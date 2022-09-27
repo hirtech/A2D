@@ -8,8 +8,8 @@ IndexIgnore *
 RewriteEngine On
 <IfModule mod_rewrite.c>
 RewriteEngine On
-RewriteCond %{HTTP_HOST} ^www.lee.vectorcontrolsystem.com$
-RewriteRule (.*) http://lee.vectorcontrolsystem.com/$1 [R=301,L]
+RewriteCond %{HTTP_HOST} ^54.167.253.109/eCommunityfiber$
+RewriteRule (.*) http://54.167.253.109/eCommunityfiber/$1 [R=301,L]
 </IfModule>
 
 #RewriteCond %{HTTPS} !=on
