@@ -24,8 +24,7 @@ RewriteRule (.*) http://lee.vectorcontrolsystem.com/$1 [R=301,L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
-#RewriteBase /vectorERP/
-RewriteBase /
+RewriteBase /eCommunityfiber/
 
 RewriteRule ^api/v2/(.*) request_api_v2.php?version=v2
 
