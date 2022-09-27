@@ -1,0 +1,32 @@
+/* Dark Template */
+.dark, .dark-alt, .semi-dark-alt {
+  /*********** Icheck *******************/ }
+  .dark #header-fix .bg-search, .dark-alt #header-fix .bg-search, .semi-dark-alt #header-fix .bg-search {
+    background-color: rgba(0, 0, 0, 0.1); }
+    @media (max-width: 991px) {
+      .dark #header-fix .bg-search, .dark-alt #header-fix .bg-search, .semi-dark-alt #header-fix .bg-search {
+        background-color: var(--mainbackground); } }
+  .dark .note-btn, .dark-alt .note-btn, .semi-dark-alt .note-btn {
+    background-color: var(--primarycolor);
+    border-color: var(--primarycolor); }
+  .dark .jumbotron, .dark-alt .jumbotron, .semi-dark-alt .jumbotron {
+    background-color: #3b4250; }
+  .dark .bg-light, .dark-alt .bg-light, .semi-dark-alt .bg-light {
+    background: var(--bodybackground) !important; }
+  .dark .table-hover tbody tr:hover, .dark-alt .table-hover tbody tr:hover, .semi-dark-alt .table-hover tbody tr:hover {
+    color: var(--bodycolor); }
+  .dark .icheckbox_minimal.checked, .dark-alt .icheckbox_minimal.checked, .semi-dark-alt .icheckbox_minimal.checked {
+    background-position: -80px 0; }
+  .dark .iradio_minimal.checked, .dark-alt .iradio_minimal.checked, .semi-dark-alt .iradio_minimal.checked {
+    background-position: -180px 0; }
+  .dark .btn-outline-dark, .dark-alt .btn-outline-dark, .semi-dark-alt .btn-outline-dark {
+    color: var(--bodycolor); }
+  .dark select, .dark-alt select, .semi-dark-alt select {
+    background-color: var(--mainbackground) !important;
+    color: var(--bodycolor); }
+  .dark textarea, .dark-alt textarea, .semi-dark-alt textarea {
+    background: transparent; }
+  .dark .progress, .dark-alt .progress, .semi-dark-alt .progress {
+    background-color: var(--bodybackground); }
+
+/*# sourceMappingURL=dark.css.map */

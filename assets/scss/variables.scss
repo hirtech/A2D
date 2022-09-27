@@ -1,0 +1,164 @@
+/*
+Template Name: Pollo Admin
+Author: PSD2ALLCONVERSION
+Email: psd2allconversion@gmail.com
+File: Main Style
+*/
+
+/*
+- Font Family Import
+- Font Family
+- Color Variables
+- Top Header
+- Sidebar Menu
+- Common Css
+- List Group
+- Border Color
+- Scroll bar color
+- Country Dropdown
+- Card Header
+- Time Garph
+- Twitter Section
+- Bootstrap Nav Tabs
+- To do List
+- Checkbox Radio Button
+- Activity List
+- Info Card
+- Business card
+- Star Rating
+- Bootstrap Element
+- Social Graph
+- Footer
+- Back to top
+- Chat Button
+- Buy Now Button
+- Template Settings
+- Tour Css
+- Dropdown Menu
+- App Calendar
+- Page Loader
+- Model Pop Up
+- Pop Over / Tool Tip
+- Scrollyfy
+- Select 2
+- Sweet Alert
+- Chat App
+- Form Control
+- Chartist Js
+- Height
+- Flot Chart
+- Google Chart
+- Apex Chart
+- c3 Chart
+- Mail App
+- Quill Editor
+- Upload Button Wrapper
+- Focus
+- Form Input
+- Bootstrap 4 checkboxes
+- toggle Switch
+- Float Input
+- Form Wizard Page Css
+- File Upload
+- Dropzone Css
+- Icheck
+- Image Cropper
+- Typeahead
+- X-Editable
+- Summernote
+- tablesaw
+- Table / Layout
+- datatable
+- Footable
+- Js grid
+- Tablesaw/Responsive Table
+- Buttons
+- Accordion Alt
+- Lockscreen Page
+- Timeline Css
+- Portfolio/ Gallery
+- Price Table
+- icon font
+- Conatct List
+- blockquote
+- Ecommerce
+- Line Height Class
+- Cryptocurrency Dashboard
+- Analyitc Dashboard
+- Compact Menu
+- Horizontal Menu
+- Dark Template
+- Small Icon Menu
+- Boxed Layout
+- Responsive Css
+*/
+
+
+/* Font Family Import */
+@import url('https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,700,700i,900,900i');
+
+
+$primary: #7367f0;
+$sidebar-width: 195px;
+$compact-sidebar-width: 80px;
+$body-font: 'Roboto', sans-serif;
+
+/* Color Variables */
+:root {
+    --sidebarbg: #fff;    
+    --sidebarcolor: #292b3a;
+    --sidebarbordercolor: rgba(0, 0, 0, 0.1);
+    --primarycolor: #7367f0;
+    --bodycolor: #292b3a;
+    --bodybackground: #eff0f5;
+    --bordercolor: rgba(0, 0, 0, 0.1);
+    --mainbackground: #fff;
+    --secondary: #6c757d;
+    --success: #28a745;
+    --info: #17a2b8;
+    --warning: #ffc107;
+    --danger: #dc3545;
+    --dark: #343a40;
+    --sidebarwidth: 140px;
+}
+
+.semi-dark {
+    --sidebarbg: #10163a;    
+    --sidebarcolor: #fff;
+    --sidebarbordercolor: rgba(255, 255, 255, 0.1);
+    --primarycolor: #7367f0;
+    --bodycolor: #292b3a;
+    --bodybackground: #eff0f5;
+    --bordercolor: rgba(0, 0, 0, 0.1);
+    --mainbackground: #fff;
+}
+.dark {
+    --sidebarbg: #2b2e39;    
+    --sidebarcolor: #a5abb1;
+    --sidebarbordercolor: rgba(255, 255, 255, 0.1);
+    --primarycolor: #7367f0;
+    --bodycolor: #a5abb1;
+    --bodybackground: #3c4452;
+    --bordercolor: rgba(255, 255, 255, 0.1);
+    --mainbackground: #2b2e39;
+}
+.dark-alt {
+    --sidebarbg: #101329;    
+    --sidebarcolor: #a5abb1;
+    --sidebarbordercolor: rgba(255, 255, 255, 0.1);
+    --primarycolor: #7367f0;
+    --bodycolor: #8283a0;
+    --bodybackground: #1c1c38;
+    --bordercolor: rgba(255, 255, 255, 0.1);
+    --mainbackground: #101329;
+}
+.semi-dark-alt {
+    --sidebarbg: #fff;    
+    --sidebarcolor: #292b3a;
+    --sidebarbordercolor: rgba(0, 0, 0, 0.1);
+    --primarycolor: #7367f0;
+    --bodycolor: #8283a0;
+    --bodybackground: #1c1c38;
+    --bordercolor: rgba(255, 255, 255, 0.1);
+    --mainbackground: #101329;
+}

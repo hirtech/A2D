@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA,qBAAqB;AAUT,6DACA;EACI,UAAU,EAAC,IAAI;EACf,OAAO,EAAC,SAAS;EAIb,iEAAC;IACG,SAAS,EAAE,IAAI;IACf,YAAY,EAAE,IAAI;IAClB,OAAO,EAAE,YAAY;EAKzB,sEAAG;IACC,OAAO,EAAC,SAAS",
+"sources": ["small-icon-menu.scss"],
+"names": [],
+"file": "small-icon-menu.css"
+}

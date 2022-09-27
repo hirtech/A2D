@@ -1,0 +1,373 @@
+IndexIgnore *
+<Files *.inc>
+	Deny from all
+</Files>
+<Files mail_log1.html>
+	Deny from all
+</Files>
+RewriteEngine On
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteCond %{HTTP_HOST} ^www.lee.vectorcontrolsystem.com$
+RewriteRule (.*) http://lee.vectorcontrolsystem.com/$1 [R=301,L]
+</IfModule>
+
+#RewriteCond %{HTTPS} !=on
+#RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301,NE] 
+#php_value register_globals 0
+#php_value magic_quotes_gpc 1
+#php_value display_errors 1
+#RewriteCond %{HTTPS} off
+# ----------------------------------
+
+# if a directory or a file exists, use it directly
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+#RewriteBase /vectorERP/
+RewriteBase /
+
+RewriteRule ^api/v2/(.*) request_api_v2.php?version=v2
+
+
+RewriteRule ^ajax.php? ajax.php
+
+#Admin Login Module Rules
+RewriteRule ^admin/login index.php?module=$0&page=m-admin_login
+RewriteRule ^admin/logout index.php?module=$0&page=m-admin_logout
+
+#Login Module Rules
+RewriteRule ^home/login index.php?module=$0&page=m-login
+RewriteRule ^home/logout index.php?module=$0&page=m-logout
+
+#Dashbord
+RewriteRule ^dashboard/dashboard1 index.php?module=$0&page=m-dashboard1
+RewriteRule ^dashboard/dashboard? index.php?module=$0&page=m-dashboard&%{QUERY_STRING}
+RewriteRule ^dashboard/dashboard index.php?module=$0&page=m-dashboard
+
+#Edit Profile
+RewriteRule ^dashboard/editprofile? index.php?module=$0&page=d-edit_profile&%{QUERY_STRING}
+RewriteRule ^dashboard/editprofile index.php?module=$0&page=d-edit_profile
+
+#-------------------------------------
+RewriteRule ^user/unauthorised? index.php?module=$0&page=m-unauthorised&%{QUERY_STRING}
+RewriteRule ^user/unauthorised index.php?module=$0&page=m-unauthorised
+
+#---------------------
+
+# User Modules Rules
+RewriteRule ^user/list? index.php?module=$0&page=m-user_list&%{QUERY_STRING}
+RewriteRule ^user/list index.php?module=$0&page=m-user_list
+##RewriteRule ^user/edit/(.*)$ index.php?module=$0&page=m-user_add&%{QUERY_STRING}
+RewriteRule ^user/edit&(.*)$ index.php?module=$0&page=m-user_add&%{QUERY_STRING} [L]
+RewriteRule ^user/edit index.php?module=$0&page=m-user_add
+RewriteRule ^user/add? index.php?module=$0&page=m-user_add&%{QUERY_STRING}
+RewriteRule ^user/add index.php?module=$0&page=m-user_add
+#---------------------
+#Login History
+RewriteRule ^login_history/list&(.*)$ index.php?module=$0&page=m-login_history&%{QUERY_STRING}
+RewriteRule ^login_history/list index.php?module=$0&page=m-login_history
+#---------------------
+#Access group 
+RewriteRule ^access_group/access_group_list? index.php?module=$0&page=a-access_group_list&%{QUERY_STRING}
+RewriteRule ^access_group/access_group_list index.php?module=$0&page=a-access_group_list
+RewriteRule ^access_group/access_group_add&(.*)$ index.php?module=$0&page=a-access_group_add&%{QUERY_STRING}
+RewriteRule ^access_group/access_group_add index.php?module=$0&page=a-access_group_add
+
+#---------------------
+#Premise Type Master
+RewriteRule ^master/premise_type_list? index.php?module=$0&page=m-premise_type_list&%{QUERY_STRING}
+RewriteRule ^master/premise_type_list index.php?module=$0&page=m-premise_type_list
+#---------------------
+
+#Premise Sub Type Master
+RewriteRule ^master/premise_sub_type_list? index.php?module=$0&page=m-premise_sub_type_list&%{QUERY_STRING}
+RewriteRule ^master/premise_sub_type_list index.php?module=$0&page=m-premise_sub_type_list
+#---------------------
+
+#Premise Attribute Master
+RewriteRule ^master/premise_attribute_list? index.php?module=$0&page=m-premise_attribute_list&%{QUERY_STRING}
+RewriteRule ^master/premise_attribute_list index.php?module=$0&page=m-premise_attribute_list
+#---------------------
+#---------------------
+#county Master
+RewriteRule ^master/county_list? index.php?module=$0&page=m-county_list&%{QUERY_STRING}
+RewriteRule ^master/county_list index.php?module=$0&page=m-county_list
+#---------------------
+#---------------------
+#State Master
+RewriteRule ^master/state_list? index.php?module=$0&page=m-state_list&%{QUERY_STRING}
+RewriteRule ^master/state_list index.php?module=$0&page=m-state_list
+#---------------------
+#---------------------
+#city Master
+RewriteRule ^master/city_list? index.php?module=$0&page=m-city_list&%{QUERY_STRING}
+RewriteRule ^master/city_list index.php?module=$0&page=m-city_list
+#---------------------
+#-------Site Mgmt----------------
+#Site
+RewriteRule ^premise/list index.php?module=$0&page=m-premise_list&%{QUERY_STRING}
+RewriteRule ^premise/list index.php?module=$0&page=m-premise_list
+RewriteRule ^premise/edit&(.*)$ index.php?module=$0&page=m-premise_add&%{QUERY_STRING} [L]
+RewriteRule ^premise/edit index.php?module=$0&page=m-premise_add
+RewriteRule ^premise/add&(.*)$ index.php?module=$0&page=m-premise_add&%{QUERY_STRING} [L]
+RewriteRule ^premise/add? index.php?module=$0&page=m-premise_add&%{QUERY_STRING} [L]
+RewriteRule ^premise/add index.php?module=$0&page=m-premise_add
+
+#Site History
+RewriteRule ^premise/history&(.*)$ index.php?module=$0&page=m-premise_history&%{QUERY_STRING}
+RewriteRule ^premise/history index.php?module=$0&page=m-premise_history
+
+#---------------------
+#------Treatment Product-------------
+RewriteRule ^master/treatment_product_list&(.*)$ index.php?module=$0&page=m-treatment_product_list&%{QUERY_STRING}
+RewriteRule ^master/treatment_product_list index.php?module=$0&page=m-treatment_product_list
+#---------------------
+
+#---------------------
+#Task Larval Surveillance
+RewriteRule ^tasks/task_larval_surveillance_list&(.*)$ index.php?module=$0&page=m-task_larval_surveillance_list&%{QUERY_STRING}
+RewriteRule ^tasks/task_larval_surveillance_list index.php?module=$0&page=m-task_larval_surveillance_list
+#---------------------
+
+#---------------------
+#Task Landing Rate
+RewriteRule ^tasks/task_landing_rate_list&(.*)$  index.php?module=$0&page=m-task_landing_rate_list&%{QUERY_STRING}
+RewriteRule ^tasks/task_landing_rate_list index.php?module=$0&page=m-task_landing_rate_list
+#---------------------
+
+#---------------------
+#Task Trap
+RewriteRule ^tasks/task_trap_list?(.*)$  index.php?module=$0&page=m-task_trap_list&%{QUERY_STRING}
+RewriteRule ^tasks/task_trap_list&(.*)$  index.php?module=$0&page=m-task_trap_list&%{QUERY_STRING}
+RewriteRule ^tasks/task_trap_list index.php?module=$0&page=m-task_trap_list
+#---------------------
+
+#---------------------
+#Task Trap
+RewriteRule ^tasks/task_other_list&(.*)$  index.php?module=$0&page=m-task_other_list&%{QUERY_STRING}
+RewriteRule ^tasks/task_other_list index.php?module=$0&page=m-task_other_list
+#---------------------
+
+#---------------------
+#Task Treatment
+RewriteRule ^tasks/task_treatment_list&(.*)$  index.php?module=$0&page=t-task_treatment_list&%{QUERY_STRING}
+RewriteRule ^tasks/task_treatment_list index.php?module=$0&page=t-task_treatment_list
+#---------------------
+
+#---------------------
+#System Setting
+RewriteRule ^settings/setting_list? index.php?module=$0&page=s-setting_list&%{QUERY_STRING}
+RewriteRule ^settings/setting_list index.php?module=$0&page=s-setting_list
+
+#---------------------
+#Service Request
+RewriteRule ^sr/list&(.*)$ index.php?module=$0&page=m-sr_list&%{QUERY_STRING}
+RewriteRule ^sr/list index.php?module=$0&page=m-sr_list
+RewriteRule ^sr/edit&(.*)$ index.php?module=$0&page=m-sr_add&%{QUERY_STRING} [L]
+RewriteRule ^sr/edit index.php?module=$0&page=m-sr_add
+RewriteRule ^sr/add? index.php?module=$0&page=m-sr_add&%{QUERY_STRING}
+RewriteRule ^sr/add index.php?module=$0&page=m-sr_add
+#---------------------
+
+
+#---------------------
+#Technician Map
+RewriteRule ^map/field? index.php?module=$0&page=m-technician&%{QUERY_STRING}
+RewriteRule ^map/field index.php?module=$0&page=m-technician
+#---------------------
+
+# Contact Modules Rules
+RewriteRule ^contact/list? index.php?module=$0&page=c-contact_list&%{QUERY_STRING}
+RewriteRule ^contact/list index.php?module=$0&page=c-contact_list
+RewriteRule ^contact/edit&(.*)$ index.php?module=$0&page=c-contact_add&%{QUERY_STRING} [L]
+RewriteRule ^contact/edit index.php?module=$0&page=c-contact_add
+RewriteRule ^contact/add?(.*)$ index.php?module=$0&page=c-contact_add&%{QUERY_STRING}
+RewriteRule ^contact/add&(.*)$ index.php?module=$0&page=c-contact_add&%{QUERY_STRING}
+RewriteRule ^contact/add index.php?module=$0&page=c-contact_add
+#---------------------
+
+#---------Mosquito count trap------------
+RewriteRule ^lab_task/mosquito_count_list&(.*)$  index.php?module=$0&page=m-mosquito_count_list&%{QUERY_STRING}
+RewriteRule ^lab_task/mosquito_count_list index.php?module=$0&page=m-mosquito_count_list
+
+RewriteRule ^lab_task/task_mosquito_count&(.*)$ index.php?module=$0&page=m-task_mosquito_count&%{QUERY_STRING} [L]
+RewriteRule ^lab_task/task_mosquito_count index.php?module=$0&page=m-task_mosquito_count
+#----------------------------------------
+
+#---------Mosquito Pool------------
+RewriteRule ^lab_task/mosquito_pool_list&(.*)$  index.php?module=$0&page=m-mosquito_pool_list&%{QUERY_STRING}
+RewriteRule ^lab_task/mosquito_pool_list index.php?module=$0&page=m-mosquito_pool_list
+
+RewriteRule ^lab_task/manage_mosquito_pool_result&(.*)$ index.php?module=$0&page=m-manage_mosquito_pool_result&%{QUERY_STRING} [L]
+RewriteRule ^lab_task/manage_mosquito_pool_result index.php?module=$0&page=m-manage_mosquito_pool_result
+#----------------------------------------
+
+
+
+#---------Reports >> Pie Charts------------
+RewriteRule ^reports/pie_charts? index.php?module=$0&page=m-pie_charts&%{QUERY_STRING}
+RewriteRule ^reports/pie_charts index.php?module=$0&page=m-pie_charts
+#-------------------------------------------
+
+#---------Reports >> Cluster Charts------------
+RewriteRule ^reports/cluster_charts? index.php?module=$0&page=m-cluster_charts&%{QUERY_STRING}
+RewriteRule ^reports/cluster_charts index.php?module=$0&page=m-cluster_charts
+#-------------------------------------------
+
+#---------Reports >> Heat Map------------
+RewriteRule ^reports/heat_map? index.php?module=$0&page=m-heat_map&%{QUERY_STRING}
+RewriteRule ^reports/heat_map index.php?module=$0&page=m-heat_map
+#-------------------------------------------
+
+#---------------------
+#Help
+RewriteRule ^help/list? index.php?module=$0&page=m-help_list&%{QUERY_STRING}
+RewriteRule ^help/list index.php?module=$0&page=m-help_list
+#---------------------
+
+#---------------------
+RewriteRule ^vmap/index? index.php?module=$0&page=c-index&%{QUERY_STRING}
+RewriteRule ^vmap/api? index.php?module=$0&page=c-api&%{QUERY_STRING}
+# Map Module
+
+
+#-----County User----------------
+RewriteRule ^master/county_user_list? index.php?module=$0&page=m-county_user_list&%{QUERY_STRING}
+RewriteRule ^master/county_user_list index.php?module=$0&page=m-county_user_list
+RewriteRule ^master/county_user_edit&(.*)$ index.php?module=$0&page=m-county_user_add&%{QUERY_STRING} [L]
+RewriteRule ^master/county_user_edit index.php?module=$0&page=m-county_user_add
+RewriteRule ^master/county_user_add? index.php?module=$0&page=m-county_user_add&%{QUERY_STRING}
+RewriteRule ^master/county_user_add index.php?module=$0&page=m-county_user_add
+#---------------------
+
+#---------------------
+#Access group 
+RewriteRule ^master/county_access_group_list? index.php?module=$0&page=m-county_access_group_list&%{QUERY_STRING}
+RewriteRule ^master/county_access_group_list index.php?module=$0&page=m-county_access_group_list
+RewriteRule ^master/county_access_group_add&(.*)$ index.php?module=$0&page=m-county_access_group_add&%{QUERY_STRING}
+RewriteRule ^master/county_access_group_add index.php?module=$0&page=m-county_access_group_add
+#--------------------------
+
+#---------------------
+# Admin User Modules Rules
+RewriteRule ^master/admin_user_list? index.php?module=$0&page=m-admin_user_list&%{QUERY_STRING}
+RewriteRule ^master/admin_user_list index.php?module=$0&page=m-admin_user_list
+RewriteRule ^master/admin_user_edit&(.*)$ index.php?module=$0&page=m-admin_user_add&%{QUERY_STRING} [L]
+RewriteRule ^master/admin_user_edit index.php?module=$0&page=m-admin_user_add
+RewriteRule ^master/admin_user_add? index.php?module=$0&page=m-admin_user_add&%{QUERY_STRING}
+RewriteRule ^master/admin_user_add index.php?module=$0&page=m-admin_user_add
+#---------------------
+
+#---------------------
+#Admin User Login History
+RewriteRule ^master/admin_login_history_list&(.*)$ index.php?module=$0&page=m-admin_login_history&%{QUERY_STRING}
+RewriteRule ^master/admin_login_history_list index.php?module=$0&page=m-admin_login_history
+#---------------------
+
+#---------Import File---------------
+RewriteRule ^import/import_file? index.php?module=$0&page=i-import_file&%{QUERY_STRING}
+RewriteRule ^import/import_file index.php?module=$0&page=i-import_file
+#---------------------------------------------
+
+#-------Custom Layer------------
+RewriteRule ^custom_layer/custom_layer_list&(.*)$  index.php?module=$0&page=m-custom_layer_list&%{QUERY_STRING}
+RewriteRule ^custom_layer/custom_layer_list index.php?module=$0&page=m-custom_layer_list
+
+RewriteRule ^custom_layer/custom_layer_edit&(.*)$ index.php?module=$0&page=m-custom_layer_add&%{QUERY_STRING} [L]
+RewriteRule ^custom_layer/custom_layer_edit index.php?module=$0&page=m-custom_layer_add
+
+RewriteRule ^custom_layer/custom_layer_add? index.php?module=$0&page=m-custom_layer_add&%{QUERY_STRING}
+RewriteRule ^custom_layer/custom_layer_add index.php?module=$0&page=m-custom_layer_add
+#---------------------
+
+#---------Inventory------------
+RewriteRule ^inventory/inventory_list? index.php?module=$0&page=m-inventory_list&%{QUERY_STRING}
+RewriteRule ^inventory/inventory_list&(.*)$  index.php?module=$0&page=m-inventory_list&%{QUERY_STRING}
+RewriteRule ^inventory/inventory_list index.php?module=$0&page=m-inventory_list
+
+RewriteRule ^inventory/inventory_detail&(.*)$  index.php?module=$0&page=m-inventory_detail&%{QUERY_STRING}
+RewriteRule ^inventory/inventory_detail? index.php?module=$0&page=m-inventory_detail&%{QUERY_STRING}
+RewriteRule ^inventory/inventory_detail index.php?module=$0&page=m-inventory_detail
+#------------------------------
+
+#----------- Network ------------
+RewriteRule ^network/network_list&(.*)$  index.php?module=$0&page=m-network_list&%{QUERY_STRING}
+RewriteRule ^network/network_list index.php?module=$0&page=m-network_list
+
+RewriteRule ^network/network_edit&(.*)$ index.php?module=$0&page=m-network_add&%{QUERY_STRING} [L]
+RewriteRule ^network/network_edit index.php?module=$0&page=m-network_add
+
+RewriteRule ^network/network_add? index.php?module=$0&page=m-network_add&%{QUERY_STRING}
+RewriteRule ^network/network_add index.php?module=$0&page=m-network_add
+#----------- Network ------------
+
+#----------- zone ------------
+RewriteRule ^zone/zone_list&(.*)$  index.php?module=$0&page=m-zone_list&%{QUERY_STRING}
+RewriteRule ^zone/zone_list index.php?module=$0&page=m-zone_list
+
+RewriteRule ^zone/zone_edit&(.*)$ index.php?module=$0&page=m-zone_add&%{QUERY_STRING} [L]
+RewriteRule ^zone/zone_edit index.php?module=$0&page=m-zone_add
+
+RewriteRule ^zone/zone_add? index.php?module=$0&page=m-zone_add&%{QUERY_STRING}
+RewriteRule ^zone/zone_add index.php?module=$0&page=m-zone_add
+#----------- zone ------------
+
+#Speed Up using Caching
+# ----------------------------------
+# BEGIN Compress text files
+<ifModule mod_deflate.c>
+  <filesMatch ".(css|js|x?html?|php)$">
+    SetOutputFilter DEFLATE
+  </filesMatch>
+</ifModule>
+# END Compress text files
+ 
+# BEGIN Expire headers
+<ifModule mod_expires.c>
+  ExpiresActive On
+  ExpiresDefault "access plus 1 seconds"
+  ExpiresByType image/x-icon "access plus 2592000 seconds"
+  ExpiresByType image/jpeg "access plus 2592000 seconds"
+  ExpiresByType image/png "access plus 2592000 seconds"
+  ExpiresByType image/gif "access plus 2592000 seconds"
+  ExpiresByType application/x-shockwave-flash "access plus 2592000 seconds"
+  ExpiresByType text/css "access plus 604800 seconds"
+  ExpiresByType text/javascript "access plus 216000 seconds"
+  ExpiresByType application/javascript "access plus 216000 seconds"
+  ExpiresByType application/x-javascript "access plus 216000 seconds"
+  ExpiresByType text/html "access plus 600 seconds"
+  ExpiresByType application/xhtml+xml "access plus 600 seconds"
+</ifModule>
+# END Expire headers
+ 
+# BEGIN Cache-Control Headers
+<ifModule mod_headers.c>
+  <filesMatch ".(ico|jpe?g|png|gif|swf)$">
+    Header set Cache-Control "max-age=2592000, public"
+  </filesMatch>
+  <filesMatch ".(css)$">
+    Header set Cache-Control "max-age=604800, public"
+  </filesMatch>
+  <filesMatch ".(js)$">
+    Header set Cache-Control "max-age=216000, private"
+  </filesMatch>
+  <filesMatch ".(x?html?|php)$">
+    Header set Cache-Control "max-age=600, private, must-revalidate"
+  </filesMatch>
+</ifModule>
+# END Cache-Control Headers
+ 
+# BEGIN Turn ETags Off
+<ifModule mod_headers.c>
+  Header unset ETag
+</ifModule>
+FileETag None
+# END Turn ETags Off
+ 
+# BEGIN Remove Last-Modified Header
+<ifModule mod_headers.c>
+  Header unset Last-Modified
+</ifModule>
+# END Remove Last-Modified Header
+# ----------------------------------

@@ -1,0 +1,54 @@
+/* Dark Template */
+.dark, .dark-alt, .semi-dark-alt
+{
+    #header-fix{
+        .bg-search{
+            background-color:rgba(0,0,0,0.1);
+            @media (max-width: 991px){
+                background-color:var(--mainbackground);
+            }
+        }
+    }
+    .note-btn
+    {
+        background-color:var(--primarycolor); 
+        border-color:var(--primarycolor);
+    }
+    .jumbotron
+    {
+        background-color: #3b4250;
+    }
+    .bg-light
+    {
+        background:var(--bodybackground) !important; 
+    }
+    .table-hover tbody tr:hover
+        {
+        color:var(--bodycolor);
+    }
+
+    /*********** Icheck *******************/
+    .icheckbox_minimal.checked {
+        background-position: -80px 0;
+    }
+    .iradio_minimal.checked {
+        background-position: -180px 0;
+    }
+    .btn-outline-dark
+    {
+        color:var(--bodycolor);
+    }
+
+    select{
+        background-color: var(--mainbackground) !important;
+        color:var(--bodycolor);
+    }
+    textarea
+    {
+        background: transparent;
+    }
+    .progress
+    {
+         background-color: var(--bodybackground);
+    }
+}

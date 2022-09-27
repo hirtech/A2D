@@ -1,0 +1,39 @@
+/* Small Icon Menu */
+.small-menu-icon:not(.compact-menu)
+{
+
+    .sidebar
+    {
+
+        .sidebar-menu
+        {
+
+            li
+            {
+                text-align:left; 
+                padding:15px 10px;
+
+                a{
+
+                    i{
+                        font-size: 15px;
+                        margin-right: 15px;
+                        display: inline-block;
+                    }
+                }
+                >div
+                {
+                    li {
+                        padding:10px 10px; 
+                    }
+                }
+            }
+
+
+        }
+    }
+}
+
+
+
+

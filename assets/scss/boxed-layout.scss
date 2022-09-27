@@ -1,0 +1,123 @@
+/* Boxed Layout */
+.boxed
+{
+    max-width: 1200px;
+    margin: 0  auto;
+    #header-fix
+    {
+        max-width: calc(1200px - 140px);
+        margin: 0  auto;
+        #collapse
+        {
+            @media (min-width: 992px)
+                {
+                display:none;
+            } 
+        }
+    }
+    .sidebar
+    {
+        -webkit-box-shadow: -5px 10px 29px -22px rgba(0,0,0,.55);
+        -moz-box-shadow: -5px 10px 29px -22px rgba(0,0,0,.55);
+        box-shadow: -5px 10px 29px -22px rgba(0,0,0,.55);
+    }
+    &:not(.horizontal-menu)
+        {
+        .sidebar
+        {
+
+            .sidebar-menu
+            {
+                >li{
+                    padding:0px;
+                    >a{
+                        padding: 20px;
+                        display: inline-block;
+                    }
+                    div{
+                        left:inherit;
+                        margin-left: calc(var(--sidebarwidth) - 2px);
+                        li{
+                            div
+                            {
+                                left: 100%;
+                                margin-left: 0px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        &.small-menu-icon{
+            .sidebar{
+                .sidebar-menu
+                {
+                    >li{
+                        padding:0px;
+                        >a{
+                            padding: 15px;
+
+                        }
+
+                    }
+                }
+
+            } 
+        }
+    }
+    &.horizontal-menu
+    {
+        #header-fix
+        {
+            max-width: 1200px;
+
+        }
+        .sidebar{
+            @media (min-width: 992px)
+                {
+                border:none;
+            }
+            #side-menu
+            {
+                li:nth-child(13)
+                    {
+                    border-right: none;
+                }
+                li:nth-child(14)
+                    {
+                    display: none;
+                }
+            }
+        }
+        main
+        {
+            >.container-fluid
+            {
+                @media (min-width: 1231px)
+                    {
+                    padding-left: 0px;
+                    padding-right: 0px; 
+                }
+
+            }
+        }
+        &.small-menu-icon{
+            .sidebar{
+
+                #side-menu
+                {
+                    li:nth-child(12)
+                        {
+                        border-right: none;
+                    }
+                    li:nth-child(14), li:nth-child(13)
+                        {
+                        display: none;
+                    }
+                }
+            } 
+        }
+
+    }
+
+}
