@@ -28,7 +28,6 @@ RewriteBase /eCommunityfiber/
 
 RewriteRule ^api/v2/(.*) request_api_v2.php?version=v2
 
-
 RewriteRule ^ajax.php? ajax.php
 
 #Admin Login Module Rules
