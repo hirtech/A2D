@@ -1,6 +1,6 @@
 <?php
-$sitefolder = "/";
-//$sitefolder = "/vectorERP/"; // Local Setting 
+//$sitefolder = "/";
+$sitefolder = "/eCommunityfiber/";  
 
 $adminfolder = "smspanel/";
 $site_path	= $_SERVER["DOCUMENT_ROOT"].$sitefolder;
