@@ -10,8 +10,8 @@ ini_set('session.cookie_lifetime', 0);
 //ini_set('session.use_only_cookies', 0);
 //ini_set('session.remember_login_cookie_lifetime', 0);
 
-//error_reporting(0);
-error_reporting(E_ALL);
+error_reporting(0);
+//error_reporting(E_ALL);
 session_start();
 include_once("config/setting/settings.php");
 //$time_zone = file_get_contents($time_zone_path."timezone.txt");

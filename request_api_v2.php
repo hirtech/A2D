@@ -34,7 +34,7 @@ $local_host = $_SERVER['SERVER_ADDR'];
 $path = str_replace($sitefolder_api,"",$_SERVER['REQUEST_URI']);
 
 
-$path = str_replace("/api/".$version."/","",$path);
+$path = str_replace("/eCommunityfiber/api/".$version."/","",$path);
 
 
 if(strstr($path, '?'))
