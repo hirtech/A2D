@@ -136,9 +136,7 @@ if($mode == "List"){
     hc_exit();
     # ----------------------------------- 
 }else if($mode == "Add"){
-
     $arr_param = array();
-
     $files = "";
     //echo "<pre>";print_r($_FILES);exit;
     if(isset($_FILES["vFile"])){
@@ -149,7 +147,7 @@ if($mode == "List"){
 
     $arr_param = array(
         "vZoneName"     => $_POST['vZoneName'],
-        "iZoneId"    => $_POST['iZoneId'],
+        "iNetworkId"    => $_POST['iNetworkId'],
         "vFile"         => $files,
         "iStatus"       => $_POST['iStatus'],
         "sessionId"     => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
@@ -191,14 +189,13 @@ if($mode == "List"){
     $arr_param = array(
         'iZoneId'   => $_POST['iZoneId'],
         "vZoneName"     => $_POST['vZoneName'],
-        "iZoneId"    => $_POST['iZoneId'],
+        "iNetworkId"    => $_POST['iNetworkId'],
         "iStatus"   => $_POST['iStatus'],
         "sessionId" => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
     );
     //echo "<pre>";print_r(json_encode($arr_param));
 
     $API_URL = $site_api_url."zone_edit.json";
-    //echo "<pre>";print_r($API_URL);exit();
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $API_URL);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);

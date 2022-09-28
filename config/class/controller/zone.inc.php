@@ -63,7 +63,6 @@ class Zone {
 		global $sqlObj;
 			
 		$sql = "SELECT zone.* ".$this->join_field_str." FROM zone".$this->join_clause.$this->where_clause.$this->group_by_clause.$this->order_by_clause.$this->limit_clause;
-		//echo $sql;exit;
 		$rs_db = $sqlObj->GetAll($sql);
 		return $rs_db;
 		
@@ -161,7 +160,7 @@ class Zone {
 		if($this->update_arr){
 			$file_name = $this->update_arr['vFile'];
 			$iZoneId = $this->update_arr['iZoneId'];
-			$rs_db = "UPDATE zone SET \"vZoneName\"='".$this->update_arr['vZoneName']."', \"iNetworkId\"='".$this->update_arr['iNetworkId'].", \"iStatus\"='".$this->update_arr['iStatus']."',\"dModifiedDate\" = ".gen_allow_null_char(date_getSystemDateTime())."  WHERE \"iZoneId\"='".$this->update_arr['iZoneId']."' LIMIT 1";
+			$rs_db = "UPDATE zone SET \"vZoneName\"='".$this->update_arr['vZoneName']."', \"iNetworkId\"='".$this->update_arr['iNetworkId']."', \"iStatus\"='".$this->update_arr['iStatus']."',\"dModifiedDate\" = ".gen_allow_null_char(date_getSystemDateTime())."  WHERE \"iZoneId\"='".$this->update_arr['iZoneId']."'";
 			$sqlObj->Execute($rs_db);
 			$rs_db = $sqlObj->Affected_Rows();
 			if($rs_db){

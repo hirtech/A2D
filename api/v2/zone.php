@@ -7,7 +7,6 @@ $ZoneObj = new Zone();
 
 ##Search Arary
 $where_arr = array();
-//echo $request_type;exit;
 if($request_type == "zone_list"){
 	$where_arr = array();
 
@@ -16,7 +15,7 @@ if($request_type == "zone_list"){
         $iZoneId            = $RES_PARA['iZoneId'];
         $vZoneName          = $RES_PARA['vZoneName'];
         $vNetwork           = $RES_PARA['vNetwork'];
-        $iStatus           = $RES_PARA['iStatus'];
+        $iStatus            = $RES_PARA['iStatus'];
         $page_length        = isset($RES_PARA['page_length']) ? trim($RES_PARA['page_length']) : "10";
         $start              = isset($RES_PARA['start']) ? trim($RES_PARA['start']) : "0";
         $sEcho              = $RES_PARA['sEcho'];
@@ -26,11 +25,11 @@ if($request_type == "zone_list"){
     }
     
     if ($iZoneId != "") {
-        $where_arr[] = 'zone."iZoneId"='.$iZoneId ;
+        $where_arr[] = '"iZoneId"='.$iZoneId ;
     }
 
     if ($vZoneName != "") {
-        $where_arr[] = "zone.\"vZoneName\" ILIKE '" . $vZoneName . "%'";
+        $where_arr[] = "\"vZoneName\" ILIKE '" . $vZoneName . "%'";
     }
 
     if ($vNetwork != "") {
@@ -39,10 +38,10 @@ if($request_type == "zone_list"){
 
     if($iStatus != ""){
         if(strtolower($iStatus) == "active"){
-            $where_arr[] = "zone.\"iStatus\" = '1'";
+            $where_arr[] = "\"iStatus\" = '1'";
         }
         else if(strtolower($iStatus) == "inactive"){
-            $where_arr[] = "zone.\"iStatus\" = '0'";
+            $where_arr[] = "\"iStatus\" = '0'";
         }
     } 
 
@@ -93,8 +92,7 @@ if($request_type == "zone_list"){
 
     if($ni > 0){
         for($i=0;$i<$ni;$i++){
-	
-        	$data[] = array(
+	        $data[] = array(
                 "iZoneId" => $rs_list[$i]['iZoneId'],
                 "vZoneName" => gen_strip_slash($rs_list[$i]['vZoneName']),
                 "vNetwork" => gen_strip_slash($rs_list[$i]['vNetwork']),
@@ -113,6 +111,7 @@ if($request_type == "zone_list"){
 }else if($request_type == "zone_delete"){
 
     $iZoneId = $RES_PARA['iZoneId'];
+    $county_id = $RES_PARA['county_id'];
 
     //get data
     $ZoneObj->clear_variable();
@@ -123,7 +122,7 @@ if($request_type == "zone_list"){
     $ZoneObj->join_field = $join_fieds_arr;
     $ZoneObj->join = $join_arr;
     $ZoneObj->where = $where_arr;
-    //$ZoneObj->param['limit'] = ' LIMIT 1 ';
+    $ZoneObj->param['limit'] = ' LIMIT 1 ';
     $ZoneObj->setClause();
     $rs_data = $ZoneObj->recordset_list();
 
@@ -134,7 +133,7 @@ if($request_type == "zone_list"){
 
         $response_data = array("Code" => 200, "Message" => MSG_DELETE, "result" => $iZoneId);
         //unlink(delete) file
-        $filepath = $zone_path;
+        $filepath = $zone_path."/";
         if($rs_data[0]['vFile'] != "" && file_exists($filepath.$rs_data[0]['vFile']) ){
              @unlink($filepath.$rs_data[0]['vFile']);
         }
@@ -160,12 +159,13 @@ else if($request_type == "zone_add"){
             "vFile"         => $file_name,
             "iStatus"       => $RES_PARA['iStatus'],
         );
+
         $ZoneObj->insert_arr = $insert_arr;
         $ZoneObj->setClause();
-        $arr = $ZoneObj->add_records();
+        $iZoneId = $ZoneObj->add_records();
 
-        if(!empty($arr)){
-            $response_data = array("Code" => 200, "Message" => MSG_ADD, "iZoneId" => $arr['iZoneId'], "file_name" => $arr['file_name']);
+        if($iZoneId){
+            $response_data = array("Code" => 200, "Message" => MSG_ADD, "iZoneId" => $iZoneId);
         }
         else{
             $response_data = array("Code" => 500 , "Message" => MSG_ADD_ERROR);
@@ -201,8 +201,12 @@ else if($request_type == "zone_edit"){
 } else if($request_type == "zone_map_data"){
    
     $iZoneId = $RES_PARA['iZoneId']; 
+    $country_id = $RES_PARA['country_id']; 
+
     $jsonData =array();
     $ZoneObj->clear_variable();
+    
+
     $join_fieds_arr = array();
     $join_arr  = array();
     $where_arr  = array();
@@ -219,11 +223,11 @@ else if($request_type == "zone_edit"){
    
     if($ki > 0){
         for($k=0;$k<$ki;$k++){
-            $filepath = $zone_path;
+            $filepath = $zone_path."/";
             $file_url = "";
             if(file_exists($filepath.$rs_data[0]['vFile'])){
-                $file_path = $zone_path.$rs_data[0]['vFile'];
-                $file_url = $zone_url.$rs_data[0]['vFile'];
+                $file_path = $zone_path."/".$rs_data[0]['vFile'];
+                $file_url = $zone_url."/".$rs_data[0]['vFile'];
             }
             $rs_data[$k]['vFilePath'] = $file_url;
         }
