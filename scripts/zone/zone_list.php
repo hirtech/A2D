@@ -104,7 +104,7 @@ if($mode == "List"){
     $arr_param = array();
     $iZoneId = $_POST['iZoneId'];
 
-    $arr_param['iNetworkId'] = $iNetworkId; 
+    $arr_param['iZoneId'] = $iZoneId; 
     $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
     $API_URL = $site_api_url."zone_delete.json";
    
@@ -150,7 +150,7 @@ if($mode == "List"){
 
     $arr_param = array(
         "vZoneName"     => $_POST['vZoneName'],
-        "iNetworkId"    => $_POST['iNetworkId'],
+        "iZoneId"    => $_POST['iZoneId'],
         "vFile"         => $files,
         "iStatus"       => $_POST['iStatus'],
         "sessionId"     => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
@@ -192,7 +192,7 @@ if($mode == "List"){
     $arr_param = array(
         'iZoneId'   => $_POST['iZoneId'],
         "vZoneName"     => $_POST['vZoneName'],
-        "iNetworkId"    => $_POST['iNetworkId'],
+        "iZoneId"    => $_POST['iZoneId'],
         "iStatus"   => $_POST['iStatus'],
         "sessionId" => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
     );
@@ -235,7 +235,7 @@ if($mode == "List"){
 
     $iZoneId = $_POST['iZoneId']; 
     $arr_param["sessionId"] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
-    $arr_param['iNetworkId'] = $iNetworkId;
+    $arr_param['iZoneId'] = $iZoneId;
     //echo "<pre>";print_r($arr_param);
     $API_URL = $site_api_url."zone_map_data.json";
    
