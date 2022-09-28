@@ -107,7 +107,6 @@ if($mode == "List"){
     $arr_param['iZoneId'] = $iZoneId; 
     $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
     $API_URL = $site_api_url."zone_delete.json";
-   
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $API_URL);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);

@@ -123,7 +123,7 @@ if($request_type == "zone_list"){
     $ZoneObj->join_field = $join_fieds_arr;
     $ZoneObj->join = $join_arr;
     $ZoneObj->where = $where_arr;
-    $ZoneObj->param['limit'] = ' LIMIT 1 ';
+    //$ZoneObj->param['limit'] = ' LIMIT 1 ';
     $ZoneObj->setClause();
     $rs_data = $ZoneObj->recordset_list();
 
@@ -134,7 +134,7 @@ if($request_type == "zone_list"){
 
         $response_data = array("Code" => 200, "Message" => MSG_DELETE, "result" => $iZoneId);
         //unlink(delete) file
-        $filepath = $zone_path."/";
+        $filepath = $zone_path;
         if($rs_data[0]['vFile'] != "" && file_exists($filepath.$rs_data[0]['vFile']) ){
              @unlink($filepath.$rs_data[0]['vFile']);
         }
@@ -201,12 +201,8 @@ else if($request_type == "zone_edit"){
 } else if($request_type == "zone_map_data"){
    
     $iZoneId = $RES_PARA['iZoneId']; 
-    $country_id = $RES_PARA['country_id']; 
-
     $jsonData =array();
     $ZoneObj->clear_variable();
-    
-
     $join_fieds_arr = array();
     $join_arr  = array();
     $where_arr  = array();
@@ -216,7 +212,6 @@ else if($request_type == "zone_edit"){
     $ZoneObj->join_field = $join_fieds_arr;
     $ZoneObj->join = $join_arr;
     $ZoneObj->where = $where_arr;
-    $ZoneObj->param['limit'] = 0;
     $ZoneObj->setClause();
     $rs_data = $ZoneObj->recordset_list();
     
@@ -224,11 +219,11 @@ else if($request_type == "zone_edit"){
    
     if($ki > 0){
         for($k=0;$k<$ki;$k++){
-            $filepath = $zone_path."/";
+            $filepath = $zone_path;
             $file_url = "";
             if(file_exists($filepath.$rs_data[0]['vFile'])){
-                $file_path = $zone_path."/".$rs_data[0]['vFile'];
-                $file_url = $zone_url."/".$rs_data[0]['vFile'];
+                $file_path = $zone_path.$rs_data[0]['vFile'];
+                $file_url = $zone_url.$rs_data[0]['vFile'];
             }
             $rs_data[$k]['vFilePath'] = $file_url;
         }

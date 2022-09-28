@@ -88,7 +88,8 @@ class Zone {
 	function delete_records(){
 		global $sqlObj;
 		
-		$sql = "DELETE zone ".$this->join_field_str." FROM zone".$this->join_clause.$this->where_clause.$this->group_by_clause.$this->order_by_clause.$this->limit_clause;
+		$sql = "DELETE  FROM zone".$this->join_clause.$this->where_clause.$this->group_by_clause.$this->order_by_clause.$this->limit_clause;
+		//echo $sql;exit;
 		$sqlObj->Execute($sql);
 		$rs_db = Affected_Rows();
 		
