@@ -114,7 +114,9 @@ $(document).ready(function() {
 <script src="https://maps.googleapis.com/maps/api/js?key={$GOOGLE_GEOCODE_API_KEY}&libraries=geometry,drawing,places,visualization"></script>
 <script type="text/javascript">
     $(window).on('load',function(){
-        initMap();
+        setTimeout(function(){
+            initMap();
+        }, 1000);
     });
 </script>
 {/if}
