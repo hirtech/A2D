@@ -98,7 +98,12 @@ class User {
         $rs_del = $sqlObj->Affected_Rows();
 
         $sql = "DELETE FROM user_details WHERE \"iUserId\" IN (" . $_POST['iUserId'] . ")";
-        
+        $sqlObj->Execute($sql);
+
+		$sql = "DELETE FROM user_panel_customizer WHERE \"iUserId\" IN (" . $_POST['iUserId'] . ")";
+        $sqlObj->Execute($sql);
+
+		$sql = "DELETE FROM user_zone WHERE \"iUserId\" IN (" . $_POST['iUserId'] . ")";
         $sqlObj->Execute($sql);
 
         $sql = "DELETE FROM user_preference WHERE \"iUserId\" IN (" . $_POST['iUserId'] . ")";
@@ -128,7 +133,13 @@ class User {
         $sql = "DELETE FROM user_details WHERE \"iUserId\" = ".$iUserId;
         $sqlObj->Execute($sql);
 
-         $sql = "DELETE FROM user_preference WHERE \"iUserId\" = ".$iUserId;
+		$sql = "DELETE FROM user_panel_customizer WHERE \"iUserId\" IN (" . $_POST['iUserId'] . ")";
+        $sqlObj->Execute($sql);
+
+		$sql = "DELETE FROM user_zone WHERE \"iUserId\" IN (" . $_POST['iUserId'] . ")";
+        $sqlObj->Execute($sql);
+
+        $sql = "DELETE FROM user_preference WHERE \"iUserId\" = ".$iUserId;
         $sqlObj->Execute($sql);
 
         $sql = "DELETE FROM user_department WHERE \"iUserId\" = ".$iUserId;
@@ -140,8 +151,6 @@ class User {
 
         global $sqlObj;
         if ($this->ids) {
-
-
 
             if ($this->action == "Active") {
                 $sql = "UPDATE user_mas set \"iStatus\" = '1' WHERE \"iUserId\" IN (" . $this->ids . ")";
