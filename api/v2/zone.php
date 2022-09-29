@@ -144,6 +144,7 @@ if($request_type == "zone_list"){
 }
 else if($request_type == "zone_add"){
     //echo "<pre>";print_r($FILES_PARA);exit;
+    $file_msg = "File Not Uploaded.Please Check it.";
     if($FILES_PARA["vFile"]['name'] != ""){
         //$filepath = create_image_folder($sess_iCountySaasId,$zone_path);
         $filepath = $zone_path;
@@ -159,11 +160,9 @@ else if($request_type == "zone_add"){
             "vFile"         => $file_name,
             "iStatus"       => $RES_PARA['iStatus'],
         );
-
         $ZoneObj->insert_arr = $insert_arr;
         $ZoneObj->setClause();
         $iZoneId = $ZoneObj->add_records();
-
         if($iZoneId){
             $response_data = array("Code" => 200, "Message" => MSG_ADD, "iZoneId" => $iZoneId);
         }
@@ -176,7 +175,6 @@ else if($request_type == "zone_add"){
     }
 }
 else if($request_type == "zone_edit"){
-
     if($RES_PARA['iZoneId'] > 0 || $RES_PARA != ""){
         $update_arr = array(
             "iZoneId"       => $RES_PARA['iZoneId'],

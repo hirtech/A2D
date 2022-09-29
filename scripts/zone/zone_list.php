@@ -170,6 +170,7 @@ if($mode == "List"){
     $response = curl_exec($ch);
     curl_close($ch); 
     $result_arr = json_decode($response, true); 
+    //echo "<pre>";print_r($result_arr);exit();
     if(isset($result_arr['iZoneId'])){       
         $result['msg'] = MSG_ADD;
         $result['error']= 0 ;
@@ -193,7 +194,7 @@ if($mode == "List"){
         "iStatus"   => $_POST['iStatus'],
         "sessionId" => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
     );
-    //echo "<pre>";print_r(json_encode($arr_param));
+    //echo "<pre>";print_r(json_encode($arr_param));exit;
 
     $API_URL = $site_api_url."zone_edit.json";
     $ch = curl_init();
@@ -208,11 +209,10 @@ if($mode == "List"){
        "Content-Type: application/json",
     ));
 
-    $rs = curl_exec($ch);
-
-    curl_close($ch);  
-
-    if($rs){
+    $response = curl_exec($ch);
+    curl_close($ch); 
+    $result = json_decode($response, true); 
+    if($result){
         $result['msg'] = MSG_UPDATE;
         $result['error']= 0 ;
     }else{

@@ -39,20 +39,19 @@ if($mode == "Update") {
     $ZoneObj->param['limit'] = "LIMIT 1";
     $ZoneObj->setClause();
     $rs_data = $ZoneObj->recordset_list();
-    if($rs_data[0]['vFile'] != ""){
-    	$filepath = $network_path."/";
-    	if(file_exists($filepath.$rs_data[0]['vFile'])){
-    		$download_path = $network_path."/".$rs_data[0]['vFile'];
-			$download_url = $network_url."/".$rs_data[0]['vFile'];
+    if($rs_data){
+    	if(file_exists($zone_path.$rs_data[0]['vFile'])){
+    		$download_path = $zone_path.$rs_data[0]['vFile'];
+			$download_url = $zone_path.$rs_data[0]['vFile'];
 			
 			$file_name_arr = explode('_', $rs_data[0]['vFile'], 2);
-			
+			//echo "<pre>";print_r($file_name_arr);exit();
 			$file_url = $site_url.'download.php?vFileName_path='.base64_encode($download_path).'&vFileName_url='.base64_encode($download_url).'&file_name='.base64_encode($file_name_arr[1]);
 			$rs_data[0]['file_url'] = $file_url;
     	}
     }
    
-    //echo "<pre>";print_r($rs_sr);exit();
+    //echo "<pre>";print_r($rs_data);exit();
 }
 
 $network_arr_param = array();

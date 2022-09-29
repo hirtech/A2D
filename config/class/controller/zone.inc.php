@@ -121,32 +121,50 @@ class Zone {
 		        $data= xmlstring2array($contents);
 		        //echo "<pre>";print_r($data);exit;
 		        $ni = count($data['Document']['Placemark']);
-		        if($ni > 0) {
+		         if($ni > 0) {
 		            $PShape =   trim($data['Document']['Placemark']['Polygon']['outerBoundaryIs']['LinearRing']['coordinates']);
 		            $str1 = '';
 		            $str2 = '';
 		            $str3 = '';
-		            $str1 = str_replace(" ","|||", $PShape);
-		            $str2 = str_replace(","," ", $str1);
-		            $str3 = str_replace("|||",", ", $str2);
-		            /*echo $str1."\n";
-		            echo $str2."\n";
-		            echo $str3;exit;*/
+		            $pstr = '';
+		            $pstr1 = '';
+		            $str4 = '';
+		            if(strpos($PShape,',0') !== false){
+					    $str1 = str_replace(",0","|||", $PShape);
+					    $str2 = str_replace(","," ", $str1);
+			            $str3 = str_replace("|||",", ", trim($str2));
+			            $str3 = substr(trim($str3), 0, -1);
+			            $pstr = str_replace("\n","", $PShape);
+			            $pstr1 = str_replace(",0 ","),(", trim($pstr));
+			            $str4 = str_replace(" ","", trim($pstr1));
+			            $str4 = substr(trim($str4), 0, -2);
+					} else {
+					    $str1 = str_replace(" ","|||", $PShape);
+			            $str2 = str_replace(","," ", $str1);
+			            $str3 = str_replace("|||",", ", $str2);
+			            $str4 = str_replace(" ","),(", $PShape);
+					}
+		            // echo $str1."==";
+		            // echo $str2."==";
+		            // echo $str3;exit; 
+		            // echo $pstr."==";
+		            // echo $str4;exit;
 		            //$str3 = substr($str3, 0, -1);
 		            $pShape = '';
 		            $pShape .= 'POLYGON((';
 		            $pShape .= $str3;
 		            $pShape .= '))';
 
-		            $str4 = '';
-		            $str4 = str_replace(" ","),(", $PShape);
+					//echo $str4;exit;
 		            $pShape1 = '';
 		            $pShape1 .= '((';
 		            $pShape1 .= $str4;
 		            $pShape1 .= '))';
+		            //echo $pShape1;exit;
 		            if($str3 != '') {
-		                $rs_db = 'UPDATE zone SET "PShape"= ST_GeomFromText(\''.$pShape.'\', 4326), "PShape1"= \''.$pShape1.'\' WHERE "iZoneId"= '.$iZoneId.'';
-		                $sqlObj->Execute($rs_db);
+		                $sql_up = 'UPDATE zone SET "PShape"= ST_GeomFromText(\''.$pShape.'\', 4326), "PShape1"= \''.$pShape1.'\' WHERE "iZoneId"= '.$iZoneId.'';
+		                //echo $sql_up;exit();
+		                $sqlObj->Execute($sql_up);
 		            }
 		        } 
 			}
@@ -158,46 +176,71 @@ class Zone {
 		global $sqlObj, $zone_path, $zone_url;
 
 		if($this->update_arr){
-			$file_name = $this->update_arr['vFile'];
 			$iZoneId = $this->update_arr['iZoneId'];
+			$sql = 'SELECT "vFile" from zone where "iZoneId" = '.$iZoneId.' LIMIT 1';
+			$rs = $sqlObj->GetAll($sql);
+			$file_name = '';
+			if(!empty($rs)){
+				$file_name = $rs[0]['vFile'];
+			}
 			$rs_db = "UPDATE zone SET \"vZoneName\"='".$this->update_arr['vZoneName']."', \"iNetworkId\"='".$this->update_arr['iNetworkId']."', \"iStatus\"='".$this->update_arr['iStatus']."',\"dModifiedDate\" = ".gen_allow_null_char(date_getSystemDateTime())."  WHERE \"iZoneId\"='".$this->update_arr['iZoneId']."'";
 			$sqlObj->Execute($rs_db);
 			$rs_db = $sqlObj->Affected_Rows();
 			if($rs_db){
-		        $contents = file_get_contents($zone_path.$file_name);   
-		        $data= xmlstring2array($contents);
-		        //echo "<pre>";print_r($data);exit;
-		        $ni = count($data['Document']['Placemark']);
-		        if($ni > 0) {
-		            $PShape =   trim($data['Document']['Placemark']['Polygon']['outerBoundaryIs']['LinearRing']['coordinates']);
-		            $str1 = '';
-		            $str2 = '';
-		            $str3 = '';
-		            $str1 = str_replace(" ","|||", $PShape);
-		            $str2 = str_replace(","," ", $str1);
-		            $str3 = str_replace("|||",", ", $str2);
-		            /*echo $str1."\n";
-		            echo $str2."\n";
-		            echo $str3;exit;*/
-		            //$str3 = substr($str3, 0, -1);
-		            $pShape = '';
-		            $pShape .= 'POLYGON((';
-		            $pShape .= $str3;
-		            $pShape .= '))';
+				if($file_name != ''){
+			        $contents = file_get_contents($zone_path.$file_name);
+			        $data= xmlstring2array($contents);
+			        //echo "<pre>";print_r($data);exit;
+			        $ni = count($data['Document']['Placemark']);
+			        if($ni > 0) {
+			            $PShape =   trim($data['Document']['Placemark']['Polygon']['outerBoundaryIs']['LinearRing']['coordinates']);
+			            $str1 = '';
+			            $str2 = '';
+			            $str3 = '';
+			            $pstr = '';
+			            $pstr1 = '';
+			            $str4 = '';
+			            if(strpos($PShape,',0') !== false){
+						    $str1 = str_replace(",0","|||", $PShape);
+						    $str2 = str_replace(","," ", $str1);
+				            $str3 = str_replace("|||",", ", trim($str2));
+				            $str3 = substr(trim($str3), 0, -1);
+				            $pstr = str_replace("\n","", $PShape);
+				            $pstr1 = str_replace(",0 ","),(", trim($pstr));
+				            $str4 = str_replace(" ","", trim($pstr1));
+				            $str4 = substr(trim($str4), 0, -2);
+						} else {
+						    $str1 = str_replace(" ","|||", $PShape);
+				            $str2 = str_replace(","," ", $str1);
+				            $str3 = str_replace("|||",", ", $str2);
+				            $str4 = str_replace(" ","),(", $PShape);
+						}
+			            // echo $str1."==";
+			            // echo $str2."==";
+			            // echo $str3;exit; 
+			            // echo $pstr."==";
+			            // echo $str4;exit;
+			            //$str3 = substr($str3, 0, -1);
+			            $pShape = '';
+			            $pShape .= 'POLYGON((';
+			            $pShape .= $str3;
+			            $pShape .= '))';
 
-		            $str4 = '';
-		            $str4 = str_replace(" ","),(", $PShape);
-		            $pShape1 = '';
-		            $pShape1 .= '((';
-		            $pShape1 .= $str4;
-		            $pShape1 .= '))';
-		            if($str3 != '') {
-		                $rs_db = 'UPDATE zone SET "PShape"= ST_GeomFromText(\''.$pShape.'\', 4326), "PShape1"= \''.$pShape1.'\' WHERE "iZoneId"= '.$iZoneId.'';
-		                $sqlObj->Execute($rs_db);
-		            }
-		        } 
+						//echo $str4;exit;
+			            $pShape1 = '';
+			            $pShape1 .= '((';
+			            $pShape1 .= $str4;
+			            $pShape1 .= '))';
+			            //echo $pShape1;exit;
+			            if($str3 != '') {
+			                $sql_up = 'UPDATE zone SET "PShape"= ST_GeomFromText(\''.$pShape.'\', 4326), "PShape1"= \''.$pShape1.'\' WHERE "iZoneId"= '.$iZoneId.'';
+			                //echo $sql_up;exit();
+			                $sqlObj->Execute($sql_up);
+			            }
+			        }
+			    }
 			}
-			return $rs_up;
+			return $rs_db;
 		}
 	}
 	
