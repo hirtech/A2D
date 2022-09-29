@@ -101,12 +101,20 @@ function onMapLoad(){
                     if(len > 0){  
                         //var src = 'http://butte.vectorcontrolsystem.com/storage/kml/6/1606197216_1516332155_organic.kml';
                         var src = json_kml[0]['vFilePath'];
-                        var kmlOptions = {
+                        /*var kmlOptions = {
                             suppressInfoWindows: true,
-                            preserveViewport: true,
-                            map: map
+                            preserveViewport: false,
+                            map: map,
                         };
-                        var kmlLayer = new google.maps.KmlLayer(src, kmlOptions);
+                        var kmlLayer = new google.maps.KmlLayer(src, kmlOptions);*/
+                        //src = "http://54.167.253.109/eCommunityfiber/storage/zone//1664396393_Polygon_One.kml"
+                        var ctaLayer = new google.maps.KmlLayer({
+                            url: src,
+                            suppressInfoWindows: true,  
+                            map:map,
+                            zindex: 0,
+                            clickable : false
+                      }); 
                     }
                 }  
             }
