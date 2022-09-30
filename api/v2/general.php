@@ -693,6 +693,69 @@ else if($request_type == "result_dropdown"){
     $code = 2000;
     $message = api_getMessage($req_ext, constant($code));
     $response_data = array("Code" => $code, "Message" => $message, "result" => $jsonData);
+} else if ($request_type == "premise_type_dropdown"){
+    $where_arr = array();
+    $join_fieds_arr = array();
+    $join_arr  = array();
+    
+    $SiteTypeObj = new SiteType();
+    $iStatus = $RES_PARA['iStatus'];
+    $where_arr = array();
+    if($iStatus != ''){
+        $where_arr[] = "site_type_mas.\"iStatus\"='".$iStatus."'";
+    }
+    $SiteTypeObj->where = $where_arr;
+    $SiteTypeObj->param['order_by'] = "site_type_mas.\"vTypeName\"";
+    $SiteTypeObj->setClause();
+    $rs_sitetype = $SiteTypeObj->recordset_list();
+    if($rs_sitetype){
+        $response_data = array("Code" => 200, "result" => $rs_sitetype, "total_record" => count($rs_sitetype));
+    }else{
+        $response_data = array("Code" => 500);
+    }
+}else if($request_type == "premise_sub_type_dropdown"){
+    $where_arr = array();
+    $join_fieds_arr = array();
+    $join_arr  = array();
+
+    $SiteSubTypeObj = new SiteSubType();
+    $iStatus = $RES_PARA['iStatus'];
+    $iSTypeId = $RES_PARA['iSTypeId'];
+    $where_arr = array();
+    if($iStatus != ''){
+        $where_arr[] = "site_sub_type_mas.\"iStatus\"='".$iStatus."'";
+    }
+    if($iSTypeId != ''){
+        $where_arr[] = "site_sub_type_mas.\"iSTypeId\"='".$iSTypeId."'";
+    }
+    $SiteSubTypeObj->where = $where_arr;
+    $SiteSubTypeObj->param['order_by'] = "site_sub_type_mas.\"vSubTypeName\"";
+    $SiteSubTypeObj->setClause();
+    $rs_sstype = $SiteSubTypeObj->recordset_list();
+    if($rs_sstype){
+        $response_data = array("Code" => 200, "result" => $rs_sstype, "total_record" => count($rs_sstype));
+    }else{
+        $response_data = array("Code" => 500);
+    }
+}else if($request_type == "premise_attribute_dropdown"){
+    $where_arr = array();
+    $join_fieds_arr = array();
+    $join_arr  = array();
+    $SiteAttribute = new SiteAttribute();
+    $iStatus = $RES_PARA['iStatus'];
+    $where_arr = array();
+    if($iStatus != ''){
+        $where_arr[] = "site_attribute_mas.\"iStatus\"='".$iStatus."'";
+    }
+    $SiteAttribute->where = $where_arr;
+    $SiteAttribute->param['order_by'] = "site_attribute_mas.\"vAttribute\"";
+    $SiteAttribute->setClause();
+    $rs_sitetype = $SiteAttribute->recordset_list();
+    if($rs_sitetype){
+        $response_data = array("Code" => 200, "result" => $rs_sitetype, "total_record" => count($rs_sitetype));
+    }else{
+        $response_data = array("Code" => 500);
+    }
 }
 else {
 	$r = HTTPStatus(400);

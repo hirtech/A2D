@@ -25,34 +25,6 @@ if($mode == "List"){
     $result_arr = array();
     $total =0;
     $arr_param = array();
-
-    switch ($display_order) {
-        case "0":
-            $sortname = "iTPId";
-            break;
-        case "1":
-            $sortname = "vName";
-            break; 
-        case "2":
-            $sortname = "vCategory";
-            break;
-        case "3":
-            $sortname = "iPesticide";
-            break;
-        case "4":
-            $sortname = "vClass";
-            break;
-        case "6":
-            $sortname = "vUnit";
-            break;
-        case "8":
-            $sortname = "iStatus";
-            break;
-        default:
-            $sortname = "iTPId";
-            break;
-    }
-
     $vOptions = $_REQUEST['vOptions'];
     $Keyword = addslashes(trim($_REQUEST['Keyword']));
     if ($Keyword != "") {
@@ -61,13 +33,14 @@ if($mode == "List"){
     $arr_param['page_length'] = $page_length;
     $arr_param['start'] = $start;
     $arr_param['sEcho'] = $sEcho;
-    $arr_param['display_order'] = $sortname;
+    $arr_param['display_order'] = $display_order;
     $arr_param['dir'] = $dir;
     $arr_param['access_group_var_edit'] = $access_group_var_edit;
     $arr_param['access_group_var_delete'] = $access_group_var_delete;
-    
+    $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
     
     $API_URL = $site_api_url."treatment_product_list.json";
+    //echo $API_URL. " ".json_encode($arr_param);exit;
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $API_URL);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
@@ -170,7 +143,7 @@ if($mode == "List"){
         );
 
         $API_URL = $site_api_url."treatment_product_add.json";
-     
+        //echo $API_URL." ".json_encode($arr_param);exit;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $API_URL);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
@@ -209,7 +182,7 @@ if($mode == "List"){
     $arr_param['iTPId'] = $id;
     $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
     $API_URL = $site_api_url."treatment_product_delete.json";
-
+    ///echo $API_URL." ".json_encode($arr_param);exit;
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $API_URL);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
@@ -267,7 +240,7 @@ if($mode == "List"){
         );
 
         $API_URL = $site_api_url."treatment_product_edit.json";
-  
+        //echo $API_URL." ".json_encode($arr_param);exit;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $API_URL);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
@@ -282,7 +255,6 @@ if($mode == "List"){
 
         $rs = curl_exec($ch); 
         curl_close($ch);  
-
         if($rs){
             $result['msg'] = MSG_UPDATE;
             $result['error']= 0 ;
@@ -304,6 +276,7 @@ if($mode == "List"){
 
 //Unit array
 $arr_param = array();
+$arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
 $API_URL = $site_api_url."unit_multi_dropdown.json";
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, $API_URL);

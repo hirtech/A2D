@@ -2,6 +2,7 @@
 include_once($controller_path . "premise_type.inc.php");
 include_once($controller_path . "premise_attribute.inc.php");
 include_once($controller_path . "premise_sub_type.inc.php");
+include_once($controller_path . "treatment_product.inc.php");
 include_once($function_path."image.inc.php");
 include_once($function_path."site_general.inc.php");
 
@@ -262,6 +263,329 @@ if($request_type == "premise_type_list"){
         $response_data = array("Code" => 200, "Message" => MSG_UPDATE, "iSSTypeId" => $RES_PARA['iSSTypeId']);
     }else{
         $response_data = array("Code" => 500 , "Message" => MSG_UPDATE_ERROR);
+    }
+}else if($request_type == "premise_attribute_list"){
+    $SiteAttObj = new SiteAttribute();
+    $where_arr = array();
+    if(!empty($RES_PARA)){
+        $vAttribute         = trim($RES_PARA['vAttribute']);
+        $iStatus            = trim($RES_PARA['iStatus']);
+        $page_length        = isset($RES_PARA['page_length']) ? trim($RES_PARA['page_length']) : "10";
+        $start              = isset($RES_PARA['start']) ? trim($RES_PARA['start']) : "0";
+        $sEcho              = $RES_PARA['sEcho'];
+        $display_order      = $RES_PARA['display_order'];
+        $dir                = $RES_PARA['dir'];
+    }
+
+    if ($vAttribute != "") {
+        $where_arr[] = 'site_type_mas."vAttribute" ILIKE \''.$vAttribute.'%\'';
+    }
+
+    if ($iStatus != "") {
+        $where_arr[] = "site_attribute_mas.\"iStatus\"='".$iStatus."'";
+    }
+
+    switch ($display_order) {
+        case "0":
+            $sortname = "site_attribute_mas.\"iSAttributeId\"";
+            break;
+        case "1":
+            $sortname = "site_attribute_mas.\"vAttribute\"";
+            break;
+        case "2":
+            $sortname = "site_attribute_mas.\"iStatus\"";
+            break;
+        default:
+            $sortname = 'site_attribute_mas."vAttribute"';
+            break;
+    }
+
+    $join_fieds_arr = array();
+    $join_arr = array();
+    $SiteAttObj->join_field = $join_fieds_arr;
+    $SiteAttObj->join = $join_arr;
+    $SiteAttObj->where = $where_arr;
+    $SiteAttObj->param['order_by'] = $sortname . " " . $dir;
+    $SiteAttObj->param['limit'] = $limit;
+    $SiteAttObj->setClause();
+    $SiteAttObj->debug_query = false;
+    $rs_type = $SiteAttObj->recordset_list();
+    // Paging Total Records
+    $total = $SiteAttObj->recordset_total();
+
+    $data = array();
+    $ni = count($rs_type);
+
+    if($ni > 0){
+        for($i=0;$i<$ni;$i++){
+            $data[] = array(
+                "iSAttributeId"    => $rs_type[$i]['iSAttributeId'],
+                "vAttribute"       => gen_strip_slash($rs_type[$i]['vAttribute']),
+                'iStatus'          => $rs_type[$i]['iStatus'],
+            );
+        }
+    }
+    $result = array('data' => $data , 'total_record' => $total);
+
+    $rh = HTTPStatus(200);
+    $code = 2000;
+    $message = api_getMessage($req_ext, constant($code));
+    $response_data = array("Code" => 200, "Message" => $message, "result" => $result);
+}else if($request_type == "premise_attribute_delete"){
+    $iSAttributeId = $RES_PARA['iSAttributeId'];
+    $SiteAttObj = new SiteAttribute();
+    $rs_db = $SiteAttObj->delete_records($iSAttributeId);
+    if($rs_db){
+        $response_data = array("Code" => 200, "Message" => MSG_DELETE, "iSAttributeId" => $iSAttributeId);
+    }else{
+        $response_data = array("Code" => 500 , "Message" => MSG_DELETE_ERROR);
+    }
+}else if($request_type == "premise_attribute_add"){
+    $SiteAttObj = new SiteAttribute();
+    $insert_arr = array(
+        "vAttribute"    => $RES_PARA['vAttribute'],
+        "iStatus"       => $RES_PARA['iStatus'],
+    );
+    //echo "<pre>";print_r($insert_arr);exit;
+    $SiteAttObj->insert_arr = $insert_arr;
+    $SiteAttObj->setClause();
+    $iSAttributeId = $SiteAttObj->add_records();
+    if(isset($iSAttributeId)){
+        $response_data = array("Code" => 200, "Message" => MSG_ADD, "iSAttributeId" => $iSAttributeId);
+    }else{
+        $response_data = array("Code" => 500 , "Message" => MSG_ADD_ERROR);
+    }
+}else if($request_type == "premise_attribute_edit"){
+    $SiteAttObj = new SiteAttribute();
+    $update_arr = array(
+        "iSAttributeId"     => $RES_PARA['iSAttributeId'],
+        "vAttribute"        => $RES_PARA['vAttribute'],
+        "iStatus"           => $RES_PARA['iStatus'],
+    );
+    //echo "<pre>";print_r($update_arr);exit;
+    $SiteAttObj->update_arr = $update_arr;
+    $SiteAttObj->setClause();
+    $iSAttributeId = $SiteAttObj->update_records();
+    if(isset($iSAttributeId)){
+        $response_data = array("Code" => 200, "Message" => MSG_UPDATE, "iSAttributeId" => $RES_PARA['iSAttributeId']);
+    }else{
+        $response_data = array("Code" => 500 , "Message" => MSG_UPDATE_ERROR);
+    }
+}else if($request_type == "treatment_product_list"){
+    $TProdObj = new TreatmentProduct();
+    $where_arr = array();
+
+    $page_length   = $RES_PARA['page_length'];
+    $start         = $RES_PARA['start'];
+    $sEcho         = $RES_PARA['sEcho'];
+    $display_order = $RES_PARA['display_order'];
+    $dir           = $RES_PARA['dir'];
+    $iTPId         = $RES_PARA['iTPId'];
+    $vName         = $RES_PARA['vName'];
+    $vCategory     = $RES_PARA['vCategory'];
+    $vClass        = $RES_PARA['vClass'];
+    $iPesticide    = $RES_PARA['iPesticide'];
+    $iUId          = $RES_PARA['iUId'];
+    $iStatus       = $RES_PARA['iStatus'];
+    $access_group_var_edit = $RES_PARA['access_group_var_edit'];
+    $access_group_var_delete = $RES_PARA['access_group_var_delete'];
+
+    if(!empty($RES_PARA)){
+        $iTPId         = $RES_PARA['iTPId'];
+        $vName         = $RES_PARA['vName'];
+        $vCategory     = $RES_PARA['vCategory'];
+        $vClass        = $RES_PARA['vClass'];
+        $iPesticide    = $RES_PARA['iPesticide'];
+        $iUId          = $RES_PARA['iUId'];
+        $iStatus       = $RES_PARA['iStatus'];
+        $page_length = isset($RES_PARA['page_length'])?trim($RES_PARA['page_length']):"10";
+        $start = isset($RES_PARA['start'])?trim($RES_PARA['start']):"0";
+        $display_order = isset($RES_PARA['display_order'])?trim($RES_PARA['display_order']):"";
+        $dir = isset($RES_PARA['dir'])?trim($RES_PARA['dir']):"";
+    }
+   
+    if ($iTPId != "") {
+        $where_arr[] = 'treatment_product."iTPId"='.$iTPId ;
+    }
+    if ($vName != "") {
+        $where_arr[] = "treatment_product.\"vName\" ILIKE '" . $vName . "%'";
+    }
+    if ($vCategory != "") {
+        $where_arr[] = "treatment_product.\"vCategory\" ILIKE '" . $vCategory . "%'";
+    }
+    if ($vClass != "") {
+        $where_arr[] = "treatment_product.\"vClass\" ILIKE '" . $vClass . "%'";
+    }
+    if ($iPesticide != ""){
+        if(strtolower($iPesticide) == "yes"){
+            $where_arr[] = "treatment_product.\"iPesticide\" = 'Y'";
+        }
+        else if(strtolower($iPesticide) == "no"){
+            $where_arr[] = "treatment_product.\"iPesticide\" = 'N'";
+        } 
+    }
+    if ($iUId != "") {
+        $where_arr[] = "unit_mas.\"vUnit\" ILIKE '" . $iUId . "%'";
+    }
+    if ($iStatus != ""){
+        if(strtolower($iStatus) == "active"){
+            $where_arr[] = "treatment_product.\"iStatus\" = '1'";
+        }
+        else if(strtolower($iStatus) == "inactive"){
+            $where_arr[] = "treatment_product.\"iStatus\" = '0'";
+        }
+    }
+    switch ($display_order) {
+        case "0":
+            $sortname = 'treatment_product."iTPId"';
+            break;
+        case "1":
+            $sortname = 'treatment_product."vName"';
+            break; 
+        case "2":
+            $sortname = 'treatment_product."vCategory"';
+            break;
+        case "3":
+            $sortname = 'treatment_product."iPesticide"';
+            break;
+        case "4":
+            $sortname = 'treatment_product."vClass"';
+            break;
+        case "6":
+            $sortname = 'unit_mas."vUnit"';
+            break;
+        case "8":
+            $sortname = 'treatment_product."iStatus"';
+            break;
+        default:
+            $sortname = 'treatment_product."iTPId"';
+            break;
+    }
+
+    $limit = "LIMIT ".$page_length." OFFSET ".$start."";
+  
+    $join_fieds_arr = array();
+    $join_fieds_arr[] = "unit_mas.\"vUnit\"";
+    $join_arr = array();
+    $join_arr[] = 'LEFT JOIN unit_mas  on unit_mas."iUId" = treatment_product."iUId"';
+    $TProdObj->join_field = $join_fieds_arr;
+    $TProdObj->join = $join_arr;
+    $TProdObj->where = $where_arr;
+    $TProdObj->param['order_by'] = $sortname . " " . $dir;
+    $TProdObj->param['limit'] = $limit;
+    $TProdObj->setClause();
+    $TProdObj->debug_query = false;
+    $rs_data = $TProdObj->recordset_list();
+    // Paging Total Records
+    $total_record = $TProdObj->recordset_total();
+    // Paging Total Records
+
+    $jsonData = array('sEcho' => $sEcho, 'iTotalDisplayRecords' => $total, 'iTotalRecords' => $total, 'aaData' => array());
+    $data = array();
+    $ni = count($rs_data);
+    if(!empty($rs_data)){
+        for($i=0;$i<$ni;$i++){
+            $itpId = $rs_data[$i]['iTPId'];
+            $pesticide = ($rs_data[$i]['iPesticide'] =='Y')?'Yes':'No';
+            $data[] = array(
+                "iTPId" => $itpId,
+                "vName" => $rs_data[$i]['vName'],
+                "vCategory" => $rs_data[$i]['vCategory'],
+                "iPesticide" => $pesticide,
+                "vClass" => $rs_data[$i]['vClass'],
+                "vEPARegNo" => $rs_data[$i]['vEPARegNo'],
+                "vActiveIngredient" => $rs_data[$i]['vActiveIngredient'],
+                "vActiveIngredient2" => $rs_data[$i]['vActiveIngredient2'],
+                "vAI" => $rs_data[$i]['vAI'],
+                "vAI2" => $rs_data[$i]['vAI2'],
+                "iUId" => $rs_data[$i]['iUId'],
+                "vUnit" => $rs_data[$i]['vUnit'],
+                "vAppRate" => $rs_data[$i]['vAppRate'],
+                "vTragetAppRate" =>$rs_data[$i]['vTragetAppRate'],
+                "vMinAppRate" =>$rs_data[$i]['vMinAppRate'],
+                "vMaxAppRate" =>$rs_data[$i]['vMaxAppRate'],
+                "iStatus" => $rs_data[$i]['iStatus']       
+            );
+        }
+    }
+    $result = array('data' => $data , 'total_record' => $total_record);
+
+    $rh = HTTPStatus(200);
+    $code = 2000;
+    $message = api_getMessage($req_ext, constant($code));
+    $response_data = array("Code" => 200, "Message" => $message, "result" => $result);
+}else if($request_type == "treatment_product_add"){
+    $TProdObj = new TreatmentProduct();
+    $insert_arr = array(
+        "vName"             => $RES_PARA['vName'],
+        "vCategory"         => $RES_PARA['vCategory'],
+        "vClass"            => $RES_PARA['vClass'],
+        "iPesticide"        => $RES_PARA['iPesticide'],
+        "vEPARegNo"         => $RES_PARA['vEPARegNo'],
+        "vActiveIngredient" => $RES_PARA['vActiveIngredient'],
+        "vActiveIngredient2"=> $RES_PARA['vActiveIngredient2'],
+        "vAI"               => $RES_PARA['vAI'],
+        "vAI2"              => $RES_PARA['vAI2'],
+        "iUId"              => $RES_PARA['iUId'],
+        "vAppRate"          => $RES_PARA['vAppRate'],
+        "vTragetAppRate"    => $RES_PARA['vTragetAppRate'],
+        "vMinAppRate"       => $RES_PARA['vMinAppRate'],
+        "vMaxAppRate"       => $RES_PARA['vMaxAppRate'],
+        "iStatus"           => $RES_PARA['iStatus']
+    );
+
+    $TProdObj->insert_arr = $insert_arr;
+    $TProdObj->setClause();
+    $rs_db = $TProdObj->add_records();
+
+    if($rs_db){
+        $response_data = array("Code" => 200, "Message" => MSG_ADD, "result" => $rs_db);
+    }
+    else{
+        $response_data = array("Code" => 500 , "Message" => MSG_ADD_ERROR);
+    }
+}else if($request_type == "treatment_product_edit"){
+    $TProdObj = new TreatmentProduct();
+    $update_arr = array(
+        "iTPId"             => $RES_PARA['iTPId'],
+        "vName"             => $RES_PARA['vName'],
+        "vCategory"         => $RES_PARA['vCategory'],
+        "vClass"            => $RES_PARA['vClass'],
+        "iPesticide"        => $RES_PARA['iPesticide'],
+        "vEPARegNo"         => $RES_PARA['vEPARegNo'],
+        "vActiveIngredient" => $RES_PARA['vActiveIngredient'],
+        "vActiveIngredient2"=> $RES_PARA['vActiveIngredient2'],
+        "vAI"               => $RES_PARA['vAI'],
+        "vAI2"              => $RES_PARA['vAI2'],
+        "iUId"              => $RES_PARA['iUId'],
+        "vAppRate"          => $RES_PARA['vAppRate'],
+        "vTragetAppRate"    => $RES_PARA['vTragetAppRate'],
+        "vMinAppRate"       => $RES_PARA['vMinAppRate'],
+        "vMaxAppRate"       => $RES_PARA['vMaxAppRate'],
+        "iStatus"           => $RES_PARA['iStatus']
+    );
+
+    $TProdObj->update_arr = $update_arr;
+    $TProdObj->setClause();
+    $rs_db = $TProdObj->update_records();
+
+    if($rs_db){
+        $response_data = array("Code" => 200, "Message" => MSG_UPDATE, "result" => $rs_db);
+    }
+    else{
+        $response_data = array("Code" => 500 , "Message" => MSG_UPDATE_ERROR);
+    }
+}
+else if($request_type == "treatment_product_delete"){
+    $TProdObj = new TreatmentProduct();
+    $iTPId = $RES_PARA['iTPId'];
+    $rs_db = $TProdObj->delete_records($iTPId);
+
+    if($rs_db){
+        $response_data = array("Code" => 200, "Message" => MSG_DELETE, "iTPId" => $iTPId);
+    }
+    else{
+        $response_data = array("Code" => 500 , "Message" => MSG_DELETE_ERROR);
     }
 }
 else {
