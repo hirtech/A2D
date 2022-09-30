@@ -90,7 +90,7 @@ if($mode == "List"){
    
     $result_arr = json_decode($response, true);
 
-    $ni = $total = $result_arr['result']['total_record'];
+    $total = $result_arr['result']['total_record'];
     $jsonData = array('sEcho' => $sEcho, 'iTotalDisplayRecords' => $total, 'iTotalRecords' => $total, 'aaData' => array());
     $entry = $hidden_arr = array();
     $rs_type = $result_arr['result']['data'];

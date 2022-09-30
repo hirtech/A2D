@@ -67,11 +67,11 @@ if($mode == "List"){
    
     $result_arr = json_decode($response, true);
 
-    $ni = $total = $result_arr['result']['total_record'];
+    $total = $result_arr['result']['total_record'];
     $jsonData = array('sEcho' => $sEcho, 'iTotalDisplayRecords' => $total, 'iTotalRecords' => $total, 'aaData' => array());
     $entry = array();
     $rs_list = $result_arr['result']['data'];
-
+	$ni = count($rs_list);
     if($ni > 0){
         for($i=0;$i<$ni;$i++){
 

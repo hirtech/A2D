@@ -64,11 +64,11 @@ if($mode == "List"){
     $result_arr = json_decode($response, true);
     //echo "<pre>";print_r(json_encode($result_arr['result']));exit();
 
-    $ni = $total = $result_arr['result']['total_record'];
+    $total = $result_arr['result']['total_record'];
     $jsonData = array('sEcho' => $sEcho, 'iTotalDisplayRecords' => $total, 'iTotalRecords' => $total, 'aaData' => array());
     $entry = $hidden_arr = array();
     $rs_data = $result_arr['result']['data'];
-
+	$ni = count($rs_data);
     if($ni > 0){
         for($i=0;$i<$ni;$i++){
 

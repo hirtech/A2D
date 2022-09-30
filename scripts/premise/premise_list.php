@@ -121,11 +121,11 @@ if($mode == "List"){
     curl_close($ch);  
     //echo "<pre>";print_r($response);exit();
     $result_arr = json_decode($response, true);
-    $ni = $total = $result_arr['result']['total_record'];
+    $total = $result_arr['result']['total_record'];
     $jsonData = array('sEcho' => $sEcho, 'iTotalDisplayRecords' => $total, 'iTotalRecords' => $total, 'aaData' => array());
     $entry = $hidden_arr = array();
     $rs_site = $result_arr['result']['data'];
-
+    $ni = count($rs_site);
     if($ni > 0){
         for($i=0;$i<$ni;$i++){
             $action = '';
