@@ -6,4 +6,5 @@ sudo chmod 0750 vectorERP
 chmod 777 vectorERP/logs/
 chmod 777 vectorERP/storage
 
+
 sudo /etc/init.d/httpd restart
