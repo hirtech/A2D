@@ -10,9 +10,9 @@ $access_group_var_PDF = per_hasModuleAccess("Treatment Product", 'PDF', 'N');
 $access_group_var_CSV = per_hasModuleAccess("Treatment Product", 'CSV', 'N');
 $access_group_var_Respond = per_hasModuleAccess("Treatment Product", 'Respond', 'N');
 # ----------- Access Rule Condition -----------
-
 # General Variables
 # ------------------------------------------------------------
+$page = $_REQUEST['page'];
 $mode = isset($_REQUEST['mode']) ? $_REQUEST['mode'] : 'list';
 $page_length = isset($_REQUEST['iDisplayLength']) ? $_REQUEST['iDisplayLength'] : '10';
 $start = isset($_REQUEST['iDisplayStart']) ? $_REQUEST['iDisplayStart'] : '0';
@@ -20,7 +20,6 @@ $sEcho = (isset($_REQUEST["sEcho"]) ? $_REQUEST["sEcho"] : '0');
 $display_order = (isset($_REQUEST["iSortCol_0"]) ? $_REQUEST["iSortCol_0"] : '1');
 $dir = (isset($_REQUEST["sSortDir_0"]) ? $_REQUEST["sSortDir_0"] : 'desc');
 # ------------------------------------------------------------
-
 if($mode == "List"){
     $result_arr = array();
     $total =0;

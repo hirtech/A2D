@@ -3,10 +3,306 @@ include_once($controller_path . "premise_type.inc.php");
 include_once($controller_path . "premise_attribute.inc.php");
 include_once($controller_path . "premise_sub_type.inc.php");
 include_once($controller_path . "treatment_product.inc.php");
+include_once($controller_path . "city.inc.php");
+include_once($controller_path . "state.inc.php");
+include_once($controller_path . "county.inc.php");
 include_once($function_path."image.inc.php");
 include_once($function_path."site_general.inc.php");
 
-if($request_type == "premise_type_list"){
+if($request_type == "city_list"){
+    $City_Obj = new City();
+    $where_arr = array();
+    if(!empty($RES_PARA)){
+        $vCity              = trim($RES_PARA['vCity']);
+        $page_length        = isset($RES_PARA['page_length']) ? trim($RES_PARA['page_length']) : "10";
+        $start              = isset($RES_PARA['start']) ? trim($RES_PARA['start']) : "0";
+        $sEcho              = $RES_PARA['sEcho'];
+        $display_order      = $RES_PARA['display_order'];
+        $dir                = $RES_PARA['dir'];
+    }
+
+    if ($vCity != "") {
+         $where_arr[] = 'city_mas."vCity" ILIKE \''.$vCity.'%\'';
+    }
+
+    switch ($display_order) {
+        case "0" : 
+            $sortname = "city_mas.\"iCityId\"";
+            break;
+        case "1":
+            $sortname = "city_mas.\"vCity\"";
+            break;
+        default:
+            $sortname = 'city_mas."vCity"';
+            break;
+    }
+
+    $join_fieds_arr = array();
+    $join_arr = array();
+    $City_Obj->join_field = $join_fieds_arr;
+    $City_Obj->join = $join_arr;
+    $City_Obj->where = $where_arr;
+    $City_Obj->param['order_by'] = $sortname . " " . $dir;
+    $City_Obj->param['limit'] = $limit;
+    $City_Obj->setClause();
+    $City_Obj->debug_query = false;
+    $rs_type = $City_Obj->recordset_list();
+    $total = $City_Obj->recordset_total();
+    $data = array();
+    $ni = count($rs_type);
+    if($ni > 0){
+        for($i=0;$i<$ni;$i++){
+            $data[] = array(
+                "iCityId" => gen_strip_slash($rs_type[$i]['iCityId']),
+                "vCity" => gen_strip_slash($rs_type[$i]['vCity']),
+            );
+        }
+    }
+    $result = array('data' => $data , 'total_record' => $total);
+
+    $rh = HTTPStatus(200);
+    $code = 2000;
+    $message = api_getMessage($req_ext, constant($code));
+    $response_data = array("Code" => 200, "Message" => $message, "result" => $result);
+}else if($request_type == "city_delete"){
+    $iCityId = $RES_PARA['iCityId'];
+    $City_Obj = new City();
+    $rs_db = $City_Obj->delete_records($iCityId);
+    if($rs_db){
+        $response_data = array("Code" => 200, "Message" => MSG_DELETE, "iCityId" => $iCityId);
+    }else{
+        $response_data = array("Code" => 500 , "Message" => MSG_DELETE_ERROR);
+    }
+}else if($request_type == "city_add"){
+    $City_Obj = new City();
+    $insert_arr = array(
+        "vCity"    => $RES_PARA['vCity'],
+    );
+    $City_Obj->insert_arr = $insert_arr;
+    $City_Obj->setClause();
+    $iCityId = $City_Obj->add_records();
+    if(isset($iCityId)){
+        $response_data = array("Code" => 200, "Message" => MSG_ADD, "iCityId" => $iCityId);
+    }else{
+        $response_data = array("Code" => 500 , "Message" => MSG_ADD_ERROR);
+    }
+}else if($request_type == "city_edit"){
+    $City_Obj = new City();
+    $update_arr = array(
+        "iCityId"       => $RES_PARA['iCityId'],
+        "vCity"         => $RES_PARA['vCity'],
+    );
+    //echo "<pre>";print_r($update_arr);exit;
+    $City_Obj->update_arr = $update_arr;
+    $City_Obj->setClause();
+    $iCityId = $City_Obj->update_records();
+    if(isset($iCityId)){
+        $response_data = array("Code" => 200, "Message" => MSG_UPDATE, "iCityId" => $RES_PARA['iCityId']);
+    }else{
+        $response_data = array("Code" => 500 , "Message" => MSG_UPDATE_ERROR);
+    }
+}else if($request_type == "state_list"){
+    $State_Obj = new State();
+    $where_arr = array();
+    if(!empty($RES_PARA)){
+        $vState             = trim($RES_PARA['vState']);
+        $vStateCode         = trim($RES_PARA['vStateCode']);
+        $page_length        = isset($RES_PARA['page_length']) ? trim($RES_PARA['page_length']) : "10";
+        $start              = isset($RES_PARA['start']) ? trim($RES_PARA['start']) : "0";
+        $sEcho              = $RES_PARA['sEcho'];
+        $display_order      = $RES_PARA['display_order'];
+        $dir                = $RES_PARA['dir'];
+    }
+
+    if ($vState != "") {
+        $where_arr[] = 'state_mas."vState" ILIKE \''.$vState.'%\'';
+    }
+    if ($vStateCode != "") {
+        $where_arr[] = 'state_mas."vStateCode" ILIKE \''.$vStateCode.'%\'';
+    }
+
+    switch ($display_order) {
+        case "0" : 
+            $sortname = "state_mas.\"iStateId\"";
+            break;
+        case "1":
+            $sortname = "state_mas.\"vState\"";
+            break;
+        case "2":
+            $sortname = "state_mas.\"vStateCode\"";
+            break;
+        default:
+            $sortname = 'state_mas."vState"';
+            break;
+    }
+
+    $limit = "LIMIT ".$page_length." OFFSET ".$start."";
+
+    $join_fieds_arr = array();
+    $join_arr = array();
+    $State_Obj->join_field = $join_fieds_arr;
+    $State_Obj->join = $join_arr;
+    $State_Obj->where = $where_arr;
+    $State_Obj->param['order_by'] = $sortname . " " . $dir;
+    $State_Obj->param['limit'] = $limit;
+    $State_Obj->setClause();
+    $State_Obj->debug_query = false;
+    $rs_type = $State_Obj->recordset_list();
+    // Paging Total Records
+    $total = $State_Obj->recordset_total();
+    $data = array();
+    $ni = count($rs_type);
+    if($ni > 0){
+        for($i=0;$i<$ni;$i++){
+            $data[] = array(
+                "iStateId"      => gen_strip_slash($rs_type[$i]['iStateId']),
+                "vState"        => gen_strip_slash($rs_type[$i]['vState']),
+                "vStateCode"    => gen_strip_slash($rs_type[$i]['vStateCode']),
+            );
+        }
+    }
+    $result = array('data' => $data , 'total_record' => $total);
+
+    $rh = HTTPStatus(200);
+    $code = 2000;
+    $message = api_getMessage($req_ext, constant($code));
+    $response_data = array("Code" => 200, "Message" => $message, "result" => $result);
+}else if($request_type == "state_add"){
+    $State_Obj = new State();
+    $insert_arr = array(
+        "vState"        => $RES_PARA['vState'],
+        "vStateCode"    => $RES_PARA['vStateCode'],
+    );
+    $State_Obj->insert_arr = $insert_arr;
+    $State_Obj->setClause();
+    $iStateId = $State_Obj->add_records();
+    if(isset($iStateId)){
+        $response_data = array("Code" => 200, "Message" => MSG_ADD, "iStateId" => $iStateId);
+    }else{
+        $response_data = array("Code" => 500 , "Message" => MSG_ADD_ERROR);
+    }
+}else if($request_type == "state_edit"){
+    $State_Obj = new State();
+    $update_arr = array(
+        "iStateId"       => $RES_PARA['iStateId'],
+        "vState"         => $RES_PARA['vState'],
+        "vStateCode"     => $RES_PARA['vStateCode']
+    );
+    //echo "<pre>";print_r($update_arr);exit;
+    $State_Obj->update_arr = $update_arr;
+    $State_Obj->setClause();
+    $iStateId = $State_Obj->update_records();
+    if(isset($iStateId)){
+        $response_data = array("Code" => 200, "Message" => MSG_UPDATE, "iStateId" => $RES_PARA['iStateId']);
+    }else{
+        $response_data = array("Code" => 500 , "Message" => MSG_UPDATE_ERROR);
+    }
+}else if($request_type == "state_delete"){
+    $iStateId = $RES_PARA['iStateId'];
+    $State_Obj = new State();
+    $rs_db = $State_Obj->delete_records($iStateId);
+    if($rs_db){
+        $response_data = array("Code" => 200, "Message" => MSG_DELETE, "iStateId" => $iStateId);
+    }else{
+        $response_data = array("Code" => 500 , "Message" => MSG_DELETE_ERROR);
+    }
+}else if($request_type == "county_list"){
+    $County_Obj = new County();
+    $where_arr = array();
+    if(!empty($RES_PARA)){
+        $vCounty            = trim($RES_PARA['vCounty']);
+        $page_length        = isset($RES_PARA['page_length']) ? trim($RES_PARA['page_length']) : "10";
+        $start              = isset($RES_PARA['start']) ? trim($RES_PARA['start']) : "0";
+        $sEcho              = $RES_PARA['sEcho'];
+        $display_order      = $RES_PARA['display_order'];
+        $dir                = $RES_PARA['dir'];
+    }
+
+    if ($vCounty != "") {
+        $where_arr[] = 'county_mas."vCounty" ILIKE \''.$vCounty.'%\'';
+    }
+
+    switch ($display_order) {
+        case "0" : 
+            $sortname = "county_mas.\"iCountyId\"";
+            break;
+        case "1":
+            $sortname = "county_mas.\"vCounty\"";
+            break;
+        default:
+            $sortname = 'county_mas."vCounty"';
+            break;
+    }
+
+    $limit = "LIMIT ".$page_length." OFFSET ".$start."";
+
+    $join_fieds_arr = array();
+    $join_arr = array();
+    $County_Obj->join_field = $join_fieds_arr;
+    $County_Obj->join = $join_arr;
+    $County_Obj->where = $where_arr;
+    $County_Obj->param['order_by'] = $sortname . " " . $dir;
+    $County_Obj->param['limit'] = $limit;
+    $County_Obj->setClause();
+    $County_Obj->debug_query = false;
+    $rs_type = $County_Obj->recordset_list();
+    // Paging Total Records
+    $total = $County_Obj->recordset_total();
+
+    $data = array();
+    $ni = count($rs_type);
+    if($ni > 0){
+        for($i=0;$i<$ni;$i++){
+            $data[] = array(
+                "iCountyId"    => gen_strip_slash($rs_type[$i]['iCountyId']),
+                "vCounty"      => gen_strip_slash($rs_type[$i]['vCounty'])
+            );
+        }
+    }
+    $result = array('data' => $data , 'total_record' => $total);
+
+    $rh = HTTPStatus(200);
+    $code = 2000;
+    $message = api_getMessage($req_ext, constant($code));
+    $response_data = array("Code" => 200, "Message" => $message, "result" => $result);
+}else if($request_type == "county_add"){
+    $County_Obj = new County();
+    $insert_arr = array(
+        "vCounty"    => $RES_PARA['vCounty'],
+    );
+    $County_Obj->insert_arr = $insert_arr;
+    $County_Obj->setClause();
+    $iCountyId = $County_Obj->add_records();
+    if(isset($iCountyId)){
+        $response_data = array("Code" => 200, "Message" => MSG_ADD, "iCountyId" => $iCountyId);
+    }else{
+        $response_data = array("Code" => 500 , "Message" => MSG_ADD_ERROR);
+    }
+}else if($request_type == "county_edit"){
+    $County_Obj = new County();
+    $update_arr = array(
+        "iCountyId"      => $RES_PARA['iCountyId'],
+        "vCounty"        => $RES_PARA['vCounty'],
+    );
+    //echo "<pre>";print_r($update_arr);exit;
+    $County_Obj->update_arr = $update_arr;
+    $County_Obj->setClause();
+    $iCountyId = $County_Obj->update_records();
+    if(isset($iCountyId)){
+        $response_data = array("Code" => 200, "Message" => MSG_UPDATE, "iCountyId" => $RES_PARA['iCountyId']);
+    }else{
+        $response_data = array("Code" => 500 , "Message" => MSG_UPDATE_ERROR);
+    }
+}else if($request_type == "county_delete"){
+    $iCountyId = $RES_PARA['iCountyId'];
+    $County_Obj = new County();
+    $rs_db = $County_Obj->delete_records($iCountyId);
+    if($rs_db){
+        $response_data = array("Code" => 200, "Message" => MSG_DELETE, "iCountyId" => $iCountyId);
+    }else{
+        $response_data = array("Code" => 500 , "Message" => MSG_DELETE_ERROR);
+    }
+}else if($request_type == "premise_type_list"){
 	$SiteTypeObj = new SiteType();
 	$where_arr = array();
     if(!empty($RES_PARA)){
@@ -24,7 +320,12 @@ if($request_type == "premise_type_list"){
     }
 
 	if ($iStatus != "") {
-        $where_arr[] = "site_type_mas.\"iStatus\"='".$iStatus."'";
+        if(strtolower($iStatus) == "active"){
+            $where_arr[] = "site_type_mas.\"iStatus\" = '1'";
+        }
+        else if(strtolower($iStatus) == "inactive"){
+            $where_arr[] = "site_type_mas.\"iStatus\" = '0'";
+        }
     }
 
 	switch ($display_order) {
@@ -163,7 +464,12 @@ if($request_type == "premise_type_list"){
     }
 
     if ($iStatus != "") {
-        $where_arr[] = "site_sub_type_mas.\"iStatus\"='".$iStatus."'";
+        if(strtolower($iStatus) == "active"){
+            $where_arr[] = "site_sub_type_mas.\"iStatus\" = '1'";
+        }
+        else if(strtolower($iStatus) == "inactive"){
+            $where_arr[] = "site_sub_type_mas.\"iStatus\" = '0'";
+        }
     }
 
     switch ($display_order) {
@@ -278,11 +584,16 @@ if($request_type == "premise_type_list"){
     }
 
     if ($vAttribute != "") {
-        $where_arr[] = 'site_type_mas."vAttribute" ILIKE \''.$vAttribute.'%\'';
+        $where_arr[] = 'site_attribute_mas."vAttribute" ILIKE \''.$vAttribute.'%\'';
     }
 
     if ($iStatus != "") {
-        $where_arr[] = "site_attribute_mas.\"iStatus\"='".$iStatus."'";
+        if(strtolower($iStatus) == "active"){
+            $where_arr[] = "site_attribute_mas.\"iStatus\" = '1'";
+        }
+        else if(strtolower($iStatus) == "inactive"){
+            $where_arr[] = "site_attribute_mas.\"iStatus\" = '0'";
+        }
     }
 
     switch ($display_order) {
@@ -312,7 +623,7 @@ if($request_type == "premise_type_list"){
     $rs_type = $SiteAttObj->recordset_list();
     // Paging Total Records
     $total = $SiteAttObj->recordset_total();
-
+    //echo "<pre>";print_r($rs_type);exit;
     $data = array();
     $ni = count($rs_type);
 

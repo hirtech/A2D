@@ -7,24 +7,17 @@ $access_group_var_status = per_hasModuleAccess("Premise Type", 'Status', 'N');
 $access_group_var_add = per_hasModuleAccess("Premise Type", 'Add', 'N');
 $access_group_var_edit = per_hasModuleAccess("Premise Type", 'Edit', 'N');
 # ----------- Access Rule Condition -----------
-
-include_once($controller_path . "premise_type.inc.php");
-include_once($function_path."image.inc.php");
-
-$page = $_REQUEST['page'];
 # ------------------------------------------------------------
 # General Variables
 # ------------------------------------------------------------
+$page = $_REQUEST['page'];
 $mode = isset($_REQUEST['mode']) ? $_REQUEST['mode'] : 'list';
 $page_length = isset($_REQUEST['iDisplayLength']) ? $_REQUEST['iDisplayLength'] : '10';
 $start = isset($_REQUEST['iDisplayStart']) ? $_REQUEST['iDisplayStart'] : '0';
 $sEcho = (isset($_REQUEST["sEcho"]) ? $_REQUEST["sEcho"] : '0');
-$display_order = (isset($_REQUEST["iSortCol_0"]) ? $_REQUEST["iSortCol_0"] : '7');
+$display_order = (isset($_REQUEST["iSortCol_0"]) ? $_REQUEST["iSortCol_0"] : '1');
 $dir = (isset($_REQUEST["sSortDir_0"]) ? $_REQUEST["sSortDir_0"] : 'desc');
 # ------------------------------------------------------------
-$Site_TypeObj = new SiteType();
-$iSTypeId = $_POST['iSTypeId'];
-
 if($mode == "List"){
     $arr_param = array();
 
