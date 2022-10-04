@@ -8,10 +8,10 @@
 							<ul class="nav search-links float-right">
 								<li>
 									<select id="vOptions" name="vOptions" class="form-control">
-										<option value="Name">Name</option>
-										<option value="vCompanyName">Company Name</option>
-										<option value="vUsername">Username</option>
-										<option value="vEmail">Email</option>
+										<option value="vSName">Name</option>
+										<option value="vSCompanyName">Company Name</option>
+										<option value="vSUsername">Username</option>
+										<option value="vSEmail">Email</option>
 	                  					<option value="iStatus">Status</option>
 									</select>
 								</li>

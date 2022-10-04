@@ -9,7 +9,6 @@ $access_group_var_CSV = per_hasModuleAccess("Login History", 'CSV', 'N');
 # ----------- Access Rule Condition -----------
 
 include_once($controller_path . "login_history.inc.php");
-include_once($controller_path . "access_group.inc.php");
 # ------------------------------------------------------------
 # General Variables
 # ------------------------------------------------------------
@@ -20,132 +19,68 @@ $sEcho = (isset($_REQUEST["sEcho"]) ? $_REQUEST["sEcho"] : '0');
 $display_order = (isset($_REQUEST["iSortCol_0"]) ? $_REQUEST["iSortCol_0"] : '7');
 $dir = (isset($_REQUEST["sSortDir_0"]) ? $_REQUEST["sSortDir_0"] : 'desc');
 # ------------------------------------------------------------
-$Login_HistoryObj = new Login_History();
-$AccessGroupObj = new AccessGroup();
 $iUserId = $_REQUEST['iUserId'];
 
 if ($mode == "List") {
-
-    //echo "<pre>";print_r($_REQUEST);exit;
-    $where_arr = array();
+    $arr_param = array();
     $vOptions = $_REQUEST['vOptions'];
     $Keyword = addslashes(trim($_REQUEST['Keyword']));
-    if($iUserId != '')
-    {
-        $where_arr[] = "login_logs_mas.\"iID\"=".$iUserId."";
-    }
+
     if ($Keyword != "") {
-        if ($vOptions == "vIP") {
-            $where_arr[] = "user_mas.\"vIP\" LIKE '%" . $Keyword . "%'";
-        } 
-        if ($vOptions == "vUsername") {
-            $where_arr[] = "user_mas.\"vUsername\" LIKE '" . $Keyword . "%'";
-           // echo "<pre>";print_r($where_arr);exit;
-        } 
-        else {
-            $where_arr[] = '"' . $vOptions . "\" ILIKE '" . $Keyword . "%'";
-        }
+        $arr_param[$vOptions] = $Keyword;
     }
 
-   if ($_REQUEST['iAGroupId'] != "") {
-        $where_arr[] = "user_mas.\"iAGroupId\"='" . $_REQUEST['iAGroupId'] . "'";
-    }
-    if ($_REQUEST['iStatus'] != "") {
-        if ($_REQUEST['iStatus'] != "-1")
-            $where_arr[] = "user_mas.\"iStatus\"='" . $_REQUEST['iStatus'] . "'";
-    }
+    $arr_param['iUserId']       = $iUserId;
+    $arr_param['page_length']   = $page_length;
+    $arr_param['start']         = $start;
+    $arr_param['sEcho']         = $sEcho;
+    $arr_param['display_order'] = $display_order;
+    $arr_param['dir']           = $dir;
 
+    $arr_param['access_group_var_edit'] = $access_group_var_edit;
+    $arr_param['access_group_var_delete'] = $access_group_var_delete;
 
-    if ($_REQUEST['vUsername'] != "") {
-        if ($_REQUEST['vUsernameDD'] != "") {
-            if ($_REQUEST['vUsernameDD'] == "Begins") {
-                $where_arr[] = 'user_mas."vUsername" LIKE \'' . trim($_REQUEST['vUsername']) . '%\'';
-            } else if ($_REQUEST['vUsernameDD'] == "Ends") {
-                $where_arr[] = 'user_mas."vUsername" LIKE \'%' . trim($_REQUEST['vUsername']) . '\'';
-            } else if ($_REQUEST['vUsernameDD'] == "Contains") {
-                $where_arr[] = 'user_mas."vUsername" LIKE \'%' . trim($_REQUEST['vUsername']) . '%\'';
-            } else if ($_REQUEST['vUsernameDD'] == "Exactly") {
-                $where_arr[] = 'user_mas."vUsername" = \'' . trim($_REQUEST['vUsername']) . '\'';
-            }
-        } else {
-            $where_arr[] = 'user_mas."vUsername" LIKE \'' . trim($_REQUEST['vUsername']) . '%\'';
-        }
-    }
+    $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
 
+    $API_URL = $site_api_url."login_history_list.json";
+    //echo $API_URL. " ".json_encode($arr_param);exit;
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $API_URL);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_HEADER, FALSE);
+    curl_setopt($ch, CURLOPT_POST, TRUE);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($arr_param));
 
-    switch ($display_order) {
-        case "0":
-         $sortname = "login_logs_mas.\"iLLogsId\"";
-            break;
-        case "1":
-         $sortname = "user_mas.\"vUsername\"";
-            break;
-        case "2":
-            $sortname = "concat(user_mas.\"vFirstName\", ' ', user_mas.\"vLastName\" )";
-            break;
-        case "3":
-            $sortname = "login_logs_mas.\"vIP\"";
-            break;
-        case "4":
-            $sortname = "login_logs_mas.\"dLoginDate\"";
-            break;
-        case "5":
-            $sortname = "login_logs_mas.\"dLogoutDate\"";
-            break;
-        default:
-            $sortname = 'login_logs_mas."dLoginDate"';
-            break;
-    }
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+       "Content-Type: application/json",
+    ));
 
-    $limit = "LIMIT ".$page_length." OFFSET ".$start."";
+    $response = curl_exec($ch);
+    curl_close($ch);  
+   
+    $result_arr = json_decode($response, true);
 
-    $join_fieds_arr = array();
-    $join_fieds_arr[] = "user_mas.\"vUsername\", user_mas.\"vFirstName\", user_mas.\"vLastName\"";
-    $join_fieds_arr[] = "access_group_mas.\"vAccessGroup\"";
-    $join_arr  = array();
-    $join_arr[] = "LEFT JOIN user_mas ON login_logs_mas.\"iID\" = user_mas.\"iUserId\"";
-    $join_arr[] = "LEFT JOIN access_group_mas ON user_mas.\"iAGroupId\" = access_group_mas.\"iAGroupId\"";
-    
-    $Login_HistoryObj->join_field = $join_fieds_arr;
-    $Login_HistoryObj->join = $join_arr;
-    $Login_HistoryObj->where = $where_arr;
-    $Login_HistoryObj->param['order_by'] = $sortname . " " . $dir;
-    $Login_HistoryObj->param['limit'] = $limit;
-    $Login_HistoryObj->setClause();
-    $Login_HistoryObj->debug_query = false;
-    $rs_login_history = $Login_HistoryObj->recordset_list();
-
-    // Paging Total Records
-    $total = $Login_HistoryObj->recordset_total();
-    // Paging Total Records
-
-    //echo $page_length;exit;
-   // $jsonData = array('sEcho' => $sEcho, 'recordsTotal' => $total, 'recordsFiltered' => $total, 'data' => array());
-     $jsonData = array('sEcho' => $sEcho, 'iTotalDisplayRecords' => $total, 'iTotalRecords' => $total, 'aaData' => array());
+    $total = $result_arr['result']['total_record'];
+    $jsonData = array('sEcho' => $sEcho, 'iTotalDisplayRecords' => $total, 'iTotalRecords' => $total, 'aaData' => array());
+    $entry = $hidden_arr = array();
+    $rs_login_history = $result_arr['result']['data'];
     $ni = count($rs_login_history);
+
     if ($ni > 0) {
-       
         for ($i = 0; $i < $ni; $i++) {
             $delete = '';
             if ($access_group_var_delete == '1') {
                 $delete = '<a class="btn btn-outline-danger" title="Delete" href="javascript:;" onclick="delete_record('.$rs_login_history[$i]['iLLogsId'].');"><i class="fa fa-trash"></i></a>';
             }
 
-			$Login_HistoryObj->Login_History();
-            $where_arr = array();
-            $join_arr = array();
-           
-            $Login_HistoryObj->where = $where_arr;
-            $Login_HistoryObj->param['limit'] = 0;
-            $Login_HistoryObj->setClause();
-       
             $one_date = strtotime($rs_login_history[$i]['dLoginDate']);
             $two_date = strtotime($rs_login_history[$i]['dLogoutDate']);
             $date_diff = date_timeBetween($one_date, $two_date);
             if ($date_diff=='0 seconds')
                 $date_diff='---';
 
-            //$entry[$i]['checkbox'] = '<input type="checkbox" class="list" value="' . $rs_login_history[$i]['iLLogsId'] . '"/>';
             $entry[$i]['checkbox'] =  $rs_login_history[$i]['iLLogsId'];
             $entry[$i]['vUsername'] = gen_strip_slash($rs_login_history[$i]['vUsername']);
             $entry[$i]['Name'] = gen_strip_slash($rs_login_history[$i]['vFirstName']) . " " . gen_strip_slash($rs_login_history[$i]['vLastName']). " - " . gen_strip_slash($rs_login_history[$i]['vAccessGroup']);
@@ -153,8 +88,6 @@ if ($mode == "List") {
             $entry[$i]['dLoginDate'] = date_getDateTime($rs_login_history[$i]['dLoginDate']);
             $entry[$i]['dLogoutDate'] = date_getDateTime($rs_login_history[$i]['dLogoutDate']);
             $entry[$i]['date_diff'] = $date_diff;
-
-
         }
         $jsonData['aaData'] = $entry;
     }
@@ -162,18 +95,47 @@ if ($mode == "List") {
     # Return jSON data.
     # -----------------------------------
     //echo"<pre>";print_r($jsonData);exit;
-
     echo json_encode($jsonData);
     hc_exit();
     # -----------------------------------
 }
 
-$module_name = "Login History List";
+
+#Get User details from Id
+$arr_param['iUserId']       = $iUserId;
+$arr_param['sessionId']     = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
+
+$API_URL = $site_api_url."getUserDetailsFromUserId.json";
+//echo $API_URL. " ".json_encode($arr_param);exit;
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $API_URL);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_HEADER, FALSE);
+curl_setopt($ch, CURLOPT_POST, TRUE);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($arr_param));
+
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+   "Content-Type: application/json",
+));
+
+$response = curl_exec($ch);
+curl_close($ch);  
+$result_arr = json_decode($response, true);
+$rs_user = $result_arr['result'];
+$vName = '';
+if(!empty($rs_user)){
+    $vName = $rs_user[0]['vFirstName']." ".$rs_user[0]['vLastName']."(User Id#".$rs_user[0]['iUserId'].")";
+}
+if($iUserId > 0) {
+    $module_name = $vName."'s Login History List";
+}else {
+    $module_name = "Login History List";
+}
 $module_title = "Login History";
 $smarty->assign("module_name", $module_name);
 $smarty->assign("module_title", $module_title);
-$smarty->assign("option_arr", $option_arr);
 $smarty->assign("msg", $_GET['msg']);
 $smarty->assign("flag", $_GET['flag']);
-$smarty->assign("iAGroupId", $_GET['iAGroupId']);
 $smarty->assign("iUserId",$iUserId);

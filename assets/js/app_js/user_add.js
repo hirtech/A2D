@@ -1,41 +1,3 @@
-function getCountyFromState(obj, iCountyId, iCityId) {
-    if (iCountyId == "" || iCountyId == "undefined")
-        iCountyId = 0;
-
-    $('#iCountyId').after('<img src="assets/images/loading-small.gif" border="0" class="loading">');
-    $.ajax({
-        type: "POST",
-        dataType: "json",
-        url: site_url + "user/list",
-        data: 'mode=GetCountyFromState&pageMode=' + $("#mode").val() + '&iStateId=' + $(obj).val() + '&iCountyId=' + iCountyId,
-        success: function (data) {
-            $('#iCountyId').next().remove();
-            {
-                $('#iCountyId').html(data.county);
-                getCityFromCounty($('#iCountyId'), iCityId);
-            }
-        }
-    });
-}
-
-function getCityFromCounty(obj, iCityId) {
-    if (iCityId == "" || iCityId == "undefined"){
-        iCityId = 0;
-    }
-
-    $('#iCityId').after('<img src="assets/images/loading-small.gif" border="0" class="loading">');
-    $.ajax({
-        type: "POST",
-        dataType: "json",
-        url: site_url + "user/list",
-        data: 'mode=GetCityFromCounty&pageMode=' + $("#mode").val() + '&iCountyId=' + $(obj).val() + '&iCityId=' + iCityId,
-        success: function (data) {
-            $('#iCityId').next().remove();
-            $('#iCityId').html(data.city);
-        }
-    });
-}
-
 function checkDuplicateUser() {
     var vUsername = Trim($('#vUsername').val());
     $.ajax({
@@ -108,6 +70,7 @@ $("#save_data").click(function(){
          form_data.append("iStateId",$('[name="iStateId"]').val());
          form_data.append("iCountyId",$('[name="iCountyId"]').val());
          form_data.append("iCityId",$('[name="iCityId"]').val());
+         form_data.append("iZoneId",$('[name="iZoneId"]').val());
          form_data.append("zoneId_arr",$('[name="zoneId_arr[]"]').val());
          form_data.append("vLatitude",$('[name="vLatitude"]').val());
          form_data.append("vLongitude",$('[name="vLongitude"]').val());

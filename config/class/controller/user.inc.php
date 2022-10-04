@@ -106,9 +106,6 @@ class User {
 		$sql = "DELETE FROM user_zone WHERE \"iUserId\" IN (" . $_POST['iUserId'] . ")";
         $sqlObj->Execute($sql);
 
-        $sql = "DELETE FROM user_preference WHERE \"iUserId\" IN (" . $_POST['iUserId'] . ")";
-        $sqlObj->Execute($sql);
-
         $sql = "DELETE FROM user_department WHERE \"iUserId\" IN (" . $_POST['iUserId'] . ")";
         $sqlObj->Execute($sql);
         $this->debug_query($sql);
@@ -139,39 +136,11 @@ class User {
 		$sql = "DELETE FROM user_zone WHERE \"iUserId\" IN (" . $_POST['iUserId'] . ")";
         $sqlObj->Execute($sql);
 
-        $sql = "DELETE FROM user_preference WHERE \"iUserId\" = ".$iUserId;
-        $sqlObj->Execute($sql);
-
         $sql = "DELETE FROM user_department WHERE \"iUserId\" = ".$iUserId;
         $sqlObj->Execute($sql);
         return $rs_del;
     }
 
-    function action_records() {
-
-        global $sqlObj;
-        if ($this->ids) {
-
-            if ($this->action == "Active") {
-                $sql = "UPDATE user_mas set \"iStatus\" = '1' WHERE \"iUserId\" IN (" . $this->ids . ")";
-            }
-            if ($this->action == "Inactive") {
-                $sql = "UPDATE user_mas set \"iStatus\" = '0' WHERE \"iUserId\" IN (" . $this->ids . ")";
-            }
-            $sqlObj->Execute($sql);
-            $rs_db = $sqlObj->Affected_Rows();
-
-            /* -------------- Log Entry ------------- */
-            $this->SALObj->type = 1;
-            $this->SALObj->module_name = "user";
-            $this->SALObj->action = $this->action;
-            $this->SALObj->audit_log_entry();
-            /* -------------- Log Entry ------------- */
-
-            $this->debug_query($sql);
-        }
-        return $rs_db;
-    }
 
     function add_records() {
         global $sqlObj, $admin_panel_session_suffix,$panel_default_customizer;
@@ -208,7 +177,6 @@ class User {
 
 
                 $sql_user_details = "INSERT INTO user_details (\"iUserId\", \"vCompanyName\", \"vCompanyNickName\", \"vAddress1\", \"vAddress2\", \"vStreet\",\"vCrossStreet\", \"iZipcode\", \"iStateId\", \"iCountyId\", \"iCityId\", \"iZoneId\", \"vLatitude\", \"vLongitude\", \"vPhone\", \"vCell\", \"vFax\", \"vLoginUserName\",  \"iRecLimit\") VALUES (" . gen_allow_null_int($userid) . ", " . gen_allow_null_char($this->insert_arr['vCompanyName']) . ", " . gen_allow_null_char($this->insert_arr['vCompanyName']) . ", " .gen_allow_null_char($this->insert_arr['vAddress1']).", ".gen_allow_null_char($this->insert_arr['vAddress2']).", ".gen_allow_null_char($this->insert_arr['vStreet']).", ".gen_allow_null_char($this->insert_arr['vCrossStreet']).", ".gen_allow_null_char($this->insert_arr['iZipcode']).", ".gen_allow_null_char($this->insert_arr['iStateId']).", ".gen_allow_null_char($this->insert_arr['iCountyId']).", ".gen_allow_null_char($this->insert_arr['iCityId']).", ".gen_allow_null_char($this->insert_arr['iZoneId']).", ".gen_allow_null_char($this->insert_arr['vLatitude']).", ".gen_allow_null_char($this->insert_arr['vLongitude']).", " . gen_allow_null_char($this->insert_arr['vPhone']) . ", " . gen_allow_null_char($this->insert_arr['vCell']) . ", " . gen_allow_null_char($this->insert_arr['vFax']) . ", " . gen_allow_null_char($_SESSION["sess_vName" . $admin_panel_session_suffix]). ", ". gen_allow_null_int($iRecLimit) .")";
-
                 $iUDetailId = $sqlObj->Execute($sql_user_details);
 
               
@@ -236,16 +204,6 @@ class User {
                             $zone_arr[] = implode(",", $val);
                     }
                 }
-
-                $vZone = "";
-                if (count($zone_arr) > 0) {
-                    $vZone = implode("||", $zone_arr);
-                }
-
-                $sql = 'INSERT INTO user_preference ("iUserId", "iAssetsTracking", "iUserTracking", "iPositiveWMVCarcas", "iPositiveWMVMosquito", "iPositiveTickPool", "iServiceRequestOpen", "iServiceRequestDuration", "vZone", "iZoneBoundary") VALUES (' . gen_allow_null_int($userid) . ', 0, 0, 1, 1, 1, 1, 1, ' . gen_allow_null_char($vZone) . ', 1)';
-
-                $sqlObj->Execute($sql);
-
 
                 $iZoneId_arr = $this->insert_arr['zoneId_arr'];
                 $pi = count($iZoneId_arr);
@@ -297,9 +255,21 @@ class User {
 
             $rs_up = $sqlObj->Affected_Rows();
             if ($rs_up) {
-                $sql_user_details = "UPDATE user_details SET \"vCompanyName\"=" . gen_allow_null_char($this->update_arr['vCompanyName']) . ", \"vCompanyNickName\"=" . gen_allow_null_char($this->update_arr['vCompanyNickName']) . ",\"vAddress1\"=".gen_allow_null_char($this->update_arr['vAddress1']).", \"vAddress2\"=".gen_allow_null_char($this->update_arr['vAddress2']).", \"vStreet\"=".gen_allow_null_char($this->update_arr['vStreet']).", \"vCrossStreet\"=".gen_allow_null_char($this->update_arr['vCrossStreet']).", \"iZipcode\"=".gen_allow_null_char($this->update_arr['iZipcode']).", \"iStateId\"=".gen_allow_null_char($this->update_arr['iStateId']).", \"iCountyId\"=".gen_allow_null_char($this->update_arr['iCountyId']).", \"iCityId\"=".gen_allow_null_char($this->update_arr['iCityId']).", \"iZoneId\"=".gen_allow_null_char($this->update_arr['iZoneId']).", \"vLatitude\"=".gen_allow_null_char($this->update_arr['vLatitude']).", \"vLongitude\"=".gen_allow_null_char($this->update_arr['vLongitude']).", \"vPhone\"=" . gen_allow_null_char($this->update_arr['vPhone']) . ", \"vCell\"=" . gen_allow_null_char($this->update_arr['vCell']) . ", \"vFax\"=" . gen_allow_null_char($this->update_arr['vFax']) . ", \"vLoginUserName\"=" . gen_allow_null_char($_SESSION["sess_vName" . $admin_panel_session_suffix]). " WHERE \"iUserId\"=" . $this->update_arr['iUserId'];
-                $sqlObj->Execute($sql_user_details);
-              //  echo $sql_user_details;exit();
+                $sql_det = 'SELECT "iUDetailId" FROM user_details WHERE "iUserId" = '.$this->update_arr['iUserId'].' LIMIT 1';
+                $rs_det = $sqlObj->GetAll($sql_det);
+                //print_r($rs_det);exit;
+                if(count($rs_det) > 0){
+                    $sql_user_details = "UPDATE user_details SET \"vCompanyName\"=" . gen_allow_null_char($this->update_arr['vCompanyName']) . ", \"vCompanyNickName\"=" . gen_allow_null_char($this->update_arr['vCompanyNickName']) . ",\"vAddress1\"=".gen_allow_null_char($this->update_arr['vAddress1']).", \"vAddress2\"=".gen_allow_null_char($this->update_arr['vAddress2']).", \"vStreet\"=".gen_allow_null_char($this->update_arr['vStreet']).", \"vCrossStreet\"=".gen_allow_null_char($this->update_arr['vCrossStreet']).", \"iZipcode\"=".gen_allow_null_char($this->update_arr['iZipcode']).", \"iStateId\"=".gen_allow_null_char($this->update_arr['iStateId']).", \"iCountyId\"=".gen_allow_null_char($this->update_arr['iCountyId']).", \"iCityId\"=".gen_allow_null_char($this->update_arr['iCityId']).", \"iZoneId\"=".gen_allow_null_char($this->update_arr['iZoneId']).", \"vLatitude\"=".gen_allow_null_char($this->update_arr['vLatitude']).", \"vLongitude\"=".gen_allow_null_char($this->update_arr['vLongitude']).", \"vPhone\"=" . gen_allow_null_char($this->update_arr['vPhone']) . ", \"vCell\"=" . gen_allow_null_char($this->update_arr['vCell']) . ", \"vFax\"=" . gen_allow_null_char($this->update_arr['vFax']) . ", \"vLoginUserName\"=" . gen_allow_null_char($_SESSION["sess_vName" . $admin_panel_session_suffix]). " WHERE \"iUserId\"=" . $this->update_arr['iUserId'];
+                    $sqlObj->Execute($sql_user_details);
+                } else {
+                    ## Default RecLimit = 100;
+                    $iRecLimit = 100;
+                    $sql_user_details = "INSERT INTO user_details (\"iUserId\", \"vCompanyName\", \"vCompanyNickName\", \"vAddress1\", \"vAddress2\", \"vStreet\",\"vCrossStreet\", \"iZipcode\", \"iStateId\", \"iCountyId\", \"iCityId\", \"iZoneId\", \"vLatitude\", \"vLongitude\", \"vPhone\", \"vCell\", \"vFax\", \"vLoginUserName\",  \"iRecLimit\") VALUES (" . gen_allow_null_int($this->update_arr['iUserId']) . ", " . gen_allow_null_char($this->update_arr['vCompanyName']) . ", " . gen_allow_null_char($this->update_arr['vCompanyName']) . ", " .gen_allow_null_char($this->update_arr['vAddress1']).", ".gen_allow_null_char($this->update_arr['vAddress2']).", ".gen_allow_null_char($this->update_arr['vStreet']).", ".gen_allow_null_char($this->update_arr['vCrossStreet']).", ".gen_allow_null_char($this->update_arr['iZipcode']).", ".gen_allow_null_char($this->update_arr['iStateId']).", ".gen_allow_null_char($this->update_arr['iCountyId']).", ".gen_allow_null_char($this->update_arr['iCityId']).", ".gen_allow_null_char($this->update_arr['iZoneId']).", ".gen_allow_null_char($this->update_arr['vLatitude']).", ".gen_allow_null_char($this->update_arr['vLongitude']).", " . gen_allow_null_char($this->update_arr['vPhone']) . ", " . gen_allow_null_char($this->update_arr['vCell']) . ", " . gen_allow_null_char($this->update_arr['vFax']) . ", " . gen_allow_null_char($_SESSION["sess_vName" . $admin_panel_session_suffix]). ", ". gen_allow_null_int($iRecLimit) .")";
+                    //echo $sql_user_details;exit;
+                    $sqlObj->Execute($sql_user_details);
+                }
+                
+               //  echo $sql_user_details;exit();
 				###user department
 				$sql = 'DELETE FROM user_department WHERE "iUserId" = '.$this->update_arr['iUserId'];
 				$sqlObj->Execute($sql);
@@ -399,51 +369,6 @@ class User {
         $rs_db = $sqlObj->GetAll($sql);
         return $rs_db[0]['vName'];
     }
-
-    function user_preference_list() {
-        global $sqlObj;
-
-        $sql = "SELECT user_preference.* " . $this->join_field_str . " FROM user_preference" . $this->join_clause . $this->where_clause . $this->group_by_clause . $this->order_by_clause . $this->limit_clause;
-        //echo $sql;exit;
-        file_put_contents($site_path."a.txt", $sql);
-        $rs_db = $sqlObj->GetAll($sql);
-        $this->debug_query($sql);
-        return $rs_db;
-    }
-
-    function user_preference_total() {
-        global $sqlObj;
-
-        $sql = "SELECT user_preference.* " . $this->join_field_str . " FROM user_preference" . $this->join_clause . $this->where_clause . $this->group_by_clause;
-        //$rs_db = $sqlObj->GetAll($sql);
-        $rs_db = $sqlObj->Execute($sql);
-        if ($rs_db === false)
-            $count = 0;
-        else
-            $count = $rs_db->RecordCount();
-
-        $this->debug_query($sql);
-        return $count;
-    }
-
-    function preference_add_records() {
-        global $sqlObj, $admin_panel_session_suffix;
-
-        $sql = "DELETE FROM user_preference WHERE \"iUserId\" =" . $this->insert_arr['iUserId'];
-        $sqlObj->Execute($sql);
-
-        if ($this->insert_arr) {
-
-            $_SESSION["sess_user_preference" . $admin_panel_session_suffix] = $this->insert_arr;
-
-            $sql_user = 'INSERT INTO user_preference ("iUserId", "vKmlLayer", "vLoginUserName", "iMailNewSRAssigned", "iMailServiceCallsByZone", "iMailServiceCallsMap", "iMailSummaryByZone", "iMailNewSpeacialSR", "bRainCollection", "bTruckTrapCount", "bSRToday", "bSRThreeDays", "bPermanentTrap", "bTemporaryTrap", "bTreatmentPlans", "bLandingRates", "bAerialLarvicide", "bGroundLarvicide", "bGroundAdulticide", "bAerialAdulticide", "bAerialLarvicidingRoute", "bChickenSurveillanceRoute", "bSRRoute", "bRainData", "bTruckTrapCollection", "bCDCBG", "bTemporaryTrapData", "bTrapTruckRoute") VALUES ('.gen_allow_null_int($this->insert_arr['iUserId']).', '.gen_allow_null_char($this->insert_arr['vKmlLayer']).', '. gen_allow_null_char($_SESSION["sess_vName".$admin_panel_session_suffix]).', '.gen_allow_null_int($this->insert_arr['iMailNewSRAssigned']).', '.gen_allow_null_int($this->insert_arr['iMailServiceCallsByZone']).', '.gen_allow_null_int($this->insert_arr['iMailServiceCallsMap']).', '.gen_allow_null_int($this->insert_arr['iMailSummaryByZone']).', '.gen_allow_null_int($this->insert_arr['iMailNewSpeacialSR']).', '.gen_allow_null_char($this->insert_arr['bRainCollection']).', '.gen_allow_null_char($this->insert_arr['bTruckTrapCount']).', '.gen_allow_null_char($this->insert_arr['bSRToday']).', '.gen_allow_null_char($this->insert_arr['bSRThreeDays']).', '.gen_allow_null_char($this->insert_arr['bPermanentTrap']).', '.gen_allow_null_char($this->insert_arr['bTemporaryTrap']).', '.gen_allow_null_char($this->insert_arr['bTreatmentPlans']).', '.gen_allow_null_char($this->insert_arr['bLandingRates']).', '.gen_allow_null_char($this->insert_arr['bAerialLarvicide']).', '.gen_allow_null_char($this->insert_arr['bGroundLarvicide']).', '.gen_allow_null_char($this->insert_arr['bGroundAdulticide']).', '.gen_allow_null_char($this->insert_arr['bAerialAdulticide']).', '.gen_allow_null_char($this->insert_arr['bAerialLarvicidingRoute']).', '.gen_allow_null_char($this->insert_arr['bChickenSurveillanceRoute']).', '.gen_allow_null_char($this->insert_arr['bSRRoute']).', '.gen_allow_null_char($this->insert_arr['bRainData']).', '.gen_allow_null_char($this->insert_arr['bTruckTrapCollection']).', '.gen_allow_null_char($this->insert_arr['bCDCBG']).', '.gen_allow_null_char($this->insert_arr['bTemporaryTrapData']).', '.gen_allow_null_char($this->insert_arr['bTrapTruckRoute']).')';
-            $sqlObj->Execute($sql_user);
-            $iUserId = $sqlObj->Insert_ID();
-
-            return $iUserId;
-        }
-    }
-
 	
 	function user_department_list()
 	{

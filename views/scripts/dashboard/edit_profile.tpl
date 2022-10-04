@@ -28,8 +28,8 @@
                                     <div class="form-group row">
                                         <label for="vFirstName" class="col-sm-2 col-form-label">Access Group</label>
                                         <div class="col-sm-8">
-                                            <input type="hidden" class="form-control" id="iAGroupId" placeholder="" value="{$rs_access_group[0].vAccessGroup|gen_filter_text}" name="iAGroupId">
-                                            <span style="display:inline-block;border-color: white;" class="form-control"><strong>{$rs_access_group[0].vAccessGroup|gen_filter_text}</strong> </span>
+                                            <input type="hidden" class="form-control" id="iAGroupId" placeholder="" value="{$rs_user[0].iAGroupId}" name="iAGroupId">
+                                            <span style="display:inline-block;border-color: white;" class="form-control"><strong>{$rs_user[0].vAccessGroup|gen_filter_text}</strong> </span>
                                         </div>
                                     </div>
                                     <div class="form-group row">

@@ -67,9 +67,8 @@
         var PageLengthMenuArr = [10, 15, 20, 30, 50, 100, 200];
 		var REC_LIMIT = '{$REC_LIMIT}';
 
-       var user_panel_theme_arr = {$user_panel_theme_arr|@json_encode};
+        var user_panel_theme_arr = {$user_panel_theme_arr|@json_encode};
 
-        var sess_user_preference = {if $sess_user_preference|@count gt 0}{$sess_user_preference|@json_encode} {else} "" {/if} ;
 	</script>
 </head>
 <body id="main-container" class="default {if $page == 'c-home'} login-screen {/if}">

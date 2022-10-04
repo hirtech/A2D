@@ -239,40 +239,12 @@ function sendSystemMailWithAttachment($vSection, $vType, $iId, $file_path) {
             $SRObj->setClause();
             $rs_sr = $SRObj->recordset_list();
 
-            $where_arr = array();
-            $join_fieds_arr = array();
-            $join_arr  = array();
-
-            $where_arr[] = 'user_preference."iMailNewSRAssigned" = 1';
-
-            $join_fieds_arr[] = 'user_mas."vEmail"';
-            $join_arr[] = 'LEFT JOIN user_mas ON user_preference."iUserId" = user_mas."iUserId"';
-
-            $UserObj->join_field = $join_fieds_arr;
-            $UserObj->join = $join_arr;
-            $UserObj->where = $where_arr;
-            $UserObj->param['limit'] = 0;
-            $UserObj->setClause();
-            $rs_sr_assigned_user = $UserObj->user_preference_list();
-            $cnt_sr_assigned_user = count($rs_sr_assigned_user);
-            $user_email_arr = array();
-            if($cnt_sr_assigned_user > 0)
-            {                    
-                for ($i=0; $i < $cnt_sr_assigned_user; $i++)
-                { 
-                    $user_email_arr[] = $rs_sr_assigned_user[$i]['vEmail'];
-                }
-            }
-            $user_pref_user_email = '';
-            if(count($user_email_arr) > 0)
-                $user_pref_user_email = ", ".implode(', ', $user_email_arr);
-
             $Name = $rs_sr[0]['vName'];
             $iSRId = $rs_sr[0]['iSRId'];
             $vEmail = $rs_sr[0]['vEmail'];
            
             $to = $vEmail;
-            $vCC = 'sterling@lcmcd.org, kbaker@lcmcd.org'.$user_pref_user_email;
+            $vCC = 'sterling@lcmcd.org, kbaker@lcmcd.org';
             //$to = $vEmail.', sterling@lcmcd.org, kbaker@lcmcd.org';
             //$to = 'pallavi.makadia@horizoncore.com';
 
@@ -317,24 +289,9 @@ function sendSystemMailWithAttachment($vSection, $vType, $iId, $file_path) {
                 }
             }
             //echo "<pre>";print_r($user_email_arr);
-            ## New Special Event Service Request Created
-            $sql_user_pref = "SELECT u.\"vEmail\" from user_preference up INNER JOIN user_mas u ON  up.\"iUserId\" = u.\"iUserId\" WHERE up.\"iMailNewSpeacialSR\" = 1 AND u.\"iStatus\" = 1 AND u.\"vEmail\" NOTNULL";
-            $rs_user_pref = $sqlObj->GetCol($sql_user_pref);
-            $cnt_user_pref = count($rs_user_pref);
-            //echo "<pre>";print_r($rs_user_pref);exit;
-            if($cnt_user_pref > 0){
-				for ($i=0; $i < $cnt_user_pref; $i++){ 
-					$user_pref_email_arr[] = $rs_user_pref[$i]; 
-				}
-            }
-			$user_email_arr11 = array_merge($user_email_arr,$user_pref_email_arr);
-            $user_email_arr1 = array_unique($user_email_arr11);
-
-            //echo "<pre>";print_r($user_email_arr);exit;
-            //file_put_contents($site_path."a.txt", print_r($user_email_arr,true));
             $user_emails = '';
             if(count($user_email_arr1) > 0)
-                $user_emails = implode(',', $user_email_arr1);
+                $user_emails = implode(',', $user_email_arr);
 
            
             $to = $user_emails;

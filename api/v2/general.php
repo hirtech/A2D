@@ -15,160 +15,48 @@ include_once($controller_path . "zipcode.inc.php");
 include_once($controller_path . "agent_mosquito.inc.php");
 include_once($controller_path . "test_method_mosquito.inc.php");
 include_once($controller_path . "result.inc.php");
+include_once($controller_path . "department.inc.php");
+include_once($controller_path . "access_group.inc.php");
 
-if($request_type == "get_county_zone"){
-    $iZoneId = trim($RES_PARA['iZoneId']);
-    $vZoneName = trim($RES_PARA['vZoneName']);
-    $iStatus = trim($RES_PARA['iStatus']);
-    $from_date = trim($RES_PARA['from_date']);
-    $to_date = trim($RES_PARA['to_date']);
-    $page_length = isset($RES_PARA['page_length'])?trim($RES_PARA['page_length']):"";
-    $start = isset($RES_PARA['start'])?trim($RES_PARA['start']):"";
-
-    $where_arr =array();
-    $Zoneobj = new Zone();
-    $Zoneobj->clear_variable();
-
-    if($iZoneId != ""){
-        $where_arr[] = ' "iZoneId" = '.$iZoneId.' '; 
-    }
-
-    if($vZoneName != ""){
-        $where_arr[] = ' "vZoneName" ILIKE \''.$vZoneName.'%\' '; 
-    }
-
-    if($iStatus != ""){
-        $where_arr[] = ' "iStatus" = '.$iStatus.' '; 
-    }
-
-    if((isset($from_date) && $from_date != "") && (isset($to_date) && $to_date != "")){
-        $where_arr[] = " (( DATE(\"dAddedDate\") >= '" . $from_date . "' AND DATE(\"dAddedDate\") <= '" . $to_date. "')  OR (DATE(\"dModifiedDate\") >= '" . $from_date . "' AND DATE(\"dModifiedDate\") <= '" . $to_date. "' ))";
-    }else {
-        if((isset($from_date) && $from_date != "")){
-            $where_arr[] =  " (DATE(\"dAddedDate\") >= '" . $from_date. "' OR  DATE(\"dModifiedDate\") >= '" . $from_date . "' ) ";
-        }
-        if((isset($to_date) && $to_date != "")){
-            $where_arr[] =  " ( DATE(\"dAddedDate\") <= '" . $to_date. "' OR DATE(\"dModifiedDate\") <= '" . $to_date . "' ) ";
-        }
-    }
-    if($start != "" && $page_length != ""){
-       // $Zoneobj->param['limit'] = " LIMIT $start,  $page_length";
-        $Zoneobj->param['limit'] = " LIMIT $page_length OFFSET $start";
-    }else if($page_length != ""){
-        $Zoneobj->param['limit'] = " LIMIT $page_length";
-    }
-
-    $Zoneobj->join_field = array();
-    $Zoneobj->join = array();
-    $Zoneobj->where = $where_arr;
-    $Zoneobj->param['order_by'] = ' zone."vZoneName" asc ';
-    $Zoneobj->setClause();
-    $zone_data = $Zoneobj->getZoneWithCoordinate();
-    
-    $total_record = $Zoneobj->recordset_total();
-
-    $result = array('data' =>$zone_data , 'total_record' => $total_record);
-
-    $rh = HTTPStatus(200);
-    $code = 2000;
-    $message = api_getMessage($req_ext, constant($code));
-    $response_data = array("Code" => 200, "Message" => $message, "result" => $result);
-}else if($request_type == "get_county_city"){
-    $iCityId = trim($RES_PARA['iCityId']);
-    $vCity = trim($RES_PARA['vCity']);
-    $to_date = trim($RES_PARA['to_date']);
-    $from_date = trim($RES_PARA['from_date']);
-    $page_length = isset($RES_PARA['page_length'])?trim($RES_PARA['page_length']):"";
-    $start = isset($RES_PARA['start'])?trim($RES_PARA['start']):"";
-
+if($request_type == "access_group_dropdown") {
+	$AccessGroupObj = new AccessGroup();
+	$where_arr = array();
+    $join_fieds_arr = array();
+    $join_arr  = array();
+    $iStatus = $RES_PARA['iStatus'];
     $where_arr = array();
-    $Cityobj = new City();
-    $Cityobj->clear_variable();
-
-    if($iCityId != ""){
-        $where_arr[] = " city_mas.\"iCityId\" = " . $iCityId;
+    if($iStatus != ''){
+        $where_arr[] = "\"iStatus\"='".$iStatus."'";
     }
-    if($vCity != ""){
-       $where_arr[] = " city_mas.\"vCity\" ILIKE '" . trim($vCity) . "%'";
+	$AccessGroupObj->where = $where_arr;
+	$AccessGroupObj->param['order_by'] = "\"vAccessGroup\"";
+	$AccessGroupObj->setClause();
+	$rs_access_group = $AccessGroupObj->recordset_list();;
+	if($rs_access_group){
+        $response_data = array("Code" => 200, "result" => $rs_access_group, "total_record" => count($rs_access_group));
+    }else{
+        $response_data = array("Code" => 500);
     }
-    if((isset($from_date) && $from_date != "") && (isset($to_date) && $to_date != "")){
-        $where_arr[] = " (( DATE(city_mas.\"dAddedDate\") >= '" . $from_date . "' AND DATE(city_mas.\"dAddedDate\") <= '" . $to_date. "')  OR (DATE(city_mas.\"dModifiedDate\") >= '" . $from_date . "' AND DATE(city_mas.\"dModifiedDate\") <= '" . $to_date. "' ))";
-    }else {
-        if((isset($from_date) && $from_date != "")){
-            $where_arr[] =  " (DATE(city_mas.\"dAddedDate\") >= '" . $from_date. "' OR  DATE(city_mas.\"dModifiedDate\") >= '" . $from_date . "' ) ";
-        }
-        if((isset($to_date) && $to_date != "")){
-            $where_arr[] =  " ( DATE(city_mas.\"dAddedDate\") <= '" . $to_date. "' OR DATE(city_mas.\"dModifiedDate\") <= '" . $to_date . "' ) ";
-        }
+}else if($request_type == "department_dropdown") {
+	$DepartmentObj = new Department();
+	$where_arr = array();
+    $join_fieds_arr = array();
+    $join_arr  = array();
+    $iStatus = $RES_PARA['iStatus'];
+    $where_arr = array();
+    if($iStatus != ''){
+        $where_arr[] = "department_mas.\"iStatus\"='".$iStatus."'";
     }
-    if($start != "" && $page_length != ""){
-       // $Cityobj->param['limit'] = " LIMIT $start,  $page_length";
-        $Cityobj->param['limit'] = " LIMIT $page_length OFFSET $start";
-    }else if($page_length != ""){
-        $Cityobj->param['limit'] = " LIMIT $page_length";
+	$DepartmentObj->where = $where_arr;
+	$DepartmentObj->param['order_by'] = "department_mas.\"vDepartment\"";
+	$DepartmentObj->setClause();
+	$rs_department = $DepartmentObj->recordset_list();
+	if($rs_department){
+        $response_data = array("Code" => 200, "result" => $rs_department, "total_record" => count($rs_department));
+    }else{
+        $response_data = array("Code" => 500);
     }
-
-    $Cityobj->join_field = array();
-    $Cityobj->join = array();
-    $Cityobj->where = $where_arr;
-    $Cityobj->param['order_by'] = ' city_mas."vCity" asc ';
-    $Cityobj->setClause();
-    $city_data = $Cityobj->recordset_list();
-
-    $total_record = $Cityobj->recordset_total();
-    $result = array('data' =>$city_data , 'total_record' => $total_record);
-    
-    $rh = HTTPStatus(200);
-    $code = 2000;
-    $message = api_getMessage($req_ext, constant($code));
-    $response_data = array("Code" => 200, "Message" => $message, "result" => $result);
-}else if($request_type == "get_county_state"){
-    $iStateId = trim($RES_PARA['iStateId']);
-    $vStateCode = trim($RES_PARA['vStateCode']);
-    $vState = trim($RES_PARA['vState']);
-    $page_length = isset($RES_PARA['page_length'])?trim($RES_PARA['page_length']):"";
-    $start = isset($RES_PARA['start'])?trim($RES_PARA['start']):"";
-
-    $where_arr =array();
-    $Stateobj = new State();
-    $Stateobj->clear_variable();
-    if($iStateId != ""){
-        $where_arr[] = ' "iStateId" = '.$iStateId.' '; 
-    }
-
-    if($vStateCode != ""){
-        $where_arr[] = ' state_mas."vStateCode" ILIKE \'%'.$vStateCode.'%\' '; 
-    }
-
-    if($vState != ""){
-        $where_arr[] = ' state_mas."vState" = ILIKE \'%'.$vStateCode.'%\' '; 
-    }
-
-    
-    if($start != "" && $page_length != ""){
-        $Stateobj->param['limit'] = " LIMIT $page_length OFFSET $start";
-    }else if($page_length != ""){
-        $Stateobj->param['limit'] = " LIMIT $page_length";
-    }
-
-    $Stateobj->join_field = array();
-    $Stateobj->join = array();
-    $Stateobj->where = $where_arr;
-    $Stateobj->param['order_by'] = ' state_mas."vState" asc ';
-    $Stateobj->setClause();
-    $state_data = $Stateobj->getStateWithCoordinate();
-    
-    
-    $total_record = $Stateobj->recordset_total();
-
-    $result = array('data' =>$state_data , 'total_record' => $total_record);
-
-    $rh = HTTPStatus(200);
-    $code = 2000;
-    $message = api_getMessage($req_ext, constant($code));
-    $response_data = array("Code" => 200, "Message" => $message, "result" => $result);
-}else if($request_type == "get_mosquito_species_data"){
-    
+}else if($request_type == "get_mosquito_species_data"){    
     $where_arr = array();
     $join_fieds_arr = array();
     $join_arr  = array();
@@ -229,45 +117,6 @@ if($request_type == "get_county_zone"){
     $code = 2000;
     $message = api_getMessage($req_ext, constant($code));
     $response_data = array("Code" => $code, "Message" => $message, "result" => $result);
-    
-}else if($request_type == "get_county_list"){
-    $iCountyId = trim($RES_PARA['iCountyId']);
-    $vCounty = trim($RES_PARA['vCounty']);
-    $page_length = isset($RES_PARA['page_length'])?trim($RES_PARA['page_length']):"";
-    $start = isset($RES_PARA['start'])?trim($RES_PARA['start']):"";
-
-    $where_arr =array();
-    $Countyobj = new County();
-    if($iCountyId != ""){
-        $where_arr[] = ' "iCountyId" = '.$iCountyId.' '; 
-    }
-
-    if($vCounty != ""){
-        $where_arr[] = ' "vCounty" ILIKE \'%'.$vCounty.'%\' '; 
-    }
-
-    
-    if($start != "" && $page_length != ""){
-        $Countyobj->param['limit'] = " LIMIT $page_length OFFSET $start";
-    }else if($page_length != ""){
-        $Countyobj->param['limit'] = " LIMIT $page_length";
-    }
-
-    $Countyobj->join_field = array();
-    $Countyobj->join = array();
-    $Countyobj->where = $where_arr;
-    $Countyobj->param['order_by'] = ' "vCounty" asc ';
-    $Countyobj->setClause();
-    $county_data = $Countyobj->recordset_list();
-    
-    $total_record = count($county_data);
-
-    $result = array('data' =>$county_data , 'total_record' => $total_record);
-
-    $rh = HTTPStatus(200);
-    $code = 2000;
-    $message = api_getMessage($req_ext, constant($code));
-    $response_data = array("Code" => 200, "Message" => $message, "result" => $result);
 }else if($request_type == "get_sync_unit_data"){
     
     $where_arr = array();
@@ -322,56 +171,7 @@ if($request_type == "get_county_zone"){
     $code = 2000;
     $message = api_getMessage($req_ext, constant($code));
     $response_data = array("Code" => $code, "Message" => $message, "result" => $result);
-}else if($request_type == "get_county_zipcode"){
-    $iZipcode = trim($RES_PARA['iZipcode']);
-    $vZipcode = trim($RES_PARA['vZipcode']);
-    $to_date = trim($RES_PARA['to_date']);
-    $from_date = trim($RES_PARA['from_date']);
-    $page_length = isset($RES_PARA['page_length'])?trim($RES_PARA['page_length']):"";
-    $start = isset($RES_PARA['start'])?trim($RES_PARA['start']):"";
-
-    $where_arr = array();
-    $Zipobj = new Zipcode();
-    $Zipobj->clear_variable();
-
-    if($iZipcode != ""){
-        $where_arr[] = " zipcode_mas.\"iZipcode\" = " . $iZipcode;
-    }
-    if($vZipcode != ""){
-       $where_arr[] = " zipcode_mas.\"vZipcode\" ILIKE '" . trim($vZipcode) . "%'";
-    }
-    if((isset($from_date) && $from_date != "") && (isset($to_date) && $to_date != "")){
-        $where_arr[] = " (( DATE(zipcode_mas.\"dAddedDate\") >= '" . $from_date . "' AND DATE(zipcode_mas.\"dAddedDate\") <= '" . $to_date. "')  OR (DATE(zipcode_mas.\"dModifiedDate\") >= '" . $from_date . "' AND DATE(zipcode_mas.\"dModifiedDate\") <= '" . $to_date. "' ))";
-    }else {
-        if((isset($from_date) && $from_date != "")){
-            $where_arr[] =  " (DATE(zipcode_mas.\"dAddedDate\") >= '" . $from_date. "' OR  DATE(zipcode_mas.\"dModifiedDate\") >= '" . $from_date . "' ) ";
-        }
-        if((isset($to_date) && $to_date != "")){
-            $where_arr[] =  " ( DATE(zipcode_mas.\"dAddedDate\") <= '" . $to_date. "' OR DATE(zipcode_mas.\"dModifiedDate\") <= '" . $to_date . "' ) ";
-        }
-    }
-    if($start != "" && $page_length != ""){
-        $Zipobj->param['limit'] = " LIMIT $page_length OFFSET $start";
-    }else if($page_length != ""){
-        $Zipobj->param['limit'] = " LIMIT $page_length";
-    }
-
-    $Zipobj->join_field = array();
-    $Zipobj->join = array();
-    $Zipobj->where = $where_arr;
-    $Zipobj->param['order_by'] = ' zipcode_mas."vZipcode" asc ';
-    $Zipobj->setClause();
-    $zip_data = $Zipobj->recordset_list();
-
-    $total_record = $Zipobj->recordset_total();
-    $result = array('data' =>$zip_data , 'total_record' => $total_record);
-    
-    $rh = HTTPStatus(200);
-    $code = 2000;
-    $message = api_getMessage($req_ext, constant($code));
-    $response_data = array("Code" => 200, "Message" => $message, "result" => $result);
-}
-else if($request_type == "task_type_dropdown"){
+}else if($request_type == "task_type_dropdown"){
     
     $where_arr = array();
     $join_fieds_arr = array();
@@ -407,7 +207,7 @@ else if($request_type == "task_type_dropdown"){
     }else{
       $response_data = array("Code" => 500);
     }
-} else if($request_type == "search_treatment_product"){
+}else if($request_type == "search_treatment_product"){
     //treatment prodcut with unit data
     
     $rs_arr  = array();
@@ -487,8 +287,7 @@ else if($request_type == "task_type_dropdown"){
     $code = 2000;
     $message = api_getMessage($req_ext, constant($code));
     $response_data = array("Code" => $code, "Message" => $message, "result" => $unit_arr);
-}
-else if($request_type == "agent_mosquito_dropdown"){
+}else if($request_type == "agent_mosquito_dropdown"){
 
     $AgentMosquitoObj = new AgentMosquito();
     $res_arr = array();
@@ -514,8 +313,7 @@ else if($request_type == "agent_mosquito_dropdown"){
     $code = 2000;
     $message = api_getMessage($req_ext, constant($code));
     $response_data = array("Code" => $code, "Message" => $message, "result" => $res_arr);
-}
-else if($request_type == "test_method_mosquito_dropdown"){
+}else if($request_type == "test_method_mosquito_dropdown"){
     
     $TestMetodMosquitoObj = new TestMetodMosquito();
     $res_arr = array();
@@ -541,8 +339,7 @@ else if($request_type == "test_method_mosquito_dropdown"){
     $code = 2000;
     $message = api_getMessage($req_ext, constant($code));
     $response_data = array("Code" => $code, "Message" => $message, "result" => $res_arr);
-}
-else if($request_type == "result_dropdown"){
+}else if($request_type == "result_dropdown"){
 
     $ResultObj = new Result();
     $res_arr = array();
@@ -568,8 +365,7 @@ else if($request_type == "result_dropdown"){
     $code = 2000;
     $message = api_getMessage($req_ext, constant($code));
     $response_data = array("Code" => $code, "Message" => $message, "result" => $res_arr);
-}
- else if($request_type == "autoGoogleZoneFromLatlong"){
+}else if($request_type == "autoGoogleZoneFromLatlong"){
     $lat = $RES_PARA['lat'];
     $long = $RES_PARA['long'];
     //echo"<pre>";print_r($RES_PARA);exit;
@@ -590,7 +386,7 @@ else if($request_type == "result_dropdown"){
     $code = 2000;
     $message = api_getMessage($req_ext, constant($code));
     $response_data = array("Code" => $code, "Message" => $message, "result" => $jsonData);
-} else if($request_type == "autoGoogleCheckCityState"){
+}else if($request_type == "autoGoogleCheckCityState"){
     $state_code = $RES_PARA['state_code'];
     $city = $RES_PARA['city'];
     $jsonData = array();
@@ -622,7 +418,7 @@ else if($request_type == "result_dropdown"){
     $code = 2000;
     $message = api_getMessage($req_ext, constant($code));
     $response_data = array("Code" => $code, "Message" => $message, "result" => $jsonData);
-} else if($request_type == "autoGooglegetState"){
+}else if($request_type == "autoGooglegetState"){
     $vStateCode = $RES_PARA['vStateCode'];
     $jsonData = array();
 
@@ -640,7 +436,7 @@ else if($request_type == "result_dropdown"){
     $code = 2000;
     $message = api_getMessage($req_ext, constant($code));
     $response_data = array("Code" => $code, "Message" => $message, "result" => $jsonData);
-} else if($request_type == "autoGooglegetZipcode"){
+}else if($request_type == "autoGooglegetZipcode"){
     $vZipcode = $RES_PARA['vZipcode'];
     $jsonData = array();
 
@@ -658,7 +454,7 @@ else if($request_type == "result_dropdown"){
     $code = 2000;
     $message = api_getMessage($req_ext, constant($code));
     $response_data = array("Code" => $code, "Message" => $message, "result" => $jsonData);
-} else if($request_type == "autoGooglegetCity"){
+}else if($request_type == "autoGooglegetCity"){
     $vCity = $RES_PARA['vCity'];
     $vCounty = $RES_PARA['vCounty'];
     $jsonData = array();
@@ -693,7 +489,7 @@ else if($request_type == "result_dropdown"){
     $code = 2000;
     $message = api_getMessage($req_ext, constant($code));
     $response_data = array("Code" => $code, "Message" => $message, "result" => $jsonData);
-} else if ($request_type == "premise_type_dropdown"){
+}else if ($request_type == "premise_type_dropdown"){
     $where_arr = array();
     $join_fieds_arr = array();
     $join_arr  = array();

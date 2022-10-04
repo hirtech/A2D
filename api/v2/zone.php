@@ -141,8 +141,7 @@ if($request_type == "zone_list"){
     else{
         $response_data = array("Code" => 500 , "Message" => MSG_DELETE_ERROR);
     }    
-}
-else if($request_type == "zone_add"){
+}else if($request_type == "zone_add"){
     //echo "<pre>";print_r($FILES_PARA);exit;
     $file_msg = "File Not Uploaded.Please Check it.";
     if($FILES_PARA["vFile"]['name'] != ""){
@@ -173,8 +172,7 @@ else if($request_type == "zone_add"){
         $r = HTTPStatus(500);
         $response_data = array("Code" => 500 , "Message" => $file_msg);
     }
-}
-else if($request_type == "zone_edit"){
+}else if($request_type == "zone_edit"){
     if($RES_PARA['iZoneId'] > 0 || $RES_PARA != ""){
         $update_arr = array(
             "iZoneId"       => $RES_PARA['iZoneId'],
@@ -196,7 +194,7 @@ else if($request_type == "zone_edit"){
     }else{
          $response_data = array("Code" => 500 , "Message" => "iZoneId is missing");
     }
-} else if($request_type == "zone_map_data"){
+}else if($request_type == "zone_map_data"){
    
     $iZoneId = $RES_PARA['iZoneId']; 
     $country_id = $RES_PARA['country_id']; 
@@ -236,6 +234,23 @@ else if($request_type == "zone_edit"){
         $code = 2104;
         $message = api_getMessage($req_ext, constant($code));
         $response_data = array("Code" => 500 , "Message" => $message , "result" => array());
+    }
+}else if($request_type == "zone_dropdown"){
+    $where_arr = array();
+    $join_fieds_arr = array();
+    $join_arr  = array();
+    $iStatus = $RES_PARA['iStatus'];
+    if($iStatus != ''){
+        $where_arr[] = "zone.\"iStatus\"='".$iStatus."'";
+    }
+    $ZoneObj->where = $where_arr;
+    $ZoneObj->param['order_by'] = "zone.\"iZoneId\"";
+    $ZoneObj->setClause();
+    $rs_zone = $ZoneObj->recordset_list();
+    if($rs_zone){
+        $response_data = array("Code" => 200, "result" => $rs_zone, "total_record" => count($rs_zone));
+    }else{
+        $response_data = array("Code" => 500);
     }
 }
 else {

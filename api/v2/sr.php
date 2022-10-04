@@ -69,62 +69,6 @@ else if($request_type == "sr_delete"){
         $response_data = array("Code" => 500 , "Message" => MSG_DELETE_ERROR);
     }
 }
-else if($request_type == "get_county_sr"){
-    $rs_arr  = array();
-    $iSRId = $RES_PARA['iSRId'];
-    $iStatus = $RES_PARA['iStatus'];
-    $to_date = trim($RES_PARA['to_date']);
-    $from_date = trim($RES_PARA['from_date']);
-    $page_length = isset($RES_PARA['page_length'])?trim($RES_PARA['page_length']):"";
-    $start = isset($RES_PARA['start'])?trim($RES_PARA['start']):"";
-    
-    $where_arr = array();
-    $join_fieds_arr = array();
-    $join_arr = array();
-
-    $SRObj = new SR();
-    $SRObj->clear_variable();
-
-    if($iSRId != ""){
-        $where_arr[] = ' sr_details."iSRId" = '.$iSRId.' ';
-    }
-    if($iStatus != ""){
-        $where_arr[] = ' sr_details."iStatus" = '.$iStatus.' ';
-    }
-    if((isset($from_date) && $from_date != "") && (isset($to_date) && $to_date != "")){
-        $where_arr[] = " (( DATE(sr_details.\"dAddedDate\") >= '" . $from_date . "' AND DATE(sr_details.\"dAddedDate\") <= '" . $to_date. "')  OR (DATE(sr_details.\"dModifiedDate\") >= '" . $from_date . "' AND DATE(sr_details.\"dModifiedDate\") <= '" . $to_date. "' ))";
-    }else {
-        if((isset($from_date) && $from_date != "")){
-            $where_arr[] =  " (DATE(sr_details.\"dAddedDate\") >= '" . $from_date. "' OR  DATE(sr_details.\"dModifiedDate\") >= '" . $from_date . "' ) ";
-        }
-        if((isset($to_date) && $to_date != "")){
-            $where_arr[] =  " ( DATE(sr_details.\"dAddedDate\") <= '" . $to_date. "' OR DATE(sr_details.\"dModifiedDate\") <= '" . $to_date . "' ) ";
-        }
-    }
-    if($start != "" && $page_length != ""){
-       // $SRObj->param['limit'] = " LIMIT $start,  $page_length";
-        $SRObj->param['limit'] = " LIMIT $page_length OFFSET $start";
-    }else if($page_length != ""){
-        $SRObj->param['limit'] = " LIMIT $page_length";
-    }
-
-    $join_fieds_arr[] = "CONCAT(contact_mas.\"vFirstName\", ' ', contact_mas.\"vLastName\") AS \"vContactName\"";
-    $join_arr[] = 'LEFT JOIN contact_mas on sr_details."iCId" = contact_mas."iCId"';
-    $SRObj->join_field = $join_fieds_arr;
-    $SRObj->join = $join_arr;
-    $SRObj->where = $where_arr;
-    $SRObj->param['order_by'] = 'sr_details."iSRId" DESC';
-    $SRObj->setClause();
-    $sr_data = $SRObj->recordset_list();
-   
-    $total_record = $SRObj->recordset_total();
-    $result = array('data' =>$sr_data , 'total_record' => $total_record);
-    
-    $rh = HTTPStatus(200);
-    $code = 2000;
-    $message = api_getMessage($req_ext, constant($code));
-    $response_data = array("Code" => 200 , "Message" => $message, "result" => $result);
-}
 else if($request_type == "sr_add"){
 
     $srObj = new SR();
