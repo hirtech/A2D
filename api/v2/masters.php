@@ -6,6 +6,7 @@ include_once($controller_path . "treatment_product.inc.php");
 include_once($controller_path . "city.inc.php");
 include_once($controller_path . "state.inc.php");
 include_once($controller_path . "county.inc.php");
+include_once($controller_path . "engagement.inc.php");
 include_once($function_path."image.inc.php");
 include_once($function_path."site_general.inc.php");
 
@@ -886,8 +887,7 @@ if($request_type == "city_list"){
     else{
         $response_data = array("Code" => 500 , "Message" => MSG_UPDATE_ERROR);
     }
-}
-else if($request_type == "treatment_product_delete"){
+}else if($request_type == "treatment_product_delete"){
     $TProdObj = new TreatmentProduct();
     $iTPId = $RES_PARA['iTPId'];
     $rs_db = $TProdObj->delete_records($iTPId);
@@ -896,6 +896,114 @@ else if($request_type == "treatment_product_delete"){
         $response_data = array("Code" => 200, "Message" => MSG_DELETE, "iTPId" => $iTPId);
     }
     else{
+        $response_data = array("Code" => 500 , "Message" => MSG_DELETE_ERROR);
+    }
+}else if($request_type == "engagement_list"){
+    $EngagementObj = new Engagement();
+    $where_arr = array();
+    if(!empty($RES_PARA)){
+        $vEngagement        = trim($RES_PARA['vEngagement']);
+        $iStatus            = trim($RES_PARA['iStatus']);
+        $page_length        = isset($RES_PARA['page_length']) ? trim($RES_PARA['page_length']) : "10";
+        $start              = isset($RES_PARA['start']) ? trim($RES_PARA['start']) : "0";
+        $sEcho              = $RES_PARA['sEcho'];
+        $display_order      = $RES_PARA['display_order'];
+        $dir                = $RES_PARA['dir'];
+    }
+
+    if ($vEngagement != "") {
+        $where_arr[] = 'engagement_mas."vEngagement" ILIKE \''.$vEngagement.'%\'';
+    }
+
+    if ($iStatus != "") {
+        if(strtolower($iStatus) == "active"){
+            $where_arr[] = "engagement_mas.\"iStatus\" = '1'";
+        }
+        else if(strtolower($iStatus) == "inactive"){
+            $where_arr[] = "engagement_mas.\"iStatus\" = '0'";
+        }
+    }
+
+    switch ($display_order) {
+        case "0" : 
+            $sortname = "engagement_mas.\"iEngagementId\"";
+            break;
+        case "1":
+            $sortname = "engagement_mas.\"vEngagement\"";
+            break;
+        case "2":
+            $sortname = "engagement_mas.\"iStatus\"";
+            break;
+        default:
+            $sortname = 'engagement_mas."vEngagement"';
+            break;
+    }
+
+    $join_fieds_arr = array();
+    $join_arr = array();
+    $EngagementObj->join_field = $join_fieds_arr;
+    $EngagementObj->join = $join_arr;
+    $EngagementObj->where = $where_arr;
+    $EngagementObj->param['order_by'] = $sortname . " " . $dir;
+    $EngagementObj->param['limit'] = $limit;
+    $EngagementObj->setClause();
+    $EngagementObj->debug_query = false;
+    $rs_engagement = $EngagementObj->recordset_list();
+    $total = $EngagementObj->recordset_total();
+    $data = array();
+    $ni = count($rs_engagement);
+    if($ni > 0){
+        for($i=0;$i<$ni;$i++){
+            $data[] = array(
+                "iEngagementId"     => gen_strip_slash($rs_engagement[$i]['iEngagementId']),
+                "vEngagement"       => gen_strip_slash($rs_engagement[$i]['vEngagement']),
+                "iStatus"           => $rs_engagement[$i]['iStatus'],
+            );
+        }
+    }
+    $result = array('data' => $data , 'total_record' => $total);
+
+    $rh = HTTPStatus(200);
+    $code = 2000;
+    $message = api_getMessage($req_ext, constant($code));
+    $response_data = array("Code" => 200, "Message" => $message, "result" => $result);
+}else if($request_type == "engagement_add"){
+    $EngagementObj = new Engagement();
+    $insert_arr = array(
+        "vEngagement"    => $RES_PARA['vEngagement'],
+        "iStatus"        => $RES_PARA['iStatus'],
+    );
+    $EngagementObj->insert_arr = $insert_arr;
+    $EngagementObj->setClause();
+    $iEngagementId = $EngagementObj->add_records();
+    if(isset($iEngagementId)){
+        $response_data = array("Code" => 200, "Message" => MSG_ADD, "iEngagementId" => $iEngagementId);
+    }else{
+        $response_data = array("Code" => 500 , "Message" => MSG_ADD_ERROR);
+    }
+}else if($request_type == "engagement_edit"){
+    $EngagementObj = new Engagement();
+    $update_arr = array(
+        "iEngagementId"       => $RES_PARA['iEngagementId'],
+        "vEngagement"         => $RES_PARA['vEngagement'],
+        "iStatus"             => $RES_PARA['iStatus'],
+    );
+    //echo "<pre>";print_r($update_arr);exit;
+    $EngagementObj->update_arr = $update_arr;
+    $EngagementObj->setClause();
+    $iEngagementId = $EngagementObj->update_records();
+    if(isset($iEngagementId)){
+        $response_data = array("Code" => 200, "Message" => MSG_UPDATE, "iEngagementId" => $RES_PARA['iEngagementId']);
+    }else{
+        $response_data = array("Code" => 500 , "Message" => MSG_UPDATE_ERROR);
+    }
+}else if($request_type == "engagement_delete"){
+    $iEngagementId = $RES_PARA['iEngagementId'];
+    $EngagementObj = new Engagement();
+    $rs_db = $EngagementObj->delete_records($iEngagementId);
+    if($rs_db){
+        $response_data = array("Code" => 200, "Message" => MSG_DELETE, "iEngagementId" => $iEngagementId);
+    }else{
         $response_data = array("Code" => 500 , "Message" => MSG_DELETE_ERROR);
     }
 }

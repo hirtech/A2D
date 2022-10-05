@@ -102,6 +102,12 @@ RewriteRule ^master/state_list index.php?module=$0&page=m-state_list
 RewriteRule ^master/city_list? index.php?module=$0&page=m-city_list&%{QUERY_STRING}
 RewriteRule ^master/city_list index.php?module=$0&page=m-city_list
 #---------------------
+#---------------------
+#Engagement Master
+RewriteRule ^master/engagement_list? index.php?module=$0&page=m-engagement_list&%{QUERY_STRING}
+RewriteRule ^master/engagement_list index.php?module=$0&page=m-engagement_list
+#---------------------
+
 #-------Site Mgmt----------------
 #Site
 RewriteRule ^premise/list index.php?module=$0&page=m-premise_list&%{QUERY_STRING}
