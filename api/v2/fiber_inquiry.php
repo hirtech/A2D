@@ -1,19 +1,19 @@
 <?php
 include_once($controller_path . "premise.inc.php");
-include_once($controller_path . "sr.inc.php");
+include_once($controller_path . "fiber_inquiry.inc.php");
 include_once($controller_path . "task_larval_surveillance.inc.php");
 include_once($controller_path . "task_treatment.inc.php");
 include_once($controller_path . "task_landing_rate.inc.php");
 include_once($controller_path . "task_trap.inc.php");
 include_once($controller_path . "task_other.inc.php");
-if($request_type == "sr_edit"){
-   //echo "<pre>";print_r($RES_PARA);exit;
+if($request_type == "fiber_inquiry_edit"){
+    //echo "<pre>";print_r($RES_PARA);exit;
+   	$FiberInquiryObj = new FiberInquiry();
+	$FiberInquiryObj->clear_variable();
 
-   	$srObj = new SR();
-	$srObj->clear_variable();
    	$update_arr = array(
-        "sessionId"         	=> $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
-        "iSRId"                 => $RES_PARA['iSRId'],
+        "sessionId"         	=> $_SESSION["we_api_session_id".$admin_panel_session_suffix],
+        "iFiberInquiryId"       => $RES_PARA['iFiberInquiryId'],
         "vAddress1"             => $RES_PARA['vAddress1'],
         "vAddress2"             => $RES_PARA['vAddress2'],
         "vStreet"               => $RES_PARA['vStreet'],
@@ -26,53 +26,40 @@ if($request_type == "sr_edit"){
         "vLatitude"             => $RES_PARA['vLatitude'],
         "vLongitude"            => $RES_PARA['vLongitude'],
         "iCId"                  => $RES_PARA['iCId'],
-        "bMosquitoService"      => $RES_PARA['bMosquitoService'],
-        "bCarcassService"       => $RES_PARA['bCarcassService'],
-        "iUserId"               => $RES_PARA['iUserId'],
-        "bInspectPermission"    => $RES_PARA['bInspectPermission'],
-        "bAccessPermission"     => $RES_PARA['bAccessPermission'],
-        "bPets"                 => $RES_PARA['bPets'],
         "iStatus"               => $RES_PARA['iStatus'],
         "iOldStatus"            => $RES_PARA['iOldStatus'],
-        "tProblems"             => $RES_PARA['tProblems'],
-        "tInternalNotes"        => $RES_PARA['tInternalNotes'],
-        "tRequestorNotes"       => $RES_PARA['tRequestorNotes'],
+        "iPremiseSubTypeId"     => $RES_PARA['iPremiseSubTypeId'],
+        "iEngagementId"         => $RES_PARA['iEngagementId'],
         "iLoginUserId"          => $RES_PARA['iLoginUserId'],
     );
 
-   $srObj->update_arr = $update_arr;
-   $srObj->setClause();
-   $rs_db = $srObj->update_records();
+   $FiberInquiryObj->update_arr = $update_arr;
+   $FiberInquiryObj->setClause();
+   $rs_db = $FiberInquiryObj->update_records();
 
    if($rs_db){
       $rh = HTTPStatus(200);
       $code = 2000;
       $message = api_getMessage($req_ext, constant($code));
-      $response_data = array("Code" => 200, "Message" => MSG_UPDATE, "iSRId" => $RES_PARA['iSRId']);
+      $response_data = array("Code" => 200, "Message" => MSG_UPDATE, "iFiberInquiryId" => $RES_PARA['iFiberInquiryId']);
    }else{
       $r = HTTPStatus(500);
       $response_data = array("Code" => 500 , "Message" => MSG_UPDATE_ERROR);
    }
-}
-
-else if($request_type == "sr_delete"){
+}else if($request_type == "fiber_inquiry_delete"){
    	//echo "<pre>";print_r($RES_PARA);exit;
-   	$iSRId = $RES_PARA['iSRId'];
-   	
-   	$srObj = new SR();
-	$srObj->clear_variable();
-    $rs_db = $srObj->delete_records($iSRId);
-
+   	$iFiberInquiryId = $RES_PARA['iFiberInquiryId'];
+   	$FiberInquiryObj = new FiberInquiry();
+	$FiberInquiryObj->clear_variable();
+    $rs_db = $FiberInquiryObj->delete_records($iFiberInquiryId);
     if($rs_db){
-        $response_data = array("Code" => 200, "Message" => MSG_DELETE, "iSRId" => $iSRId);
+        $response_data = array("Code" => 200, "Message" => MSG_DELETE, "iFiberInquiryId" => $iFiberInquiryId);
     }else{
         $response_data = array("Code" => 500 , "Message" => MSG_DELETE_ERROR);
     }
-}
-else if($request_type == "sr_add"){
-
-    $srObj = new SR();
-    $srObj->clear_variable();
+}else if($request_type == "fiber_inquiry_add"){
+    $FiberInquiryObj = new FiberInquiry();
+    $FiberInquiryObj->clear_variable();
     $insert_arr = array(
         "vAddress1"             => $RES_PARA['vAddress1'],
         "vAddress2"             => $RES_PARA['vAddress2'],
@@ -86,68 +73,60 @@ else if($request_type == "sr_add"){
         "vLatitude"             => $RES_PARA['vLatitude'],
         "vLongitude"            => $RES_PARA['vLongitude'],
         "iCId"                  => $RES_PARA['iCId'],
-        "bMosquitoService"      => $RES_PARA['bMosquitoService'],
-        "bCarcassService"       => $RES_PARA['bCarcassService'],
-        "iUserId"               => $RES_PARA['iUserId'],
-        "bInspectPermission"    => $RES_PARA['bInspectPermission'],
-        "bAccessPermission"     => $RES_PARA['bAccessPermission'],
-        "bPets"                 => $RES_PARA['bPets'],
         "iStatus"               => $RES_PARA['iStatus'],
         "iOldStatus"            => $RES_PARA['iOldStatus'],
-        "tProblems"             => $RES_PARA['tProblems'],
-        "tInternalNotes"        => $RES_PARA['tInternalNotes'],
-        "tRequestorNotes"       => $RES_PARA['tRequestorNotes'],
-        "iLoginUserId"          => $RES_PARA['iLoginUserId']
+        "iPremiseSubTypeId"     => $RES_PARA['iPremiseSubTypeId'],
+        "iEngagementId"         => $RES_PARA['iEngagementId'],
+        "iLoginUserId"          => $RES_PARA['iLoginUserId'],
     );
 
-    $srObj->insert_arr = $insert_arr;
-    $srObj->setClause();
-    $rs_db = $srObj->add_records();
-
+    $FiberInquiryObj->insert_arr = $insert_arr;
+    $FiberInquiryObj->setClause();
+    $rs_db = $FiberInquiryObj->add_records();
     if($rs_db){
-        $response_data = array("Code" => 200, "Message" => MSG_ADD, "iSRId" => $rs_db);
+        $response_data = array("Code" => 200, "Message" => MSG_ADD, "iFiberInquiryId" => $rs_db);
     }
     else{
         $response_data = array("Code" => 500 , "Message" => MSG_ADD_ERROR);
     }
-}
-else if($request_type == "sr_list"){
+}else if($request_type == "fiber_inquiry_list"){
 
-    $SRObj = new SR();
-    $SRObj->clear_variable();
+    $FiberInquiryObj = new FiberInquiry();
+    $FiberInquiryObj->clear_variable();
     $where_arr = array();
 
     if(!empty($RES_PARA)){
-        $iSRId              = $RES_PARA['iSRId'];
-        $page_length        = isset($RES_PARA['page_length']) ? trim($RES_PARA['page_length']) : "10";
-        $start              = isset($RES_PARA['start']) ? trim($RES_PARA['start']) : "0";
-        $sEcho              = $RES_PARA['sEcho'];
-        $display_order      = $RES_PARA['display_order'];
-        $dir                = $RES_PARA['dir'];
+        $iFiberInquiryId        = $RES_PARA['iFiberInquiryId'];
+        $page_length            = isset($RES_PARA['page_length']) ? trim($RES_PARA['page_length']) : "10";
+        $start                  = isset($RES_PARA['start']) ? trim($RES_PARA['start']) : "0";
+        $sEcho                  = $RES_PARA['sEcho'];
+        $display_order          = $RES_PARA['display_order'];
+        $dir                    = $RES_PARA['dir'];
 
-        $srId = $RES_PARA['srId'];
-        $contactName = $RES_PARA['contactName'];
-        $contactNameFilterOpDD = $RES_PARA['contactNameFilterOpDD'];
-        $vAddress = $RES_PARA['vAddress'];
-        $AddressFilterOpDD = $RES_PARA['AddressFilterOpDD'];
-        $vCity = $RES_PARA['vCity'];
-        $CityFilterOpDD = $RES_PARA['CityFilterOpDD'];
-        $vState = $RES_PARA['vState'];
-        $StateFilterOpDD = $RES_PARA['StateFilterOpDD'];
-        $vCounty = $RES_PARA['vCounty'];
-        $CountyFilterOpDD = $RES_PARA['CountyFilterOpDD'];
-        $assignTo = $RES_PARA['assignTo'];
-        $AssignToFilterOpDD = $RES_PARA['AssignToFilterOpDD'];
-        $srreqType = $RES_PARA['srreqType'];
-        $status = $RES_PARA['status'];
+        $fiberInquiryId         = $RES_PARA['fiberInquiryId'];
+        $contactName            = $RES_PARA['contactName'];
+        $contactNameFilterOpDD  = $RES_PARA['contactNameFilterOpDD'];
+        $vAddress               = $RES_PARA['vAddress'];
+        $AddressFilterOpDD      = $RES_PARA['AddressFilterOpDD'];
+        $vCity                  = $RES_PARA['vCity'];
+        $CityFilterOpDD         = $RES_PARA['CityFilterOpDD'];
+        $vState                 = $RES_PARA['vState'];
+        $StateFilterOpDD        = $RES_PARA['StateFilterOpDD'];
+        $vCounty                = $RES_PARA['vCounty'];
+        $CountyFilterOpDD       = $RES_PARA['CountyFilterOpDD'];
+        $zoneName               = $RES_PARA['zoneName'];
+        $ZoneNameFilterOpDD     = $RES_PARA['ZoneNameFilterOpDD'];
+        $networkName            = $RES_PARA['networkName'];
+        $NetworkFilterOpDD      = $RES_PARA['NetworkFilterOpDD'];
+        $status                 = $RES_PARA['status'];
     }
 
-    if ($iSRId != "") {
-        $where_arr[] = 'sr_details."iSRId"='.$iSRId ;
+    if ($iFiberInquiryId != "") {
+        $where_arr[] = 'fiberinquiry_details."iFiberInquiryId"='.$iFiberInquiryId ;
     }
     
-    if ($srId != ""){
-        $where_arr[] = 'sr_details."iSRId"='.$srId;
+    if ($fiberInquiryId != ""){
+        $where_arr[] = 'fiberinquiry_details."iFiberInquiryId"='.$fiberInquiryId;
     }
 
     if ($contactName != "") {
@@ -169,16 +148,16 @@ else if($request_type == "sr_list"){
     if ($vAddress != "") {
         if ($AddressFilterOpDD != "") {
             if ($AddressFilterOpDD == "Begins") {
-                $where_arr[] = "concat(sr_details.\"vAddress1\", ' ', sr_details.\"vStreet\",' ',cm.\"vCity\",' ',sm.\"vState\",' ',c.\"vCounty\") IILIKE '" . trim($vAddress) . "%'";
+                $where_arr[] = "concat(fiberinquiry_details.\"vAddress1\", ' ', fiberinquiry_details.\"vStreet\",' ',cm.\"vCity\",' ',sm.\"vState\",' ',c.\"vCounty\") IILIKE '" . trim($vAddress) . "%'";
             } else if ($AddressFilterOpDD == "Ends") {
-                $where_arr[] = "concat(sr_details.\"vAddress1\", ' ', sr_details.\"vStreet\",' ',cm.\"vCity\",' ',sm.\"vState\",' ',c.\"vCounty\") ILIKE '%" . trim($vAddress) . "'";
+                $where_arr[] = "concat(fiberinquiry_details.\"vAddress1\", ' ', fiberinquiry_details.\"vStreet\",' ',cm.\"vCity\",' ',sm.\"vState\",' ',c.\"vCounty\") ILIKE '%" . trim($vAddress) . "'";
             } else if ($AddressFilterOpDD == "Contains") {
-                $where_arr[] = "concat(sr_details.\"vAddress1\", ' ', sr_details.\"vStreet\",' ',cm.\"vCity\",' ',sm.\"vState\",' ',c.\"vCounty\") ILIKE '%" . trim($vAddress) . "%'";
+                $where_arr[] = "concat(fiberinquiry_details.\"vAddress1\", ' ', fiberinquiry_details.\"vStreet\",' ',cm.\"vCity\",' ',sm.\"vState\",' ',c.\"vCounty\") ILIKE '%" . trim($vAddress) . "%'";
             } else if ($AddressFilterOpDD == "Exactly") {
-                $where_arr[] = "concat(sr_details.\"vAddress1\", ' ', sr_details.\"vStreet\",' ',cm.\"vCity\",' ',sm.\"vState\",' ',c.\"vCounty\") = '" . trim($vAddress) . "'";
+                $where_arr[] = "concat(fiberinquiry_details.\"vAddress1\", ' ', fiberinquiry_details.\"vStreet\",' ',cm.\"vCity\",' ',sm.\"vState\",' ',c.\"vCounty\") = '" . trim($vAddress) . "'";
             }
         } else {
-            $where_arr[] = "concat(sr_details.\"vAddress1\", ' ', sr_details.\"vStreet\",' ',cm.\"vCity\",' ',sm.\"vState\",' ',c.\"vCounty\") ILIKE '" . trim($vAddress) . "%'";
+            $where_arr[] = "concat(fiberinquiry_details.\"vAddress1\", ' ', fiberinquiry_details.\"vStreet\",' ',cm.\"vCity\",' ',sm.\"vState\",' ',c.\"vCounty\") ILIKE '" . trim($vAddress) . "%'";
         }
     }
 
@@ -230,38 +209,45 @@ else if($request_type == "sr_list"){
         }
     }
 
-    if ($assignTo != "") {
-        if ($AssignToFilterOpDD != "") {
-            if ($AssignToFilterOpDD == "Begins") {
-                $where_arr[] = 'CONCAT(user_mas."vFirstName", \' \', user_mas."vLastName") ILIKE \'' . trim($assignTo) . '%\'';
-            } else if ($AssignToFilterOpDD == "Ends") {
-                $where_arr[] = 'CONCAT(user_mas."vFirstName", \' \', user_mas."vLastName") ILIKE \'%' . trim($assignTo) . '\'';
-            } else if ($AssignToFilterOpDD == "Contains") {
-                $where_arr[] = 'CONCAT(user_mas."vFirstName", \' \', user_mas."vLastName") ILIKE \'%' . trim($assignTo) . '%\'';
-            } else if ($AssignToFilterOpDD == "Exactly") {
-                $where_arr[] = 'CONCAT(user_mas."vFirstName", \' \', user_mas."vLastName") = \'' . trim($assignTo) . '\'';
+    if ($zoneName != "") {
+        if ($ZoneNameFilterOpDD != "") {
+            if ($ZoneNameFilterOpDD == "Begins") {
+                $where_arr[] = 'z."vZoneName" ILIKE \'' . trim($zoneName) . '%\'';
+            } else if ($ZoneNameFilterOpDD == "Ends") {
+                $where_arr[] = 'z."vZoneName"  ILIKE \'%' . trim($zoneName) . '\'';
+            } else if ($ZoneNameFilterOpDD == "Contains") {
+                $where_arr[] = 'z."vZoneName"  ILIKE \'%' . trim($zoneName) . '%\'';
+            } else if ($ZoneNameFilterOpDD == "Exactly") {
+                $where_arr[] = 'z."vZoneName" = \'' . trim($zoneName) . '\'';
             }
         } else {
-            $where_arr[] = 'CONCAT(user_mas."vFirstName", \' \', user_mas."vLastName") ILIKE \'' . trim($assignTo) . '%\'';
+            $where_arr[] = 'z."vZoneName" ILIKE \'' . trim($zoneName) . '%\'';
         }
     }
 
-    if($srreqType != ""){
-        if($srreqType == "CR"){
-            $where_arr[] = " sr_details.\"bCarcassService\"= 't' ";
-        }elseif($srreqType == "MIT"){
-            $where_arr[] = " sr_details.\"bMosquitoService\"= 't' ";
+    if ($networkName != "") {
+        if ($NetworkFilterOpDD != "") {
+            if ($NetworkFilterOpDD == "Begins") {
+                $where_arr[] = 'n."vName" ILIKE \''.$networkName.'%\'';
+            } else if ($NetworkFilterOpDD == "Ends") {
+                $where_arr[] = 'n."vName"  ILIKE \'%'.$networkName.'\'';
+            } else if ($NetworkFilterOpDD == "Contains") {
+                $where_arr[] = 'n."vName"  ILIKE \'%'.$networkName.'%\'';
+            } else if ($NetworkFilterOpDD == "Exactly") {
+                $where_arr[] = 'n."vName" = \''.$networkName.'\'';
+            }
+        } else {
+            $where_arr[] = 'n."vName" ILIKE \''.$networkName.'%\'';
         }
-         
     }
 
     if ($status != "") {
-        $where_arr[] = "sr_details.\"iStatus\"='" . $status  . "'";
+        $where_arr[] = "fiberinquiry_details.\"iStatus\"='" . $status  . "'";
     }
 
     switch ($display_order) {
         case "1":
-            $sortname = "sr_details.\"iSRId\"";
+            $sortname = "fiberinquiry_details.\"iFiberInquiryId\"";
             break;
         case "2":
             $sortname = "\"vContactName\"";
@@ -276,13 +262,16 @@ else if($request_type == "sr_list"){
             $sortname = "c.\"vCounty\"";
             break;
         case "7":
-            $sortname = "\"vAssignTo\"";
+            $sortname = "z.\"vZoneName\"";
+            break;
+        case "8":
+            $sortname = "n.\"vName\"";
             break;
         case "9":
-            $sortname = "sr_details.\"iStatus\"";
+            $sortname = "fiberinquiry_details.\"iStatus\"";
             break;
         default:
-            $sortname = "sr_details.\"iSRId\"";
+            $sortname = "fiberinquiry_details.\"iFiberInquiryId\"";
             break;
         }
 
@@ -290,27 +279,30 @@ else if($request_type == "sr_list"){
 
         $join_fieds_arr = array();
         $join_fieds_arr[] = "CONCAT(contact_mas.\"vFirstName\", ' ', contact_mas.\"vLastName\") AS \"vContactName\"";;
-        $join_fieds_arr[] = "CONCAT(user_mas.\"vFirstName\", ' ', user_mas.\"vLastName\") AS \"vAssignTo\"";;
         $join_fieds_arr[] = 'c."vCounty"';
         $join_fieds_arr[] = 'sm."vState"';
         $join_fieds_arr[] = 'cm."vCity"';
+        $join_fieds_arr[] = 'z."vZoneName"';
+        $join_fieds_arr[] = 'n."vName" as "vNetwork"';
+
         $join_arr = array();
-        $join_arr[] = 'LEFT JOIN user_mas on user_mas."iUserId" = sr_details."iUserId"';
-        $join_arr[] = 'LEFT JOIN contact_mas on sr_details."iCId" = contact_mas."iCId"';
-        $join_arr[] = 'LEFT JOIN county_mas c on sr_details."iCountyId" = c."iCountyId"';
-        $join_arr[] = 'LEFT JOIN state_mas sm on sr_details."iStateId" = sm."iStateId"';
-        $join_arr[] = 'LEFT JOIN city_mas cm on sr_details."iCityId" = cm."iCityId"';
-        $SRObj->join_field = $join_fieds_arr;
-        $SRObj->join = $join_arr;
-        $SRObj->where = $where_arr;
-        $SRObj->param['order_by'] = $sortname . " " . $dir;
-        $SRObj->param['limit'] = $limit;
-        $SRObj->setClause();
-        $SRObj->debug_query = false;
-        $rs_sr = $SRObj->recordset_list();
+        $join_arr[] = 'LEFT JOIN contact_mas on fiberinquiry_details."iCId" = contact_mas."iCId"';
+        $join_arr[] = 'LEFT JOIN county_mas c on fiberinquiry_details."iCountyId" = c."iCountyId"';
+        $join_arr[] = 'LEFT JOIN state_mas sm on fiberinquiry_details."iStateId" = sm."iStateId"';
+        $join_arr[] = 'LEFT JOIN city_mas cm on fiberinquiry_details."iCityId" = cm."iCityId"';
+        $join_arr[] = 'LEFT JOIN zone z on fiberinquiry_details."iZoneId" = z."iZoneId"';
+        $join_arr[] = 'LEFT JOIN network n on z."iNetworkId" = n."iNetworkId"';
+        $FiberInquiryObj->join_field = $join_fieds_arr;
+        $FiberInquiryObj->join = $join_arr;
+        $FiberInquiryObj->where = $where_arr;
+        $FiberInquiryObj->param['order_by'] = $sortname . " " . $dir;
+        $FiberInquiryObj->param['limit'] = $limit;
+        $FiberInquiryObj->setClause();
+        $FiberInquiryObj->debug_query = false;
+        $rs_sr = $FiberInquiryObj->recordset_list();
 
         // Paging Total Records
-        $total = $SRObj->recordset_total();
+        $total = $FiberInquiryObj->recordset_total();
         // Paging Total Records
 
         $data = array();
@@ -318,42 +310,31 @@ else if($request_type == "sr_list"){
 
         if($ni > 0){
             for($i=0;$i<$ni;$i++){
+                $vAddress =  $rs_sr[$i]['vAddress1'].' '.$rs_sr[$i]['vStreet'].' '.$rs_sr[$i]['vCity'].', '.$rs_sr[$i]['vState'].' '.$rs_sr[$i]['vCounty'];
 
-             $vAddress =  $rs_sr[$i]['vAddress1'].' '.$rs_sr[$i]['vStreet'].' '.$rs_sr[$i]['vCity'].', '.$rs_sr[$i]['vState'].' '.$rs_sr[$i]['vCounty'];
-
-             $vRequestType = '';
-             if($rs_sr[$i]['bMosquitoService'] == 't' && $rs_sr[$i]['bCarcassService'] != 't') {
-                $vRequestType = 'Mosquito Inspection/Treatment';
-            }else if($rs_sr[$i]['bMosquitoService'] != 't' && $rs_sr[$i]['bCarcassService'] == 't') {
-                $vRequestType = 'Carcass Removal';
-            }else if($rs_sr[$i]['bMosquitoService'] == 't' && $rs_sr[$i]['bCarcassService'] == 't') {
-                $vRequestType = 'Mosquito Inspection/Treatment<br/>Carcass Removal';
+                $vStatus = '';
+                if($rs_sr[$i]['iStatus'] == 1){
+                    $vStatus = 'Draft';
+                }else if($rs_sr[$i]['iStatus'] == 2){
+                    $vStatus = 'Assigned';
+                }else if($rs_sr[$i]['iStatus'] == 3){
+                    $vStatus = 'Review';
+                }else if($rs_sr[$i]['iStatus'] == 4){
+                    $vStatus = 'Complete';
+                }
+                $data[] = array(
+                    "iFiberInquiryId" => $rs_sr[$i]['iFiberInquiryId'],
+                    "vContactName" => $rs_sr[$i]['vContactName'],
+                    "vAddress" => $vAddress,
+                    "vCity" => $rs_sr[$i]['vCity'],
+                    "vState" => $rs_sr[$i]['vState'],
+                    "vCounty" => $rs_sr[$i]['vCounty'],
+                    "vZoneName" => $rs_sr[$i]['vZoneName'],
+                    "vNetwork" => $rs_sr[$i]['vNetwork'],
+                    "vStatus" => $vStatus
+                );
             }
-
-            $vStatus = '';
-            if($rs_sr[$i]['iStatus'] == 1){
-                $vStatus = 'Draft';
-            }else if($rs_sr[$i]['iStatus'] == 2){
-                $vStatus = 'Assigned';
-            }else if($rs_sr[$i]['iStatus'] == 3){
-                $vStatus = 'Review';
-            }else if($rs_sr[$i]['iStatus'] == 4){
-                $vStatus = 'Complete';
-            }
-
-            $data[] = array(
-                "iSRId" => $rs_sr[$i]['iSRId'],
-                "vContactName" => $rs_sr[$i]['vContactName'],
-                "vAddress" => $vAddress,
-                "vCity" => $rs_sr[$i]['vCity'],
-                "vState" => $rs_sr[$i]['vState'],
-                "vCounty" => $rs_sr[$i]['vCounty'],
-                "vAssignTo" => $rs_sr[$i]['vAssignTo'],
-                "vRequestType" => $vRequestType,
-                "vStatus" => $vStatus
-            );
         }
-    }
 
     $result = array('data' => $data , 'total_record' => $total);
 
@@ -361,31 +342,31 @@ else if($request_type == "sr_list"){
     $code = 2000;
     $message = api_getMessage($req_ext, constant($code));
     $response_data = array("Code" => 200, "Message" => $message, "result" => $result);
-}else if($request_type == "search_sr"){
+}else if($request_type == "search_fiber_inquiry"){
+
     $rs_arr  = array();
     $where_arr = array();
     $join_fieds_arr = array();
     $join_arr = array();
-    $srId = $RES_PARA['srId'];
+    $fiberInquiryId = $RES_PARA['srId'];
         
     $join_fieds_arr[] = "CONCAT(contact_mas.\"vFirstName\", ' ', contact_mas.\"vLastName\") AS \"vContactName\"";
-    $where_arr[] = '(sr_details."iSRId" = '.$srId.')';
-    $join_arr[] = 'LEFT JOIN contact_mas on sr_details."iCId" = contact_mas."iCId"';
+    $where_arr[] = '(fiberinquiry_details."iFiberInquiryId" = '.$fiberInquiryId.')';
+    $join_arr[] = 'LEFT JOIN contact_mas on fiberinquiry_details."iCId" = contact_mas."iCId"';
 
-    $SRObj = new SR();
-    $SRObj->clear_variable();
-    $SRObj->join_field = $join_fieds_arr;
-    $SRObj->join = $join_arr;
-    $SRObj->where = $where_arr;
-    $SRObj->param['limit'] = "0";
-    $SRObj->param['order_by'] = 'sr_details."iSRId" DESC';
-    $SRObj->setClause(); 
-    $rs_sr = $SRObj->recordset_list();
-    
+    $FiberInquiryObj = new FiberInquiry();
+    $FiberInquiryObj->clear_variable();
+    $FiberInquiryObj->join_field = $join_fieds_arr;
+    $FiberInquiryObj->join = $join_arr;
+    $FiberInquiryObj->where = $where_arr;
+    $FiberInquiryObj->param['limit'] = "0";
+    $FiberInquiryObj->param['order_by'] = 'fiberinquiry_details."iFiberInquiryId" DESC';
+    $FiberInquiryObj->setClause(); 
+    $rs_sr = $FiberInquiryObj->recordset_list();
     for ($i = 0; $i < count($rs_sr); $i++) {
         $rs_arr[] = array(
-         'display' => $rs_sr[$i]['iSRId']." (".$rs_sr[$i]['vContactName'].")",
-         "iSRId" => $rs_sr[$i]['iSRId'],
+         'display' => $rs_sr[$i]['iFiberInquiryId']." (".$rs_sr[$i]['vContactName'].")",
+         "iSRId" => $rs_sr[$i]['iFiberInquiryId'],
         );
     }
 
@@ -395,45 +376,38 @@ else if($request_type == "sr_list"){
     $code = 2000;
     $message = api_getMessage($req_ext, constant($code));
     $response_data = array("Code" => 200, "Message" => $message, "result" => $result);
-}else if($request_type == "nearby_sr"){
-    $lat=$RES_PARA['lat'];
-    $long=$RES_PARA['long'];
-    $meter=$RES_PARA['meter'];
+}else if($request_type == "nearby_fiber_inquiry"){
+    $lat = $RES_PARA['lat'];
+    $long = $RES_PARA['long'];
+    $meter = $RES_PARA['meter'];
     $entry = array();
     $arr = array();
     $ind = 0;
 
     if($lat != ""  && $long != "" && $meter != ""){
-
-        // for near by sr list
-
-
         $where_arr = array();
-        $where_arr[] = 'ST_DWithin(ST_SetSRID(ST_MakePoint(sr_details."vLongitude",sr_details."vLatitude"), 4326)::geography, ST_MakePoint(' . $long . ', ' . $lat . ')::geography, '.$meter.') ';
-         $SRObj = new SR();
-
-        $SRObj->where = $where_arr;
-        $SRObj->param['order_by'] = "sr_details.\"iSRId\" DESC";
-        $SRObj->setClause();
-        $SRObj->debug_query = false;
-        $rs_nearsr =  $SRObj->recordset_list();
-        $iSRId_list = array();
+        $where_arr[] = 'ST_DWithin(ST_SetSRID(ST_MakePoint(fiberinquiry_details."vLongitude",fiberinquiry_details."vLatitude"), 4326)::geography, ST_MakePoint(' . $long . ', ' . $lat . ')::geography, '.$meter.') ';
+        $FiberInquiryObj = new FiberInquiry();
+        $FiberInquiryObj->where = $where_arr;
+        $FiberInquiryObj->param['order_by'] = "fiberinquiry_details.\"iFiberInquiryId\" DESC";
+        $FiberInquiryObj->setClause();
+        $FiberInquiryObj->debug_query = false;
+        $rs_nearsr =  $FiberInquiryObj->recordset_list();
+        $iFiberInquiryId_list = array();
         $count_list = count($rs_nearsr);
 
         for($i=0; $i < $count_list; $i++)
         {
-            $iSRId_list[] = $rs_nearsr[$i]['iSRId'];
+            $iFiberInquiryId_list[] = $rs_nearsr[$i]['iFiberInquiryId'];
         }
-        if(count($iSRId_list) > 0) {
-            $iSRId_ids = implode(',', $iSRId_list);
+        if(count($iFiberInquiryId_list) > 0) {
+            $iFiberInquiryId_ids = implode(',', $iFiberInquiryId_list);
         }else {
-            $iSRId_ids = "99999999999999999999";
+            $iFiberInquiryId_ids = "99999999999999999999";
         }
-
-       // end near by sr list
-
+        //echo "<pre>";print_r($iFiberInquiryId_list);exit;
+        // end near by sr list
         // for near by site list
-
         $where_arr = array();
         $SiteObj = new Site();
         $SiteObj->clear_variable();
@@ -455,35 +429,31 @@ else if($request_type == "sr_list"){
         }else {
             $iSiteId_ids = "99999999999999999999";
         }
+        //echo "<pre>";print_r($iSiteId_list);exit;
         // end near by site list
 
         $end_date = date("Y-m-d");
         $start_date = date("Y-m-d", strtotime( date( 'Y-m-d' )." -3 months"));
-        if(count($iSiteId_list) > 0 || count($iSRId_list) > 0) {
+        if(count($iSiteId_list) > 0 || count($iFiberInquiryId_list) > 0) {
             //-------------------------- start task laravel ---------------------------//
             $where_arr = array();
             $join_fieds_arr = array();
             $join_arr = array();
             $TaskLarvalSurveillance = new TaskLarvalSurveillance();
             $TaskLarvalSurveillance->clear_variable();
-            $where_arr[] = "(task_larval_surveillance.\"iSRId\" IN ($iSRId_ids) OR task_larval_surveillance.\"iSiteId\" IN ($iSiteId_ids))";
+            $where_arr[] = "(task_larval_surveillance.\"iSRId\" IN ($iFiberInquiryId_ids) OR task_larval_surveillance.\"iSiteId\" IN ($iSiteId_ids))";
             $where_arr[] = "task_larval_surveillance.\"dDate\" between '".$start_date."' and '".$end_date."'";
             $join_fieds_arr[] = " s.\"vName\" as  \"vSiteName\" ";
             $join_fieds_arr[] = " site_type_mas.\"vTypeName\"";
             $join_fieds_arr[] = " site_sub_type_mas.\"vSubTypeName\"";
-            $join_fieds_arr[] = " sr_details.\"iSRId\"";
-            $join_fieds_arr[] = " sr_details.\"iCId\"";
+            $join_fieds_arr[] = " fiberinquiry_details.\"iFiberInquiryId\"";
+            $join_fieds_arr[] = " fiberinquiry_details.\"iCId\"";
             $join_fieds_arr[] = "concat(\"vFirstName\",' ', \"vLastName\") as \"vContactName\" ";
-            //$join_fieds_arr[] = " site_attribute_mas.\"vAttribute\"";
             $join_arr[] = 'LEFT JOIN site_mas s on s."iSiteId" = task_larval_surveillance."iSiteId"';
             $join_arr[] = 'LEFT JOIN site_type_mas on site_type_mas."iSTypeId" = s."iSTypeId"';
             $join_arr[] = 'LEFT JOIN site_sub_type_mas on site_sub_type_mas."iSSTypeId" = s."iSSTypeId"';
-
-            //$join_arr[] = 'LEFT JOIN site_attribute on site_attribute."iSiteId" = s."iSiteId"';
-            //$join_arr[] = 'LEFT JOIN site_attribute_mas on site_attribute_mas."iSAttributeId" = site_attribute."iSAttributeId"';
-
-            $join_arr[] = 'LEFT JOIN sr_details on sr_details."iSRId" = task_larval_surveillance."iSRId"';
-            $join_arr[] = 'LEFT JOIN contact_mas on contact_mas."iCId" = sr_details."iCId"';
+            $join_arr[] = 'LEFT JOIN fiberinquiry_details on fiberinquiry_details."iFiberInquiryId" = task_larval_surveillance."iSRId"';
+            $join_arr[] = 'LEFT JOIN contact_mas on contact_mas."iCId" = fiberinquiry_details."iCId"';
             $TaskLarvalSurveillance = new TaskLarvalSurveillance();
             $TaskLarvalSurveillance->join_field = $join_fieds_arr;
             $TaskLarvalSurveillance->join = $join_arr;
@@ -492,7 +462,7 @@ else if($request_type == "sr_list"){
             $TaskLarvalSurveillance->setClause();
             $TaskLarvalSurveillance->debug_query = false;
             $larval_surveillance_arr = $TaskLarvalSurveillance->recordset_list();
-            // echo "<pre>";print_r($larval_surveillance_arr);exit();
+            //echo "<pre>";print_r($larval_surveillance_arr);exit();
             if(!empty($larval_surveillance_arr)) {
                 $ti =count($larval_surveillance_arr);
                 for($t =0; $t<$ti; $t++) {
@@ -524,9 +494,9 @@ else if($request_type == "sr_list"){
                     //$arr[$ind]['vAttribute'][] = $larval_surveillance_arr[$t]['vAttribute'];
                     $site_details .=  'Premise '.$larval_surveillance_arr[$t]['iSiteId'].($larval_surveillance_arr[$t]['vSiteName'] ? ' ('.$larval_surveillance_arr[$t]['vSiteName'].') ' : ' ').($larval_surveillance_arr[$t]['vTypeName'] ? $larval_surveillance_arr[$t]['vTypeName'] : ' ').($larval_surveillance_arr[$t]['vSubTypeName'] ? ' ('.$larval_surveillance_arr[$t]['vSubTypeName'].')': ' ').(!empty($vAttributeArr) ? ' ('.implode(' | ',$vAttributeArr).')' : '');
 
-                    if($larval_surveillance_arr[$t]['iSRId'] > 0){
-                        $site_details .= "<br/>SR ".$larval_surveillance_arr[$t]['iSRId'].($larval_surveillance_arr[$t]['vContactName'] ? " (".$larval_surveillance_arr[$t]['vContactName'].")" : '');
-                        $sr_arr[] = $larval_surveillance_arr[$t]['iSRId'];
+                    if($larval_surveillance_arr[$t]['iFiberInquiryId'] > 0){
+                        $site_details .= "<br/>Fiber Inquiry ".$larval_surveillance_arr[$t]['iFiberInquiryId'].($larval_surveillance_arr[$t]['vContactName'] ? " (".$larval_surveillance_arr[$t]['vContactName'].")" : '');
+                        $fiber_inquiry_arr[] = $larval_surveillance_arr[$t]['iFiberInquiryId'];
                     }
 
                     $arr[$ind]['dDate'] = ($larval_surveillance_arr[$t]['dDate'] ? $larval_surveillance_arr[$t]['dDate'] : '');
@@ -603,14 +573,14 @@ else if($request_type == "sr_list"){
             $where_arr = array();
             $join_fieds_arr = array();
             $join_arr = array();
-            $where_arr[] = "(task_treatment.\"iSRId\" IN ($iSRId_ids) OR task_treatment.\"iSiteId\" IN ($iSiteId_ids))";
+            $where_arr[] = "(task_treatment.\"iSRId\" IN ($iFiberInquiryId_ids) OR task_treatment.\"iSiteId\" IN ($iSiteId_ids))";
             $where_arr[] = "task_treatment.\"dDate\" between '".$start_date."' and '".$end_date."'";
 
             $join_fieds_arr[] = " s.\"vName\" as  \"vSiteName\" ";
             $join_fieds_arr[] = " site_type_mas.\"vTypeName\"";
             $join_fieds_arr[] = " site_sub_type_mas.\"vSubTypeName\"";
-            $join_fieds_arr[] = " sr_details.\"iSRId\"";
-            $join_fieds_arr[] = " sr_details.\"iCId\"";
+            $join_fieds_arr[] = " fiberinquiry_details.\"iFiberInquiryId\"";
+            $join_fieds_arr[] = " fiberinquiry_details.\"iCId\"";
             $join_fieds_arr[] = "concat(\"vFirstName\",' ', \"vLastName\") as \"vContactName\" ";
             //$join_fieds_arr[] = " site_attribute_mas.\"vAttribute\"";
             $join_fieds_arr[] = " unit_mas.\"vUnit\"";
@@ -622,8 +592,8 @@ else if($request_type == "sr_list"){
 
             $join_arr[] = 'LEFT JOIN site_sub_type_mas on site_sub_type_mas."iSSTypeId" = s."iSSTypeId"';
 
-            $join_arr[] = 'LEFT JOIN sr_details on sr_details."iSRId" = task_treatment."iSRId"';
-            $join_arr[] = 'LEFT JOIN contact_mas on contact_mas."iCId" = sr_details."iCId"';
+            $join_arr[] = 'LEFT JOIN fiberinquiry_details on fiberinquiry_details."iFiberInquiryId" = task_treatment."iSRID"';
+            $join_arr[] = 'LEFT JOIN contact_mas on contact_mas."iCId" = fiberinquiry_details."iCId"';
             $join_arr[] = 'LEFT JOIN unit_mas on unit_mas."iUId" = task_treatment."iUId"';
             $join_arr[] = 'LEFT JOIN treatment_product on treatment_product."iTPId" = task_treatment."iTPId"';
 
@@ -665,9 +635,9 @@ else if($request_type == "sr_list"){
                     //$arr[$ind]['vAttribute'][] = $treatment_arr[$t]['vAttribute'];
                     $site_details .=  'Premise '.$treatment_arr[$t]['iSiteId'].($treatment_arr[$t]['vSiteName'] ? ' ('.$treatment_arr[$t]['vSiteName'].') ' :'').($treatment_arr[$t]['vTypeName'] ? $treatment_arr[$t]['vTypeName'] :'').($treatment_arr[$t]['vSubTypeName'] ? ' ('.$treatment_arr[$t]['vSubTypeName'].')': '').(!empty($vAttributeArr) ? ' ('.implode(' | ',$vAttributeArr).')' :'');
 
-                    if($treatment_arr[$t]['iSRId'] > 0){
-                        $site_details .= "<br/>SR ".$treatment_arr[$t]['iSRId'].($treatment_arr[$t]['vContactName'] ? " (".$treatment_arr[$t]['vContactName'].")" : '');
-                        $sr_arr[] = $treatment_arr[$t]['iSRId'];
+                    if($treatment_arr[$t]['iFiberInquiryId'] > 0){
+                        $site_details .= "<br/>SR ".$treatment_arr[$t]['iFiberInquiryId'].($treatment_arr[$t]['vContactName'] ? " (".$treatment_arr[$t]['vContactName'].")" : '');
+                        $fiber_inquiry_arr[] = $treatment_arr[$t]['iFiberInquiryId'];
                     }
 
                     $arr[$ind]['dDate'] = ($treatment_arr[$t]['dDate'] ? $treatment_arr[$t]['dDate'] :'');
@@ -689,22 +659,22 @@ else if($request_type == "sr_list"){
             $where_arr = array();
             $join_fieds_arr = array();
             $join_arr = array();
-            $where_arr[] = "(task_landing_rate.\"iSRId\" IN ($iSRId_ids) OR task_landing_rate.\"iSiteId\" IN ($iSiteId_ids))";
+            $where_arr[] = "(task_landing_rate.\"iSRId\" IN ($iFiberInquiryId_ids) OR task_landing_rate.\"iSiteId\" IN ($iSiteId_ids))";
             $where_arr[] = "task_landing_rate.\"dDate\" between '".$start_date."' and '".$end_date."'";
 
             $join_fieds_arr[] = " s.\"vName\"";
             $join_fieds_arr[] = " site_type_mas.\"vTypeName\"";
             $join_fieds_arr[] = " site_sub_type_mas.\"vSubTypeName\"";
-            $join_fieds_arr[] = " sr_details.\"iSRId\"";
-            $join_fieds_arr[] = " sr_details.\"iCId\"";
+            $join_fieds_arr[] = " fiberinquiry_details.\"iFiberInquiryId\"";
+            $join_fieds_arr[] = " fiberinquiry_details.\"iCId\"";
             $join_fieds_arr[] = "concat(\"vFirstName\",' ', \"vLastName\") as \"vContactName\" ";
             //$join_fieds_arr[] = " site_attribute_mas.\"vAttribute\"";
             //$join_fieds_arr[] = " mosquito_species_mas.\"tDescription\"";
             $join_arr[] = 'LEFT JOIN site_mas s on s."iSiteId" = task_landing_rate."iSiteId"';
             $join_arr[] = 'LEFT JOIN site_type_mas on site_type_mas."iSTypeId" = s."iSTypeId"';
             $join_arr[] = 'LEFT JOIN site_sub_type_mas on site_sub_type_mas."iSSTypeId" = s."iSSTypeId"';
-            $join_arr[] = 'LEFT JOIN sr_details on sr_details."iSRId" = task_landing_rate."iSRId"';
-            $join_arr[] = 'LEFT JOIN contact_mas on contact_mas."iCId" = sr_details."iCId"';
+            $join_arr[] = 'LEFT JOIN fiberinquiry_details on fiberinquiry_details."iFiberInquiryId" = task_landing_rate."iSRId"';
+            $join_arr[] = 'LEFT JOIN contact_mas on contact_mas."iCId" = fiberinquiry_details."iCId"';
             //$join_arr[] = 'LEFT JOIN site_attribute on site_attribute."iSiteId" = s."iSiteId"';
             //$join_arr[] = 'LEFT JOIN site_attribute_mas on site_attribute_mas."iSAttributeId" = site_attribute."iSAttributeId"';
 
@@ -767,9 +737,9 @@ else if($request_type == "sr_list"){
                     //$arr[$ind]['vAttribute'][] = $landingrate_arr[$t]['vAttribute'];
                     $site_details .=  'Premise '.$landingrate_arr[$t]['iSiteId'].($landingrate_arr[$t]['vName'] ? ' ('.$landingrate_arr[$t]['vName'].') ': '').($landingrate_arr[$t]['vTypeName'] ? $landingrate_arr[$t]['vTypeName'] : ' '). ($landingrate_arr[$t]['vSubTypeName'] ? ' ('.$landingrate_arr[$t]['vSubTypeName'].')' : '').(!empty($vAttributeArr) ? '('.implode(' | ',$vAttributeArr).')':'');
 
-                    if($landingrate_arr[$t]['iSRId'] > 0){
-                        $site_details .= "<br/>SR ".$landingrate_arr[$t]['iSRId'].($landingrate_arr[$t]['vContactName'] ? " (".$landingrate_arr[$t]['vContactName'].")" : '');
-                        $sr_arr[] = $landingrate_arr[$t]['iSRId'];
+                    if($landingrate_arr[$t]['iFiberInquiryId'] > 0){
+                        $site_details .= "<br/>SR ".$landingrate_arr[$t]['iFiberInquiryId'].($landingrate_arr[$t]['vContactName'] ? " (".$landingrate_arr[$t]['vContactName'].")" : '');
+                        $fiber_inquiry_arr[] = $landingrate_arr[$t]['iFiberInquiryId'];
 
                     }
 
@@ -795,22 +765,22 @@ else if($request_type == "sr_list"){
             $where_arr = array();
             $join_fieds_arr = array();
             $join_arr = array();
-            $where_arr[] = "(task_trap.\"iSRId\" IN ($iSRId_ids) OR task_trap.\"iSiteId\" IN ($iSiteId_ids))";
+            $where_arr[] = "(task_trap.\"iSRId\" IN ($iFiberInquiryId_ids) OR task_trap.\"iSiteId\" IN ($iSiteId_ids))";
             $where_arr[] = "task_trap.\"dTrapPlaced\" between '".$start_date."' and '".$end_date."'";
             $join_fieds_arr[] = " s.\"vName\"";
             $join_fieds_arr[] = " site_type_mas.\"vTypeName\"";
             $join_fieds_arr[] = " site_sub_type_mas.\"vSubTypeName\"";
-            $join_fieds_arr[] = " sr_details.\"iSRId\"";
-            $join_fieds_arr[] = " sr_details.\"iCId\"";
+            $join_fieds_arr[] = " fiberinquiry_details.\"iFiberInquiryId\"";
+            $join_fieds_arr[] = " fiberinquiry_details.\"iCId\"";
             $join_fieds_arr[] = "concat(\"vFirstName\",' ', \"vLastName\") as \"vContactName\" ";
             //$join_fieds_arr[] = " site_attribute_mas.\"vAttribute\"";
             $join_arr[] = 'LEFT JOIN site_mas s on s."iSiteId" = task_trap."iSiteId"';
             $join_arr[] = 'LEFT JOIN site_type_mas on site_type_mas."iSTypeId" = s."iSTypeId"';
             $join_arr[] = 'LEFT JOIN site_sub_type_mas on site_sub_type_mas."iSSTypeId" = s."iSSTypeId"';
-            $join_arr[] = 'LEFT JOIN sr_details on sr_details."iSRId" = task_trap."iSRId"';
+            $join_arr[] = 'LEFT JOIN fiberinquiry_details on fiberinquiry_details."iFiberInquiryId" = task_trap."iSRId"';
             //$join_arr[] = 'LEFT JOIN site_attribute on site_attribute."iSiteId" = s."iSiteId"';
             //$join_arr[] = 'LEFT JOIN site_attribute_mas on site_attribute_mas."iSAttributeId" = site_attribute."iSAttributeId"';
-            $join_arr[] = 'LEFT JOIN contact_mas on contact_mas."iCId" = sr_details."iCId"';
+            $join_arr[] = 'LEFT JOIN contact_mas on contact_mas."iCId" = fiberinquiry_details."iCId"';
             $join_fieds_arr[] = " trap_type_mas.\"vTrapName\",task_trap.\"dTrapPlaced\" as dDate";
             $join_arr[] = 'LEFT JOIN trap_type_mas on trap_type_mas."iTrapTypeId" = task_trap."iTrapTypeId"';
 
@@ -851,9 +821,9 @@ else if($request_type == "sr_list"){
                     //$arr[$ind]['vAttribute'][] = $tasktrap_arr[$t]['vAttribute'];   
                     $site_details .=  'Premise '.$tasktrap_arr[$t]['iSiteId'].($tasktrap_arr[$t]['vName'] ? ' ('.$tasktrap_arr[$t]['vName'].') ':' ').($tasktrap_arr[$t]['vTypeName'] ? $tasktrap_arr[$t]['vTypeName'] : ' ').($tasktrap_arr[$t]['vSubTypeName'] ?  ' ('.$tasktrap_arr[$t]['vSubTypeName'].')' : ' ').(!empty($vAttributeArr) ? ' ('.implode(' | ',$vAttributeArr).')' : ' ');
 
-                    if($tasktrap_arr[$t]['iSRId'] > 0){
-                        $site_details .= "<br/>SR ".$tasktrap_arr[$t]['iSRId'].($tasktrap_arr[$t]['vContactName'] ? " (".$tasktrap_arr[$t]['vContactName'].")" :'');
-                        $sr_arr[] = $tasktrap_arr[$t]['iSRId'];
+                    if($tasktrap_arr[$t]['iFiberInquiryId'] > 0){
+                        $site_details .= "<br/>SR ".$tasktrap_arr[$t]['iFiberInquiryId'].($tasktrap_arr[$t]['vContactName'] ? " (".$tasktrap_arr[$t]['vContactName'].")" :'');
+                        $fiber_inquiry_arr[] = $tasktrap_arr[$t]['iFiberInquiryId'];
                     }
                     $arr[$ind]['site_details'] =$site_details;       
                     $arr[$ind]['dDate'] = ($tasktrap_arr[$t]['dTrapPlaced'] ? $tasktrap_arr[$t]['dTrapPlaced'] : '');
@@ -872,14 +842,14 @@ else if($request_type == "sr_list"){
             $where_arr = array();
             $join_fieds_arr = array();
             $join_arr = array();
-            $where_arr[] = "(task_other.\"iSRId\" IN ($iSRId_ids) OR task_other.\"iSiteId\" IN ($iSiteId_ids))";
+            $where_arr[] = "(task_other.\"iSRId\" IN ($iFiberInquiryId_ids) OR task_other.\"iSiteId\" IN ($iSiteId_ids))";
             $where_arr[] = "task_other.\"dDate\" between '".$start_date."' and '".$end_date."'";
 
             $join_fieds_arr[] = " s.\"vName\" as  \"vSiteName\" ";
             $join_fieds_arr[] = " site_type_mas.\"vTypeName\"";
             $join_fieds_arr[] = " site_sub_type_mas.\"vSubTypeName\"";
-            $join_fieds_arr[] = " sr_details.\"iSRId\"";
-            $join_fieds_arr[] = " sr_details.\"iCId\"";
+            $join_fieds_arr[] = " fiberinquiry_details.\"iFiberInquiryId\"";
+            $join_fieds_arr[] = " fiberinquiry_details.\"iCId\"";
             $join_fieds_arr[] = "concat(\"vFirstName\",' ', \"vLastName\") as \"vContactName\" ";
             //$join_fieds_arr[] = " site_attribute_mas.\"vAttribute\"";
             $join_arr[] = 'LEFT JOIN site_mas s on s."iSiteId" = task_other."iSiteId"';
@@ -890,8 +860,8 @@ else if($request_type == "sr_list"){
             //$join_arr[] = 'LEFT JOIN site_attribute on site_attribute."iSiteId" = s."iSiteId"';
             //$join_arr[] = 'LEFT JOIN site_attribute_mas on site_attribute_mas."iSAttributeId" = site_attribute."iSAttributeId"';
             $join_arr[] = 'LEFT JOIN task_type_mas on task_type_mas."iTaskTypeId" = task_other."iTaskTypeId"';
-            $join_arr[] = 'LEFT JOIN sr_details on sr_details."iSRId" = task_other."iSRId"';
-            $join_arr[] = 'LEFT JOIN contact_mas on contact_mas."iCId" = sr_details."iCId"';
+            $join_arr[] = 'LEFT JOIN fiberinquiry_details on fiberinquiry_details."iFiberInquiryId" = task_other."iSRId"';
+            $join_arr[] = 'LEFT JOIN contact_mas on contact_mas."iCId" = fiberinquiry_details."iCId"';
 
             $TaskOther->join_field = $join_fieds_arr;
             $TaskOther->join = $join_arr;
@@ -900,6 +870,7 @@ else if($request_type == "sr_list"){
             $TaskOther->setClause();
             $TaskOther->debug_query = false;
             $task_other_arr = $TaskOther->recordset_list();
+            //echo "<pre>";print_r($task_other_arr);exit;
             if(!empty($task_other_arr)) {
                 $ti =count($task_other_arr);
                 for($t =0; $t<$ti; $t++) {
@@ -931,10 +902,10 @@ else if($request_type == "sr_list"){
                     //$arr[$ind]['vAttribute'][] = $task_other_arr[$t]['vAttribute'];
                     $site_details .=  'Premise '.$task_other_arr[$t]['iSiteId'].($task_other_arr[$t]['vSiteName'] ? ' ('.$task_other_arr[$t]['vSiteName'].') ' :'').($task_other_arr[$t]['vTypeName'] ? $task_other_arr[$t]['vTypeName'] : '').($task_other_arr[$t]['vSubTypeName'] ? ' ('.$task_other_arr[$t]['vSubTypeName'].')': '').(!empty($vAttributeArr) ? ' ('.implode(' | ',$vAttributeArr).')' : '');
 
-                    if($task_other_arr[$t]['iSRId'] > 0)
+                    if($task_other_arr[$t]['iFiberInquiryId'] > 0)
                     {
-                        $site_details .= "<br/>SR ".$task_other_arr[$t]['iSRId']." (".$task_other_arr[$t]['vContactName'].")";
-                        $sr_arr[] = $task_other_arr[$t]['iSRId'];
+                        $site_details .= "<br/>Fiber Inquiry ".$task_other_arr[$t]['iFiberInquiryId']." (".$task_other_arr[$t]['vContactName'].")";
+                        $fiber_inquiry_arr[] = $task_other_arr[$t]['iFiberInquiryId'];
                     }
 
                     $arr[$ind]['dDate'] = $task_other_arr[$t]['dDate'];
@@ -963,7 +934,7 @@ else if($request_type == "sr_list"){
         $rh = HTTPStatus(200);
         $code = 2000;
         $message = api_getMessage($req_ext, constant($code));
-        $response_data = array("Code" => 200 , "Message" => $message, "result" => array('nearsr_list' => $entry));
+        $response_data = array("Code" => 200 , "Message" => $message, "result" => array('nearfiber_inquiry_list' => $entry));
     }else{
        
         $response_data = array("Code" => 500 , "Message" => "LatLong are missing.");

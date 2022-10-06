@@ -398,7 +398,7 @@ else if($mode == "search_site"){
     $vName = trim($_REQUEST['vName']);
     $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
     $arr_param['siteName'] = $vName;
-    $API_URL = $site_api_url."premise_site.json";
+    $API_URL = $site_api_url."search_premise.json";
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $API_URL);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);

@@ -1523,18 +1523,13 @@ function srinfo_popup(marker, siteid, vName, vAddress, vRequestType, vAssignTo, 
 			} else {
 				vStatus = vStatus;
 			}
-			if (vAssignTo == null || vAssignTo == 'undefined' || vAssignTo == '') {
-				vAssignTo = '';
-			} else {
-				vAssignTo = vAssignTo;
-			}
+			
 			content += "<div CELLPADDING=5 CELLSPACING=5 class=info_box id=info_box>";
-			content += "<h5 class='border-bottom pb-2 mb-3'>SR Id " + siteid + " " + vName + "</h5>";
+			content += "<h5 class='border-bottom pb-2 mb-3'>Fiber Inquiry Id " + siteid + " " + vName + "</h5>";
 			content += "<div class='d-flex'><h6>" + vRequestType + "</h6></div>";
 			content += "<div class='d-flex'><span>" + vAddress + "</span></div>";
-			content += "<div class='d-flex'><b>Assign To : </b>&nbsp;<span>" + vAssignTo + "</span></div>";
 			content += "<div class='d-flex'><b>Status : </b>&nbsp;<span>" + vStatus + "</span></div>";
-			content += "<div class='button mt-3'><a class='btn btn-primary  mr-2 text-white' href='" + site_url + "sr/edit&mode=Update&iSRId=" + siteid + "' target='_blank'>Edit SR</a></div>";
+			content += "<div class='button mt-3'><a class='btn btn-primary  mr-2 text-white' href='" + site_url + "fiber_inquiry/edit&mode=Update&iFiberInquiryId=" + siteid + "' target='_blank'>Edit Fiber Inquiry</a></div>";
 			content += "</div>";
 			if (infowindow) {
 				infowindow.close();

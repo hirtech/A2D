@@ -34,7 +34,11 @@ $local_host = $_SERVER['SERVER_ADDR'];
 $path = str_replace($sitefolder_api,"",$_SERVER['REQUEST_URI']);
 
 //echo $path."\n";
-$path = str_replace("/eCommunityfiber/api/".$version."/","",$path);
+if($local_host == "192.168.32.139") {
+	$path = str_replace("/api/".$version."/","",$path);
+}else {
+	$path = str_replace("/eCommunityfiber/api/".$version."/","",$path);
+}
 //echo $path;exit;
 
 if(strstr($path, '?'))
@@ -468,6 +472,15 @@ switch($path) {
 			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
 		}
 		break;
+	case "engagement_dropdown." . $req_ext:
+		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
+			$request_type = "engagement_dropdown";
+			$api_file_name = "general.php";
+			include_once($site_api_path . "api_authentication.php");
+		}else {
+			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
+		}
+		break;
 	case "premise_list." . $req_ext:
 		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
 			$request_type = "premise_list";
@@ -774,37 +787,37 @@ switch($path) {
 			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
 		}
 		break;
-	case "sr_edit." . $req_ext:
+	case "fiber_inquiry_list." . $req_ext:
 		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
-			$request_type = "sr_edit";
-			$api_file_name = "sr.php";
+			$request_type = "fiber_inquiry_list";
+			$api_file_name = "fiber_inquiry.php";
 			include_once($site_api_path."api_authentication.php");
 		}else {
 			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
 		}
 		break;
-	case "sr_add." . $req_ext:
+	case "fiber_inquiry_edit." . $req_ext:
 		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
-			$request_type = "sr_add";
-			$api_file_name = "sr.php";
+			$request_type = "fiber_inquiry_edit";
+			$api_file_name = "fiber_inquiry.php";
 			include_once($site_api_path."api_authentication.php");
 		}else {
 			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
 		}
 		break;
-	case "sr_list." . $req_ext:
+	case "fiber_inquiry_add." . $req_ext:
 		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
-			$request_type = "sr_list";
-			$api_file_name = "sr.php";
+			$request_type = "fiber_inquiry_add";
+			$api_file_name = "fiber_inquiry.php";
 			include_once($site_api_path."api_authentication.php");
 		}else {
 			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
 		}
 		break;
-	case "sr_delete." . $req_ext:
+	case "fiber_inquiry_delete." . $req_ext:
 		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
-			$request_type = "sr_delete";
-			$api_file_name = "sr.php";
+			$request_type = "fiber_inquiry_delete";
+			$api_file_name = "fiber_inquiry.php";
 			include_once($site_api_path."api_authentication.php");
 		}else {
 			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
@@ -1062,10 +1075,10 @@ switch($path) {
 			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
 		}
 		break;
-	case "search_sr." . $req_ext:
+	case "search_fiber_inquiry." . $req_ext:
 		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
-			$request_type = "search_sr";
-			$api_file_name = "sr.php";
+			$request_type = "search_fiber_inquiry";
+			$api_file_name = "fiber_inquiry.php";
 			include_once($site_api_path."api_authentication.php");
 		}else {
 			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
@@ -1129,10 +1142,10 @@ switch($path) {
 			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
 		}
 		break;
-	case "nearby_sr." . $req_ext:
+	case "nearby_fiber_inquiry." . $req_ext:
 		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
-			$request_type = "nearby_sr";
-			$api_file_name = "sr.php";
+			$request_type = "nearby_fiber_inquiry";
+			$api_file_name = "fiber_inquiry.php";
 			include_once($site_api_path . "api_authentication.php");
 		}else {
 			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);

@@ -144,7 +144,7 @@ function addEditDataTaskOther(id,mode,iSiteId_list){
       datumTokenizer: function(d) { return d.tokens; },
       queryTokenizer: Bloodhound.tokenizers.whitespace,
       remote: {
-        url: site_url+'tasks/task_other_list&mode=search_sr',
+        url: site_url+'tasks/task_other_list&mode=search_fiber_inquiry',
         replace: function(url, uriEncodedQuery) {
             var newUrl = url + '&vSR_other=' + uriEncodedQuery;
             return newUrl;

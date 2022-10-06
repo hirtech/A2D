@@ -68,7 +68,7 @@ if($request_type == "task_larval_surveillance_list"){
    $join_arr[] = 'LEFT JOIN state_mas sm on s."iStateId" = sm."iStateId"';
    $join_arr[] = 'LEFT JOIN city_mas cm on s."iCityId" = cm."iCityId"';
    $join_arr[] = 'LEFT JOIN site_type_mas st on s."iSTypeId" = st."iSTypeId"';
-   $join_arr[] = 'LEFT JOIN sr_details sd on sd."iSRId" = task_larval_surveillance."iSRId"';
+   $join_arr[] = 'LEFT JOIN fiberinquiry_details sd on sd."iFiberInquiryId" task_larval_surveillance."iSRId"';
     $join_arr[] = 'LEFT JOIN contact_mas on  contact_mas."iCId"= sd."iCId"';
    $TaskLarvalObj->join_field = $join_fieds_arr;
    $TaskLarvalObj->join = $join_arr;

@@ -27,14 +27,14 @@ var listPage = function(){
                 'bAutoWidth': true,
                 "columns": [
                     { "data": "checkbox", "sortable":false, "className": "text-center", "width" : "1%"},
-                    { "data": "iSRId", "className": "text-center", "width" : "2%"},
+                    { "data": "iFiberInquiryId", "className": "text-center", "width" : "2%"},
                     { "data": "vContactName", "width" : "8%"},
                     { "data": "vAddress", "width" : "12%", "sortable":false},
                     { "data": "vCity", "width" : "8%"},
                     { "data": "vState", "width" : "8%"},
                     { "data": "vCounty", "width" : "8%"},
-                    { "data": "vAssignTo", "width" : "10%"},
-                    { "data": "vRequestType", "width" : "12%", "sortable":false},
+                    { "data": "vZoneName", "width" : "10%"},
+                    { "data": "vNetwork", "width" : "12%"},
                     { "data": "vStatus", "className": "text-center", "width" : "8%"},
                     { "data": "actions", "sortable":false, "className": "text-center", "width" : "10%"},
                 ],
@@ -83,7 +83,7 @@ var listPage = function(){
         if(access_group_var_add == '1') {
             gridtable.button().add( 0, {
                 action: function ( e, dt, node, config ) {
-                    location.href = site_url+"sr/add";
+                    location.href = site_url+"fiber_inquiry/add";
                 },
                 text: '<i class="fa fa-plus"></i>Add',
                 className: 'btn btn-primary'
@@ -96,11 +96,11 @@ var listPage = function(){
                     $.each($("input[class='list']:checked"), function(e)
                     {
                         sr_list_id.push($(this).val());
-                        location.href = site_url+"vmap/index&mode=filter_sr&iSRId="+sr_list_id;
+                        location.href = site_url+"vmap/index&mode=filter_fiberInquiry&iFiberInquiryId="+sr_list_id;
                     });
                 }
                 else{
-                    alert("Please Select At List One SR");
+                    alert("Please Select At List One Fiber Inquiry");
                 }
             },
             text: 'Map Selected',
@@ -116,7 +116,7 @@ var listPage = function(){
 
 
 $('#Search').click(function (){
-     gridtable.ajax.reload();
+    gridtable.ajax.reload();
     return false;
 });
 
@@ -127,7 +127,7 @@ $('#AdvSearchSubmit').click(function () {
 
 $('#AdvSearchReset').click(function () {
     //alert('1111');
-    $('#srId').val("");
+    $('#fiberInquiryId').val("");
     $('#contactNameFilterOpDD').val("Contains");
     $('#contactName').val("");
     $('#AddressFilterOpDD').val("Contains");
@@ -165,10 +165,10 @@ function delete_record(id)
             if (isConfirm) {
                 $.ajax({
                     type: "POST",
-                    url: site_url+"sr/list",
+                    url: site_url+"fiber_inquiry/list",
                     data: {
                         "mode" : "Delete",
-                        "iSRId" : id
+                        "iFiberInquiryId" : id
                     },
                     success: function(data){
                          swal.close();

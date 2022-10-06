@@ -1,5 +1,5 @@
 <?php
-include_once($controller_path . "sr.inc.php");
+include_once($controller_path . "fiber_inquiry.inc.php");
 include_once($controller_path . "premise_type.inc.php");
 include_once($controller_path . "premise_attribute.inc.php");
 include_once($controller_path . "premise_sub_type.inc.php");
@@ -17,6 +17,7 @@ include_once($controller_path . "test_method_mosquito.inc.php");
 include_once($controller_path . "result.inc.php");
 include_once($controller_path . "department.inc.php");
 include_once($controller_path . "access_group.inc.php");
+include_once($controller_path . "engagement.inc.php");
 
 if($request_type == "access_group_dropdown") {
 	$AccessGroupObj = new AccessGroup();
@@ -549,6 +550,25 @@ if($request_type == "access_group_dropdown") {
     $rs_sitetype = $SiteAttribute->recordset_list();
     if($rs_sitetype){
         $response_data = array("Code" => 200, "result" => $rs_sitetype, "total_record" => count($rs_sitetype));
+    }else{
+        $response_data = array("Code" => 500);
+    }
+}else if($request_type == "engagement_dropdown"){
+    $where_arr = array();
+    $join_fieds_arr = array();
+    $join_arr  = array();
+    $EngagementObj = new Engagement();
+    $iStatus = $RES_PARA['iStatus'];
+    $where_arr = array();
+    if($iStatus != ''){
+        $where_arr[] = "engagement_mas.\"iStatus\"='".$iStatus."'";
+    }
+    $EngagementObj->where = $where_arr;
+    $EngagementObj->param['order_by'] = "engagement_mas.\"vEngagement\"";
+    $EngagementObj->setClause();
+    $rs_eng = $EngagementObj->recordset_list();
+    if($rs_eng){
+        $response_data = array("Code" => 200, "result" => $rs_eng, "total_record" => count($rs_eng));
     }else{
         $response_data = array("Code" => 500);
     }

@@ -1,22 +1,17 @@
 <?php
 //echo "<pre>";print_r($_REQUEST);exit();
 # ----------- Access Rule Condition -----------
-per_hasModuleAccess("Service Request", 'List');
-$access_group_var_delete = per_hasModuleAccess("Service Request", 'Delete', 'N');
-$access_group_var_status = per_hasModuleAccess("Service Request", 'Status', 'N');
-$access_group_var_add = per_hasModuleAccess("Service Request", 'Add', 'N');
-$access_group_var_edit = per_hasModuleAccess("Service Request", 'Edit', 'N');
-$access_group_var_PDF = per_hasModuleAccess("Service Request", 'PDF', 'N');
-$access_group_var_CSV = per_hasModuleAccess("Service Request", 'CSV', 'N');
-$access_group_var_Respond = per_hasModuleAccess("Service Request", 'Respond', 'N');
+per_hasModuleAccess("Fiber Inquiry", 'List');
+$access_group_var_delete = per_hasModuleAccess("Fiber Inquiry", 'Delete', 'N');
+$access_group_var_status = per_hasModuleAccess("Fiber Inquiry", 'Status', 'N');
+$access_group_var_add = per_hasModuleAccess("Fiber Inquiry", 'Add', 'N');
+$access_group_var_edit = per_hasModuleAccess("Fiber Inquiry", 'Edit', 'N');
+$access_group_var_PDF = per_hasModuleAccess("Fiber Inquiry", 'PDF', 'N');
+$access_group_var_CSV = per_hasModuleAccess("Fiber Inquiry", 'CSV', 'N');
+$access_group_var_Respond = per_hasModuleAccess("Fiber Inquiry", 'Respond', 'N');
 # ----------- Access Rule Condition -----------
 
 include_once($site_path . "scripts/session_valid.php");
-include_once($controller_path . "sr.inc.php");
-
-
-$SRObj = new SR();
-
 # General Variables
 # ------------------------------------------------------------
 $mode = isset($_REQUEST['mode']) ? $_REQUEST['mode'] : 'list';
@@ -28,7 +23,6 @@ $dir = (isset($_REQUEST["sSortDir_0"]) ? $_REQUEST["sSortDir_0"] : 'desc');
 # ------------------------------------------------------------
 //echo "<pre>";print_r($access_group_var_delete);exit();
 
-
 if($mode == "List"){
     $arr_param = array();
 
@@ -38,8 +32,8 @@ if($mode == "List"){
         $arr_param[$vOptions] = $Keyword;
     }
     //echo "<pre>";print_r($_REQUEST);
-    if($_REQUEST['srId'] != ""){
-        $arr_param['srId'] = $_REQUEST['srId'];
+    if($_REQUEST['fiberInquiryId'] != ""){
+        $arr_param['fiberInquiryId'] = $_REQUEST['fiberInquiryId'];
     }
     if($_REQUEST['contactName'] != ""){
         $arr_param['contactName'] = $_REQUEST['contactName'];
@@ -61,12 +55,13 @@ if($mode == "List"){
         $arr_param['vCounty'] = $_REQUEST['vCounty'];
         $arr_param['CountyFilterOpDD'] = $_REQUEST['CountyFilterOpDD'];  
     }
-    if($_REQUEST['assignTo'] != ""){
-        $arr_param['assignTo'] = $_REQUEST['assignTo'];
-        $arr_param['AssignToFilterOpDD'] = $_REQUEST['AssignToFilterOpDD'];  
+    if($_REQUEST['zoneName'] != ""){
+        $arr_param['zoneName'] = $_REQUEST['zoneName'];
+        $arr_param['ZoneNameFilterOpDD'] = $_REQUEST['ZoneNameFilterOpDD'];  
     }
-    if($_REQUEST['srreqType'] != ""){
-        $arr_param['srreqType'] = $_REQUEST['srreqType'];  
+    if($_REQUEST['networkName'] != ""){
+        $arr_param['networkName'] = $_REQUEST['networkName'];
+        $arr_param['NetworkFilterOpDD'] = $_REQUEST['NetworkFilterOpDD'];  
     }
     if($_REQUEST['status'] != ""){
         $arr_param['status'] = $_REQUEST['status'];  
@@ -80,10 +75,8 @@ if($mode == "List"){
     $arr_param['access_group_var_edit'] = $access_group_var_edit;
     $arr_param['access_group_var_delete'] = $access_group_var_delete;
     $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
-    
-    //echo "<pre>";print_r($arr_param);exit();
-    $API_URL = $site_api_url."sr_list.json";
-    //echo $API_URL;exit;
+    $API_URL = $site_api_url."fiber_inquiry_list.json";
+    //echo $API_URL." ".json_encode($arr_param);exit;
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $API_URL);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
@@ -113,24 +106,24 @@ if($mode == "List"){
 
             $action = '';
             if($access_group_var_edit == "1"){
-                $action .= '<a class="btn btn-outline-secondary" title="Edit" href="'.$site_url.'sr/edit&mode=Update&iSRId=' . $rs_sr[$i]['iSRId'] . '"><i class="fa fa-edit"></i></a>';
+                $action .= '<a class="btn btn-outline-secondary" title="Edit" href="'.$site_url.'fiber_inquiry/edit&mode=Update&iFiberInquiryId=' . $rs_sr[$i]['iFiberInquiryId'] . '"><i class="fa fa-edit"></i></a>';
             }
             if($access_group_var_delete == "1"){
-                $action .= ' <a class="btn btn-outline-danger" title="Delete" href="javascript:void(0);" onclick="delete_record('.$rs_sr[$i]['iSRId'].');"><i class="fa fa-trash"></i></a>';
+                $action .= ' <a class="btn btn-outline-danger" title="Delete" href="javascript:void(0);" onclick="delete_record('.$rs_sr[$i]['iFiberInquiryId'].');"><i class="fa fa-trash"></i></a>';
             }
 
             $entry[] = array(
-                "checkbox" => '<input type="checkbox" class="list" value="'.$rs_sr[$i]['iSRId'].'"/>',
-                "iSRId" => $rs_sr[$i]['iSRId'],
-                "vContactName" => $rs_sr[$i]['vContactName'],
-                "vAddress" => $rs_sr[$i]['vAddress'],
-                "vCity" => $rs_sr[$i]['vCity'],
-                "vState" => $rs_sr[$i]['vState'],
-                "vCounty" => $rs_sr[$i]['vCounty'],
-                "vAssignTo" => $rs_sr[$i]['vAssignTo'],
-                "vRequestType" => $rs_sr[$i]['vRequestType'],
-                "vStatus" => $rs_sr[$i]['vStatus'],
-                "actions" => ($action!="")?$action:"---"
+                "checkbox"           => '<input type="checkbox" class="list" value="'.$rs_sr[$i]['iFiberInquiryId'].'"/>',
+                "iFiberInquiryId"    => $rs_sr[$i]['iFiberInquiryId'],
+                "vContactName"       => $rs_sr[$i]['vContactName'],
+                "vAddress"           => $rs_sr[$i]['vAddress'],
+                "vCity"              => $rs_sr[$i]['vCity'],
+                "vState"             => $rs_sr[$i]['vState'],
+                "vCounty"            => $rs_sr[$i]['vCounty'],
+                "vZoneName"          => $rs_sr[$i]['vZoneName'],
+                "vNetwork"           => $rs_sr[$i]['vNetwork'],
+                "vStatus"            => $rs_sr[$i]['vStatus'],
+                "actions"            => ($action!="")?$action:"---"
             );
         }
     }
@@ -141,7 +134,7 @@ if($mode == "List"){
     echo json_encode($jsonData);
     hc_exit();
     # -----------------------------------
-} else if ($mode == "get_zone_from_latlong") {
+}else if ($mode == "get_zone_from_latlong") {
     //echo"<pre>";print_r($_REQUEST);exit;
     $lat = number_format($_REQUEST['lat'],6);
     $long = number_format($_REQUEST['long'],6);
@@ -174,7 +167,7 @@ if($mode == "List"){
     
     echo json_encode($jsonData);
     hc_exit();
-} else if ($mode == "check_city_state") {
+}else if ($mode == "check_city_state") {
     $state_code = $_REQUEST['state_code'];
     $city = $_REQUEST['city'];
 
@@ -208,7 +201,7 @@ if($mode == "List"){
     
     echo json_encode($jsonData);
     hc_exit();
-} else if ($mode == "get_state") {
+}else if ($mode == "get_state") {
     $jsonData = array();
     $vStateCode = trim($_REQUEST['vStateCode']);
 
@@ -239,7 +232,7 @@ if($mode == "List"){
     
     echo json_encode($jsonData);
     hc_exit();
-} else if ($mode == "get_zipcode") {
+}else if ($mode == "get_zipcode") {
 
     $jsonData = array();
     $vZipcode = trim($_REQUEST['vZipcode']);
@@ -270,7 +263,7 @@ if($mode == "List"){
 
     echo json_encode($jsonData);
     hc_exit();
-} else if ($mode == "get_city") {
+}else if ($mode == "get_city") {
     $vCity = trim($_REQUEST['city']);
     $vCounty = trim($_REQUEST['county']);
 
@@ -300,11 +293,9 @@ if($mode == "List"){
     $jsonData =$res['result'];
     echo json_encode($jsonData);
     hc_exit();
-} else if($mode == "searchContact"){
-    //echo "<pre>";print_r($_REQUEST);exit();
+}else if($mode == "searchContact"){
     $iCId = trim($_REQUEST['iCId']);
     $vContactName = trim($_REQUEST['vContactName']);
-
     $arr_param = array(
         'sessionId' => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
         "iCId"              => $iCId,
@@ -334,13 +325,12 @@ if($mode == "List"){
     # -----------------------------------
     echo json_encode($jsonData);
     hc_exit();
-} else if($mode == "Add"){
+}else if($mode == "Add"){
     $arr_param = array();
     $iLoginUserId = $_SESSION["sess_iUserId".$admin_panel_session_suffix];
     if (isset($_POST) && count($_POST) > 0) {
-        //echo "<pre>";print_r($_POST);exit;
-
         $arr_param = array(
+            "sessionId"             => $_SESSION["we_api_session_id".$admin_panel_session_suffix],
             "vAddress1"             => $_POST['vAddress1'],
             "vAddress2"             => $_POST['vAddress2'],
             "vStreet"               => $_POST['vStreet'],
@@ -353,23 +343,14 @@ if($mode == "List"){
             "vLatitude"             => $_POST['vLatitude'],
             "vLongitude"            => $_POST['vLongitude'],
             "iCId"                  => $_POST['iCId'],
-            "bMosquitoService"      => $_POST['bMosquitoService'],
-            "bCarcassService"       => $_POST['bCarcassService'],
-            "iUserId"               => $_POST['iUserId'],
-            "bInspectPermission"    => $_POST['bInspectPermission'],
-            "bAccessPermission"     => $_POST['bAccessPermission'],
-            "bPets"                 => $_POST['bPets'],
             "iStatus"               => $_POST['iStatus'],
-            "tProblems"             => $_POST['tProblems'],
-            "tInternalNotes"        => $_POST['tInternalNotes'],
-            "tRequestorNotes"       => $_POST['tRequestorNotes'],
+            "iOldStatus"            => $_POST['iOldStatus'],
+            "iPremiseSubTypeId"     => $_POST['iPremiseSubTypeId'],
+            "iEngagementId"         => $_POST['iEngagementId'],
             "iLoginUserId"          => $iLoginUserId,
-            "sessionId"             => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
         );
-        //echo "<pre>";print_r(json_encode($arr_param));exit();
-
-        $API_URL = $site_api_url."sr_add.json";
-        //echo "<pre>";print_r($API_URL);exit();
+        $API_URL = $site_api_url."fiber_inquiry_add.json";
+        //echo $API_URL." ".json_encode($arr_param);exit();
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $API_URL);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
@@ -382,11 +363,10 @@ if($mode == "List"){
            "Content-Type: application/json",
         ));
 
-        $iSRId = curl_exec($ch);
-        //echo "<pre>";print_r($iSRId);exit();  
+        $iFiberInquiryId = curl_exec($ch);
         curl_close($ch);  
 
-        if($iSRId){
+        if($iFiberInquiryId){
             $result['msg'] = MSG_ADD;
             $result['error']= 0 ;
         }else{
@@ -404,13 +384,14 @@ if($mode == "List"){
     echo json_encode($result);
     hc_exit();
     # ----------------------------------- 
-} else if($mode == "Update"){
+}else if($mode == "Update"){
     $arr_param = array();
     $iLoginUserId = $_SESSION["sess_iUserId".$admin_panel_session_suffix];
     if (isset($_POST) && count($_POST) > 0) {
+        //echo "<pre>";print_r($_POST);exit;
         $arr_param = array(
-            "sessionId"         => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
-            "iSRId"             => $_POST['iSRId'],
+            "sessionId"             => $_SESSION["we_api_session_id".$admin_panel_session_suffix],
+            "iFiberInquiryId"       => $_POST['iFiberInquiryId'],
             "vAddress1"             => $_POST['vAddress1'],
             "vAddress2"             => $_POST['vAddress2'],
             "vStreet"               => $_POST['vStreet'],
@@ -423,23 +404,15 @@ if($mode == "List"){
             "vLatitude"             => $_POST['vLatitude'],
             "vLongitude"            => $_POST['vLongitude'],
             "iCId"                  => $_POST['iCId'],
-            "bMosquitoService"      => $_POST['bMosquitoService'],
-            "bCarcassService"       => $_POST['bCarcassService'],
-            "iUserId"     => $_POST['iUserId'],
-            "bInspectPermission"    => $_POST['bInspectPermission'],
-            "bAccessPermission"     => $_POST['bAccessPermission'],
-            "bPets"                 => $_POST['bPets'],
             "iStatus"               => $_POST['iStatus'],
             "iOldStatus"            => $_POST['iOldStatus'],
-            "tProblems"             => $_POST['tProblems'],
-            "tInternalNotes"        => $_POST['tInternalNotes'],
-            "tRequestorNotes"       => $_POST['tRequestorNotes'],
+            "iPremiseSubTypeId"     => $_POST['iPremiseSubTypeId'],
+            "iEngagementId"         => $_POST['iEngagementId'],
             "iLoginUserId"          => $iLoginUserId,
         );
-        //echo "<pre>";print_r(json_encode($arr_param));//exit();
 
-        $API_URL = $site_api_url."sr_edit.json";
-        //echo "<pre>";print_r($API_URL);exit();
+        $API_URL = $site_api_url."fiber_inquiry_edit.json";
+        //echo $API_URL." ".json_encode($arr_param);exit;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $API_URL);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
@@ -474,15 +447,14 @@ if($mode == "List"){
     echo json_encode($result);
     hc_exit();
     # ----------------------------------- 
-} else if($mode == "Delete"){
+}else if($mode == "Delete"){
     $result = array();
     $arr_param = array();
-    $iSRId = $_REQUEST['iSRId'];
-    
-    $arr_param['iSRId'] = $iSRId; 
+    $iFiberInquiryId = $_REQUEST['iFiberInquiryId'];
+    $arr_param['iFiberInquiryId'] = $iFiberInquiryId; 
     $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
-    $API_URL = $site_api_url."sr_delete.json";
-        //echo "<pre>";print_r($API_URL);exit();
+    $API_URL = $site_api_url."fiber_inquiry_delete.json";
+    //echo $API_URL." ".json_encode($arr_param);exit;
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $API_URL);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
@@ -513,15 +485,9 @@ if($mode == "List"){
     # -----------------------------------   
 }
 
-
-
-$module_name = "Service Request List";
-$module_title = "Service Request";
+$module_name = "Fiber Inquiry List";
+$module_title = "Fiber Inquiry";
 $smarty->assign("module_name", $module_name);
 $smarty->assign("module_title", $module_title);
-$smarty->assign("msg", $_GET['msg']);
-$smarty->assign("flag", $_GET['flag']);
-
 $smarty->assign("access_group_var_add", $access_group_var_add);
-
 ?>

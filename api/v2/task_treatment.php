@@ -84,7 +84,7 @@ if($request_type == "task_treatment_list"){
     $join_arr[] = 'LEFT JOIN treatment_product t on t."iTPId" = task_treatment."iTPId"';
     $join_arr[] = 'LEFT JOIN unit_mas  on unit_mas."iUId" = task_treatment."iUId"';
     $join_arr[] = 'LEFT JOIN site_type_mas st on s."iSTypeId" = st."iSTypeId"';
-    $join_arr[] = 'LEFT JOIN sr_details sd on sd."iSRId" = task_treatment."iSRId"';
+    $join_arr[] = 'LEFT JOIN fiberinquiry_details sd on sd."iFiberInquiryId" = task_treatment."iSRId"';
     $join_arr[] = 'LEFT JOIN contact_mas on  contact_mas."iCId"= sd."iCId"';
     $TaskTreatmentObj->join_field = $join_fieds_arr;
     $TaskTreatmentObj->join = $join_arr;

@@ -49,7 +49,7 @@ function fillInAddress() {
 	var vLatitude_nearbysr = place.geometry.location.lat();
 	var vLongitude_nearbysr = place.geometry.location.lng();
 
-	var html="<input type='button' onclick='showNearbySr("+vLatitude_nearbysr+","+vLongitude_nearbysr+","+meter+")' class='btn btn-primary' value='SR History'>";
+	var html="<input type='button' onclick='showNearbySr("+vLatitude_nearbysr+","+vLongitude_nearbysr+","+meter+")' class='btn btn-primary' value='Fiber Inquiry History'>";
 	$("#showNearbySr").html(html);
 
 	$(".address-details").show();
@@ -58,7 +58,7 @@ function fillInAddress() {
 		$.ajax({
 			type: "POST",
 			dataType: "json",
-			url: site_url+"sr/list",
+			url: site_url+"fiber_inquiry/list",
 			data: 'mode=get_zone_from_latlong&lat=' + place.geometry.location.lat() + '&long=' + place.geometry.location.lng(),
 			success: function(data){
 				if(data){
@@ -137,7 +137,7 @@ if(city != "" && state_code != "" ) {
 	$.ajax({
 		type: "POST",
 		dataType: "json",
-		url: site_url+"sr/list",
+		url: site_url+"fiber_inquiry/list",
 		data: 'mode=check_city_state&city='+city+'&state_code='+state_code,
 		async: false,
 		success: function(data){
@@ -165,7 +165,7 @@ if(city != "" && state_code != "" ) {
 							$.ajax({
 								type: "POST",
 								dataType: "json",
-								url: site_url+"sr/list",
+								url: site_url+"fiber_inquiry/list",
 								data: 'mode=get_state&vStateCode='+state_code,
 								async: false,
 								success: function(data){
@@ -183,7 +183,7 @@ if(city != "" && state_code != "" ) {
 							$.ajax({
 								type: "POST",
 								dataType: "json",
-								url: site_url+"sr/list",
+								url: site_url+"fiber_inquiry/list",
 								data: 'mode=get_city&city='+city+'&county='+county,
 								async: false,
 								success: function(data){
@@ -202,7 +202,7 @@ if(city != "" && state_code != "" ) {
 							$.ajax({
 								type: "POST",
 								dataType: "json",
-								url: site_url+"sr/list",
+								url: site_url+"fiber_inquiry/list",
 								data: 'mode=get_zipcode&vZipcode='+zipcode,
 								async: false,
 								success: function(data){

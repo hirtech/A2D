@@ -20,7 +20,7 @@ $(document).ready(function() {
 
 	if(vLatitude_nearbysr!='' && vLongitude_nearbysr!='')
 	{
-		var html="<input type='button' onclick='showNearbySr("+vLatitude_nearbysr+","+vLongitude_nearbysr+","+meter+")' class='btn btn-primary' value='SR History'>";
+		var html="<input type='button' onclick='showNearbySr("+vLatitude_nearbysr+","+vLongitude_nearbysr+","+meter+")' class='btn btn-primary' value='Fiber Inquiry History'>";
 		$("#showNearbySr").html(html);
 	}
 	// end popup 
@@ -81,7 +81,7 @@ $("#save_data").click(function(e){
         
         $.ajax({
             type: "POST",
-            url: site_url+"sr/list",
+            url: site_url+"fiber_inquiry/list",
             data: form_data,
             cache: false,
             success: function(data){
@@ -93,7 +93,7 @@ $("#save_data").click(function(e){
                 }else{
                     toastr.error(response['msg']);
                 }
-                location.href = site_url+'sr/list';
+                location.href = site_url+'fiber_inquiry/list';
             }
         });
         return false; 
@@ -126,7 +126,7 @@ function clear_address() {
         datumTokenizer: function(d) { return d.tokens; },
         queryTokenizer: Bloodhound.tokenizers.whitespace,
         remote: {
-            url: site_url+'sr/list&mode=searchContact',
+            url: site_url+'fiber_inquiry/list&mode=searchContact',
             replace: function(url, uriEncodedQuery) {
                 var newUrl = url + '&vContactName=' + uriEncodedQuery;
                 return newUrl;

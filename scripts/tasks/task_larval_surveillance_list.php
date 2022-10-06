@@ -350,7 +350,7 @@ if($mode == "List"){
     $vSiteName = trim($_REQUEST['vSiteName']);
     $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
     $arr_param['siteName'] = $vSiteName;
-    $API_URL = $site_api_url."premise_site.json";
+    $API_URL = $site_api_url."search_premise.json";
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $API_URL);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
@@ -375,7 +375,7 @@ if($mode == "List"){
     echo  json_encode($result_arr['result']['data']);
     hc_exit();
     # -----------------------------------
-}else if($mode == "search_sr"){
+}else if($mode == "search_fiber_inquiry"){
     /*Search site api*/
     $arr_param = array();
     $srId = trim($_REQUEST['vSR_search']);
@@ -383,7 +383,7 @@ if($mode == "List"){
     $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];        
     $arr_param['srId'] = $srId;
     
-    $API_URL = $site_api_url."search_sr.json";
+    $API_URL = $site_api_url."search_fiber_inquiry.json";
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $API_URL);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);

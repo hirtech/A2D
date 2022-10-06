@@ -8,7 +8,7 @@
 						<ul class="nav search-links float-right">
 							<li>
 								<select id="vOptions" name="vOptions" class="form-control">
-									<option value="iSRId">ID</option>
+									<option value="iFiberInquiryId">ID</option>
 									<!-- <option value="iSiteId">Premise Id</option>
 									<option value="vName">Premise Name</option>
 									<option value="vTypeName">Premise Type</option> -->
@@ -32,7 +32,7 @@
 		              <div class="center">
 		                  <a data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample" id="anchor_adv_search" >Adv. Search<i class="fas fa-caret-down"></i></a>
 		                  <div class="collapse" id="collapseExample">
-		                      {include file="top/top_sr_advance_search.tpl"}
+		                      {include file="top/top_fiber_inquiry_advance_search.tpl"}
 		                  </div>
 		              </div>
 		          </div>
@@ -49,8 +49,8 @@
 						<th>City</th>
 						<th>State</th>
 						<th>County</th>
-						<th>Assign To</th>
-						<th>Request Type</th>
+						<th>Zone</th>
+						<th>Network</th>
 						<th>Status</th>
 						<th>Action</th> 
 						</tr>
@@ -65,9 +65,9 @@
 </div>
 
 <script type="text/javascript">
-	var ajax_url = 'sr/list&mode=List';
+	var ajax_url = 'fiber_inquiry/list&mode=List';
 	var access_group_var_add= '{$access_group_var_add}';
 </script>
-<script src="assets/js/app_js/sr.js"></script>
+<script src="assets/js/app_js/fiber_inquiry.js"></script>
 
 {include file="general/dataTables.tpl"}

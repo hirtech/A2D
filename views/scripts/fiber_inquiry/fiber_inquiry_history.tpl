@@ -3,8 +3,8 @@
     <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-				<h5 class="modal-title" id="nearsrmodaltitle">SR History {if isset($iSRId)}
-                    #{$iSRId}
+				<h5 class="modal-title" id="nearsrmodaltitle">Fiber Inquiry History {if isset($iFiberInquiryId)}
+                    #{$iFiberInquiryId}
                     {else}
                     #New
                     {/if}</h5>
@@ -15,9 +15,6 @@
 			<div class="row">
 				<div class="col-md-12">
 					<div class="card">
-						<!-- <div class="card-header justify-content-between align-items-center">                               
-							<h4 class="card-title">SR Details</h4>
-						</div> -->
 						<div class="card-body">
 							<div class="table-responsive">
 								<table class="table layout-primary bordered" >
@@ -42,4 +39,4 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="assets/js/app_js/sr_history.js"></script>
+<script type="text/javascript" src="assets/js/app_js/fiber_inquiry_history.js"></script>

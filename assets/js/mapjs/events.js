@@ -27,9 +27,9 @@ $(document).ready(function() {
         siteFilter.push(iSiteId);
         getSiteSRFilterData(siteFilter, srFilter);
        
-    } else if (mode == 'filter_sr') {
-        var iSRId = $.urlParam('iSRId');
-        srFilter.push(iSRId);
+    } else if (mode == 'filter_fiberInquiry') {
+        var iFiberInquiryId = $.urlParam('iFiberInquiryId');
+        srFilter.push(iFiberInquiryId);
         getSiteSRFilterData(siteFilter, srFilter);
      
     }

@@ -162,12 +162,12 @@ if(isset($_POST) &&  !in_array($_POST['action'],array("getSerachSiteData","getSe
                 if(isset($site['vLatitude']) && $site['vLongitude'] != ''){
                     $vLatitude = $site['vLatitude'];
                     $vLongitude = $site['vLongitude'];
-                    $geoArr['sites'][$site['iSRId']]['point'][] =  array(
+                    $geoArr['sites'][$site['iFiberInquiryId']]['point'][] =  array(
                         'lat' => (float) $vLatitude,
                         'lng' => (float) $vLongitude
                         );
 
-                    $geoArr['sites'][$site['iSRId']]['icon'] = $site_url."images/black_icon.png";
+                    $geoArr['sites'][$site['iFiberInquiryId']]['icon'] = $site_url."images/black_icon.png";
 
                     $vFirstName = ($site['vFirstName'] ? $site['vFirstName'] : '');
                     $vLastName = ($site['vLastName'] ? $site['vLastName'] : '');
@@ -176,37 +176,25 @@ if(isset($_POST) &&  !in_array($_POST['action'],array("getSerachSiteData","getSe
                     $vCity = ($site['vCity'] ? $site['vCity'] : '');
                     $vState = ($site['vState'] ? $site['vState'] : '');
 
-                    $vRequestType = '';
-                    if($site['bMosquitoService'] == 't' && $site['bCarcassService'] != 't') {
-                        $vRequestType = 'Mosquito Inspection/Treatment';
-                    }else if($site['bMosquitoService'] != 't' && $site['bCarcassService'] == 't') {
-                        $vRequestType = 'Carcass Removal';
-                    }else if($site['bMosquitoService'] == 't' && $site['bCarcassService'] == 't') {
-                        $vRequestType = 'Mosquito Inspection/Treatment | Carcass Removal';
-                    }
-
                     $vStatus = '';
                     if($site['iStatus'] == 1){
                         $vStatus = 'Draft';
-                        $geoArr['sites'][$site['iSRId']]['icon'] = $site_url."images/sr_red.png";
+                        $geoArr['sites'][$site['iFiberInquiryId']]['icon'] = $site_url."images/sr_red.png";
                     }else if($site['iStatus'] == 2){
                         $vStatus = 'Assigned';
-                        $geoArr['sites'][$site['iSRId']]['icon'] = $site_url."images/sr_yellow.png";
+                        $geoArr['sites'][$site['iFiberInquiryId']]['icon'] = $site_url."images/sr_yellow.png";
                     }else if($site['iStatus'] == 3){
                         $vStatus = 'Review';
-                        $geoArr['sites'][$site['iSRId']]['icon'] = $site_url."images/sr_green.png";
+                        $geoArr['sites'][$site['iFiberInquiryId']]['icon'] = $site_url."images/sr_green.png";
                     }else if($site['iStatus'] == 4){
                         $vStatus = 'Complete';
-                        $geoArr['sites'][$site['iSRId']]['icon'] = $site_url."images/sr_black.png";
+                        $geoArr['sites'][$site['iFiberInquiryId']]['icon'] = $site_url."images/sr_black.png";
                     }
                     
 
-                    $vAssignTo = ($site['vAssignTo'] ? $site['vAssignTo'] :'');
-                    $geoArr['sites'][$site['iSRId']]['vName'] = $vFirstName. ' '.$vLastName;
-                    $geoArr['sites'][$site['iSRId']]['vAddress'] = $vAddress1.' '.$vStreet.' '.$vCity.' '.$vState ;
-                    $geoArr['sites'][$site['iSRId']]['vRequestType'] = $vRequestType;
-                    $geoArr['sites'][$site['iSRId']]['vStatus'] = $vStatus;
-                    $geoArr['sites'][$site['iSRId']]['vAssignTo'] = $vAssignTo;
+                    $geoArr['sites'][$site['iFiberInquiryId']]['vName'] = $vFirstName. ' '.$vLastName;
+                    $geoArr['sites'][$site['iFiberInquiryId']]['vAddress'] = $vAddress1.' '.$vStreet.' '.$vCity.' '.$vState ;
+                    $geoArr['sites'][$site['iFiberInquiryId']]['vStatus'] = $vStatus;
 
                 }
             }
@@ -737,18 +725,17 @@ if(isset($_POST) &&  !in_array($_POST['action'],array("getSerachSiteData","getSe
 
 
     /***************************/
-
     foreach($srData_arr as $site){
        
         if(isset($site['vLatitude']) && $site['vLongitude'] != ''){
             $vLatitude = $site['vLatitude'];
             $vLongitude = $site['vLongitude'];
-            $srData[$site['iSRId']]['point'][] =  array(
+            $srData[$site['iFiberInquiryId']]['point'][] =  array(
                 'lat' => (float) $vLatitude,
                 'lng' => (float) $vLongitude
                 );
 
-            $srData[$site['iSRId']]['icon'] = $site_url."images/black_icon.png";
+            $srData[$site['iFiberInquiryId']]['icon'] = $site_url."images/black_icon.png";
 
             $vFirstName = ($site['vFirstName'] ? $site['vFirstName'] : '');
             $vLastName = ($site['vLastName'] ? $site['vLastName'] : '');
@@ -757,38 +744,25 @@ if(isset($_POST) &&  !in_array($_POST['action'],array("getSerachSiteData","getSe
             $vCity = ($site['vCity'] ? $site['vCity'] : '');
             $vState = ($site['vState'] ? $site['vState'] : '');
 
-            $vRequestType = '';
-            if($site['bMosquitoService'] == 't' && $site['bCarcassService'] != 't') {
-                $vRequestType = 'Mosquito Inspection/Treatment';
-            }else if($site['bMosquitoService'] != 't' && $site['bCarcassService'] == 't') {
-                $vRequestType = 'Carcass Removal';
-            }else if($site['bMosquitoService'] == 't' && $site['bCarcassService'] == 't') {
-                $vRequestType = 'Mosquito Inspection/Treatment | Carcass Removal';
-            }
-
             $vStatus = '';
             if($site['iStatus'] == 1){
                 $vStatus = 'Draft';
-                $srData[$site['iSRId']]['icon'] = $site_url."images/sr_red.png";
+                $srData[$site['iFiberInquiryId']]['icon'] = $site_url."images/sr_red.png";
             }else if($site['iStatus'] == 2){
                 $vStatus = 'Assigned';
-                $srData[$site['iSRId']]['icon'] = $site_url."images/sr_yellow.png";
+                $srData[$site['iFiberInquiryId']]['icon'] = $site_url."images/sr_yellow.png";
             }else if($site['iStatus'] == 3){
                 $vStatus = 'Review';
-                $srData[$site['iSRId']]['icon'] = $site_url."images/sr_green.png";
+                $srData[$site['iFiberInquiryId']]['icon'] = $site_url."images/sr_green.png";
             }else if($site['iStatus'] == 4){
                 $vStatus = 'Complete';
-                $srData[$site['iSRId']]['icon'] = $site_url."images/sr_black.png";
+                $srData[$site['iFiberInquiryId']]['icon'] = $site_url."images/sr_black.png";
             }
-            
 
-            $vAssignTo = ($site['vAssignTo'] ? $site['vAssignTo'] :'');
-            $srData[$site['iSRId']]['vName'] = $vFirstName. ' '.$vLastName;
-            $srData[$site['iSRId']]['vAddress'] = $vAddress1.' '.$vStreet.' '.$vCity.' '.$vState ;
-            $srData[$site['iSRId']]['vRequestType'] = $vRequestType;
-            $srData[$site['iSRId']]['vStatus'] = $vStatus;
-            $srData[$site['iSRId']]['vAssignTo'] = $vAssignTo;
-
+            $srData[$site['iFiberInquiryId']]['vName'] = $vFirstName. ' '.$vLastName;
+            $srData[$site['iFiberInquiryId']]['vAddress'] = $vAddress1.' '.$vStreet.' '.$vCity.' '.$vState ;
+            $srData[$site['iFiberInquiryId']]['vRequestType'] = $vRequestType;
+            $srData[$site['iFiberInquiryId']]['vStatus'] = $vStatus;
         }
     }
 

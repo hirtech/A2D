@@ -4,7 +4,7 @@
 			<div class="w-sm-100 mr-auto"><h4 class="mb-0">{$mode} {$module_name}</h4></div>
 			<ol class="breadcrumb bg-transparent align-self-center m-0 p-0">
 				<li class="breadcrumb-item"><a href="{$site_url}">Home</a></li>
-				<li class="breadcrumb-item"><a href="{$site_url}sr/list">SR List</a></li>
+				<li class="breadcrumb-item"><a href="{$site_url}fiber_inquiry/list">Fiber Inquiry List</a></li>
 				<li class="breadcrumb-item active">{$module_name}</li>
 			</ol>
 		</div>
@@ -20,7 +20,7 @@
 							<div class="col-12">
 								<input type="hidden" name="groupAction" value="groupAction">
 								<input type="hidden" name="mode" id="mode" value="{$mode}">
-								<input type="hidden" name="iSRId" id="iSRId" value="{$rs_sr[0].iSRId}" />
+								<input type="hidden" name="iFiberInquiryId" id="iFiberInquiryId" value="{$rs_sr[0].iFiberInquiryId}" />
 								<input type="hidden" name="vAddress1" id="vAddress1" value="{$rs_sr[0].vAddress1}" />
 								<input type="hidden" name="vAddress2" id="vAddress2" value="{$rs_sr[0].vAddress2}" />
 								<input type="hidden" name="vStreet" id="vStreet" value="{$rs_sr[0].vStreet}" />
@@ -85,63 +85,24 @@
 									<div class="col-md-4">
 										<div class="form-row mb-2">
 											<div class="col-12">
-												<ul class="list-unstyled">
-													<li>
-														<div class=" custom-control custom-checkbox custom-control-inline">
-															<input type="checkbox" class="custom-control-input" id="bMosquitoService" name="bMosquitoService" value="1"  {if $rs_sr[0].bMosquitoService eq 't'} checked {/if}>
-															<label class="custom-control-label" for="bMosquitoService">Mosquito Inspection/Treatment</label>
-														</div>
-													</li>
-													<li>
-														<div class="custom-control custom-checkbox custom-control-inline">
-															<input type="checkbox" class="custom-control-input" id="bCarcassService" name="bCarcassService" value="1" {if $rs_sr[0].bCarcassService eq 't'} checked {/if}>
-															<label class="custom-control-label" for="bCarcassService">Carcass Removal</label>
-														</div>
-													</li>
-												</ul>
-												<div class="invalid-feedback errmsg_iSRService">Please select at least one service type
-												</div>
-											</div>
-										</div>
-										<div class="form-row mb-2">
-											<div class="col-12">
-												<label for="iUserId">Assigned Technician <span class="required" aria-required="true">*</span></label>
-												<select name="iUserId" id="iUserId" class="select" required {if !($sess_user_iAGroupId|in_array:$Access_Group_SuperAdmin)} disabled {/if}>
-													<option value="">--- Select ---</option>
-													{section name="u" loop=$rs_user}
-													<option value="{$rs_user[u].iUserId}"  {if $rs_sr[0].iUserId eq $rs_user[u].iUserId} selected {/if}>{$rs_user[u].vName|gen_strip_slash}</option>
+												<label for="iPremiseSubTypeId">Premise Sub Type </label>
+												<select name="iPremiseSubTypeId" id="iPremiseSubTypeId" class="select">
+												<option value="">--- Select ---</option>
+													{section name="p" loop=$rs_premise_sub_type}
+													<option value="{$rs_premise_sub_type[p].iSSTypeId}" {if $rs_premise_sub_type[p].iSSTypeId eq $rs_sr[0].iPremiseSubTypeId} selected {/if}>{$rs_premise_sub_type[p].vSubTypeName|gen_strip_slash}</option>
 													{/section}
-												</select>
-												<div class="invalid-feedback">
-													Please choose Premise Type.
-												</div>
+											</select>
 											</div>
 										</div>
 										<div class="form-row mb-2">
 											<div class="col-12">
-												<label for="bInspectPermission">Do we have the permission to inspect, treat or plant fish for mosquito-problem or pick up carcass for dead animal issue?</label>
-												<select name="bInspectPermission" id="bInspectPermission" class="select">
-													<option value="1" {if $rs_sr[0].bInspectPermission eq 't'} selected {/if}>Yes</option>
-													<option value="0" {if $rs_sr[0].bInspectPermission neq 't'} selected {/if}>No</option>
-												</select>
-											</div>
-										</div>
-										<div class="form-row mb-2">
-											<div class="col-12">
-												<label for="bAccessPermission">Do we have the permission to access the property without you present?</label>
-												<select name="bAccessPermission" id="bAccessPermission" class="select">
-													<option value="1" {if $rs_sr[0].bAccessPermission eq 't'} selected {/if}>Yes</option>
-													<option value="0" {if $rs_sr[0].bAccessPermission neq 't'} selected {/if}>No</option>
-												</select>
-											</div>
-										</div>
-										<div class="form-row mb-2">
-											<div class="col-12">
-												<label for="bPets">Do you have pets on the property?</label>
-												<select name="bPets" id="bPets" class="select">
-													<option value="1" {if $rs_sr[0].bPets eq 't'} selected {/if}>Yes</option>
-													<option value="0" {if $rs_sr[0].bPets neq 't'} selected {/if}>No</option>
-												</select>
+												<label for="iEngagementId">Engagement </label>
+												<select name="iEngagementId" id="iEngagementId" class="select">
+												<option value="">--- Select ---</option>
+													{section name="a" loop=$rs_engagement}
+													<option value="{$rs_engagement[a].iEngagementId}" {if $rs_engagement[a].iEngagementId eq $rs_sr[0].iEngagementId} selected {/if}>{$rs_engagement[a].vEngagement|gen_strip_slash}</option>
+													{/section}
+											</select>
 											</div>
 										</div>
 									</div>
@@ -157,7 +118,7 @@
 											</div>
 										</div>
 										<div class="form-row mb-2">
-											<div class="col-9 address-details">
+											<div class="col-8 address-details">
 												<table class="table layout-secondary table-responsive">
 													<tbody>
 														<tr>
@@ -187,7 +148,7 @@
 													</tbody>    
 												</table> 
 											</div>
-											<div class="col-3 address-details" id="showNearbySr">
+											<div class="col-4 address-details" id="showNearbySr">
 											</div>
 										</div>
 										<div class="form-row mb-2">
@@ -201,24 +162,6 @@
 												</select>
 											</div>
 										</div>
-									</div>
-								</div>
-								<div class="form-row mb-2">
-									<div class="col-md-12">
-										<label for="tProblems">Describe the problem</label>
-										<textarea id="tProblems" name="tProblems" class="form-control">{$rs_sr[0].tProblems}</textarea>
-									</div>
-								</div>
-								<div class="form-row mb-2">
-									<div class="col-md-12">
-										<label for="tInternalNotes">Internal Resolution Note</label>
-										<textarea id="tInternalNotes" name="tInternalNotes" class="form-control">{$rs_sr[0].tInternalNotes}</textarea>
-									</div>
-								</div>
-								<div class="form-row mb-2">
-									<div class="col-md-12">
-										<label for="tRequestorNotes">Resolution Notes to be shared with the Requestor</label>
-										<textarea id="tRequestorNotes" name="tRequestorNotes" class="form-control">{$rs_sr[0].tRequestorNotes}</textarea>
 									</div>
 								</div>
 							</div>
@@ -238,7 +181,7 @@
 								<div class="col-12 ml-3 float-right">
 									<button type="submit" class="btn btn-primary" id="save_data" value="submit">Save </button>  
 									<img src="assets/images/loading-small.gif" id="sr_save_loading" border="0" style="display:none;">   
-									<button type="button" onclick="location.href = site_url+'sr/list';" class="btn btn-secondary ml-2"> Close </button>
+									<button type="button" onclick="location.href = site_url+'fiber_inquiry/list';" class="btn btn-secondary ml-2"> Close </button>
 								</div>
 							</div>
 						</div>
@@ -250,7 +193,7 @@
 </form>
 {include file="scripts/contact/contact_addedit_popup.tpl"}
 {include file="scripts/contact/contact_history.tpl"}
-{include file="scripts/sr/sr_history.tpl"}
+{include file="scripts/fiber_inquiry/fiber_inquiry_history.tpl"}
 
 
 <link rel="stylesheet" href="assets/vendors/select2/css/select2.min.css"/>
@@ -262,7 +205,7 @@
 <script src="assets/vendors/typeahead/typeahead.bundle.js"></script>
 <!-- END: Page Vendor JS-->
 <script src="https://maps.googleapis.com/maps/api/js?key={$GOOGLE_GEOCODE_API_KEY}&libraries=geometry,drawing,places,visualization"></script>
-<script type="text/javascript" src="assets/js/app_js/sr_add.js"></script>
+<script type="text/javascript" src="assets/js/app_js/fiber_inquiry_add.js"></script>
 <script type="text/javascript" src="assets/js/app_js/contact_add.js"></script>
 
 
