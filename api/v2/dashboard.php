@@ -1,6 +1,6 @@
 <?php
 include_once ($controller_path . "premise.inc.php");
-include_once ($controller_path . "sr.inc.php");
+include_once ($controller_path . "fiber_inquiry.inc.php");
 include_once ($controller_path . "task_larval_surveillance.inc.php");
 include_once ($controller_path . "task_treatment.inc.php");
 include_once ($controller_path . "task_trap.inc.php");
@@ -16,7 +16,7 @@ if ($request_type == "dashboard_glance")
     $lastweek_startdate = date("Y-m-d", strtotime("-7 days"));
     $lastweek_enddate = date("Y-m-d", strtotime("-13 days"));
     
-    $SRObj = new SR();
+    $FiberInquiryObj = new FiberInquiry();
     $LarvalSurObj = new TaskLarvalSurveillance();
     $TreatmentObj = new TaskTreatment();
     $TrapObj = new TaskTrap();
@@ -38,7 +38,7 @@ if ($request_type == "dashboard_glance")
     $day_where2 = '"dAddedDate"::date = \'' . $yesterdate . '\'';
 
     //SR Count Differnce of current day and yester day
-    $rs_db_day = $SRObj->recordset_glance_data($day_where1, $day_where2);
+    $rs_db_day = $FiberInquiryObj->recordset_glance_data($day_where1, $day_where2);
     $diff_ratio = ($rs_db_day[0]['srcount1'] - $rs_db_day[0]['srcount2']) / ($rs_db_day[0]['srcount2'] * 100);
     $diff_ratio = (is_nan($diff_ratio) == 1 || is_infinite($diff_ratio) == 1)?"0" : $diff_ratio;
     //check today >= yesterday
@@ -147,7 +147,7 @@ if ($request_type == "dashboard_glance")
     $month_where2 = 'date_trunc(\'month\', "dAddedDate") = date_trunc(\'month\', (\'' . $currentdate . '\')::date - interval \'1 month\') ';
 
     //SR Count Differnce of current month and last month
-    $rs_db_month = $SRObj->recordset_glance_data($month_where1, $month_where2);
+    $rs_db_month = $FiberInquiryObj->recordset_glance_data($month_where1, $month_where2);
     $diff_ratio = ($rs_db_month[0]['srcount1'] - $rs_db_month[0]['srcount2']) / ($rs_db_month[0]['srcount2'] * 100);
     $diff_ratio = (is_nan($diff_ratio) == 1 || is_infinite($diff_ratio) == 1)?"0" : $diff_ratio;
     //check curr_month >= last_month
@@ -257,7 +257,7 @@ if ($request_type == "dashboard_glance")
     $week_where2 = '( "dAddedDate"::date <= \'' . $lastweek_startdate . '\' and "dAddedDate"::date >= \'' . $lastweek_enddate . '\' )';
 
     //SR Count Differnce of current week and last week
-    $rs_db_week = $SRObj->recordset_glance_data($week_where1, $week_where2);
+    $rs_db_week = $FiberInquiryObj->recordset_glance_data($week_where1, $week_where2);
     $diff_ratio = ($rs_db_week[0]['srcount1'] - $rs_db_week[0]['srcount2']) / ($rs_db_week[0]['srcount2'] * 100);
     $diff_ratio = (is_nan($diff_ratio) == 1 || is_infinite($diff_ratio) == 1)?"0" : $diff_ratio;
     //check curr_week >= last_week
@@ -365,7 +365,7 @@ if ($request_type == "dashboard_glance")
     $year_where2 = 'date_trunc(\'year\', "dAddedDate") = date_trunc(\'year\', (\'' . $currentdate . '\')::date - interval \'1 year\') ';
 
     //SR Differnce of current year and previous year
-    $rs_db_year = $SRObj->recordset_glance_data($year_where1, $year_where2);
+    $rs_db_year = $FiberInquiryObj->recordset_glance_data($year_where1, $year_where2);
     $diff_ratio = ($rs_db_year[0]['srcount1'] - $rs_db_year[0]['srcount2']) / ($rs_db_year[0]['srcount2'] * 100);
     $diff_ratio = (is_nan($diff_ratio) == 1 || is_infinite($diff_ratio) == 1)?"0" : $diff_ratio;
     //check curr_year >= last_year

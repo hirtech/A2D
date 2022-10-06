@@ -1,6 +1,6 @@
 <?php
 include_once($controller_path . "contact.inc.php");
-include_once($controller_path . "sr.inc.php");
+include_once($controller_path . "fiber_inquiry.inc.php");
 
 if($request_type == "contact_add"){
 	//echo"<pre>qqq";print_r($RES_PARA);exit;
@@ -324,22 +324,22 @@ else if($request_type == "contact_history"){
 
     //-- for sr details --//
 
-    $SRObj = new SR();
+    $FiberInquiryObj = new FiberInquiry();
     $where_arr = array();
     $join_fieds_arr = array();
     $join_arr=array();
-    $SRObj->clear_variable();
+    $FiberInquiryObj->clear_variable();
     if($id != '') {
         $where_arr[] = "\"iCId\" = ".$id."";
     }
     
-    $SRObj->join_field = $join_fieds_arr;
-    $SRObj->join = $join_arr;
-    $SRObj->where = $where_arr;
-    $SRObj->param['order_by'] = '"iCId"';
-    $SRObj->setClause();
-    $SRObj->debug_query = false;
-    $rs_site = $SRObj->recordset_list();
+    $FiberInquiryObj->join_field = $join_fieds_arr;
+    $FiberInquiryObj->join = $join_arr;
+    $FiberInquiryObj->where = $where_arr;
+    $FiberInquiryObj->param['order_by'] = '"iCId"';
+    $FiberInquiryObj->setClause();
+    $FiberInquiryObj->debug_query = false;
+    $rs_site = $FiberInquiryObj->recordset_list();
     $rs_arr['site_list'] = $rs_site;
 
     $rh = HTTPStatus(200);

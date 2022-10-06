@@ -5,7 +5,7 @@ include_once ($controller_path . "task_landing_rate.inc.php");
 include_once ($controller_path . "task_trap.inc.php");
 include_once ($controller_path . "task_larval_surveillance.inc.php");
 include_once ($controller_path . "task_other.inc.php");
-include_once ($controller_path . "sr.inc.php");
+include_once ($controller_path . "fiber_inquiry.inc.php");
 include_once ($controller_path . "treatment_product.inc.php");
 
 # ------------------------------------------------------------
@@ -15,7 +15,7 @@ $TaskLandingRate = new TaskLandingRate();
 $TaskTrap = new TaskTrap();
 $TaskLarvalSurveillance = new TaskLarvalSurveillance();
 $TaskOther = new TaskOther();
-$SRObj = new SR();
+$FiberInquiryObj = new FiberInquiry();
 $TProdObj = new TreatmentProduct();
 
 ##Search Arary
@@ -809,7 +809,7 @@ if ($request_type == "get_premise_history")
             $where_arr = array();
             $join_fieds_arr = array();
             $join_arr = array();
-            $SRObj->clear_variable();
+            $FiberInquiryObj->clear_variable();
 
             $where_arr[] = "sr_details.\"iSRId\" IN (" . implode(", ", $sr_arr) . ")";
             $where_arr[] = "sr_details.\"iStatus\" = 4 "; // SR Status = Complete;
@@ -817,13 +817,13 @@ if ($request_type == "get_premise_history")
 
             $join_arr[] = 'LEFT JOIN contact_mas on contact_mas."iCId" = sr_details."iCId"';
 
-            $SRObj->join_field = $join_fieds_arr;
-            $SRObj->join = $join_arr;
-            $SRObj->where = $where_arr;
-            $SRObj->param['order_by'] = "sr_details.\"dAddedDate\" DESC";
-            $SRObj->setClause();
-            $SRObj->debug_query = false;
-            $sr_details_arr = $SRObj->recordset_list();
+            $FiberInquiryObj->join_field = $join_fieds_arr;
+            $FiberInquiryObj->join = $join_arr;
+            $FiberInquiryObj->where = $where_arr;
+            $FiberInquiryObj->param['order_by'] = "sr_details.\"dAddedDate\" DESC";
+            $FiberInquiryObj->setClause();
+            $FiberInquiryObj->debug_query = false;
+            $sr_details_arr = $FiberInquiryObj->recordset_list();
             $si = count($sr_details_arr);
             for ($s = 0;$s < $si;$s++)
             {
