@@ -401,7 +401,7 @@ class Fieldmap {
 
         global $sqlObj;
         $data = array();
-        $SrData = 'SELECT sr_details.*,contact_mas."vFirstName",concat(user_mas."vFirstName",\' \', user_mas."vLastName") AS "vAssignTo" FROM "public"."sr_details" left join contact_mas on "contact_mas"."iCId" = "sr_details"."iCId" LEFT JOIN state_mas  on "state_mas"."iStateId" = "sr_details"."iStateId" LEFT JOIN "city_mas" on "city_mas"."iCityId" = "sr_details"."iCityId" LEFT JOIN user_mas on user_mas."iUserId" = sr_details."iUserId" WHERE sr_details."iStatus" != 4 ORDER BY sr_details."iSRId"';
+        $SrData = 'SELECT fiberinquiry_details.*,contact_mas."vFirstName" FROM "public"."fiberinquiry_details" left join contact_mas on "contact_mas"."iCId" = "fiberinquiry_details"."iCId" LEFT JOIN state_mas  on "state_mas"."iStateId" = "fiberinquiry_details"."iStateId" LEFT JOIN "city_mas" on "city_mas"."iCityId" = "fiberinquiry_details"."iCityId" WHERE fiberinquiry_details."iStatus" != 4 ORDER BY fiberinquiry_details."iFiberInquiryId"';
         $data['sites'] = $sqlObj->GetAll($SrData);
         return $data;
     } 
@@ -460,12 +460,12 @@ class Fieldmap {
         $srId= $param['srId'];
         
         if($srId != ""){
-           $where[] = ' sr_details."iSRId" IN ('.$srId.')'; 
+           $where[] = ' fiberinquiry_details."iFiberInquiryId" IN ('.$srId.')'; 
         }
-        $where[] = ' sr_details."iStatus" != 4 ';
+        $where[] = ' fiberinquiry_details."iStatus" != 4 ';
         $whereQuery = implode(" AND ", $where);
         
-        $SrData = 'SELECT sr_details.*,contact_mas."vFirstName",concat(user_mas."vFirstName",\' \', user_mas."vLastName") AS "vAssignTo" FROM "public"."sr_details" left join contact_mas on "contact_mas"."iCId" = "sr_details"."iCId" LEFT JOIN state_mas  on "state_mas"."iStateId" = "sr_details"."iStateId" LEFT JOIN "city_mas" on "city_mas"."iCityId" = "sr_details"."iCityId" LEFT JOIN user_mas on user_mas."iUserId" = sr_details."iUserId" WHERE  '.$whereQuery.' ORDER BY sr_details."iSRId"';
+        $SrData = 'SELECT fiberinquiry_details.*,contact_mas."vFirstName" FROM "public"."fiberinquiry_details" left join contact_mas on "contact_mas"."iCId" = "fiberinquiry_details"."iCId" LEFT JOIN state_mas  on "state_mas"."iStateId" = "fiberinquiry_details"."iStateId" LEFT JOIN "city_mas" on "city_mas"."iCityId" = "fiberinquiry_details"."iCityId" WHERE  '.$whereQuery.' ORDER BY fiberinquiry_details."iFiberInquiryId"';
         $data['srData'] = $sqlObj->GetAll($SrData);
       
         return $data;
@@ -494,7 +494,6 @@ class Fieldmap {
 
         $siteId= $param['siteId'];
         $srId= $param['srId'];
-        
         if($siteId != ""){
             $sitewhere = array();
         
@@ -512,11 +511,12 @@ class Fieldmap {
         
         if($srId != ""){
         
-            $srwhere[] = ' sr_details."iSRId" IN ('.$srId.')'; 
+            $srwhere[] = ' fiberinquiry_details."iFiberInquiryId" IN ('.$srId.')'; 
         
             $srwhereQuery = implode(" AND ", $srwhere);
             
-            $SrData = 'SELECT sr_details.*,contact_mas."vFirstName",concat(user_mas."vFirstName",\' \', user_mas."vLastName") AS "vAssignTo" FROM "public"."sr_details" left join contact_mas on "contact_mas"."iCId" = "sr_details"."iCId" LEFT JOIN state_mas  on "state_mas"."iStateId" = "sr_details"."iStateId" LEFT JOIN "city_mas" on "city_mas"."iCityId" = "sr_details"."iCityId" LEFT JOIN user_mas on user_mas."iUserId" = sr_details."iUserId" WHERE  '.$srwhereQuery.' ORDER BY sr_details."iSRId"';
+            $SrData = 'SELECT fiberinquiry_details.*, contact_mas."vFirstName" FROM "public"."fiberinquiry_details" left join contact_mas on "contact_mas"."iCId" = "fiberinquiry_details"."iCId" LEFT JOIN state_mas  on "state_mas"."iStateId" = "fiberinquiry_details"."iStateId" LEFT JOIN "city_mas" on "city_mas"."iCityId" = "fiberinquiry_details"."iCityId" WHERE  '.$srwhereQuery.' ORDER BY fiberinquiry_details."iFiberInquiryId"';
+			//echo $SrData;exit;
             $data['srData'] = $sqlObj->GetAll($SrData);
         }
       
