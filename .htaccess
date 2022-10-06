@@ -165,13 +165,13 @@ RewriteRule ^settings/setting_list? index.php?module=$0&page=s-setting_list&%{QU
 RewriteRule ^settings/setting_list index.php?module=$0&page=s-setting_list
 
 #---------------------
-#Service Request
-RewriteRule ^sr/list&(.*)$ index.php?module=$0&page=m-sr_list&%{QUERY_STRING}
-RewriteRule ^sr/list index.php?module=$0&page=m-sr_list
-RewriteRule ^sr/edit&(.*)$ index.php?module=$0&page=m-sr_add&%{QUERY_STRING} [L]
-RewriteRule ^sr/edit index.php?module=$0&page=m-sr_add
-RewriteRule ^sr/add? index.php?module=$0&page=m-sr_add&%{QUERY_STRING}
-RewriteRule ^sr/add index.php?module=$0&page=m-sr_add
+#^Fiber Inquiry
+RewriteRule ^fiber_inquiry/list&(.*)$ index.php?module=$0&page=m-fiber_inquiry_list&%{QUERY_STRING}
+RewriteRule ^fiber_inquiry/list index.php?module=$0&page=m-fiber_inquiry_list
+RewriteRule ^fiber_inquiry/edit&(.*)$ index.php?module=$0&page=m-fiber_inquiry_add&%{QUERY_STRING} [L]
+RewriteRule ^fiber_inquiry/edit index.php?module=$0&page=m-fiber_inquiry_add
+RewriteRule ^fiber_inquiry/add? index.php?module=$0&page=m-fiber_inquiry_add&%{QUERY_STRING}
+RewriteRule ^fiber_inquiry/add index.php?module=$0&page=m-fiber_inquiry_add
 #---------------------
 
 
