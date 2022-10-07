@@ -365,25 +365,6 @@ else if($mode == "Delete"){
     echo json_encode($result);
     hc_exit();
     # ----------------------------------- 
-
-    $iSiteId = $_POST['iSiteId'];
-
-    $rs_tot = $SiteObj->delete_single_record($iSiteId);
-    if($rs_tot){
-        $result['msg'] = MSG_DELETE;
-        $result['error']= 0 ;
-    }else{
-        $result['msg'] = MSG_DELETE_ERROR;
-        $result['error']= 1 ;
-
-    }
-
-    # -----------------------------------
-    # Return jSON data.
-    # -----------------------------------
-    echo json_encode($result);
-    hc_exit();
-    # -----------------------------------   
 } 
 else if ($mode == "get_zone_from_latlong") {
     //echo"<pre>";print_r($_REQUEST);exit;
