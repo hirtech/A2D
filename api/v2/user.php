@@ -32,16 +32,16 @@ if($request_type == "user_list"){
        $where_arr[] = "((concat(user_mas.\"vFirstName\", ' ', user_mas.\"vLastName\") LIKE '".$vSName."%') OR (user_mas.\"vFirstName\" LIKE '".$vSName."%') OR (user_mas.\"vLastName\" LIKE '".$vSName."%'))";
     }
     if ($vSCompanyName != "") {
-        $where_arr[] = "user_details.\"vCompanyName\"='" . $_REQUEST['vSCompanyName'] . "'";
+        $where_arr[] = "user_details.\"vCompanyName\"='" . $vSCompanyName . "'";
     }
     if ($vSUsername != "") {
-        $where_arr[] = "user_mas.\"vUsername\"='" . $_REQUEST['vSUsername'] . "'";
+        $where_arr[] = "user_mas.\"vUsername\"='" . $vSUsername . "'";
     }
     if ($vSUsername != "") {
-        $where_arr[] = "user_mas.\"vUsername\"='" . $_REQUEST['vSUsername'] . "'";
+        $where_arr[] = "user_mas.\"vUsername\"='" . $vSUsername . "'";
     }
     if ($vSEmail != "") {
-        $where_arr[] = "user_mas.\"vEmail\"='" . $_REQUEST['vSEmail'] . "'";
+        $where_arr[] = "user_mas.\"vEmail\"='" . $vSEmail. "'";
     }
     if ($iStatus != "") {
         if(strtolower($iStatus) == "active"){
