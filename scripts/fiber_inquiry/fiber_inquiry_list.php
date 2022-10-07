@@ -362,11 +362,13 @@ if($mode == "List"){
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
            "Content-Type: application/json",
         ));
-
-        $iFiberInquiryId = curl_exec($ch);
+        $rs = curl_exec($ch);
         curl_close($ch);  
-
-        if($iFiberInquiryId){
+        $res = json_decode($rs, true);
+        //echo "<pre>";print_r($res);exit();
+        if($res){
+            $result['iSiteId'] = $res['iSiteId'];
+            $result['iFiberInquiryId'] = $res['iFiberInquiryId'];
             $result['msg'] = MSG_ADD;
             $result['error']= 0 ;
         }else{
@@ -426,10 +428,12 @@ if($mode == "List"){
         ));
 
         $rs = curl_exec($ch);
-        //echo "<pre>";print_r($rs);exit();  
         curl_close($ch);  
-
-        if($rs){
+        $res = json_decode($rs, true);
+        //echo "<pre>";print_r($res);exit();
+        if($res){
+            $result['iSiteId'] = $res['iSiteId'];
+            $result['iFiberInquiryId'] = $res['iFiberInquiryId'];
             $result['msg'] = MSG_UPDATE;
             $result['error']= 0 ;
         }else{
@@ -440,7 +444,7 @@ if($mode == "List"){
         $result['msg'] = MSG_UPDATE_ERROR;
         $result['error']= 1 ;
     }
-     //echo "<pre>";print_r($result);exit(); 
+    //echo "<pre>";print_r($result);exit(); 
 
     # Return jSON data.
     # -----------------------------------

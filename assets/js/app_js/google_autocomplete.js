@@ -62,7 +62,7 @@ function fillInAddress() {
 			data: 'mode=get_zone_from_latlong&lat=' + place.geometry.location.lat() + '&long=' + place.geometry.location.lng(),
 			success: function(data){
 				if(data){
-					//alert(data.iZoneId)
+					//alert(JSON.stringify(data))
 					$('#iZoneId').val(data.iZoneId);
 					$('#vLatitude').val(data.lat);
 					$('#vLongitude').val(data.long);
@@ -70,6 +70,8 @@ function fillInAddress() {
 					$('.iZoneId').html(data.iZoneId);
 					$('.vLatitude').html(data.lat);
 					$('.vLongitude').html(data.long);
+					$('.vNetwork').html(data.vNetwork);
+					$('.vZoneName').html(data.vZoneName);
 				}
 				else{
 					$('#iZoneId').val('');
@@ -79,6 +81,8 @@ function fillInAddress() {
 					$('.iZoneId').html('');
 					$('.vLatitude').html('');
 					$('.vLongitude').html('');
+					$('.vNetwork').html('');
+					$('.vZoneName').html('');
 				}	
 				$("#address_loading").hide();				
 			}
@@ -87,135 +91,147 @@ function fillInAddress() {
 	//$('.address_fields').show();
 
 	for (var component in componentForm) {
-	//document.getElementById(component).value = '';
-    //document.getElementById(component).disabled = false;
-}
+		//document.getElementById(component).value = '';
+	    //document.getElementById(component).disabled = false;
+	}
 
-  // Get each component of the address from the place details
-  // and fill the corresponding field on the form.
-  
-  var city = "";
-  var state_code = "";
-  var house_number = "";
-  var street = "";
-  var zipcode = "";
-  var county = "";
+	// Get each component of the address from the place details
+	// and fill the corresponding field on the form.
 
-  //alert(JSON.stringify(place.address_components));
+	var city = "";
+	var state_code = "";
+	var house_number = "";
+	var street = "";
+	var zipcode = "";
+	var county = "";
+	var address_data = '';
+
+  	//alert(JSON.stringify(place.address_components));
   
-  for (var i = 0; i < place.address_components.length; i++) {
-  	var addressType = place.address_components[i].types[0];
-	//alert(place.address_components[i][componentForm['postal_code']]);
+  	for (var i = 0; i < place.address_components.length; i++) {
+  		var addressType = place.address_components[i].types[0];
+		//alert(place.address_components[i][componentForm['postal_code']]);
 	
-	if (componentForm[addressType]) {
-		var val = place.address_components[i][componentForm[addressType]];
-	 // alert(addressType);
-		if(addressType == "locality"){ //City
-			city = val;
-		}
-		if(addressType == "administrative_area_level_1"){ //State Code
-			state_code = val;
-		}
-		if(addressType == "street_number"){ // House number
-			house_number = val;
-		}
-		if(addressType == "route"){ // Street
-			street = val;
-		}
-		if(addressType == "postal_code"){ // Zipcode
-			zipcode = val;
-		}
-		if(addressType == "administrative_area_level_2"){ // county
-			county = val;
-		}
-      //document.getElementById(addressType).value = val;
-  }
-}
+		if (componentForm[addressType]) {
+			var val = place.address_components[i][componentForm[addressType]];
+		 	// alert(addressType);
+			if(addressType == "locality"){ //City
+				city = val;
+			}
+			if(addressType == "administrative_area_level_1"){ //State Code
+				state_code = val;
+			}
+			if(addressType == "street_number"){ // House number
+				house_number = val;
+			}
+			if(addressType == "route"){ // Street
+				street = val;
+			}
+			if(addressType == "postal_code"){ // Zipcode
+				zipcode = val;
+			}
+			if(addressType == "administrative_area_level_2"){ // county
+				county = val;
+			}
+	      //document.getElementById(addressType).value = val;
+	  	}
+	}
 
-if(city != "" && state_code != "" ) {
+	if(city != "" && state_code != "" ) {
 
-	$.ajax({
-		type: "POST",
-		dataType: "json",
-		url: site_url+"fiber_inquiry/list",
-		data: 'mode=check_city_state&city='+city+'&state_code='+state_code,
-		async: false,
-		success: function(data){
-					//alert(data.check)
-					if(data.check == 0){
-						var zone_flag = 0;
-						$('#autofilladdress').val("");
-						$('#autofilladdress').focus();
-					}
-					else {
-						$(".clear_address").show();
-						var addr_val = $('#autofilladdress').val().split(" ");
-						//alert(addr_val[0])
-
-						if(house_number == '')
-							house_number = addr_val[0];
-
-						$('#vAddress1').val(house_number);
-						$('#vStreet').val(street);
-						
-						$('.vAddress1').html(house_number);
-						$('.vStreet').html(street);
-
-						if(state_code != ""){
-							$.ajax({
-								type: "POST",
-								dataType: "json",
-								url: site_url+"fiber_inquiry/list",
-								data: 'mode=get_state&vStateCode='+state_code,
-								async: false,
-								success: function(data){
-									if(data.iStateId){
-										$('#iStateId').val(data.iStateId);
-										$('.iStateId').html(data.iStateId);
-										
-									}
-								}
-							});
-						}
-						
-						if(city != "") {
-
-							$.ajax({
-								type: "POST",
-								dataType: "json",
-								url: site_url+"fiber_inquiry/list",
-								data: 'mode=get_city&city='+city+'&county='+county,
-								async: false,
-								success: function(data){
-									if(data.iCityId){
-										$('#iCountyId').val(data.iCountyId);
-										$('#iCityId').val(data.iCityId);
-
-										$('.iCountyId').html(data.iCountyId);
-										$('.iCityId').html(data.iCityId);
-									}
-								}
-							});
-						}
-
-						if(zipcode != "") {
-							$.ajax({
-								type: "POST",
-								dataType: "json",
-								url: site_url+"fiber_inquiry/list",
-								data: 'mode=get_zipcode&vZipcode='+zipcode,
-								async: false,
-								success: function(data){
-									$('#iZipcode').val(data.iZipcode);
-									$('.iZipcode').html(data.iZipcode);
-								}
-							});
-						}
-					}
-					return false;
+		$.ajax({
+			type: "POST",
+			dataType: "json",
+			url: site_url+"fiber_inquiry/list",
+			data: 'mode=check_city_state&city='+city+'&state_code='+state_code,
+			async: false,
+			success: function(data){
+				//alert(data.check)
+				if(data.check == 0){
+					var zone_flag = 0;
+					$('#autofilladdress').val("");
+					$('#autofilladdress').focus();
 				}
-			});
-}
+				else {
+					$(".clear_address").show();
+					var addr_val = $('#autofilladdress').val().split(" ");
+					//alert(addr_val[0])
+
+					if(house_number == '')
+						house_number = addr_val[0];
+
+					if(house_number != '')
+						address_data += house_number+", ";	
+					if(street != '')
+						address_data += street+", ";
+
+
+					$('#vAddress1').val(house_number);
+					$('#vStreet').val(street);
+					
+					$('.vAddress1').html(house_number);
+					$('.vStreet').html(street);
+
+					if(state_code != ""){
+						$.ajax({
+							type: "POST",
+							dataType: "json",
+							url: site_url+"fiber_inquiry/list",
+							data: 'mode=get_state&vStateCode='+state_code,
+							async: false,
+							success: function(data){
+								if(data.iStateId){
+									$('#iStateId').val(data.iStateId);
+									$('.iStateId').html(data.iStateId);
+									
+								}
+							}
+						});
+					}
+					
+					if(city != "") {
+						$.ajax({
+							type: "POST",
+							dataType: "json",
+							url: site_url+"fiber_inquiry/list",
+							data: 'mode=get_city&city='+city+'&county='+county,
+							async: false,
+							success: function(data){
+								if(data.iCityId){
+									$('#iCountyId').val(data.iCountyId);
+									$('#iCityId').val(data.iCityId);
+
+									$('.iCountyId').html(data.iCountyId);
+									$('.iCityId').html(data.iCityId);
+									//alert(county)
+									if(county != '')
+										address_data += county+", ";
+								}
+							}
+						});
+					}
+
+					if(zipcode != "") {
+						$.ajax({
+							type: "POST",
+							dataType: "json",
+							url: site_url+"fiber_inquiry/list",
+							data: 'mode=get_zipcode&vZipcode='+zipcode,
+							async: false,
+							success: function(data){
+								$('#iZipcode').val(data.iZipcode);
+								$('.iZipcode').html(data.iZipcode);
+								if(zipcode != '')
+									address_data += zipcode;
+							}
+						});
+					}
+					$(".address_data").html(address_data)
+				}
+				return false;
+			}
+		});
+	}
 }
 initialize();
 

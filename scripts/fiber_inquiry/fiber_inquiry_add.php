@@ -27,6 +27,8 @@ if($mode == "Update") {
     $join_fieds_arr[] = 'c."vCounty"';
     $join_fieds_arr[] = 'sm."vState"';
     $join_fieds_arr[] = 'cm."vCity"';
+    $join_fieds_arr[] = 'z."vZoneName"';
+    $join_fieds_arr[] = 'n."vName" as "vNetwork"';
     $join_fieds_arr[] = 'contact_mas."vSalutation"';
     $join_fieds_arr[] = 'contact_mas."vFirstName"';
     $join_fieds_arr[] = 'contact_mas."vLastName"';
@@ -37,6 +39,8 @@ if($mode == "Update") {
     $join_arr[] = 'LEFT JOIN state_mas sm on fiberinquiry_details."iStateId" = sm."iStateId"';
     $join_arr[] = 'LEFT JOIN city_mas cm on fiberinquiry_details."iCityId" = cm."iCityId"';
     $join_arr[] = 'LEFT JOIN contact_mas ON fiberinquiry_details."iCId" = contact_mas."iCId"';
+    $join_arr[] = 'LEFT JOIN zone z ON fiberinquiry_details."iZoneId" = z."iZoneId"';
+    $join_arr[] = 'LEFT JOIN network n ON z."iNetworkId" = n."iNetworkId"';
     $FiberInquiryObj->join_field = $join_fieds_arr;
     $FiberInquiryObj->join = $join_arr;
     $FiberInquiryObj->where = $where_arr;

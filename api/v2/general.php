@@ -370,17 +370,25 @@ if($request_type == "access_group_dropdown") {
     $lat = $RES_PARA['lat'];
     $long = $RES_PARA['long'];
     //echo"<pre>";print_r($RES_PARA);exit;
-    $iZoneId = 0;
+    $iZoneId = $iNetworkId = 0;
+    $vZoneName = $vNetwork = '';
     $jsonData = array();
     if ($lat != "" && $long != "") {
-        $sql_zone = "SELECT zone.\"iZoneId\" FROM zone WHERE  St_Within(ST_GeometryFromText('POINT(".$long." ".$lat.")', 4326)::geometry, (zone.\"PShape\")::geometry)='t'"; 
+        $sql_zone = "SELECT zone.\"iZoneId\", zone.\"vZoneName\" FROM zone WHERE  St_Within(ST_GeometryFromText('POINT(".$long." ".$lat.")', 4326)::geometry, (zone.\"PShape\")::geometry)='t'"; 
         $rs = $sqlObj->GetAll($sql_zone);
-        
         if($rs){
             $iZoneId = $rs[0]['iZoneId'];
+            $vZoneName = $rs[0]['vZoneName'];
+            $sql_ntwork = "SELECT \"iNetworkId\", \"vName\" FROM network WHERE \"iZoneId\" = '" . $iZoneId . "'";
+            $rs_ntwork = $sqlObj->GetAll($sql_ntwork);
+            if($rs_ntwork){
+                $iNetworkId = $rs_ntwork[0]['iNetworkId'];
+                $vNetwork = $rs_ntwork[0]['vName'];
+            }
         }
+
         
-        $jsonData = array('iZoneId' => $iZoneId, "lat"=>$lat, "long"=>$long); 
+        $jsonData = array('iZoneId' => $iZoneId, 'vZoneName' => $vZoneName, 'iNetworkId' => $iNetworkId, 'vNetwork' => $vNetwork, "lat"=>$lat, "long"=>$long); 
     } 
 
     $rh = HTTPStatus(200);

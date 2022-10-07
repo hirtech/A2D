@@ -64,15 +64,6 @@ $("#save_data").click(function(e){
         $(".errmsg_iCId").hide();
     }
 
-    /*if($("input[name=bMosquitoService]").prop("checked") == false || $("input[name=bCarcassService]").prop("checked") == false){
-        $(".errmsg_iSRService").html('Please select at least one service type');
-        $(".errmsg_iSRService").show();
-        isError = 1;
-    }else{
-        $(".errmsg_iSRService").html('');
-        $(".errmsg_iSRService").hide();
-        isError = 0;
-    }*/
     //alert(isError);
     form.addClass('was-validated');
     if(isError == 0){
@@ -89,11 +80,41 @@ $("#save_data").click(function(e){
                 $("#save_data").prop('disabled', false);
                 response =JSON.parse(data);
                 if(response['error'] == "0"){
-                    toastr.success(response['msg']);
+                    var fiber_msg = "";
+                    var confirm_Button_Class = "";
+                    var iFiberInquiryId = response['iFiberInquiryId'];
+                    if(response['iSiteId'] > 0){
+                        fiber_msg = "Good News! Fiber is coming your way!\nWe have your contact information and will let you know when we start deploying our Fiber Network in your area";
+                        confirm_Button_Class = "confirm btn btn-lg btn-success";
+
+                    }else {
+                        fiber_msg = "WE APPRECIATE YOUR INTEREST!\nUnfortunately, eCommunity™ Fiber is not yet available in your area.\nWe have your contact information and will let you know when we start deploying in your community!";
+                        confirm_Button_Class = "confirm btn btn-lg btn-danger";
+                    }
+                    swal({
+                        title: fiber_msg,
+                        text: "",
+                        type: "info",
+                        //showCancelButton: true,
+                        //confirmButtonColor: "#DD6B55",
+                        confirmButtonClass: confirm_Button_Class,
+                        //cancelButtonClass : 'cancel btn btn-lg btn-default',
+                        confirmButtonText: 'Okay',
+                        closeOnConfirm: false,
+                        //closeOnCancel: true,
+                        },
+                        function(isConfirm) {
+                            swal.close();
+                            toastr.success(response['msg']);
+                            location.href =  site_url+'fiber_inquiry/list';
+                        }
+                    );
                 }else{
                     toastr.error(response['msg']);
+                    location.href = site_url+'fiber_inquiry/list';
                 }
-                location.href = site_url+'fiber_inquiry/list';
+                
+                return false;
             }
         });
         return false; 
@@ -117,7 +138,6 @@ function clear_address() {
     $('#iCountyId').val('');
     $('#iCityId').val('');
     $('#iZipcode').val('');
-
 }
 
 (function ($) {
@@ -161,26 +181,37 @@ function onClusteSelected(e, datum){
     
     $(".contact-details").show();
     $("#iCId").val(datum['id']);
-    $(".vFirstName").html(datum['vFirstName']);
-    $(".vLastName").html(datum['vLastName']);
-    $(".vCompany").html(datum['vCompany']);
+    //$(".vFirstName").html(datum['vFirstName']);
+    //$(".vLastName").html(datum['vLastName']);
+    //$(".vCompany").html(datum['vCompany']);
+    var contact_name = "";
+    if(datum['vFirstName'] != '' && datum['vLastName'] != ''){
+        contact_name += datum['vFirstName']+ " "+datum['vLastName'];
+    }else if(datum['vFirstName'] != '' && datum['vLastName'] == ''){ 
+        contact_name += datum['vFirstName'];
+    }else if(datum['vFirstName'] == '' && datum['vLastName'] != ''){ 
+        contact_name += datum['vLastName'];
+    }
+    
+    $(".contact_name").html(contact_name);
     $(".vEmail").html(datum['vEmail']);
     $(".vPhone").html(datum['vPhone']);
     $(".contact-details").show();
-// start contry history popup for add time
+    // start contry history popup for add time
 
-var html="<input type='button' onclick='showContactHistory("+datum['id']+',"'+datum['vFirstName']+'"'+',"'+datum['vLastName']+'"'+")' class='btn btn-primary' value='Contact History'>";
-$("#showContactHistory").html(html);
-// end contry history    
+    var html="<input type='button' onclick='showContactHistory("+datum['id']+',"'+datum['vFirstName']+'"'+',"'+datum['vLastName']+'"'+")' class='btn btn-primary' value='Contact History'>";
+    $("#showContactHistory").html(html);
+    // end contry history    
 }
 
 function clear_serach_contact(){
- $("#search_contact").typeahead('val','');
- $("#iCId").val('');
- $(".vFirstName").html('');
- $(".vLastName").html('');
- $(".vCompany").html('');
- $(".vEmail").html('');
- $(".vPhone").html('');
- $(".contact-details").hide();
+    $("#search_contact").typeahead('val','');
+    $("#iCId").val('');
+    //$(".vFirstName").html('');
+    //$(".vLastName").html('');
+    //$(".vCompany").html('');
+    $(".contact_name").html('');
+    $(".vEmail").html('');
+    $(".vPhone").html('');
+    $(".contact-details").hide();
 }

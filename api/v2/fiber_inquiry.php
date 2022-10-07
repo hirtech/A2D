@@ -7,6 +7,12 @@ include_once($controller_path . "task_landing_rate.inc.php");
 include_once($controller_path . "task_trap.inc.php");
 include_once($controller_path . "task_other.inc.php");
 if($request_type == "fiber_inquiry_edit"){
+    $sql_premise = "SELECT s.\"iSiteId\", s.\"vName\" FROM site_mas s WHERE  St_Within(ST_GeometryFromText('POINT(".$RES_PARA['vLongitude']." ".$RES_PARA['vLatitude'].")', 4326)::geometry, (s.\"vPointLatLong\")::geometry)='t'ORDER BY s.\"iSiteId\" DESC LIMIT 1"; 
+    $rs_premise = $sqlObj->GetAll($sql_premise);
+    $iSiteId = 0;
+    if(!empty($rs_premise)){
+        $iSiteId = $rs_premise[0]['iSiteId'];
+    }
     //echo "<pre>";print_r($RES_PARA);exit;
    	$FiberInquiryObj = new FiberInquiry();
 	$FiberInquiryObj->clear_variable();
@@ -41,7 +47,7 @@ if($request_type == "fiber_inquiry_edit"){
       $rh = HTTPStatus(200);
       $code = 2000;
       $message = api_getMessage($req_ext, constant($code));
-      $response_data = array("Code" => 200, "Message" => MSG_UPDATE, "iFiberInquiryId" => $RES_PARA['iFiberInquiryId']);
+      $response_data = array("Code" => 200, "Message" => MSG_UPDATE, "iFiberInquiryId" => $RES_PARA['iFiberInquiryId'], "iSiteId" => $iSiteId);
    }else{
       $r = HTTPStatus(500);
       $response_data = array("Code" => 500 , "Message" => MSG_UPDATE_ERROR);
@@ -57,7 +63,13 @@ if($request_type == "fiber_inquiry_edit"){
     }else{
         $response_data = array("Code" => 500 , "Message" => MSG_DELETE_ERROR);
     }
-}else if($request_type == "fiber_inquiry_add"){
+}else if($request_type == "fiber_inquiry_add") {
+    $sql_premise = "SELECT s.\"iSiteId\", s.\"vName\" FROM site_mas s WHERE  St_Within(ST_GeometryFromText('POINT(".$RES_PARA['vLongitude']." ".$RES_PARA['vLatitude'].")', 4326)::geometry, (s.\"vPointLatLong\")::geometry)='t'ORDER BY s.\"iSiteId\" DESC LIMIT 1"; 
+    $rs_premise = $sqlObj->GetAll($sql_premise);
+    $iSiteId = 0;
+    if(!empty($rs_premise)){
+        $iSiteId = $rs_premise[0]['iSiteId'];
+    }       
     $FiberInquiryObj = new FiberInquiry();
     $FiberInquiryObj->clear_variable();
     $insert_arr = array(
@@ -84,7 +96,7 @@ if($request_type == "fiber_inquiry_edit"){
     $FiberInquiryObj->setClause();
     $rs_db = $FiberInquiryObj->add_records();
     if($rs_db){
-        $response_data = array("Code" => 200, "Message" => MSG_ADD, "iFiberInquiryId" => $rs_db);
+        $response_data = array("Code" => 200, "Message" => MSG_ADD, "iFiberInquiryId" => $rs_db, "iSiteId" => $iSiteId);
     }
     else{
         $response_data = array("Code" => 500 , "Message" => MSG_ADD_ERROR);
@@ -343,7 +355,6 @@ if($request_type == "fiber_inquiry_edit"){
     $message = api_getMessage($req_ext, constant($code));
     $response_data = array("Code" => 200, "Message" => $message, "result" => $result);
 }else if($request_type == "search_fiber_inquiry"){
-
     $rs_arr  = array();
     $where_arr = array();
     $join_fieds_arr = array();

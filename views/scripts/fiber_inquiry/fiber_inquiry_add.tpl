@@ -35,7 +35,7 @@
 								<input type="hidden" name="iCId" id="iCId" value="{$rs_sr[0].iCId}" />
 								<input type="hidden" name="iOldStatus" id="iOldStatus" value="{$rs_sr[0].iStatus}" />
 								<div class="form-row">
-									<div class="col-md-4">
+									<div class="col-md-5">
 										<div class="form-row">
 											<div class="col-md-12 mb-2">
 												<input type="button" onclick="addEditData('','add','0','srcontactadd');" class="btn btn-primary" value="Create New Contact">
@@ -52,37 +52,18 @@
 											</div>
 										</div>
 										<div class="form-row mb-2">
-											<div class="col-8 mb-8 contact-details">
-												<table class="table layout-secondary table-responsive">
-													<tbody>
-														<tr>
-															<th scope="col">First Name:</th>
-															<td class="vFirstName">{$rs_sr[0].vFirstName}</td>
-														</tr>
-														<tr>
-															<th scope="col">Last Name:</th>
-															<td class="vLastName">{$rs_sr[0].vLastName}</td>
-														</tr>
-														<tr>
-															<th scope="col">Company:</th>
-															<td class="vCompany">{$rs_sr[0].vCompany}</td>
-														</tr>
-														<tr>
-															<th scope="col">Email:</th>
-															<td class="vEmail">{$rs_sr[0].vEmail}</td>
-														</tr>
-														<tr>
-															<th scope="col">Phone:</th>
-															<td class="vPhone">{$rs_sr[0].vPhone}</td>
-														</tr>
-													</tbody>    
-												</table> 
+											<div class="col-9 mb-8 contact-details border-top border-bottom">
+												<label class="mt-3"><strong>Contact Details:</strong></label>
+												<label class="mt-3 contact_name">{$rs_sr[0].vFirstName} {$rs_sr[0].vLastName}</label><br/>
+												{if $rs_sr[0].vEmail != ''}
+												<label class="vEmail">{$rs_sr[0].vEmail}</label><br/>
+												{/if}{if $rs_sr[0].vPhone != ''}
+												<label class="vPhone">{$rs_sr[0].vPhone}</label>
+												{/if}
 											</div>
-											<div id="showContactHistory" class="col-4 mb-4 contact-details">
+											<div id="showContactHistory" class="col-3 mb-4 contact-details text-right">
 											</div>
 										</div>
-									</div>
-									<div class="col-md-4">
 										<div class="form-row mb-2">
 											<div class="col-12">
 												<label for="iPremiseSubTypeId">Premise Sub Type </label>
@@ -106,7 +87,8 @@
 											</div>
 										</div>
 									</div>
-									<div class="col-md-4">
+									<div class="col-md-1"></div>
+									<div class="col-md-6">
 										<div class="form-row mb-3">
 											<label for="autofilladdress">Address</label>
 											<div class="position-relative w-100">
@@ -118,37 +100,17 @@
 											</div>
 										</div>
 										<div class="form-row mb-2">
-											<div class="col-8 address-details">
-												<table class="table layout-secondary table-responsive">
-													<tbody>
-														<tr>
-															<th scope="col">vAddress1:</th>
-															<td class="vAddress1">{$rs_sr[0].vAddress1}</td>
-														</tr>
-														<tr>
-															<th scope="col">vStreet:</th>
-															<td class="vStreet">{$rs_sr[0].vStreet}</td>
-														</tr>
-														<tr>
-															<th scope="col">iZipcode:</th>
-															<td class="iZipcode">{$rs_sr[0].iZipcode}</td>
-														</tr>
-														<tr>
-															<th scope="col">iCountyId:</th>
-															<td class="iCountyId">{$rs_sr[0].iCountyId}</td>
-														</tr>
-														<tr>
-															<th scope="col">iCityId:</th>
-															<td class="iCityId">{$rs_sr[0].iCityId}</td>
-														</tr>
-														<tr>
-															<th scope="col">iZoneId:</th>
-															<td class="iZoneId">{$rs_sr[0].iZoneId}</td>
-														</tr>
-													</tbody>    
-												</table> 
+											<div class="col-9 address-details border-top border-bottom">
+												<label class="mt-3 address_data">{$rs_sr[0].vAddress1}, {$rs_sr[0].vStreet}, {$rs_sr[0].vCounty}, {$rs_sr[0].iZipcode}</label><br/>
+												{if $rs_sr[0].vNetwork != '' }
+												<label><strong>Network:</strong></label>
+												<label class="vNetwork">{$rs_sr[0].vNetwork}</label><br/>
+												{/if}{if $rs_sr[0].vZoneName != '' }
+												<label><strong>Zone:</strong></label>
+												<label class="vZoneName">{$rs_sr[0].vZoneName}</label>
+												{/if}
 											</div>
-											<div class="col-4 address-details" id="showNearbySr">
+											<div class="col-3 address-details text-right" id="showNearbySr">
 											</div>
 										</div>
 										<div class="form-row mb-2">
