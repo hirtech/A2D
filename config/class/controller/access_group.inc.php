@@ -62,7 +62,6 @@ class AccessGroup {
 	function recordset_list()
 	{
 		global $sqlObj;
-			
 		$sql = "SELECT access_group_mas.* ".$join_field_str." FROM access_group_mas".$this->join_clause.$this->where_clause.$this->group_by_clause.$this->order_by_clause.$this->limit_clause;
 		$rs_db = $sqlObj->GetAll($sql);
 		return $rs_db;
@@ -71,7 +70,6 @@ class AccessGroup {
 	function recordset_module_roles_list()
 	{
 		global $sqlObj;
-			
 		$sql = "SELECT access_module_role.* ".$join_field_str." FROM access_module_role".$this->join_clause.$this->where_clause.$this->group_by_clause.$this->order_by_clause.$this->limit_clause;
 		$rs_db = $sqlObj->GetAll($sql);
 		return $rs_db;
@@ -80,17 +78,14 @@ class AccessGroup {
 	function recordset_module_list()
 	{
 		global $sqlObj;
-			
 		$sql = "SELECT access_module_mas.* ".$join_field_str." FROM access_module_mas".$this->join_clause.$this->where_clause.$this->group_by_clause.$this->order_by_clause.$this->limit_clause;
 		$rs_db = $sqlObj->GetAll($sql);
 		return $rs_db;
-		
 	}
 
 	function recordset_total()
 	{
 		global $sqlObj;
-			
 		$sql = "SELECT access_group_mas.* ".$this->join_field_str." FROM access_group_mas".$this->join_clause.$this->where_clause.$this->group_by_clause;
 		//$rs_db = $sqlObj->GetAll($sql);
 		//return count($rs_db);
@@ -100,7 +95,6 @@ class AccessGroup {
 		else
 			$count = $rs_db->RecordCount();
 		return $count;
-		
 	}
 	
 	function delete_records(){
@@ -109,76 +103,60 @@ class AccessGroup {
 		$sql =  "DELETE FROM access_group_mas WHERE access_group_mas.\"iAGroupId\" IN (".$this->ids.")";
 		$sqlObj->Execute($sql);
 		$rs_db = $sqlObj->Affected_Rows();
-
 		/*-------------- Log Entry -------------*/
 		$this->SALObj->type = 2;
 		$this->SALObj->module_name = "Access Group";
 		$this->SALObj->audit_log_entry();
 		/*-------------- Log Entry -------------*/
-
 		return $rs_db;
 	}
-	function action_records(){
-		
-		global $sqlObj;
-		if($this->ids){
-			if($this->action=="Active"){
-				$sql = "UPDATE access_group_mas set \"iStatus\" = '1' WHERE \"iAGroupId\" IN (".$this->ids.")";
-			}
-			else if($this->action=="Inactive"){
-				$sql = "UPDATE access_group_mas set \"iStatus\" = '0' WHERE \"iAGroupId\" IN (".$this->ids.")";
-			}
-			$sqlObj->Execute($sql);
-		}
-		
-		$rs_db = $sqlObj->Affected_Rows();
-		
-		/*-------------- Log Entry -------------*/
-		$this->SALObj->type = 1;
-		$this->SALObj->module_name = "Access Group";
-		$this->SALObj->action = $this->action;
-		$this->SALObj->audit_log_entry();
-		/*-------------- Log Entry -------------*/
-
-		return $rs_db;
-	}
+	
 	function add_records(){
 		global $sqlObj;
 		if($this->insert_arr){
 			$sql = "INSERT INTO access_group_mas(\"vAccessGroup\", \"iStatus\", \"tDescription\", \"iDefault\")VALUES (".gen_allow_null_char($this->insert_arr['vAccessGroup']).", ".gen_allow_null_int($this->insert_arr['iStatus']).", ".gen_allow_null_char($this->insert_arr['tDescription']).", ".gen_allow_null_int($this->insert_arr['iDefault']).")";
 			$sqlObj->Execute($sql);		
 			$rs_db = $sqlObj-> Insert_ID();
-
 			/*-------------- Log Entry -------------*/
 			$this->SALObj->type = 0;
 			$this->SALObj->module_name = "Access Group";
 			$this->SALObj->audit_log_entry();
 			/*-------------- Log Entry -------------*/
-
 			return $rs_db;
 		}
 	}
 
 	function update_records(){
 		global $sqlObj;
-
 		if($this->update_arr){
-			//$rs_db = "UPDATE access_group_mas SET \"vAccessGroup\"=".gen_allow_null_char($this->update_arr['vAccessGroup']).", \"iStatus\"=".gen_allow_null_int($this->update_arr['iStatus'])." WHERE \"iAGroupId\" = ".$this->update_arr['iAGroupId'];
-			
-			//$rs_db = "UPDATE access_group_mas SET \"vAccessGroup\"=".gen_allow_null_char($this->update_arr['vAccessGroup']).", \"tDescription\"=".gen_allow_null_char($this->update_arr['tDescription'])." WHERE \"iAGroupId\" = ".$this->update_arr['iAGroupId'];
 			$rs_db = "UPDATE access_group_mas SET \"vAccessGroup\"=".gen_allow_null_char($this->update_arr['vAccessGroup']).", \"tDescription\"=".gen_allow_null_char($this->update_arr['tDescription']).",\"iStatus\"=".gen_allow_null_int($this->update_arr['iStatus'])."  WHERE \"iAGroupId\" = ".$this->update_arr['iAGroupId'];
 			$sqlObj->Execute($rs_db);
 			$rs_up = $sqlObj->Affected_Rows();
-
 			/*-------------- Log Entry -------------*/
 			$this->SALObj->type = 1;
 			$this->SALObj->module_name = "Access Group";
 			$this->SALObj->action = "Update";
 			$this->SALObj->audit_log_entry();
 			/*-------------- Log Entry -------------*/
-
 			return $rs_up;
 		}
 	}
+
+	 function clear_variable() {
+        $this->join_field = array();
+        $this->join = array();
+        $this->where = array();
+        $this->param = array();
+        $this->ids = 0;
+        $this->action = "";
+        $this->insert_arr = array();
+        $this->update_arr = array();
+        $this->join_field_str = "";
+        $this->where_clause = "";
+        $this->join_clause = "";
+        $this->order_by_clause = "";
+        $this->group_by_clause = "";
+        $this->limit_clause = "";
+    }
 }
 ?>
