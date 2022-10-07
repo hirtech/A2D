@@ -1,15 +1,11 @@
 <?php
-# By Zinal as on October 2021
+# By Zinal as on September 2022
 #-------------------------------------------------------------------------------------
 # Include necessary files.
 #-------------------------------------------------------------------------------------
 /*error_reporting(E_ALL);
 ini_set('display_errors', 0);*/
-
-//echo"<pre>";print_r($_SERVER);exit;
 include_once("server.php");
-
-
 include_once($setting_path."api_messages.php");
 include_once($setting_path."settings_api.php");
 include_once($setting_path."settings.php");
@@ -17,7 +13,7 @@ include_once($function_path."api.inc.php");
 include_once($function_path."app.inc.php");
 include_once($function_path."date.inc.php");
 include_once($function_path."general.inc.php");
-
+#-------------------------------------------------------------------------------------
 include_once($class_path."php-jwt/BeforeValidException.php");
 include_once($class_path."php-jwt/ExpiredException.php");
 include_once($class_path."php-jwt/SignatureInvalidException.php");
@@ -148,10 +144,55 @@ switch($path) {
 			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
 		}
 		break;
+	case "access_group_list.".$req_ext:
+		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
+			$request_type = "access_group_list";
+			$api_file_name = "access_group.php";
+			include_once($site_api_path."api_authentication.php");
+		}else {
+			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
+		}
+		break;
+	case "access_group_add.".$req_ext:
+		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
+			$request_type = "access_group_add";
+			$api_file_name = "access_group.php";
+			include_once($site_api_path."api_authentication.php");
+		}else {
+			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
+		}
+		break;
+	case "access_group_edit.".$req_ext:
+		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
+			$request_type = "access_group_edit";
+			$api_file_name = "access_group.php";
+			include_once($site_api_path."api_authentication.php");
+		}else {
+			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
+		}
+		break;
+	case "access_group_delete." . $req_ext:
+		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
+			$request_type = "access_group_delete";
+			$api_file_name = "access_group.php";
+			include_once($site_api_path . "api_authentication.php");
+		}else {
+			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
+		}
+		break;
 	case "access_group_dropdown." . $req_ext:
 		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
 			$request_type = "access_group_dropdown";
-			$api_file_name = "general.php";
+			$api_file_name = "access_group.php";
+			include_once($site_api_path . "api_authentication.php");
+		}else {
+			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
+		}
+		break;
+	case "access_group_manage_role." . $req_ext:
+		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
+			$request_type = "access_group_manage_role";
+			$api_file_name = "access_group.php";
 			include_once($site_api_path . "api_authentication.php");
 		}else {
 			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);

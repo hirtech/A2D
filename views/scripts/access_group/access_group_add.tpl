@@ -15,7 +15,7 @@
     <div class="col-12 mt-3">
         <div class="card">
             <div class="card-header">                               
-                <h4 class="card-title">{$module_title} - {$vAccessGroup}</h4>                                
+                <h4 class="card-title">{$module_title} - {$vAccessGroup}</h4>
             </div>
             <div class="card-content">
                 <div class="card-body">

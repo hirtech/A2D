@@ -15,11 +15,9 @@ $access_group_var_add = per_hasModuleAccess("Access Group", 'Add', 'N');
 $access_group_var_edit = per_hasModuleAccess("Access Group", 'Edit', 'N');
 # ----------- Access Rule Condition -----------
 
-
 $AccessGroupObj = new AccessGroup();
 $iAGroupId = $_GET['iAGroupId'];
- if($mode == "Manage") {
-
+if($mode == "Manage") {
 	#----------------
 	/*$sql_module="select * from access_module_mas where \"iStatus\" = 1";
 	$db_sql_module=$sqlObj->GetAll($sql_module);*/
@@ -51,7 +49,7 @@ $iAGroupId = $_GET['iAGroupId'];
 	}
 
 
-/***************************************************************************/
+	/***************************************************************************/
 	$asso_array =$accmod_assoc_arr = $param_array= array();
 	$arid = 0;
 		
@@ -129,7 +127,7 @@ $iAGroupId = $_GET['iAGroupId'];
 	    );
 	}
 	//echo "<pre>";print_r($records);exit();
-/************************************************************************/
+	/************************************************************************/
 
 	// Access Group Checkbox...
 	$where_arr = array();

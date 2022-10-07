@@ -32,13 +32,12 @@
 				<table id="datatable-grid" class="display table dataTable table-striped table-bordered editable-table" width="100%">
 					<thead>
 						<tr>
-							<!--<th  width="10%"><input type="checkbox" id="chkall" onclick="checkall(this)"/></th> -->
 							<th width="10%">ID</th>
-							<th  width="20%">Access Group</th>
-							<th  width="20%">Description</th>
-							<th  width="20%">Access Right</th>
-							<th  width="20%">Status</th>
-							<th  width="10%">Action</th> 
+							<th width="20%">Access Group</th>
+							<th width="20%">Description</th>
+							<th width="20%">Access Right</th>
+							<th width="20%">Status</th>
+							<th width="10%">Action</th> 
 						</tr>
 					</thead>
 					<tbody>                            
