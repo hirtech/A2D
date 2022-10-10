@@ -7,6 +7,8 @@ include_once($controller_path . "city.inc.php");
 include_once($controller_path . "state.inc.php");
 include_once($controller_path . "county.inc.php");
 include_once($controller_path . "engagement.inc.php");
+include_once($controller_path . "connection_type.inc.php");
+include_once($controller_path . "company.inc.php");
 include_once($function_path."image.inc.php");
 include_once($function_path."site_general.inc.php");
 
@@ -1003,6 +1005,273 @@ if($request_type == "city_list"){
     $rs_db = $EngagementObj->delete_records($iEngagementId);
     if($rs_db){
         $response_data = array("Code" => 200, "Message" => MSG_DELETE, "iEngagementId" => $iEngagementId);
+    }else{
+        $response_data = array("Code" => 500 , "Message" => MSG_DELETE_ERROR);
+    }
+}else if($request_type == "connection_type_list"){
+    $ConnectionTypeObj = new ConnectionType();
+    $where_arr = array();
+    if(!empty($RES_PARA)){
+        $vConnectionTypeName    = trim($RES_PARA['vConnectionTypeName']);
+        $iStatus                = trim($RES_PARA['iStatus']);
+        $page_length            = isset($RES_PARA['page_length']) ? trim($RES_PARA['page_length']) : "10";
+        $start                  = isset($RES_PARA['start']) ? trim($RES_PARA['start']) : "0";
+        $sEcho                  = $RES_PARA['sEcho'];
+        $display_order          = $RES_PARA['display_order'];
+        $dir                    = $RES_PARA['dir'];
+    }
+
+    if ($vConnectionTypeName != "") {
+        $where_arr[] = 'connection_type_mas."vConnectionTypeName" ILIKE \''.$vConnectionTypeName.'%\'';
+    }
+
+    if ($iStatus != "") {
+        if(strtolower($iStatus) == "active"){
+            $where_arr[] = "connection_type_mas.\"iStatus\" = '1'";
+        }
+        else if(strtolower($iStatus) == "inactive"){
+            $where_arr[] = "connection_type_mas.\"iStatus\" = '0'";
+        }
+    }
+
+    switch ($display_order) {
+        case "0" : 
+            $sortname = "connection_type_mas.\"iConnectionTypeId\"";
+            break;
+        case "1":
+            $sortname = "connection_type_mas.\"vConnectionTypeName\"";
+            break;
+        case "2":
+            $sortname = "connection_type_mas.\"iStatus\"";
+            break;
+        default:
+            $sortname = 'connection_type_mas."vConnectionTypeName"';
+            break;
+    }
+
+    $join_fieds_arr = array();
+    $join_arr = array();
+    $ConnectionTypeObj->join_field = $join_fieds_arr;
+    $ConnectionTypeObj->join = $join_arr;
+    $ConnectionTypeObj->where = $where_arr;
+    $ConnectionTypeObj->param['order_by'] = $sortname . " " . $dir;
+    $ConnectionTypeObj->param['limit'] = $limit;
+    $ConnectionTypeObj->setClause();
+    $ConnectionTypeObj->debug_query = false;
+    $rs_connection_type = $ConnectionTypeObj->recordset_list();
+    $total = $ConnectionTypeObj->recordset_total();
+    $data = array();
+    $ni = count($rs_connection_type);
+    if($ni > 0){
+        for($i=0;$i<$ni;$i++){
+            $data[] = array(
+                "iConnectionTypeId"         => gen_strip_slash($rs_connection_type[$i]['iConnectionTypeId']),
+                "vConnectionTypeName"       => gen_strip_slash($rs_connection_type[$i]['vConnectionTypeName']),
+                "iStatus"                   => $rs_connection_type[$i]['iStatus'],
+            );
+        }
+    }
+    $result = array('data' => $data , 'total_record' => $total);
+
+    $rh = HTTPStatus(200);
+    $code = 2000;
+    $message = api_getMessage($req_ext, constant($code));
+    $response_data = array("Code" => 200, "Message" => $message, "result" => $result);
+}else if($request_type == "connection_type_add"){
+    $ConnectionTypeObj = new ConnectionType();
+    $insert_arr = array(
+        "vConnectionTypeName"   => $RES_PARA['vConnectionTypeName'],
+        "iStatus"               => $RES_PARA['iStatus'],
+    );
+    $ConnectionTypeObj->insert_arr = $insert_arr;
+    $ConnectionTypeObj->setClause();
+    $iConnectionTypeId = $ConnectionTypeObj->add_records();
+    if(isset($iConnectionTypeId)){
+        $response_data = array("Code" => 200, "Message" => MSG_ADD, "iConnectionTypeId" => $iConnectionTypeId);
+    }else{
+        $response_data = array("Code" => 500 , "Message" => MSG_ADD_ERROR);
+    }
+}else if($request_type == "connection_type_edit"){
+    $ConnectionTypeObj = new ConnectionType();
+    $update_arr = array(
+        "iConnectionTypeId"         => $RES_PARA['iConnectionTypeId'],
+        "vConnectionTypeName"       => $RES_PARA['vConnectionTypeName'],
+        "iStatus"                   => $RES_PARA['iStatus'],
+    );
+    //echo "<pre>";print_r($update_arr);exit;
+    $ConnectionTypeObj->update_arr = $update_arr;
+    $ConnectionTypeObj->setClause();
+    $iConnectionTypeId = $ConnectionTypeObj->update_records();
+    if(isset($iConnectionTypeId)){
+        $response_data = array("Code" => 200, "Message" => MSG_UPDATE, "iConnectionTypeId" => $RES_PARA['iConnectionTypeId']);
+    }else{
+        $response_data = array("Code" => 500 , "Message" => MSG_UPDATE_ERROR);
+    }
+}else if($request_type == "connection_type_delete"){
+    $ConnectionTypeObj = new ConnectionType();
+    $iConnectionTypeId = $RES_PARA['iConnectionTypeId'];
+    $rs_db = $ConnectionTypeObj->delete_records($iConnectionTypeId);
+    if($rs_db){
+        $response_data = array("Code" => 200, "Message" => MSG_DELETE, "iConnectionTypeId" => $iConnectionTypeId);
+    }else{
+        $response_data = array("Code" => 500 , "Message" => MSG_DELETE_ERROR);
+    }
+}else if($request_type == "company_list"){
+    $CompanyObj = new Company();
+    $where_arr = array();
+    if(!empty($RES_PARA)){
+        $vCompanyType           = trim($RES_PARA['vCompanyType']);
+        $vCompanyName           = trim($RES_PARA['vCompanyName']);
+        $vNameId                = trim($RES_PARA['vNameId']);
+        $vAccessType            = trim($RES_PARA['vAccessType']);
+        $vMSOYr                 = trim($RES_PARA['vMSOYr']);
+        $vMSANum                = trim($RES_PARA['vMSANum']);
+        $iStatus                = trim($RES_PARA['iStatus']);
+        $page_length            = isset($RES_PARA['page_length']) ? trim($RES_PARA['page_length']) : "10";
+        $start                  = isset($RES_PARA['start']) ? trim($RES_PARA['start']) : "0";
+        $sEcho                  = $RES_PARA['sEcho'];
+        $display_order          = $RES_PARA['display_order'];
+        $dir                    = $RES_PARA['dir'];
+    }
+
+    if ($vCompanyType != "") {
+        $where_arr[] = 'company_mas."vCompanyType" ILIKE \''.$vCompanyType.'%\'';
+    }
+    if ($vCompanyName != "") {
+        $where_arr[] = 'company_mas."vCompanyName" ILIKE \''.$vCompanyName.'%\'';
+    }
+    if ($vNameId != "") {
+        $where_arr[] = 'company_mas."vNameId" ILIKE \''.$vNameId.'%\'';
+    }
+    if ($vAccessType != "") {
+        $where_arr[] = 'company_mas."vAccessType" ILIKE \''.$vAccessType.'%\'';
+    }
+    if ($vMSOYr != "") {
+        $where_arr[] = 'company_mas."vMSOYr" ILIKE \''.$vMSOYr.'%\'';
+    }
+    if ($vMSANum != "") {
+        $where_arr[] = 'company_mas."vMSANum" ILIKE \''.$vMSANum.'%\'';
+    }
+
+    if ($iStatus != "") {
+        if(strtolower($iStatus) == "active"){
+            $where_arr[] = "company_mas.\"iStatus\" = '1'";
+        }
+        else if(strtolower($iStatus) == "inactive"){
+            $where_arr[] = "company_mas.\"iStatus\" = '0'";
+        }
+    }
+
+    switch ($display_order) {
+        case "0" : 
+            $sortname = "company_mas.\"iCompanyId\"";
+            break;
+        case "1":
+            $sortname = "company_mas.\"vCompanyType\"";
+            break;
+        case "2":
+            $sortname = "company_mas.\"vCompanyName\"";
+            break;
+        case "3":
+            $sortname = "company_mas.\"vNameId\"";
+            break;
+        case "4":
+            $sortname = "company_mas.\"vAccessType\"";
+            break;
+        case "5":
+            $sortname = "company_mas.\"vMSOYr\"";
+            break;
+        case "6":
+            $sortname = "company_mas.\"vMSANum\"";
+            break;
+        case "7":
+            $sortname = "company_mas.\"iStatus\"";
+            break;
+        default:
+            $sortname = 'company_mas."vCompanyType"';
+            break;
+    }
+
+    $join_fieds_arr = array();
+    $join_arr = array();
+    $CompanyObj->join_field = $join_fieds_arr;
+    $CompanyObj->join = $join_arr;
+    $CompanyObj->where = $where_arr;
+    $CompanyObj->param['order_by'] = $sortname . " " . $dir;
+    $CompanyObj->param['limit'] = $limit;
+    $CompanyObj->setClause();
+    $CompanyObj->debug_query = false;
+    $rs_connection_type = $CompanyObj->recordset_list();
+    $total = $CompanyObj->recordset_total();
+    $data = array();
+    $ni = count($rs_connection_type);
+    if($ni > 0){
+        for($i=0;$i<$ni;$i++){
+            $data[] = array(
+                "iCompanyId"            => gen_strip_slash($rs_connection_type[$i]['iCompanyId']),
+                "vCompanyType"          => gen_strip_slash($rs_connection_type[$i]['vCompanyType']),
+                "vCompanyName"          => gen_strip_slash($rs_connection_type[$i]['vCompanyName']),
+                "vNameId"               => gen_strip_slash($rs_connection_type[$i]['vNameId']),
+                "vAccessType"           => gen_strip_slash($rs_connection_type[$i]['vAccessType']),
+                "vMSOYr"                => gen_strip_slash($rs_connection_type[$i]['vMSOYr']),
+                "vMSANum"               => gen_strip_slash($rs_connection_type[$i]['vMSANum']),
+                "iStatus"               => $rs_connection_type[$i]['iStatus'],
+            );
+        }
+    }
+    $result = array('data' => $data , 'total_record' => $total);
+
+    $rh = HTTPStatus(200);
+    $code = 2000;
+    $message = api_getMessage($req_ext, constant($code));
+    $response_data = array("Code" => 200, "Message" => $message, "result" => $result);
+}else if($request_type == "company_add"){
+    $CompanyObj = new Company();
+
+    $insert_arr = array(
+        "vCompanyType"      => $RES_PARA['vCompanyType'],
+        "vCompanyName"      => $RES_PARA['vCompanyName'],
+        "vNameId"           => $RES_PARA['vNameId'],
+        "vAccessType"       => $RES_PARA['vAccessType'],
+        "vMSOYr"            => $RES_PARA['vMSOYr'],
+        "vMSANum"           => $RES_PARA['vMSANum'],
+        "iStatus"           => $RES_PARA['iStatus'],
+    );
+    $CompanyObj->insert_arr = $insert_arr;
+    $CompanyObj->setClause();
+    $iCompanyId = $CompanyObj->add_records();
+    if(isset($iCompanyId)){
+        $response_data = array("Code" => 200, "Message" => MSG_ADD, "iCompanyId" => $iCompanyId);
+    }else{
+        $response_data = array("Code" => 500 , "Message" => MSG_ADD_ERROR);
+    }
+}else if($request_type == "company_edit"){
+    $CompanyObj = new Company();
+    $update_arr = array(
+        "iCompanyId"            => $RES_PARA['iCompanyId'],
+        "vCompanyType"          => $RES_PARA['vCompanyType'],
+        "vCompanyName"          => $RES_PARA['vCompanyName'],
+        "vNameId"               => $RES_PARA['vNameId'],
+        "vAccessType"           => $RES_PARA['vAccessType'],
+        "vMSOYr"                => $RES_PARA['vMSOYr'],
+        "vMSANum"               => $RES_PARA['vMSANum'],
+        "iStatus"               => $RES_PARA['iStatus'],
+    );
+    //echo "<pre>";print_r($update_arr);exit;
+    $CompanyObj->update_arr = $update_arr;
+    $CompanyObj->setClause();
+    $iCompanyId = $CompanyObj->update_records();
+    if(isset($iCompanyId)){
+        $response_data = array("Code" => 200, "Message" => MSG_UPDATE, "iCompanyId" => $RES_PARA['iCompanyId']);
+    }else{
+        $response_data = array("Code" => 500 , "Message" => MSG_UPDATE_ERROR);
+    }
+}else if($request_type == "company_delete"){
+    $CompanyObj = new Company();
+    $iCompanyId = $RES_PARA['iCompanyId'];
+    $rs_db = $CompanyObj->delete_records($iCompanyId);
+    if($rs_db){
+        $response_data = array("Code" => 200, "Message" => MSG_DELETE, "iCompanyId" => $iCompanyId);
     }else{
         $response_data = array("Code" => 500 , "Message" => MSG_DELETE_ERROR);
     }

@@ -108,6 +108,18 @@ RewriteRule ^master/engagement_list? index.php?module=$0&page=m-engagement_list&
 RewriteRule ^master/engagement_list index.php?module=$0&page=m-engagement_list
 #---------------------
 
+#---------------------
+#Connection Type Master
+RewriteRule ^master/connection_type_list? index.php?module=$0&page=m-connection_type_list&%{QUERY_STRING}
+RewriteRule ^master/connection_type_list index.php?module=$0&page=m-connection_type_list
+#---------------------
+
+#---------------------
+#Company Master
+RewriteRule ^master/company_list? index.php?module=$0&page=m-company_list&%{QUERY_STRING}
+RewriteRule ^master/company_list index.php?module=$0&page=m-company_list
+#---------------------
+
 #-------Site Mgmt----------------
 #Site
 RewriteRule ^premise/list index.php?module=$0&page=m-premise_list&%{QUERY_STRING}
