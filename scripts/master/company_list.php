@@ -239,7 +239,7 @@ if($mode == "List"){
 
     $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
 
-    $API_URL = $site_api_url."connection_type_list.json";
+    $API_URL = $site_api_url."company_list.json";
     //echo $API_URL. " ".json_encode($arr_param);exit;
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $API_URL);
@@ -258,6 +258,10 @@ if($mode == "List"){
     curl_close($ch);  
    
     $result_arr = json_decode($response, true);
+
+    $total = $result_arr['result']['total_record'];
+    $jsonData = array('sEcho' => $sEcho, 'iTotalDisplayRecords' => $total, 'iTotalRecords' => $total, 'aaData' => array());
+    $entry = $hidden_arr = array();
     $rs_export = $result_arr['result']['data'];
     $cnt_export = count($rs_export);
 
@@ -265,36 +269,51 @@ if($mode == "List"){
     //include_once($class_path.'PHPExcel-1.8/PHPExcel.php'); 
     // // Create new PHPExcel object
     $objPHPExcel = new PHPExcel();
-    $file_name = "connection_type_".time().".xlsx";
+    $file_name = "company_".time().".xlsx";
 
     if($cnt_export >0) {
 
         $objPHPExcel->setActiveSheetIndex(0)
                 ->setCellValue('A1', 'Id')
-                ->setCellValue('B1', 'Connection Type Name')
-                ->setCellValue('C1', 'Status');
+                ->setCellValue('B1', 'Company Type')
+                ->setCellValue('C1', 'Company Name')
+                ->setCellValue('D1', 'Name Id')
+                ->setCellValue('E1', 'Access Type')
+                ->setCellValue('F1', 'MSOYr')
+                ->setCellValue('G1', 'MSANum')
+                ->setCellValue('H1', 'Status');
     
         for($e=0; $e<$cnt_export; $e++) {
             $iStatus = ($rs_export[$e]['iStatus'] == "1")?"Active":"Inactive";
             $objPHPExcel->getActiveSheet()
             ->setCellValue('A'.($e+2), $rs_export[$e]['iCompanyId'])
             ->setCellValue('B'.($e+2), $rs_export[$e]['vCompanyType'])
-            ->setCellValue('C'.($e+2), $iStatus);
+            ->setCellValue('C'.($e+2), $rs_export[$e]['vCompanyName'])
+            ->setCellValue('D'.($e+2), $rs_export[$e]['vNameId'])
+            ->setCellValue('E'.($e+2), $rs_export[$e]['vAccessType'])
+            ->setCellValue('F'.($e+2), $rs_export[$e]['vMSOYr'])
+            ->setCellValue('G'.($e+2), $rs_export[$e]['vMSANum'])
+            ->setCellValue('H'.($e+2), $iStatus);
         }
                             
         /* Set Auto width of each comlumn */
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
         
         /* Set Font to Bold for each comlumn */
-        $objPHPExcel->getActiveSheet()->getStyle('A1:C1')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A1:H1')->getFont()->setBold(true);
         
 
         /* Set Alignment of Selected Columns */
-        $objPHPExcel->getActiveSheet()->getStyle("A1:A".($e+3))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle("A1:H".($e+3))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
         // Rename worksheet
-        $objPHPExcel->getActiveSheet()->setTitle('Connection Type');
+        $objPHPExcel->getActiveSheet()->setTitle('Company');
 
         // Set active sheet index to the first sheet, so Excel opens this as the first sheet
         $objPHPExcel->setActiveSheetIndex(0);
