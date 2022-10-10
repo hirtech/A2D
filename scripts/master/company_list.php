@@ -258,10 +258,6 @@ if($mode == "List"){
     curl_close($ch);  
    
     $result_arr = json_decode($response, true);
-
-    $total = $result_arr['result']['total_record'];
-    $jsonData = array('sEcho' => $sEcho, 'iTotalDisplayRecords' => $total, 'iTotalRecords' => $total, 'aaData' => array());
-    $entry = $hidden_arr = array();
     $rs_export = $result_arr['result']['data'];
     $cnt_export = count($rs_export);
 
