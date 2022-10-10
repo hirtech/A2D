@@ -16,7 +16,7 @@
             <button id="tourfirst" data-toggle="dropdown" aria-expanded="false" class="btn btn-primary p-1 rounded mx-3 h4 mb-0 line-height-1 d-none d-lg-block">
                 <span class="text-white font-weight-bold h5">+</span></button>
                <div class="dropdown-menu left p-0">
-                    <a href="{$site_url}sr/add" class="dropdown-item px-2">Create Fiber Inquiry</a><!-- 
+                    <a href="{$site_url}fiber_inquiry/add" class="dropdown-item px-2">Create Fiber Inquiry</a><!-- 
                     <a href="" class="dropdown-item px-2">Add New User</a>
                     <a href="" class="dropdown-item px-2">New Campain</a>
                     <div class="dropdown-divider"></div>
