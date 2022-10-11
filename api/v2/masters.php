@@ -9,6 +9,7 @@ include_once($controller_path . "county.inc.php");
 include_once($controller_path . "engagement.inc.php");
 include_once($controller_path . "connection_type.inc.php");
 include_once($controller_path . "company.inc.php");
+include_once($controller_path . "service_type.inc.php");
 include_once($function_path."image.inc.php");
 include_once($function_path."site_general.inc.php");
 
@@ -1272,6 +1273,114 @@ if($request_type == "city_list"){
     $rs_db = $CompanyObj->delete_records($iCompanyId);
     if($rs_db){
         $response_data = array("Code" => 200, "Message" => MSG_DELETE, "iCompanyId" => $iCompanyId);
+    }else{
+        $response_data = array("Code" => 500 , "Message" => MSG_DELETE_ERROR);
+    }
+}else if($request_type == "service_type_list"){
+    $ServiceTypeObj = new ServiceType();
+    $where_arr = array();
+    if(!empty($RES_PARA)){
+        $vServiceType           = trim($RES_PARA['vServiceType']);
+        $iStatus                = trim($RES_PARA['iStatus']);
+        $page_length            = isset($RES_PARA['page_length']) ? trim($RES_PARA['page_length']) : "10";
+        $start                  = isset($RES_PARA['start']) ? trim($RES_PARA['start']) : "0";
+        $sEcho                  = $RES_PARA['sEcho'];
+        $display_order          = $RES_PARA['display_order'];
+        $dir                    = $RES_PARA['dir'];
+    }
+
+    if ($vServiceType != "") {
+        $where_arr[] = 'service_type_mas."vServiceType" ILIKE \''.$vServiceType.'%\'';
+    }
+    
+    if ($iStatus != "") {
+        if(strtolower($iStatus) == "active"){
+            $where_arr[] = "service_type_mas.\"iStatus\" = '1'";
+        }
+        else if(strtolower($iStatus) == "inactive"){
+            $where_arr[] = "service_type_mas.\"iStatus\" = '0'";
+        }
+    }
+
+    switch ($display_order) {
+        case "0" : 
+            $sortname = "service_type_mas.\"iServiceTypeId\"";
+            break;
+        case "1":
+            $sortname = "service_type_mas.\"vServiceType\"";
+            break;
+        case "2":
+            $sortname = "service_type_mas.\"iStatus\"";
+            break;
+        default:
+            $sortname = 'service_type_mas."vServiceType"';
+            break;
+    }
+
+    $join_fieds_arr = array();
+    $join_arr = array();
+    $ServiceTypeObj->join_field = $join_fieds_arr;
+    $ServiceTypeObj->join = $join_arr;
+    $ServiceTypeObj->where = $where_arr;
+    $ServiceTypeObj->param['order_by'] = $sortname . " " . $dir;
+    $ServiceTypeObj->param['limit'] = $limit;
+    $ServiceTypeObj->setClause();
+    $ServiceTypeObj->debug_query = false;
+    $rs_service_type = $ServiceTypeObj->recordset_list();
+    $total = $ServiceTypeObj->recordset_total();
+    $data = array();
+    $ni = count($rs_service_type);
+    if($ni > 0){
+        for($i=0;$i<$ni;$i++){
+            $data[] = array(
+                "iServiceTypeId"        => gen_strip_slash($rs_service_type[$i]['iServiceTypeId']),
+                "vServiceType"          => gen_strip_slash($rs_service_type[$i]['vServiceType']),
+                "iStatus"               => $rs_service_type[$i]['iStatus'],
+            );
+        }
+    }
+    $result = array('data' => $data , 'total_record' => $total);
+
+    $rh = HTTPStatus(200);
+    $code = 2000;
+    $message = api_getMessage($req_ext, constant($code));
+    $response_data = array("Code" => 200, "Message" => $message, "result" => $result);
+}else if($request_type == "service_type_add"){
+    $ServiceTypeObj = new ServiceType();
+    $insert_arr = array(
+        "vServiceType"      => $RES_PARA['vServiceType'],
+        "iStatus"           => $RES_PARA['iStatus'],
+    );
+    $ServiceTypeObj->insert_arr = $insert_arr;
+    $ServiceTypeObj->setClause();
+    $iServiceTypeId = $ServiceTypeObj->add_records();
+    if(isset($iServiceTypeId)){
+        $response_data = array("Code" => 200, "Message" => MSG_ADD, "iServiceTypeId" => $iServiceTypeId);
+    }else{
+        $response_data = array("Code" => 500 , "Message" => MSG_ADD_ERROR);
+    }
+}else if($request_type == "service_type_edit"){
+    $ServiceTypeObj = new ServiceType();
+    $update_arr = array(
+        "iServiceTypeId"        => $RES_PARA['iServiceTypeId'],
+        "vServiceType"          => $RES_PARA['vServiceType'],
+        "iStatus"               => $RES_PARA['iStatus'],
+    );
+    //echo "<pre>";print_r($update_arr);exit;
+    $ServiceTypeObj->update_arr = $update_arr;
+    $ServiceTypeObj->setClause();
+    $iServiceTypeId = $ServiceTypeObj->update_records();
+    if(isset($iServiceTypeId)){
+        $response_data = array("Code" => 200, "Message" => MSG_UPDATE, "iServiceTypeId" => $RES_PARA['iServiceTypeId']);
+    }else{
+        $response_data = array("Code" => 500 , "Message" => MSG_UPDATE_ERROR);
+    }
+}else if($request_type == "service_type_delete"){
+    $ServiceTypeObj = new ServiceType();
+    $iServiceTypeId = $RES_PARA['iServiceTypeId'];
+    $rs_db = $ServiceTypeObj->delete_records($iServiceTypeId);
+    if($rs_db){
+        $response_data = array("Code" => 200, "Message" => MSG_DELETE, "iServiceTypeId" => $iServiceTypeId);
     }else{
         $response_data = array("Code" => 500 , "Message" => MSG_DELETE_ERROR);
     }

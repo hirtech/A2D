@@ -120,6 +120,12 @@ RewriteRule ^master/company_list? index.php?module=$0&page=m-company_list&%{QUER
 RewriteRule ^master/company_list index.php?module=$0&page=m-company_list
 #---------------------
 
+#---------------------
+#Service Type Master
+RewriteRule ^master/service_type_list? index.php?module=$0&page=m-service_type_list&%{QUERY_STRING}
+RewriteRule ^master/service_type_list index.php?module=$0&page=m-service_type_list
+#---------------------
+
 #-------Site Mgmt----------------
 #Site
 RewriteRule ^premise/list index.php?module=$0&page=m-premise_list&%{QUERY_STRING}
