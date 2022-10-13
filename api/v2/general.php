@@ -16,29 +16,12 @@ include_once($controller_path . "agent_mosquito.inc.php");
 include_once($controller_path . "test_method_mosquito.inc.php");
 include_once($controller_path . "result.inc.php");
 include_once($controller_path . "department.inc.php");
-include_once($controller_path . "access_group.inc.php");
 include_once($controller_path . "engagement.inc.php");
+include_once($controller_path . "company.inc.php");
+include_once($controller_path . "connection_type.inc.php");
+include_once($controller_path . "service_type.inc.php");
 
-if($request_type == "access_group_dropdown") {
-	$AccessGroupObj = new AccessGroup();
-	$where_arr = array();
-    $join_fieds_arr = array();
-    $join_arr  = array();
-    $iStatus = $RES_PARA['iStatus'];
-    $where_arr = array();
-    if($iStatus != ''){
-        $where_arr[] = "\"iStatus\"='".$iStatus."'";
-    }
-	$AccessGroupObj->where = $where_arr;
-	$AccessGroupObj->param['order_by'] = "\"vAccessGroup\"";
-	$AccessGroupObj->setClause();
-	$rs_access_group = $AccessGroupObj->recordset_list();;
-	if($rs_access_group){
-        $response_data = array("Code" => 200, "result" => $rs_access_group, "total_record" => count($rs_access_group));
-    }else{
-        $response_data = array("Code" => 500);
-    }
-}else if($request_type == "department_dropdown") {
+if($request_type == "department_dropdown") {
 	$DepartmentObj = new Department();
 	$where_arr = array();
     $join_fieds_arr = array();
@@ -577,6 +560,66 @@ if($request_type == "access_group_dropdown") {
     $rs_eng = $EngagementObj->recordset_list();
     if($rs_eng){
         $response_data = array("Code" => 200, "result" => $rs_eng, "total_record" => count($rs_eng));
+    }else{
+        $response_data = array("Code" => 500);
+    }
+}else if($request_type == "company_dropdown"){
+    $where_arr = array();
+    $join_fieds_arr = array();
+    $join_arr  = array();
+    $CompanyObj = new Company();
+    $iStatus = $RES_PARA['iStatus'];
+    $where_arr = array();
+    if($iStatus != ''){
+        $where_arr[] = "company_mas.\"iStatus\"='".$iStatus."'";
+    }
+    $CompanyObj->where = $where_arr;
+    $CompanyObj->param['order_by'] = "company_mas.\"vCompanyName\"";
+    $CompanyObj->setClause();
+    $rs_company = $CompanyObj->recordset_list();
+    //print_r($rs_company);exit;
+    if($rs_company){
+        $response_data = array("Code" => 200, "result" => $rs_company, "total_record" => count($rs_company));
+    }else{
+        $response_data = array("Code" => 500);
+    }
+}else if($request_type == "connection_type_dropdown"){
+    $where_arr = array();
+    $join_fieds_arr = array();
+    $join_arr  = array();
+    $ConnectionTypeObj = new ConnectionType();
+    $iStatus = $RES_PARA['iStatus'];
+    $where_arr = array();
+    if($iStatus != ''){
+        $where_arr[] = "connection_type_mas.\"iStatus\"='".$iStatus."'";
+    }
+    $ConnectionTypeObj->where = $where_arr;
+    $ConnectionTypeObj->param['order_by'] = "connection_type_mas.\"vConnectionTypeName\"";
+    $ConnectionTypeObj->setClause();
+    $rs_connection_type = $ConnectionTypeObj->recordset_list();
+    //print_r($rs_connection_type);exit;
+    if($rs_connection_type){
+        $response_data = array("Code" => 200, "result" => $rs_connection_type, "total_record" => count($rs_connection_type));
+    }else{
+        $response_data = array("Code" => 500);
+    }
+}else if($request_type == "service_type_dropdown"){
+    $where_arr = array();
+    $join_fieds_arr = array();
+    $join_arr  = array();
+    $ServiceTypeObj = new ServiceType();
+    $iStatus = $RES_PARA['iStatus'];
+    $where_arr = array();
+    if($iStatus != ''){
+        $where_arr[] = "service_type_mas.\"iStatus\"='".$iStatus."'";
+    }
+    $ServiceTypeObj->where = $where_arr;
+    $ServiceTypeObj->param['order_by'] = "service_type_mas.\"vServiceType\"";
+    $ServiceTypeObj->setClause();
+    $rs_service_type = $ServiceTypeObj->recordset_list();
+    //print_r($rs_service_type);exit;
+    if($rs_service_type){
+        $response_data = array("Code" => 200, "result" => $rs_service_type, "total_record" => count($rs_service_type));
     }else{
         $response_data = array("Code" => 500);
     }

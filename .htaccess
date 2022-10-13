@@ -139,8 +139,19 @@ RewriteRule ^premise/add index.php?module=$0&page=m-premise_add
 #Site History
 RewriteRule ^premise/history&(.*)$ index.php?module=$0&page=m-premise_history&%{QUERY_STRING}
 RewriteRule ^premise/history index.php?module=$0&page=m-premise_history
+#---------------------
 
 #---------------------
+#Service Order
+RewriteRule ^service_order/list? index.php?module=$0&page=m-service_order_list&%{QUERY_STRING}
+RewriteRule ^service_order/list index.php?module=$0&page=m-service_order_list
+RewriteRule ^service_order/edit&(.*)$ index.php?module=$0&page=m-service_order_add&%{QUERY_STRING} [L]
+RewriteRule ^service_order/edit index.php?module=$0&page=m-service_order_add
+RewriteRule ^service_order/add&(.*)$ index.php?module=$0&page=m-service_order_add&%{QUERY_STRING} [L]
+RewriteRule ^service_order/add? index.php?module=$0&page=m-service_order_add&%{QUERY_STRING} [L]
+RewriteRule ^service_order/add index.php?module=$0&page=m-service_order_add
+#---------------------
+
 #------Treatment Product-------------
 RewriteRule ^master/treatment_product_list&(.*)$ index.php?module=$0&page=m-treatment_product_list&%{QUERY_STRING}
 RewriteRule ^master/treatment_product_list index.php?module=$0&page=m-treatment_product_list

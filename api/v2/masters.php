@@ -40,6 +40,8 @@ if($request_type == "city_list"){
             $sortname = 'city_mas."vCity"';
             break;
     }
+	
+	$limit = "LIMIT ".$page_length." OFFSET ".$start."";
 
     $join_fieds_arr = array();
     $join_arr = array();
@@ -614,6 +616,8 @@ if($request_type == "city_list"){
             $sortname = 'site_attribute_mas."vAttribute"';
             break;
     }
+	
+	$limit = "LIMIT ".$page_length." OFFSET ".$start."";
 
     $join_fieds_arr = array();
     $join_arr = array();
@@ -941,6 +945,8 @@ if($request_type == "city_list"){
             $sortname = 'engagement_mas."vEngagement"';
             break;
     }
+	
+	$limit = "LIMIT ".$page_length." OFFSET ".$start."";
 
     $join_fieds_arr = array();
     $join_arr = array();
@@ -1049,6 +1055,8 @@ if($request_type == "city_list"){
             $sortname = 'connection_type_mas."vConnectionTypeName"';
             break;
     }
+	
+	$limit = "LIMIT ".$page_length." OFFSET ".$start."";
 
     $join_fieds_arr = array();
     $join_arr = array();
@@ -1192,6 +1200,8 @@ if($request_type == "city_list"){
             $sortname = 'company_mas."vCompanyType"';
             break;
     }
+	
+	$limit = "LIMIT ".$page_length." OFFSET ".$start."";
 
     $join_fieds_arr = array();
     $join_arr = array();
@@ -1316,6 +1326,8 @@ if($request_type == "city_list"){
             $sortname = 'service_type_mas."vServiceType"';
             break;
     }
+	
+	$limit = "LIMIT ".$page_length." OFFSET ".$start."";
 
     $join_fieds_arr = array();
     $join_arr = array();
