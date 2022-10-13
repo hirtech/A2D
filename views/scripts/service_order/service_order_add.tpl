@@ -60,6 +60,7 @@
                                         <label for="iPremiseId">Premise <span class="text-danger">*</span></label>
                                         <input type="text" name="vPremiseName"  class="form-control " id="vPremiseName" placeholder="Search Premise Id or Premise Name" value="{if $rs_sorder[0].iPremiseId}{if $rs_sorder[0].vPremiseName neq ''}{$rs_sorder[0].vPremiseName|gen_strip_slash} - {/if}PremiseID# {$rs_sorder[0].iPremiseId}{/if}"  required>
                                         <input type="hidden" id="search_iPremiseId" name="search_iPremiseId" value="{$rs_sorder[0].iPremiseId}"/>
+                                        <img class="clear_address" src="assets/images/icon-delete.png" style="cursor:pointer;" onclick="return clear_serach_premise();">
                                         <div class="invalid-feedback" id="errmsg_search_premise">Please enter premise</div>
                                     </div>
                                 </div>
@@ -145,3 +146,11 @@
 <script type="text/javascript">
 var mode = '{$mode}';
 </script>
+<style type="text/css">
+    img.clear_address {
+        position: absolute;
+        right: 20px;
+        top: 42px;
+        width: 12px;
+    }
+</style>

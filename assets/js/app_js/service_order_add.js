@@ -85,3 +85,8 @@ $("#save_data").click(function(){
         $("#save_data").prop('disabled', false);
     }
 });
+
+function clear_serach_premise(){
+    $("#vPremiseName").typeahead('val','');
+    $("#search_iPremiseId").val('');
+}
