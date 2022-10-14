@@ -227,6 +227,23 @@ else if($request_type == "network_edit"){
         $message = api_getMessage($req_ext, constant($code));
         $response_data = array("Code" => 500 , "Message" => $message , "result" => array());
     }
+}else if($request_type == "network_dropdown"){
+    $where_arr = array();
+    $join_fieds_arr = array();
+    $join_arr  = array();
+    $iStatus = $RES_PARA['iStatus'];
+    if($iStatus != ''){
+        $where_arr[] = "network.\"iStatus\"='".$iStatus."'";
+    }
+    $NetworkObj->where = $where_arr;
+    $NetworkObj->param['order_by'] = "network.\"vName\"";
+    $NetworkObj->setClause();
+    $rs_network = $NetworkObj->recordset_list();
+    if($rs_network){
+        $response_data = array("Code" => 200, "result" => $rs_network, "total_record" => count($rs_network));
+    }else{
+        $response_data = array("Code" => 500);
+    }
 }
 else {
    $r = HTTPStatus(400);

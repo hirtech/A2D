@@ -33,8 +33,8 @@ if($request_type == "premise_list"){
         $CityFilterOpDD		= $RES_PARA['CityFilterOpDD'];
         $vState				= $RES_PARA['vState'];
         $StateFilterOpDD	= $RES_PARA['StateFilterOpDD'];
-        $vCountry			= $RES_PARA['vCountry'];
-        $CountryFilterOpDD	= $RES_PARA['CountryFilterOpDD'];
+        $iZoneId			= $RES_PARA['iZoneId'];
+        $iNetworkId         = $RES_PARA['iNetworkId'];
         $status				= $RES_PARA['status'];
     }
 	
@@ -133,21 +133,13 @@ if($request_type == "premise_list"){
         }
     }
 
-    if ($vCountry != "") {
-        if ($CountryFilterOpDD != "") {
-            if ($CountryFilterOpDD == "Begins") {
-                $where_arr[] = 'c."vCounty" ILIKE \''.trim($vCountry).'%\'';
-            } else if ($CountryFilterOpDD == "Ends") {
-                $where_arr[] = 'c."vCounty" ILIKE \'%'.trim($vCountry).'\'';
-            } else if ($CountryFilterOpDD == "Contains") {
-                $where_arr[] = 'c."vCounty" ILIKE \'%'.trim($vCountry).'%\'';
-            } else if ($CountryFilterOpDD == "Exactly") {
-                $where_arr[] = 'c."vCounty" ILIKE \''.trim($vCountry).'\'';
-            }
-        } else {
-            $where_arr[] = 'c."vCounty" ILIKE \''.trim($vCountry).'%\'';
-        }
+    if ($iZoneId != "") {
+        $where_arr[] = "s.\"iZoneId\"='".$iZoneId."'";
     }
+    if ($iNetworkId != "") {
+        $where_arr[] = "z.\"iNetworkId\"='".$iNetworkId."'";
+    }
+
     if ($status != "") {
         $where_arr[] = "s.\"iStatus\"='".$status."'";
     }

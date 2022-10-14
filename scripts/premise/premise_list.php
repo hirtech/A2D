@@ -87,9 +87,16 @@ if($mode == "List"){
         $arr_param['StateFilterOpDD'] = $_REQUEST['StateFilterOpDD'];
     }
 
-    if($_REQUEST['vCountry'] != ""){
-        $arr_param['vCountry'] = $_REQUEST['vCountry'];
-        $arr_param['CountryFilterOpDD'] = $_REQUEST['CountryFilterOpDD'];
+    if($_REQUEST['iZoneId'] != ""){
+        $arr_param['iZoneId'] = $_REQUEST['iZoneId'];
+    }
+
+    if($_REQUEST['iNetworkId'] != ""){
+        $arr_param['iNetworkId'] = $_REQUEST['iNetworkId'];
+    }
+    
+    if($_REQUEST['status'] != ""){
+        $arr_param['status'] = $_REQUEST['status'];
     }
 
     $arr_param['page_length'] = $page_length;
@@ -878,7 +885,6 @@ $smarty->assign("rs_site_type", $rs_site_type);
 
 ## --------------------------------
 # Premise Sub type Dropdown
-
 $SiteSubTypeObj = new SiteSubType();
 $where_arr = array();
 $SiteSubTypeObj->where = $where_arr;
@@ -887,7 +893,57 @@ $SiteSubTypeObj->setClause();
 $rs_site_sub_type = $SiteSubTypeObj->recordset_list();
 $smarty->assign("rs_site_sub_type", $rs_site_sub_type);
 ## --------------------------------
-
+## --------------------------------
+# Network Dropdown
+$network_arr_param = array();
+$network_arr_param = array(
+    "iStatus"        => 1,
+    "sessionId"     => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
+);
+$network_API_URL = $site_api_url."network_dropdown.json";
+//echo $network_API_URL." ".json_encode($network_arr_param);
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $network_API_URL);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_HEADER, FALSE);
+curl_setopt($ch, CURLOPT_POST, TRUE);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($network_arr_param));
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+   "Content-Type: application/json",
+));
+$response_network = curl_exec($ch);
+curl_close($ch); 
+$rs_network = json_decode($response_network, true); 
+$rs_ntwork = $rs_network['result'];
+$smarty->assign("rs_ntwork", $rs_ntwork);
+## --------------------------------
+## --------------------------------
+# Zone Dropdown
+$zone_arr_param = array();
+$zone_arr_param = array(
+    "iStatus"        => 1,
+    "sessionId"     => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
+);
+$zone_API_URL = $site_api_url."zone_dropdown.json";
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $zone_API_URL);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_HEADER, FALSE);
+curl_setopt($ch, CURLOPT_POST, TRUE);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($zone_arr_param));
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+   "Content-Type: application/json",
+));
+$response_zone = curl_exec($ch);
+curl_close($ch); 
+$rs_zone1 = json_decode($response_zone, true); 
+$rs_zone = $rs_zone1['result'];
+$smarty->assign("rs_zone", $rs_zone);
+## --------------------------------
 /*-----------------Mosquito Species ---------------------------*/
 $arr_param = array();
 $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];

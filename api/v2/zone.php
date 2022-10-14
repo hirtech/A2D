@@ -244,7 +244,7 @@ if($request_type == "zone_list"){
         $where_arr[] = "zone.\"iStatus\"='".$iStatus."'";
     }
     $ZoneObj->where = $where_arr;
-    $ZoneObj->param['order_by'] = "zone.\"iZoneId\"";
+    $ZoneObj->param['order_by'] = "zone.\"vZoneName\"";
     $ZoneObj->setClause();
     $rs_zone = $ZoneObj->recordset_list();
     if($rs_zone){

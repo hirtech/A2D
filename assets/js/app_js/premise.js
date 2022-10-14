@@ -200,10 +200,9 @@ $('#AdvSearchReset').click(function () {
     $('#vCity').val("");
     $('#StateFilterOpDD').val("Contains");
     $('#vState').val("");
-    $('#CountryFilterOpDD').val("Contains");
-    $('#vCountry').val("");
+    $('#iZoneId').val("");
+    $('#iNetworkId').val("");
     $('#status').val("");
-    $('#iGeometryType').val("");
     gridtable.ajax.reload();
     return false;
 });
