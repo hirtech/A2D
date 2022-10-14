@@ -225,7 +225,7 @@ else if($request_type == "contact_list"){
 
     switch ($display_order) {
         case "0":
-         $sortname = "contact_mas.\"iCId\"";
+            $sortname = "contact_mas.\"iCId\"";
             break;
         case "1":
             $sortname = "concat(contact_mas.\"vSalutation\",' ',contact_mas.\"vFirstName\", ' ', contact_mas.\"vLastName\" )";
@@ -242,8 +242,8 @@ else if($request_type == "contact_list"){
         case "6":
             $sortname = "contact_mas.\"iStatus\"";
             break;
-        default:
-            $sortname = 'contact_mas."iCId"';
+        case "0":
+            $sortname = "contact_mas.\"iCId\"";
             break;
     }
 

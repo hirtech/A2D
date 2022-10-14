@@ -12,10 +12,10 @@ $access_group_var_edit = per_hasModuleAccess("Company", 'Edit', 'N');
 # ------------------------------------------------------------
 $page = $_REQUEST['page'];
 $mode = isset($_REQUEST['mode']) ? $_REQUEST['mode'] : 'list';
-$page_length = isset($_REQUEST['iDisplayLength']) ? $_REQUEST['iDisplayLength'] : '1';
+$page_length = isset($_REQUEST['iDisplayLength']) ? $_REQUEST['iDisplayLength'] : '10';
 $start = isset($_REQUEST['iDisplayStart']) ? $_REQUEST['iDisplayStart'] : '0';
 $sEcho = (isset($_REQUEST["sEcho"]) ? $_REQUEST["sEcho"] : '0');
-$display_order = (isset($_REQUEST["iSortCol_0"]) ? $_REQUEST["iSortCol_0"] : '1');
+$display_order = (isset($_REQUEST["iSortCol_0"]) ? $_REQUEST["iSortCol_0"] : '0');
 $dir = (isset($_REQUEST["sSortDir_0"]) ? $_REQUEST["sSortDir_0"] : 'desc');
 # ------------------------------------------------------------
 if($mode == "List"){
@@ -74,7 +74,7 @@ if($mode == "List"){
             }
 
             $entry[] = array(                        
-                "checkbox" =>$rs_company[$i]['iCompanyId'].'<input type="hidden" id="engagement_id_'.$rs_company[$i]['iCompanyId'].'" value="'.$rs_company[$i]['iCompanyId'].'">',
+                "checkbox" =>$rs_company[$i]['iCompanyId'].'<input type="hidden" id="company_id_'.$rs_company[$i]['iCompanyId'].'" value="'.$rs_company[$i]['iCompanyId'].'">',
                 "vCompanyType" =>gen_strip_slash($rs_company[$i]['vCompanyType']).'<input type="hidden" id="company_type_'.$rs_company[$i]['iCompanyId'].'" value="'.$rs_company[$i]['vCompanyType'].'">',
                 "vCompanyName" =>gen_strip_slash($rs_company[$i]['vCompanyName']).'<input type="hidden" id="company_name_'.$rs_company[$i]['iCompanyId'].'" value="'.$rs_company[$i]['vCompanyName'].'">',
                 "vNameId" =>gen_strip_slash($rs_company[$i]['vNameId']).'<input type="hidden" id="name_id_'.$rs_company[$i]['iCompanyId'].'" value="'.$rs_company[$i]['vNameId'].'">',

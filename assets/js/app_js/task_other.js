@@ -12,7 +12,7 @@ var listPage = function(){
                 "serverSide": true,
                 "orderMulti" : false,
                 "ajaxSource": site_url+ajax_url,
-                "aaSorting": [4,'Desc'],
+                "aaSorting": [0,'Desc'],
                 'bAutoWidth': true,
                 "columns": [
                     { "data": "iTOId", "className": "text-center", "width" : "2%"},

@@ -68,7 +68,7 @@ if($request_type == "task_mosquito_pool_list"){
             $sortname = 'task_mosquito_pool."vPool"';
             break;
         default:
-            $sortname = 'task_trap."iTTId"';
+            $sortname = 'task_mosquito_pool."iTMPId"';
             break;
     }
 

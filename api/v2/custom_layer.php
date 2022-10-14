@@ -40,7 +40,7 @@ if($request_type == "custom_layer_list"){
         case "2":
             $sortname = "\"iStatus\"";
             break;
-        default:
+        case "0":
             $sortname = "\"iCLId\"";
             break;
     }

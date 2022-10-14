@@ -23,7 +23,7 @@ var listPage = function(){
                 "ajaxSource": site_url+ajax_url,
                 "sAjaxSourceData": myData,
                 'serverMethod': 'post',
-                "aaSorting": [[1,'Desc']],
+                "aaSorting": [[0,'Desc']],
                 'bAutoWidth': true,
                 "columns": [
                     { "data": "checkbox", "sortable":false, "className": "text-center", "width" : "1%"},

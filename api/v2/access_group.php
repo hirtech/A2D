@@ -42,7 +42,7 @@ if($request_type == "access_group_list"){
             $sortname = "access_group_mas.\"iStatus\"";
             break;
         default:
-            $sortname = 'access_group_mas."vAccessGroup"';
+            $sortname = "access_group_mas.\"iAGroupId\"";
             break;
     }
     $limit = "LIMIT ".$page_length." OFFSET ".$start."";

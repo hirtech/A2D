@@ -15,7 +15,7 @@ $mode = isset($_REQUEST['mode']) ? $_REQUEST['mode'] : 'list';
 $page_length = isset($_REQUEST['iDisplayLength']) ? $_REQUEST['iDisplayLength'] : '10';
 $start = isset($_REQUEST['iDisplayStart']) ? $_REQUEST['iDisplayStart'] : '0';
 $sEcho = (isset($_REQUEST["sEcho"]) ? $_REQUEST["sEcho"] : '0');
-$display_order = (isset($_REQUEST["iSortCol_0"]) ? $_REQUEST["iSortCol_0"] : '1');
+$display_order = (isset($_REQUEST["iSortCol_0"]) ? $_REQUEST["iSortCol_0"] : '0');
 $dir = (isset($_REQUEST["sSortDir_0"]) ? $_REQUEST["sSortDir_0"] : 'desc');
 # ------------------------------------------------------------
 if($mode == "List"){
@@ -74,7 +74,7 @@ if($mode == "List"){
             }
 
             $entry[] = array(                        
-                "checkbox" =>$rs_connection_type[$i]['iConnectionTypeId'].'<input type="hidden" id="engagement_id_'.$rs_connection_type[$i]['iConnectionTypeId'].'" value="'.$rs_connection_type[$i]['iConnectionTypeId'].'">',
+                "checkbox" =>$rs_connection_type[$i]['iConnectionTypeId'].'<input type="hidden" id="connection_type__id_'.$rs_connection_type[$i]['iConnectionTypeId'].'" value="'.$rs_connection_type[$i]['iConnectionTypeId'].'">',
                 "vConnectionTypeName" =>gen_strip_slash($rs_connection_type[$i]['vConnectionTypeName']).'<input type="hidden" id="connection_type_name_'.$rs_connection_type[$i]['iConnectionTypeId'].'" value="'.$rs_connection_type[$i]['vConnectionTypeName'].'">',
                 "iStatus" => '<span data-toggle="tooltip" data-placement="top" title="'.gen_status($rs_connection_type[$i]['iStatus']).'" class="badge badge-pill badge-'.$status_color[ gen_status($rs_connection_type[$i]['iStatus'])].'">&nbsp;</span><input type="hidden" id="connection_type_status_'.$rs_connection_type[$i]['iConnectionTypeId'].'" value="'.gen_status($rs_connection_type[$i]['iStatus']).'">',
                 "actions" => ($action == "")?"---":$action

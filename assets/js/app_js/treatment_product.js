@@ -16,7 +16,7 @@ var listPage = function(){
                 "ajaxSource": site_url+ajax_url,
                 "sAjaxSourceData": myData,
                 'serverMethod': 'post',
-                "aaSorting": [[1,'Desc']],
+                "aaSorting": [[0,'Desc']],
                 'bAutoWidth': true,
                 "columns": [
                     { "data": "iTPId", "className": "text-center", "width" : "2%"},

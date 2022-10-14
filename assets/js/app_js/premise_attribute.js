@@ -12,7 +12,7 @@ var listPage = function(){
                 "serverSide": true,
                 "orderMulti" : false,
                 "ajaxSource": site_url+ajax_url,
-                "aaSorting": [[1,'asc']],
+                "aaSorting": [[0,'DESC']],
                 'bAutoWidth': true,
                 "columns": [
                     { "data": "checkbox", "sortable":true, "className": "text-center", "width" : "1%"},

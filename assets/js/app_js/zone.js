@@ -13,7 +13,7 @@ var listPage = function(){
                 "serverSide": true,
                 "orderMulti" : false,
                 "ajaxSource": site_url+ajax_url,
-                "aaSorting": [1,'Desc'],
+                "aaSorting": [0,'Desc'],
                 'bAutoWidth': true,
                 "columns": [
                     { "data": "iZoneId", "sortable":true, "className": "text-center", "width" : "1%"},

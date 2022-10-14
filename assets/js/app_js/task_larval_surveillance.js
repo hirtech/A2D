@@ -23,7 +23,7 @@ var listPage = function(){
                 "ajaxSource": site_url+ajax_url,
                 "sAjaxSourceData": myData,
                 'serverMethod': 'post',
-                "aaSorting": [4,'desc'],
+                "aaSorting": [0,'desc'],
                 'bAutoWidth': true,
                 "columns": [
                     { "data": "iTLSId", "className": "text-center", "width" : "2%"},

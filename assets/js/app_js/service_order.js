@@ -11,7 +11,7 @@ var listPage = function(){
                 "serverSide": true,
                 " " : false,
                 "ajaxSource": site_url+'service_order/list?mode=List',
-                "aaSorting": [[0,'asc']],
+                "aaSorting": [[0,'desc']],
                 'bAutoWidth': true,
                 "aoColumns": [
                     { "mData": "iServiceOrderId", "sortable":true, "className": "text-center", "width" : "1%"},

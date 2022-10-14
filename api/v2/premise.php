@@ -180,7 +180,7 @@ if($request_type == "premise_list"){
         case "10":
             $sortname = 's."iStatus"';
             break;
-        default:
+        case "1":
             $sortname = "s.\"iSiteId\"";
             break;
     }

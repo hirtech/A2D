@@ -37,7 +37,7 @@ if($request_type == "city_list"){
             $sortname = "city_mas.\"vCity\"";
             break;
         default:
-            $sortname = 'city_mas."vCity"';
+            $sortname = "city_mas.\"iCityId\"";
             break;
     }
 	
@@ -138,7 +138,7 @@ if($request_type == "city_list"){
             $sortname = "state_mas.\"vStateCode\"";
             break;
         default:
-            $sortname = 'state_mas."vState"';
+            $sortname = "state_mas.\"iStateId\"";
             break;
     }
 
@@ -236,7 +236,7 @@ if($request_type == "city_list"){
             $sortname = "county_mas.\"vCounty\"";
             break;
         default:
-            $sortname = 'county_mas."vCounty"';
+            $sortname = "county_mas.\"iCountyId\"";
             break;
     }
 
@@ -492,7 +492,7 @@ if($request_type == "city_list"){
             $sortname = "site_sub_type_mas.\"iStatus\"";
             break;
         default:
-            $sortname = 'site_sub_type_mas."vSubTypeName"';
+            $sortname = "site_sub_type_mas.\"iSSTypeId\"";
             break;
     }
     $limit = "LIMIT ".$page_length." OFFSET ".$start."";
@@ -613,7 +613,7 @@ if($request_type == "city_list"){
             $sortname = "site_attribute_mas.\"iStatus\"";
             break;
         default:
-            $sortname = 'site_attribute_mas."vAttribute"';
+            $sortname = "site_attribute_mas.\"iSAttributeId\"";
             break;
     }
 	
@@ -942,7 +942,7 @@ if($request_type == "city_list"){
             $sortname = "engagement_mas.\"iStatus\"";
             break;
         default:
-            $sortname = 'engagement_mas."vEngagement"';
+            $sortname = "engagement_mas.\"iEngagementId\"";
             break;
     }
 	
@@ -1052,7 +1052,7 @@ if($request_type == "city_list"){
             $sortname = "connection_type_mas.\"iStatus\"";
             break;
         default:
-            $sortname = 'connection_type_mas."vConnectionTypeName"';
+            $sortname = "connection_type_mas.\"iConnectionTypeId\"";
             break;
     }
 	
@@ -1197,7 +1197,7 @@ if($request_type == "city_list"){
             $sortname = "company_mas.\"iStatus\"";
             break;
         default:
-            $sortname = 'company_mas."vCompanyType"';
+            $sortname = "company_mas.\"iCompanyId\"";
             break;
     }
 	
@@ -1323,7 +1323,7 @@ if($request_type == "city_list"){
             $sortname = "service_type_mas.\"iStatus\"";
             break;
         default:
-            $sortname = 'service_type_mas."vServiceType"';
+            $sortname = "service_type_mas.\"iServiceTypeId\"";
             break;
     }
 	

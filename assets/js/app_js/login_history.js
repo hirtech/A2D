@@ -61,7 +61,7 @@ var listPage = function(){
                     return res;
                 }
             },*/
-            "aaSorting": [[4,'desc']],
+            "aaSorting": [[0,'desc']],
             "aoColumns": [
                 { "mData": "checkbox", "bSortable":true, "className": "text-center" , "width":"1%"},
                 { "mData": "vUsername", "width":"10%"},

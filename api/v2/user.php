@@ -129,7 +129,7 @@ if($request_type == "user_list"){
         	$sortname = "user_mas.\"iStatus\"";
         break;
         default:
-        	$sortname = 'user_mas."dDate"';
+        	$sortname = 'user_mas."iUserId"';
         break;
     }
 
@@ -498,10 +498,10 @@ if($request_type == "user_list"){
 
     switch ($display_order) {
         case "0":
-         $sortname = "login_logs_mas.\"iLLogsId\"";
+            $sortname = "login_logs_mas.\"iLLogsId\"";
             break;
         case "1":
-         $sortname = "user_mas.\"vUsername\"";
+            $sortname = "user_mas.\"vUsername\"";
             break;
         case "2":
             $sortname = "concat(user_mas.\"vFirstName\", ' ', user_mas.\"vLastName\" )";
@@ -516,7 +516,7 @@ if($request_type == "user_list"){
             $sortname = "login_logs_mas.\"dLogoutDate\"";
             break;
         default:
-            $sortname = 'login_logs_mas."dLoginDate"';
+            $sortname = "login_logs_mas.\"iLLogsId\"";
             break;
     }
 

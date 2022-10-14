@@ -24,7 +24,7 @@ $mode = isset($_REQUEST['mode']) ? $_REQUEST['mode'] : 'list';
 $page_length = isset($_REQUEST['iDisplayLength']) ? $_REQUEST['iDisplayLength'] : '10';
 $start = isset($_REQUEST['iDisplayStart']) ? $_REQUEST['iDisplayStart'] : '0';
 $sEcho = (isset($_REQUEST["sEcho"]) ? $_REQUEST["sEcho"] : '0');
-$display_order = (isset($_REQUEST["iSortCol_0"]) ? $_REQUEST["iSortCol_0"] : '1');
+$display_order = (isset($_REQUEST["iSortCol_0"]) ? $_REQUEST["iSortCol_0"] : '0');
 $dir = (isset($_REQUEST["sSortDir_0"]) ? $_REQUEST["sSortDir_0"] : 'desc');
 # ------------------------------------------------------------
 //echo "<pre>";print_r($access_group_var_delete);exit();
@@ -69,6 +69,7 @@ if($mode == "List"){
     
     //echo "<pre>";print_r(json_encode($arr_param));exit();
     $API_URL = $site_api_url."get_task_larval_surveillance_list.json";
+    //echo $API_URL. " ".json_encode($arr_param);exit;
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $API_URL);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
