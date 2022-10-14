@@ -112,7 +112,7 @@
                 </div>
             </div>
             <div class="form-group col-md-4">
-                <label for="inputEmail4">Zone</label>
+                <label for="inputEmail4">Network</label>
                 <div class="form-row">
                     <div class="form-group col-md-12">
                         <select name="iNetworkId" id="iNetworkId" class="form-control col-md-12">
