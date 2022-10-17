@@ -15,6 +15,8 @@ let zoneLatLngPoly = [];
 let zoneLatLngCircle = []; 
 let mapAddZoneSiteListner = []; 
 let addSiteMarker = null;
+let mapAddZoneBatchSiteListner = []; 
+let addBatchSiteMarker = [];
 let  infoWindow;
 
 $(document).ready(function() {
@@ -1225,6 +1227,102 @@ function cancleAddSite(){
     $("#sitedivmsg").html('Click the spot on the map where you want this site placed.');
     $("#btn_map_addsite").addClass('d-flex').removeClass('d-none');           
 }
+/**************** Add Batch-create Premises ****************/
+$("#btn_map_addbatchsite").click(function() {
+    //remove object of drwa shapes 
+    if ($("#showDistance").prop("checked")) {
+        $("#showDistance").prop("checked", false);
+    }
+    if ($("#showArea").prop("checked")) {
+        $("#showArea").prop("checked", false);
+    }
+    if ($("#showCircle").prop("checked")) {
+        $("#showCircle").prop("checked", false);
+    }
+    clearMapTool();
+    $('.collapse').collapse('hide')
+    //add site point
+    $("#batchsitedivmsg").html('<p>Click the multiple spot on the map where you want to create new premises.</p>');
+    $("#batchsitedivmsg").removeClass('d-none');
+    $(this).removeClass('d-flex').addClass('d-none');
+    //set access of zone area
+    if (zCount > 0) {
+        for (k = 0; k < zCount; k++) {
+            mapAddZoneBatchSiteListner[k] = google.maps.event.addListener(zonePolygonObj[k], 'click', (function(args) {
+                var sitelatlong = args.latLng;
+                var mrk = new google.maps.Marker({
+                    position: sitelatlong,
+                    draggable: true
+                });
+                
+                mrk.setMap(map);
+                addBatchSiteMarker.push(mrk);
+                $("#batchsitedivmsg").html('<p>When Finished, press the <b>\'Done\'</b> Button below.</p><div class="d-flex"><input type="button" class=" col-sm-6  btn-primary " id="btn_done_addbatchsite" value="Done"><button type="button" class="ml-1  col-sm-6  btn-danger " id="btn_cancle_addbatchsite">Cancel</button></div>');
+
+                if ($.isEmptyObject(mapAddZoneBatchSiteListner) == false) {
+                    for (g = 0; g < zCount; g++) {
+                        google.maps.event.removeListener(mapAddZoneBatchSiteListner[g]);
+                    }
+                    mapAddZoneBatchSiteListner = [];
+                }
+
+                $("#btn_done_addbatchsite").click(function() {
+                    addBatchSite();
+                });
+                $("#btn_cancle_addbatchsite").click(function() {
+                    cancleAddBatchSite();
+                });
+
+            }));
+        }
+    }
+    
+    map.AddBatchSiteListner =  google.maps.event.addListener(map, 'click', function (event) {
+        var marker = new google.maps.Marker({
+            position: event.latLng,
+            map: map
+        });
+
+        addBatchSiteMarker.push(marker);
+
+        $("#batchsitedivmsg").html('<p>When Finished, press the <b>\'Done\'</b> Button below.</p><div class="d-flex"><input type="button" class=" col-sm-6  btn-primary " id="btn_done_addbatchsite" value="Done"><button type="button" class="ml-1  col-sm-6  btn-danger " id="btn_cancle_addbatchsite">Cancel</button></div>');
+        $("#btn_done_addbatchsite").click(function() {
+            addBatchSite();
+        });
+        $("#btn_cancle_addbatchsite").click(function() {
+            cancleAddBatchSite();
+        });
+    });
+});
+
+function addBatchSite() {
+    if (addBatchSiteMarker.length > 0) {
+        var latlong = '';
+        for (i = 0; i < addBatchSiteMarker.length; i++) {
+            latlong += addBatchSiteMarker[i].position + '##';
+        }
+        //alert(lat_long_arr);return false;
+        $("#batch_latlong").val(latlong)
+        $("#batchPremises_box").trigger('click');
+
+    } else {
+        alert("Please select points on the map to create site");
+        return false;
+    }
+}
+function cancleAddBatchSite(){
+    if (addBatchSiteMarker.length > 0) {
+        for (i = 0; i < addBatchSiteMarker.length; i++) {
+            addBatchSiteMarker[i].setMap(null);
+        }
+        addBatchSiteMarker.length = 0;
+    }  
+    $("#batchsitedivmsg").addClass('d-none');
+    $("#batchsitedivmsg").html('Click the spot on the map where you want this site placed.');
+    $("#btn_map_addbatchsite").addClass('d-flex').removeClass('d-none');           
+}
+/**************** Add Batch-create Premises ****************/
+
 
 function clearLayersData(){
     siteTypes = [];

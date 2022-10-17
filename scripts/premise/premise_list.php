@@ -871,6 +871,54 @@ $kml .= '</kml>';
         unlink($file_path);
     }*/
     hc_exit();
+}else if($mode == "multiple_batch_premises"){
+	//echo "<pre>";print_r($_POST);exit;
+	$arr_param = array();
+    if (isset($_POST) && count($_POST) > 0) {
+        $arr_param = array(
+            "batch_latlong"		=> $_POST['batch_latlong'],
+            "iSMapTypeId"		=> $_POST['iSMapTypeId'],
+            "iSSMapTypeId"		=> $_POST['iSSMapTypeId'],
+            "iSMapAttributeId"	=> $_POST['iSMapAttributeId'],
+			"vLoginUserName"	=>$_SESSION["sess_vName".$admin_panel_session_suffix],
+            "sessionId"         => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
+        );
+        $API_URL = $site_api_url."premise_batch_multiple_add.json";
+        //echo $API_URL. " ". json_encode($arr_param);exit;
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $API_URL);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_HEADER, FALSE);
+        curl_setopt($ch, CURLOPT_POST, TRUE);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($arr_param));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+           "Content-Type: application/json",
+        ));
+
+        $response_site = curl_exec($ch);
+        curl_close($ch); 
+        $result_site_arr = json_decode($response_site, true); 
+
+        if(!empty($result_site_arr)){
+            $result['sites'] = @implode(",", $result_site_arr['site_arr']);
+            $result['msg'] = $result_site_arr['Message'];
+            $result['error']= 0 ;
+        }else{
+            $result['msg'] = $result_site_arr['Message'];
+            $result['error']= 1 ;
+        }
+    }else {
+        $result['msg'] = MSG_ADD_ERROR;
+        $result['error']= 1 ;
+    }
+    # -----------------------------------
+    # Return jSON data.
+    # -----------------------------------
+    echo json_encode($result);
+    hc_exit();
+    
 }
 
 # Premise Type Dropdown

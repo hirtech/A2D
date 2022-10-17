@@ -125,7 +125,7 @@ if($mode == "Update") {
 	//echo "<pre>";print_r($_REQUEST);exit();
     $premise_subtype_arr_param = array();
     $premise_subtype_arr_param = array(
-        "iState"        => 1,
+        "iStatus"        => 1,
         "iSTypeId"      => $_REQUEST['iSiteTypeId'],
         "sessionId"     => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
     );
@@ -414,7 +414,7 @@ if($_GET['lat'] != "" && $_GET['lat'] != ""){
 // Premise Type dropdown
 $premise_type_arr_param = array();
 $premise_type_arr_param = array(
-    "iState"    => 1,
+    "iStatus"    => 1,
     "sessionId" => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
 );
 $premise_type_API_URL = $site_api_url."premise_type_dropdown.json";
@@ -435,10 +435,11 @@ curl_close($ch);
 $rs_sitetype1 = json_decode($response_sitetype, true); 
 $rs_sitetype = $rs_sitetype1['result'];
 //echo "<pre>";print_r($rs_sitetype);exit();
+
 // Premise Attribute dropdown
 $premise_attr_arr_param = array();
 $premise_attr_arr_param = array(
-    "iState"    => 1,
+    "iStatus"    => 1,
     "sessionId" => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
 );
 $premise_attr_API_URL = $site_api_url."premise_attribute_dropdown.json";

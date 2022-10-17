@@ -760,6 +760,57 @@ function setSiteHistory($data)
 /*--------------------------------------------------------*/
 /*
 echo "<pre>";print_r($sk_zones);exit;*/
+
+
+$premise_type_arr_param = array();
+$premise_type_arr_param = array(
+    "iStatus"    => 1,
+    "sessionId" => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
+);
+$premise_type_API_URL = $site_api_url."premise_type_dropdown.json";
+//echo json_encode($premise_type_arr_param);exit();
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $premise_type_API_URL);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_HEADER, FALSE);
+curl_setopt($ch, CURLOPT_POST, TRUE);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($premise_type_arr_param));
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+   "Content-Type: application/json",
+));
+$response_sitetype = curl_exec($ch);
+curl_close($ch); 
+$rs_sitetype1 = json_decode($response_sitetype, true); 
+$rs_sitetype = $rs_sitetype1['result'];
+//echo "<pre>";print_r($rs_sitetype);exit();
+
+// Premise Attribute dropdown
+$premise_attr_arr_param = array();
+$premise_attr_arr_param = array(
+    "iStatus"    => 1,
+    "sessionId" => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
+);
+$premise_attr_API_URL = $site_api_url."premise_attribute_dropdown.json";
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $premise_attr_API_URL);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_HEADER, FALSE);
+curl_setopt($ch, CURLOPT_POST, TRUE);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($premise_attr_arr_param));
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+   "Content-Type: application/json",
+));
+$response_attr = curl_exec($ch);
+curl_close($ch); 
+$rs_siteattr1 = json_decode($response_attr, true); 
+$rs_siteattr = $rs_siteattr1['result'];
+$smarty->assign("rs_sitetype", $rs_sitetype);
+$smarty->assign("rs_siteattr", $rs_siteattr);
+
 $smarty->assign("cityArr", $cityArr);
 $smarty->assign("sAttrubutes", $sAttrubutes);
 $smarty->assign("skSites", $sTypes);

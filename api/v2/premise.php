@@ -675,7 +675,28 @@ if($request_type == "premise_list"){
     $code = 2000;
     $message = api_getMessage($req_ext, constant($code));
     $response_data = array("Code" => 200, "Message" => $message, "result" => $result);
-}else {
+}else if($request_type == "premise_batch_multiple_add"){
+    $SiteObj = new Site();
+    $insert_arr = array(
+        "latlong"            => $RES_PARA['batch_latlong'],
+        "iSTypeId"           => $RES_PARA['iSMapTypeId'],
+        "iSSTypeId"          => $RES_PARA['iSSMapTypeId'],
+        "iSAttributeId"      => $RES_PARA['iSMapAttributeId'],
+        "vLoginUserName"      => $RES_PARA['vLoginUserName'],
+    );
+    //echo "<pre>";print_r($insert_arr);exit;
+    $SiteObj->insert_arr = $insert_arr;
+    $SiteObj->setClause();
+    $site_arr = $SiteObj->add_multiple_site_records();
+
+    if($site_arr){
+        $response_data = array("Code" => 200, "Message" => "Muliple Premises Added Successfully", "site_arr" => $site_arr);
+    }
+    else{
+        $response_data = array("Code" => 500 , "Message" => MSG_ADD_ERROR);
+    }
+}
+else {
    $r = HTTPStatus(400);
    $code = 1001;
    $message = api_getMessage($req_ext, constant($code));

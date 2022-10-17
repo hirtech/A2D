@@ -548,54 +548,43 @@ class Site {
 	function add_multiple_site_records(){
 		
 		global $sqlObj, $GOOGLE_GEOCODE_API_KEY, $admin_panel_session_suffix;
+		//echo "<pre>";print_r($this->insert_arr);exit;
 
 		$search_arr = array("(", ")");
 		$replace_arr = array("", "");
 
-		$latlong = str_replace($search_arr, $replace_arr, $_POST['latlong']);
-		$iSTypeId = $_POST['iSTypeId'];
-		$iSSTypeId = $_POST['iSSTypeId'];
-
+		$latlong = str_replace($search_arr, $replace_arr, $this->insert_arr['latlong']);
+		$iSTypeId = $this->insert_arr['iSTypeId'];
+		$iSSTypeId = $this->insert_arr['iSSTypeId'];
+		$vLoginUserName = $this->insert_arr['vLoginUserName'];
+		//echo $latlong;exit;
 		if($latlong){
-
 			$latlong_arr = explode("##", $latlong);
-
 			$ni = count($latlong_arr);
-
+			//echo $ni;exit;
+			//echo "<pre>";print_r($latlong_arr);exit;
 			$site_arr = array();
-
 			if($ni > 0){
-
 				for ($i=0; $i < $ni; $i++) { 
-
 					$arr = explode(", ", $latlong_arr[$i]);
-
-					$vLatitude = $arr[0];
-					$vLongitude = $arr[1];
-
+					$vLatitude = trim($arr[0]);
+					$vLongitude = trim($arr[1]);
 					if($vLatitude != "" && $vLongitude != ""){
-
 						$url = "https://maps.googleapis.com/maps/api/geocode/json?key=$GOOGLE_GEOCODE_API_KEY&latlng=".$vLatitude.",".$vLongitude."&sensor=true";
 						$ch = curl_init();
-									
 						curl_setopt($ch,CURLOPT_URL,$url);
 						curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
 						curl_setopt($ch,CURLOPT_SSL_VERIFYPEER, false);
-						
 						$data = curl_exec($ch);
-					 
 						curl_close($ch);
-						
 						$jsondata = json_decode($data,true);
 						//echo "<pre>";print_r($data);exit;
-						
 						$address_arr = array();
-						
-						if(is_array($jsondata) && $jsondata['status'] == "OK"){							
-							 foreach($jsondata['results']['0']['address_components'] as $element){
+						if(is_array($jsondata) && $jsondata['status'] == "OK"){					
+							foreach($jsondata['results']['0']['address_components'] as $element){
 								$address_arr[$element['types'][0]]['short_name'] = $element['short_name'];
 								$address_arr[$element['types'][0]]['long_name'] = $element['long_name'];
-							 }
+							}
 						}
 						
 						$vAddress1 = "";
@@ -642,23 +631,31 @@ class Site {
 
 							if($vZipcode != "" && $iStateId != "" && $iCountyId != "" && $iCityId != "") {
 								$iZipcode = $this->getZipcodeId($vZipcode, $iStateId, $iCountyId, $iCityId);
-							}						
+							}	
+
+							$vName = $vAddress1." ".$vStreet;	
+							$iGeometryType = 1;
+							$iStatus = 1;
 							
-							$sql_in_add = 'INSERT INTO address_mas ("vAddress1", "vAddress2", "vStreet", "vCrossStreet", "iZipcode", "iGeometryType", "iZoneId", "vLatitude", "vLongitude", "vPointLatLong", "dModifiedDate", "vLoginUserName") VALUES ('.gen_allow_null_char($vAddress1).', '.gen_allow_null_char($vAddress2).', '.gen_allow_null_char($vStreet).', '.gen_allow_null_char($vCrossStreet).', '.gen_allow_null_int($iZipcode).', '.gen_allow_null_int($iGeometryType).', '.gen_allow_null_int($iZoneId).', '.gen_allow_null_int($vLatitude).', '.gen_allow_null_int($vLongitude).', ST_GEOMFROMTEXT(\'POINT('.$vLongitude.' '.$vLatitude .')\', 4326), '.gen_allow_null_char(date_getSystemDateTime()).', '.gen_allow_null_char($_SESSION["sess_vName".$admin_panel_session_suffix]).')';
-							$rs_address = $sqlObj->Execute($sql_in_add);
+							$sql_ins = 'INSERT INTO site_mas ("vName",  "iSTypeId", "iSSTypeId",  "vAddress1", "vAddress2", "vStreet", "vCrossStreet", "iZipcode", "iGeometryType", "iZoneId", "vLatitude", "vLongitude", "vPointLatLong", "dAddedDate",  "vLoginUserName", "iStatus","iStateId", "iCountyId", "iCityId") VALUES ('.gen_allow_null_char($vName).', '.gen_allow_null_int($iSTypeId).', '.gen_allow_null_int($iSSTypeId).', '.gen_allow_null_char($vAddress1).', '.gen_allow_null_char($vAddress2).', '.gen_allow_null_char($vStreet).', '.gen_allow_null_char($vCrossStreet).', '.gen_allow_null_int($iZipcode).', '.gen_allow_null_int($iGeometryType).', '.gen_allow_null_int($iZoneId).', '.gen_allow_null_char($vLatitude).', '.gen_allow_null_char($vLongitude).', ST_GEOMFROMTEXT(\'POINT('.$vLongitude.' '.$vLatitude .')\', 4326), '.gen_allow_null_char(date_getSystemDateTime()).', '.gen_allow_null_char($vLoginUserName).', '.gen_allow_null_int($iStatus).', '.gen_allow_null_int($iStateId).', '.gen_allow_null_int($iCountyId).', '.gen_allow_null_int($iCityId).')';
+						    //echo $sql_ins."\n";
+							$rs_site = $sqlObj->Execute($sql_ins);
+							if($rs_site){
+								$site_arr[] = $sqlObj->Insert_ID();
+					 			$iSAttributeIds = $this->insert_arr['iSAttributeId'];
+					 			if(count($iSAttributeIds) >0){
+					 				$attr_array = array();
+					 				for($ai=0;$ai<count($iSAttributeIds);$ai++){
+					 					$attr_array[] = "(".$iSiteId.",".gen_allow_null_int($iSAttributeIds[$ai]).",".gen_allow_null_char($vLoginUserName).', '.gen_allow_null_char(date_getSystemDateTime()).', '.gen_allow_null_char(date_getSystemDateTime()).")";
+					 				}
+					 				if(count($attr_array) > 0){
+					 					$sql_site_attr = 'INSERT INTO site_attribute ("iSiteId","iSAttributeId","vLoginUserName","dAddedDate","dModifiedDate") VALUES '.implode(",", $attr_array).'';
+					 					//echo $sql_site_attr."\n";
+					 					$sqlObj->Execute($sql_site_attr);
+					 				}
+					 			}
 
-							if($rs_address){
-
-								$iAddressId = $sqlObj->Insert_ID();
-
-								$vName = $vAddress1." ".$vStreet;
-
-								$sql_in_sou = 'INSERT INTO site_mas ("vName", "iSTypeId", "iSSTypeId", "iAddressId", "dModifiedDate", "vLoginUserName") VALUES ('.gen_allow_null_char($vName).', '.gen_allow_null_int($iSTypeId).', '.gen_allow_null_int($iSSTypeId).', '.gen_allow_null_int($iAddressId).', '.gen_allow_null_char(date_getSystemDateTime()).', '.gen_allow_null_char($_SESSION["sess_vName".$admin_panel_session_suffix]).')';
 								
-								$rs_site = $sqlObj->Execute($sql_in_sou);
-								if($rs_site){
-									$site_arr[] = $sqlObj->Insert_ID();
-								}
 							}
 						}
 					}

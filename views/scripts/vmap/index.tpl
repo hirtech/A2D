@@ -692,6 +692,16 @@ div.sitedivmsg{
                                 </div>
                             </div>
                         </div>
+                        <div class="card4">
+                            <div class="card-header" >
+                                <h2 class="mb-0">
+                                    <button class="d-flex align-items-center justify-content-between  btn btn-link" id="btn_map_addbatchsite">Batch-create Premises <span class="fa-stack fa-sm"><i class="fa fa-plus fa-stack-1x fa-inverse"></i></span></button>
+                                </h2>
+                                <div id="batchsitedivmsg" class="d-none batchsitedivmsg">
+                                    <center>Click the spot on the map where you want this premise placed.</center>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                 </div>
@@ -861,6 +871,7 @@ div.sitedivmsg{
 {include file="scripts/tasks/task_trap_add.tpl"}
 {include file="scripts/tasks/task_other_add.tpl"}
 {include file="scripts/tasks/task_treatment_add.tpl"}
+{include file="scripts/premise/multiple_premise_add.tpl"}
 <script type="text/javascript">
     var ajax_url = 'vmap/index?mode=List';
     var access_group_var_add = '{$access_group_var_add}';
@@ -877,6 +888,8 @@ div.sitedivmsg{
 <script src="assets/js/app_js/task_trap_add.js"></script>
 <script src="assets/js/app_js/task_other_add.js"></script>
 <script src="assets/js/app_js/task_treatment_add.js"></script>
+<script src="assets/js/app_js/multiple_premise_add.js"></script>
+
 <script>
     var toggler = document.getElementsByClassName("caret");
     var i;
