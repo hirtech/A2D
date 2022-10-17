@@ -8,14 +8,35 @@ if($request_type == "service_order_list"){
         $iServiceOrderId        = $RES_PARA['iServiceOrderId'];
         $vMasterMSA             = $RES_PARA['vMasterMSA'];
         $vServiceOrder          = $RES_PARA['vServiceOrder'];
+        $vNetwork               = $RES_PARA['vNetwork'];
+        $vCarrier               = $RES_PARA['vCarrier'];
         $vSalesRepName          = $RES_PARA['vSalesRepName'];
         $vSalesRepEmail         = $RES_PARA['vSalesRepEmail'];
+        $vServiceType           = $RES_PARA['vServiceType'];
 
         $page_length            = isset($RES_PARA['page_length']) ? trim($RES_PARA['page_length']) : "10";
         $start                  = isset($RES_PARA['start']) ? trim($RES_PARA['start']) : "0";
         $sEcho                  = $RES_PARA['sEcho'];
         $display_order          = $RES_PARA['display_order'];
-        $dir                    = $RES_PARA['dir'];       
+        $dir                    = $RES_PARA['dir'];    
+
+        $vSContactNameDD        = $RES_PARA['vSContactNameDD'];
+        $vSContactName          = $RES_PARA['vSContactName'];
+        $vSAddressFilterOpDD    = $RES_PARA['vSAddressFilterOpDD'];
+        $vSAddress              = $RES_PARA['vSAddress'];
+        $vSvSCityFilterOpDD       = $RES_PARA['vSvSCityFilterOpDD'];
+        $vSCity                 = $RES_PARA['vSCity'];
+        $vvSStateFilterOpDD       = $RES_PARA['vvSStateFilterOpDD'];
+        $vSState                = $RES_PARA['vSState'];
+        $vSZipCode              = $RES_PARA['vSZipCode'];
+        $iSZoneId               = $RES_PARA['iSZoneId'];
+        $iSNetworkId            = $RES_PARA['iSNetworkId'];
+        $iSCarrierId            = $RES_PARA['iSCarrierId'];
+        $vSSalesRepNameDD       = $RES_PARA['vSSalesRepNameDD'];
+        $vSSalesRepName         = $RES_PARA['vSSalesRepName'];
+        $vSSalesRepEmailDD      = $RES_PARA['vSSalesRepEmailDD'];
+        $vSSalesRepEmail        = $RES_PARA['vSSalesRepEmail'];
+        $iSServiceType          = $RES_PARA['iSServiceType'];   
     }
 
     if ($iServiceOrderId != "") {
@@ -30,12 +51,140 @@ if($request_type == "service_order_list"){
         $where_arr[] = "service_order.\"vServiceOrder\" = '".$vServiceOrder."'";
     }
 
+    if ($vNetwork != "") {
+        $where_arr[] = "n.\"vName\" ILIKE '%".$vNetwork."%'";
+    }
+
+    if ($vCarrier != "") {
+        $where_arr[] = "cm.\"vCompanyName\" ILIKE '%".$vCarrier."%'";
+    }
+
     if ($vSalesRepName != "") {
         $where_arr[] = "service_order.\"vSalesRepName\" = '".$vSalesRepName."'";
     }
 
     if ($vSalesRepEmail != "") {
         $where_arr[] = "service_order.\"vSalesRepEmail\" = '".$vSalesRepEmail."'";
+    }
+
+    if ($vServiceType != "") {
+        $where_arr[] = "(st1.\"vServiceType\" ILIKE '%".$vServiceType."%' OR st2.\"vServiceType\" ILIKE '%".$vServiceType."%' OR st3.\"vServiceType\" ILIKE '%".$vServiceType."%')";
+    }
+
+    if ($vSContactName != "") {
+        if ($vSContactNameDD != "") {
+            if ($vSContactNameDD == "Begins") {
+                $where_arr[] = ' CONCAT(contact_mas."vFirstName", \' \', contact_mas."vLastName") ILIKE \'' . trim($vSContactName) . '%\'';
+            } else if ($vSContactNameDD == "Ends") {
+                $where_arr[] = ' CONCAT(contact_mas."vFirstName", \' \', contact_mas."vLastName") ILIKE \'%' . trim($vSContactName) . '\'';
+            } else if ($vSContactNameDD == "Contains") {
+                $where_arr[] = ' CONCAT(contact_mas."vFirstName", \' \', contact_mas."vLastName") ILIKE \'%' . trim($vSContactName) . '%\'';
+            } else if ($vSContactNameDD == "Exactly") {
+                $where_arr[] =  ' CONCAT(contact_mas."vFirstName", \' \', contact_mas."vLastName")  = \'' . trim($vSContactName) . '\'';
+            }
+        } else {
+            $where_arr[] = ' CONCAT(contact_mas."vFirstName", \' \', contact_mas."vLastName")  ILIKE \'' . trim($vSContactName) . '%\'';
+        }
+    }
+
+    if ($vSAddress != "") {
+        if ($vSAddressFilterOpDD != "") {
+            if ($vSAddressFilterOpDD == "Begins") {
+                $where_arr[] = "s.\"vAddress1\" ILIKE '".trim($vSAddress)."%'";
+            } else if ($vSAddressFilterOpDD == "Ends") {
+                $where_arr[] = "s.\"vStreet\" ILIKE '%".trim($vSAddress)."'";
+            } else if ($vSAddressFilterOpDD == "Contains") {
+                $where_arr[] = "concat(s.\"vAddress1\", ' ', s.\"vStreet\") ILIKE '%".trim($vSAddress)."%'";
+            } else if ($vSAddressFilterOpDD == "Exactly") {
+                $where_arr[] = "concat(s.\"vAddress1\", ' ', s.\"vStreet\") ILIKE '".trim($vSAddress)."'";
+            }
+        } else {
+            $where_arr[] = "concat(s.\"vAddress1\", ' ', s.\"vStreet\") ILIKE '".trim($vSAddress)."%'";
+        }
+    }
+
+    if ($vSCity != "") {
+        if ($vSCityFilterOpDD != "") {
+            if ($vSCityFilterOpDD == "Begins") {
+                $where_arr[] = 'cm."vCity" ILIKE \''.trim($vSCity).'%\'';
+            } else if ($vSCityFilterOpDD == "Ends") {
+                $where_arr[] = 'cm."vCity" ILIKE \'%'.trim($vSCity).'\'';
+            } else if ($vSCityFilterOpDD == "Contains") {
+                $where_arr[] = 'cm."vCity" ILIKE \'%'.trim($vSCity).'%\'';
+            } else if ($vSCityFilterOpDD == "Exactly") {
+                $where_arr[] = 'cm."vCity" ILIKE \''.trim($vSCity).'\'';
+            }
+        } else {
+            $where_arr[] = 'cm."vCity" ILIKE \''.trim($vSCity).'%\'';
+        }
+    }
+
+    if ($vSState != "") {
+        if ($vSStateFilterOpDD != "") {
+            if ($vSStateFilterOpDD == "Begins") {
+                $where_arr[] = 'sm."vState" ILIKE \''.trim($vSState).'%\'';
+            } else if ($vSStateFilterOpDD == "Ends") {
+                $where_arr[] = 'sm."vState" ILIKE \'%'.trim($vSState).'\'';
+            } else if ($vSStateFilterOpDD == "Contains") {
+                $where_arr[] = 'sm."vState" ILIKE \'%'.trim($vSState).'%\'';
+            } else if ($vSStateFilterOpDD == "Exactly") {
+                $where_arr[] = 'sm."vState" ILIKE \''.trim($vSState).'\'';
+            }
+        } else {
+            $where_arr[] = 'sm."vState" ILIKE \''.trim($vSState).'%\'';
+        }
+    }
+
+    if ($vSZipCode != "") {
+        $where_arr[] = "zipcode_mas.\"vZipcode\" = '".$vSZipCode."'";
+    }
+
+    if ($iSZoneId != "") {
+        $where_arr[] = "z.\"iZoneId\" = '".$iSZoneId."'";
+    }
+
+    if ($iSNetworkId != "") {
+        $where_arr[] = "n.\"iNetworkId\" = '".$iSNetworkId."'";
+    }
+
+    if ($iSCarrierId != "") {
+        $where_arr[] = "service_order.\"iCarrierID\" = '".$iSCarrierId."'";
+    }
+
+    if ($vSSalesRepName != "") {
+        if ($vSSalesRepNameDD != "") {
+            if ($vSSalesRepNameDD == "Begins") {
+                $where_arr[] = 'service_order."vSalesRepName" ILIKE \''.trim($vSSalesRepName).'%\'';
+            } else if ($vSSalesRepNameDD == "Ends") {
+                $where_arr[] = 'service_order."vSalesRepName" ILIKE \'%'.trim($vSSalesRepName).'\'';
+            } else if ($vSSalesRepNameDD == "Contains") {
+                $where_arr[] = 'service_order."vSalesRepName" ILIKE \'%'.trim($vSSalesRepName).'%\'';
+            } else if ($vSSalesRepNameDD == "Exactly") {
+                $where_arr[] = 'service_order."vSalesRepName" ILIKE \''.trim($vSSalesRepName).'\'';
+            }
+        } else {
+            $where_arr[] = 'service_order."vSalesRepName" ILIKE \''.trim($vSSalesRepName).'%\'';
+        }
+    }
+
+    if ($vSSalesRepEmail != "") {
+        if ($vSSalesRepEmailDD != "") {
+            if ($vSSalesRepEmailDD == "Begins") {
+                $where_arr[] = 'service_order."vSalesRepName" ILIKE \''.trim($vSSalesRepEmail).'%\'';
+            } else if ($vSSalesRepEmailDD == "Ends") {
+                $where_arr[] = 'service_order."vSalesRepName" ILIKE \'%'.trim($vSSalesRepEmail).'\'';
+            } else if ($vSSalesRepEmailDD == "Contains") {
+                $where_arr[] = 'service_order."vSalesRepName" ILIKE \'%'.trim($vSSalesRepEmail).'%\'';
+            } else if ($vSSalesRepEmailDD == "Exactly") {
+                $where_arr[] = 'service_order."vSalesRepName" ILIKE \''.trim($vSSalesRepEmail).'\'';
+            }
+        } else {
+            $where_arr[] = 'service_order."vSalesRepName" ILIKE \''.trim($vSSalesRepEmail).'%\'';
+        }
+    }
+
+    if ($iSServiceType != "") {
+        $where_arr[] = "(service_order.\"iService1\" = '".$iSServiceType."' OR service_order.\"iService2\"  = '".$iSServiceType."' OR service_order.\"iService3\" = '".$iSServiceType."')";
     }
 
     switch ($display_order) {
@@ -69,8 +218,11 @@ if($request_type == "service_order_list"){
 
     $join_fieds_arr = array();
     $join_fieds_arr[] = 's."vName" as "vPremiseName"';
+    $join_fieds_arr[] = 's."vAddress1"';
 	$join_fieds_arr[] = 'st."vTypeName" as "vPremiseType"';
     $join_fieds_arr[] = 'cm."vCompanyName"';
+    $join_fieds_arr[] = 'z."vZoneName"';
+    $join_fieds_arr[] = 'n."vName" as "vNetwork"';
     $join_fieds_arr[] = 'c."vConnectionTypeName"';
     $join_fieds_arr[] = 'st1."vServiceType" as "vServiceType1"';
     $join_fieds_arr[] = 'st2."vServiceType" as "vServiceType2"';
@@ -78,6 +230,13 @@ if($request_type == "service_order_list"){
     
     $join_arr = array();
     $join_arr[] = 'LEFT JOIN site_mas s on service_order."iPremiseId" = s."iSiteId"';
+    $join_arr[] = 'LEFT JOIN zipcode_mas on s."iZipcode" = zipcode_mas."iZipcode"';
+    if($vSContactName != '') {
+        $join_arr[] = 'LEFT JOIN site_contact sc on s."iSiteId" = sc."iSiteId"';
+        $join_arr[] = 'LEFT JOIN contact_mas on sc."iCId" = contact_mas."iCId"';
+    }
+    $join_arr[] = 'LEFT JOIN zone z on s."iZoneId" = z."iZoneId"';
+    $join_arr[] = 'LEFT JOIN network n on z."iNetworkId" = n."iNetworkId"';
 	$join_arr[] = 'LEFT JOIN site_type_mas st on s."iSTypeId" = st."iSTypeId"';
     $join_arr[] = 'LEFT JOIN company_mas cm on service_order."iCarrierID" = cm."iCompanyId"';
     $join_arr[] = 'LEFT JOIN connection_type_mas c on service_order."iConnectionTypeId" = c."iConnectionTypeId"';
@@ -87,6 +246,9 @@ if($request_type == "service_order_list"){
     $ServiceOrderObj->join_field = $join_fieds_arr;
     $ServiceOrderObj->join = $join_arr;
     $ServiceOrderObj->where = $where_arr;
+    if($vSContactName != '') {
+        $ServiceOrderObj->param['group_by'] = 'sc."iCId", sc."iSiteId"';
+    }
     $ServiceOrderObj->param['order_by'] = $sortname . " " . $dir;
     $ServiceOrderObj->param['limit'] = $limit;
     $ServiceOrderObj->setClause();

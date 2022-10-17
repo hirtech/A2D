@@ -36,6 +36,24 @@ if($mode == "List") {
     $arr_param['display_order'] = $display_order;
     $arr_param['dir']           = $dir;
 
+    $arr_param['vSContactNameDD']       = trim($_REQUEST['vSContactNameDD']);
+    $arr_param['vSContactName']         = trim($_REQUEST['vSContactName']);
+    $arr_param['vSAddressFilterOpDD']   = trim($_REQUEST['vSAddressFilterOpDD']);
+    $arr_param['vSAddress']             = trim($_REQUEST['vSAddress']);
+    $arr_param['vSCityFilterOpDD']      = trim($_REQUEST['vSCityFilterOpDD']);
+    $arr_param['vSCity']                = trim($_REQUEST['vSCity']);
+    $arr_param['vSStateFilterOpDD']     = trim($_REQUEST['vSStateFilterOpDD']);
+    $arr_param['vSState']               = trim($_REQUEST['vSState']);
+    $arr_param['vSZipCode']             = trim($_REQUEST['vSZipCode']);
+    $arr_param['iSZoneId']              = trim($_REQUEST['iSZoneId']);
+    $arr_param['iSNetworkId']           = trim($_REQUEST['iSNetworkId']);
+    $arr_param['iSCarrierId']           = trim($_REQUEST['iSCarrierId']);
+    $arr_param['vSSalesRepNameDD']      = trim($_REQUEST['vSSalesRepNameDD']);
+    $arr_param['vSSalesRepName']        = trim($_REQUEST['vSSalesRepName']);
+    $arr_param['vSSalesRepEmailDD']     = trim($_REQUEST['vSSalesRepEmailDD']);
+    $arr_param['vSSalesRepEmail']       = trim($_REQUEST['vSSalesRepEmail']);
+    $arr_param['iSServiceType']         = trim($_REQUEST['iSServiceType']);
+
     $arr_param['access_group_var_edit'] = $access_group_var_edit;
     $arr_param['access_group_var_delete'] = $access_group_var_delete;
 
@@ -373,6 +391,105 @@ if($mode == "List") {
    exit;
 }
 
+## --------------------------------
+# Network Dropdown
+$network_arr_param = array();
+$network_arr_param = array(
+    "iStatus"        => 1,
+    "sessionId"     => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
+);
+$network_API_URL = $site_api_url."network_dropdown.json";
+//echo $network_API_URL." ".json_encode($network_arr_param);
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $network_API_URL);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_HEADER, FALSE);
+curl_setopt($ch, CURLOPT_POST, TRUE);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($network_arr_param));
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+   "Content-Type: application/json",
+));
+$response_network = curl_exec($ch);
+curl_close($ch); 
+$rs_network = json_decode($response_network, true); 
+$rs_ntwork = $rs_network['result'];
+$smarty->assign("rs_ntwork", $rs_ntwork);
+## --------------------------------
+## --------------------------------
+# Zone Dropdown
+$zone_arr_param = array();
+$zone_arr_param = array(
+    "iStatus"        => 1,
+    "sessionId"     => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
+);
+$zone_API_URL = $site_api_url."zone_dropdown.json";
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $zone_API_URL);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_HEADER, FALSE);
+curl_setopt($ch, CURLOPT_POST, TRUE);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($zone_arr_param));
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+   "Content-Type: application/json",
+));
+$response_zone = curl_exec($ch);
+curl_close($ch); 
+$rs_zone1 = json_decode($response_zone, true); 
+$rs_zone = $rs_zone1['result'];
+$smarty->assign("rs_zone", $rs_zone);
+## --------------------------------
+
+//Carrier (Company) Dropdown
+$carrier_param = array();
+$carrier_param['iStatus'] = '1';
+$carrier_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
+$carrierAPI_URL = $site_api_url."company_dropdown.json";
+//echo $carrierAPI_URL." ".json_encode($carrier_param);exit;
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $carrierAPI_URL);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_HEADER, FALSE);
+curl_setopt($ch, CURLOPT_POST, TRUE);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($carrier_param));
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+   "Content-Type: application/json",
+)); 
+$response = curl_exec($ch);
+curl_close($ch);  
+$res = json_decode($response, true);
+$rs_carrier = $res['result'];
+$smarty->assign("rs_carrier", $rs_carrier);
+
+//Service Type Dropdown
+$stype_param = array();
+$stype_param['iStatus'] = '1';
+$stype_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
+$stypeAPI_URL = $site_api_url."service_type_dropdown.json";
+//echo $stypeAPI_URL." ".json_encode($stype_param);exit;
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $stypeAPI_URL);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_HEADER, FALSE);
+curl_setopt($ch, CURLOPT_POST, TRUE);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($stype_param));
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+   "Content-Type: application/json",
+)); 
+$response_stype = curl_exec($ch);
+curl_close($ch);  
+$res_stype = json_decode($response_stype, true);
+$rs_stype = $res_stype['result'];
+$smarty->assign("rs_stype", $rs_stype);
+//echo "<pre>";print_r($rs_stype);exit;
+
 $module_name = "Service Order List";
 $module_title = "Service Order";
 $smarty->assign("module_name", $module_name);
@@ -383,5 +500,4 @@ $smarty->assign("flag", $_GET['flag']);
 $smarty->assign("iAGroupId", $_GET['iAGroupId']);
 $smarty->assign("access_group_var_add", $access_group_var_add);
 $smarty->assign("access_group_var_CSV", $access_group_var_CSV);
-
 ?>

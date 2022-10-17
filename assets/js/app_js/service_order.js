@@ -52,7 +52,7 @@ var listPage = function(){
                         "dataType": 'json',
                         "type": "POST",
                         "url": sSource+'&'+$.param(aoData),
-                        "data": $(".user_search_form").serializeArray(),
+                        "data": $(".sorder_search_form").serializeArray(),
                         "success": fnCallback
                     });
                 },
@@ -150,3 +150,31 @@ function exportExcelSheet(){
     });
     return false;
 }
+
+$('#AdvSearchSubmit').click(function () {
+    gridtable.ajax.reload();
+    return false;
+});
+
+$('#AdvSearchReset').click(function () {
+    $('#vSContactNameDD').val("Contains");
+    $('#vSContactName').val("");
+    $('#vSAddressFilterOpDD').val("Contains");
+    $('#vSAddress').val("");
+    $('#vSCityFilterOpDD').val("Contains");
+    $('#vSCity').val("");
+    $('#vSStateFilterOpDD').val("Contains");
+    $('#vSState').val("");
+    $('#vSZipCode').val("");
+    $('#iSZoneId').val("");
+    $('#iSNetworkId').val("");
+    $('#iSCarrierId').val("");
+    $('#vSSalesRepNameDD').val("Contains");
+    $('#vSSalesRepName').val("");
+    $('#vSSalesRepEmailDD').val("Contains");
+    $('#vSSalesRepEmail').val("");
+    $('#iSServiceType').val("");
+    
+    gridtable.ajax.reload();
+    return false;
+});
