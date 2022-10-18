@@ -877,6 +877,7 @@ div.sitedivmsg{
 {include file="scripts/tasks/task_other_add.tpl"}
 {include file="scripts/tasks/task_treatment_add.tpl"}
 {include file="scripts/premise/multiple_premise_add.tpl"}
+{include file="scripts/awareness/awareness_add.tpl"}
 <script type="text/javascript">
     var ajax_url = 'vmap/index?mode=List';
     var access_group_var_add = '{$access_group_var_add}';
@@ -894,7 +895,7 @@ div.sitedivmsg{
 <script src="assets/js/app_js/task_other_add.js"></script>
 <script src="assets/js/app_js/task_treatment_add.js"></script>
 <script src="assets/js/app_js/multiple_premise_add.js"></script>
-
+<script src="assets/js/app_js/awareness_add.js"></script>
 <script>
     var toggler = document.getElementsByClassName("caret");
     var i;

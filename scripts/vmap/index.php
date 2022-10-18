@@ -10,6 +10,7 @@ include_once($controller_path . "task_trap.inc.php");
 include_once($controller_path . "task_mosquito_pool_result.inc.php");
 include_once($controller_path . "custom_layer.inc.php");
 include_once($controller_path . "user.inc.php");
+include_once($controller_path . "service_order.inc.php");
 
 
 $SiteObj = new Site();
@@ -20,6 +21,7 @@ $TaskTypeObj = new TaskType();
 $TaskTrapObj = new TaskTrap();
 $TaskMosquitoPoolResultObj = new TaskMosquitoPoolResult();
 $CustomLayerObj = new CustomLayer();
+$ServiceOrderObj = new ServiceOrder();
 
 /*Get Map Filter data*/
 $API_URL = $site_api_url."get_map_filter_data.json";
@@ -101,6 +103,22 @@ if($mode == "site_map")
 	$SiteObj->debug_query = false;
     $rs_site['site'] = $SiteObj->recordset_list();
 	//echo "<pre>";print_r($rs_site);exit;
+    $rs_site['site'][0]['ServiceOrderCount'] = 0;
+    if(!empty($rs_site['site'])){
+        $ServiceOrderObj->clear_variable();
+        $where_arr = array();
+        $join_fieds_arr = array();
+        $join_arr  = array();
+        $where_arr[] = "\"iPremiseId\"='".gen_add_slash($iSiteId)."'";
+        $ServiceOrderObj->join_field = $join_fieds_arr;
+        $ServiceOrderObj->join = $join_arr;
+        $ServiceOrderObj->where = $where_arr;
+        $ServiceOrderObj->setClause();
+        $rs_sorder = $ServiceOrderObj->recordset_list();
+        $rs_site['site'][0]['ServiceOrderCount'] = count($rs_sorder);
+    }
+    //echo "<pre>";print_r($rs_site);exit;
+
 
     $SiteObj->clear_variable();
     $where_arr = array();
@@ -810,6 +828,30 @@ $rs_siteattr1 = json_decode($response_attr, true);
 $rs_siteattr = $rs_siteattr1['result'];
 $smarty->assign("rs_sitetype", $rs_sitetype);
 $smarty->assign("rs_siteattr", $rs_siteattr);
+
+
+/*-------------------------- Engagement -------------------------- */
+$arr_param = array();
+$arr_param['iStatus']   = 1;
+$arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
+$API_URL = $site_api_url."engagement_dropdown.json";
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $API_URL);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_HEADER, FALSE);
+curl_setopt($ch, CURLOPT_POST, TRUE);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($arr_param));
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+   "Content-Type: application/json",
+)); 
+$response = curl_exec($ch);
+curl_close($ch);  
+$res = json_decode($response, true);
+$smarty->assign("rs_engagement", $res['result']);
+/*-------------------------- Engagement -------------------------- */
+
 
 $smarty->assign("cityArr", $cityArr);
 $smarty->assign("sAttrubutes", $sAttrubutes);

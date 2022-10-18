@@ -19,14 +19,15 @@ if($request_type == "service_order_list"){
         $sEcho                  = $RES_PARA['sEcho'];
         $display_order          = $RES_PARA['display_order'];
         $dir                    = $RES_PARA['dir'];    
+        $iFieldmapPremiseId     = $RES_PARA['iFieldmapPremiseId'];    
 
         $vSContactNameDD        = $RES_PARA['vSContactNameDD'];
         $vSContactName          = $RES_PARA['vSContactName'];
         $vSAddressFilterOpDD    = $RES_PARA['vSAddressFilterOpDD'];
         $vSAddress              = $RES_PARA['vSAddress'];
-        $vSvSCityFilterOpDD       = $RES_PARA['vSvSCityFilterOpDD'];
+        $vSvSCityFilterOpDD     = $RES_PARA['vSvSCityFilterOpDD'];
         $vSCity                 = $RES_PARA['vSCity'];
-        $vvSStateFilterOpDD       = $RES_PARA['vvSStateFilterOpDD'];
+        $vvSStateFilterOpDD     = $RES_PARA['vvSStateFilterOpDD'];
         $vSState                = $RES_PARA['vSState'];
         $vSZipCode              = $RES_PARA['vSZipCode'];
         $iSZoneId               = $RES_PARA['iSZoneId'];
@@ -37,6 +38,10 @@ if($request_type == "service_order_list"){
         $vSSalesRepEmailDD      = $RES_PARA['vSSalesRepEmailDD'];
         $vSSalesRepEmail        = $RES_PARA['vSSalesRepEmail'];
         $iSServiceType          = $RES_PARA['iSServiceType'];   
+    }
+
+    if ($iFieldmapPremiseId != "") {
+        $where_arr[] = 'service_order."iPremiseId"='.$iFieldmapPremiseId ;
     }
 
     if ($iServiceOrderId != "") {

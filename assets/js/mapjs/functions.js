@@ -1429,10 +1429,22 @@ function info_popup(marker, siteid) {
 						content += "<h6>" + type_str + "</h6>";
 						content += "<strong>" + address_str + "</strong>";
 						content += "<div class='button mt-3'>";
-						content += "<a class='btn btn-primary  mr-2 text-white' title='Landing Rate' onclick=addEditDataTaskAdult(0,'add','" + siteid + "')>Landing Rate</a><a class='btn btn-primary  mr-2 text-white' title='Larval Surveillance' onclick=addEditDataTaskLarval(0,'add','" + siteid + "')>Larval Surveillance</a><a class='btn btn-primary  mr-2 text-white' title='Treatment Task' onclick=addEditDataTaskTreatment(0,'add','" + siteid + "')>Treatment</a><a class='btn btn-primary  mr-2 text-white' title='Trap' onclick=addEditDataTaskTrap(0,'add','" + siteid + "')>Trap Place</a><a class='btn btn-primary  mr-2 text-white' title='Other Task' onclick=addEditDataTaskOther(0,'add','" + siteid + "')>Other</a><a class='btn btn-primary  mr-2 text-white' href='" + site_url + "premise/edit&mode=Update&iSiteId=" + siteid + "' target='_blank'>Edit premise</a>";
-						if(ENABLE_INSTA_TREATMENT=='Y'){
-							content += "<a class='btn btn-primary  mr-2 text-white' title='Landing Rate' onclick=addInstaTreatData('add','" + siteid + "')>Insta Treat</a>";
+						//content += "<a class='btn btn-primary  mr-2 text-white' title='Landing Rate' onclick=addEditDataTaskAdult(0,'add','" + siteid + "')>Landing Rate</a><a class='btn btn-primary  mr-2 text-white' title='Larval Surveillance' onclick=addEditDataTaskLarval(0,'add','" + siteid + "')>Larval Surveillance</a><a class='btn btn-primary  mr-2 text-white' title='Treatment Task' onclick=addEditDataTaskTreatment(0,'add','" + siteid + "')>Treatment</a><a class='btn btn-primary  mr-2 text-white' title='Trap' onclick=addEditDataTaskTrap(0,'add','" + siteid + "')>Trap Place</a><a class='btn btn-primary  mr-2 text-white' title='Other Task' onclick=addEditDataTaskOther(0,'add','" + siteid + "')>Other</a><a class='btn btn-primary  mr-2 text-white' href='" + site_url + "premise/edit&mode=Update&iSiteId=" + siteid + "' target='_blank'>Edit premise</a>";
+						var ServiceOrderCount = 0;
+						if (data.site[0]['ServiceOrderCount'] > 0) {
+							ServiceOrderCount = data.site[0]['ServiceOrderCount'];
 						}
+						content += "<a class='btn btn-primary  mr-2 text-white' title='Awareness' onclick=addEditDataAwareness(0,'add','" + siteid + "')>Awareness</a>";
+						content += "<a class='btn btn-primary  mr-2 text-white' title='Inquiry'>Inquiry</a>";
+						content += "<a class='btn btn-primary  mr-2 text-white' title='Service Order' onclick=mapRedirectServiceOrder('" + ServiceOrderCount + "','" + siteid + "')>Service Order</a>";
+						content += "<a class='btn btn-primary  mr-2 text-white' title='Work Order'>Work Order</a>";
+						content += "<a class='btn btn-primary  mr-2 text-white' title='Circuit'>Circuit</a>";
+						content += "<a class='btn btn-primary  mr-2 text-white' title='Trouble'>Trouble</a>";
+						content += "<a class='btn btn-primary  mr-2 text-white' title='Other'>Other</a>";
+						content += "<a class='btn btn-primary  mr-2 text-white'  title='Other' href='" + site_url + "premise/edit&mode=Update&iSiteId=" + siteid + "' target='_blank'>Edit Premise</a>";
+						/*if(ENABLE_INSTA_TREATMENT=='Y'){
+							content += "<a class='btn btn-primary  mr-2 text-white' title='Landing Rate' onclick=addInstaTreatData('add','" + siteid + "')>Insta Treat</a>";
+						}*/
 						content += "</div>";
 						
 						if (typeof data.site_history !== "undefined" && data.site_history != null && data.site_history != '') {
@@ -2524,4 +2536,14 @@ function infoPolygonArea($site_map, siteid)
           });
       }
   })($site_map, siteid));
+}
+
+function mapRedirectServiceOrder(ServiceOrderLength, iPremiseId) {
+	if(ServiceOrderLength > 0){
+		var so_url = site_url+"service_order/list&iPremiseId="+iPremiseId;
+		window.open(so_url,'_blank');
+	}else {
+		alert("No service order exists for this premise");return false;
+	}
+
 }

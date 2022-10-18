@@ -3,8 +3,7 @@
 include_once($function_path."image.inc.php");
 include_once($controller_path . "fieldmap.inc.php");
 
-$sess_iCountySaasId_erp = $_SESSION['sess_iCountySaasId'.$admin_panel_session_suffix];
-$field_map_json_path = create_image_folder($sess_iCountySaasId_erp,$field_map_json_url);
+$field_map_json_path = $field_map_json_url;
 
 $mapObj = new Fieldmap();
 if(isset($_POST) &&  !in_array($_POST['action'],array("getSerachSiteData","getSerachSRData","getSiteSRFilterData","getNearBySite")) ){
@@ -451,9 +450,9 @@ if(isset($_POST) &&  !in_array($_POST['action'],array("getSerachSiteData","getSe
             $i = 0;
             foreach($custlayerData as $data){
                 if($data['vFile'] != ""){
-                    $filepath = $custom_layer_path.$sess_iCountySaasId_erp."/";
+                    $filepath = $custom_layer_path;
                     if(file_exists($filepath.$data['vFile'])){
-                        $file_url = $custom_layer_url.$sess_iCountySaasId_erp."/".$data['vFile'];
+                        $file_url = $custom_layer_url.$data['vFile'];
                        
                        
                         $geoArr['customlayer'][$data['iCLId']]['file_url'] = $file_url;

@@ -20,6 +20,8 @@ $sEcho = (isset($_REQUEST["sEcho"]) ? $_REQUEST["sEcho"] : '0');
 $display_order = (isset($_REQUEST["iSortCol_0"]) ? $_REQUEST["iSortCol_0"] : '0');
 $dir = (isset($_REQUEST["sSortDir_0"]) ? $_REQUEST["sSortDir_0"] : 'desc');
 # ------------------------------------------------------------
+
+$iPremiseId = $_REQUEST['iPremiseId'];
 if($mode == "List") {
     //print_r($_REQUEST);exit();
     $arr_param = array();
@@ -35,6 +37,8 @@ if($mode == "List") {
     $arr_param['sEcho']         = $sEcho;
     $arr_param['display_order'] = $display_order;
     $arr_param['dir']           = $dir;
+
+    $arr_param['iFieldmapPremiseId']    = $iPremiseId;
 
     $arr_param['vSContactNameDD']       = trim($_REQUEST['vSContactNameDD']);
     $arr_param['vSContactName']         = trim($_REQUEST['vSContactName']);
@@ -494,10 +498,7 @@ $module_name = "Service Order List";
 $module_title = "Service Order";
 $smarty->assign("module_name", $module_name);
 $smarty->assign("module_title", $module_title);
-$smarty->assign("option_arr", $option_arr);
-$smarty->assign("msg", $_GET['msg']);
-$smarty->assign("flag", $_GET['flag']);
-$smarty->assign("iAGroupId", $_GET['iAGroupId']);
 $smarty->assign("access_group_var_add", $access_group_var_add);
 $smarty->assign("access_group_var_CSV", $access_group_var_CSV);
+$smarty->assign("iPremiseId", $iPremiseId);
 ?>

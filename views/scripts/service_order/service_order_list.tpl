@@ -67,6 +67,9 @@
 </div> 
 {include file="general/dataTables.tpl"} 
 <script type="text/javascript">
+    var iPremiseId = '{$iPremiseId}';
+    var extra_url = (jQuery.isEmptyObject(iPremiseId))?"":'&iPremiseId='+iPremiseId;
+    var ajax_url = 'service_order/list&mode=List'+extra_url;
     var access_group_var_add = '{$access_group_var_add}';
     var access_group_var_CSV = '{$access_group_var_CSV}';
 </script>

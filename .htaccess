@@ -189,6 +189,12 @@ RewriteRule ^tasks/task_treatment_list index.php?module=$0&page=t-task_treatment
 #---------------------
 
 #---------------------
+#Awarness
+RewriteRule ^awareness/awareness_list&(.*)$  index.php?module=$0&page=m-awareness_list&%{QUERY_STRING}
+RewriteRule ^awareness/awareness_list index.php?module=$0&page=m-awareness_list
+#---------------------
+
+#---------------------
 #System Setting
 RewriteRule ^settings/setting_list? index.php?module=$0&page=s-setting_list&%{QUERY_STRING}
 RewriteRule ^settings/setting_list index.php?module=$0&page=s-setting_list

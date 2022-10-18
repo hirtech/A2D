@@ -10,7 +10,7 @@ var listPage = function(){
             "processing": true,
                 "serverSide": true,
                 " " : false,
-                "ajaxSource": site_url+'service_order/list?mode=List',
+                "ajaxSource": site_url+ajax_url,
                 "aaSorting": [[0,'desc']],
                 'bAutoWidth': true,
                 "aoColumns": [
@@ -61,7 +61,7 @@ var listPage = function(){
         if(access_group_var_add == '1') {
             gridtable.button().add( 0, {
                 action: function ( e, dt, node, config ) {
-                           location.href = site_url+"service_order/add";
+                    location.href = site_url+"service_order/add";
                 },
                 text: '<i class="fa fa-plus"></i>Add',
                 className: 'btn btn-primary'

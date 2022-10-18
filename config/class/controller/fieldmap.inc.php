@@ -144,8 +144,7 @@ class Fieldmap {
         global $sqlObj, $field_map_json_url;
         include_once($function_path."image.inc.php");
 
-        $sess_iCountySaasId_erp=$_SESSION['sess_iCountySaasId_erp'];
-        $field_map_json_path = $field_map_json_url.$sess_iCountySaasId_erp;
+        $field_map_json_path = $field_map_json_url;
         $tmp_siteArr = array();
 
         $siteJsonUrl = $field_map_json_path."/site-type.json";
