@@ -594,17 +594,17 @@ div.sitedivmsg{
                 </div>
             </div>
             <div class="card3">
-                <div class="main" id="main">
-                    <span style="font-size:30px;cursor:pointer; color: #000;" onclick="openNav()"><img src="/images/tool.png" /> <p class="area-text">Tools</p></span>
-                </div>
                 <div class="main" id="main1">
-                    <span style="font-size:30px;cursor:pointer; color: #000;" onclick="openNav1()"><img src="/images/filter.png" /> <p class="area-text">Filters</p></span>
+                    <span style="font-size:30px;cursor:pointer; color: #000;" onclick="openNav1()"><img src="{$site_url}images/filter.png" /> <p class="area-text">Filters</p></span>
                 </div>
                 <div class="main" id="main2">
-                    <span style="font-size:30px;cursor:pointer; color: #000;" onclick="openNav2()"><img src="/images/layers.png" /> <p class="area-text">Layers</p></span>
+                    <span style="font-size:30px;cursor:pointer; color: #000;" onclick="openNav2()"><img src="{$site_url}images/layers.png" /> <p class="area-text">Layers</p></span>
+                </div>
+                <div class="main" id="main">
+                    <span style="font-size:30px;cursor:pointer; color: #000;" onclick="openNav()"><img src="{$site_url}images/tool.png" /> <p class="area-text">Tools</p></span>
                 </div>
                 <div class="main" id="main3">
-                    <span style="font-size:30px;cursor:pointer; color: #000;" onclick="openNav3()"><img src="/images/search.png" /> <p class="area-text">Search</p></span>
+                    <span style="font-size:30px;cursor:pointer; color: #000;" onclick="openNav3()"><img src="{$site_url}images/search.png" /> <p class="area-text">Search</p></span>
                 </div>
             </div>
             <div id="mySidenav" class="sidenav">
