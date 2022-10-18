@@ -81,8 +81,8 @@ if($_SESSION["sess_iUserId".$admin_panel_session_suffix]!= '') {
 	$smarty->assign("sess_iUserId", $_SESSION["sess_iUserId".$admin_panel_session_suffix]);
 	$smarty->assign("sess_vName", $_SESSION["sess_vName".$admin_panel_session_suffix]);
 	$smarty->assign("sess_vAccessGroup", $_SESSION["sess_vAccessGroup".$admin_panel_session_suffix]);
+	$smarty->assign("sess_vCompanyName", $_SESSION["sess_vCompanyName".$admin_panel_session_suffix]);
 	$smarty->assign("sess_iAGroupId", $_SESSION["sess_iAGroupId".$admin_panel_session_suffix]);
-	$smarty->assign("sess_user_preference", $_SESSION["sess_user_preference".$admin_panel_session_suffix]);
 	$smarty->assign("sess_vImage", $_SESSION["sess_vImage".$admin_panel_session_suffix]);
 	$smarty->assign("sess_vImage_url", $_SESSION["sess_vImage_url".$admin_panel_session_suffix]);
 	$smarty->assign("host_name", $_SERVER["HTTP_HOST"]);

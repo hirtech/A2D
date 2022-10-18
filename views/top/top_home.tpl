@@ -8,7 +8,7 @@
     <nav class="navbar navbar-expand-lg  p-0">
         <div class="navbar-header h5 mb-0 align-self-center d-flex">  
             <a href="{$site_url}" class="horizontal-logo align-self-center d-flex d-lg-none">
-                <img src="assets/images/logo.png" alt="logo" width="23" class="img-fluid"/> <span class="h5 align-self-center mb-0 ">eCommunity Fiber</span>              
+                <img src="assets/images/logo.png" alt="logo" width="23" class="img-fluid"/> <span class="h5 align-self-center mb-0 ">{$sess_vCompanyName}</span>              
             </a>
             <a href="javascript:void(0)" class="sidebarCollapse ml-2" id="collapse"><i class="icon-menu body-color"></i></a>
         </div>
@@ -25,7 +25,7 @@
         </div>
         <div class="navbar-center ml-auto">
            <h6 class="mb-0 text-primary line-height-1"><b>
-            eCommunity Fiber
+            {$sess_vCompanyName}
             </b></h6>
         </div>
         <div class="navbar-right ml-auto">
