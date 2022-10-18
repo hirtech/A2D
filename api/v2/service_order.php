@@ -170,13 +170,13 @@ if($request_type == "service_order_list"){
     if ($vSSalesRepEmail != "") {
         if ($vSSalesRepEmailDD != "") {
             if ($vSSalesRepEmailDD == "Begins") {
-                $where_arr[] = 'service_order."vSalesRepName" ILIKE \''.trim($vSSalesRepEmail).'%\'';
+                $where_arr[] = 'service_order."vSalesRepEmail" ILIKE \''.trim($vSSalesRepEmail).'%\'';
             } else if ($vSSalesRepEmailDD == "Ends") {
-                $where_arr[] = 'service_order."vSalesRepName" ILIKE \'%'.trim($vSSalesRepEmail).'\'';
+                $where_arr[] = 'service_order."vSalesRepEmail" ILIKE \'%'.trim($vSSalesRepEmail).'\'';
             } else if ($vSSalesRepEmailDD == "Contains") {
-                $where_arr[] = 'service_order."vSalesRepName" ILIKE \'%'.trim($vSSalesRepEmail).'%\'';
+                $where_arr[] = 'service_order."vSalesRepEmail" ILIKE \'%'.trim($vSSalesRepEmail).'%\'';
             } else if ($vSSalesRepEmailDD == "Exactly") {
-                $where_arr[] = 'service_order."vSalesRepName" ILIKE \''.trim($vSSalesRepEmail).'\'';
+                $where_arr[] = 'service_order."vSalesRepEmail" ILIKE \''.trim($vSSalesRepEmail).'\'';
             }
         } else {
             $where_arr[] = 'service_order."vSalesRepName" ILIKE \''.trim($vSSalesRepEmail).'%\'';
