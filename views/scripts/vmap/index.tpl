@@ -332,8 +332,8 @@ ul,
 }
 
 .myaccordion .card-header {
-    border-bottom-color: #008651;
-    background: #008651;
+    border-bottom-color: #f0f2f3;
+    background: #f0f2f3;
     margin: 5px;
     padding: 6px 10px !important;
 }
@@ -347,6 +347,7 @@ ul,
     font-weight: bold;
     color: #fff;
     padding: 0;
+    border: none;
 }
 
 .myaccordion .btn-link:hover,
@@ -377,6 +378,10 @@ ul,
     overflow-x: inherit;
     display: block;
     width: 100%;
+}
+
+.fa-inverse {
+    color: #161616 !important;
 }
 
 p.area-text {
