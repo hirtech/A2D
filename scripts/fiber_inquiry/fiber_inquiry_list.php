@@ -367,7 +367,7 @@ if($mode == "List"){
         $res = json_decode($rs, true);
         //echo "<pre>";print_r($res);exit();
         if($res){
-            $result['iSiteId'] = $res['iSiteId'];
+            $result['iMatchingPremiseId'] = $res['iMatchingPremiseId'];
             $result['iFiberInquiryId'] = $res['iFiberInquiryId'];
             $result['msg'] = MSG_ADD;
             $result['error']= 0 ;
@@ -432,7 +432,7 @@ if($mode == "List"){
         $res = json_decode($rs, true);
         //echo "<pre>";print_r($res);exit();
         if($res){
-            $result['iSiteId'] = $res['iSiteId'];
+            $result['iMatchingPremiseId'] = $res['iMatchingPremiseId'];
             $result['iFiberInquiryId'] = $res['iFiberInquiryId'];
             $result['msg'] = MSG_UPDATE;
             $result['error']= 0 ;
