@@ -1,6 +1,6 @@
 <?php
 include_once("security_audit_log.inc.php");
-class Awareness {
+class TaskAwareness {
 
 	var $join_field = array();
 	var $join = array();
@@ -18,7 +18,7 @@ class Awareness {
 	var $limit_clause = "";
 	var $debug_query = false;
 	
-	function Awareness() {
+	function TaskAwareness() {
 		$this->SALObj = new Security_audit_log();
 	}
 	

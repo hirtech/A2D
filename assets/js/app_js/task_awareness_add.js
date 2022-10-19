@@ -103,13 +103,11 @@ function addEditDataAwareness(id,mode,iSiteId_list){
 /**************************************************************/
 
 (function ($) {
-   
-
     var cluster = new Bloodhound({
       datumTokenizer: function(d) { return d.tokens; },
       queryTokenizer: Bloodhound.tokenizers.whitespace,
       remote: {
-        url: site_url+'awareness/awareness_list&mode=search_site',
+        url: site_url+'tasks/task_awareness_list&mode=search_site',
         replace: function(url, uriEncodedQuery) {
             var newUrl = url + '&vSiteName_awareness=' + uriEncodedQuery;
             return newUrl;
@@ -142,7 +140,7 @@ function addEditDataAwareness(id,mode,iSiteId_list){
       datumTokenizer: function(d) { return d.tokens; },
       queryTokenizer: Bloodhound.tokenizers.whitespace,
       remote: {
-        url: site_url+'awareness/awareness_list&mode=search_fiber_inquiry',
+        url: site_url+'tasks/task_awareness_list&mode=search_fiber_inquiry',
         replace: function(url, uriEncodedQuery) {
             var newUrl = url + '&vSR_awareness=' + uriEncodedQuery;
             return newUrl;
@@ -227,7 +225,7 @@ $("#save_data_awareness").click(function(){
         var data_str = $("#frmadd_awareness").serializeArray();
         $.ajax({
             type: "POST",
-            url: site_url+"awareness/awareness_list",
+            url: site_url+"tasks/task_awareness_list",
             data: data_str,
             success: function(data){
                 $('#save_loading_awareness').hide();
@@ -250,3 +248,13 @@ $("#save_data_awareness").click(function(){
         $("#save_data_awareness").prop('disabled', false);
     }
 });
+
+function clear_site(){
+    $("#vSiteName_awareness").val('');
+    $("#serach_iSiteId_awareness").val('');
+}
+
+function clear_sr(){
+    $("#vSR_awareness").val('');
+    $("#serach_iSRId_awareness").val('');
+}

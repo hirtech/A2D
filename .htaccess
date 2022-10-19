@@ -177,7 +177,7 @@ RewriteRule ^tasks/task_trap_list index.php?module=$0&page=m-task_trap_list
 #---------------------
 
 #---------------------
-#Task Trap
+#Task Other
 RewriteRule ^tasks/task_other_list&(.*)$  index.php?module=$0&page=m-task_other_list&%{QUERY_STRING}
 RewriteRule ^tasks/task_other_list index.php?module=$0&page=m-task_other_list
 #---------------------
@@ -189,9 +189,9 @@ RewriteRule ^tasks/task_treatment_list index.php?module=$0&page=t-task_treatment
 #---------------------
 
 #---------------------
-#Awarness
-RewriteRule ^awareness/awareness_list&(.*)$  index.php?module=$0&page=m-awareness_list&%{QUERY_STRING}
-RewriteRule ^awareness/awareness_list index.php?module=$0&page=m-awareness_list
+#Task Awarness
+RewriteRule ^tasks/task_awareness_list&(.*)$  index.php?module=$0&page=m-task_awareness_list&%{QUERY_STRING}
+RewriteRule ^tasks/task_awareness_list index.php?module=$0&page=m-task_awareness_list
 #---------------------
 
 #---------------------

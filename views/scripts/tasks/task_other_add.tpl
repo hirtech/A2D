@@ -59,7 +59,7 @@
                             <select name="technician_id" id="otechnician_id" class="form-control select">
                                 <option value="">Select Technician</option>
                                 {section name="s" loop=$technician_user_arr}
-                                <option value="{$technician_user_arr[s].iUserId}">{$technician_user_arr[s].vFirstName|gen_strip_slash} {$technician_user_arr[s].vLastName|gen_strip_slash}</option>
+                                <option value="{$technician_user_arr[s].iUserId}">{$technician_user_arr[s].vName|gen_strip_slash}</option>
                                 {/section}
                             </select>
                         </div>

@@ -83,7 +83,7 @@ $("#save_data").click(function(e){
                     var fiber_msg = "";
                     var confirm_Button_Class = "";
                     var iFiberInquiryId = response['iFiberInquiryId'];
-                    if(response['iSiteId'] > 0){
+                    if(response['iMatchingPremiseId'] > 0){
                         fiber_msg = "Good News! Fiber is coming your way!\nWe have your contact information and will let you know when we start deploying our Fiber Network in your area";
                         confirm_Button_Class = "confirm btn btn-lg btn-success";
 

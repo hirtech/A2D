@@ -90,7 +90,7 @@ class FiberInquiry {
 
 		global $sqlObj, $admin_panel_session_suffix, $function_path;
 
-		$sql = "INSERT INTO fiberinquiry_details(\"vAddress1\", \"vAddress2\", \"vStreet\",\"vCrossStreet\", \"iZipcode\", \"iStateId\", \"iCountyId\", \"iCityId\", \"iZoneId\", \"vLatitude\", \"vLongitude\", \"iCId\", \"iStatus\", \"iPremiseSubTypeId\", \"iEngagementId\", \"dAddedDate\") VALUES (".gen_allow_null_char($this->insert_arr['vAddress1']).", ".gen_allow_null_char($this->insert_arr['vAddress2']).", ".gen_allow_null_char($this->insert_arr['vStreet']).", ".gen_allow_null_char($this->insert_arr['vCrossStreet']).", ".gen_allow_null_char($this->insert_arr['iZipcode']).", ".gen_allow_null_char($this->insert_arr['iStateId']).", ".gen_allow_null_char($this->insert_arr['iCountyId']).", ".gen_allow_null_char($this->insert_arr['iCityId']).", ".gen_allow_null_char($this->insert_arr['iZoneId']).", ".gen_allow_null_char($this->insert_arr['vLatitude']).", ".gen_allow_null_char($this->insert_arr['vLongitude']).", ".gen_allow_null_char($this->insert_arr['iCId']).", ".gen_allow_null_char($this->insert_arr['iStatus']).", ".gen_allow_null_char($this->insert_arr['iPremiseSubTypeId']).", ".gen_allow_null_char($this->insert_arr['iEngagementId']).", ".gen_allow_null_char(date_getSystemDateTime()).")";
+		$sql = "INSERT INTO fiberinquiry_details(\"vAddress1\", \"vAddress2\", \"vStreet\",\"vCrossStreet\", \"iZipcode\", \"iStateId\", \"iCountyId\", \"iCityId\", \"iZoneId\", \"vLatitude\", \"vLongitude\", \"iCId\", \"iStatus\", \"iPremiseSubTypeId\", \"iEngagementId\", \"dAddedDate\", \"iMatchingPremiseId\") VALUES (".gen_allow_null_char($this->insert_arr['vAddress1']).", ".gen_allow_null_char($this->insert_arr['vAddress2']).", ".gen_allow_null_char($this->insert_arr['vStreet']).", ".gen_allow_null_char($this->insert_arr['vCrossStreet']).", ".gen_allow_null_char($this->insert_arr['iZipcode']).", ".gen_allow_null_char($this->insert_arr['iStateId']).", ".gen_allow_null_char($this->insert_arr['iCountyId']).", ".gen_allow_null_char($this->insert_arr['iCityId']).", ".gen_allow_null_char($this->insert_arr['iZoneId']).", ".gen_allow_null_char($this->insert_arr['vLatitude']).", ".gen_allow_null_char($this->insert_arr['vLongitude']).", ".gen_allow_null_char($this->insert_arr['iCId']).", ".gen_allow_null_char($this->insert_arr['iStatus']).", ".gen_allow_null_char($this->insert_arr['iPremiseSubTypeId']).", ".gen_allow_null_char($this->insert_arr['iEngagementId']).", ".gen_allow_null_char(date_getSystemDateTime()).", ".gen_allow_null_int($this->insert_arr['iMatchingPremiseId']).")";
 		//echo $sql;exit;
 		$sqlObj->Execute($sql);		
 			
@@ -134,7 +134,9 @@ class FiberInquiry {
 			\"iStatus\" = ".gen_allow_null_char($this->update_arr['iStatus']).", 
 			\"iPremiseSubTypeId\" = ".gen_allow_null_char($this->update_arr['iPremiseSubTypeId']).", 
 			\"iEngagementId\" = ".gen_allow_null_char($this->update_arr['iEngagementId']).", 
-			\"dModifiedDate\"=".gen_allow_null_char(date_getSystemDateTime())." WHERE \"iFiberInquiryId\" = ".$this->update_arr['iFiberInquiryId'];
+			\"dModifiedDate\"=".gen_allow_null_char(date_getSystemDateTime()).", 
+			\"iMatchingPremiseId\"=".gen_allow_null_int($this->update_arr['iMatchingPremiseId'])."
+			 WHERE \"iFiberInquiryId\" = ".$this->update_arr['iFiberInquiryId'];
 			//echo $rs_db;exit;
 			$sqlObj->Execute($rs_db);
 			$rs_up = $sqlObj->Affected_Rows();

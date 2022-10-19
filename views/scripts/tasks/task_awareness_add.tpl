@@ -16,12 +16,14 @@
             			<label class="col-sm-2 col-form-label" for="vSiteName_awareness">Premise<span class="text-danger"> *</span></label>
             			<div class="col-sm-4">
                 			<input type="text" name="vSiteName_awareness"  class="form-control " id="vSiteName_awareness" placeholder="Search Premise Id or Premise Name" value="{if $rs_site[0].iSiteId}{if $rs_site[0].vName neq ''}{$rs_site[0].vName|gen_strip_slash} - {/if}PremiseID# {$rs_site[0].iSiteId}{/if}"  required>
+                            <img class="clear_site" src="{$site_url}assets/images/icon-delete.png" style="cursor:pointer;" onclick="return clear_site();">
                 			<input type="hidden" id="serach_iSiteId_awareness" name="serach_iSiteId_awareness" value="{$rs_site[0].iSiteId}"/>
                 			<div class="invalid-feedback" id="errmsg_search_site">Please enter premise</div>
                 		</div>
                         <label class="col-sm-2 col-form-label" for="vSR_awareness">Fiber Inquiry</label>
                         <div class="col-sm-4">
-                            <input type="text" name="vSR_awareness"  class="form-control " id="vSR_awareness" placeholder="Search Fiber Inquiry Id" value=""  >
+                            <input type="text" name="vSR_awareness"  class="form-control " id="vSR_awareness" placeholder="Search Fiber Inquiry Id" value="" >
+                            <img class="clear_sr" src="{$site_url}assets/images/icon-delete.png" style="cursor:pointer;" onclick="return clear_sr();">
                             <input type="hidden" id="serach_iSRId_awareness" name="serach_iSRId_awareness" value=""/>
                         </div>
             		</div>
@@ -60,7 +62,7 @@
                             <select name="technician_id" id="otechnician_id" class="form-control select">
                                 <option value="">Select Technician</option>
                                 {section name="s" loop=$technician_user_arr}
-                                <option value="{$technician_user_arr[s].iUserId}">{$technician_user_arr[s].vFirstName|gen_strip_slash} {$technician_user_arr[s].vLastName|gen_strip_slash}</option>
+                                <option value="{$technician_user_arr[s].iUserId}">{$technician_user_arr[s].vName|gen_strip_slash}</option>
                                 {/section}
                             </select>
                         </div>
@@ -98,3 +100,18 @@ $(document).ready(function() {
 });
 {/literal}
 </script>
+<style type="text/css">
+img.clear_site {
+    position: absolute;
+    right: 20px;
+    top: 13px;
+    width: 12px;
+}
+
+img.clear_sr {
+    position: absolute;
+    right: 20px;
+    top: 13px;
+    width: 12px;
+}
+</style>

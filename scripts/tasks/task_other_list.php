@@ -385,20 +385,27 @@ curl_close($ch);
 $res = json_decode($response, true);
 $smarty->assign("rs_type", $res['result']);
 
-/*USer data*/
-$UserObj = new User();
-$where_arr = array();
-$join_fieds_arr = array();
-$join_arr  = array();
-$UserObj->user_clear_variable();
-$where_arr[] = "user_mas.\"iStatus\" = '1'";
-
-$UserObj->join_field = $join_fieds_arr;
-$UserObj->join = $join_arr;
-$UserObj->where = $where_arr;
-$UserObj->setClause();
-$rs_user_data = $UserObj->recordset_list();
-$smarty->assign("technician_user_arr", $rs_user_data);
+/*-------------------------- User -------------------------- */
+$arr_param = array();
+$arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
+$API_URL = $site_api_url."getUserDropdown.json";
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $API_URL);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_HEADER, FALSE);
+curl_setopt($ch, CURLOPT_POST, TRUE);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($arr_param));
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+   "Content-Type: application/json",
+)); 
+$response = curl_exec($ch);
+curl_close($ch);  
+$res = json_decode($response, true);
+$smarty->assign("technician_user_arr", $res['result']);
+//echo "<pre>";print_r($res['result']);exit;
+/*-------------------------- User -------------------------- */
 
 $module_name = "Task Other List";
 $module_title = "Task Other";

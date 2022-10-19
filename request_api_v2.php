@@ -1080,10 +1080,37 @@ switch($path) {
 			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
 		}
 		break;
-	case "awareness_add." . $req_ext:
+	case "task_awareness_list." . $req_ext:
 		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
-			$request_type = "awareness_add";
-			$api_file_name = "awareness.php";
+			$request_type = "task_awareness_list";
+			$api_file_name = "task_awareness.php";
+			include_once($site_api_path."api_authentication.php");
+		}else {
+			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
+		}
+		break;
+	case "task_awareness_add." . $req_ext:
+		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
+			$request_type = "task_awareness_add";
+			$api_file_name = "task_awareness.php";
+			include_once($site_api_path."api_authentication.php");
+		}else {
+			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
+		}
+		break;
+	case "task_awareness_edit." . $req_ext:
+		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
+			$request_type = "task_awareness_edit";
+			$api_file_name = "task_awareness.php";
+			include_once($site_api_path."api_authentication.php");
+		}else {
+			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
+		}
+		break;
+	case "task_awareness_delete." . $req_ext:
+		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
+			$request_type = "task_awareness_delete";
+			$api_file_name = "task_awareness.php";
 			include_once($site_api_path."api_authentication.php");
 		}else {
 			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
