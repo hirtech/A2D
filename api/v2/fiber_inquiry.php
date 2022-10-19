@@ -7,10 +7,11 @@ include_once($controller_path . "task_landing_rate.inc.php");
 include_once($controller_path . "task_trap.inc.php");
 include_once($controller_path . "task_other.inc.php");
 if($request_type == "fiber_inquiry_edit"){
-    $vLatitude = number_format($RES_PARA['vLatitude'], 6, '.', '');
-    $vLongitude = number_format($RES_PARA['vLongitude'], 6, '.', '');
+    //$vLatitude = number_format($RES_PARA['vLatitude'], 6, '.', '');
+    //$vLongitude = number_format($RES_PARA['vLongitude'], 6, '.', '');
+    //$sql_premise = "SELECT s.\"iSiteId\", s.\"vName\" FROM site_mas s WHERE  St_Within(ST_GeometryFromText('POINT(".$vLongitude." ".$vLatitude.")', 4326)::geometry, (s.\"vPointLatLong\")::geometry)='t'ORDER BY s.\"iSiteId\" DESC LIMIT 1";
 
-    $sql_premise = "SELECT s.\"iSiteId\", s.\"vName\" FROM site_mas s WHERE  St_Within(ST_GeometryFromText('POINT(".$vLongitude." ".$vLatitude.")', 4326)::geometry, (s.\"vPointLatLong\")::geometry)='t'ORDER BY s.\"iSiteId\" DESC LIMIT 1"; 
+    $sql_premise = "SELECT s.\"iSiteId\", s.\"vName\" FROM site_mas s WHERE s.\"vLongitude\" = '".$RES_PARA['vLongitude']."' AND  s.\"vLatitude\" = '".$RES_PARA['vLatitude']."' ORDER BY s.\"iSiteId\" DESC LIMIT 1";    
     $rs_premise = $sqlObj->GetAll($sql_premise);
     $iMatchingPremiseId = 0;
     if(!empty($rs_premise)){
@@ -68,10 +69,10 @@ if($request_type == "fiber_inquiry_edit"){
         $response_data = array("Code" => 500 , "Message" => MSG_DELETE_ERROR);
     }
 }else if($request_type == "fiber_inquiry_add") {
-    $vLatitude = number_format($RES_PARA['vLatitude'], 6, '.', '');
-    $vLongitude = number_format($RES_PARA['vLongitude'], 6, '.', '');
-
-    $sql_premise = "SELECT s.\"iSiteId\", s.\"vName\" FROM site_mas s WHERE  St_Within(ST_GeometryFromText('POINT(".$vLongitude." ".$vLatitude.")', 4326)::geometry, (s.\"vPointLatLong\")::geometry)='t'ORDER BY s.\"iSiteId\" DESC LIMIT 1"; 
+    //$vLatitude = number_format($RES_PARA['vLatitude'], 6, '.', '');
+    //$vLongitude = number_format($RES_PARA['vLongitude'], 6, '.', '');
+    //$sql_premise = "SELECT s.\"iSiteId\", s.\"vName\" FROM site_mas s WHERE  St_Within(ST_GeometryFromText('POINT(".$vLongitude." ".$vLatitude.")', 4326)::geometry, (s.\"vPointLatLong\")::geometry)='t'ORDER BY s.\"iSiteId\" DESC LIMIT 1"; 
+    $sql_premise = "SELECT s.\"iSiteId\", s.\"vName\" FROM site_mas s WHERE s.\"vLongitude\" = '".$RES_PARA['vLongitude']."' AND  s.\"vLatitude\" = '".$RES_PARA['vLatitude']."' ORDER BY s.\"iSiteId\" DESC LIMIT 1";
     $rs_premise = $sqlObj->GetAll($sql_premise);
     $iMatchingPremiseId = 0;
     if(!empty($rs_premise)){
