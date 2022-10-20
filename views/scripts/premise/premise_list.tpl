@@ -64,11 +64,7 @@
 		</div> 
 	</div> 
 </div>
-{include file="scripts/tasks/task_larval_surveillance_add.tpl"}
-{include file="scripts/tasks/task_landing_rate_add.tpl"}
-{include file="scripts/tasks/task_trap_add.tpl"}
-{include file="scripts/tasks/task_other_add.tpl"}
-{include file="scripts/tasks/task_treatment_add.tpl"}
+{include file="scripts/tasks/task_awareness_add.tpl"}
 
 <script type="text/javascript">
 	var ajax_url = 'premise/list?mode=List';
@@ -86,8 +82,4 @@
 <script src="assets/vendors/typeahead/handlebars-v4.5.3.js"></script>
 <script src="assets/vendors/typeahead/typeahead.bundle.js"></script>
 <!-- END: Page Vendor JS-->
-<script src="assets/js/app_js/task_larval_surveillance_add.js"></script>
-<script src="assets/js/app_js/task_landing_rate_add.js"></script>
-<script src="assets/js/app_js/task_trap_add.js"></script>
-<script src="assets/js/app_js/task_other_add.js"></script>
-<script src="assets/js/app_js/task_treatment_add.js"></script>
+<script src="assets/js/app_js/task_awareness_add.js"></script>

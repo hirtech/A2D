@@ -16,7 +16,7 @@ function addEditDataAwareness(id,mode,iSiteId_list){
     if(mode == "edit"){
         $("#modal_title_awareness").html('Edit Awareness');
         $("#mode_title_awareness").val('Update');
-        if (typeof(siteInfoWindowAwarenessArr) !== 'undefined' && siteInfoWindowAwarenessArr.length > 0) {
+        if (typeof(siteInfoWindowTaskAwarenessArr) !== 'undefined' && siteInfoWindowTaskAwarenessArr.length > 0) {
             var iAId_s = '';
             var vSiteName_s = '';
             var iSiteId_s = '';
@@ -30,7 +30,7 @@ function addEditDataAwareness(id,mode,iSiteId_list){
 
             //var technicianid = sess_iUserId;
             var technicianid = '';
-            $.each(siteInfoWindowAwarenessArr, function(k, v) {
+            $.each(siteInfoWindowTaskAwarenessArr, function(k, v) {
                 iAId_s = v['iAId'];
                 if(id == iAId_s ){
                     vSiteName_s = v['vSiteName'];
@@ -220,7 +220,7 @@ $("#save_data_awareness").click(function(){
 	        $("#errmsg_dEndTime_awareness").hide();
 	    }    	
     }
-
+    
     if(isError == 0){
         var data_str = $("#frmadd_awareness").serializeArray();
         $.ajax({

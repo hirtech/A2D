@@ -1,5 +1,5 @@
 var markerCluster;
-function getMapData(siteTypes, sAttr, skCity, skZones, sr, larvalfieldtask, landingfieldtask, positive, custlayer, siteSubTypes) {
+function getMapData(siteTypes, sAttr, skCity, skZones, sr, custlayer, siteSubTypes) {
 
 	/*console.log("Site : " + siteTypes);
 	console.log("Premise Sub type : " + siteSubTypes);
@@ -17,7 +17,7 @@ function getMapData(siteTypes, sAttr, skCity, skZones, sr, larvalfieldtask, land
 	
 	//siteMarker.length = 0;
 	clearMap();
-	 if(siteTypes != "" || sAttr != "" || skCity != "" || skZones != "" || sr != "" || larvalfieldtask != "" || landingfieldtask !="" || positive != "" ||  custlayer != ""|| siteSubTypes != ""){
+	 if(siteTypes != "" || sAttr != "" || skCity != "" || skZones != "" || sr != "" ||  custlayer != ""|| siteSubTypes != ""){
 		if(typeof siteSubTypes == "undefined"){
 			siteSubTypes = [];
 		}
@@ -32,9 +32,6 @@ function getMapData(siteTypes, sAttr, skCity, skZones, sr, larvalfieldtask, land
 				city: skCity.join(","),
 				zone: skZones.join(","),
 				sr: sr.join(","),
-				larvalfieldtask: larvalfieldtask.join(","),
-				landingfieldtask: landingfieldtask.join(","),
-				positive: positive.join(","),
 				custlayer: custlayer.join(","),
 			},
 			cache: true,
@@ -54,10 +51,7 @@ function getMapData(siteTypes, sAttr, skCity, skZones, sr, larvalfieldtask, land
 					console.log('data found');
 					var response = JSON.parse(data);
 					var siteData = response.sites;
-					var reslanddata = "";
-					var reslarvaldata = "";
 					var ressrdata = "";
-					var respositivedata = "";
 					
 					//var srcount = 0;
 					if (response.polyZone !== undefined) {
@@ -114,82 +108,8 @@ function getMapData(siteTypes, sAttr, skCity, skZones, sr, larvalfieldtask, land
 								}
 						});
           }
-         	if (response.landing_rate !== undefined ) {
-            reslanddata =response.landing_rate;
-						$.each(reslanddata, function(id, item) {
-							fieldtask = landingfieldtask;
-							if (reslanddata[id].polygon !== undefined) {
-								
-								showPolygonMapForfieldtask(reslanddata[id].polygon, map, reslanddata[id].icon, id, fieldtask);
-								if (reslanddata[id].polyCenter !== undefined) {
-									var centerPoint = {
-										lat: reslanddata[id].polyCenter['lat']+ (Math.random() / 10000),
-										lng: reslanddata[id].polyCenter['lng']+ (Math.random() / 10000)
-									};
-									/*var centerPoint = {
-										lat: reslanddata[id].polyCenter['lat']+ mathRandLat,
-										lng: reslanddata[id].polyCenter['lng']+ mathRandLng
-									};*/
-									showPolyCenterForfieldtask(centerPoint, map, reslanddata[id].icon, id, fieldtask);
-								}
-							}
-							if (reslanddata[id].poly_line !== undefined) {
-								showPolyLineMapForfieldtask(reslanddata[id].poly_line, map, reslanddata[id].icon, id, fieldtask);
-							}
-							if (reslanddata[id].point !== undefined) {
-								
-								for (i = 0; i < reslanddata[id].point.length; i++) {
-									var pointMatrix = {
-										lat: reslanddata[id].point[i]['lat']+ (Math.random() / 10000),
-										lng: reslanddata[id].point[i]['lng']+ (Math.random() / 10000)
-									};
-									/*var pointMatrix = {
-										lat: reslanddata[id].point[i]['lat']+ mathRandLat,
-										lng: reslanddata[id].point[i]['lng']+ mathRandLng
-									};*/
-									showPointMapForfieldtask(pointMatrix, map, reslanddata[id].icon, id, fieldtask,reslanddata[id].count);
-								}
-							}
-						});
-          }
-          if (response.larval !== undefined ) {
-            reslarvaldata =response.larval;
-						$.each(reslarvaldata, function(id, item) {
-							fieldtask = larvalfieldtask;
-							if (reslarvaldata[id].polygon !== undefined) {
-								
-								showPolygonMapForfieldtask(reslarvaldata[id].polygon, map, reslarvaldata[id].icon, id, fieldtask);
-								if (reslarvaldata[id].polyCenter !== undefined) {
-									var centerPoint = {
-										lat: reslarvaldata[id].polyCenter['lat']+ (Math.random() / 10000),
-										lng: reslarvaldata[id].polyCenter['lng']+ (Math.random() / 10000)
-									};
-									/*var centerPoint = {
-										lat: reslarvaldata[id].polyCenter['lat']+ mathRandLat,
-										lng: reslarvaldata[id].polyCenter['lng']+ mathRandLng
-									};*/
-									showPolyCenterForfieldtask(centerPoint, map, reslarvaldata[id].icon, id, fieldtask);
-								}
-							}
-							if (reslarvaldata[id].poly_line !== undefined) {
-								showPolyLineMapForfieldtask(reslarvaldata[id].poly_line, map, reslarvaldata[id].icon, id, fieldtask);
-							}
-							if (reslarvaldata[id].point !== undefined) {
-								
-								for (i = 0; i < reslarvaldata[id].point.length; i++) {
-									var pointMatrix = {
-										lat: reslarvaldata[id].point[i]['lat']+ (Math.random() / 10000),
-										lng: reslarvaldata[id].point[i]['lng']+ (Math.random() / 10000)
-									};
-									/*var pointMatrix = {
-										lat: reslarvaldata[id].point[i]['lat']+ mathRandLat,
-										lng: reslarvaldata[id].point[i]['lng']+ mathRandLng
-									};*/
-									showPointMapForfieldtask(pointMatrix, map, reslarvaldata[id].icon, id, fieldtask,reslarvaldata[id].count);
-								}
-							}
-						});
-          }
+         	
+          
           if (response.sr !== undefined ) {
             ressrdata = response.sr;
             $.each(ressrdata, function(id, item) {
@@ -214,48 +134,7 @@ function getMapData(siteTypes, sAttr, skCity, skZones, sr, larvalfieldtask, land
             	}
             });
           }
-          if(response.positive != undefined){
-            respositivedata = response.positive;
-            $.each(respositivedata, function(id, item) {
-								var iTMPId = '';
-								var iTTId = '';
-								iTTId = respositivedata[id].iTTId;
-								iTMPId = respositivedata[id].iTMPId;
-								if (respositivedata[id].polygon !== undefined) {
-									showPolygonMapForpositive(respositivedata[id].polygon, map, respositivedata[id].icon, id,respositivedata);
-									if (respositivedata[id].polyCenter !== undefined) {
-										var centerPoint = {
-											lat: respositivedata[id].polyCenter['lat']+ (Math.random() / 10000),
-											lng: respositivedata[id].polyCenter['lng']+ (Math.random() / 10000)
-										};
-										/*var centerPoint = {
-											lat: respositivedata[id].polyCenter['lat']+ mathRandLat,
-											lng: respositivedata[id].polyCenter['lng']+ mathRandLng
-										};*/
-										showPolyCenterForpositive(centerPoint, map, respositivedata[id].icon, id,respositivedata);
-									}
-								}
-								if (respositivedata[id].poly_line !== undefined) {
-									
-									showPolyLineMapForpositive(respositivedata[id].poly_line, map, respositivedata[id].icon, id,respositivedata);
-								}
-								if (respositivedata[id].point !== undefined) {
-									
-									for (i = 0; i < respositivedata[id].point.length; i++) {
-										var pointMatrix = {
-											lat: respositivedata[id].point[i]['lat']+ (Math.random() / 10000),
-											lng: respositivedata[id].point[i]['lng']+ (Math.random() / 10000)
-										};
-										/*var pointMatrix = {
-											lat: respositivedata[id].point[i]['lat']+ mathRandLat,
-											lng: respositivedata[id].point[i]['lng']+ mathRandLng
-										};*/
-										
-										showPointMapForpositive(pointMatrix, map, respositivedata[id].icon, id,respositivedata);
-									}
-								}
-							});
-           }
+         
 					
 					//custom layer kml data
 					if (response.customlayer !== undefined) {
@@ -620,137 +499,7 @@ function getCurrentlatlong($setposition = false){
 	    }
 }
 
-function showPolygonMapForpositive(sitePath, map, icon, siteid,siteData) {
 
-	/*polygonObj[pl] = new google.maps.Polygon({
-		path: sitePath,
-		strokeColor: '#FF0000',
-		strokeOpacity: 0.8,
-		strokeWeight: 2,
-		fillColor: '#FF0000',
-		fillOpacity: 0.35,
-		icon: icon
-	});
-	$site_map = polygonObj[pl];
-	info_positive_popup($site_map, siteid,siteData);
-	//info_larval_popup($site_map, siteid,Fieldtask);
-	polygonObj[pl].setMap(map);
-	pl++;
-	*/
-	positivesiteMarker[pov] = new google.maps.Polygon({
-		path: sitePath,
-		strokeColor: '#FF0000',
-		strokeOpacity: 0.8,
-		strokeWeight: 2,
-		fillColor: '#FF0000',
-		fillOpacity: 0.35,
-		icon: icon
-	});
-
-
-	$site_map = positivesiteMarker[pov];
-	gmarkers.push($site_map);
-	info_positive_popup($site_map, siteid,siteData);
-
-	infoPolygonArea($site_map, siteid);
-
-  positivesiteMarker[pov].setMap(map);
-	pov++;
-}
-
-function showPointMapForpositive(sitePath, map, icon, siteid,siteData) {
-	/*map.setCenter({lat: 41.595526, lng: -72.687145}); */
-	/*siteMarker[pCount] = new google.maps.Marker({
-		map: map,
-		position: sitePath,
-		icon: icon
-	});
-
-	$site_map = siteMarker[pCount];
-	info_positive_popup($site_map, siteid,siteData);
-	siteMarker[pCount].setMap(map);
-	pCount++;*/
-	positivesiteMarker[pov] = new google.maps.Marker({
-		map: map,
-		position: sitePath,
-		icon: icon
-	});
-
-	$site_map = positivesiteMarker[pov];
-	gmarkers.push($site_map);
-	info_positive_popup($site_map, siteid,siteData);
-	positivesiteMarker[pov].setMap(map);
-
-	//Extend each marker's position in LatLngBounds object.
-    latlngbounds.extend(positivesiteMarker[pov].position);
-
-	pov++;
-}
-
-function showPolyLineMapForpositive(sitePath, map, icon, siteid,siteData) {
-	/*polyLineObj[pline] = new google.maps.Polyline({
-		path: sitePath,
-		strokeColor: '#FF0000',
-		strokeOpacity: 0.8,
-		strokeWeight: 2,
-		fillColor: '#FF0000',
-		fillOpacity: 0.35,
-		icon: icon,
-	});
-
-	info_positive_popup(polyLineObj[pline], siteid,siteData);
-	polyLineObj[pline].setMap(map);
-	pline++;*/
-	positivesiteMarker[pov] = new google.maps.Polyline({
-		path: sitePath,
-		strokeColor: '#FF0000',
-		strokeOpacity: 0.8,
-		strokeWeight: 2,
-		fillColor: '#FF0000',
-		fillOpacity: 0.35,
-		icon: icon,
-	});
-
-	info_positive_popup(positivesiteMarker[pov], siteid,siteData);
-	positivesiteMarker[pov].setMap(map);
-
-	//Extend each marker's position in LatLngBounds object.
-    //latlngbounds.extend(positivesiteMarker[pov].position);
-    positivesiteMarker[pov].getPath().forEach(function (path, index) {                              
-        latlngbounds.extend(path);
-    });
-
-
-	pov++;
-}
-
-function showPolyCenterForpositive(sitePath, map, icon, siteid,siteData) {
-	/*pCenterMarker[pCenter] = new google.maps.Marker({
-		position: sitePath,
-		map: map,
-		icon: icon,
-	});
-
-	$site_map = pCenterMarker[pCenter];
-	info_positive_popup($site_map, siteid,siteData);
-	pCenterMarker[pCenter].setMap(map);
-	pCenter++;*/
-	positivesiteMarker[pov] = new google.maps.Marker({
-		position: sitePath,
-		map: map,
-		icon: icon,
-	});
-
-	$site_map = positivesiteMarker[pov];
-	gmarkers.push($site_map);
-	info_positive_popup($site_map, siteid,siteData);
-	positivesiteMarker[pov].setMap(map);
-
-	//Extend each marker's position in LatLngBounds object.
-    latlngbounds.extend(positivesiteMarker[pov].position);
-
-	pov++;
-}
 function showPolygonMapForfieldtask(sitePath, map, icon, siteid,Fieldtask) {
 
 	polygonObj[pl] = new google.maps.Polygon({
@@ -1190,46 +939,6 @@ function generateSRJson() {
 	});
 }
 
-function generatelandingrateJson() {
-	//console.log(site_url + "vmap/api");
-	$.ajax({
-		type: "POST",
-		url: site_url + "vmap/api",
-		data: {
-			action: "getlandingrateData",
-		},
-		success: function(data) {
-			console.log(data);
-		}
-	});
-}
-function getlarvalJson() {
-	//console.log(site_url + "vmap/api");
-	$.ajax({
-		type: "POST",
-		url: site_url + "vmap/api",
-		data: {
-			action: "getlarvalData",
-		},
-		success: function(data) {
-			console.log(data);
-		}
-	});
-}
-function getpositiveJson() {
-	//console.log(site_url + "vmap/api");
-	$.ajax({
-		type: "POST",
-		url: site_url + "vmap/api",
-		data: {
-			action: "getpositiveData",
-		},
-		success: function(data) {
-			console.log('getpositiveData');
-			console.log(data);
-		}
-	});
-}
 function getCustomLayerJson() {
 	$.ajax({
 		type: "POST",
@@ -1258,12 +967,6 @@ function clearMap() {
             polyLineObj[i].setMap(null);
         }
     }
-   if (positivesiteMarker.length > 0) {
-        for (i = 0; i < positivesiteMarker.length; i++) {
-            positivesiteMarker[i].setMap(null);
-        }
-    }
-	
 
 	if (pCenterMarker.length > 0) {
         for (i = 0; i < pCenterMarker.length; i++) {
@@ -1307,10 +1010,6 @@ function clearMap() {
 		pCenterMarker = [];
 	}
 
-	if (positivesiteMarker !== undefined) {
-		positivesiteMarker = [];
-	}
-
 	if (srlayerMarker !== undefined) {
 		srlayerMarker = [];
 	}
@@ -1318,29 +1017,15 @@ function clearMap() {
 		fieldmap_sr_arr = [];
 
 	}
-	if (landing_rate !== undefined) {
-		landing_rate = [];
-	}
-	if (larval !== undefined) {
-		larval = [];
-	}
-	if (Fieldtask !== undefined) {
-		Fieldtask = [];
-	}
-
-	if (positive !== undefined) {
-		positive = [];
-	}*/
+	*/
 
 	/*siteTypes.length = 0;
 	sAttr.length = 0;
 	skCity.length = 0;
 	skZones.length = 0;
 	fieldmap_sr_arr.length = 0;
-	landing_rate.length = 0;
 	larval.length = 0;
 	Fieldtask.length = 0;
-	positive.length = 0;
 	siteMarker.length = 0;
 	zonePolygonObj.length = 0;
 	polyLineObj.length=0;*/
@@ -1429,7 +1114,7 @@ function info_popup(marker, siteid) {
 						content += "<h6>" + type_str + "</h6>";
 						content += "<strong>" + address_str + "</strong>";
 						content += "<div class='button mt-3'>";
-						//content += "<a class='btn btn-primary  mr-2 text-white' title='Landing Rate' onclick=addEditDataTaskAdult(0,'add','" + siteid + "')>Landing Rate</a><a class='btn btn-primary  mr-2 text-white' title='Larval Surveillance' onclick=addEditDataTaskLarval(0,'add','" + siteid + "')>Larval Surveillance</a><a class='btn btn-primary  mr-2 text-white' title='Treatment Task' onclick=addEditDataTaskTreatment(0,'add','" + siteid + "')>Treatment</a><a class='btn btn-primary  mr-2 text-white' title='Trap' onclick=addEditDataTaskTrap(0,'add','" + siteid + "')>Trap Place</a><a class='btn btn-primary  mr-2 text-white' title='Other Task' onclick=addEditDataTaskOther(0,'add','" + siteid + "')>Other</a><a class='btn btn-primary  mr-2 text-white' href='" + site_url + "premise/edit&mode=Update&iSiteId=" + siteid + "' target='_blank'>Edit premise</a>";
+						
 						var ServiceOrderCount = 0;
 						if (data.site[0]['ServiceOrderCount'] > 0) {
 							ServiceOrderCount = data.site[0]['ServiceOrderCount'];
@@ -1442,46 +1127,26 @@ function info_popup(marker, siteid) {
 						content += "<a class='btn btn-primary  mr-2 text-white' title='Trouble'>Trouble</a>";
 						content += "<a class='btn btn-primary  mr-2 text-white' title='Other'>Other</a>";
 						content += "<a class='btn btn-primary  mr-2 text-white'  title='Other' href='" + site_url + "premise/edit&mode=Update&iSiteId=" + siteid + "' target='_blank'>Edit Premise</a>";
-						/*if(ENABLE_INSTA_TREATMENT=='Y'){
-							content += "<a class='btn btn-primary  mr-2 text-white' title='Landing Rate' onclick=addInstaTreatData('add','" + siteid + "')>Insta Treat</a>";
-						}*/
+						
 						content += "</div>";
 						
 						if (typeof data.site_history !== "undefined" && data.site_history != null && data.site_history != '') {
 							
 							if (data.site_history.length > 0) {
 								content += "<h5 class='border-bottom pb-2 mb-3 mt-3'>History</h5>";
-								siteInfoWindowTaskOtherArr = [];
-								siteInfoWindowTaskLandingArr = [];
-								siteInfoWindowTaskTrapArr = [];
-								siteInfoWindowTaskLarvalArr = [];
-								siteInfoWindowTaskTreatmentArr = [];
+								siteInfoWindowTaskAwarenessArr = [];
 								$.each(data.site_history, function(index, item) {
-									if(item['Type'] == "Treatment") {
-										siteInfoWindowTaskTreatmentArr.push(item['hidden_arr']);
-										content += item['hidden_fields']+"<span class='w-100 d-block  pb-2'><a href='javascript:void(0);' onclick='addEditDataTaskTreatment("+item['id']+",\"edit\",0)'>" + item['Date'] + " " + item['Description'] + "</a></span>";
+									if(item['Type'] == "Awareness") {
+										siteInfoWindowTaskAwarenessArr.push(item['hidden_arr']);
+										content += item['hidden_fields']+"<span class='w-100 d-block  pb-2'><a href='javascript:void(0);' onclick='addEditDataAwareness("+item['id']+",\"edit\",0)'>" + item['Date'] + " " + item['Description'] + "</a></span>";
+									}else if(item['Type'] == "FiberInquiry") {
+										var fiber_inquiry_link = site_url+"fiber_inquiry/edit&mode=Update&iFiberInquiryId="+item['id'];
+										content += "<span class='w-100 d-block  pb-2'><a href='"+fiber_inquiry_link+"' target='_blank'>" + item['Date'] + " " + item['Description'] + "</a></span>";
+									}else if(item['Type'] == "ServiceOrder") {
+										var so_link = site_url+"service_order/edit&mode=Update&iServiceOrderId="+item['id'];
+										content += "<span class='w-100 d-block  pb-2'><a href='"+so_link+"' target='_blank'>" + item['Date'] + " " + item['Description'] + "</a></span>";
 									}
-									else if(item['Type'] == "Landing Rate") {
-										siteInfoWindowTaskLandingArr.push(item['hidden_arr']);
-										content += item['hidden_fields']+"<span class='w-100 d-block  pb-2'><a href='javascript:void(0);' onclick='addEditDataTaskAdult("+item['id']+",\"edit\",0)'>" + item['Date'] + " " + item['Description'] + "</a></span>";
-									}
-									else if(item['Type'] == "Task Trap") {
-										siteInfoWindowTaskTrapArr.push(item['hidden_arr']);
-										content += item['hidden_fields']+"<span class='w-100 d-block  pb-2'><a href='javascript:void(0);' onclick='addEditDataTaskTrap("+item['id']+",\"edit\",0)'>" + item['Date'] + " " + item['Description'] + "</a></span>";
-									}
-									else if(item['Type'] == "Laravel Surveillance") {
-										siteInfoWindowTaskLarvalArr.push(item['hidden_arr']);
-										content += item['hidden_fields']+"<span class='w-100 d-block  pb-2'><a href='javascript:void(0);' onclick='addEditDataTaskLarval("+item['id']+",\"edit\",0)'>" + item['Date'] + " " + item['Description'] + "</a></span>";
-									}
-									else if(item['Type'] == "Other") {
-										siteInfoWindowTaskOtherArr.push(item['hidden_arr']);
-										content += item['hidden_fields']+"<span class='w-100 d-block  pb-2'><a href='javascript:void(0);' onclick='addEditDataTaskOther("+item['id']+",\"edit\",0)'>" + item['Date'] + " " + item['Description'] + "</a></span>";
-									}
-									else if(item['Type'] == "SR") {
-										var sr_url = site_url+"sr/edit&mode=Update&iSRId="+item['id'];
-										content += "<span class='w-100 d-block  pb-2'><a href='"+sr_url+"' target='_blank'>" + item['Date'] + " " + item['Description'] + "</a></span>";
-									}
-									//content += "<span class='w-100 d-block  pb-2'><a href='javascript:void(0);'>" + item['Date'] + " " + item['Description'] + "</a></span>";
+									
 								});
 							}
 						}
@@ -1568,283 +1233,6 @@ function info_fieldtask_popup(marker, siteid, Fieldtask) {
 				url: site_url + "vmap/index",
 				data: 'mode=site_map_'+Fieldtask[0]+'&iSiteId=' + siteid+"&fieldtask="+Fieldtask[0],
 				success: function(data){
-					if(Fieldtask[0] == 'landing_rate'){
-						//var vName = data.site[0]['vName'];
-						var vName = '' ;
-						console.log(data);
-						if(Object.keys(data.site).length > 0){
-							/*if (typeof data.site[0]['vName'] == 'undefined' ||  data.site[0]['vName'] ==  null || data.site[0]['vName'] == '') {
-								vName = '';
-							} else {
-								vName = "(" + data.site[0]['vName'] + ")";
-							}*/
-							if (typeof data.site[0]['vName'] !== 'undefined' &&  data.site[0]['vName'] ==  null && data.site[0]['vName'] !== '') {
-								vName = "(" + data.site[0]['vName'] + ")";
-							} else {
-								vName = '';
-							}
-
-							var type_str = '';
-							if (typeof data.site[0]['vTypeName'] !== "undefined" && data.site[0]['vTypeName'] != null && data.site[0]['vTypeName'] != '') {
-								type_str += data.site[0]['vTypeName'];
-							}
-							if (typeof data.site[0]['vSubTypeName'] !== "undefined" && data.site[0]['vSubTypeName'] != null && data.site[0]['vSubTypeName'] != '') {
-								type_str += " " + data.site[0]['vSubTypeName'];
-							}
-
-							if (typeof data.site_attribute !== "undefined" && data.site_attribute != '') {
-								type_str += " (" + data.site_attribute + ")";
-							}
-							var address_str = '';
-							if (typeof data.site[0]['vAddress1'] !== "undefined" && data.site[0]['vAddress1'] != null && data.site[0]['vAddress1'] != '') {
-								address_str += data.site[0]['vAddress1'];
-							}
-							if (typeof data.site[0]['vStreet'] !== "undefined" && data.site[0]['vStreet'] != null && data.site[0]['vStreet'] != '') {
-								address_str += " " + data.site[0]['vStreet'];
-							}
-							if (typeof data.site[0]['vCity'] !== "undefined" && data.site[0]['vCity'] != null && data.site[0]['vCity'] != '') {
-								address_str += " ," + data.site[0]['vCity'];
-							}
-							if (typeof data.site[0]['vState'] !== "undefined" && data.site[0]['vState'] != null && data.site[0]['vState'] != '') {
-								address_str += " ," + data.site[0]['vState'];
-							}
-							var date_str = '';
-							var srid_str = '';
-							var tNotes_str = '';
-							var vMaxLandingRate = '';
-							content += "<div CELLPADDING=5 CELLSPACING=5 class=info_box id=info_box>";
-							content += "<h5 class='border-bottom pb-2 mb-3'>Premise ID " + data.site[0]['iSiteId'] + " " + vName + "</h5>";
-							content += "<h6>" + type_str + "</h6>";
-							content += "<strong>" + address_str + "</strong>";
-							if (typeof data.site !== "undefined" && data.site != null && data.site != '') {
-								if (data.site.length > 0) {
-									content += "<h5 class='border-bottom pb-2 mb-3 mt-3'></h5>";
-									content += "<table class=table>";
-									content += "<thead class='thead-dark'>";
-									content += "<tr>";
-									content += "<th>Date</th><th>Summary</th><th>SR</th><th>Notes</th>";
-									content += "</tr>";
-									content += "</thead><tbody>";
-									$.each(data.site, function(index, item) {
-										if (typeof data.site[index]['dDate'] !== "undefined" && data.site[index]['dDate'] != null && data.site[index]['dDate'] != '') {
-											date_str = data.site[index]['dDate'];
-										}
-										if (typeof data.site[index]['iSRId'] !== "undefined" && data.site[index]['iSRId'] != null && data.site[index]['iSRId'] != '') {
-											srid_str = data.site[index]['iSRId'];
-										}
-										if (typeof data.site[index]['tNotes'] !== "undefined" && data.site[index]['tNotes'] != null && data.site[index]['tNotes'] != '') {
-											tNotes_str = data.site[index]['tNotes'];
-										}
-										if (typeof data.site[index]['vMaxLandingRate'] !== "undefined" && data.site[index]['vMaxLandingRate'] != null && data.site[0]['vMaxLandingRate'] != '') {
-											vMaxLandingRate = data.site[index]['vMaxLandingRate'];
-										}
-										content += "<tr>";
-										content += "<td>" + date_str + "</td><td>Landing Rate" + vMaxLandingRate + "</td><td>" + srid_str + "</td><td>" + tNotes_str + "</td>";
-										content += "</tr>";
-									});
-									content += "</tbody></table>";
-								}
-							}
-							content += "</div>";
-						}
-					}
-					else if(Fieldtask[0] == 'larval'){
-						if(Object.keys(data.site).length > 0){
-							var vName = data.site[0]['vName'];
-							if (vName == null || vName == 'undefined' || vName == '') {
-							vName = '';
-							} else {
-								vName = "(" + data.site[0]['vName'] + ")";
-							}
-
-							var type_str = '';
-							if (typeof data.site[0]['vTypeName'] !== "undefined" && data.site[0]['vTypeName'] != null && data.site[0]['vTypeName'] != '') {
-								type_str += data.site[0]['vTypeName'];
-							}
-							if (typeof data.site[0]['vSubTypeName'] !== "undefined" && data.site[0]['vSubTypeName'] != null && data.site[0]['vSubTypeName'] != '') {
-								type_str += " " + data.site[0]['vSubTypeName'];
-							}
-
-							if (typeof data.site_attribute !== "undefined" && data.site_attribute != '') {
-								type_str += " (" + data.site_attribute + ")";
-							}
-							var address_str = '';
-							if (typeof data.site[0]['vAddress1'] !== "undefined" && data.site[0]['vAddress1'] != null && data.site[0]['vAddress1'] != '') {
-								address_str += data.site[0]['vAddress1'];
-							}
-							if (typeof data.site[0]['vStreet'] !== "undefined" && data.site[0]['vStreet'] != null && data.site[0]['vStreet'] != '') {
-								address_str += " " + data.site[0]['vStreet'];
-							}
-							if (typeof data.site[0]['vCity'] !== "undefined" && data.site[0]['vCity'] != null && data.site[0]['vCity'] != '') {
-								address_str += " ," + data.site[0]['vCity'];
-							}
-							if (typeof data.site[0]['vState'] !== "undefined" && data.site[0]['vState'] != null && data.site[0]['vState'] != '') {
-								address_str += " ," + data.site[0]['vState'];
-							}
-							var date_str = '';
-							var srid_str = '';
-							var tNotes_str = '';
-							var vMaxLandingRate = '';
-							var Summary = '';
-							var iGenus = '';
-							var iGenus2 = '';
-							var bEggs = '';
-							var bEggs2 = '';
-							var iDips = '';
-							var bInstar1 = '';
-							var bInstar2 = '';
-							var bInstar3 = '';
-							var bInstar4 = '';
-							var bInstar12 = '';
-							var bInstar22 = '';
-							var bInstar32 = '';
-							var bInstar42 = '';
-							var iCount = '';
-							var iCount2 = '';
-							var bPupae2 = '';
-							var bAdult2 = '';
-							var bPupae = '';
-							var bAdult = '';
-							var rAvgLarvel = '';
-							content += "<div CELLPADDING=5 CELLSPACING=5 class=info_box id=info_box>";
-							content += "<h5 class='border-bottom pb-2 mb-3'>Premise ID " + data.site[0]['iSiteId'] + " " + vName + "</h5>";
-							content += "<h6>" + type_str + "</h6>";
-							content += "<strong>" + address_str + "</strong>";
-							if (typeof data.site !== "undefined" && data.site != null && data.site != '') {
-								if (data.site.length > 0) {
-									content += "<h5 class='border-bottom pb-2 mb-3 mt-3'></h5>";
-									content += "<table class=table>";
-									content += "<thead class='thead-dark'>";
-									content += "<tr>";
-									content += "<th>Date</th><th>Summary</th><th>SR</th><th>Notes</th>";
-									content += "</tr>";
-									content += "</thead><tbody>";
-									$.each(data.site, function(index, item) {
-										if (typeof data.site[index]['iGenus'] !== "undefined" && data.site[index]['iGenus'] != null && data.site[index]['iGenus'] != '') {
-											if(data.site[index]['iGenus'] == 1){
-												iGenus = 'Ae.';
-											}
-											else if(data.site[index]['iGenus'] == 2){
-												iGenus = 'An.';
-											}
-											else if(data.site[index]['iGenus'] == 3){
-												iGenus = 'Cs.';
-											}
-											else if(data.site[index]['iGenus'] == 4){
-												iGenus = 'Cx.';
-											}
-											else {
-												iGenus = 'N/A';
-											}
-										}
-										if (typeof data.site[index]['iGenus2'] !== "undefined" && data.site[index]['iGenus2'] != null && data.site[index]['iGenus'] != '') {
-											if(data.site[index]['iGenus2'] == 1){
-												iGenus2 = 'Ae.';
-											}
-											else if(data.site[index]['iGenus2'] == 2){
-												iGenus2 = 'An.';
-											}
-											else if(data.site[index]['iGenus2'] == 3){
-												iGenus2 = 'Cs.';
-											}
-											else if(data.site[index]['iGenus2'] == 4){
-												iGenus2 = 'Cx.';
-											}
-											else {
-												iGenus = 'N/A';
-											}
-										}
-
-
-										if (typeof data.site[index]['bEggs'] !== "undefined" && data.site[index]['bEggs'] != null && data.site[index]['bEggs'] != '' && data.site[index]['bEggs'] == 't') {
-											bEggs = ", E";
-										}
-
-										if (typeof data.site[index]['bEggs2'] !== "undefined" && data.site[index]['bEggs2'] != null && data.site[index]['bEggs2'] != '' && data.site[index]['bEggs2'] == 't') {
-											bEggs2 = ", E";
-										}
-
-										if (typeof data.site[index]['bInstar12'] !== "undefined" && data.site[index]['bInstar12'] != null && data.site[index]['bInstar12'] != '' && data.site[index]['bInstar12'] == 't') {
-											bInstar12 = ", I1";
-										}
-										if (typeof data.site[index]['bInstar22'] !== "undefined" && data.site[index]['bInstar22'] != null && data.site[index]['bInstar22'] != '' && data.site[index]['bInstar22'] == 't') {
-											bInstar22 = ", I2";
-										}
-										if (typeof data.site[index]['bInstar32'] !== "undefined" && data.site[index]['bInstar32'] != null && data.site[index]['bInstar32'] != '' && data.site[index]['bInstar32'] == 't') {
-											bInstar32 = ", I3";
-										}
-										if (typeof data.site[index]['bInstar42'] !== "undefined" && data.site[index]['bInstar42'] != null && data.site[index]['bInstar42'] != '' && data.site[index]['bInstar42'] == 't') {
-											bInstar42 = ", I4";
-										}
-										if (typeof data.site[index]['bPupae2'] !== "undefined" && data.site[index]['bPupae2'] != null && data.site[index]['bPupae2'] != '' && data.site[index]['bPupae2'] == 't') {
-											bPupae2 = ", P";
-										}
-										if (typeof data.site[index]['bAdult2'] !== "undefined" && data.site[index]['bAdult2'] != null && data.site[index]['bAdult2'] != '' && data.site[index]['bAdult2'] == 't') {
-											bAdult2 = ", A";
-										}
-
-
-										if (typeof data.site[index]['bInstar1'] !== "undefined" && data.site[index]['bInstar1'] != null && data.site[index]['bInstar1'] != '' && data.site[index]['bInstar1'] == 't') {
-											bInstar1 = "I1";
-										}
-										if (typeof data.site[index]['bInstar2'] !== "undefined" && data.site[index]['bInstar2'] != null && data.site[index]['bInstar2'] != '' && data.site[index]['bInstar2'] == 't') {
-											bInstar2 = "I2";
-										}
-										if (typeof data.site[index]['bInstar3'] !== "undefined" && data.site[index]['bInstar3'] != null && data.site[index]['bInstar3'] != '' && data.site[index]['bInstar3'] == 't') {
-											bInstar3 = "I3";
-										}
-										if (typeof data.site[index]['bInstar4'] !== "undefined" && data.site[index]['bInstar4'] != null && data.site[index]['bInstar4'] != '' && data.site[index]['bInstar4'] == 't') {
-											bInstar4 = "I4";
-										}
-										
-
-										if (typeof data.site[index]['bPupae'] !== "undefined" && data.site[index]['bPupae'] != null && data.site[index]['bPupae'] != '' && data.site[index]['bPupae'] == 't') {
-											bPupae = "P";
-										}
-										if (typeof data.site[index]['bAdult'] !== "undefined" && data.site[index]['bAdult'] != null && data.site[index]['bAdult'] != '' && data.site[index]['bAdult'] == 't') {
-											bAdult = "A";
-										}
-
-										if (typeof data.site[index]['dDate'] !== "undefined" && data.site[index]['dDate'] != null && data.site[index]['dDate'] != '') {
-											date_str = data.site[index]['dDate'];
-										}
-										if (typeof data.site[index]['iSRId'] !== "undefined" && data.site[index]['iSRId'] != null && data.site[index]['iSRId'] != '') {
-											srid_str = data.site[index]['iSRId'];
-										}
-										if (typeof data.site[index]['tNotes'] !== "undefined" && data.site[index]['tNotes'] != null && data.site[index]['tNotes'] != '') {
-											tNotes_str = data.site[index]['tNotes'];
-										}
-
-										if (typeof data.site[index]['iDips'] !== "undefined" && data.site[index]['iDips'] != null && data.site[index]['iDips'] != '') {
-											iDips = " Dips "+data.site[index]['iDips'];
-										}
-
-										if (typeof data.site[index]['rAvgLarvel'] !== "undefined" && data.site[index]['rAvgLarvel'] != null && data.site[index]['rAvgLarvel'] != '') {
-											rAvgLarvel = ", Avg Larval: "+data.site[index]['rAvgLarvel']+"";
-										}
-
-										if (typeof data.site[index]['iCount'] !== "undefined" && data.site[index]['iCount'] != null && data.site[index]['iCount'] != '') {
-											iCount = data.site[index]['iCount'];
-										}
-
-										if (typeof data.site[index]['iCount2'] !== "undefined" && data.site[index]['iCount2'] != null && data.site[index]['iCount2'] != '') {
-											iCount2 = data.site[index]['iCount2'];
-										}
-										Summary = 'Larval'+iDips+rAvgLarvel+' <font color=red>|</font> Species 1 : '+iGenus+' '+iCount+bEggs+''+bInstar1+''+bInstar2+''+bInstar3+''+bInstar4+''+bPupae+''+bAdult+'<font color=red> | </font>Species 2 : '+iGenus2+' '+iCount2+bEggs2+''+bInstar12+''+bInstar22+''+bInstar32+''+bInstar42+''+bPupae2+''+bAdult2;
-										content += "<tr>";
-										content += "<td>" + date_str + "</td><td>" + Summary + "</td><td>" + srid_str + "</td><td>" + tNotes_str + "</td>";
-										content += "</tr>";
-									});
-									content += "</tbody></table>";
-								}
-							}
-							content += "</div>";
-						}
-					}
-					else
-					{
-
-					}
 					if (infowindow) {
 						infowindow.close();
 					}
@@ -1858,113 +1246,6 @@ function info_fieldtask_popup(marker, siteid, Fieldtask) {
 			google.maps.event.clearListeners(marker, 'mouseout');
 		}
 	})(marker, siteid, Fieldtask));
-}
-
-function info_positive_popup(marker, siteid, siteData) {
-	google.maps.event.addListener(marker, 'click', (function(marker, siteid,iTMPId,iTTId) {
-		return function() {
-			var content = "";
-			__marker__ = marker;
-			iTTId = siteData[siteid].iTTId;
-			work_staus = "No";
-			$.ajax({
-				type: "POST",
-				dataType: "json",
-				url: site_url + "vmap/index",
-				data: 'mode=site_map_positive&iTTId='+iTTId,
-				success: function(data) {
-					if(data.bLabWorkComplete==1)
-					{
-						work_staus = "Yes";
-					}
-					else
-					{
-						work_staus = "No";
-					}
-					var type_poll_id = '';
-					if (typeof data.iTMPId !== "undefined" && data.iTMPId != null && data.iTMPId != '') {
-						type_poll_id += data.iTMPId;
-					}
-					if (typeof data.vPool !== "undefined" && data.vPool != null && data.vPool != '') {
-						type_poll_id += "("+ data.vPool;
-					}
-					if (typeof data.iNumberinPool !== "undefined" && data.iNumberinPool != null && data.iNumberinPool != '') {
-						type_poll_id += "Number in Poll"+data.iNumberinPool+")";
-					}
-
-					var trap_id = '';
-					if (typeof data.iTTId !== "undefined" && data.iTTId != null && data.iTTId != '') {
-						trap_id += data.iTTId;
-					}
-					if (typeof data.vTrapName !== "undefined" && data.vTrapName != null && data.vTrapName != '') {
-						trap_id += " (" + data.vTrapName+" Placed  ";
-					}
-					if (typeof data.dTrapPlaced !== "undefined" && data.dTrapPlaced != null && data.dTrapPlaced != '') {
-						trap_id += " "+data.dTrapPlaced+"; Collected  ";
-					}
-					if (typeof data.dTrapCollected !== "undefined" && data.dTrapCollected != null && data.dTrapCollected != '') {
-						trap_id +=" "+data.dTrapCollected+")";
-					}
-
-					var site_id = '';
-					if (typeof data.iSiteId !== "undefined" && data.iSiteId != null && data.iSiteId != '') {
-						site_id += data.iSiteId;
-					}
-					if (typeof data.vSiteName !== "undefined" && data.vSiteName != null && data.vSiteName != '') {
-						site_id += " ("+data.vSiteName+")";
-					}
-					var vSiteAddress = '';
-					if (typeof data.vSiteAddress !== "undefined" && data.vSiteAddress != null && data.vSiteAddress != '') {
-						vSiteAddress += data.vSiteAddress;
-					}
-					var vSiteAddress = '';
-					if (typeof data.vSiteAddress !== "undefined" && data.vSiteAddress != null && data.vSiteAddress != '') {
-						vSiteAddress += data.vSiteAddress;
-					}
-					content += "<table style=width:100%;>";
-					content += "<tr>";
-					content += "<th>Pool Id</th><td>"+type_poll_id+"</td>";
-					content += "</tr>";
-					content += "<tr>";
-					content += "<th>Trap Id</th><td>"+trap_id+"</td>";
-					content += "</tr>";
-					content += "<tr>";
-					content += "<th>Premise ID</th><td>"+site_id+"</td>";
-					content += "</tr>";
-					content += "<tr>";
-					content += "<th>Site Address</th><td>"+vSiteAddress+"</td>";
-					content += "</tr>";
-					content += "<tr>";
-					content += "<th>Lab Work Complate</th><td>"+work_staus+"</td>";
-					content += "</tr>";
-					content += "</table>";
-					if (typeof data.result !== "undefined" && data.result != null && data.result != '') {
-						if (data.result.length > 0) {
-							content += "<table border=1 style=width:100%;>";
-							content += "<tr>";
-							content += "<th>Agent</th><th>Test</th><th>Value</th>";
-							content += "</tr>"
-							$.each(data.result, function(index, item) {
-								content += "<tr>"
-								content += "<td>"+item['vTitle']+"</td><td>"+item['vResult']+"</td><td>"+item['iValue']+"</td>";
-								content += "</tr>";
-							});
-							content += "</table>";
-						}
-					}
-					if (infowindow) {
-						infowindow.close();
-					}
-					infowindow = new google.maps.InfoWindow({
-						content: content,
-						zIndex: 100
-					});
-					infowindow.open(map, marker,siteData);
-				}
-			});
-			google.maps.event.clearListeners(marker, 'mouseout');
-		}
-	})(marker, siteid,siteData));
 }
 
 function deleteMarkers() {
@@ -1997,55 +1278,6 @@ function newLocation(newLat,newLng)
 }
 
 function clearMapTest(variable) {
-	
-
-	/*if (siteMarker !== undefined) {
-		siteMarker = [];
-	}
-	if(fieldmap_sr_arr !== undefined  || variable == 'sr') {
-		fieldmap_sr_arr = [];
-		fieldmap_sr_arr.length = 0;
-	}
-	if (landing_rate !== undefined || variable == 'landing_rate') {
-		landing_rate = [];
-		landing_rate.length = 0;
-	}
-	if (larval !== undefined || variable == 'larval') {
-		larval = [];
-		larval.length = 0;
-	}
-	if (Fieldtask !== undefined ) {
-		Fieldtask = [];
-		Fieldtask.length = 0;
-	}
-
-	if (positive !== undefined || variable == 'positive') {
-		positive = [];
-		positive.length = 0;
-	}
-
-
-
-	
-	
-	siteMarker.length = 0;*/
-	if(variable == "positive"){
-		console.log('11');
-
-	    if (positivesiteMarker.length > 0) {
-	        for (i = 0; i < positivesiteMarker.length; i++) {
-	            positivesiteMarker[i].setMap(null);
-	        }
-	    }
-		
-		if (positivesiteMarker !== undefined) {
-			positivesiteMarker = [];
-		}
-
-		pov = 0;
-
-	}
-
 	if(variable == "srlayer"){
 		//console.log('11');
 

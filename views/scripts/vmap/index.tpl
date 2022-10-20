@@ -436,9 +436,9 @@ p.area-text2 {
 }
 
 
-div.sitedivmsg{
+/*div.sitedivmsg{
     color: rgb(255,255,255);
-}
+}*/
 
 @media screen and (max-width: 1024px) {
     .card2 {
@@ -789,13 +789,7 @@ div.sitedivmsg{
                 </div>
                 <div class="card-heading-inner">
                     <ul id="myUL">
-                        <li class="parent"><input style="margin-left: -0.25rem;" class="form-check-input selectAllsServices" type="checkbox" name="selectAllsServices" id="selectAllsServices" value="services" /><label class="caret1" for="selectAllsServices">&nbsp;&nbsp;&nbsp;&nbsp;Service Request</label>
-                        </li>
-                        <li class="parent"><input style="margin-left: -0.25rem;" class="form-check-input selectAllslandingrate" type="checkbox" name="selectAllslandingrate" id="selectAllslandingrate" value="landing_rate" /><label class="caret1" for="selectAllslandingrate">&nbsp;&nbsp;&nbsp;&nbsp;Landing Rate</label>
-                        </li>
-                        <li class="parent"><input style="margin-left: -0.25rem;" class="form-check-input selectAllslarval" type="checkbox" name="selectAllslarval" id="selectAllslarval" value="larval" /><label class="caret1" for="selectAllslarval">&nbsp;&nbsp;&nbsp;&nbsp;Larval Data</label>
-                        </li>
-                        <li class="parent"><input style="margin-left: -0.25rem;" class="form-check-input selectAllspositive" type="checkbox" name="selectAllspositive" id="selectAllspositive" value="positive" /><label class="caret1" for="selectAllspositive">&nbsp;&nbsp;&nbsp;&nbsp;Positive</label>
+                        <li class="parent"><input style="margin-left: -0.25rem;" class="form-check-input selectAllsServices" type="checkbox" name="selectAllsServices" id="selectAllsServices" value="services" /><label class="caret1" for="selectAllsServices">&nbsp;&nbsp;&nbsp;&nbsp;Fiber Inquiry</label>
                         </li>
                         {if $custLayers|@count gt 0}
                         <li class="parent"><input style="margin-left: -0.25rem;" class="form-check-input" type="checkbox" name="allCustLayer" id="selectAllCustLayer" value="no" />&nbsp;&nbsp;&nbsp;&nbsp;<span style="margin-left: -0.25rem;" class="caret">Custom Layers</span>
@@ -1044,11 +1038,7 @@ var sAttr = [];
 var skCity = [];
 var skZones = [];
 var clusterArr = [];
-var siteInfoWindowTaskOtherArr = [];
-var siteInfoWindowTaskLandingArr = [];
-var siteInfoWindowTaskTrapArr = [];
-var siteInfoWindowTaskLarvalArr = [];
-var siteInfoWindowTaskTreatmentArr = [];
+var siteInfoWindowTaskAwarenessArr = [];
 
 /*var landinglayerMarker = [];
 var larvallayerMarker = [];

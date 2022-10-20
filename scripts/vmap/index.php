@@ -144,11 +144,11 @@ if($mode == "site_map")
 		$rs_site['site_attribute'] = implode(',', $att_array);
 	}
 
-    $arr_param['iSiteId'] = $iSiteId;
+    $arr_param['iPremiseId'] = $iSiteId;
     $arr_param['page_type'] = "site_info_window";
     $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
     
-    $API_URL = $site_api_url."get_premise_history.json";
+    $API_URL = $site_api_url."premise_history.json";
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $API_URL);
     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
@@ -645,120 +645,22 @@ function setSiteHistory($data)
                 $operation_type_data = $val['operation_type_data'];
                 $hidden_fields = "" ;
                 $hidden_arr = array();
-                if($val['Type'] == "Treatment") {
-                    $hidden_fields = '<input type="hidden" id="tt_iTreatmentId_' . $operation_type_data['iTreatmentId'] . '" value="' . $operation_type_data['iTreatmentId'] . '"><input type="hidden" id="tt_vSiteName_' . $operation_type_data['iTreatmentId'] . '" value="' . $operation_type_data['vSiteName'] . '"><input type="hidden" id="tt_iSiteId_' . $operation_type_data['iTreatmentId'] . '" value="' . $operation_type_data['iSiteId'] . '"><input type="hidden" id="tt_dDate_' . $operation_type_data['iTreatmentId'] . '" value="' . $operation_type_data['dDate'] . '"><input type="hidden" id="tt_dStartDate_' . $operation_type_data['iTreatmentId'] . '" value="' . $operation_type_data['dStartDate'] . '"><input type="hidden" id="tt_dStartTime_' . $operation_type_data['iTreatmentId'] . '" value="' . $operation_type_data['dStartTime'] . '"><input type="hidden" id="tt_dEndDate_' . $operation_type_data['iTreatmentId'] . '" value="' . $operation_type_data['dEndDate'] . '"><input type="hidden" id="tt_dEndTime_' . $operation_type_data['iTreatmentId'] . '" value="' . $operation_type_data['dEndTime'] . '"><input type="hidden" id="tt_vType_' . $operation_type_data['iTreatmentId'] . '" value="' . $operation_type_data['vType'] . '"><input type="hidden" id="tt_iTPId_' . $operation_type_data['iTreatmentId'] . '" value="' . $operation_type_data['iTPId'] . '"><input type="hidden" id="tt_iTPName_' . $operation_type_data['iTreatmentId'] . '" value="' . $operation_type_data['vName'] . '"><input type="hidden" id="tt_vAppRate_' . $operation_type_data['iTreatmentId'] . '" value="' . $operation_type_data['vAppRate'] . '"><input type="hidden" id="tt_vArea_' . $operation_type_data['iTreatmentId'] . '" value="' . $operation_type_data['vArea'] . '"><input type="hidden" id="tt_vAreaTreated_' . $operation_type_data['iTreatmentId'] . '" value="' . $operation_type_data['vAreaTreated'] . '"><input type="hidden" id="tt_vAmountApplied_' . $operation_type_data['iTreatmentId'] . '" value="' . $operation_type_data['vAmountApplied'] . '"><input type="hidden" id="tt_iUId_' . $operation_type_data['iTreatmentId'] . '" value="' . $operation_type_data['iUId'] . '"><input type="hidden" id="tt_iUParentId_' . $operation_type_data['iTreatmentId'] . '" value="' . $operation_type_data['iParentId'] . '"><input type="hidden" id="tt_srdisplay_' . $operation_type_data['iTreatmentId'] . '" value="' . $operation_type_data['srdisplay'] . '"><input type="hidden" id="tt_iSRId_' . $operation_type_data['iTreatmentId'] . '" value="' . $operation_type_data['iSRId'] . '"><input type="hidden" id="iTechnicianId_' . $operation_type_data['iTreatmentId'] . '" value="' . $operation_type_data['iTechnicianId'] . '">';
-                        $hidden_arr =array(
-                            "iTreatmentId" => $operation_type_data['iTreatmentId'],
-                            "vSiteName" => $operation_type_data['vSiteName'],
-                            "iSiteId" => $operation_type_data['iSiteId'],
-                            "dDate" => $operation_type_data['dDate'],
-                            "dStartDate" => $operation_type_data['dStartDate'],
-                            "dStartTime" => $operation_type_data['dStartTime'],
-                            "dEndDate" => $operation_type_data['dEndDate'],
-                            "dEndTime" => $operation_type_data['dEndTime'],
-                            "vType" => $operation_type_data['vType'],
-                            "iTPId" => $operation_type_data['iTPId'],
-                            "vName" => $operation_type_data['vName'],
-                            "vAppRate" => $operation_type_data['vAppRate'],
-                            "vArea" => $operation_type_data['vArea'],
-                            "vAreaTreated" => $operation_type_data['vAreaTreated'],
-                            "vAmountApplied" => $operation_type_data['vAmountApplied'],
-                            "iUId" => $operation_type_data['iUId'],
-                            "iParentId" => $operation_type_data['iParentId'],
-                            "srdisplay" => $operation_type_data['srdisplay'],
-                            "iSRId" => $operation_type_data['iSRId'],
-                            "iTechnicianId"=>$operation_type_data['iTechnicianId'],
-                        );
-
-                }
-                else if($val['Type'] == "Landing Rate") {
-                    $hidden_fields = '<input type="hidden" id="iTLRId_' . $operation_type_data['iTLRId'] . '" value="' . $operation_type_data['iTLRId'] . '"><input type="hidden" id="vSiteName_' . $operation_type_data['iTLRId'] . '" value="' . $operation_type_data['vSiteName'] . '"><input type="hidden" id="iSiteId_' . $operation_type_data['iTLRId'] . '" value="' . $operation_type_data['iSiteId'] . '"><input type="hidden" id="dDate_' . $operation_type_data['iTLRId'] . '" value="' . $operation_type_data['dDate'] . '"><input type="hidden" id="dDate_' . $operation_type_data['iTLRId'] . '" value="' . $operation_type_data['dDate'] . '"><input type="hidden" id="dStartDate_' . $operation_type_data['iTLRId'] . '" value="' . $operation_type_data['dStartDate'] . '"><input type="hidden" id="dStartTime_' . $operation_type_data['iTLRId'] . '" value="' . $operation_type_data['dStartTime'] . '"><input type="hidden" id="dEndDate_' . $operation_type_data['iTLRId'] . '" value="' . $operation_type_data['dEndDate'] . '"><input type="hidden" id="dEndTime_' . $operation_type_data['iTLRId'] . '" value="' . $operation_type_data['dEndTime'] . '"><input type="hidden" id="vMaxLandingRate_' . $operation_type_data['iTLRId'] . '" value="' . $operation_type_data['vMaxLandingRate'] . '"><input type="hidden" id="iMSpeciesId_' . $operation_type_data['iTLRId'] . '" value="' . $operation_type_data['iMSpeciesId'] . '"><input type="hidden" id="tNotes_' . $operation_type_data['iTLRId'] . '" value="' . $operation_type_data['tNotes'] . '"><input type="hidden" id="srdisplay_' . $operation_type_data['iTLRId'] . '" value="' . $operation_type_data['srdisplay'] . '"><input type="hidden" id="iSRId_' . $operation_type_data['iTLRId'] . '" value="' . $operation_type_data['iSRId'] . '"><input type="hidden" id="iTechnicianId_' . $operation_type_data['iTLRId'] . '" value="' . $operation_type_data['iTechnicianId'] . '">';
+                
+                if($val['Type'] == "Awareness") {
+                    $hidden_fields = '<input type="hidden" id="iAId_' . $operation_type_data['iAId'] . '" value="' . $operation_type_data['iAId'] . '"><input type="hidden" id="vSiteName_' . $operation_type_data['iAId'] . '" value="' . $operation_type_data['vSiteName'] . '"><input type="hidden" id="iSiteId_' . $operation_type_data['iAId'] . '" value="' . $operation_type_data['iPremiseId'] . '"><input type="hidden" id="dDate_' . $operation_type_data['iAId'] . '" value="' . $operation_type_data['dDate'] . '"><input type="hidden" id="dStartDate_' . $operation_type_data['iAId'] . '" value="' . $operation_type_data['dStartDate'] . '"><input type="hidden" id="dStartTime_' . $operation_type_data['iAId'] . '" value="' . $operation_type_data['dStartTime'] . '"><input type="hidden" id="dEndDate_' . $operation_type_data['iAId'] . '" value="' . $operation_type_data['dEndDate'] . '"><input type="hidden" id="dEndTime_' . $operation_type_data['iAId'] . '" value="' . $operation_type_data['dEndTime'] . '"><input type="hidden" id="iEngagementId_' . $operation_type_data['iAId'] . '" value="' . $operation_type_data['iEngagementId'] . '"><input type="hidden" id="tNotes_' . $operation_type_data['iAId'] . '" value="' . $operation_type_data['tNotes'] . '"><input type="hidden" id="srdisplay_' . $operation_type_data['iAId'] . '" value="' . $operation_type_data['srdisplay'] . '"><input type="hidden" id="iSRId_' . $operation_type_data['iAId'] . '" value="' . $operation_type_data['iFiberInquiryId'] . '"><input type="hidden" id="iTechnicianId_' . $operation_type_data['iAId'] . '" value="' . $operation_type_data['iTechnicianId'] . '">';
                     $hidden_arr = array(
-                            "iTLRId" => $operation_type_data['iTLRId'],
-                            "vSiteName" => $operation_type_data['vSiteName'],
-                            "iSiteId" => $operation_type_data['iSiteId'],
-                            "dDate" => $operation_type_data['dDate'],
-                            "dStartDate" => $operation_type_data['dStartDate'],
-                            "dStartTime" => $operation_type_data['dStartTime'],
-                            "dEndDate" => $operation_type_data['dEndDate'],
-                            "dEndTime" => $operation_type_data['dEndTime'],
-                            "vMaxLandingRate" => $operation_type_data['vMaxLandingRate'],
-                            "iMSpeciesId" => $operation_type_data['iMSpeciesId'],
-                            "tNotes" => $operation_type_data['tNotes'],
-                            "srdisplay" => $operation_type_data['srdisplay'],
-                            "iSRId" => $operation_type_data['iSRId'],
-                            "iTechnicianId" =>$operation_type_data['iTechnicianId'],
-                        );
-                }
-                else if($val['Type'] == "Task Trap") {
-                    $hidden_fields = '<input type="hidden" id="iTTId_' . $operation_type_data['iTTId'] . '" value="' . $operation_type_data['iTTId'] . '"><input type="hidden" id="vSiteName_' . $operation_type_data['iTTId'] . '" value="' . $operation_type_data['vSiteName'] . '"><input type="hidden" id="iSiteId_' . $operation_type_data['iTTId'] . '" value="' . $operation_type_data['iSiteId'] . '"><input type="hidden" id="iSRId_' . $operation_type_data['iTTId'] . '" value="' . $operation_type_data['iSRId'] . '"><input type="hidden" id="dTrapPlaced_' . $operation_type_data['iTTId'] . '" value="' . $operation_type_data['dTrapPlaced'] . '"><input type="hidden" id="dTrapCollected_' . $operation_type_data['iTTId'] . '" value="' . $operation_type_data['dTrapCollected'] . '"><input type="hidden" id="iTrapTypeId_' . $operation_type_data['iTTId'] . '" value="' . $operation_type_data['iTrapTypeId'] . '"><input type="hidden" id="bMalfunction_' . $operation_type_data['iTTId'] . '" value="' . $operation_type_data['bMalfunction'] . '"><input type="hidden" id="tNotes_' . $operation_type_data['iTTId'] . '" value="' . $operation_type_data['tNotes'] . '"><input type="hidden" id="srdisplay_' . $operation_type_data['iTTId'] . '" value="' . $operation_type_data['srdisplay'] . '"><input type="hidden" id="iSRId_' . $operation_type_data['iTTId'] . '" value="' . $operation_type_data['iSRId'] . '"><input type="hidden" id="iTechnicianId_' . $operation_type_data['iTTId'] . '" value="' . $operation_type_data['iTechnicianId'] . '">';
-                    $hidden_arr = array(
-                            "iTTId" => $operation_type_data['iTTId'],
-                            "vSiteName" => $operation_type_data['vSiteName'],
-                            "iSiteId" => $operation_type_data['iSiteId'],
-                            "dTrapPlaced" => $operation_type_data['dTrapPlaced'],
-                            "dTrapCollected" => $operation_type_data['dTrapCollected'],
-                            "iTrapTypeId" => $operation_type_data['iTrapTypeId'],
-                            "bMalfunction" => $operation_type_data['bMalfunction'],
-                            "tNotes" => $operation_type_data['tNotes'],
-                            "srdisplay" => $operation_type_data['srdisplay'],
-                            "iSRId" => $operation_type_data['iSRId'],
-                            "iTechnicianId" => $operation_type_data['iTechnicianId'],
-                        );
-                }
-                else if($val['Type'] == "Laravel Surveillance") {
-                    $hidden_fields = '<input type="hidden" id="iTLSId_' . $operation_type_data['iTLSId'] . '" value="' . $operation_type_data['iTLSId'] . '"><input type="hidden" id="vSiteName_' . $operation_type_data['iTLSId'] . '" value="' . $operation_type_data['vSiteName'] . '"><input type="hidden" id="iSiteId_' . $operation_type_data['iTLSId'] . '" value="' . $operation_type_data['iSiteId'] . '"><input type="hidden" id="iDips_' . $operation_type_data['iTLSId'] . '" value="' . $operation_type_data['iDips'] . '"><input type="hidden" id="dDate_' . $operation_type_data['iTLSId'] . '" value="' . $operation_type_data['dDate'] . '"><input type="hidden" id="dDate_' . $operation_type_data['iTLSId'] . '" value="' . $operation_type_data['dDate'] . '"><input type="hidden" id="dStartDate_' . $operation_type_data['iTLSId'] . '" value="' . $operation_type_data['dStartDate'] . '"><input type="hidden" id="dStartTime_' . $operation_type_data['iTLSId'] . '" value="' . $operation_type_data['dStartTime'] . '"><input type="hidden" id="dEndDate_' . $operation_type_data['iTLSId'] . '" value="' . $operation_type_data['dEndDate'] . '"><input type="hidden" id="dEndTime_' . $operation_type_data['iTLSId'] . '" value="' . $operation_type_data['dEndTime'] . '"><input type="hidden" id="iGenus_' . $operation_type_data['iTLSId'] . '" value="' . $operation_type_data['iGenus'] . '"><input type="hidden" id="iCount_' . $operation_type_data['iTLSId'] . '" value="' . $operation_type_data['iCount'] . '"><input type="hidden" id="bEggs_' . $operation_type_data['iTLSId'] . '" value="' . $operation_type_data['bEggs'] . '"><input type="hidden" id="bInstar1_' . $operation_type_data['iTLSId'] . '" value="' . $operation_type_data['bInstar1'] . '"><input type="hidden" id="bInstar2_' . $operation_type_data['iTLSId'] . '" value="' . $operation_type_data['bInstar2'] . '"><input type="hidden" id="bInstar3_' . $operation_type_data['iTLSId'] . '" value="' . $operation_type_data['bInstar3'] . '"><input type="hidden" id="bInstar4_' . $operation_type_data['iTLSId'] . '" value="' . $operation_type_data['bInstar4'] . '"><input type="hidden" id="iGenus2_' . $operation_type_data['iTLSId'] . '" value="' . $operation_type_data['iGenus2'] . '"><input type="hidden" id="iCount2_' . $operation_type_data['iTLSId'] . '" value="' . $operation_type_data['iCount2'] . '"><input type="hidden" id="bEggs2_' . $operation_type_data['iTLSId'] . '" value="' . $operation_type_data['bEggs2'] . '"><input type="hidden" id="bInstar12_' . $operation_type_data['iTLSId'] . '" value="' . $operation_type_data['bInstar12'] . '"><input type="hidden" id="bInstar22_' . $operation_type_data['iTLSId'] . '" value="' . $operation_type_data['bInstar22'] . '"><input type="hidden" id="bInstar32_' . $operation_type_data['iTLSId'] . '" value="' . $operation_type_data['bInstar32'] . '"><input type="hidden" id="bInstar42_' . $operation_type_data['iTLSId'] . '" value="' . $operation_type_data['bInstar42'] . '"><input type="hidden" id="bPupae_' . $operation_type_data['iTLSId'] . '" value="' . $operation_type_data['bPupae'] . '"><input type="hidden" id="bAdult_' . $operation_type_data['iTLSId'] . '" value="' . $operation_type_data['bAdult'] . '"><input type="hidden" id="bPupae2_' . $operation_type_data['iTLSId'] . '" value="' . $operation_type_data['bPupae2'] . '"><input type="hidden" id="bAdult2_' . $operation_type_data['iTLSId'] . '" value="' . $operation_type_data['bAdult2'] . '"><input type="hidden" id="tNotes_' . $operation_type_data['iTLSId'] . '" value="' . $operation_type_data['tNotes'] . '"><input type="hidden" id="srdisplay_' . $operation_type_data['iTLSId'] . '" value="' . $operation_type_data['srdisplay'] . '"><input type="hidden" id="iSRId_' . $operation_type_data['iTLSId'] . '" value="' . $operation_type_data['iSRId'] . '"><input type="hidden" id="iTechnicianId_' . $operation_type_data['iTLSId'] . '" value="' . $operation_type_data['iTechnicianId'] . '">';
-                    $hidden_arr = array(
-                            "iTLSId" => $operation_type_data['iTLSId'],
-                            "vSiteName" => $operation_type_data['vSiteName'],
-                            "iSiteId" => $operation_type_data['iSiteId'],
-                            "iDips" => $operation_type_data['iDips'],
-                            "dDate" => $operation_type_data['dDate'],
-                            "dStartDate" => $operation_type_data['dStartDate'],
-                            "dStartTime" => $operation_type_data['dStartTime'],
-                            "dEndDate" => $operation_type_data['dEndDate'],
-                            "dEndTime" => $operation_type_data['dEndTime'],
-                            "iGenus" => $operation_type_data['iGenus'],
-                            "iCount" => $operation_type_data['iCount'],
-                            "bEggs" => $operation_type_data['bEggs'],
-                            "bInstar1" => $operation_type_data['bInstar1'],
-                            "bInstar2" => $operation_type_data['bInstar2'],
-                            "bInstar3" => $operation_type_data['bInstar3'],
-                            "bInstar4" => $operation_type_data['bInstar4'],
-                            "bPupae" => $operation_type_data['bPupae'],
-                            "bAdult" => $operation_type_data['bAdult'],
-                            "iGenus2" => $operation_type_data['iGenus2'],
-                            "iCount2" => $operation_type_data['iCount2'],
-                            "bEggs2" => $operation_type_data['bEggs2'],
-                            "bInstar12" => $operation_type_data['bInstar12'],
-                            "bInstar22" => $operation_type_data['bInstar22'],
-                            "bInstar32" => $operation_type_data['bInstar32'],
-                            "bInstar42" => $operation_type_data['bInstar42'],
-                            "bPupae2" => $operation_type_data['bPupae2'],
-                            "bAdult2" => $operation_type_data['bAdult2'],
-                            "rAvgLarvel" => $operation_type_data['rAvgLarvel'],
-                            "tNotes" => $operation_type_data['tNotes'],
-                            "dAddedDate" => $operation_type_data['dAddedDate'],
-                            "srdisplay" => $operation_type_data['srdisplay'],
-                            "iSRId" => $operation_type_data['iSRId'],
-                            "iTechnicianId" => $operation_type_data['iTechnicianId'],
-                        );;
-                }
-                else if($val['Type'] == "Other") {
-                    $hidden_fields = '<input type="hidden" id="iTOId_' . $operation_type_data['iTOId'] . '" value="' . $operation_type_data['iTOId'] . '"><input type="hidden" id="vSiteName_' . $operation_type_data['iTOId'] . '" value="' . $operation_type_data['vSiteName'] . '"><input type="hidden" id="iSiteId_' . $operation_type_data['iTOId'] . '" value="' . $operation_type_data['iSiteId'] . '"><input type="hidden" id="dDate_' . $operation_type_data['iTOId'] . '" value="' . $operation_type_data['dDate'] . '"><input type="hidden" id="dStartDate_' . $operation_type_data['iTOId'] . '" value="' . $operation_type_data['dStartDate'] . '"><input type="hidden" id="dStartTime_' . $operation_type_data['iTOId'] . '" value="' . $operation_type_data['dStartTime'] . '"><input type="hidden" id="dEndDate_' . $operation_type_data['iTOId'] . '" value="' . $operation_type_data['dEndDate'] . '"><input type="hidden" id="dEndTime_' . $operation_type_data['iTOId'] . '" value="' . $operation_type_data['dEndTime'] . '"><input type="hidden" id="iTaskTypeId_' . $operation_type_data['iTOId'] . '" value="' . $operation_type_data['iTaskTypeId'] . '"><input type="hidden" id="tNotes_' . $operation_type_data['iTOId'] . '" value="' . $operation_type_data['tNotes'] . '"><input type="hidden" id="srdisplay_' . $operation_type_data['iTOId'] . '" value="' . $operation_type_data['srdisplay'] . '"><input type="hidden" id="iSRId_' . $operation_type_data['iTOId'] . '" value="' . $operation_type_data['iSRId'] . '"><input type="hidden" id="iTechnicianId_' . $operation_type_data['iTOId'] . '" value="' . $operation_type_data['iTechnicianId'] . '">';
-                    $hidden_arr = array(
-                            "iTOId" => $operation_type_data['iTOId'],
-                            "vSiteName" => $operation_type_data['vSiteName'],
-                            "iSiteId" => $operation_type_data['iSiteId'],
-                            "dDate" => $operation_type_data['dDate'],
-                            "dStartDate" => $operation_type_data['dStartDate'],
-                            "dStartTime" => $operation_type_data['dStartTime'],
-                            "dEndDate" => $operation_type_data['dEndDate'],
-                            "dEndTime" => $operation_type_data['dEndTime'],
-                            "iTaskTypeId" => $operation_type_data['iTaskTypeId'],
-                            "tNotes" => $operation_type_data['tNotes'],
-                            "srdisplay" => $operation_type_data['srdisplay'],
-                            "iSRId" => $operation_type_data['iSRId'],
+                            "iAId"          => $operation_type_data['iAId'],
+                            "vSiteName"     => $operation_type_data['vSiteName'],
+                            "iSiteId"       => $operation_type_data['iPremiseId'],
+                            "dDate"         => $operation_type_data['dDate'],
+                            "dStartDate"    => $operation_type_data['dStartDate'],
+                            "dStartTime"    => $operation_type_data['dStartTime'],
+                            "dEndDate"      => $operation_type_data['dEndDate'],
+                            "dEndTime"      => $operation_type_data['dEndTime'],
+                            "iEngagementId" => $operation_type_data['iEngagementId'],
+                            "tNotes"        => $operation_type_data['tNotes'],
+                            "srdisplay"     => $operation_type_data['srdisplay'],
+                            "iSRId"         => $operation_type_data['iFiberInquiryId'],
                             "iTechnicianId" => $operation_type_data['iTechnicianId'],
                         );;
                 }

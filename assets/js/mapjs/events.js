@@ -1,9 +1,4 @@
 fieldmap_sr_arr = [];
-landing_rate = [];
-larval = [];
-LarvalFieldtask = [];
-LandingFieldtask = [];
-positive = [];
 siteFilter = [];
 srFilter = [];
 custLayer = [];
@@ -38,9 +33,6 @@ $(document).ready(function() {
     
     	generateJson();
     	generateSRJson();
-    	generatelandingrateJson();
-    	getlarvalJson();
-    	getpositiveJson();
     	getCustomLayerJson();
        
     $(document).on("click", "#showDistance", function() {
@@ -240,15 +232,6 @@ $(document).ready(function() {
                 skZones.push($(this).val());
             });
 
-            // $.each($("input[name='selectAllsServices']:checked"), function(){
-            //     fieldmap_sr_arr.push($(this).val());
-            // });
-            // $.each($("input[name='selectAllslandingrate']:checked"), function(){
-            //     landing_rate.push($(this).val());
-            // });
-            // $.each($("input[name='selectAllslarval']:checked"), function(){
-            //     larval.push($(this).val());
-            // });
         }else{
             siteTypes = [];
             siteSubTypes = [];
@@ -260,7 +243,7 @@ $(document).ready(function() {
         }
         resetButton();
         clearFilterData();
-        getMapData(siteTypes, sAttr, skCity, skZones, fieldmap_sr_arr,  LarvalFieldtask, LandingFieldtask, positive, custLayer, siteSubTypes);
+        getMapData(siteTypes, sAttr, skCity, skZones, fieldmap_sr_arr, custLayer, siteSubTypes);
     });
     $(document).on("click", ".selectAllZone", function() {
         /*console.log('check zone')*/
@@ -324,7 +307,7 @@ $(document).ready(function() {
         }
         resetButton();
         clearFilterData();
-        getMapData(siteTypes, sAttr, skCity, skZones, fieldmap_sr_arr,  LarvalFieldtask, LandingFieldtask, positive, custLayer, siteSubTypes);
+        getMapData(siteTypes, sAttr, skCity, skZones, fieldmap_sr_arr, custLayer, siteSubTypes);
     });
 
     $(document).on("click", "#selectAllsType", function() {
@@ -364,7 +347,7 @@ $(document).ready(function() {
         }
         resetButton();
         clearFilterData();
-        getMapData(siteTypes, sAttr, skCity, skZones, fieldmap_sr_arr,  LarvalFieldtask, LandingFieldtask, positive,  custLayer, siteSubTypes);
+        getMapData(siteTypes, sAttr, skCity, skZones, fieldmap_sr_arr,  custLayer, siteSubTypes);
 
     });
     $(document).on("click", "#selectAllsAttr", function() {
@@ -402,7 +385,7 @@ $(document).ready(function() {
         }
         resetButton();
         clearFilterData();
-		getMapData(siteTypes, sAttr, skCity, skZones, fieldmap_sr_arr, LarvalFieldtask, LandingFieldtask, positive, custLayer, siteSubTypes);
+		getMapData(siteTypes, sAttr, skCity, skZones, fieldmap_sr_arr, custLayer, siteSubTypes);
     });
     $(document).on("click", "#selectAllCity", function() {
         console.log("Select Site Attr");
@@ -439,7 +422,7 @@ $(document).ready(function() {
         }
         resetButton();
         clearFilterData();
-        getMapData(siteTypes, sAttr, skCity, skZones, fieldmap_sr_arr,  LarvalFieldtask, LandingFieldtask, positive, custLayer, siteSubTypes);
+        getMapData(siteTypes, sAttr, skCity, skZones, fieldmap_sr_arr, custLayer, siteSubTypes);
 
     });
     $(document).on("click", "#selectAllZone", function() {
@@ -473,7 +456,7 @@ $(document).ready(function() {
             }
             resetButton();
         clearFilterData();
-        getMapData(siteTypes, sAttr, skCity, skZones, fieldmap_sr_arr,  LarvalFieldtask, LandingFieldtask, positive, custLayer, siteSubTypes);    
+        getMapData(siteTypes, sAttr, skCity, skZones, fieldmap_sr_arr, custLayer, siteSubTypes);    
     });
 
     $(document).on("click", ".selectAllsServices", function() {
@@ -490,93 +473,7 @@ $(document).ready(function() {
         }
         resetButton();
         clearLayersData();
-        getMapData(siteTypes, sAttr, skCity, skZones, fieldmap_sr_arr,  LarvalFieldtask, LandingFieldtask, positive, custLayer, siteSubTypes);
-        
-    });
-    $(document).on("click", ".selectAllslandingrate", function() {
-       
-        clearMap();
-      
-        landing_rate = [];
-        larval =[];
-        //var fieldtask_arr;
-
-        if (this.checked) {
-            $.each($("input[name='selectAllslandingrate']:checked"), function() {
-                landing_rate.push($(this).val());
-            });
-           LandingFieldtask = landing_rate;
-        } else {
-      
-            landing_rate = [];
-         
-            /*****************/
-                if ($(".selectAllslarval").prop('checked')){
-                    
-                    $.each($("input[name='selectAllslarval']:checked"), function() {
-                        larval.push($(this).val());
-                    });
-					LarvalFieldtask= larval;
-                }
-             LandingFieldtask = [];  
-            /*****************/
-        }
-        resetButton();
-        clearLayersData();
-
-       // getMapData(siteTypes, sAttr, skCity, skZones, fieldmap_sr_arr, landing_rate, positive, siteFilter, srFilter,custLayer);
-        getMapData(siteTypes, sAttr, skCity, skZones, fieldmap_sr_arr,  LarvalFieldtask, LandingFieldtask, positive, custLayer, siteSubTypes);
-
-    });
-    $(document).on("click", ".selectAllslarval", function() {
-        
-        clearMap();
-        
-        larval =[];
-        landing_rate =[]; 
-        //var fieldtask_arr;
-
-        if (this.checked) {
-            $.each($("input[name='selectAllslarval']:checked"), function() {
-                larval.push($(this).val());
-            });
-            LarvalFieldtask= larval;
-        } else {
-            //markerCluster.clearMarkers();
-            larval = [];
-            /*****************/
-                if ($(".selectAllslandingrate").prop('checked')){
-                    
-                    $.each($("input[name='selectAllslandingrate']:checked"), function() {
-                        landing_rate.push($(this).val());
-                    });
-					LandingFieldtask = landing_rate;
-                }
-               LarvalFieldtask= [];
-            /*****************/
-        }
-        resetButton();
-        clearLayersData();
-        //getMapData(siteTypes, sAttr, skCity, skZones, fieldmap_sr_arr, larval, positive, siteFilter, srFilter,custLayer);
-        getMapData(siteTypes, sAttr, skCity, skZones, fieldmap_sr_arr,  LarvalFieldtask, LandingFieldtask, positive, custLayer, siteSubTypes);
-
-
-    });
-    $(document).on("click", ".selectAllspositive", function() {
-        
-        clearMap();
-
-        if (this.checked) {
-            $.each($("input[name='selectAllspositive']:checked"), function() {
-                positive.push($(this).val());
-            });
-        } else {
-           // markerCluster.clearMarkers();
-           positive = [];
-        }
-        resetButton();
-        clearLayersData();
-        getMapData(siteTypes, sAttr, skCity, skZones, fieldmap_sr_arr,  LarvalFieldtask, LandingFieldtask, positive, custLayer, siteSubTypes);
+        getMapData(siteTypes, sAttr, skCity, skZones, fieldmap_sr_arr, custLayer, siteSubTypes);
         
     });
 
@@ -607,7 +504,7 @@ $(document).ready(function() {
         }
         resetButton();
         clearLayersData();
-        getMapData(siteTypes, sAttr, skCity, skZones, fieldmap_sr_arr,  LarvalFieldtask, LandingFieldtask, positive, custLayer, siteSubTypes);
+        getMapData(siteTypes, sAttr, skCity, skZones, fieldmap_sr_arr, custLayer, siteSubTypes);
 
     });
 
@@ -622,7 +519,7 @@ $(document).ready(function() {
         });
         resetButton();
         clearLayersData();
-        getMapData(siteTypes, sAttr, skCity, skZones, fieldmap_sr_arr,  LarvalFieldtask, LandingFieldtask, positive, custLayer);
+        getMapData(siteTypes, sAttr, skCity, skZones, fieldmap_sr_arr, custLayer);
    
     });
 
@@ -1338,22 +1235,12 @@ function clearLayersData(){
     $(".selectAllCity").prop("checked", false);
     $(".selectAllZone").prop("checked", false);
     $("#nearbysite").prop("checked", false);
-    //$("input[name='sAttr[]']").prop("checked", false);
-    //$("input[name='city[]']").prop("checked", false);
-    //$("input[name='skZones[]']").prop("checked", false);
 }
 
 function clearFilterData(){
     fieldmap_sr_arr =[];
-    LarvalFieldtask =[];
-    LandingFieldtask=[];
-    positive=[];
     custLayer=[];
-
     $(".selectAllsServices").prop("checked", false);
-    $(".selectAllslandingrate").prop("checked", false);
-    $(".selectAllslarval").prop("checked", false);
-    $(".selectAllspositive").prop("checked", false);
     $("#selectAllCustLayer").prop("checked", false);
     $(".selectAllCustLayer").prop("checked", false);
 }

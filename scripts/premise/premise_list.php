@@ -145,26 +145,12 @@ if($mode == "List"){
             
             $action .= ' <a class="btn btn-outline-warning" title="Premise History" target="_blank" href="'.$site_url.'premise/history&iSiteId=' . $rs_site[$i]['iSiteId'] . '&vName=' . $rs_site[$i]['vName'] . '"><i class="fas fa-history"></i></a>'; 
             
-            if(per_hasModuleAccess("Task Larval Surveillance", 'List')){
+            if(per_hasModuleAccess("Task Awareness", 'List')){
                 $action .= ' <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tasks</button>
                     <div class="dropdown-menu p-0">';
-                    if(per_hasModuleAccess("Task Larval Surveillance", 'List')){
-                        $action .= '<a class="dropdown-item" title="Larval Surveillance"  onclick="addEditDataTaskLarval(0,\'add\','.$rs_site[$i]['iSiteId'].')">Larval Surveillance</a>';
-                    }
-                    if(per_hasModuleAccess("Task Landing Rate", 'List')){
-                        $action .= '<a class="dropdown-item" title="Landing Rate"  onclick="addEditDataTaskAdult(0,\'add\','.$rs_site[$i]['iSiteId'].')">Landing Rate</a>';
-                    }
-                    if(per_hasModuleAccess("Task Trap", 'List')){
-                        $action .= '<a class="dropdown-item" title="Trap"  onclick="addEditDataTaskTrap(0,\'add\','.$rs_site[$i]['iSiteId'].')">Trap</a>';
-                    }
-
-                    if(per_hasModuleAccess("Task Treatment", 'List')){
-                        $action .= '<div class="dropdown-divider"></div>';
-                        $action .= '<a class="dropdown-item" title="Treatment Task"  onclick="addEditDataTaskTreatment(0,\'add\','.$rs_site[$i]['iSiteId'].')">Treatment</a>';
-                    }
-
-                    if(per_hasModuleAccess("Task Other", 'List')){
-                        $action .= '<a class="dropdown-item" title="Other Task"  onclick="addEditDataTaskOther(0,\'add\','.$rs_site[$i]['iSiteId'].')">Other</a>';
+                    if(per_hasModuleAccess("Task Awareness", 'List')){
+                        //$action .= '<div class="dropdown-divider"></div>';
+                        $action .= '<a class="dropdown-item" title="Awareness"  onclick="addEditDataAwareness(0,\'add\','.$rs_site[$i]['iSiteId'].')">Awareness</a>';
                     }
                     $action .= '</div>';
             }
@@ -992,10 +978,11 @@ $rs_zone1 = json_decode($response_zone, true);
 $rs_zone = $rs_zone1['result'];
 $smarty->assign("rs_zone", $rs_zone);
 ## --------------------------------
-/*-----------------Mosquito Species ---------------------------*/
+/*-------------------------- Engagement -------------------------- */
 $arr_param = array();
+$arr_param['iStatus']   = 1;
 $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
-$API_URL = $site_api_url."get_mosquito_species_data.json";
+$API_URL = $site_api_url."engagement_dropdown.json";
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, $API_URL);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
@@ -1010,15 +997,13 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 $response = curl_exec($ch);
 curl_close($ch);  
 $res = json_decode($response, true);
-$smarty->assign("rs_species", $res['result']['data']);
-/*-----------------Mosquito Species ---------------------------*/
+$smarty->assign("rs_engagement", $res['result']);
+/*-------------------------- Engagement -------------------------- */
 
-
-
-/*----------------- Task Type  ---------------------------*/
+/*-------------------------- User -------------------------- */
 $arr_param = array();
 $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
-$API_URL = $site_api_url."task_type_dropdown.json";
+$API_URL = $site_api_url."getUserDropdown.json";
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, $API_URL);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
@@ -1033,44 +1018,9 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 $response = curl_exec($ch);
 curl_close($ch);  
 $res = json_decode($response, true);
-$smarty->assign("rs_type", $res['result']);
-/*-----------------Task Type ---------------------------*/
-
-/*-----------------Trap Type ---------------------------*/
-$arr_param = array();
-$arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
-$API_URL = $site_api_url."trap_type_dropdown.json";
-$ch = curl_init();
-curl_setopt($ch, CURLOPT_URL, $API_URL);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-curl_setopt($ch, CURLOPT_HEADER, FALSE);
-curl_setopt($ch, CURLOPT_POST, TRUE);
-curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($arr_param));
-curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-   "Content-Type: application/json",
-));
-$response = curl_exec($ch);
-curl_close($ch);  
-$res= json_decode($response, true);
-$smarty->assign("rs_trap_type", $res['result']);
-/*--------------------------------------------------------*/
-
-/*USer data*/
-$UserObj = new User();
-$where_arr = array();
-$join_fieds_arr = array();
-$join_arr  = array();
-$UserObj->user_clear_variable();
-$where_arr[] = "user_mas.\"iStatus\" = '1'";
-
-$UserObj->join_field = $join_fieds_arr;
-$UserObj->join = $join_arr;
-$UserObj->where = $where_arr;
-$UserObj->setClause();
-$rs_user_data = $UserObj->recordset_list();
-$smarty->assign("technician_user_arr", $rs_user_data);
+$smarty->assign("technician_user_arr", $res['result']);
+//echo "<pre>";print_r($res['result']);exit;
+/*-------------------------- User -------------------------- */
 /***********************************/
 $module_name = "Premise List";
 $module_title = "Premise";

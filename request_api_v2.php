@@ -747,9 +747,9 @@ switch($path) {
 			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
 		}
 		break;
-	case "get_premise_history." . $req_ext:
+	case "premise_history." . $req_ext:
 		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
-			$request_type = "get_premise_history";
+			$request_type = "premise_history";
 			$api_file_name = "premise_history.php";
 			include_once($site_api_path . "api_authentication.php");
 		}else {

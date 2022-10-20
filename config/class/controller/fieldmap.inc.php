@@ -163,29 +163,6 @@ class Fieldmap {
             $response['sr'] = $srData['sites'];
         }
 
-        if(isset($param['larvalfieldtask']) && $param['larvalfieldtask'] != ''){
-            $fieldtask = $param['larvalfieldtask'];
-            $fieldtaskJsonUrl = $field_map_json_path.'/'.$fieldtask.".json";
-            $fieldtaskData = json_decode(file_get_contents($fieldtaskJsonUrl), true);
-           
-            $response['larval'] = $fieldtaskData['sites'];
-        }
-        if(isset($param['landingfieldtask']) && $param['landingfieldtask'] != ''){
-            $fieldtask = $param['landingfieldtask'];
-            $fieldtaskJsonUrl = $field_map_json_path.'/'.$fieldtask.".json";
-            $fieldtaskData = json_decode(file_get_contents($fieldtaskJsonUrl), true);
-            
-            $response['landing_rate'] = $fieldtaskData['sites'];
-        }
-
-        if(isset($param['positive']) && $param['positive'] != ''){
-            $positive = $param['positive'];
-            $positiveJsonUrl = $field_map_json_path."/positive.json";
-            $positiveData = json_decode(file_get_contents($positiveJsonUrl), true);
-            
-            $response['positive'] = $positiveData['sites'];
-        }
-
         if(isset($param['sAttr']) && $param['sAttr'] != ''){
             $finalArr = array();
             $siteAttrArr = explode(",", $param['sAttr']);
@@ -405,32 +382,6 @@ class Fieldmap {
         return $data;
     } 
 
-    public function getlandingrateData($param, $site_url = ''){
-        global $sqlObj;
-        $data = array();
-        $LandingData = 'SELECT DISTINCT ON (site_mas."iSiteId")site_mas."iSiteId"  as siteid,count(task_landing_rate."iSiteId"), site_mas."iSTypeId" as sTypeId, site_mas."iSSTypeId" as sSTypeId ,site_mas."iCityId", site_mas."iZoneId",st_astext(ST_Centroid("vPolygonLatLong")) as polyCenter, st_astext("vPolygonLatLong") as polygon, st_astext("vPointLatLong") as point, st_astext("vPolyLineLatLong") as poly_line FROM task_landing_rate left join site_mas on site_mas."iSiteId" = task_landing_rate."iSiteId" GROUP BY "site_mas"."iSiteId"';
-        $data['sites'] = $sqlObj->GetAll($LandingData);
-        return $data;
-    }
-
-    public function getlarvalData($param, $site_url = ''){
-        global $sqlObj;
-        $data = array();
-        $LarvalData = 'SELECT DISTINCT ON (site_mas."iSiteId")site_mas."iSiteId" as siteid,count(site_mas."iSiteId"), site_mas."iSTypeId" as sTypeId, site_mas."iSSTypeId" as sSTypeId, site_mas."iCityId", site_mas."iZoneId",st_astext(ST_Centroid("vPolygonLatLong")) as polyCenter, st_astext("vPolygonLatLong") as polygon, st_astext("vPointLatLong") as point, st_astext("vPolyLineLatLong") as poly_line FROM "public"."task_larval_surveillance" left join site_mas on "site_mas"."iSiteId" = "task_larval_surveillance"."iSiteId" GROUP BY "site_mas"."iSiteId"';
-        //echo $LarvalData;
-        //exit;
-        $data['sites'] = $sqlObj->GetAll($LarvalData);
-        return $data;
-    }
-    public function getpositiveData($param, $site_url = ''){
-        global $sqlObj;
-        $data = array();
-         $PositiveData = 'SELECT DISTINCT ON (s."iSiteId")s."iSiteId" as siteid,task_mosquito_pool."iTTId",task_mosquito_pool."iTMPId", s."iSTypeId" as sTypeId, s."iSSTypeId" as sSTypeId, s."iCityId", s."iZoneId",st_astext(ST_Centroid("vPolygonLatLong")) as polyCenter, st_astext("vPolygonLatLong") as polygon, st_astext("vPointLatLong") as point, st_astext("vPolyLineLatLong") as poly_line FROM "public"."task_mosquito_pool"  LEFT JOIN task_trap  on task_trap."iTTId" = task_mosquito_pool."iTTId" LEFT JOIN trap_type_mas tt on tt."iTrapTypeId" = task_trap."iTrapTypeId" LEFT JOIN site_mas s on s."iSiteId" = task_trap."iSiteId" LEFT JOIN county_mas c on s."iCountyId" = c."iCountyId" LEFT JOIN state_mas sm on s."iStateId" = sm."iStateId" LEFT JOIN city_mas cm on s."iCityId" = cm."iCityId" LEFT JOIN site_type_mas st on s."iSTypeId" = st."iSTypeId" LEFT JOIN task_mosquito_pool_result on task_mosquito_pool_result."iTMPId" = task_mosquito_pool."iTMPId" LEFT JOIN agent_mosquito on agent_mosquito."iAMId" = task_mosquito_pool_result."iAMId" LEFT JOIN result on result."iResultId" = task_mosquito_pool_result."iResultId" where task_mosquito_pool_result."iResultId" = 3';
-        //$PositiveData = 'SELECT task_mosquito_pool."iTTId",task_mosquito_pool."iTMPId",site_mas."iSiteId" as siteid, site_mas."iSTypeId" as sTypeId, site_mas."iCityId", site_mas."iZoneId",st_astext("vPolygonLatLong") as polygon, st_astext("vPointLatLong") as point, st_astext("vPolyLineLatLong") as poly_line FROM "public"."task_mosquito_pool"  left join task_mosquito_count on "task_mosquito_count"."iTMCId" = "task_mosquito_pool"."iTMCId" left join task_mosquito_pool_result on "task_mosquito_pool_result"."iTMPId" = "task_mosquito_pool"."iTMPId" left join task_trap on "task_trap"."iTTId" = "task_mosquito_count"."iTTId"  left join site_mas on "site_mas"."iSiteId" = "task_trap"."iSiteId"';
-        $data['sites'] = $sqlObj->GetAll($PositiveData);
-        return $data;
-    }
-
     public function getSerachSiteData($param){
         global $sqlObj;
         $data = array();
@@ -579,74 +530,6 @@ class Fieldmap {
 
         $data['sites'] = $site_data;
         $data['site_atrribute'] = $attr_arr;
-
-        return $data;
-    }
-
-    /*
-     * Function for get landing rate data using last synchronize date (for app)
-    */
-    public function getLandingRateBySyncDate($param = array()){
-        global $sqlObj;
-        $data = array();
-        $where_arr = array();
-        $last_sync_date = trim($param['last_sync_date']);
-        $current_date = trim($param['current_date']);
-
-        $where_arr[] ='  site_mas."iStatus" = 1';
-        if((isset($last_sync_date) && $last_sync_date != "")){
-            $where_arr[] = " (( DATE(task_landing_rate.\"dAddedDate\") >= '" . $last_sync_date . "' AND DATE(task_landing_rate.\"dAddedDate\") <= '" . $current_date. "')  OR (DATE(task_landing_rate.\"dModifiedDate\") >= '" . $last_sync_date . "' AND DATE(task_landing_rate.\"dModifiedDate\") <= '" . $current_date. "' ))";
-        }
-
-        $whereQuery = (!empty($where_arr))?' WHERE '.implode(" AND ", $where_arr):'';
-
-        $LandingData = 'SELECT DISTINCT ON (site_mas."iSiteId") site_mas."iSiteId",count(task_landing_rate."iSiteId"), site_mas."iSTypeId" , site_mas."vName", site_mas."iSSTypeId" ,  site_mas."vAddress1", site_mas."vAddress2", site_mas."vStreet", site_mas."vCrossStreet", site_mas."iZipcode", site_mas."iStateId", site_mas."iCountyId", site_mas."iCityId", site_mas."iGeometryType", site_mas."iZoneId",ST_AsGeoJSON("vPolygonLatLong") as vPolygonLatLong, ST_AsGeoJSON("vPointLatLong") as vPointLatLong, ST_AsGeoJSON("vPolyLineLatLong") as vPolyLineLatLong,task_landing_rate."dAddedDate",  task_landing_rate."dModifiedDate"  FROM "task_landing_rate" left join site_mas on site_mas."iSiteId" = "task_landing_rate"."iSiteId" '.$whereQuery.' GROUP BY "site_mas"."iSiteId",task_landing_rate."dAddedDate",  task_landing_rate."dModifiedDate"';
-        $data['land_rate_sites'] = $sqlObj->GetAll($LandingData);
-        
-        return $data;
-    }
-
-    /*
-     * Function for get larval Survillance data using last synchronize date (for app)
-    */
-    public function getLarvalBySyncDate($param = array()){
-        global $sqlObj;
-        $data = array();
-        $where_arr = array();
-        $last_sync_date = trim($param['last_sync_date']);
-        $current_date = trim($param['current_date']);
-
-        $where_arr[] ='  site_mas."iStatus" = 1';
-        if((isset($last_sync_date) && $last_sync_date != "")){
-            $where_arr[] = " (( DATE(task_larval_surveillance.\"dAddedDate\") >= '" . $last_sync_date . "' AND DATE(task_larval_surveillance.\"dAddedDate\") <= '" . $current_date. "')  OR (DATE(task_larval_surveillance.\"dModifiedDate\") >= '" . $last_sync_date . "' AND DATE(task_larval_surveillance.\"dModifiedDate\") <= '" . $current_date. "' ))";
-        }
-
-        $whereQuery = (!empty($where_arr))?' WHERE '.implode(" AND ", $where_arr):'';
-
-        $LarvalData = 'SELECT DISTINCT ON (site_mas."iSiteId")site_mas."iSiteId" ,count(site_mas."iSiteId"), site_mas."vName", site_mas."iSTypeId", site_mas."iSSTypeId", site_mas."vAddress1", site_mas."vAddress2", site_mas."vStreet", site_mas."vCrossStreet", site_mas."iZipcode", site_mas."iStateId", site_mas."iCountyId", site_mas."iCityId", site_mas."iGeometryType", site_mas."iZoneId", ST_AsGeoJSON("vPolygonLatLong") as polygon, ST_AsGeoJSON("vPointLatLong") as point, ST_AsGeoJSON("vPolyLineLatLong") as poly_line, task_larval_surveillance."dAddedDate",  task_larval_surveillance."dModifiedDate"  FROM "public"."task_larval_surveillance" left join site_mas on "site_mas"."iSiteId" = "task_larval_surveillance"."iSiteId" '.$whereQuery.' GROUP BY "site_mas"."iSiteId", task_larval_surveillance."dAddedDate",  task_larval_surveillance."dModifiedDate" ';
-        
-        $data = $sqlObj->GetAll($LarvalData);
-        return $data;
-    }
-
-    /*
-     * Function for get Positive data using last synchronize date (for app)
-    */
-    public function getPositiveBySyncDate($param = array()){
-        global $sqlObj;
-        $where_arr = array();
-        $last_sync_date = trim($param['last_sync_date']);
-        $current_date = trim($param['current_date']);
-        $where_arr[] ='  site_mas."iStatus" = 1';
-        if((isset($last_sync_date) && $last_sync_date != "")){
-            $where_arr[] = " (( DATE(site_mas.\"dAddedDate\") >= '" . $last_sync_date . "' AND DATE(site_mas.\"dAddedDate\") <= '" . $current_date. "')  OR (DATE(site_mas.\"dModifiedDate\") >= '" . $last_sync_date . "' AND DATE(site_mas.\"dModifiedDate\") <= '" . $current_date. "' ))";
-        }
-        $where_arr[] = ' task_mosquito_pool_result."iResultId" = 3';
-
-        $whereQuery = (!empty($where_arr))?' WHERE '.implode(" AND ", $where_arr):'';
-
-       $sql_qry = 'SELECT DISTINCT ON (site_mas."iSiteId")site_mas."iSiteId" ,task_mosquito_pool."iTTId",task_mosquito_pool."iTMPId", task_mosquito_pool."dAddedDate", task_mosquito_pool."dModifiedDate", site_mas."vName", site_mas."iSTypeId", site_mas."iSSTypeId", site_mas."vAddress1", site_mas."vAddress2", site_mas."vStreet", site_mas."vCrossStreet", site_mas."iZipcode", site_mas."iStateId", site_mas."iCountyId", site_mas."iCityId", site_mas."iGeometryType", site_mas."iZoneId", ST_AsGeoJSON("vPolygonLatLong") as vPolygonLatLong, ST_AsGeoJSON("vPointLatLong") as vPointLatLong, ST_AsGeoJSON("vPolyLineLatLong") as vPolyLineLatLong FROM "public"."task_mosquito_pool"  LEFT JOIN task_trap  on task_trap."iTTId" = task_mosquito_pool."iTTId" LEFT JOIN trap_type_mas tt on tt."iTrapTypeId" = task_trap."iTrapTypeId" LEFT JOIN site_mas  on site_mas."iSiteId" = task_trap."iSiteId" LEFT JOIN county_mas c on site_mas."iCountyId" = c."iCountyId" LEFT JOIN state_mas sm on site_mas."iStateId" = sm."iStateId" LEFT JOIN city_mas cm on site_mas."iCityId" = cm."iCityId" LEFT JOIN site_type_mas st on site_mas."iSTypeId" = st."iSTypeId" LEFT JOIN task_mosquito_pool_result on task_mosquito_pool_result."iTMPId" = task_mosquito_pool."iTMPId" LEFT JOIN agent_mosquito on agent_mosquito."iAMId" = task_mosquito_pool_result."iAMId" LEFT JOIN result on result."iResultId" = task_mosquito_pool_result."iResultId" '.$whereQuery;
-       $data = $sqlObj->GetAll($sql_qry);
 
         return $data;
     }

@@ -669,65 +669,50 @@ class Site {
 
 	//Ended by bhavik desai
 
-	function site_history_list() {
+	function site_history_list($iPremiseId = 0) {
 		//echo "111";exit();
 		global $sqlObj;
 		$arr = array();
-		
-		$sql = 'SELECT task_treatment.*, \'Treatment\' AS "Type"' . $this->join_field_str . " FROM task_treatment " . $this->join_clause . $this->where_clause . $this->group_by_clause . $this->order_by_clause . $this->limit_clause;
-		//echo $sql;exit();
+
+		// Awareness
+		$sql = 'SELECT awareness.*, \'Awareness\' AS "Type"' . $this->join_field_str . " FROM awareness " . $this->join_clause .' WHERE "iPremiseId" = '.$iPremiseId.' '.$this->group_by_clause . 'order by "dDate" desc'. $this->limit_clause;
+		//echo $sql;
 		$rs_st = $sqlObj->GetAll($sql);
 		$ni = count($rs_st);
 		if($ni > 0){
 			for($i=0;$i<$ni;$i++){
-				if($rs_st[$i]['dDate'] !=  "")
+				if($rs_st[$i]['dDate'] != ""){
 					$arr[strtotime($rs_st[$i]['dDate'])][] = $rs_st[$i];
+				}
 			}
 		}
 
-		$sql = 'SELECT task_landing_rate.*, \'Landing Rate\' AS "Type"' . $this->join_field_str . " FROM task_landing_rate " . $this->join_clause . $this->where_clause . $this->group_by_clause . $this->order_by_clause . $this->limit_clause;
+		// Fiberinquiry Details
+		$sql = 'SELECT fiberinquiry_details	.*, \'FiberInquiry\' AS "Type"' . $this->join_field_str . " FROM fiberinquiry_details " . $this->join_clause.' WHERE "iMatchingPremiseId" = '.$iPremiseId.' '.$this->group_by_clause .'order by "dAddedDate" desc'. $this->limit_clause;
+		//echo $sql;exit;
 		$rs_st = $sqlObj->GetAll($sql);
 		$ni = count($rs_st);
 		if($ni > 0){
 			for($i=0;$i<$ni;$i++){
-				if($rs_st[$i]['dDate'] !=  "")
-					$arr[strtotime($rs_st[$i]['dDate'])][] = $rs_st[$i];
+				if($rs_st[$i]['dAddedDate'] !=  "")
+					$arr[strtotime($rs_st[$i]['dAddedDate'])][] = $rs_st[$i];
 			}
 		}
 
-		 $sql = 'SELECT task_trap.*, \'Task Trap\' AS "Type"' . $this->join_field_str . " FROM task_trap " . $this->join_clause . $this->where_clause . $this->group_by_clause .'order by "dTrapPlaced" desc'. $this->limit_clause;
-		// echo $sql;exit();
+		// Service Order
+		$sql = 'SELECT service_order.*, \'ServiceOrder\' AS "Type"' . $this->join_field_str . " FROM service_order " . $this->join_clause.' WHERE "iPremiseId" = '.$iPremiseId.' '.$this->group_by_clause .'order by "dAddedDate" desc'. $this->limit_clause;
 		$rs_st = $sqlObj->GetAll($sql);
-		$ni = count($rs_st);
-		if($ni > 0){
-			for($i=0;$i<$ni;$i++){
-				if($rs_st[$i]['dTrapPlaced'] !=  "")
-					$arr[strtotime($rs_st[$i]['dTrapPlaced'])][] = $rs_st[$i];
-			}
-		}
 
-		$sql = 'SELECT task_larval_surveillance.*, \'Laravel Surveillance\' AS "Type"' . $this->join_field_str . " FROM task_larval_surveillance " . $this->join_clause . $this->where_clause . $this->group_by_clause . $this->order_by_clause . $this->limit_clause;
-		$rs_st = $sqlObj->GetAll($sql);
 		$ni = count($rs_st);
 		if($ni > 0){
 			for($i=0;$i<$ni;$i++){
-				if($rs_st[$i]['dDate'] !=  "")
-					$arr[strtotime($rs_st[$i]['dDate'])][] = $rs_st[$i];
-			}
-		}
-
-		$sql = 'SELECT task_other.*, \'Other\' AS "Type"' . $this->join_field_str . " FROM task_other" . $this->join_clause . $this->where_clause . $this->group_by_clause . $this->order_by_clause . $this->limit_clause;
-		$rs_st = $sqlObj->GetAll($sql);
-		$ni = count($rs_st);
-		if($ni > 0){
-			for($i=0;$i<$ni;$i++){
-				if($rs_st[$i]['dDate'] !=  "")
-					$arr[strtotime($rs_st[$i]['dDate'])][] = $rs_st[$i];
+				if($rs_st[$i]['dAddedDate'] !=  "")
+					$arr[strtotime($rs_st[$i]['dAddedDate'])][] = $rs_st[$i];
 			}
 		}
 
 		krsort($arr);
-
+		//echo "<pre>";print_r($arr);exit;
 		$operation_arr = array();
 
 		$ai = count($arr);
