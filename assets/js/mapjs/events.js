@@ -1040,6 +1040,7 @@ $("#btn_map_addsite").click(function(){
         $("#showCircle").prop("checked", false);
     }
     clearMapTool();
+    cancleAddBatchSite();
     $('.collapse').collapse('hide')
     //add site point
     $("#sitedivmsg").html('<p>Click the spot on the map where you want this site placed.</p>');
@@ -1137,6 +1138,7 @@ $("#btn_map_addbatchsite").click(function() {
         $("#showCircle").prop("checked", false);
     }
     clearMapTool();
+    cancleAddSite();
     $('.collapse').collapse('hide')
     //add site point
     $("#batchsitedivmsg").html('<p>Click the multiple spot on the map where you want to create new premises.</p>');
