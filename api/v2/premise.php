@@ -695,6 +695,56 @@ if($request_type == "premise_list"){
     else{
         $response_data = array("Code" => 500 , "Message" => MSG_ADD_ERROR);
     }
+}else if($request_type == "search_workorder_premise"){
+    $rs_arr  = array();
+    $where_arr = array();
+    $join_fieds_arr = array();
+    $join_arr = array();
+
+    $vSiteName_other = $RES_PARA['siteName'];
+     
+    $SiteObj = new Site();
+    $SiteObj->clear_variable();
+
+    $letters = str_replace("'","",$vSiteName_other);
+    $exp_keyword = explode("\\",$letters);
+  
+    $ext_where_arr =array();
+    foreach($exp_keyword as $vl){
+        if(trim($vl) != '')
+            $ext_where_arr[] = " (s.\"vName\" ILIKE '%".trim($vl)."%' OR concat(s.\"vAddress1\", ' ', s.\"vStreet\") ILIKE '%".trim($vl)."%' )";
+    }
+    if(count($ext_where_arr) > 0){
+        $ext_where = implode(" AND ", $ext_where_arr);
+        $where_arr[] = $ext_where;
+    }else{
+        $where_arr[] = " (s.\"vName\" ILIKE '%".trim($vSiteName_other)."%' OR concat(s.\"vAddress1\", ' ', s.\"vStreet\") ILIKE '%".trim($vSiteName_other)."%'  OR s.\"iSiteId\" ILIKE '%".intval($vSiteName_other)."%')";
+    }     
+    $where_arr[] = 's."iStatus" = 1';
+    $join_fieds_arr[] = 'st."vTypeName"';
+    $join_arr[] = 'LEFT JOIN site_type_mas st on s."iSTypeId" = st."iSTypeId"';
+    $SiteObj->join_field = $join_fieds_arr;
+    $SiteObj->join = $join_arr;
+    $SiteObj->where = $where_arr;
+    $SiteObj->param['limit'] = "0";
+    $SiteObj->param['order_by'] = 's."iSiteId" DESC';
+    
+    $SiteObj->setClause();
+    $rs_site = $SiteObj->recordset_list();
+    for ($i = 0; $i < count($rs_site); $i++) {
+        $rs_arr[] = array(
+         'display' => $rs_site[$i]['iSiteId']." (".$rs_site[$i]['vName']."; ".$rs_site[$i]['vTypeName'].")",
+         "iSiteId" => $rs_site[$i]['iSiteId'],
+         "vName" => $rs_site[$i]['vName']
+        );
+    }
+
+    $result = array('data' => $rs_arr);
+
+    $rh = HTTPStatus(200);
+    $code = 2000;
+    $message = api_getMessage($req_ext, constant($code));
+    $response_data = array("Code" => 200, "Message" => $message, "result" => $result);
 }
 else {
    $r = HTTPStatus(400);

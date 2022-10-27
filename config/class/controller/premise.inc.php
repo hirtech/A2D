@@ -711,6 +711,18 @@ class Site {
 			}
 		}
 
+		// Work Order
+		$sql = 'SELECT workorder.*, \'WorkOrder\' AS "Type"' . $this->join_field_str . " FROM workorder " . $this->join_clause.' WHERE "iPremiseId" = '.$iPremiseId.' '.$this->group_by_clause .'order by "dAddedDate" desc'. $this->limit_clause;
+		$rs_st = $sqlObj->GetAll($sql);
+
+		$ni = count($rs_st);
+		if($ni > 0){
+			for($i=0;$i<$ni;$i++){
+				if($rs_st[$i]['dAddedDate'] !=  "")
+					$arr[strtotime($rs_st[$i]['dAddedDate'])][] = $rs_st[$i];
+			}
+		}
+
 		krsort($arr);
 		//echo "<pre>";print_r($arr);exit;
 		$operation_arr = array();

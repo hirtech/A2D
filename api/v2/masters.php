@@ -10,6 +10,7 @@ include_once($controller_path . "engagement.inc.php");
 include_once($controller_path . "connection_type.inc.php");
 include_once($controller_path . "company.inc.php");
 include_once($controller_path . "service_type.inc.php");
+include_once($controller_path . "workorder_type.inc.php");
 include_once($function_path."image.inc.php");
 include_once($function_path."site_general.inc.php");
 
@@ -1393,6 +1394,121 @@ if($request_type == "city_list"){
     $rs_db = $ServiceTypeObj->delete_records($iServiceTypeId);
     if($rs_db){
         $response_data = array("Code" => 200, "Message" => MSG_DELETE, "iServiceTypeId" => $iServiceTypeId);
+    }else{
+        $response_data = array("Code" => 500 , "Message" => MSG_DELETE_ERROR);
+    }
+}else if($request_type == "workorder_type_list"){
+    $WorkOrderTypeObj = new WorkOrderType();
+    $where_arr = array();
+    if(!empty($RES_PARA)){
+        $iWOTId                 = trim($RES_PARA['iWOTId']);
+        $vType                  = trim($RES_PARA['vType']);
+        $iStatus                = trim($RES_PARA['iStatus']);
+        $page_length            = isset($RES_PARA['page_length']) ? trim($RES_PARA['page_length']) : "10";
+        $start                  = isset($RES_PARA['start']) ? trim($RES_PARA['start']) : "0";
+        $sEcho                  = $RES_PARA['sEcho'];
+        $display_order          = $RES_PARA['display_order'];
+        $dir                    = $RES_PARA['dir'];
+    }
+
+    if ($iWOTId != "") {
+        $where_arr[] = 'workorder_type_mas."iWOTId" = \''.$iWOTId.'\'';
+    }
+
+    if ($vType != "") {
+        $where_arr[] = 'workorder_type_mas."vType" ILIKE \''.$vType.'%\'';
+    }
+    
+    if ($iStatus != "") {
+        if(strtolower($iStatus) == "active"){
+            $where_arr[] = "workorder_type_mas.\"iStatus\" = '1'";
+        }
+        else if(strtolower($iStatus) == "inactive"){
+            $where_arr[] = "workorder_type_mas.\"iStatus\" = '0'";
+        }
+    }
+
+    switch ($display_order) {
+        case "0" : 
+            $sortname = "workorder_type_mas.\"iWOTId\"";
+            break;
+        case "1":
+            $sortname = "workorder_type_mas.\"vType\"";
+            break;
+        case "2":
+            $sortname = "workorder_type_mas.\"iStatus\"";
+            break;
+        default:
+            $sortname = "workorder_type_mas.\"iWOTId\"";
+            break;
+    }
+    
+    $limit = "LIMIT ".$page_length." OFFSET ".$start."";
+
+    $join_fieds_arr = array();
+    $join_arr = array();
+    $WorkOrderTypeObj->join_field = $join_fieds_arr;
+    $WorkOrderTypeObj->join = $join_arr;
+    $WorkOrderTypeObj->where = $where_arr;
+    $WorkOrderTypeObj->param['order_by'] = $sortname . " " . $dir;
+    $WorkOrderTypeObj->param['limit'] = $limit;
+    $WorkOrderTypeObj->setClause();
+    $WorkOrderTypeObj->debug_query = false;
+    $rs_service_type = $WorkOrderTypeObj->recordset_list();
+    $total = $WorkOrderTypeObj->recordset_total();
+    $data = array();
+    $ni = count($rs_service_type);
+    if($ni > 0){
+        for($i=0;$i<$ni;$i++){
+            $data[] = array(
+                "iWOTId"        => gen_strip_slash($rs_service_type[$i]['iWOTId']),
+                "vType"         => gen_strip_slash($rs_service_type[$i]['vType']),
+                "iStatus"       => $rs_service_type[$i]['iStatus'],
+            );
+        }
+    }
+    $result = array('data' => $data , 'total_record' => $total);
+
+    $rh = HTTPStatus(200);
+    $code = 2000;
+    $message = api_getMessage($req_ext, constant($code));
+    $response_data = array("Code" => 200, "Message" => $message, "result" => $result);
+}else if($request_type == "workorder_type_add"){
+    $WorkOrderTypeObj = new WorkOrderType();
+    $insert_arr = array(
+        "vType"      => $RES_PARA['vType'],
+        "iStatus"    => $RES_PARA['iStatus'],
+    );
+    $WorkOrderTypeObj->insert_arr = $insert_arr;
+    $WorkOrderTypeObj->setClause();
+    $iWOTId = $WorkOrderTypeObj->add_records();
+    if(isset($iWOTId)){
+        $response_data = array("Code" => 200, "Message" => MSG_ADD, "iWOTId" => $iWOTId);
+    }else{
+        $response_data = array("Code" => 500 , "Message" => MSG_ADD_ERROR);
+    }
+}else if($request_type == "workorder_type_edit"){
+    $WorkOrderTypeObj = new WorkOrderType();
+    $update_arr = array(
+        "iWOTId"        => $RES_PARA['iWOTId'],
+        "vType"         => $RES_PARA['vType'],
+        "iStatus"       => $RES_PARA['iStatus'],
+    );
+    //echo "<pre>";print_r($update_arr);exit;
+    $WorkOrderTypeObj->update_arr = $update_arr;
+    $WorkOrderTypeObj->setClause();
+    $iWOTId = $WorkOrderTypeObj->update_records();
+    if(isset($iWOTId)){
+        $response_data = array("Code" => 200, "Message" => MSG_UPDATE, "iWOTId" => $RES_PARA['iWOTId']);
+    }else{
+        $response_data = array("Code" => 500 , "Message" => MSG_UPDATE_ERROR);
+    }
+}else if($request_type == "workorder_type_delete"){
+    $WorkOrderTypeObj = new WorkOrderType();
+    $iWOTId = $RES_PARA['iWOTId'];
+    $rs_db = $WorkOrderTypeObj->delete_records($iWOTId);
+    if($rs_db){
+        $response_data = array("Code" => 200, "Message" => MSG_DELETE, "iWOTId" => $iWOTId);
     }else{
         $response_data = array("Code" => 500 , "Message" => MSG_DELETE_ERROR);
     }

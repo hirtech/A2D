@@ -126,6 +126,12 @@ RewriteRule ^master/service_type_list? index.php?module=$0&page=m-service_type_l
 RewriteRule ^master/service_type_list index.php?module=$0&page=m-service_type_list
 #---------------------
 
+#---------------------
+#WorkOrder Type Master
+RewriteRule ^master/workorder_type_list? index.php?module=$0&page=m-workorder_type_list&%{QUERY_STRING}
+RewriteRule ^master/workorder_type_list index.php?module=$0&page=m-workorder_type_list
+#---------------------
+
 #-------Site Mgmt----------------
 #Site
 RewriteRule ^premise/list index.php?module=$0&page=m-premise_list&%{QUERY_STRING}
@@ -150,6 +156,14 @@ RewriteRule ^service_order/edit index.php?module=$0&page=m-service_order_add
 RewriteRule ^service_order/add&(.*)$ index.php?module=$0&page=m-service_order_add&%{QUERY_STRING} [L]
 RewriteRule ^service_order/add? index.php?module=$0&page=m-service_order_add&%{QUERY_STRING} [L]
 RewriteRule ^service_order/add index.php?module=$0&page=m-service_order_add
+#---------------------
+
+#---------------------
+#Work Order
+RewriteRule ^service_order/workorder_list?(.*)$ index.php?module=$0&page=m-workorder_list&%{QUERY_STRING}
+RewriteRule ^service_order/workorder_list index.php?module=$0&page=m-workorder_list
+RewriteRule ^service_order/workorder_add&(.*)$ index.php?module=$0&page=m-workorder_add&%{QUERY_STRING}
+RewriteRule ^service_order/workorder_add index.php?module=$0&page=m-workorder_add
 #---------------------
 
 #------Treatment Product-------------

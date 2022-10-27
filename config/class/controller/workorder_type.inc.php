@@ -1,7 +1,6 @@
 <?php
 include_once("security_audit_log.inc.php");
-class SiteSubType {
-	var $iSSTypeId;
+class WorkOrderType {
 	var $join_field = array();
 	var $join = array();
 	var $where = array();
@@ -18,14 +17,14 @@ class SiteSubType {
 	var $limit_clause = "";
 	var $debug_query = false;
 	
-	function SiteSubType() {
+	function WorkOrderType(){
 		$this->SALObj = new Security_audit_log();
 	}
 	
 	function setClause() {			
 		//Join Fields for select query	
 		if(is_array($this->join_field) && count($this->join_field) > 0){
-				$this->join_field_str = ", ".implode(", ", $this->join_field);
+			$this->join_field_str = ", ".implode(", ", $this->join_field);
 		}
 		// Join clause
 		if(is_array($this->join) && count($this->join) > 0){
@@ -63,16 +62,13 @@ class SiteSubType {
 			}
 		}
 	}
-	
+
 	function recordset_list()
 	{
 		global $sqlObj;
-			
-		$sql = "SELECT site_sub_type_mas.* ".$this->join_field_str." FROM site_sub_type_mas".$this->join_clause.$this->where_clause.$this->group_by_clause.$this->order_by_clause.$this->limit_clause;
-		//echo $sql;
-		//file_put_contents($site_path."logs/a.txt", $sql);
+		
+		$sql = "SELECT workorder_type_mas.* ".$this->join_field_str." FROM workorder_type_mas".$this->join_clause.$this->where_clause.$this->group_by_clause.$this->order_by_clause.$this->limit_clause;
 		$rs_db = $sqlObj->GetAll($sql);
-		//echo "<pre>";print_r($rs_db);exit();
 		return $rs_db;
 	}
 	
@@ -80,7 +76,7 @@ class SiteSubType {
 	{
 		global $sqlObj;
 			
-		$sql = "SELECT site_sub_type_mas.* ".$this->join_field_str." FROM site_sub_type_mas".$this->join_clause.$this->where_clause.$this->group_by_clause;
+		$sql = "SELECT workorder_type_mas.* ".$this->join_field_str." FROM workorder_type_mas".$this->join_clause.$this->where_clause.$this->group_by_clause;
 		//$rs_db = $sqlObj->GetAll($sql);
 		//return count($rs_db);
 		$rs_db = $sqlObj->Execute($sql);
@@ -95,30 +91,29 @@ class SiteSubType {
 	function delete_records($id){
 		global $sqlObj;
 		
-		$sql_del = "DELETE FROM site_sub_type_mas WHERE site_sub_type_mas.\"iSSTypeId\" IN (".$id.")";
+		$sql_del = "DELETE FROM workorder_type_mas WHERE workorder_type_mas.\"iWOTId\" IN (".$id.")";
 		$rs_del = $sqlObj->Execute($sql_del);
 
 		/*-------------- Log Entry -------------*/
 		$this->SALObj->type = 2;
-		$this->SALObj->module_name = "Premise Sub type";
+		$this->SALObj->module_name = "WorkOrder Type";
 		$this->SALObj->audit_log_entry();
 		/*-------------- Log Entry -------------*/
 
 		return $rs_del;
 	}
-
+	
 	function add_records(){
 		global $sqlObj;
 		if($this->insert_arr){
-			$sql = "INSERT INTO site_sub_type_mas(\"iSTypeId\", \"vSubTypeName\", \"iStatus\", \"dAddedDate\")VALUES (".gen_allow_null_int($this->insert_arr['iSTypeId']).", ".gen_allow_null_char($this->insert_arr['vSubTypeName']).", ".gen_allow_null_char($this->insert_arr['iStatus']).", ".gen_allow_null_char(date_getSystemDateTime()).")";
-			//file_put_contents($site_path."a.txt", $sql);exit;
-			//echo $sql;exit;
+			$sql = "INSERT INTO workorder_type_mas( \"vType\", \"iStatus\", \"dAddedDate\")VALUES (".gen_allow_null_char($this->insert_arr['vType']).", ".$this->insert_arr['iStatus'].", ".gen_allow_null_char(date_getSystemDateTime()).")";
+			
 			$sqlObj->Execute($sql);		
 			$rs_db = $sqlObj-> Insert_ID();
 
 			/*-------------- Log Entry -------------*/
 			$this->SALObj->type = 0;
-			$this->SALObj->module_name = "Premise Sub type";
+			$this->SALObj->module_name = "WorkOrder Type";
 			$this->SALObj->audit_log_entry();
 			/*-------------- Log Entry -------------*/
 
@@ -128,16 +123,14 @@ class SiteSubType {
 
 	function update_records(){
 		global $sqlObj, $site_path;
-
 		if($this->update_arr){
-			$rs_db = "UPDATE site_sub_type_mas SET \"iSTypeId\"=".gen_allow_null_char($this->update_arr['iSTypeId'])." , \"vSubTypeName\"=".gen_allow_null_char($this->update_arr['vSubTypeName'])." ,\"iStatus\"=".gen_allow_null_char($this->update_arr['iStatus']).",\"dModifiedDate\" = ".gen_allow_null_char(date_getSystemDateTime())." WHERE \"iSSTypeId\" = ".$this->update_arr['iSSTypeId'];
-			//file_put_contents($site_path."a.txt", $rs_db);
+			$rs_db = "UPDATE workorder_type_mas SET  \"vType\"=".gen_allow_null_char($this->update_arr['vType']).", \"iStatus\"=".gen_allow_null_char($this->update_arr['iStatus']).", \"dModifiedDate\" = ".gen_allow_null_char(date_getSystemDateTime())." WHERE \"iWOTId\" = ".$this->update_arr['iWOTId'];
 			$sqlObj->Execute($rs_db);
 			$rs_up = $sqlObj->Affected_Rows();
 
 			/*-------------- Log Entry -------------*/
 			$this->SALObj->type = 1;
-			$this->SALObj->module_name = "Premise Sub type";
+			$this->SALObj->module_name = "WorkOrder Type";
 			$this->SALObj->action = "Update";
 			$this->SALObj->audit_log_entry();
 			/*-------------- Log Entry -------------*/
@@ -145,14 +138,6 @@ class SiteSubType {
 			return $rs_up;
 		}
 	}
-
-	/*public function getSiteTypeList() {
-		global $sqlObj;
-		$sql = "SELECT * FROM site_sub_type_mas ORDER BY \"vSubTypeName\"";
-		## Function to write query in temp file.
-		//gen_writeDataInTmpFile($sql);
-		return $sqlObj->GetAll($sql);
-	}*/
 
 	function clear_variable(){
 		$this->join_field = array();
@@ -171,3 +156,4 @@ class SiteSubType {
 		$this->limit_clause = "";
 	}
 }
+?>

@@ -20,6 +20,10 @@ include_once($controller_path . "engagement.inc.php");
 include_once($controller_path . "company.inc.php");
 include_once($controller_path . "connection_type.inc.php");
 include_once($controller_path . "service_type.inc.php");
+include_once($controller_path . "workorder_type.inc.php");
+include_once($controller_path . "contact.inc.php");
+include_once($controller_path . "service_order.inc.php");
+include_once($controller_path . "user.inc.php");
 
 if($request_type == "department_dropdown") {
 	$DepartmentObj = new Department();
@@ -620,6 +624,122 @@ if($request_type == "department_dropdown") {
     //print_r($rs_service_type);exit;
     if($rs_service_type){
         $response_data = array("Code" => 200, "result" => $rs_service_type, "total_record" => count($rs_service_type));
+    }else{
+        $response_data = array("Code" => 500);
+    }
+}else if($request_type == "workorder_type_dropdown"){
+    $where_arr = array();
+    $join_fieds_arr = array();
+    $join_arr  = array();
+    $WorkOrderTypeObj = new WorkOrderType();
+    $iStatus = $RES_PARA['iStatus'];
+    $where_arr = array();
+    if($iStatus != ''){
+        $where_arr[] = "workorder_type_mas.\"iStatus\"='".$iStatus."'";
+    }
+    $WorkOrderTypeObj->where = $where_arr;
+    $WorkOrderTypeObj->param['order_by'] = "workorder_type_mas.\"vType\"";
+    $WorkOrderTypeObj->setClause();
+    $rs_wo_type = $WorkOrderTypeObj->recordset_list();
+    if($rs_wo_type){
+        $response_data = array("Code" => 200, "result" => $rs_wo_type, "total_record" => count($rs_wo_type));
+    }else{
+        $response_data = array("Code" => 500);
+    }
+}else if($request_type == "contact_dropdown"){
+    $where_arr = array();
+    $join_fieds_arr = array();
+    $join_arr  = array();
+    $ContactObj = new Contact();
+    $iStatus = $RES_PARA['iStatus'];
+    $where_arr = array();
+    if($iStatus != ''){
+        $where_arr[] = "contact_mas.\"iStatus\"='".$iStatus."'";
+    }
+    $ContactObj->where = $where_arr;
+    $ContactObj->param['order_by'] = "contact_mas.\"vFirstName\"";
+    $ContactObj->setClause();
+    $rs_contact= $ContactObj->recordset_list();
+    if($rs_contact){
+        $ni = count($rs_contact);
+        for($i=0; $i<$ni; $i++){
+            $vName = $rs_contact[$i]['vFirstName']." ".$rs_contact[$i]['vLastName'];
+            $vDisplay = $vName;
+            if($rs_contact[$i]['vEmail'] != ""){
+                $vDisplay .= " | ".$rs_contact[$i]['vEmail'];
+            }
+            if($rs_contact[$i]['vPhone'] != ""){
+                $vDisplay .= " | ".$rs_contact[$i]['vPhone'];
+            }
+            $rs_contact[$i]['vName'] = $vName;
+            $rs_contact[$i]['vDisplay'] = $vDisplay;
+        }
+        $response_data = array("Code" => 200, "result" => $rs_contact, "total_record" => count($rs_contact));
+    }else{
+        $response_data = array("Code" => 500);
+    }
+}else if($request_type == "workorder_status_dropdown"){
+    $sql = 'SELECT * FROM workorder_status_mas WHERE "iStatus" = 1 ORDER BY "iWOSId"';
+    $rs = $sqlObj->GetAll($sql);
+    if($rs){
+        $response_data = array("Code" => 200, "result" => $rs, "total_record" => count($rs));
+    }else{
+        $response_data = array("Code" => 500);
+    }
+}else if($request_type == "service_order_dropdown"){
+    $where_arr = array();
+    $join_fieds_arr = array();
+    $join_arr  = array();
+    $ServiceOrderObj = new ServiceOrder();
+    $where_arr = array();
+    $ServiceOrderObj->where = $where_arr;
+    $ServiceOrderObj->param['order_by'] = "service_order.\"iServiceOrderId\"";
+    $ServiceOrderObj->setClause();
+    $rs_sorder= $ServiceOrderObj->recordset_list();
+    if($rs_sorder){
+        $ni = count($rs_sorder);
+        for($i=0; $i<$ni; $i++){
+            $vSODetails = "SO #".$rs_sorder[$i]['iServiceOrderId'].": ".$rs_sorder[$i]['vServiceOrder'];
+            $rs_sorder[$i]['vSODetails'] = $vSODetails;
+        }
+        $response_data = array("Code" => 200, "result" => $rs_sorder, "total_record" => count($rs_contact));
+    }else{
+        $response_data = array("Code" => 500);
+    }
+}else if($request_type == "user_dropdown"){
+    $where_arr = array();
+    $join_fieds_arr = array();
+    $join_arr  = array();
+    $UserObj = new User();
+    $iStatus = $RES_PARA['iStatus'];
+    $where_arr = array();
+    if($iStatus != ''){
+        $where_arr[] = "user_mas.\"iStatus\"='".$iStatus."'";
+    }
+	$join_fieds_arr[] = "ud.\"vPhone\"";
+    $join_arr[] = 'LEFT JOIN user_details ud on user_mas."iUserId" = ud."iUserId"';
+	$UserObj->join_field = $join_fieds_arr;
+    $UserObj->join = $join_arr;
+    $UserObj->where = $where_arr;
+    $UserObj->param['order_by'] = "user_mas.\"vFirstName\"";
+    $UserObj->setClause();
+    $rs_contact= $UserObj->recordset_list();
+	//echo "<pre>";print_r($rs_contact);exit;
+    if($rs_contact){
+        $ni = count($rs_contact);
+        for($i=0; $i<$ni; $i++){
+            $vName = $rs_contact[$i]['vFirstName']." ".$rs_contact[$i]['vLastName'];
+            $vDisplay = $vName;
+            if($rs_contact[$i]['vEmail'] != ""){
+                $vDisplay .= " | ".$rs_contact[$i]['vEmail'];
+            }
+            if($rs_contact[$i]['vPhone'] != ""){
+                $vDisplay .= " | ".$rs_contact[$i]['vPhone'];
+            }
+            $rs_contact[$i]['vName'] = $vName;
+            $rs_contact[$i]['vDisplay'] = $vDisplay;
+        }
+        $response_data = array("Code" => 200, "result" => $rs_contact, "total_record" => count($rs_contact));
     }else{
         $response_data = array("Code" => 500);
     }

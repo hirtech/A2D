@@ -111,16 +111,16 @@ if($request_type == "service_order_list"){
     if ($vSCity != "") {
         if ($vSCityFilterOpDD != "") {
             if ($vSCityFilterOpDD == "Begins") {
-                $where_arr[] = 'cm."vCity" ILIKE \''.trim($vSCity).'%\'';
+                $where_arr[] = 'c."vCity" ILIKE \''.trim($vSCity).'%\'';
             } else if ($vSCityFilterOpDD == "Ends") {
-                $where_arr[] = 'cm."vCity" ILIKE \'%'.trim($vSCity).'\'';
+                $where_arr[] = 'c."vCity" ILIKE \'%'.trim($vSCity).'\'';
             } else if ($vSCityFilterOpDD == "Contains") {
-                $where_arr[] = 'cm."vCity" ILIKE \'%'.trim($vSCity).'%\'';
+                $where_arr[] = 'c."vCity" ILIKE \'%'.trim($vSCity).'%\'';
             } else if ($vSCityFilterOpDD == "Exactly") {
-                $where_arr[] = 'cm."vCity" ILIKE \''.trim($vSCity).'\'';
+                $where_arr[] = 'c."vCity" ILIKE \''.trim($vSCity).'\'';
             }
         } else {
-            $where_arr[] = 'cm."vCity" ILIKE \''.trim($vSCity).'%\'';
+            $where_arr[] = 'c."vCity" ILIKE \''.trim($vSCity).'%\'';
         }
     }
 
@@ -241,6 +241,8 @@ if($request_type == "service_order_list"){
         $join_arr[] = 'LEFT JOIN contact_mas on sc."iCId" = contact_mas."iCId"';
     }
     $join_arr[] = 'LEFT JOIN zone z on s."iZoneId" = z."iZoneId"';
+    $join_arr[] = 'LEFT JOIN city_mas c on s."iCityId" = c."iCityId"';
+    $join_arr[] = 'LEFT JOIN state_mas sm on s."iStateId" = sm."iStateId"';
     $join_arr[] = 'LEFT JOIN network n on z."iNetworkId" = n."iNetworkId"';
 	$join_arr[] = 'LEFT JOIN site_type_mas st on s."iSTypeId" = st."iSTypeId"';
     $join_arr[] = 'LEFT JOIN company_mas cm on service_order."iCarrierID" = cm."iCompanyId"';
@@ -365,6 +367,55 @@ if($request_type == "service_order_list"){
     else{
         $response_data = array("Code" => 500 , "Message" => MSG_ADD_ERROR);
     }
+}else if($request_type == "search_service_order"){
+    $rs_arr  = array();
+    $where_arr = array();
+    $join_fieds_arr = array();
+    $join_arr = array();
+    $vServiceOrder = $RES_PARA['vServiceOrder'];
+     
+    $ServiceOrderObj->clear_variable();
+
+    $letters = str_replace("'","",$vSiteName_other);
+    $exp_keyword = explode("\\",$letters);
+  
+    $ext_where_arr =array();
+    foreach($exp_keyword as $vl){
+        if(trim($vl) != '')
+            $ext_where_arr[] = " (service_order.\"vMasterMSA\" ILIKE '%".trim($vl)."%' OR service_order.\"vServiceOrder\" ILIKE '%".trim($vl)."%'' OR concat(s.\"vAddress1\", ' ', s.\"vStreet\") ILIKE '%".trim($vl)."%') ";
+    }
+    if(count($ext_where_arr) > 0){
+        $ext_where = implode(" AND ", $ext_where_arr);
+        $where_arr[] = $ext_where;
+    }else{
+        $where_arr[] = " (service_order.\"iServiceOrderId\" = '".intval($vServiceOrder)."' OR service_order.\"vMasterMSA\" ILIKE '%".trim($vServiceOrder)."%' OR service_order.\"vServiceOrder\" ILIKE '%".trim($vServiceOrder)."%' OR concat(s.\"vAddress1\", ' ', s.\"vStreet\") ILIKE '%".trim($vServiceOrder)."%') ";
+    } 
+    $join_fieds_arr[] = "concat(s.\"vAddress1\", ' ', s.\"vStreet\") as \"vPremiseAddress\"";
+    $join_arr[] = 'LEFT JOIN site_mas s on s."iSiteId" = service_order."iPremiseId"';
+
+    $ServiceOrderObj->join_field = $join_fieds_arr;
+    $ServiceOrderObj->join = $join_arr;
+    $ServiceOrderObj->where = $where_arr;
+    $ServiceOrderObj->param['limit'] = "0";
+    $ServiceOrderObj->param['order_by'] = 'service_order."iServiceOrderId" DESC';
+    
+    $ServiceOrderObj->setClause();
+    $rs_so = $ServiceOrderObj->recordset_list();
+    for ($i = 0; $i < count($rs_so); $i++) {
+        $rs_arr[] = array(
+            'display' =>"ID#". $rs_so[$i]['iServiceOrderId']." | ".$rs_so[$i]['vMasterMSA']." | ".$rs_so[$i]['vServiceOrder'],
+            "iServiceOrderId" => $rs_so[$i]['iServiceOrderId'],
+            "vMasterMSA" => $rs_so[$i]['vMasterMSA'],
+            "vServiceOrder" => $rs_so[$i]['vServiceOrder']
+        );
+    }
+
+    $result = array('data' => $rs_arr);
+
+    $rh = HTTPStatus(200);
+    $code = 2000;
+    $message = api_getMessage($req_ext, constant($code));
+    $response_data = array("Code" => 200, "Message" => $message, "result" => $result);
 }
 else {
 	$r = HTTPStatus(400);

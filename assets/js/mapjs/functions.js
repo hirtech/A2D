@@ -1122,7 +1122,12 @@ function info_popup(marker, siteid) {
 						content += "<a class='btn btn-primary  mr-2 text-white' title='Awareness' onclick=addEditDataAwareness(0,'add','" + siteid + "')>Awareness</a>";
 						content += "<a class='btn btn-primary  mr-2 text-white' title='Inquiry'>Inquiry</a>";
 						content += "<a class='btn btn-primary  mr-2 text-white' title='Service Order' onclick=mapRedirectServiceOrder('" + ServiceOrderCount + "','" + siteid + "')>Service Order</a>";
-						content += "<a class='btn btn-primary  mr-2 text-white' title='Work Order'>Work Order</a>";
+
+						var WorkOrderCount = 0;
+						if (data.site[0]['WorkOrderCount'] > 0) {
+							WorkOrderCount = data.site[0]['WorkOrderCount'];
+						}
+						content += "<a class='btn btn-primary  mr-2 text-white' title='Work Order' onclick=mapRedirectWorkOrder('" + WorkOrderCount + "','" + siteid + "')>Work Order</a>";
 						content += "<a class='btn btn-primary  mr-2 text-white' title='Circuit'>Circuit</a>";
 						content += "<a class='btn btn-primary  mr-2 text-white' title='Trouble'>Trouble</a>";
 						content += "<a class='btn btn-primary  mr-2 text-white' title='Other'>Other</a>";
@@ -1145,6 +1150,9 @@ function info_popup(marker, siteid) {
 									}else if(item['Type'] == "ServiceOrder") {
 										var so_link = site_url+"service_order/edit&mode=Update&iServiceOrderId="+item['id'];
 										content += "<span class='w-100 d-block  pb-2'><a href='"+so_link+"' target='_blank'>" + item['Date'] + " " + item['Description'] + "</a></span>";
+									}else if(item['Type'] == "WorkOrder") {
+										var wo_link = site_url+"service_order/workorder_add&mode=Update&iWOId="+item['id'];
+										content += "<span class='w-100 d-block  pb-2'><a href='"+wo_link+"' target='_blank'>" + item['Date'] + " " + item['Description'] + "</a></span>";
 									}
 									
 								});
@@ -1777,5 +1785,14 @@ function mapRedirectServiceOrder(ServiceOrderLength, iPremiseId) {
 	}else {
 		alert("No service order exists for this premise");return false;
 	}
+}
 
+
+function mapRedirectWorkOrder(WorkOrderLength, iPremiseId) {
+	if(WorkOrderLength > 0){
+		var wo_url = site_url+"service_order/workorder_list&iPremiseId="+iPremiseId;
+		window.open(wo_url,'_blank');
+	}else {
+		alert("No work order exists for this premise");return false;
+	}
 }

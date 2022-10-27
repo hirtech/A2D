@@ -11,6 +11,7 @@ include_once($controller_path . "task_mosquito_pool_result.inc.php");
 include_once($controller_path . "custom_layer.inc.php");
 include_once($controller_path . "user.inc.php");
 include_once($controller_path . "service_order.inc.php");
+include_once($controller_path . "workorder.inc.php");
 
 
 $SiteObj = new Site();
@@ -22,6 +23,7 @@ $TaskTrapObj = new TaskTrap();
 $TaskMosquitoPoolResultObj = new TaskMosquitoPoolResult();
 $CustomLayerObj = new CustomLayer();
 $ServiceOrderObj = new ServiceOrder();
+$WorkOrderObj = new WorkOrder();
 
 /*Get Map Filter data*/
 $API_URL = $site_api_url."get_map_filter_data.json";
@@ -104,6 +106,7 @@ if($mode == "site_map")
     $rs_site['site'] = $SiteObj->recordset_list();
 	//echo "<pre>";print_r($rs_site);exit;
     $rs_site['site'][0]['ServiceOrderCount'] = 0;
+    $rs_site['site'][0]['WorkOrderCount'] = 0;
     if(!empty($rs_site['site'])){
         $ServiceOrderObj->clear_variable();
         $where_arr = array();
@@ -116,6 +119,19 @@ if($mode == "site_map")
         $ServiceOrderObj->setClause();
         $rs_sorder = $ServiceOrderObj->recordset_list();
         $rs_site['site'][0]['ServiceOrderCount'] = count($rs_sorder);
+		
+		// work order count
+		$WorkOrderObj->clear_variable();
+        $where_arr = array();
+        $join_fieds_arr = array();
+        $join_arr  = array();
+        $where_arr[] = "\"iPremiseId\"='".gen_add_slash($iSiteId)."'";
+        $WorkOrderObj->join_field = $join_fieds_arr;
+        $WorkOrderObj->join = $join_arr;
+        $WorkOrderObj->where = $where_arr;
+        $WorkOrderObj->setClause();
+        $rs_worder = $WorkOrderObj->recordset_list();
+        $rs_site['site'][0]['WorkOrderCount'] = count($rs_worder);
     }
     //echo "<pre>";print_r($rs_site);exit;
 

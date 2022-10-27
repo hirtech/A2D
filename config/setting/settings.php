@@ -97,6 +97,7 @@ $status_color = array(
 	'Uncleared'=> 'warning',
 	'Sent'=> 'success',
 	'Upcoming'=> 'info',
+	'Planning'=> 'info',
 	'Cancelled'=> 'warning',
 	'Inprocess'=> 'primary',
 	'Completed'=> 'success',

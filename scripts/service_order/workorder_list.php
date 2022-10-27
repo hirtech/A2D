@@ -1,14 +1,14 @@
 <?php
 include_once($site_path . "scripts/session_valid.php");
 # ----------- Access Rule Condition -----------
-per_hasModuleAccess("Service Order", 'List');
-$access_group_var_delete = per_hasModuleAccess("Service Order", 'Delete', 'N');
-$access_group_var_status = per_hasModuleAccess("Service Order", 'Status', 'N');
-$access_group_var_add = per_hasModuleAccess("Service Order", 'Add', 'N');
-$access_group_var_edit = per_hasModuleAccess("Service Order", 'Edit', 'N');
-$access_group_var_PDF = per_hasModuleAccess("Service Order", 'PDF', 'N');
-$access_group_var_CSV = per_hasModuleAccess("Service Order", 'CSV', 'N');
-$access_group_var_Respond = per_hasModuleAccess("Service Order", 'Respond', 'N');
+per_hasModuleAccess("Work Order", 'List');
+$access_group_var_delete = per_hasModuleAccess("Work Order", 'Delete', 'N');
+$access_group_var_status = per_hasModuleAccess("Work Order", 'Status', 'N');
+$access_group_var_add = per_hasModuleAccess("Work Order", 'Add', 'N');
+$access_group_var_edit = per_hasModuleAccess("Work Order", 'Edit', 'N');
+$access_group_var_PDF = per_hasModuleAccess("Work Order", 'PDF', 'N');
+$access_group_var_CSV = per_hasModuleAccess("Work Order", 'CSV', 'N');
+$access_group_var_Respond = per_hasModuleAccess("Work Order", 'Respond', 'N');
 # ----------- Access Rule Condition -----------
 # ------------------------------------------------------------
 # General Variables
@@ -20,8 +20,6 @@ $sEcho = (isset($_REQUEST["sEcho"]) ? $_REQUEST["sEcho"] : '0');
 $display_order = (isset($_REQUEST["iSortCol_0"]) ? $_REQUEST["iSortCol_0"] : '0');
 $dir = (isset($_REQUEST["sSortDir_0"]) ? $_REQUEST["sSortDir_0"] : 'desc');
 # ------------------------------------------------------------
-
-$iPremiseId = $_REQUEST['iPremiseId'];
 if($mode == "List") {
     //print_r($_REQUEST);exit();
     $arr_param = array();
@@ -40,8 +38,8 @@ if($mode == "List") {
 
     $arr_param['iFieldmapPremiseId']    = $iPremiseId;
 
-    $arr_param['vSContactNameDD']       = trim($_REQUEST['vSContactNameDD']);
-    $arr_param['vSContactName']         = trim($_REQUEST['vSContactName']);
+    $arr_param['vSPremiseNameDD']       = trim($_REQUEST['vSPremiseNameDD']);
+    $arr_param['vSPremiseName']         = trim($_REQUEST['vSPremiseName']);
     $arr_param['vSAddressFilterOpDD']   = trim($_REQUEST['vSAddressFilterOpDD']);
     $arr_param['vSAddress']             = trim($_REQUEST['vSAddress']);
     $arr_param['vSCityFilterOpDD']      = trim($_REQUEST['vSCityFilterOpDD']);
@@ -50,20 +48,19 @@ if($mode == "List") {
     $arr_param['vSState']               = trim($_REQUEST['vSState']);
     $arr_param['vSZipCode']             = trim($_REQUEST['vSZipCode']);
     $arr_param['iSZoneId']              = trim($_REQUEST['iSZoneId']);
-    $arr_param['iSNetworkId']           = trim($_REQUEST['iSNetworkId']);
-    $arr_param['iSCarrierId']           = trim($_REQUEST['iSCarrierId']);
-    $arr_param['vSSalesRepNameDD']      = trim($_REQUEST['vSSalesRepNameDD']);
-    $arr_param['vSSalesRepName']        = trim($_REQUEST['vSSalesRepName']);
-    $arr_param['vSSalesRepEmailDD']     = trim($_REQUEST['vSSalesRepEmailDD']);
-    $arr_param['vSSalesRepEmail']       = trim($_REQUEST['vSSalesRepEmail']);
-    $arr_param['iSServiceType']         = trim($_REQUEST['iSServiceType']);
+    $arr_param['iSServiceOrderId']      = trim($_REQUEST['iSServiceOrderId']);
+    $arr_param['vSWOProjectDD']         = trim($_REQUEST['vSWOProjectDD']);
+    $arr_param['vSWOProject']           = trim($_REQUEST['vSWOProject']);
+    $arr_param['iSRequestorId']         = trim($_REQUEST['iSRequestorId']);
+    $arr_param['iSAssignedToId']        = trim($_REQUEST['iSAssignedToId']);
+    $arr_param['iSWOSId']               = trim($_REQUEST['iSWOSId']);
 
     $arr_param['access_group_var_edit'] = $access_group_var_edit;
     $arr_param['access_group_var_delete'] = $access_group_var_delete;
 
     $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
 
-    $API_URL = $site_api_url."service_order_list.json";
+    $API_URL = $site_api_url."workorder_list.json";
     //echo $API_URL. " ".json_encode($arr_param);exit;
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $API_URL);
@@ -87,50 +84,41 @@ if($mode == "List") {
     $jsonData = array('sEcho' => $sEcho, 'iTotalDisplayRecords' => $total, 'iTotalRecords' => $total, 'aaData' => array());
     $entry = $hidden_arr = array();
     $rs_order = $result_arr['result']['data'];
-    //echo "<pre>";print_r($rs_order);
+    //echo "<pre>";print_r($rs_order);exit();
     $ni = count($rs_order);
     $entry =array();
     if ($ni > 0) {
         for ($i = 0; $i < $ni; $i++) {
             $action = '';
             if($access_group_var_edit == "1"){
-                $action .= '<a class="btn btn-outline-secondary" title="Edit" href="'.$site_url.'service_order/edit&mode=Update&iServiceOrderId=' . $rs_order[$i]['iServiceOrderId'] . '"><i class="fa fa-edit"></i></a>';
+                $action .= '<a class="btn btn-outline-secondary" title="Edit" href="'.$site_url.'service_order/workorder_add&mode=Update&iWOId=' . $rs_order[$i]['iWOId'] . '"><i class="fa fa-edit"></i></a>';
             }
             if($access_group_var_delete == "1"){
-                $action .= ' <a class="btn btn-outline-danger" title="Delete" href="javascript:void(0);" onclick="delete_record('.$rs_order[$i]['iServiceOrderId'].');"><i class="fa fa-trash"></i></a>';
+                $action .= ' <a class="btn btn-outline-danger" title="Delete" href="javascript:void(0);" onclick="delete_record('.$rs_order[$i]['iWOId'].');"><i class="fa fa-trash"></i></a>';
             }
-
-            $vSalesRepName = '';
-            if($rs_order[$i]['vSalesRepName'] != ""){
-                $vSalesRepName .= "<strong>Name:</strong> ".$rs_order[$i]['vSalesRepName']."<br/>";
-            }
-            if($rs_order[$i]['vSalesRepEmail'] != ""){
-                $vSalesRepName .= "<strong>Email:</strong> ".$rs_order[$i]['vSalesRepEmail']."<br/>";
-            }
-
-            $vServiceDetails = '';
-            if($rs_order[$i]['vServiceType1'] != ""){
-                $vServiceDetails .= "<strong>Service 1:</strong> ".$rs_order[$i]['vServiceType1']."<br/>";
-            }
-            if($rs_order[$i]['vServiceType2'] != ""){
-                $vServiceDetails .= "<strong>Service 2:</strong> ".$rs_order[$i]['vServiceType2']."<br/>";
-            }
-            if($rs_order[$i]['vServiceType3'] != ""){
-                $vServiceDetails .= "<strong>Service 3:</strong> ".$rs_order[$i]['vServiceType3']."<br/>";
-            }
+            
             $vPremise = $rs_order[$i]['iPremiseId']." (".$rs_order[$i]['vPremiseName']."; ".$rs_order[$i]['vPremiseType'].")";
 
+            $vServiceDetails = '';
+            if($rs_order[$i]['iServiceOrderId'] != ""){
+                $vServiceDetails .= "SO #".$rs_order[$i]['iServiceOrderId'].": ".$rs_order[$i]['vServiceOrder'];
+            }
+
+            $vStatus = '---';
+            if($vStatus != ""){
+                $vStatus = '<span class="badge badge-'.$status_color[$rs_order[$i]['vStatus']].'">'.$rs_order[$i]['vStatus'].'<span>';
+            }
+            
+
             $entry[] = array(
-                "iServiceOrderId"       => $rs_order[$i]['iServiceOrderId'],
-                "vMasterMSA"            => $rs_order[$i]['vMasterMSA'],
-                "vServiceOrder"         => $rs_order[$i]['vServiceOrder'],
-                "iCarrierID"            => $rs_order[$i]['vCompanyName'],
-                "vSalesRepName"         => $vSalesRepName,
-                "iPremiseId"            => $vPremise,
-                "iConnectionTypeId"     => $rs_order[$i]['vConnectionTypeName'],
-                "vConnectionTypeName"   => $rs_order[$i]['vConnectionTypeName'],
-                "iServiceDetails"       => $vServiceDetails,
-                "tComments"             => $rs_order[$i]['tComments'],
+                "iWOId"                 => $rs_order[$i]['iWOId'],
+                "vPremise"              => $vPremise,
+                "vServiceDetails"       => $vServiceDetails,
+                "vRequestor"            => $rs_order[$i]['vRequestor'],
+                "vWOProject"            => $rs_order[$i]['vWOProject'],
+                "vType"                 => $rs_order[$i]['vType'],
+                "vAssignedTo"           => $rs_order[$i]['vAssignedTo'],
+                "vStatus"               => $vStatus,
                 "actions"               => ($action!="")?$action:"---"
             );
         }
@@ -142,23 +130,19 @@ if($mode == "List") {
 }else if($mode == "Update"){   
     //echo "<pre>";print_r($_POST);exit;
     $arr_param = array(
-        "iServiceOrderId"       => $_POST['iServiceOrderId'],
-        "vMasterMSA"            => trim($_POST['vMasterMSA']),
-        "vServiceOrder"         => trim($_POST['vServiceOrder']),
-        "iCarrierID"            => $_POST['iCarrierID'],
-        "vSalesRepName"         => trim($_POST['vSalesRepName']),
-        "vSalesRepEmail"        => trim($_POST['vSalesRepEmail']),
-        "iPremiseId"            => $_POST['search_iPremiseId'],
-        "iConnectionTypeId"     => $_POST['iConnectionTypeId'],
-        "iService1"             => $_POST['iService1'],
-        "iService2"             => $_POST['iService2'],
-        "iService3"             => $_POST['iService3'],
-        "tComments"             => trim($_POST['tComments']),
-        "iUserModifiedBy"       => $_SESSION["sess_iUserId".$admin_panel_session_suffix],
-        "sessionId"             => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
+        "iWOId"                     => $_POST['iWOId'],
+        "iPremiseId"                => $_POST['search_iPremiseId'],
+        "iServiceOrderId"           => $_POST['search_iServiceOrderId'],
+        "iRequestorId"              => $_POST['iRequestorId'],
+        "vWOProject"                => trim($_POST['vWOProject']),
+        "iWOTId"                    => $_POST['iWOTId'],
+        "tDescription"              => trim($_POST['tDescription']),
+        "iAssignedToId"             => $_POST['iAssignedToId'],
+        "iWOSId"                    => $_POST['iWOSId'],
+        "sessionId"                 => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
     );
 
-    $API_URL = $site_api_url."service_order_edit.json";
+    $API_URL = $site_api_url."workorder_edit.json";
     //echo $API_URL." ".json_encode($arr_param);exit;
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $API_URL);
@@ -175,7 +159,7 @@ if($mode == "List") {
     curl_close($ch); 
     $result_arr = json_decode($response, true); 
     //echo "<pre>;";print_r($result_arr);exit;
-    if(isset($result_arr['iServiceOrderId'])){
+    if(isset($result_arr['iWOId'])){
         $result['error'] = 0 ;
         $result['msg'] = MSG_UPDATE;
     }else{
@@ -187,23 +171,20 @@ if($mode == "List") {
     hc_exit();
     # -----------------------------------
 }else if($mode == "Add") {
+    //echo "<pre>";print_r($_POST);exit;
     $arr_param = array(
-        "vMasterMSA"            => trim($_POST['vMasterMSA']),
-        "vServiceOrder"         => trim($_POST['vServiceOrder']),
-        "iCarrierID"            => $_POST['iCarrierID'],
-        "vSalesRepName"         => trim($_POST['vSalesRepName']),
-        "vSalesRepEmail"        => trim($_POST['vSalesRepEmail']),
-        "iPremiseId"            => $_POST['search_iPremiseId'],
-        "iConnectionTypeId"     => $_POST['iConnectionTypeId'],
-        "iService1"             => $_POST['iService1'],
-        "iService2"             => $_POST['iService2'],
-        "iService3"             => $_POST['iService3'],
-        "tComments"             => trim($_POST['tComments']),
-        "iUserCreatedBy"        => $_SESSION["sess_iUserId".$admin_panel_session_suffix],
-        "sessionId"             => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
+        "iPremiseId"                => $_POST['search_iPremiseId'],
+        "iServiceOrderId"           => $_POST['search_iServiceOrderId'],
+        "iRequestorId"              => $_POST['iRequestorId'],
+        "vWOProject"                => trim($_POST['vWOProject']),
+        "iWOTId"                    => $_POST['iWOTId'],
+        "tDescription"              => trim($_POST['tDescription']),
+        "iAssignedToId"             => $_POST['iAssignedToId'],
+        "iWOSId"                    => $_POST['iWOSId'],
+        "sessionId"                 => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
     );
 
-    $API_URL = $site_api_url."service_order_add.json";
+    $API_URL = $site_api_url."workorder_add.json";
     //echo $API_URL." ".json_encode($arr_param);exit;
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $API_URL);
@@ -220,7 +201,7 @@ if($mode == "List") {
     curl_close($ch); 
     $result_arr = json_decode($response, true); 
     //echo "<pre>;";print_r($result_arr);exit;
-    if(isset($result_arr['iServiceOrderId'])){
+    if(isset($result_arr['iWOId'])){
         $result['msg'] = MSG_ADD;
         $result['error']= 0 ;
     }else{
@@ -234,12 +215,12 @@ if($mode == "List") {
     hc_exit();
     # -----------------------------------   
 }else if($mode == "Delete") {
-    $iServiceOrderId = $_REQUEST['iServiceOrderId'];
+    $iWOId = $_REQUEST['iWOId'];
     $result = array();
     $arr_param = array();
-    $arr_param['iServiceOrderId']   = $iServiceOrderId; 
+    $arr_param['iWOId']   = $iWOId; 
     $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
-    $API_URL = $site_api_url."service_order_delete.json";
+    $API_URL = $site_api_url."workorder_delete.json";
     //echo $API_URL. " ".json_encode($arr_param);exit;
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $API_URL);
@@ -286,8 +267,8 @@ if($mode == "List") {
 
     $arr_param['iFieldmapPremiseId']    = $iPremiseId;
 
-    $arr_param['vSContactNameDD']       = trim($_REQUEST['vSContactNameDD']);
-    $arr_param['vSContactName']         = trim($_REQUEST['vSContactName']);
+    $arr_param['vSPremiseNameDD']       = trim($_REQUEST['vSPremiseNameDD']);
+    $arr_param['vSPremiseName']         = trim($_REQUEST['vSPremiseName']);
     $arr_param['vSAddressFilterOpDD']   = trim($_REQUEST['vSAddressFilterOpDD']);
     $arr_param['vSAddress']             = trim($_REQUEST['vSAddress']);
     $arr_param['vSCityFilterOpDD']      = trim($_REQUEST['vSCityFilterOpDD']);
@@ -296,17 +277,16 @@ if($mode == "List") {
     $arr_param['vSState']               = trim($_REQUEST['vSState']);
     $arr_param['vSZipCode']             = trim($_REQUEST['vSZipCode']);
     $arr_param['iSZoneId']              = trim($_REQUEST['iSZoneId']);
-    $arr_param['iSNetworkId']           = trim($_REQUEST['iSNetworkId']);
-    $arr_param['iSCarrierId']           = trim($_REQUEST['iSCarrierId']);
-    $arr_param['vSSalesRepNameDD']      = trim($_REQUEST['vSSalesRepNameDD']);
-    $arr_param['vSSalesRepName']        = trim($_REQUEST['vSSalesRepName']);
-    $arr_param['vSSalesRepEmailDD']     = trim($_REQUEST['vSSalesRepEmailDD']);
-    $arr_param['vSSalesRepEmail']       = trim($_REQUEST['vSSalesRepEmail']);
-    $arr_param['iSServiceType']         = trim($_REQUEST['iSServiceType']);
+    $arr_param['iSServiceOrderId']      = trim($_REQUEST['iSServiceOrderId']);
+    $arr_param['vSWOProjectDD']         = trim($_REQUEST['vSWOProjectDD']);
+    $arr_param['vSWOProject']           = trim($_REQUEST['vSWOProject']);
+    $arr_param['iSRequestorId']         = trim($_REQUEST['iSRequestorId']);
+    $arr_param['iSAssignedToId']        = trim($_REQUEST['iSAssignedToId']);
+    $arr_param['iSWOSId']               = trim($_REQUEST['iSWOSId']);
 
     $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
 
-    $API_URL = $site_api_url."service_order_list.json";
+    $API_URL = $site_api_url."workorder_list.json";
     //echo $API_URL. " ".json_encode($arr_param);exit;
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $API_URL);
@@ -320,54 +300,48 @@ if($mode == "List") {
     curl_setopt($ch, CURLOPT_HTTPHEADER, array(
        "Content-Type: application/json",
     ));
-
     $response = curl_exec($ch);
     curl_close($ch);  
-   
     $result_arr = json_decode($response, true);
-
-    $total = $result_arr['result']['total_record'];
-    $jsonData = array('sEcho' => $sEcho, 'iTotalDisplayRecords' => $total, 'iTotalRecords' => $total, 'aaData' => array());
-    $entry = $hidden_arr = array();
     $rs_export = $result_arr['result']['data'];
     $cnt_export = count($rs_export);
     //  echo "<pre>";print_r($rs_export);exit();
     include_once($class_path.'PHPExcel/PHPExcel.php'); 
     // // Create new PHPExcel object
     $objPHPExcel = new PHPExcel();
-    $file_name = "service_order_".time().".xlsx";
+    $file_name = "workorder".time().".xlsx";
 
     if($cnt_export >0) {
         $objPHPExcel->setActiveSheetIndex(0)
-                 ->setCellValue('A1', 'Id')
-                 ->setCellValue('B1', 'Master MSA #')
-                 ->setCellValue('C1', 'Service Order')
-                 ->setCellValue('D1', 'Carrier')
-                 ->setCellValue('E1', 'SalesRep Name')
-                 ->setCellValue('F1', 'SalesRep Email')
-                 ->setCellValue('G1', 'Premise Name')
-                 ->setCellValue('H1', 'Connection Type')
-                 ->setCellValue('I1', 'Service1')
-                 ->setCellValue('J1', 'Service2')
-                 ->setCellValue('K1', 'Service3')
-                 ->setCellValue('L1', 'Comments');
-    
+            ->setCellValue('A1', 'Id')
+            ->setCellValue('B1', 'Premise')
+            ->setCellValue('C1', 'Service Order')
+            ->setCellValue('D1', 'Requestor')
+            ->setCellValue('E1', 'Work Order Project')
+            ->setCellValue('F1', 'Work Order Type')
+            ->setCellValue('G1', 'Assigned To')
+            ->setCellValue('H1', 'Status');
+
         for($e=0; $e<$cnt_export; $e++) {
+
+            $vPremise = $rs_export[$e]['iPremiseId']." (".$rs_export[$e]['vPremiseName']."; ".$rs_export[$e]['vPremiseType'].")";
+
+            $vServiceDetails = '';
+            if($rs_export[$e]['iServiceOrderId'] != ""){
+                $vServiceDetails .= "SO #".$rs_export[$e]['iServiceOrderId'].": ".$rs_export[$e]['vServiceOrder'];
+            }
+
             $vPremise = $rs_export[$e]['iPremiseId']." (".$rs_export[$e]['vPremiseName']."; ".$rs_export[$e]['vPremiseType'].")";
 
             $objPHPExcel->getActiveSheet()
-            ->setCellValue('A'.($e+2), $rs_export[$e]['iServiceOrderId'])
-            ->setCellValue('B'.($e+2), $rs_export[$e]['vMasterMSA'])
-            ->setCellValue('C'.($e+2), $rs_export[$e]['vServiceOrder'])
-            ->setCellValue('D'.($e+2), $rs_export[$e]['vCompanyName'])
-            ->setCellValue('E'.($e+2), $rs_export[$e]['vSalesRepName'])
-            ->setCellValue('F'.($e+2), $rs_export[$e]['vSalesRepEmail'])
-            ->setCellValue('G'.($e+2), $vPremise)
-            ->setCellValue('H'.($e+2), $rs_export[$e]['vConnectionTypeName'])
-            ->setCellValue('I'.($e+2), $rs_export[$e]['vServiceType1'])
-            ->setCellValue('J'.($e+2), $rs_export[$e]['vServiceType2'])
-            ->setCellValue('K'.($e+2), $rs_export[$e]['vServiceType3'])
-            ->setCellValue('L'.($e+2), nl2br($rs_export[$e]['tComments']));
+            ->setCellValue('A'.($e+2), $rs_export[$e]['iWOId'])
+            ->setCellValue('B'.($e+2), $vPremise)
+            ->setCellValue('C'.($e+2), $vServiceDetails)
+            ->setCellValue('D'.($e+2), $rs_export[$e]['vRequestor'])
+            ->setCellValue('E'.($e+2), $rs_export[$e]['vWOProject'])
+            ->setCellValue('F'.($e+2), $rs_export[$e]['vType'])
+            ->setCellValue('G'.($e+2), $rs_export[$e]['vAssignedTo'])
+            ->setCellValue('H'.($e+2), $rs_export[$e]['vStatus']);
          }
                         
         /* Set Auto width of each comlumn */
@@ -379,19 +353,15 @@ if($mode == "List") {
         $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setAutoSize(true);
         
         /* Set Font to Bold for each comlumn */
-        $objPHPExcel->getActiveSheet()->getStyle('A1:L1')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A1:H1')->getFont()->setBold(true);
         
 
         /* Set Alignment of Selected Columns */
         $objPHPExcel->getActiveSheet()->getStyle("A1:A".($e+3))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
         // Rename worksheet
-        $objPHPExcel->getActiveSheet()->setTitle('Service Order');
+        $objPHPExcel->getActiveSheet()->setTitle('WorkOrder');
 
         // Set active sheet index to the first sheet, so Excel opens this as the first sheet
         $objPHPExcel->setActiveSheetIndex(0);
@@ -413,31 +383,31 @@ if($mode == "List") {
 }
 
 ## --------------------------------
-# Network Dropdown
-$network_arr_param = array();
-$network_arr_param = array(
-    "iStatus"        => 1,
+# Service Order Dropdown
+$sorder_arr_param = array();
+$sorder_arr_param = array(
     "sessionId"     => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
 );
-$network_API_URL = $site_api_url."network_dropdown.json";
-//echo $network_API_URL." ".json_encode($network_arr_param);
+$sorder_API_URL = $site_api_url."service_order_dropdown.json";
+//echo $sorder_API_URL." ".json_encode($sorder_arr_param);
 $ch = curl_init();
-curl_setopt($ch, CURLOPT_URL, $network_API_URL);
+curl_setopt($ch, CURLOPT_URL, $sorder_API_URL);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 curl_setopt($ch, CURLOPT_HEADER, FALSE);
 curl_setopt($ch, CURLOPT_POST, TRUE);
-curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($network_arr_param));
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($sorder_arr_param));
 curl_setopt($ch, CURLOPT_HTTPHEADER, array(
    "Content-Type: application/json",
 ));
 $response_network = curl_exec($ch);
 curl_close($ch); 
-$rs_network = json_decode($response_network, true); 
-$rs_ntwork = $rs_network['result'];
-$smarty->assign("rs_ntwork", $rs_ntwork);
+$rs_so1 = json_decode($response_network, true); 
+$rs_so = $rs_so1['result'];
+$smarty->assign("rs_so", $rs_so);
 ## --------------------------------
+
 ## --------------------------------
 # Zone Dropdown
 $zone_arr_param = array();
@@ -463,59 +433,58 @@ $rs_zone1 = json_decode($response_zone, true);
 $rs_zone = $rs_zone1['result'];
 $smarty->assign("rs_zone", $rs_zone);
 ## --------------------------------
-
-//Carrier (Company) Dropdown
-$carrier_param = array();
-$carrier_param['iStatus'] = '1';
-$carrier_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
-$carrierAPI_URL = $site_api_url."company_dropdown.json";
-//echo $carrierAPI_URL." ".json_encode($carrier_param);exit;
+## --------------------------------
+# User Dropdown
+$arr_param = array();
+$arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
+$API_URL = $site_api_url."getUserDropdown.json";
 $ch = curl_init();
-curl_setopt($ch, CURLOPT_URL, $carrierAPI_URL);
+curl_setopt($ch, CURLOPT_URL, $API_URL);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 curl_setopt($ch, CURLOPT_HEADER, FALSE);
 curl_setopt($ch, CURLOPT_POST, TRUE);
-curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($carrier_param));
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($arr_param));
 curl_setopt($ch, CURLOPT_HTTPHEADER, array(
    "Content-Type: application/json",
 )); 
 $response = curl_exec($ch);
 curl_close($ch);  
 $res = json_decode($response, true);
-$rs_carrier = $res['result'];
-$smarty->assign("rs_carrier", $rs_carrier);
-
-//Service Type Dropdown
-$stype_param = array();
-$stype_param['iStatus'] = '1';
-$stype_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
-$stypeAPI_URL = $site_api_url."service_type_dropdown.json";
-//echo $stypeAPI_URL." ".json_encode($stype_param);exit;
+$smarty->assign("rs_user", $res['result']);
+//echo "<pre>";print_r($res['result']);exit;
+## --------------------------------
+## --------------------------------
+# Status Dropdown
+$status_arr_param = array();
+$status_arr_param = array(
+    "iStatus"       => 1,
+    "sessionId"     => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
+);
+$status_API_URL = $site_api_url."workorder_status_dropdown.json";
 $ch = curl_init();
-curl_setopt($ch, CURLOPT_URL, $stypeAPI_URL);
+curl_setopt($ch, CURLOPT_URL, $status_API_URL);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 curl_setopt($ch, CURLOPT_HEADER, FALSE);
 curl_setopt($ch, CURLOPT_POST, TRUE);
-curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($stype_param));
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($status_arr_param));
 curl_setopt($ch, CURLOPT_HTTPHEADER, array(
    "Content-Type: application/json",
 )); 
-$response_stype = curl_exec($ch);
-curl_close($ch);  
-$res_stype = json_decode($response_stype, true);
-$rs_stype = $res_stype['result'];
-$smarty->assign("rs_stype", $rs_stype);
-//echo "<pre>";print_r($rs_stype);exit;
-
-$module_name = "Service Order List";
-$module_title = "Service Order";
+$response_status = curl_exec($ch);
+curl_close($ch); 
+$rs_status1 = json_decode($response_status, true); 
+$rs_status = $rs_status1['result'];
+$smarty->assign("rs_status", $rs_status);
+//echo "<pre>";print_r($rs_status);exit;
+## --------------------------------
+$module_name = "Work Order List";
+$module_title = "Work Order";
 $smarty->assign("module_name", $module_name);
 $smarty->assign("module_title", $module_title);
 $smarty->assign("access_group_var_add", $access_group_var_add);
 $smarty->assign("access_group_var_CSV", $access_group_var_CSV);
-$smarty->assign("iPremiseId", $iPremiseId);
 ?>

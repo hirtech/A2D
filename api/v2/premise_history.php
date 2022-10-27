@@ -3,11 +3,13 @@ include_once ($controller_path . "premise.inc.php");
 include_once ($controller_path . "task_awareness.inc.php");
 include_once ($controller_path . "fiber_inquiry.inc.php");
 include_once ($controller_path . "service_order.inc.php");
+include_once ($controller_path . "workorder.inc.php");
 # ------------------------------------------------------------
 $SiteObj = new Site();
 $TaskAwarenessObj = new TaskAwareness();
 $FiberInquiryObj = new FiberInquiry();
 $ServiceOrderObj = new ServiceOrder();
+$WorkOrderObj = new WorkOrder();
 if ($request_type == "premise_history") {
     $page_length    = isset($RES_PARA['page_length'])?trim($RES_PARA['page_length']):"";
     $start          = isset($RES_PARA['start'])?trim($RES_PARA['start']):"";
@@ -211,6 +213,42 @@ if ($request_type == "premise_history") {
                         $arr[$ind]['vSummary'] = $vSummary;
                         $arr[$ind]['Type'] = $val['Type'];
                         $arr[$ind]['id'] = $val['iServiceOrderId'];
+                    }
+                    $ind++;
+                }
+            }
+
+            if ($val['Type'] == "WorkOrder"){
+                $iWOId = $val['iWOId'];
+                $where_arr = array();
+                $join_fieds_arr = array();
+                $join_arr = array();
+                $where_arr[] = 'workorder."iWOId"=' . $iWOId;
+                $join_fieds_arr[] = " wt.\"vType\"";
+                
+                $join_arr[] = 'LEFT JOIN workorder_type_mas wt on workorder."iWOTId" = wt."iWOTId"';
+                $WorkOrderObj->join_field = $join_fieds_arr;
+                $WorkOrderObj->join = $join_arr;
+                $WorkOrderObj->where = $where_arr;
+                $WorkOrderObj->param['order_by'] = "workorder.\"dAddedDate\" DESC";
+                $WorkOrderObj->setClause();
+                $WorkOrderObj->debug_query = false;
+                $wo_arr = $WorkOrderObj->recordset_list();
+                //echo "<pre>";print_r($wo_arr);exit;
+                if (!empty($wo_arr)){
+                    $wi = count($wo_arr);
+                    for ($w=0;$w<$wi;$w++){
+
+                        $vType = $wo_arr[$w]['vType'];
+                        $vSummary = '';
+                        
+                        $vSummary .= 'WO #'.$wo_arr[$w]['iWOId'].":".$wo_arr[$w]['vWOProject']." | ".$vType;
+
+                        $arr[$ind]['site_details'] = 'Work Order ' . $wo_arr[$w]['iWOId']." ".$wo_arr[$w]['vWOProject']." | ".$vType;
+                        $arr[$ind]['dDate'] = ($wo_arr[$w]['dAddedDate'] ? date("m/d/Y", strtotime($wo_arr[$w]['dAddedDate'])) : '');
+                        $arr[$ind]['vSummary'] = $vSummary;
+                        $arr[$ind]['Type'] = $val['Type'];
+                        $arr[$ind]['id'] = $val['iWOId'];
                     }
                     $ind++;
                 }
