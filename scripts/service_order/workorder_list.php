@@ -20,6 +20,7 @@ $sEcho = (isset($_REQUEST["sEcho"]) ? $_REQUEST["sEcho"] : '0');
 $display_order = (isset($_REQUEST["iSortCol_0"]) ? $_REQUEST["iSortCol_0"] : '0');
 $dir = (isset($_REQUEST["sSortDir_0"]) ? $_REQUEST["sSortDir_0"] : 'desc');
 # ------------------------------------------------------------
+$iPremiseId = $_REQUEST['iPremiseId'];
 if($mode == "List") {
     //print_r($_REQUEST);exit();
     $arr_param = array();
@@ -487,4 +488,5 @@ $smarty->assign("module_name", $module_name);
 $smarty->assign("module_title", $module_title);
 $smarty->assign("access_group_var_add", $access_group_var_add);
 $smarty->assign("access_group_var_CSV", $access_group_var_CSV);
+$smarty->assign("iPremiseId", $iPremiseId);
 ?>
