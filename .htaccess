@@ -132,6 +132,24 @@ RewriteRule ^master/workorder_type_list? index.php?module=$0&page=m-workorder_ty
 RewriteRule ^master/workorder_type_list index.php?module=$0&page=m-workorder_type_list
 #---------------------
 
+#---------------------
+#Circuit Type Master
+RewriteRule ^master/circuit_type_list? index.php?module=$0&page=m-circuit_type_list&%{QUERY_STRING}
+RewriteRule ^master/circuit_type_list index.php?module=$0&page=m-circuit_type_list
+#---------------------
+
+#---------------------
+#Equipment Type Master
+RewriteRule ^master/equipment_type_list? index.php?module=$0&page=m-equipment_type_list&%{QUERY_STRING}
+RewriteRule ^master/equipment_type_list index.php?module=$0&page=m-equipment_type_list
+#---------------------
+
+#---------------------
+#Equipment Manufacturer Master
+RewriteRule ^master/equipment_manufacturer_list? index.php?module=$0&page=m-equipment_manufacturer_list&%{QUERY_STRING}
+RewriteRule ^master/equipment_manufacturer_list index.php?module=$0&page=m-equipment_manufacturer_list
+#---------------------
+
 #-------Site Mgmt----------------
 #Site
 RewriteRule ^premise/list index.php?module=$0&page=m-premise_list&%{QUERY_STRING}

@@ -11,6 +11,9 @@ include_once($controller_path . "connection_type.inc.php");
 include_once($controller_path . "company.inc.php");
 include_once($controller_path . "service_type.inc.php");
 include_once($controller_path . "workorder_type.inc.php");
+include_once($controller_path . "circuit_type.inc.php");
+include_once($controller_path . "equipment_type.inc.php");
+include_once($controller_path . "equipment_manufacturer.inc.php");
 include_once($function_path."image.inc.php");
 include_once($function_path."site_general.inc.php");
 
@@ -1509,6 +1512,351 @@ if($request_type == "city_list"){
     $rs_db = $WorkOrderTypeObj->delete_records($iWOTId);
     if($rs_db){
         $response_data = array("Code" => 200, "Message" => MSG_DELETE, "iWOTId" => $iWOTId);
+    }else{
+        $response_data = array("Code" => 500 , "Message" => MSG_DELETE_ERROR);
+    }
+}else if($request_type == "circuit_type_list"){
+    $CircuitTypeObj = new CircuitType();
+    $where_arr = array();
+    if(!empty($RES_PARA)){
+        $iCircuitTypeId         = trim($RES_PARA['iCircuitTypeId']);
+        $vCircuitType           = trim($RES_PARA['vCircuitType']);
+        $iStatus                = trim($RES_PARA['iStatus']);
+        $page_length            = isset($RES_PARA['page_length']) ? trim($RES_PARA['page_length']) : "10";
+        $start                  = isset($RES_PARA['start']) ? trim($RES_PARA['start']) : "0";
+        $sEcho                  = $RES_PARA['sEcho'];
+        $display_order          = $RES_PARA['display_order'];
+        $dir                    = $RES_PARA['dir'];
+    }
+
+    if ($iCircuitTypeId != "") {
+        $where_arr[] = 'circuit_type_mas."iCircuitTypeId" = \''.$iCircuitTypeId.'\'';
+    }
+
+    if ($vCircuitType != "") {
+        $where_arr[] = 'circuit_type_mas."vCircuitType" ILIKE \''.$vCircuitType.'%\'';
+    }
+    
+    if ($iStatus != "") {
+        if(strtolower($iStatus) == "active"){
+            $where_arr[] = "circuit_type_mas.\"iStatus\" = '1'";
+        }
+        else if(strtolower($iStatus) == "inactive"){
+            $where_arr[] = "circuit_type_mas.\"iStatus\" = '0'";
+        }
+    }
+
+    switch ($display_order) {
+        case "0" : 
+            $sortname = "circuit_type_mas.\"iCircuitTypeId\"";
+            break;
+        case "1":
+            $sortname = "circuit_type_mas.\"vCircuitType\"";
+            break;
+        case "2":
+            $sortname = "circuit_type_mas.\"iStatus\"";
+            break;
+        default:
+            $sortname = "circuit_type_mas.\"iCircuitTypeId\"";
+            break;
+    }
+    
+    $limit = "LIMIT ".$page_length." OFFSET ".$start."";
+
+    $join_fieds_arr = array();
+    $join_arr = array();
+    $CircuitTypeObj->join_field = $join_fieds_arr;
+    $CircuitTypeObj->join = $join_arr;
+    $CircuitTypeObj->where = $where_arr;
+    $CircuitTypeObj->param['order_by'] = $sortname . " " . $dir;
+    $CircuitTypeObj->param['limit'] = $limit;
+    $CircuitTypeObj->setClause();
+    $CircuitTypeObj->debug_query = false;
+    $rs_service_type = $CircuitTypeObj->recordset_list();
+    $total = $CircuitTypeObj->recordset_total();
+    $data = array();
+    $ni = count($rs_service_type);
+    if($ni > 0){
+        for($i=0;$i<$ni;$i++){
+            $data[] = array(
+                "iCircuitTypeId"    => gen_strip_slash($rs_service_type[$i]['iCircuitTypeId']),
+                "vCircuitType"      => gen_strip_slash($rs_service_type[$i]['vCircuitType']),
+                "iStatus"           => $rs_service_type[$i]['iStatus'],
+            );
+        }
+    }
+    $result = array('data' => $data , 'total_record' => $total);
+
+    $rh = HTTPStatus(200);
+    $code = 2000;
+    $message = api_getMessage($req_ext, constant($code));
+    $response_data = array("Code" => 200, "Message" => $message, "result" => $result);
+}else if($request_type == "circuit_type_add"){
+    $CircuitTypeObj = new CircuitType();
+    $insert_arr = array(
+        "vCircuitType"  => $RES_PARA['vCircuitType'],
+        "iStatus"       => $RES_PARA['iStatus'],
+    );
+    $CircuitTypeObj->insert_arr = $insert_arr;
+    $CircuitTypeObj->setClause();
+    $iCircuitTypeId = $CircuitTypeObj->add_records();
+    if(isset($iCircuitTypeId)){
+        $response_data = array("Code" => 200, "Message" => MSG_ADD, "iCircuitTypeId" => $iCircuitTypeId);
+    }else{
+        $response_data = array("Code" => 500 , "Message" => MSG_ADD_ERROR);
+    }
+}else if($request_type == "circuit_type_edit"){
+    $CircuitTypeObj = new CircuitType();
+    $update_arr = array(
+        "iCircuitTypeId"    => $RES_PARA['iCircuitTypeId'],
+        "vCircuitType"      => $RES_PARA['vCircuitType'],
+        "iStatus"           => $RES_PARA['iStatus'],
+    );
+    //echo "<pre>";print_r($update_arr);exit;
+    $CircuitTypeObj->update_arr = $update_arr;
+    $CircuitTypeObj->setClause();
+    $iCircuitTypeId = $CircuitTypeObj->update_records();
+    if(isset($iCircuitTypeId)){
+        $response_data = array("Code" => 200, "Message" => MSG_UPDATE, "iCircuitTypeId" => $RES_PARA['iCircuitTypeId']);
+    }else{
+        $response_data = array("Code" => 500 , "Message" => MSG_UPDATE_ERROR);
+    }
+}else if($request_type == "circuit_type_delete"){
+    $CircuitTypeObj = new CircuitType();
+    $iCircuitTypeId = $RES_PARA['iCircuitTypeId'];
+    $rs_db = $CircuitTypeObj->delete_records($iCircuitTypeId);
+    if($rs_db){
+        $response_data = array("Code" => 200, "Message" => MSG_DELETE, "iCircuitTypeId" => $iCircuitTypeId);
+    }else{
+        $response_data = array("Code" => 500 , "Message" => MSG_DELETE_ERROR);
+    }
+}else if($request_type == "equipment_type_list"){
+    $EquipmentTypeObj = new EquipmentType();
+    $where_arr = array();
+    if(!empty($RES_PARA)){
+        $iEquipmentTypeId       = trim($RES_PARA['iEquipmentTypeId']);
+        $vEquipmentType         = trim($RES_PARA['vEquipmentType']);
+        $iStatus                = trim($RES_PARA['iStatus']);
+        $page_length            = isset($RES_PARA['page_length']) ? trim($RES_PARA['page_length']) : "10";
+        $start                  = isset($RES_PARA['start']) ? trim($RES_PARA['start']) : "0";
+        $sEcho                  = $RES_PARA['sEcho'];
+        $display_order          = $RES_PARA['display_order'];
+        $dir                    = $RES_PARA['dir'];
+    }
+
+    if ($iEquipmentTypeId != "") {
+        $where_arr[] = 'equipment_type_mas."iEquipmentTypeId" = \''.$iEquipmentTypeId.'\'';
+    }
+
+    if ($vEquipmentType != "") {
+        $where_arr[] = 'equipment_type_mas."vEquipmentType" ILIKE \''.$vEquipmentType.'%\'';
+    }
+    
+    if ($iStatus != "") {
+        if(strtolower($iStatus) == "active"){
+            $where_arr[] = "equipment_type_mas.\"iStatus\" = '1'";
+        }
+        else if(strtolower($iStatus) == "inactive"){
+            $where_arr[] = "equipment_type_mas.\"iStatus\" = '0'";
+        }
+    }
+
+    switch ($display_order) {
+        case "0" : 
+            $sortname = "equipment_type_mas.\"iEquipmentTypeId\"";
+            break;
+        case "1":
+            $sortname = "equipment_type_mas.\"vEquipmentType\"";
+            break;
+        case "2":
+            $sortname = "equipment_type_mas.\"iStatus\"";
+            break;
+        default:
+            $sortname = "equipment_type_mas.\"iEquipmentTypeId\"";
+            break;
+    }
+    
+    $limit = "LIMIT ".$page_length." OFFSET ".$start."";
+
+    $join_fieds_arr = array();
+    $join_arr = array();
+    $EquipmentTypeObj->join_field = $join_fieds_arr;
+    $EquipmentTypeObj->join = $join_arr;
+    $EquipmentTypeObj->where = $where_arr;
+    $EquipmentTypeObj->param['order_by'] = $sortname . " " . $dir;
+    $EquipmentTypeObj->param['limit'] = $limit;
+    $EquipmentTypeObj->setClause();
+    $EquipmentTypeObj->debug_query = false;
+    $rs_service_type = $EquipmentTypeObj->recordset_list();
+    $total = $EquipmentTypeObj->recordset_total();
+    $data = array();
+    $ni = count($rs_service_type);
+    if($ni > 0){
+        for($i=0;$i<$ni;$i++){
+            $data[] = array(
+                "iEquipmentTypeId"    => gen_strip_slash($rs_service_type[$i]['iEquipmentTypeId']),
+                "vEquipmentType"      => gen_strip_slash($rs_service_type[$i]['vEquipmentType']),
+                "iStatus"           => $rs_service_type[$i]['iStatus'],
+            );
+        }
+    }
+    $result = array('data' => $data , 'total_record' => $total);
+
+    $rh = HTTPStatus(200);
+    $code = 2000;
+    $message = api_getMessage($req_ext, constant($code));
+    $response_data = array("Code" => 200, "Message" => $message, "result" => $result);
+}else if($request_type == "equipment_type_add"){
+    $EquipmentTypeObj = new EquipmentType();
+    $insert_arr = array(
+        "vEquipmentType"  => $RES_PARA['vEquipmentType'],
+        "iStatus"         => $RES_PARA['iStatus'],
+    );
+    $EquipmentTypeObj->insert_arr = $insert_arr;
+    $EquipmentTypeObj->setClause();
+    $iEquipmentTypeId = $EquipmentTypeObj->add_records();
+    if(isset($iEquipmentTypeId)){
+        $response_data = array("Code" => 200, "Message" => MSG_ADD, "iEquipmentTypeId" => $iEquipmentTypeId);
+    }else{
+        $response_data = array("Code" => 500 , "Message" => MSG_ADD_ERROR);
+    }
+}else if($request_type == "equipment_type_edit"){
+    $EquipmentTypeObj = new EquipmentType();
+    $update_arr = array(
+        "iEquipmentTypeId"    => $RES_PARA['iEquipmentTypeId'],
+        "vEquipmentType"      => $RES_PARA['vEquipmentType'],
+        "iStatus"             => $RES_PARA['iStatus'],
+    );
+    //echo "<pre>";print_r($update_arr);exit;
+    $EquipmentTypeObj->update_arr = $update_arr;
+    $EquipmentTypeObj->setClause();
+    $iEquipmentTypeId = $EquipmentTypeObj->update_records();
+    if(isset($iEquipmentTypeId)){
+        $response_data = array("Code" => 200, "Message" => MSG_UPDATE, "iEquipmentTypeId" => $RES_PARA['iEquipmentTypeId']);
+    }else{
+        $response_data = array("Code" => 500 , "Message" => MSG_UPDATE_ERROR);
+    }
+}else if($request_type == "equipment_type_delete"){
+    $EquipmentTypeObj = new EquipmentType();
+    $iEquipmentTypeId = $RES_PARA['iEquipmentTypeId'];
+    $rs_db = $EquipmentTypeObj->delete_records($iEquipmentTypeId);
+    if($rs_db){
+        $response_data = array("Code" => 200, "Message" => MSG_DELETE, "iEquipmentTypeId" => $iEquipmentTypeId);
+    }else{
+        $response_data = array("Code" => 500 , "Message" => MSG_DELETE_ERROR);
+    }
+}else if($request_type == "equipment_manufacturer_list"){
+    $EquipmentManufacturerObj = new EquipmentManufacturer();
+    $where_arr = array();
+    if(!empty($RES_PARA)){
+        $iEquipmentManufacturerId       = trim($RES_PARA['iEquipmentManufacturerId']);
+        $vEquipmentManufacturer         = trim($RES_PARA['vEquipmentManufacturer']);
+        $iStatus                        = trim($RES_PARA['iStatus']);
+        $page_length                    = isset($RES_PARA['page_length']) ? trim($RES_PARA['page_length']) : "10";
+        $start                          = isset($RES_PARA['start']) ? trim($RES_PARA['start']) : "0";
+        $sEcho                          = $RES_PARA['sEcho'];
+        $display_order                  = $RES_PARA['display_order'];
+        $dir                            = $RES_PARA['dir'];
+    }
+
+    if ($iEquipmentManufacturerId != "") {
+        $where_arr[] = 'equipment_manufacturer_mas."iEquipmentManufacturerId" = \''.$iEquipmentManufacturerId.'\'';
+    }
+
+    if ($vEquipmentManufacturer != "") {
+        $where_arr[] = 'equipment_manufacturer_mas."vEquipmentManufacturer" ILIKE \''.$vEquipmentManufacturer.'%\'';
+    }
+    
+    if ($iStatus != "") {
+        if(strtolower($iStatus) == "active"){
+            $where_arr[] = "equipment_manufacturer_mas.\"iStatus\" = '1'";
+        }
+        else if(strtolower($iStatus) == "inactive"){
+            $where_arr[] = "equipment_manufacturer_mas.\"iStatus\" = '0'";
+        }
+    }
+
+    switch ($display_order) {
+        case "0" : 
+            $sortname = "equipment_manufacturer_mas.\"iEquipmentManufacturerId\"";
+            break;
+        case "1":
+            $sortname = "equipment_manufacturer_mas.\"vEquipmentManufacturer\"";
+            break;
+        case "2":
+            $sortname = "equipment_manufacturer_mas.\"iStatus\"";
+            break;
+        default:
+            $sortname = "equipment_manufacturer_mas.\"iEquipmentManufacturerId\"";
+            break;
+    }
+    
+    $limit = "LIMIT ".$page_length." OFFSET ".$start."";
+
+    $join_fieds_arr = array();
+    $join_arr = array();
+    $EquipmentManufacturerObj->join_field = $join_fieds_arr;
+    $EquipmentManufacturerObj->join = $join_arr;
+    $EquipmentManufacturerObj->where = $where_arr;
+    $EquipmentManufacturerObj->param['order_by'] = $sortname . " " . $dir;
+    $EquipmentManufacturerObj->param['limit'] = $limit;
+    $EquipmentManufacturerObj->setClause();
+    $EquipmentManufacturerObj->debug_query = false;
+    $rs_service_type = $EquipmentManufacturerObj->recordset_list();
+    $total = $EquipmentManufacturerObj->recordset_total();
+    $data = array();
+    $ni = count($rs_service_type);
+    if($ni > 0){
+        for($i=0;$i<$ni;$i++){
+            $data[] = array(
+                "iEquipmentManufacturerId"      => gen_strip_slash($rs_service_type[$i]['iEquipmentManufacturerId']),
+                "vEquipmentManufacturer"        => gen_strip_slash($rs_service_type[$i]['vEquipmentManufacturer']),
+                "iStatus"                       => $rs_service_type[$i]['iStatus'],
+            );
+        }
+    }
+    $result = array('data' => $data , 'total_record' => $total);
+
+    $rh = HTTPStatus(200);
+    $code = 2000;
+    $message = api_getMessage($req_ext, constant($code));
+    $response_data = array("Code" => 200, "Message" => $message, "result" => $result);
+}else if($request_type == "equipment_manufacturer_add"){
+    $EquipmentManufacturerObj = new EquipmentManufacturer();
+    $insert_arr = array(
+        "vEquipmentManufacturer"    => $RES_PARA['vEquipmentManufacturer'],
+        "iStatus"                   => $RES_PARA['iStatus'],
+    );
+    $EquipmentManufacturerObj->insert_arr = $insert_arr;
+    $EquipmentManufacturerObj->setClause();
+    $iEquipmentManufacturerId = $EquipmentManufacturerObj->add_records();
+    if(isset($iEquipmentManufacturerId)){
+        $response_data = array("Code" => 200, "Message" => MSG_ADD, "iEquipmentManufacturerId" => $iEquipmentManufacturerId);
+    }else{
+        $response_data = array("Code" => 500 , "Message" => MSG_ADD_ERROR);
+    }
+}else if($request_type == "equipment_manufacturer_edit"){
+    $EquipmentManufacturerObj = new EquipmentManufacturer();
+    $update_arr = array(
+        "iEquipmentManufacturerId"      => $RES_PARA['iEquipmentManufacturerId'],
+        "vEquipmentManufacturer"        => $RES_PARA['vEquipmentManufacturer'],
+        "iStatus"                       => $RES_PARA['iStatus'],
+    );
+    //echo "<pre>";print_r($update_arr);exit;
+    $EquipmentManufacturerObj->update_arr = $update_arr;
+    $EquipmentManufacturerObj->setClause();
+    $iEquipmentManufacturerId = $EquipmentManufacturerObj->update_records();
+    if(isset($iEquipmentManufacturerId)){
+        $response_data = array("Code" => 200, "Message" => MSG_UPDATE, "iEquipmentManufacturerId" => $RES_PARA['iEquipmentManufacturerId']);
+    }else{
+        $response_data = array("Code" => 500 , "Message" => MSG_UPDATE_ERROR);
+    }
+}else if($request_type == "equipment_manufacturer_delete"){
+    $EquipmentManufacturerObj = new EquipmentManufacturer();
+    $iEquipmentManufacturerId = $RES_PARA['iEquipmentManufacturerId'];
+    $rs_db = $EquipmentManufacturerObj->delete_records($iEquipmentManufacturerId);
+    if($rs_db){
+        $response_data = array("Code" => 200, "Message" => MSG_DELETE, "iEquipmentManufacturerId" => $iEquipmentManufacturerId);
     }else{
         $response_data = array("Code" => 500 , "Message" => MSG_DELETE_ERROR);
     }
