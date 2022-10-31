@@ -184,6 +184,14 @@ RewriteRule ^service_order/workorder_add&(.*)$ index.php?module=$0&page=m-workor
 RewriteRule ^service_order/workorder_add index.php?module=$0&page=m-workorder_add
 #---------------------
 
+#---------------------
+#Equipment Model
+RewriteRule ^service_order/equipment_model_list?(.*)$ index.php?module=$0&page=m-equipment_model_list&%{QUERY_STRING}
+RewriteRule ^service_order/equipment_model_list index.php?module=$0&page=m-equipment_model_list
+RewriteRule ^service_order/equipment_model_add&(.*)$ index.php?module=$0&page=m-equipment_model_add&%{QUERY_STRING}
+RewriteRule ^service_order/equipment_model_add index.php?module=$0&page=m-equipment_model_add
+#---------------------
+
 #------Treatment Product-------------
 RewriteRule ^master/treatment_product_list&(.*)$ index.php?module=$0&page=m-treatment_product_list&%{QUERY_STRING}
 RewriteRule ^master/treatment_product_list index.php?module=$0&page=m-treatment_product_list
