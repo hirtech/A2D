@@ -431,7 +431,7 @@ $rs_status = $rs_status1['result'];
 $smarty->assign("rs_status", $rs_status);
 //echo "<pre>";print_r($rs_status);exit;
 ## --------------------------------
-$module_name = "Work Order List";
+$module_name = "Equipment Model List";
 $module_title = "Equipment Model";
 $smarty->assign("module_name", $module_name);
 $smarty->assign("module_title", $module_title);

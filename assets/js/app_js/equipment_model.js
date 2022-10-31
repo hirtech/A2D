@@ -186,29 +186,3 @@ function exportExcelSheet(){
     return false;
 }
 
-
-$('#AdvSearchSubmit').click(function () {
-    gridtable.ajax.reload();
-    return false;
-});
-
-$('#AdvSearchReset').click(function () {
-    $('#vSPremiseNameDD').val("Contains");
-    $('#vSPremiseName').val("");
-    $('#vSAddressFilterOpDD').val("Contains");
-    $('#vSAddress').val("");
-    $('#vSCityFilterOpDD').val("Contains");
-    $('#vSCity').val("");
-    $('#vSStateFilterOpDD').val("Contains");
-    $('#vSState').val("");
-    $('#vSZipCode').val("");
-    $('#iSZoneId').val("");
-    $('#iSServiceOrderId').val("");
-    $('#vSWOProjectDD').val("Contains");
-    $('#vSWOProject').val("");
-    $('#iSRequestorId').val("");
-    $('#iSAssignedToId').val("");
-    $('#iSWOSId').val("");
-    gridtable.ajax.reload();
-    return false;
-});
