@@ -24,6 +24,8 @@ include_once($controller_path . "workorder_type.inc.php");
 include_once($controller_path . "contact.inc.php");
 include_once($controller_path . "service_order.inc.php");
 include_once($controller_path . "user.inc.php");
+include_once($controller_path . "equipment_type.inc.php");
+include_once($controller_path . "equipment_manufacturer.inc.php");
 
 if($request_type == "department_dropdown") {
 	$DepartmentObj = new Department();
@@ -740,6 +742,44 @@ if($request_type == "department_dropdown") {
             $rs_contact[$i]['vDisplay'] = $vDisplay;
         }
         $response_data = array("Code" => 200, "result" => $rs_contact, "total_record" => count($rs_contact));
+    }else{
+        $response_data = array("Code" => 500);
+    }
+}else if($request_type == "equipment_type_dropdown"){
+    $where_arr = array();
+    $join_fieds_arr = array();
+    $join_arr  = array();
+    $EquipmentTypeObj = new EquipmentType();
+    $iStatus = $RES_PARA['iStatus'];
+    $where_arr = array();
+    if($iStatus != ''){
+        $where_arr[] = "equipment_type_mas.\"iStatus\"='".$iStatus."'";
+    }
+    $EquipmentTypeObj->where = $where_arr;
+    $EquipmentTypeObj->param['order_by'] = "equipment_type_mas.\"vEquipmentType\"";
+    $EquipmentTypeObj->setClause();
+    $rs_etype = $EquipmentTypeObj->recordset_list();
+    if($rs_etype){
+        $response_data = array("Code" => 200, "result" => $rs_etype, "total_record" => count($rs_etype));
+    }else{
+        $response_data = array("Code" => 500);
+    }
+}else if($request_type == "equipment_manufacturer_dropdown"){
+    $where_arr = array();
+    $join_fieds_arr = array();
+    $join_arr  = array();
+    $EquipmentManufacturerObj = new EquipmentManufacturer();
+    $iStatus = $RES_PARA['iStatus'];
+    $where_arr = array();
+    if($iStatus != ''){
+        $where_arr[] = "equipment_manufacturer_mas.\"iStatus\"='".$iStatus."'";
+    }
+    $EquipmentManufacturerObj->where = $where_arr;
+    $EquipmentManufacturerObj->param['order_by'] = "equipment_manufacturer_mas.\"vEquipmentManufacturer\"";
+    $EquipmentManufacturerObj->setClause();
+    $rs_emanu = $EquipmentManufacturerObj->recordset_list();
+    if($rs_emanu){
+        $response_data = array("Code" => 200, "result" => $rs_emanu, "total_record" => count($rs_emanu));
     }else{
         $response_data = array("Code" => 500);
     }

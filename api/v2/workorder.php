@@ -14,7 +14,8 @@ if($request_type == "workorder_list"){
         $start                  = isset($RES_PARA['start']) ? trim($RES_PARA['start']) : "0";
         $sEcho                  = $RES_PARA['sEcho'];
         $display_order          = $RES_PARA['display_order'];
-        $dir                    = $RES_PARA['dir'];  
+        $dir                    = $RES_PARA['dir'];
+        $order_by               = $RES_PARA['order_by'];
 
 
         $vSPremiseNameDD        = $RES_PARA['vSPremiseNameDD'];

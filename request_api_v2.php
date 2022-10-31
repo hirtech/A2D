@@ -32,6 +32,8 @@ $path = str_replace($sitefolder_api,"",$_SERVER['REQUEST_URI']);
 //echo $path."\n";
 if($local_host == "192.168.32.139") {
 	$path = str_replace("/api/".$version."/","",$path);
+}else if($_SERVER['SERVER_NAME'] == "52.21.64.154") {
+	$path = str_replace("/api/".$version."/","",$path);
 }else {
 	$path = str_replace("/eCommunityfiber/api/".$version."/","",$path);
 }
@@ -799,6 +801,16 @@ switch($path) {
 			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
 		}
 		break;
+		break;
+	case "equipment_type_dropdown." . $req_ext:
+		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
+			$request_type = "equipment_type_dropdown";
+			$api_file_name = "general.php";
+			include_once($site_api_path . "api_authentication.php");
+		}else {
+			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
+		}
+		break;
 	case "equipment_manufacturer_list." . $req_ext:
 		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
 			$request_type = "equipment_manufacturer_list";
@@ -830,6 +842,15 @@ switch($path) {
 		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
 			$request_type = "equipment_manufacturer_delete";
 			$api_file_name = "masters.php";
+			include_once($site_api_path . "api_authentication.php");
+		}else {
+			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
+		}
+		break;
+	case "equipment_manufacturer_dropdown." . $req_ext:
+		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
+			$request_type = "equipment_manufacturer_dropdown";
+			$api_file_name = "general.php";
 			include_once($site_api_path . "api_authentication.php");
 		}else {
 			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
@@ -1280,6 +1301,42 @@ switch($path) {
 		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
 			$request_type = "search_workorder";
 			$api_file_name = "workorder.php";
+			include_once($site_api_path . "api_authentication.php");
+		}else {
+			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
+		}
+		break;
+	case "equipment_model_list." . $req_ext:
+		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
+			$request_type = "equipment_model_list";
+			$api_file_name = "equipment_model.php";
+			include_once($site_api_path . "api_authentication.php");
+		}else {
+			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
+		}
+		break;
+	case "equipment_model_add." . $req_ext:
+		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
+			$request_type = "equipment_model_add";
+			$api_file_name = "equipment_model.php";
+			include_once($site_api_path . "api_authentication.php");
+		}else {
+			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
+		}
+		break;
+	case "equipment_model_edit." . $req_ext:
+		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
+			$request_type = "equipment_model_edit";
+			$api_file_name = "equipment_model.php";
+			include_once($site_api_path . "api_authentication.php");
+		}else {
+			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
+		}
+		break;
+	case "equipment_model_delete." . $req_ext:
+		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
+			$request_type = "equipment_model_delete";
+			$api_file_name = "equipment_model.php";
 			include_once($site_api_path . "api_authentication.php");
 		}else {
 			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);

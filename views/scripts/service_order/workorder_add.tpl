@@ -4,7 +4,7 @@
             <div class="w-sm-100 mr-auto"><h4 class="mb-0">{$module_name}</h4></div>
             <ol class="breadcrumb bg-transparent align-self-center m-0 p-0">
                 <li class="breadcrumb-item"><a href="{$site_url}">Home</a></li>
-                <li class="breadcrumb-item"><a href="{$site_url}service_order/workorder_list">Service Order List</a></li>
+                <li class="breadcrumb-item"><a href="{$site_url}service_order/workorder_list">WorkOrder List</a></li>
                 <li class="breadcrumb-item active">{$module_name}</li>
             </ol>
         </div>
