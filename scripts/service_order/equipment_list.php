@@ -336,15 +336,15 @@ if($mode == "List") {
                  ->setCellValue('J1', 'Grounded')
                  ->setCellValue('K1', 'Install By')
                  ->setCellValue('L1', 'Installed Date')
-                 ->setCellValue('L1', 'Purchase Cost')
-                 ->setCellValue('L1', 'Purchase Date')
-                 ->setCellValue('L1', 'Warranty Expiration')
-                 ->setCellValue('L1', 'Warranty Cost')
-                 ->setCellValue('L1', 'Premise')
-                 ->setCellValue('L1', 'Install Type')
-                 ->setCellValue('L1', 'Link Type')
-                 ->setCellValue('L1', 'Provision Date')
-                 ->setCellValue('L1', 'Operational Status');
+                 ->setCellValue('M1', 'Purchase Cost')
+                 ->setCellValue('N1', 'Purchase Date')
+                 ->setCellValue('O1', 'Warranty Expiration')
+                 ->setCellValue('P1', 'Warranty Cost')
+                 ->setCellValue('Q1', 'Premise')
+                 ->setCellValue('R1', 'Install Type')
+                 ->setCellValue('S1', 'Link Type')
+                 ->setCellValue('T1', 'Provision Date')
+                 ->setCellValue('U1', 'Operational Status');
     
         for($e=0; $e<$cnt_export; $e++) {
             $vPremise = $rs_export[$e]['iPremiseId']." (".$rs_export[$e]['vPremiseName']."; ".$rs_export[$e]['vPremiseType'].")";
