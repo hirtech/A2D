@@ -1342,6 +1342,96 @@ switch($path) {
 			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
 		}
 		break;
+	case "equipment_model_dropdown." . $req_ext:
+		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
+			$request_type = "equipment_model_dropdown";
+			$api_file_name = "general.php";
+			include_once($site_api_path."api_authentication.php");
+		}else {
+			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
+		}
+		break;
+	case "equipment_list." . $req_ext:
+		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
+			$request_type = "equipment_list";
+			$api_file_name = "equipment.php";
+			include_once($site_api_path . "api_authentication.php");
+		}else {
+			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
+		}
+		break;
+	case "equipment_add." . $req_ext:
+		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
+			$request_type = "equipment_add";
+			$api_file_name = "equipment.php";
+			include_once($site_api_path . "api_authentication.php");
+		}else {
+			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
+		}
+		break;
+	case "equipment_edit." . $req_ext:
+		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
+			$request_type = "equipment_edit";
+			$api_file_name = "equipment.php";
+			include_once($site_api_path . "api_authentication.php");
+		}else {
+			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
+		}
+		break;
+	case "equipment_delete." . $req_ext:
+		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
+			$request_type = "equipment_delete";
+			$api_file_name = "equipment.php";
+			include_once($site_api_path . "api_authentication.php");
+		}else {
+			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
+		}
+		break;
+	case "material_dropdown." . $req_ext:
+		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
+			$request_type = "material_dropdown";
+			$api_file_name = "general.php";
+			include_once($site_api_path."api_authentication.php");
+		}else {
+			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
+		}
+		break;
+	case "power_dropdown." . $req_ext:
+		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
+			$request_type = "power_dropdown";
+			$api_file_name = "general.php";
+			include_once($site_api_path."api_authentication.php");
+		}else {
+			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
+		}
+		break;
+	case "install_type_dropdown." . $req_ext:
+		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
+			$request_type = "install_type_dropdown";
+			$api_file_name = "general.php";
+			include_once($site_api_path."api_authentication.php");
+		}else {
+			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
+		}
+		break;
+	case "link_type_dropdown." . $req_ext:
+		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
+			$request_type = "link_type_dropdown";
+			$api_file_name = "general.php";
+			include_once($site_api_path."api_authentication.php");
+		}else {
+			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
+		}
+		break;
+	case "operational_status_dropdown." . $req_ext:
+		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
+			$request_type = "operational_status_dropdown";
+			$api_file_name = "general.php";
+			include_once($site_api_path."api_authentication.php");
+		}else {
+			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
+		}
+		break;
 	case "trap_type_dropdown." . $req_ext:
 		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
 			$request_type = "trap_type_dropdown";

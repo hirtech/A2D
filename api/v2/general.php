@@ -26,6 +26,7 @@ include_once($controller_path . "service_order.inc.php");
 include_once($controller_path . "user.inc.php");
 include_once($controller_path . "equipment_type.inc.php");
 include_once($controller_path . "equipment_manufacturer.inc.php");
+include_once($controller_path . "equipment_model.inc.php");
 
 if($request_type == "department_dropdown") {
 	$DepartmentObj = new Department();
@@ -780,6 +781,61 @@ if($request_type == "department_dropdown") {
     $rs_emanu = $EquipmentManufacturerObj->recordset_list();
     if($rs_emanu){
         $response_data = array("Code" => 200, "result" => $rs_emanu, "total_record" => count($rs_emanu));
+    }else{
+        $response_data = array("Code" => 500);
+    }
+}else if($request_type == "equipment_model_dropdown"){
+    $where_arr = array();
+    $join_fieds_arr = array();
+    $join_arr  = array();
+    $EquipmentModelObj = new EquipmentModel();
+    $where_arr = array();
+    $EquipmentModelObj->where = $where_arr;
+    $EquipmentModelObj->param['order_by'] = "equipment_model.\"vModelName\"";
+    $EquipmentModelObj->setClause();
+    $rs_model = $EquipmentModelObj->recordset_list();
+    if($rs_model){
+        $response_data = array("Code" => 200, "result" => $rs_model, "total_record" => count($rs_model));
+    }else{
+        $response_data = array("Code" => 500);
+    }
+}else if($request_type == "material_dropdown"){
+    $sql = 'SELECT * FROM material_mas WHERE "iStatus" = 1 ORDER BY "vMaterial"';
+    $rs = $sqlObj->GetAll($sql);
+    if($rs){
+        $response_data = array("Code" => 200, "result" => $rs, "total_record" => count($rs));
+    }else{
+        $response_data = array("Code" => 500);
+    }
+}else if($request_type == "power_dropdown"){
+    $sql = 'SELECT * FROM power_mas WHERE "iStatus" = 1 ORDER BY "vPower"';
+    $rs = $sqlObj->GetAll($sql);
+    if($rs){
+        $response_data = array("Code" => 200, "result" => $rs, "total_record" => count($rs));
+    }else{
+        $response_data = array("Code" => 500);
+    }
+}else if($request_type == "install_type_dropdown"){
+    $sql = 'SELECT * FROM install_type_mas WHERE "iStatus" = 1 ORDER BY "vInstallType"';
+    $rs = $sqlObj->GetAll($sql);
+    if($rs){
+        $response_data = array("Code" => 200, "result" => $rs, "total_record" => count($rs));
+    }else{
+        $response_data = array("Code" => 500);
+    }
+}else if($request_type == "link_type_dropdown"){
+    $sql = 'SELECT * FROM link_type_mas WHERE "iStatus" = 1 ORDER BY "vLinkType"';
+    $rs = $sqlObj->GetAll($sql);
+    if($rs){
+        $response_data = array("Code" => 200, "result" => $rs, "total_record" => count($rs));
+    }else{
+        $response_data = array("Code" => 500);
+    }
+}else if($request_type == "operational_status_dropdown"){
+    $sql = 'SELECT * FROM operational_status_mas WHERE "iStatus" = 1 ORDER BY "vOperationalStatus"';
+    $rs = $sqlObj->GetAll($sql);
+    if($rs){
+        $response_data = array("Code" => 200, "result" => $rs, "total_record" => count($rs));
     }else{
         $response_data = array("Code" => 500);
     }
