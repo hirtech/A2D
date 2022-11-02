@@ -278,25 +278,20 @@ if($mode == "List") {
     $arr_param['display_order'] = $display_order;
     $arr_param['dir']           = $dir;
 
-    $arr_param['iFieldmapPremiseId']    = $iPremiseId;
+    $arr_param['iSEquipmentModelId']        = $_REQUEST['iSEquipmentModelId'];
+    $arr_param['iSMaterialId']              = $_REQUEST['iSMaterialId'];
+    $arr_param['iSPowerId']                 = $_REQUEST['iSPowerId'];
+    $arr_param['iSGrounded']                = $_REQUEST['iSGrounded'];
+    $arr_param['iSPremiseId']               = $_REQUEST['iSPremiseId'];
+    $arr_param['PremiseFilterOpDD']         = $_REQUEST['PremiseFilterOpDD'];
+    $arr_param['vPremiseName']              = $_REQUEST['vPremiseName'];
+    $arr_param['iSInstallTypeId']           = $_REQUEST['iSInstallTypeId'];
+    $arr_param['iSLinkTypeId']              = $_REQUEST['iSLinkTypeId'];
+    $arr_param['iSOperationalStatusId']     = $_REQUEST['iSOperationalStatusId'];
+    
 
-    $arr_param['vSContactNameDD']       = trim($_REQUEST['vSContactNameDD']);
-    $arr_param['vSContactName']         = trim($_REQUEST['vSContactName']);
-    $arr_param['vSAddressFilterOpDD']   = trim($_REQUEST['vSAddressFilterOpDD']);
-    $arr_param['vSAddress']             = trim($_REQUEST['vSAddress']);
-    $arr_param['vSCityFilterOpDD']      = trim($_REQUEST['vSCityFilterOpDD']);
-    $arr_param['vSCity']                = trim($_REQUEST['vSCity']);
-    $arr_param['vSStateFilterOpDD']     = trim($_REQUEST['vSStateFilterOpDD']);
-    $arr_param['vSState']               = trim($_REQUEST['vSState']);
-    $arr_param['vSZipCode']             = trim($_REQUEST['vSZipCode']);
-    $arr_param['iSZoneId']              = trim($_REQUEST['iSZoneId']);
-    $arr_param['iSNetworkId']           = trim($_REQUEST['iSNetworkId']);
-    $arr_param['iSCarrierId']           = trim($_REQUEST['iSCarrierId']);
-    $arr_param['vSSalesRepNameDD']      = trim($_REQUEST['vSSalesRepNameDD']);
-    $arr_param['vSSalesRepName']        = trim($_REQUEST['vSSalesRepName']);
-    $arr_param['vSSalesRepEmailDD']     = trim($_REQUEST['vSSalesRepEmailDD']);
-    $arr_param['vSSalesRepEmail']       = trim($_REQUEST['vSSalesRepEmail']);
-    $arr_param['iSServiceType']         = trim($_REQUEST['iSServiceType']);
+    $arr_param['access_group_var_edit'] = $access_group_var_edit;
+    $arr_param['access_group_var_delete'] = $access_group_var_delete;
 
     $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
 
@@ -319,10 +314,6 @@ if($mode == "List") {
     curl_close($ch);  
    
     $result_arr = json_decode($response, true);
-
-    $total = $result_arr['result']['total_record'];
-    $jsonData = array('sEcho' => $sEcho, 'iTotalDisplayRecords' => $total, 'iTotalRecords' => $total, 'aaData' => array());
-    $entry = $hidden_arr = array();
     $rs_export = $result_arr['result']['data'];
     $cnt_export = count($rs_export);
     //  echo "<pre>";print_r($rs_export);exit();
@@ -334,34 +325,55 @@ if($mode == "List") {
     if($cnt_export >0) {
         $objPHPExcel->setActiveSheetIndex(0)
                  ->setCellValue('A1', 'Id')
-                 ->setCellValue('B1', 'Master MSA #')
-                 ->setCellValue('C1', 'Service Order')
-                 ->setCellValue('D1', 'Carrier')
-                 ->setCellValue('E1', 'SalesRep Name')
-                 ->setCellValue('F1', 'SalesRep Email')
-                 ->setCellValue('G1', 'Premise Name')
-                 ->setCellValue('H1', 'Connection Type')
-                 ->setCellValue('I1', 'Service1')
-                 ->setCellValue('J1', 'Service2')
-                 ->setCellValue('K1', 'Service3')
-                 ->setCellValue('L1', 'Comments');
+                 ->setCellValue('B1', 'Equipment Model')
+                 ->setCellValue('C1', 'Serial Number')
+                 ->setCellValue('D1', 'MAC Address')
+                 ->setCellValue('E1', 'IP Address')
+                 ->setCellValue('F1', 'Size')
+                 ->setCellValue('G1', 'Weight')
+                 ->setCellValue('H1', 'Material')
+                 ->setCellValue('I1', 'Power')
+                 ->setCellValue('J1', 'Grounded')
+                 ->setCellValue('K1', 'Install By')
+                 ->setCellValue('L1', 'Installed Date')
+                 ->setCellValue('L1', 'Purchase Cost')
+                 ->setCellValue('L1', 'Purchase Date')
+                 ->setCellValue('L1', 'Warranty Expiration')
+                 ->setCellValue('L1', 'Warranty Cost')
+                 ->setCellValue('L1', 'Premise')
+                 ->setCellValue('L1', 'Install Type')
+                 ->setCellValue('L1', 'Link Type')
+                 ->setCellValue('L1', 'Provision Date')
+                 ->setCellValue('L1', 'Operational Status');
     
         for($e=0; $e<$cnt_export; $e++) {
             $vPremise = $rs_export[$e]['iPremiseId']." (".$rs_export[$e]['vPremiseName']."; ".$rs_export[$e]['vPremiseType'].")";
 
+            $iGrounded = ($rs_export[$e]['iGrounded'] == 1) ? "Yes" : "No";
+
+
             $objPHPExcel->getActiveSheet()
             ->setCellValue('A'.($e+2), $rs_export[$e]['iEquipmentId'])
-            ->setCellValue('B'.($e+2), $rs_export[$e]['vMasterMSA'])
-            ->setCellValue('C'.($e+2), $rs_export[$e]['vServiceOrder'])
-            ->setCellValue('D'.($e+2), $rs_export[$e]['vCompanyName'])
-            ->setCellValue('E'.($e+2), $rs_export[$e]['vSalesRepName'])
-            ->setCellValue('F'.($e+2), $rs_export[$e]['vSalesRepEmail'])
-            ->setCellValue('G'.($e+2), $vPremise)
-            ->setCellValue('H'.($e+2), $rs_export[$e]['vConnectionTypeName'])
-            ->setCellValue('I'.($e+2), $rs_export[$e]['vServiceType1'])
-            ->setCellValue('J'.($e+2), $rs_export[$e]['vServiceType2'])
-            ->setCellValue('K'.($e+2), $rs_export[$e]['vServiceType3'])
-            ->setCellValue('L'.($e+2), nl2br($rs_export[$e]['tComments']));
+            ->setCellValue('B'.($e+2), $rs_export[$e]['vModelName'])
+            ->setCellValue('C'.($e+2), $rs_export[$e]['vSerialNumber'])
+            ->setCellValue('D'.($e+2), $rs_export[$e]['vMACAddress'])
+            ->setCellValue('E'.($e+2), $rs_export[$e]['vIPAddress'])
+            ->setCellValue('F'.($e+2), $rs_export[$e]['vSize'])
+            ->setCellValue('G'.($e+2), $rs_export[$e]['vWeight'])
+            ->setCellValue('H'.($e+2), $rs_export[$e]['vMaterial'])
+            ->setCellValue('I'.($e+2), $rs_export[$e]['vPower'])
+            ->setCellValue('J'.($e+2), $iGrounded)
+            ->setCellValue('K'.($e+2), $rs_export[$e]['dInstallByDate'])
+            ->setCellValue('L'.($e+2), $rs_export[$e]['dInstalledDate'])
+            ->setCellValue('M'.($e+2), $rs_export[$e]['vPurchaseCost'])
+            ->setCellValue('N'.($e+2), $rs_export[$e]['dPurchaseDate'])
+            ->setCellValue('O'.($e+2), $rs_export[$e]['dWarrantyExpiration'])
+            ->setCellValue('P'.($e+2), $rs_export[$e]['vWarrantyCost'])
+            ->setCellValue('Q'.($e+2), $vPremise)
+            ->setCellValue('R'.($e+2), $rs_export[$e]['vInstallType'])
+            ->setCellValue('S'.($e+2), $rs_export[$e]['vLinkType'])
+            ->setCellValue('T'.($e+2), $rs_export[$e]['dProvisionDate'])
+            ->setCellValue('U'.($e+2), $rs_export[$e]['vOperationalStatus']);
          }
                         
         /* Set Auto width of each comlumn */
@@ -377,15 +389,22 @@ if($mode == "List") {
         $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('R')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('T')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('U')->setAutoSize(true);
         
         /* Set Font to Bold for each comlumn */
-        $objPHPExcel->getActiveSheet()->getStyle('A1:L1')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A1:U1')->getFont()->setBold(true);
         
 
         /* Set Alignment of Selected Columns */
         $objPHPExcel->getActiveSheet()->getStyle("A1:A".($e+3))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
         // Rename worksheet
-        $objPHPExcel->getActiveSheet()->setTitle('Service Order');
+        $objPHPExcel->getActiveSheet()->setTitle('Equipment');
 
         // Set active sheet index to the first sheet, so Excel opens this as the first sheet
         $objPHPExcel->setActiveSheetIndex(0);
