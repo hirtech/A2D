@@ -7,8 +7,8 @@ $access_group_var_delete = per_hasModuleAccess("Circuit", 'Delete', 'N');
 $access_group_var_status = per_hasModuleAccess("Circuit", 'Status', 'N');
 $access_group_var_add = per_hasModuleAccess("Circuit", 'Add', 'N');
 $access_group_var_edit = per_hasModuleAccess("Circuit", 'Edit', 'N');
-$access_group_var_PDF = per_hasModuleAccess("Equipment", 'PDF', 'N');
-$access_group_var_CSV = per_hasModuleAccess("Equipment", 'CSV', 'N');
+$access_group_var_PDF = per_hasModuleAccess("Circuit", 'PDF', 'N');
+$access_group_var_CSV = per_hasModuleAccess("Circuit", 'CSV', 'N');
 # ------------------------------------------------------------
 # General Variables
 # ------------------------------------------------------------
