@@ -1729,9 +1729,9 @@ switch($path) {
 			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
 		}
 		break;
-	case "search_workorder_premise." . $req_ext:
+	case "search_premise_address." . $req_ext:
 		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
-			$request_type = "search_workorder_premise";
+			$request_type = "search_premise_address";
 			$api_file_name = "premise.php";
 			include_once($site_api_path . "api_authentication.php");
 		}else {

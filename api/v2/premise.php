@@ -695,7 +695,7 @@ if($request_type == "premise_list"){
     else{
         $response_data = array("Code" => 500 , "Message" => MSG_ADD_ERROR);
     }
-}else if($request_type == "search_workorder_premise"){
+}else if($request_type == "search_premise_address"){
     $rs_arr  = array();
     $where_arr = array();
     $join_fieds_arr = array();

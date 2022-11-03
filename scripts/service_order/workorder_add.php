@@ -48,7 +48,7 @@ if($mode == "Update") {
     $vPremiseName = trim($_REQUEST['vPremiseName']);
     $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
     $arr_param['siteName'] = $vPremiseName;
-    $API_URL = $site_api_url."search_workorder_premise.json";
+    $API_URL = $site_api_url."search_premise_address.json";
     //echo $API_URL." ".json_encode($arr_param);exit;
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $API_URL);
