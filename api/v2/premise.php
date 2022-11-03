@@ -712,13 +712,13 @@ if($request_type == "premise_list"){
     $ext_where_arr =array();
     foreach($exp_keyword as $vl){
         if(trim($vl) != '')
-            $ext_where_arr[] = " (s.\"vName\" ILIKE '%".trim($vl)."%' OR concat(s.\"vAddress1\", ' ', s.\"vStreet\") ILIKE '%".trim($vl)."%' )";
+            $ext_where_arr[] = " (s.\"vName\" ILIKE '%".trim($vl)."%' OR concat(s.\"vAddress1\", ' ', s.\"vStreet\") ILIKE '%".trim($vl)."%' OR CAST(s.\"iSiteId\" AS TEXT) LIKE '".intval($vl)."%')";
     }
     if(count($ext_where_arr) > 0){
         $ext_where = implode(" AND ", $ext_where_arr);
         $where_arr[] = $ext_where;
     }else{
-        $where_arr[] = " (s.\"vName\" ILIKE '%".trim($vSiteName_other)."%' OR concat(s.\"vAddress1\", ' ', s.\"vStreet\") ILIKE '%".trim($vSiteName_other)."%'  OR s.\"iSiteId\" ILIKE '%".intval($vSiteName_other)."%')";
+        $where_arr[] = " (s.\"vName\" ILIKE '%".trim($vSiteName_other)."%' OR concat(s.\"vAddress1\", ' ', s.\"vStreet\") ILIKE '%".trim($vSiteName_other)."%'  OR CAST(s.\"iSiteId\" AS TEXT) LIKE '".intval($vSiteName_other)."%')";
     }     
     $where_arr[] = 's."iStatus" = 1';
     $join_fieds_arr[] = 'st."vTypeName"';
