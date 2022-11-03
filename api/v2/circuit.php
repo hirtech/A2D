@@ -26,7 +26,7 @@ if($request_type == "circuit_list"){
     }
 
     if ($vCircuitType != "") {
-        $where_arr[] = "ct\"vCircuitType\" ILIKE '" . $vCircuitType . "%'";
+        $where_arr[] = "ct.\"vCircuitType\" ILIKE '" . $vCircuitType . "%'";
     }
 
     if ($vNetwork != "") {
