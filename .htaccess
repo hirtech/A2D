@@ -400,6 +400,17 @@ RewriteRule ^zone/zone_add? index.php?module=$0&page=m-zone_add&%{QUERY_STRING}
 RewriteRule ^zone/zone_add index.php?module=$0&page=m-zone_add
 #----------- zone ------------
 
+#----------- circuit ------------
+RewriteRule ^circuit/circuit_list&(.*)$  index.php?module=$0&page=m-circuit_list&%{QUERY_STRING}
+RewriteRule ^circuit/circuit_list index.php?module=$0&page=m-circuit_list
+
+RewriteRule ^circuit/circuit_edit&(.*)$ index.php?module=$0&page=m-circuit_add&%{QUERY_STRING} [L]
+RewriteRule ^circuit/circuit_edit index.php?module=$0&page=m-circuit_add
+
+RewriteRule ^circuit/circuit_add? index.php?module=$0&page=m-circuit_add&%{QUERY_STRING}
+RewriteRule ^circuit/circuit_add index.php?module=$0&page=m-circuit_add
+#----------- circuit ------------
+
 #Speed Up using Caching
 # ----------------------------------
 # BEGIN Compress text files

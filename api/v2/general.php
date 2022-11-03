@@ -27,6 +27,7 @@ include_once($controller_path . "user.inc.php");
 include_once($controller_path . "equipment_type.inc.php");
 include_once($controller_path . "equipment_manufacturer.inc.php");
 include_once($controller_path . "equipment_model.inc.php");
+include_once($controller_path . "circuit_type.inc.php");
 
 if($request_type == "department_dropdown") {
 	$DepartmentObj = new Department();
@@ -836,6 +837,25 @@ if($request_type == "department_dropdown") {
     $rs = $sqlObj->GetAll($sql);
     if($rs){
         $response_data = array("Code" => 200, "result" => $rs, "total_record" => count($rs));
+    }else{
+        $response_data = array("Code" => 500);
+    }
+}else if($request_type == "circuit_type_dropdown"){
+    $where_arr = array();
+    $join_fieds_arr = array();
+    $join_arr  = array();
+    $CircuitTypeObj = new CircuitType();
+    $iStatus = $RES_PARA['iStatus'];
+    $where_arr = array();
+    if($iStatus != ''){
+        $where_arr[] = "circuit_type_mas.\"iStatus\"='".$iStatus."'";
+    }
+    $CircuitTypeObj->where = $where_arr;
+    $CircuitTypeObj->param['order_by'] = "circuit_type_mas.\"vCircuitType\"";
+    $CircuitTypeObj->setClause();
+    $rs_ctype = $CircuitTypeObj->recordset_list();
+    if($rs_ctype){
+        $response_data = array("Code" => 200, "result" => $rs_ctype, "total_record" => count($rs_ctype));
     }else{
         $response_data = array("Code" => 500);
     }
