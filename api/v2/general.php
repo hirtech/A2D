@@ -28,6 +28,7 @@ include_once($controller_path . "equipment_type.inc.php");
 include_once($controller_path . "equipment_manufacturer.inc.php");
 include_once($controller_path . "equipment_model.inc.php");
 include_once($controller_path . "circuit_type.inc.php");
+include_once($controller_path . "circuit.inc.php");
 
 if($request_type == "department_dropdown") {
 	$DepartmentObj = new Department();
@@ -856,6 +857,65 @@ if($request_type == "department_dropdown") {
     $rs_ctype = $CircuitTypeObj->recordset_list();
     if($rs_ctype){
         $response_data = array("Code" => 200, "result" => $rs_ctype, "total_record" => count($rs_ctype));
+    }else{
+        $response_data = array("Code" => 500);
+    }
+}else if($request_type == "circuit_dropdown"){
+    $where_arr = array();
+    $join_fieds_arr = array();
+    $join_arr  = array();
+    $CircuitObj = new Circuit();
+    $where_arr = array();
+    $CircuitObj->where = $where_arr;
+    $CircuitObj->param['order_by'] = "circuit.\"vCircuitName\"";
+    $CircuitObj->setClause();
+    $rs_ctype = $CircuitObj->recordset_list();
+    if($rs_ctype){
+        $response_data = array("Code" => 200, "result" => $rs_ctype, "total_record" => count($rs_ctype));
+    }else{
+        $response_data = array("Code" => 500);
+    }
+}else if ($request_type == "premise_circuit_dropdown"){
+
+    $rs_data = array();
+    $where_arr = array();
+    $join_fieds_arr = array();
+    $join_arr  = array();
+    $ServiceOrderObj = new ServiceOrder();
+
+    $iPremiseId = $RES_PARA['iPremiseId'];
+
+    $where_arr[] = "service_order.\"iPremiseId\"='".gen_add_slash($iPremiseId)."'";
+
+    $join_fieds_arr[] = 'wt."vType" as "vWorkOrderType"';
+    $join_fieds_arr[] = 's."vName" as "vPremiseName"';
+    $join_fieds_arr[] = 'st."vTypeName" as "vPremiseType"';
+    $join_fieds_arr[] = 'pc."iPremiseCircuitId"';
+    
+    $join_arr[] = " LEFT JOIN workorder w ON service_order.\"iServiceOrderId\" = w.\"iServiceOrderId\"";
+    $join_arr[] = " LEFT JOIN workorder_type_mas wt ON w.\"iWOTId\" = wt.\"iWOTId\"";
+    $join_arr[] = " LEFT JOIN site_mas s ON service_order.\"iPremiseId\" = s.\"iSiteId\"";
+    $join_arr[] = " LEFT JOIN site_type_mas st ON s.\"iSTypeId\" = st.\"iSTypeId\"";
+    $join_arr[] = " LEFT JOIN premise_circuit pc ON w.\"iWOId\" = pc.\"iWOId\"";
+    $ServiceOrderObj->join_field = $join_fieds_arr;
+    $ServiceOrderObj->join = $join_arr;
+    $ServiceOrderObj->where = $where_arr;
+    $ServiceOrderObj->param['limit'] = "LIMIT 1";
+    $ServiceOrderObj->setClause();
+    $ServiceOrderObj->debug_query = false;
+    $rs = $ServiceOrderObj->recordset_list();
+    $ni = count($rs);
+    if($ni > 0){
+        for($i=0; $i<$ni; $i++){
+            $vPremiseDisplay = " Workorder ID#".$rs[$i]['iWOId']." (".$rs[$i]['vWorkOrderType']."; Premise ID# ".$rs[$i]['iPremiseId'].";".$rs[$i]['vPremiseName'].";".$rs[$i]['vTypeName'].")";
+
+            $rs_data[$i]['iPremiseCircuitId'] = $rs[$i]['iPremiseCircuitId'];
+            $rs_data[$i]['vPremiseDisplay'] = $vPremiseDisplay;
+        }
+    }
+    //echo "<pre>";print_r($rs_data);exit();
+    if($rs_data){
+        $response_data = array("Code" => 200, "result" => $rs_data, "total_record" => count($rs_data));
     }else{
         $response_data = array("Code" => 500);
     }

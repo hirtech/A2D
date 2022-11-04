@@ -90,7 +90,7 @@ class Equipment {
 
 		global $sqlObj, $admin_panel_session_suffix, $function_path;
 
-		$sql = "INSERT INTO equipment(\"iEquipmentModelId\", \"vSerialNumber\", \"vMACAddress\", \"vIPAddress\", \"vSize\", \"vWeight\", \"iMaterialId\", \"iPowerId\", \"iGrounded\", \"dInstallByDate\", \"dInstalledDate\", \"vPurchaseCost\", \"dPurchaseDate\", \"dWarrantyExpiration\", \"vWarrantyCost\", \"iPremiseId\", \"iInstallTypeId\", \"iPrimaryCircuitId\", \"iLinkTypeId\", \"dProvisionDate\", \"iOperationalStatusId\", \"dAddedDate\") VALUES (".gen_allow_null_int($this->insert_arr['iEquipmentModelId']).", ".gen_allow_null_char($this->insert_arr['vSerialNumber']).", ".gen_allow_null_char($this->insert_arr['vMACAddress']).", ".gen_allow_null_char($this->insert_arr['vIPAddress']).", ".gen_allow_null_char($this->insert_arr['vSize']).", ".gen_allow_null_char($this->insert_arr['vWeight']).", ".gen_allow_null_int($this->insert_arr['iMaterialId']).", ".gen_allow_null_int($this->insert_arr['iPowerId']).",
+		$sql = "INSERT INTO equipment(\"iEquipmentModelId\", \"vSerialNumber\", \"vMACAddress\", \"vIPAddress\", \"vSize\", \"vWeight\", \"iMaterialId\", \"iPowerId\", \"iGrounded\", \"dInstallByDate\", \"dInstalledDate\", \"vPurchaseCost\", \"dPurchaseDate\", \"dWarrantyExpiration\", \"vWarrantyCost\", \"iPremiseId\", \"iInstallTypeId\", \"iPremiseCircuitId\", \"iLinkTypeId\", \"dProvisionDate\", \"iOperationalStatusId\", \"dAddedDate\") VALUES (".gen_allow_null_int($this->insert_arr['iEquipmentModelId']).", ".gen_allow_null_char($this->insert_arr['vSerialNumber']).", ".gen_allow_null_char($this->insert_arr['vMACAddress']).", ".gen_allow_null_char($this->insert_arr['vIPAddress']).", ".gen_allow_null_char($this->insert_arr['vSize']).", ".gen_allow_null_char($this->insert_arr['vWeight']).", ".gen_allow_null_int($this->insert_arr['iMaterialId']).", ".gen_allow_null_int($this->insert_arr['iPowerId']).",
 		".gen_allow_null_int($this->insert_arr['iGrounded']).",
 		".gen_allow_null_char($this->insert_arr['dInstallByDate']).",
 		".gen_allow_null_char($this->insert_arr['dInstalledDate']).",
@@ -100,7 +100,7 @@ class Equipment {
 		".gen_allow_null_char($this->insert_arr['vWarrantyCost']).",
 		".gen_allow_null_char($this->insert_arr['iPremiseId']).",
 		".gen_allow_null_char($this->insert_arr['iInstallTypeId']).",
-		".gen_allow_null_char($this->insert_arr['iPrimaryCircuitId']).",
+		".gen_allow_null_char($this->insert_arr['iPremiseCircuitId']).",
 		".gen_allow_null_char($this->insert_arr['iLinkTypeId']).",
 		".gen_allow_null_char($this->insert_arr['dProvisionDate']).",
 		".gen_allow_null_char($this->insert_arr['iOperationalStatusId']).",
@@ -132,7 +132,7 @@ class Equipment {
 			\"vWarrantyCost\" = ".gen_allow_null_char($this->update_arr['vWarrantyCost']).", 
 			\"iPremiseId\" = ".gen_allow_null_char($this->update_arr['iPremiseId']).", 
 			\"iInstallTypeId\" = ".gen_allow_null_int($this->update_arr['iInstallTypeId']).", 
-			\"iPrimaryCircuitId\" = ".gen_allow_null_int($this->update_arr['iPrimaryCircuitId']).", 
+			\"iPremiseCircuitId\" = ".gen_allow_null_int($this->update_arr['iPremiseCircuitId']).", 
 			\"iLinkTypeId\" = ".gen_allow_null_int($this->update_arr['iLinkTypeId']).", 
 			\"dProvisionDate\" = ".gen_allow_null_char($this->update_arr['dProvisionDate']).", 
 			\"iOperationalStatusId\" = ".gen_allow_null_int($this->update_arr['iOperationalStatusId']).", 

@@ -318,6 +318,58 @@ if($request_type == "workorder_list"){
     else{
         $response_data = array("Code" => 500 , "Message" => MSG_ADD_ERROR);
     }
+}else if($request_type == "search_workorder"){
+    $rs_arr  = array();
+    $where_arr = array();
+    $join_fieds_arr = array();
+    $join_arr = array();
+
+    $vWorkOrder = $RES_PARA['vWorkOrder'];
+     
+    $WorkOrderObj->clear_variable();
+
+    $letters = str_replace("'","",$vWorkOrder);
+    $exp_keyword = explode("\\",$letters);
+  
+    $ext_where_arr =array();
+    foreach($exp_keyword as $vl){
+        if(trim($vl) != '')
+            $ext_where_arr[] = " (s.\"vName\" ILIKE '%".trim($vl)."%' OR concat(s.\"vAddress1\", ' ', s.\"vStreet\") ILIKE '%".trim($vl)."%' OR CAST(s.\"iSiteId\" AS TEXT) LIKE '".intval($vl)."%' OR CAST(workorder.\"iWOId\" AS TEXT) LIKE '".intval($vl)."%' OR wt.\"vType\" ILIKE '%".trim($vl)."%')";
+    }
+    if(count($ext_where_arr) > 0){
+        $ext_where = implode(" AND ", $ext_where_arr);
+        $where_arr[] = $ext_where;
+    }else{
+        $where_arr[] = " (s.\"vName\" ILIKE '%".trim($vWorkOrder)."%' OR concat(s.\"vAddress1\", ' ', s.\"vStreet\") ILIKE '%".trim($vWorkOrder)."%'  OR CAST(s.\"iSiteId\" AS TEXT) LIKE '".intval($vWorkOrder)."%' OR CAST(workorder.\"iWOId\" AS TEXT) LIKE '".intval($vWorkOrder)."%' OR wt.\"vType\" ILIKE '%".trim($vWorkOrder)."%')";
+    }     
+    $join_fieds_arr[] = 's."vName" as "vPremiseName"';
+    $join_fieds_arr[] = 'st."vTypeName"';
+    $join_fieds_arr[] = 'wt."vType" as "vWorkorderType"';
+    $join_arr[] = 'LEFT JOIN service_order so on workorder."iWOId" = so."iWOId"';
+    $join_arr[] = 'LEFT JOIN site_mas s on so."iPremiseId" = s."iSiteId"';
+    $join_arr[] = 'LEFT JOIN site_type_mas st on s."iSTypeId" = st."iSTypeId"';
+    $join_arr[] = 'LEFT JOIN workorder_type_mas wt on workorder."iWOTId" = wt."iWOTId"';
+    $WorkOrderObj->join_field = $join_fieds_arr;
+    $WorkOrderObj->join = $join_arr;
+    $WorkOrderObj->where = $where_arr;
+    $WorkOrderObj->param['limit'] = "0";
+    $WorkOrderObj->param['order_by'] = 'workorder."iWOId" DESC';
+    
+    $WorkOrderObj->setClause();
+    $rs_site = $WorkOrderObj->recordset_list();
+    for ($i = 0; $i < count($rs_site); $i++) {
+        $rs_arr[] = array(
+			'display' => " Workorder ID#".$rs_site[$i]['iWOId']." (".$rs_site[$i]['vWorkorderType']."; Premise ID# ".$rs_site[$i]['iPremiseId'].";".$rs_site[$i]['vPremiseName'].";".$rs_site[$i]['vTypeName'].")",
+			"iWOId" => $rs_site[$i]['iWOId'],
+        );
+    }
+
+    $result = array('data' => $rs_arr);
+
+    $rh = HTTPStatus(200);
+    $code = 2000;
+    $message = api_getMessage($req_ext, constant($code));
+    $response_data = array("Code" => 200, "Message" => $message, "result" => $result);
 }
 else {
 	$r = HTTPStatus(400);

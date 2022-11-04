@@ -60,6 +60,35 @@ if($mode == "Update") {
     echo  json_encode($result_arr['result']['data']);
     hc_exit();
     # -----------------------------------
+}else if($mode =="getPremiseCircuitData"){
+    //echo "<pre>";print_r($_REQUEST);exit();
+    $iPremiseId = $_REQUEST['iPremiseId'];
+    $arr_param['iPremiseId'] = $iPremiseId;
+
+    $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
+
+    $API_URL = $site_api_url."premise_circuit_dropdown.json";
+    //echo $API_URL. " ".json_encode($arr_param);exit;
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $API_URL);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_HEADER, FALSE);
+    curl_setopt($ch, CURLOPT_POST, TRUE);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($arr_param));
+
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+       "Content-Type: application/json",
+    ));
+
+    $response = curl_exec($ch);
+    curl_close($ch);  
+   
+    $result_arr = json_decode($response, true);
+    $rs = $result_arr['result'];
+    echo json_encode($rs);
+    hc_exit();
 }
 
 /*************** Equipment Model Dropdown ***************/

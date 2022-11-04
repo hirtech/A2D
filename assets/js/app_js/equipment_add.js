@@ -8,6 +8,8 @@ $(document).ready(function() {
         });
     });
 
+    getPremiseCircuitData(iPremiseId);
+
     var cluster = new Bloodhound({
         datumTokenizer: function(d) { return d.tokens; },
         queryTokenizer: Bloodhound.tokenizers.whitespace,
@@ -42,6 +44,38 @@ $(document).ready(function() {
 function onPremiseClusteSelected(e, datum){
     $("#search_iPremiseId").val(datum['iSiteId']);
     $("#vPremiseName").val(datum['display']);
+    getPremiseCircuitData(datum['iSiteId']);
+}
+
+function getPremiseCircuitData(iPremiseId) {
+    $("#iPremiseCircuitId").html('<option value="">Select</option>');
+    if(iPremiseId != ""){
+        $.ajax({
+            type: "POST",
+            url: site_url+"service_order/equipment_add",
+            data: {
+                "mode" : "getPremiseCircuitData",
+                "iPremiseId" : iPremiseId
+            },
+            success: function(data){
+                response =JSON.parse(data);
+                var option ="<option value=''>Select</option>";
+                if(response.length > 0 ){
+                    $.each(response,function(i,val){
+                        var selected = '';
+                        //alert(iPremiseCircuitId)
+                        if(iPremiseCircuitId == response[i]['iPremiseCircuitId']){
+                            selected = ' selected';
+                        }
+                        option +="<option value='"+response[i]['iPremiseCircuitId']+"'"+selected+">"+response[i]['vPremiseDisplay']+"</option>";
+                    });
+                }
+                $("#iPremiseCircuitId").html(option);
+
+                $("#iPremiseCircuitId").focus();
+            }
+        });
+    }
 }
 
 $("#save_data").click(function(){

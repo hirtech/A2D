@@ -143,10 +143,8 @@
                                         <div class="invalid-feedback"> Please enter install type</div>
                                     </div>
                                     <div class="col-12 mb-3">
-                                        <label for="iPrimaryCircuitId">Primary Circuit </label>
-                                        <select name="iPrimaryCircuitId" id="iPrimaryCircuitId" class="form-control">
-                                            <option value="">Select</option>
-                                            
+                                        <label for="iPremiseCircuitId">Premise Circuit </label>
+                                        <select name="iPremiseCircuitId" id="iPremiseCircuitId" class="form-control">
                                         </select>
                                     </div>
                                     <div class="col-12 mb-3">
@@ -211,6 +209,8 @@
 <!-- START: Page JS-->
 <script type="text/javascript">
 var mode = '{$mode}';
+var iPremiseId = '{$rs_equipment[0].iPremiseId}'; 
+var iPremiseCircuitId = '{$rs_equipment[0].iPremiseCircuitId}'; 
 </script>
 <style type="text/css">
     img.clear_address {

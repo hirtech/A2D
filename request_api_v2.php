@@ -2255,7 +2255,61 @@ switch($path) {
 		}else {
 			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
 		}
-		break;	
+		break;
+	case "circuit_dropdown." . $req_ext:
+		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
+			$request_type = "circuit_dropdown";
+			$api_file_name = "general.php";
+			include_once($site_api_path . "api_authentication.php");
+		}else {
+			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
+		}
+		break;
+	case "premise_circuit_list." . $req_ext:
+		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
+			$request_type = "premise_circuit_list";
+			$api_file_name = "premise_circuit.php";
+			include_once($site_api_path . "api_authentication.php");
+		}else {
+			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
+		}
+		break;
+	case "premise_circuit_delete." . $req_ext:
+		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
+			$request_type = "premise_circuit_delete";
+			$api_file_name = "premise_circuit.php";
+			include_once($site_api_path . "api_authentication.php");
+		}else {
+			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
+		}
+		break;
+	case "premise_circuit_add." . $req_ext:
+		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
+			$request_type = "premise_circuit_add";
+			$api_file_name = "premise_circuit.php";
+			include_once($site_api_path . "api_authentication.php");
+		}else {
+			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
+		}
+		break;
+	case "premise_circuit_edit." . $req_ext:
+		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
+			$request_type = "premise_circuit_edit";
+			$api_file_name = "premise_circuit.php";
+			include_once($site_api_path . "api_authentication.php");
+		}else {
+			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
+		}
+		break;
+	case "premise_circuit_dropdown." . $req_ext:
+		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
+			$request_type = "premise_circuit_dropdown";
+			$api_file_name = "general.php";
+			include_once($site_api_path . "api_authentication.php");
+		}else {
+			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
+		}
+		break;
 	default:
 		$r = HTTPStatus(404);
 		$code = 404;

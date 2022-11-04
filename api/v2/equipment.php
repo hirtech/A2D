@@ -184,7 +184,7 @@ if($request_type == "equipment_list"){
                 "vPremiseType"			=> $rs_equipment[$i]['vPremiseType'],
                 "iInstallTypeId"		=> $rs_equipment[$i]['iInstallTypeId'],
                 "vInstallType"			=> $rs_equipment[$i]['vInstallType'],
-                "iPrimaryCircuitId"		=> $rs_equipment[$i]['iPrimaryCircuitId'],
+                "iPremiseCircuitId"		=> $rs_equipment[$i]['iPremiseCircuitId'],
                 "iLinkTypeId"			=> $rs_equipment[$i]['iLinkTypeId'],
                 "vLinkType"				=> $rs_equipment[$i]['vLinkType'],
                 "dProvisionDate"		=> $rs_equipment[$i]['dProvisionDate'],
@@ -221,7 +221,7 @@ if($request_type == "equipment_list"){
         "vWarrantyCost"				=> $RES_PARA['vWarrantyCost'],
         "iPremiseId"				=> $RES_PARA['iPremiseId'],
         "iInstallTypeId"			=> $RES_PARA['iInstallTypeId'],
-        "iPrimaryCircuitId"			=> $RES_PARA['iPrimaryCircuitId'],
+        "iPremiseCircuitId"			=> $RES_PARA['iPremiseCircuitId'],
         "iLinkTypeId"				=> $RES_PARA['iLinkTypeId'],
         "dProvisionDate"			=> $RES_PARA['dProvisionDate'],
         "iOperationalStatusId"		=> $RES_PARA['iOperationalStatusId']
@@ -268,7 +268,7 @@ if($request_type == "equipment_list"){
         "vWarrantyCost"				=> $RES_PARA['vWarrantyCost'],
         "iPremiseId"				=> $RES_PARA['iPremiseId'],
         "iInstallTypeId"			=> $RES_PARA['iInstallTypeId'],
-        "iPrimaryCircuitId"			=> $RES_PARA['iPrimaryCircuitId'],
+        "iPremiseCircuitId"			=> $RES_PARA['iPremiseCircuitId'],
         "iLinkTypeId"				=> $RES_PARA['iLinkTypeId'],
         "dProvisionDate"			=> $RES_PARA['dProvisionDate'],
         "iOperationalStatusId"		=> $RES_PARA['iOperationalStatusId']
