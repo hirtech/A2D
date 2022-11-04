@@ -345,7 +345,7 @@ if($request_type == "workorder_list"){
     $join_fieds_arr[] = 's."vName" as "vPremiseName"';
     $join_fieds_arr[] = 'st."vTypeName"';
     $join_fieds_arr[] = 'wt."vType" as "vWorkorderType"';
-    $join_arr[] = 'LEFT JOIN service_order so on workorder."iWOId" = so."iWOId"';
+    $join_arr[] = 'LEFT JOIN service_order so on workorder."iServiceOrderId" = so."iServiceOrderId"';
     $join_arr[] = 'LEFT JOIN site_mas s on so."iPremiseId" = s."iSiteId"';
     $join_arr[] = 'LEFT JOIN site_type_mas st on s."iSTypeId" = st."iSTypeId"';
     $join_arr[] = 'LEFT JOIN workorder_type_mas wt on workorder."iWOTId" = wt."iWOTId"';
