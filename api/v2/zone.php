@@ -37,11 +37,13 @@ if($request_type == "zone_list"){
     }
 
     if($iStatus != ""){
-        if(strtolower($iStatus) == "active"){
-            $where_arr[] = "\"iStatus\" = '1'";
-        }
-        else if(strtolower($iStatus) == "inactive"){
-            $where_arr[] = "\"iStatus\" = '0'";
+
+        if(strtolower($iStatus) == "near" || strtolower($iStatus) == "near net"){
+            $where_arr[] = "zone.\"iStatus\" = '1'";
+        }else if(strtolower($iStatus) == "off" || strtolower($iStatus) == "off net"){
+            $where_arr[] = "zone.\"iStatus\" = '2'";
+        }else if(strtolower($iStatus) == "created"){
+            $where_arr[] = "zone.\"iStatus\" = '3'";
         }
     } 
 
@@ -53,7 +55,7 @@ if($request_type == "zone_list"){
             $sortname = "zone.\"vZoneName\"";
             break;
         case "2":
-            $sortname = "network.\"vZoneName\"";
+            $sortname = "network.\"vName\"";
             break;
         case "3":
             $sortname = "zone.\"iStatus\"";

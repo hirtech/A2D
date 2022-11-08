@@ -10,7 +10,7 @@
 							<li>
 								<select id="vOptions" name="vOptions" class="form-control">
                   					<option value="iZoneId">ID</option>
-									<option value="vZoneName">Zone Name</option>
+									<option value="vZoneName">Fiber Zone Name</option>
 									<option value="vNetwork">Network</option>
 									<option value="iStatus">Status</option>
 								</select>
@@ -34,7 +34,7 @@
 					<thead>
 						<tr>
 							<th>Id</th>
-							<th>Name</th>
+							<th>Fiber Zone Name</th>
 							<th>Network</th>
 							<th>Status</th>
 							<th>Action</th> 

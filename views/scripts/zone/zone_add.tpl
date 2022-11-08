@@ -4,7 +4,7 @@
             <div class="w-sm-100 mr-auto"><h4 class="mb-0">{$mode} {$module_name}</h4></div>
             <ol class="breadcrumb bg-transparent align-self-center m-0 p-0">
                 <li class="breadcrumb-item"><a href="{$site_url}">Home</a></li>
-                <li class="breadcrumb-item"><a href="{$site_url}zone/zone_list">Zone List</a></li>
+                <li class="breadcrumb-item"><a href="{$site_url}zone/zone_list">Fiber Zone List</a></li>
                 <li class="breadcrumb-item active">{$module_name}</li>
             </ol>
         </div>
@@ -27,21 +27,21 @@
                             <div class="form-row">
                                 <div class="col-6">
                                     <div class="col-12 mb-3">
-                                        <label for="vZoneName">Zone Name  <span class="text-danger">*</span></label>
+                                        <label for="vZoneName">Fiber Zone Name  <span class="text-danger">*</span></label>
                                         <input type="text" id="vZoneName" name="vZoneName" value="{$rs_data[0]['vZoneName']}" class="form-control" required>
                                         <div class="invalid-feedback"> Please enter name</div>
                                     </div>
                                     {if $mode neq 'Update'}
                                     <div class="col-12 mb-3">
-                                        <label for="vFile">File <span class="text-danger"> *</span></label>
+                                        <label for="vFile">Upload Fiber Zone Boundary Map <span class="text-danger"> *</span></label>
                             				 <input type="file" class="d-inline-flex form-control-file" id="vFile" name="vFile" {if $mode neq 'Update'} required {/if}>
                             				 <input type="hidden" name="vFile_old" id="vFile_old" value="{$rs_data[0]['vFile']}">
-                                        <div class="invalid-feedback"> Please select file</div>
+                                        <div class="invalid-feedback"> Please upload fiber zone boundary map</div>
                                         &nbsp;&nbsp;<span class="text-danger"> [valid extension file : kml,kmz]</span>
                                     </div>
                                     {elseif $mode eq 'Update' &&  $rs_data[0].file_url neq ''}
                                     <div class="col-12 mb-3">
-                                        <label >File</label>
+                                        <label >Fiber Zone Boundary Map</label>
                                         &nbsp;&nbsp;<a href="{$rs_data[0].file_url}" title="Download"><i class="fa fa-download"></i>&nbsp;&nbsp;Download</a>
                                     </div>
                                     {/if}
@@ -53,16 +53,19 @@
                                                 <option value="{$network_arr[n].iNetworkId}" {if $network_arr[n].iNetworkId eq $rs_data[0].iNetworkId}selected{/if}>{$network_arr[n].vName|gen_strip_slash}</option>
                                             {/section}
                                         </select>
-                                        <div class="invalid-feedback"> Please select Network</div>
+                                        <div class="invalid-feedback"> Please select network</div>
                                     </div>
                                     <div class="col-12 mb-3">
-                                        <label for="iStatus">Status</label>
-                                        <select name="iStatus" id="iStatus" class="form-control">
-                                            <option value="1" {if $rs_data[0]['iStatus'] eq '1' } selected {/if}>Active</option>
-                                            <option value="0" {if $rs_data[0]['iStatus'] eq '0' } selected {/if}>Inactive</option>
+                                        <label for="iStatus">Status <span class="text-danger">*</span></label>
+                                        <select name="iStatus" id="iStatus" class="form-control" required>
+                                            <option value="">Select</option>
+                                            <option value="1" {if $rs_data[0]['iStatus'] eq 1 } selected {/if}>Near Net</option>
+                                            <option value="2" {if $rs_data[0]['iStatus'] eq 2 } selected {/if}>Off Net</option>
+                                            <option value="3" {if $rs_data[0]['iStatus'] eq 3 } selected {/if}>Created</option>
                                         </select>
+                                        <div class="invalid-feedback"> Please select status</div>
                                 	</div>
-                                </div>
+                                </div> 
                                 <div class="col-6 ">
                                      <div id="map" style="width: 500px; height: 500px"></div>
                                 </div>

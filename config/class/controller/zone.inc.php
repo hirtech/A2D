@@ -63,6 +63,7 @@ class Zone {
 		global $sqlObj;
 			
 		$sql = "SELECT zone.* ".$this->join_field_str." FROM zone".$this->join_clause.$this->where_clause.$this->group_by_clause.$this->order_by_clause.$this->limit_clause;
+		//echo $sql;exit;
 		$rs_db = $sqlObj->GetAll($sql);
 		return $rs_db;
 		

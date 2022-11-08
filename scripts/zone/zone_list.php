@@ -2,11 +2,11 @@
 //echo "<pre>";print_r($_REQUEST);exit;
 include_once($site_path . "scripts/session_valid.php");
 # ----------- Access Rule Condition -----------
-per_hasModuleAccess("Zone", 'List');
-$access_group_var_delete = per_hasModuleAccess("Zone", 'Delete', 'N');
-$access_group_var_status = per_hasModuleAccess("Zone", 'Status', 'N');
-$access_group_var_add = per_hasModuleAccess("Zone", 'Add', 'N');
-$access_group_var_edit = per_hasModuleAccess("Zone", 'Edit', 'N');
+per_hasModuleAccess("Fiber Zone", 'List');
+$access_group_var_delete = per_hasModuleAccess("Fiber Zone", 'Delete', 'N');
+$access_group_var_status = per_hasModuleAccess("Fiber Zone", 'Status', 'N');
+$access_group_var_add = per_hasModuleAccess("Fiber Zone", 'Add', 'N');
+$access_group_var_edit = per_hasModuleAccess("Fiber Zone", 'Edit', 'N');
 
 # ------------------------------------------------------------
 # General Variables
@@ -81,12 +81,21 @@ if($mode == "List"){
                $action .= ' <a class="btn btn-outline-danger" title="Delete" href="javascript:void(0);" onclick="delete_record('.$rs_list[$i]['iZoneId'].');"><i class="fa fa-trash"></i></a>';
             }
 
+            $vStatus = "---";
+            if($rs_list[$i]['iStatus'] == 1){
+                $vStatus = "Near Net";
+            }else if($rs_list[$i]['iStatus'] == 2){
+                $vStatus = "Off Net";
+            }else if($rs_list[$i]['iStatus'] == 3){
+                $vStatus = "Created";
+            }
+
             $entry[] = array(
                 "iZoneId" => $rs_list[$i]['iZoneId'],
                 "checkbox" => '<input type="checkbox" class="list" value="'.$rs_list[$i]['iZoneId'].'"/>',
                 "vZoneName" => $rs_list[$i]['vZoneName'],
                 "vNetwork" => $rs_list[$i]['vNetwork'],
-                "iStatus" => '<span data-toggle="tooltip" data-placement="top" title="'.gen_status($rs_list[$i]['iStatus']).'" class="badge badge-pill badge-'.$status_color[ gen_status($rs_list[$i]['iStatus'])].'">&nbsp;</span>',
+                "iStatus" => $vStatus,
                 "actions" => ($action!="")?$action:"---"       
             );
         }
@@ -261,8 +270,8 @@ if($mode == "List"){
     # -----------------------------------
 }
 
-$module_name = "Zone List";
-$module_title = "Zone";
+$module_name = "Fiber Zone List";
+$module_title = "Fiber Zone";
 $smarty->assign("module_name", $module_name);
 $smarty->assign("module_title", $module_title);
 $smarty->assign("msg", $_GET['msg']);

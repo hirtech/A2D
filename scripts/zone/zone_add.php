@@ -5,17 +5,17 @@ include_once($site_path . "scripts/session_valid.php");
 $mode = (($_REQUEST['mode'] != "") ? $_REQUEST['mode'] : "Add");
 # ----------- Access Rule Condition -----------
 if ($mode == "Update") {
-    per_hasModuleAccess("Zone", 'Edit');
+    per_hasModuleAccess("Fiber Zone", 'Edit');
 
 } else {
-    per_hasModuleAccess("Zone", 'Add');
+    per_hasModuleAccess("Fiber Zone", 'Add');
 }
 # ----------- Access Rule Condition -----------
-$access_group_var_list = per_hasModuleAccess("Zone", 'List', 'N');
-$access_group_var_delete = per_hasModuleAccess("Zone", 'Delete', 'N');
-$access_group_var_status = per_hasModuleAccess("Zone", 'Status', 'N');
-$access_group_var_add = per_hasModuleAccess("Zone", 'Add', 'N');
-$access_group_var_edit = per_hasModuleAccess("Zone", 'Edit', 'N');
+$access_group_var_list = per_hasModuleAccess("Fiber Zone", 'List', 'N');
+$access_group_var_delete = per_hasModuleAccess("Fiber Zone", 'Delete', 'N');
+$access_group_var_status = per_hasModuleAccess("Fiber Zone", 'Status', 'N');
+$access_group_var_add = per_hasModuleAccess("Fiber Zone", 'Add', 'N');
+$access_group_var_edit = per_hasModuleAccess("Fiber Zone", 'Edit', 'N');
 # ----------- Access Rule Condition -----------
 
 include_once($controller_path . "zone.inc.php");
@@ -82,8 +82,8 @@ $network_result_arr = json_decode($network_response, true);
 $network_arr = $network_result_arr['result']['data'];
 //echo "<pre>";print_r($network_arr);exit;
 
-$module_name = "Zone";
-$module_title = "Zone";
+$module_name = "Fiber Zone";
+$module_title = "Fiber Zone";
 $smarty->assign("module_name", $module_name);
 $smarty->assign("module_title", $module_title);
 $smarty->assign("mode", $mode);
