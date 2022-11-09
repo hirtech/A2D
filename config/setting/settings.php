@@ -100,6 +100,8 @@ $status_color = array(
 	'Planning'=> 'info',
 	'Cancelled'=> 'warning',
 	'Inprocess'=> 'primary',
+	'Not Started'=> 'info',
+	'In Progress'=> 'primary',
 	'Completed'=> 'success',
 	'Approve'=> 'success',
 	'Approved'=> 'success',
@@ -192,4 +194,6 @@ $site_api_url = $site_url."api/v2/";
 
 /*Access Group ID of super/administrator*/
 $Access_Group_SuperAdmin= array('1','2');
+
+$EVENT_CAMPAIGN_BY_ARR = array("1" => "Premise", "2" => "Fiber Zone", "3" => "Zip Code", "4" => "City", "5" => "Network");
 ?>

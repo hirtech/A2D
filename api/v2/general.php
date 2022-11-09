@@ -3,6 +3,7 @@ include_once($controller_path . "fiber_inquiry.inc.php");
 include_once($controller_path . "premise_type.inc.php");
 include_once($controller_path . "premise_attribute.inc.php");
 include_once($controller_path . "premise_sub_type.inc.php");
+include_once($controller_path . "premise.inc.php");
 include_once($controller_path . "zone.inc.php");
 include_once($controller_path . "city.inc.php");
 include_once($controller_path . "state.inc.php");
@@ -841,6 +842,30 @@ if($request_type == "department_dropdown") {
     }else{
         $response_data = array("Code" => 500);
     }
+}else if($request_type == "event_type_dropdown"){
+    $sql = 'SELECT * FROM event_type_mas WHERE "iStatus" = 1 ORDER BY "vEventType"';
+    $rs = $sqlObj->GetAll($sql);
+    if($rs){
+        $response_data = array("Code" => 200, "result" => $rs, "total_record" => count($rs));
+    }else{
+        $response_data = array("Code" => 500);
+    }
+}else if($request_type == "zipcode_dropdown"){
+    $sql = 'SELECT * FROM zipcode_mas ORDER BY "vZipcode"';
+    $rs = $sqlObj->GetAll($sql);
+    if($rs){
+        $response_data = array("Code" => 200, "result" => $rs, "total_record" => count($rs));
+    }else{
+        $response_data = array("Code" => 500);
+    }
+}else if($request_type == "city_dropdown"){
+    $sql = 'SELECT * FROM city_mas ORDER BY "vCity"';
+    $rs = $sqlObj->GetAll($sql);
+    if($rs){
+        $response_data = array("Code" => 200, "result" => $rs, "total_record" => count($rs));
+    }else{
+        $response_data = array("Code" => 500);
+    }
 }else if($request_type == "circuit_type_dropdown"){
     $where_arr = array();
     $join_fieds_arr = array();
@@ -916,6 +941,20 @@ if($request_type == "department_dropdown") {
     //echo "<pre>";print_r($rs_data);exit();
     if($rs_data){
         $response_data = array("Code" => 200, "result" => $rs_data, "total_record" => count($rs_data));
+    }else{
+        $response_data = array("Code" => 500);
+    }
+}else if($request_type == "premise_dropdown"){
+    $sql = 'SELECT s."iSiteId", s."vName", st."vTypeName" FROM site_mas s LEFT JOIN site_type_mas st ON st."iSTypeId" = s."iSTypeId" WHERE s."iStatus" = 1 ORDER BY s."vName"';
+    $rs = $sqlObj->GetAll($sql);
+	$site_data = array();
+    if($rs){
+		$ni = count($rs);
+		for($i=0; $i<$ni; $i++) {
+			$site_data[$i]['iSiteId'] = $rs[$i]['iSiteId'];
+			$site_data[$i]['vName'] = $rs[$i]['iSiteId']."(".$rs[$i]['vName'].";".$rs[$i]['vTypeName'].")";
+		}
+        $response_data = array("Code" => 200, "result" => $site_data, "total_record" => count($site_data));
     }else{
         $response_data = array("Code" => 500);
     }

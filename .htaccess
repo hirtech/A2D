@@ -243,6 +243,14 @@ RewriteRule ^tasks/task_awareness_list index.php?module=$0&page=m-task_awareness
 #---------------------
 
 #---------------------
+#Event
+RewriteRule ^event/event_list&(.*)$  index.php?module=$0&page=m-event_list&%{QUERY_STRING}
+RewriteRule ^event/event_list index.php?module=$0&page=m-event_list
+RewriteRule ^event/event_add&(.*)$ index.php?module=$0&page=m-event_add&%{QUERY_STRING}
+RewriteRule ^event/event_add index.php?module=$0&page=m-event_add
+#---------------------
+
+#---------------------
 #System Setting
 RewriteRule ^settings/setting_list? index.php?module=$0&page=s-setting_list&%{QUERY_STRING}
 RewriteRule ^settings/setting_list index.php?module=$0&page=s-setting_list
