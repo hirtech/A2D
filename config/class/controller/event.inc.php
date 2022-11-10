@@ -179,6 +179,17 @@ class Event {
 		}
 	}
 
+	function event_campaign_coverage_recordset_list()
+	{
+		global $sqlObj;
+			
+		$sql = "SELECT event_campaign_coverage.* ".$this->join_field_str." FROM event_campaign_coverage".$this->join_clause.$this->where_clause.$this->group_by_clause.$this->order_by_clause.$this->limit_clause;
+		$rs_db = $sqlObj->GetAll($sql);
+		//echo $sql;exit;
+		//echo "<pre>";print_r($rs_db);exit;
+		return $rs_db;
+	}
+
 	function clear_variable(){
 		$this->join_field = array();
 		$this->join = array();

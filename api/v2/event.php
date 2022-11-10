@@ -10,18 +10,18 @@ if($request_type == "event_list"){
         $vCampaignBy        = $RES_PARA['vCampaignBy'];
         $iStatus            = $RES_PARA['iStatus'];
 
-        $iSCampaignBy      = $RES_PARA['iSCampaignBy'];
-        // $vSPremiseNameDD   = $RES_PARA['vSPremiseNameDD'];
-        // $vSPremiseName     = $RES_PARA['vSPremiseName'];
-        // $vSZoneNameDD      = $RES_PARA['vSZoneNameDD'];
-        // $vSZoneName        = $RES_PARA['vSZoneName'];
-        // $vSZipcodeDD       = $RES_PARA['vSZipcodeDD'];
-        // $vSZipcode         = $RES_PARA['vSZipcode'];
-        // $vSCityDD          = $RES_PARA['vSCityDD'];
-        // $vSCity            = $RES_PARA['vSCity'];
-        // $vSNetworkDD       = $RES_PARA['vSNetworkDD'];
-        // $vSNetwork         = $RES_PARA['vSNetwork'];
-        $iSStatus          = $RES_PARA['iSStatus'];
+        $iSCampaignBy       = $RES_PARA['iSCampaignBy'];
+        $iSPremiseId        = $RES_PARA['iSPremiseId'];
+        $vSPremiseNameDD    = $RES_PARA['vSPremiseNameDD'];
+        $vSPremiseName      = $RES_PARA['vSPremiseName'];
+        $iSZoneId           = $RES_PARA['iSZoneId'];
+        $vSZipcodeDD        = $RES_PARA['vSZipcodeDD'];
+        $vSZipcode          = $RES_PARA['vSZipcode'];
+        $vSCityDD           = $RES_PARA['vSCityDD'];
+        $vSCity             = $RES_PARA['vSCity'];
+        $iSNetworkId        = $RES_PARA['iSNetworkId'];
+        $iSStatus           = $RES_PARA['iSStatus'];
+        $dSCompletedDate    = $RES_PARA['dSCompletedDate'];
 
         $page_length        = isset($RES_PARA['page_length']) ? trim($RES_PARA['page_length']) : "10";
         $start              = isset($RES_PARA['start']) ? trim($RES_PARA['start']) : "0";
@@ -45,6 +45,188 @@ if($request_type == "event_list"){
     if ($iSStatus != "") {
         $where_arr[] = 'event."iStatus"='.$iSStatus ;
     }
+
+    if ($dSCompletedDate != "") {
+        $where_arr[] = "event.\"dCompletedDate\"='".$dSCompletedDate."'";
+    }
+
+    $iEventIdArr = array();
+    // Campaign Covarage Filters
+    $premise_where_arr = [];
+    if($iSPremiseId != "" || $vSPremiseName != ""){
+        $premise_where_arr[] = "event_campaign_coverage.\"iCampaignBy\"='1'";
+        if ($iSPremiseId != "") {
+            $premise_where_arr[] = "event_campaign_coverage.\"iCampaignCoverageId\"='".$iSPremiseId."'";
+        }
+        if ($vSPremiseName != "") {
+            if ($vSPremiseNameDD != "") {
+                if ($vSPremiseNameDD == "Begins") {
+                    $premise_where_arr[] = 's."vName" ILIKE \''.$vSPremiseName.'%\'';
+                } else if ($vSPremiseNameDD == "Ends") {
+                    $premise_where_arr[] = 's."vName" ILIKE \'%'.$vSPremiseName.'\'';
+                } else if ($vSPremiseNameDD == "Contains") {
+                    $premise_where_arr[] = 's."vName" ILIKE \'%'.$vSPremiseName.'%\'';
+                } else if ($vSPremiseNameDD == "Exactly") {
+                    $premise_where_arr[] = 's."vName" ILIKE \''.$vSPremiseName.'\'';
+                }
+            } else {
+                $premise_where_arr[] = 's."vName" ILIKE \''.$vSPremiseName.'%\'';
+            }
+        }
+        if(!empty($premise_where_arr)) {
+            //echo "<pre>";print_r($premise_where_arr);exit;
+            $premise_join_fieds_arr = array();
+            $premise_join_fieds_arr[] = 's."vName"';
+            $premise_join_arr = array();
+            $premise_join_arr[] = 'LEFT JOIN site_mas s on event_campaign_coverage."iCampaignCoverageId" = s."iSiteId"';
+            $EventObj->join_field = $premise_join_fieds_arr;
+            $EventObj->join = $premise_join_arr;
+            $EventObj->where = $premise_where_arr;
+            $EventObj->param['order_by'] = "s.\"vName\" ASC";
+            $EventObj->setClause();
+            $EventObj->debug_query = false;
+            $rs = $EventObj->event_campaign_coverage_recordset_list();
+            if($rs) {
+                //echo "<pre>";print_r($rs);exit;
+                $ci =count($rs);
+                for($c=0; $c<$ci; $c++){
+                    $iEventIdArr[] = $rs[$c]['iEventId'];
+                }
+            }
+        }
+    }
+
+    $zone_where_arr = [];
+    if ($iSZoneId != "") {
+        $zone_where_arr[] = "event_campaign_coverage.\"iCampaignBy\"='2'";
+        $zone_where_arr[] = "event_campaign_coverage.\"iCampaignCoverageId\"='".$iSZoneId."'";
+    }
+    if(!empty($zone_where_arr)) {
+        $zone_join_fieds_arr = array();
+        $zone_join_arr = array();
+        $zone_join_arr[] = 'LEFT JOIN zone z on event_campaign_coverage."iCampaignCoverageId" = z."iZoneId"';
+        $EventObj->join_field = $zone_join_fieds_arr;
+        $EventObj->join = $zone_join_arr;
+        $EventObj->where = $zone_where_arr;
+        $EventObj->param['order_by'] = "z.\"iZoneId\" DESC";
+        $EventObj->setClause();
+        $EventObj->debug_query = false;
+        $rs = $EventObj->event_campaign_coverage_recordset_list();
+        if($rs) {
+            //echo "<pre>";print_r($rs);exit;
+            $ci =count($rs);
+            for($c=0; $c<$ci; $c++){
+                $iEventIdArr[] = $rs[$c]['iEventId'];
+            }
+        }
+    }
+
+    $zipcode_where_arr = [];
+    if ($vSZipcode != "") {
+        $zipcode_where_arr[] = "event_campaign_coverage.\"iCampaignBy\"='3'";
+        if ($vSZipcodeDD != "") {
+            if ($vSZipcodeDD == "Begins") {
+                $zipcode_where_arr[] = 'z."vZipcode" ILIKE \''.$vSZipcode.'%\'';
+            } else if ($vSZipcodeDD == "Ends") {
+                $zipcode_where_arr[] = 'z."vZipcode" ILIKE \'%'.$vSZipcode.'\'';
+            } else if ($vSZipcodeDD == "Contains") {
+                $zipcode_where_arr[] = 'z."vZipcode" ILIKE \'%'.$vSZipcode.'%\'';
+            } else if ($vSZipcodeDD == "Exactly") {
+                $zipcode_where_arr[] = 'z."vZipcode" ILIKE \''.$vSZipcode.'\'';
+            }
+        } else {
+            $zipcode_where_arr[] = 'z."vZipcode" ILIKE \''.$vSZipcode.'%\'';
+        }
+    }
+    if(!empty($zipcode_where_arr)) {
+        $zipcode_join_fieds_arr = array();
+        $zipcode_join_fieds_arr[] = 'z."vZipcode"';
+        $zipcode_join_arr = array();
+        $zipcode_join_arr[] = 'LEFT JOIN zipcode_mas z on event_campaign_coverage."iCampaignCoverageId" = z."iZipcode"';
+        $EventObj->join_field = $zipcode_join_fieds_arr;
+        $EventObj->join = $zipcode_join_arr;
+        $EventObj->where = $zipcode_where_arr;
+        $EventObj->param['order_by'] = "z.\"vZipcode\" ASC";
+        $EventObj->setClause();
+        $EventObj->debug_query = false;
+        $rs = $EventObj->event_campaign_coverage_recordset_list();
+        if($rs) {
+            //echo "<pre>";print_r($rs);exit;
+            $ci =count($rs);
+            for($c=0; $c<$ci; $c++){
+                $iEventIdArr[] = $rs[$c]['iEventId'];
+            }
+        }
+    }
+
+    $city_where_arr = [];
+    if ($vSCity != "") {
+        $city_where_arr[] = "event_campaign_coverage.\"iCampaignBy\"='4'";
+        if ($vSCityDD != "") {
+            if ($vSCityDD == "Begins") {
+                $city_where_arr[] = 'c."vCity" ILIKE \''.$vSCity.'%\'';
+            } else if ($vSCityDD == "Ends") {
+                $city_where_arr[] = 'c."vCity" ILIKE \'%'.$vSCity.'\'';
+            } else if ($vSCityDD == "Contains") {
+                $city_where_arr[] = 'c."vCity" ILIKE \'%'.$vSCity.'%\'';
+            } else if ($vSCityDD == "Exactly") {
+                $city_where_arr[] = 'c."vCity" ILIKE \''.$vSCity.'\'';
+            }
+        } else {
+            $city_where_arr[] = 'c."vCity" ILIKE \''.$vSCity.'%\'';
+        }
+    }
+    if(!empty($city_where_arr)) {
+        $city_join_fieds_arr = array();
+        $city_join_fieds_arr[] = 'c."vCity"';
+        $city_join_arr = array();
+        $city_join_arr[] = 'LEFT JOIN city_mas c on event_campaign_coverage."iCampaignCoverageId" = c."iCityId"';
+        $EventObj->join_field = $city_join_fieds_arr;
+        $EventObj->join = $city_join_arr;
+        $EventObj->where = $city_where_arr;
+        $EventObj->param['order_by'] = "c.\"vCity\" ASC";
+        $EventObj->setClause();
+        $EventObj->debug_query = false;
+        $rs = $EventObj->event_campaign_coverage_recordset_list();
+        if($rs) {
+            //echo "<pre>";print_r($rs);exit;
+            $ci =count($rs);
+            for($c=0; $c<$ci; $c++){
+                $iEventIdArr[] = $rs[$c]['iEventId'];
+            }
+        }
+    }
+    
+    $network_where_arr = [];
+    if ($iSNetworkId != "") {
+        $network_where_arr[] = "event_campaign_coverage.\"iCampaignBy\"='5'";
+        $network_where_arr[] = "event_campaign_coverage.\"iCampaignCoverageId\"='".$iSNetworkId."'";
+    }
+    if(!empty($network_where_arr)) {
+        $network_join_fieds_arr = array();
+        $network_join_arr = array();
+        $network_join_arr[] = 'LEFT JOIN network n on event_campaign_coverage."iCampaignCoverageId" = n."iNetworkId"';
+        $EventObj->join_field = $network_join_fieds_arr;
+        $EventObj->join = $network_join_arr;
+        $EventObj->where = $network_where_arr;
+        $EventObj->param['order_by'] = "n.\"iNetworkId\" DESC";
+        $EventObj->setClause();
+        $EventObj->debug_query = false;
+        $rs = $EventObj->event_campaign_coverage_recordset_list();
+        if($rs) {
+            //echo "<pre>";print_r($rs);exit;
+            $ci =count($rs);
+            for($c=0; $c<$ci; $c++){
+                $iEventIdArr[] = $rs[$c]['iEventId'];
+            }
+        }
+    }
+
+    $iEventIdArr = array_unique($iEventIdArr);
+    if(!empty($iEventIdArr)){
+        $where_arr[] = "event.\"iEventId\" IN (".implode(",", $iEventIdArr).") ";
+    }
+    //echo "<pre>"; print_r($where_arr);exit;
 
     switch ($display_order) {
         case "0":

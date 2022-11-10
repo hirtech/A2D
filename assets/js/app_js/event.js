@@ -76,7 +76,7 @@ var listPage = function(){
 
 
 $('#Search').click(function (){
-     gridtable.ajax.reload();
+    gridtable.ajax.reload();
     return false;
 });
 
@@ -129,18 +129,17 @@ $('#AdvSearchSubmit').click(function () {
 
 $('#AdvSearchReset').click(function () {
     $('#iSCampaignBy').val("");
-    // $('#vSPremiseNameDD').val("Contains");
-    // $('#vSPremiseName').val("");
-    // $('#vSZoneNameDD').val("Contains");
-    // $('#vSZoneName').val("");
-    // $('#vSZipcodeDD').val("Contains");
-    // $('#vSZipcode').val("");
-    // $('#vSCityDD').val("Contains");
-    // $('#vSCity').val("");
-    // $('#vSNetworkDD').val("Contains");
-    // $('#vSNetwork').val("");
+    $('#iSPremiseId').val("");
+    $('#vSPremiseNameDD').val("Contains");
+    $('#vSPremiseName').val("");
+    $('#iSZoneId').val("");
+    $('#vSZipcodeDD').val("Contains");
+    $('#vSZipcode').val("");
+    $('#vSCityDD').val("Contains");
+    $('#vSCity').val("");
+    $('#iSNetworkId').val("");
     $('#iSStatus').val("");
-
+    $('#dSCompletedDate').val("");
     gridtable.ajax.reload();
     return false;
 });

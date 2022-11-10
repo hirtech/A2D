@@ -31,17 +31,17 @@ if($mode == "List"){
     }
     
     $arr_param['iSCampaignBy']      = $_POST['iSCampaignBy'];
-    // $arr_param['vSPremiseNameDD']   = $_POST['vSPremiseNameDD'];
-    // $arr_param['vSPremiseName']     = $_POST['vSPremiseName'];
-    // $arr_param['vSZoneNameDD']      = $_POST['vSZoneNameDD'];
-    // $arr_param['vSZoneName']        = $_POST['vSZoneName'];
-    // $arr_param['vSZipcodeDD']       = $_POST['vSZipcodeDD'];
-    // $arr_param['vSZipcode']         = $_POST['vSZipcode'];
-    // $arr_param['vSCityDD']          = $_POST['vSCityDD'];
-    // $arr_param['vSCity']            = $_POST['vSCity'];
-    // $arr_param['vSNetworkDD']       = $_POST['vSNetworkDD'];
-    // $arr_param['vSNetwork']         = $_POST['vSNetwork'];
+    $arr_param['iSPremiseId']       = $_POST['iSPremiseId'];
+    $arr_param['vSPremiseNameDD']   = $_POST['vSPremiseNameDD'];
+    $arr_param['vSPremiseName']     = trim($_POST['vSPremiseName']);
+    $arr_param['iSZoneId']          = $_POST['iSZoneId'];
+    $arr_param['vSZipcodeDD']       = $_POST['vSZipcodeDD'];
+    $arr_param['vSZipcode']         = trim($_POST['vSZipcode']);
+    $arr_param['vSCityDD']          = $_POST['vSCityDD'];
+    $arr_param['vSCity']            = trim($_POST['vSCity']);
+    $arr_param['iSNetworkId']       = $_POST['iSNetworkId'];
     $arr_param['iSStatus']          = $_POST['iSStatus'];
+    $arr_param['dSCompletedDate']   = $_POST['dSCompletedDate'];
 
     $arr_param['page_length']       = $page_length;
     $arr_param['start']             = $start;
@@ -258,7 +258,50 @@ if($mode == "List"){
     # -----------------------------------   
 }
 
+/*-------------------------- Zone -------------------------- */
+$zone_arr_param = array();
+$zone_arr_param['iStatus']   = 1;
+$zone_arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
+$ZONE_API_URL = $site_api_url."zone_dropdown.json";
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $ZONE_API_URL);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_HEADER, FALSE);
+curl_setopt($ch, CURLOPT_POST, TRUE);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($zone_arr_param));
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+   "Content-Type: application/json",
+)); 
+$response_zone = curl_exec($ch);
+curl_close($ch);  
+$res_zone = json_decode($response_zone, true);
+$smarty->assign("rs_zone", $res_zone['result']);
+//echo "<pre>";print_r($res_zone['result']);exit;
+/*-------------------------- Zone -------------------------- */
 
+/*-------------------------- Network -------------------------- */
+$ntwork_arr_param = array();
+$ntwork_arr_param['iStatus']   = 1;
+$ntwork_arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
+$ntwork_API_URL = $site_api_url."network_dropdown.json";
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $ntwork_API_URL);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_HEADER, FALSE);
+curl_setopt($ch, CURLOPT_POST, TRUE);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($ntwork_arr_param));
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+   "Content-Type: application/json",
+)); 
+$response_ntwork = curl_exec($ch);
+curl_close($ch);  
+$res_ntwork = json_decode($response_ntwork, true);
+$smarty->assign("rs_ntwork", $res_ntwork['result']);
+/*-------------------------- Network -------------------------- */
 
 $module_name = "Event List";
 $module_title = "Event";
@@ -266,5 +309,4 @@ $smarty->assign("module_name", $module_name);
 $smarty->assign("module_title", $module_title);
 $smarty->assign("access_group_var_add", $access_group_var_add);
 $smarty->assign("EVENT_CAMPAIGN_BY_ARR", $EVENT_CAMPAIGN_BY_ARR);
-
 ?>
