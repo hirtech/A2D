@@ -733,9 +733,10 @@ if($request_type == "premise_list"){
     $rs_site = $SiteObj->recordset_list();
     for ($i = 0; $i < count($rs_site); $i++) {
         $rs_arr[] = array(
-         'display' => $rs_site[$i]['iSiteId']." (".$rs_site[$i]['vName']."; ".$rs_site[$i]['vTypeName'].")",
-         "iSiteId" => $rs_site[$i]['iSiteId'],
-         "vName" => $rs_site[$i]['vName']
+			'display' => $rs_site[$i]['iSiteId']." (".$rs_site[$i]['vName']."; ".$rs_site[$i]['vTypeName'].")",
+			"iSiteId" => $rs_site[$i]['iSiteId'],
+			"vName" => $rs_site[$i]['vName'],
+			"vAddress" => $rs_site[$i]['vAddress1']. " ".$rs_site[$i]['vStreet']
         );
     }
 
