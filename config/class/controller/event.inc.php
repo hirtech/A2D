@@ -96,6 +96,10 @@ class Event {
 		
 		$sql_del = "DELETE FROM event WHERE event.\"iEventId\" IN (".$id.")";
 		$rs_del = $sqlObj->Execute($sql_del);
+		if($rs_del){
+			$sql = "DELETE FROM event_campaign_coverage WHERE event.\"iEventId\" IN (".$id.")";
+			$rs = $sqlObj->Execute($sql);
+		}
 		return $rs_del;
 	}
 	
