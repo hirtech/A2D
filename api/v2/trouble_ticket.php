@@ -160,6 +160,9 @@ if($request_type == "trouble_ticket_list"){
         case "5":
             $sortname = "trouble_ticket.\"dCompletionDate\"";
             break;
+        case "6":
+            $sortname = "trouble_ticket.\"tDescription\"";
+            break;
         default:
             $sortname = "trouble_ticket.\"iTroubleTicketId\"";
             break;
