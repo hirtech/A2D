@@ -14,6 +14,8 @@ if($request_type == "trouble_ticket_list"){
         $iSSeverity         = $RES_PARA['iSSeverity'];
         $iSStatus           = $RES_PARA['iSStatus'];
         $dSCompletionDate   = $RES_PARA['dSCompletionDate'];
+        $tSDescriptionDD        = $RES_PARA['tSDescriptionDD'];
+        $tSDescription          = trim($RES_PARA['tSDescription']);
         $iSPremiseId        = $RES_PARA['iSPremiseId'];
         $vSPremiseNameDD    = $RES_PARA['vSPremiseNameDD'];
         $vSPremiseName      = trim($RES_PARA['vSPremiseName']);
@@ -57,6 +59,22 @@ if($request_type == "trouble_ticket_list"){
 
     if ($dSCompletionDate != "") {
         $where_arr[] = "(trouble_ticket.\"dCompletionDate\" = '" . $dSCompletionDate . "')";
+    }
+
+    if ($tSDescription != "") {
+        if ($tSDescriptionDD != "") {
+            if ($tSDescriptionDD == "Begins") {
+                $where_arr[] = 'trouble_ticket."tDescription" ILIKE \''.$tSDescription.'%\'';
+            } else if ($tSDescriptionDD == "Ends") {
+                $where_arr[] = 'trouble_ticket."tDescription" ILIKE \'%'.$tSDescription.'\'';
+            } else if ($tSDescriptionDD == "Contains") {
+                $where_arr[] = 'trouble_ticket."tDescription" ILIKE \'%'.$tSDescription.'%\'';
+            } else if ($tSDescriptionDD == "Exactly") {
+                $where_arr[] = 'trouble_ticket."tDescription" ILIKE \''.$tSDescription.'\'';
+            }
+        } else {
+            $where_arr[] = 'trouble_ticket."tDescription" ILIKE \''.$tSDescription.'%\'';
+        }
     }
 
     $iTroubleTicketIdArr = array();
@@ -184,6 +202,7 @@ if($request_type == "trouble_ticket_list"){
                 "iSeverity"         => $rs_trouble_ticket[$i]['iSeverity'],
                 "iStatus"           => $rs_trouble_ticket[$i]['iStatus'], 
                 "dCompletionDate"   => $rs_trouble_ticket[$i]['dCompletionDate'], 
+                "tDescription"      => $rs_trouble_ticket[$i]['tDescription'], 
                 "dAddedDate"        => $rs_trouble_ticket[$i]['dAddedDate'], 
                 "dModifiedDate"     => $rs_trouble_ticket[$i]['dModifiedDate'], 
             );
@@ -198,8 +217,8 @@ if($request_type == "trouble_ticket_list"){
     $response_data = array("Code" => 200, "Message" => $message, "result" => $result);
 }else if($request_type == "trouble_ticket_add"){
     $is_error = 0;
+    $premise_length = $RES_PARA['premise_length'];
     if($RES_PARA['iStatus'] == 3) { //Complete 
-        $premise_length = $RES_PARA['premise_length'];
         $dResolvedDatecnt = 0;
         for($i=0; $i<$premise_length; $i++){
             if(!empty($RES_PARA['dResolvedDate'][$i])) {
@@ -212,6 +231,24 @@ if($request_type == "trouble_ticket_list"){
             $response_data = array("Code" => 500 , "Message" => 'You cannot select complete if any premise-record below has "Date - Resolved" field blank/null', "error" => 2);
         }
     }
+
+    if($RES_PARA['dCompletionDate'] != '') {
+        $dCompletionDatecnt = 0;
+        for($i=0; $i<$premise_length; $i++){
+            if($RES_PARA['dResolvedDate'][$i] != ''){
+                //echo $RES_PARA['dCompletionDate']." < ".$RES_PARA['dResolvedDate'][$i]."<br/>";
+                if($RES_PARA['dCompletionDate'] < $RES_PARA['dResolvedDate'][$i]) {
+                    $dCompletionDatecnt++;
+                }
+            }
+        }
+        //echo $dCompletionDatecnt;exit;
+        if($dCompletionDatecnt > 0) {
+            $is_error = 1;
+            $response_data = array("Code" => 500 , "Message" => 'Completion Date cannot be before any "Date - Resolved" below', "error" => 2);
+        }
+    }
+
     //echo "<pre>";print_r($is_error);exit;
     if($is_error == 0){
         $insert_arr = array(
@@ -220,6 +257,7 @@ if($request_type == "trouble_ticket_list"){
             "iSeverity"         => $RES_PARA['iSeverity'],
             "iStatus"           => $RES_PARA['iStatus'],
             "dCompletionDate"   => $RES_PARA['dCompletionDate'],
+            "tDescription"      => $RES_PARA['tDescription'],
             "premise_length"    => $RES_PARA['premise_length'],
             "iPremiseId"        => $RES_PARA['iPremiseId'],
             "dTroubleStartDate" => $RES_PARA['dTroubleStartDate'],
@@ -255,12 +293,14 @@ if($request_type == "trouble_ticket_list"){
         $dCompletionDatecnt = 0;
         for($i=0; $i<$premise_length; $i++){
             if($RES_PARA['dResolvedDate'][$i] != ''){
-                if($RES_PARA['dResolvedDate'][$i] < $RES_PARA['dCompletionDate']) {
+                //echo $RES_PARA['dCompletionDate']." < ".$RES_PARA['dResolvedDate'][$i]."<br/>";
+                if($RES_PARA['dCompletionDate'] < $RES_PARA['dResolvedDate'][$i]) {
                     $dCompletionDatecnt++;
                 }
             }
         }
-        if($dCompletionDatecnt == 0) {
+        //echo $dCompletionDatecnt;exit;
+        if($dCompletionDatecnt > 0) {
             $is_error = 1;
             $response_data = array("Code" => 500 , "Message" => 'Completion Date cannot be before any "Date - Resolved" below', "error" => 2);
         }
@@ -274,6 +314,7 @@ if($request_type == "trouble_ticket_list"){
             "iSeverity"         => $RES_PARA['iSeverity'],
             "iStatus"           => $RES_PARA['iStatus'],
             "dCompletionDate"   => $RES_PARA['dCompletionDate'],
+            "tDescription"      => $RES_PARA['tDescription'],
             "premise_length"    => $RES_PARA['premise_length'],
             "iPremiseId"        => $RES_PARA['iPremiseId'],
             "dTroubleStartDate" => $RES_PARA['dTroubleStartDate'],

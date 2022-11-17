@@ -15,7 +15,7 @@ var listPage = function(){
                 "aaSorting": [0,'Desc'],
                 'bAutoWidth': true,
                 "columns": [
-                    { "data": "iTroubleTicketId", "className": "text-center", "sortable":true},
+                    { "data": "iMaintenanceTicketId", "className": "text-center", "sortable":true},
                     { "data": "vAssignedTo", "sortable":true},
                     { "data": "vServiceOrder", "sortable":false},
                     { "data": "iSeverity", "sortable":false},
@@ -52,7 +52,7 @@ var listPage = function(){
                         "dataType": 'json',
                         "type": "POST",
                         "url": sSource+'&'+$.param(aoData),
-                        "data": $(".trouble_ticket_search_form").serializeArray(),
+                        "data": $(".maintenance_ticket_search_form").serializeArray(),
                         "success": fnCallback
                     });
                 },
@@ -61,7 +61,7 @@ var listPage = function(){
         if(access_group_var_add == '1') {
             gridtable.button().add( 0, {
                 action: function ( e, dt, node, config ) {
-                    location.href = site_url+"trouble_ticket/trouble_ticket_add";
+                    location.href = site_url+"maintenance_ticket/maintenance_ticket_add";
                 },
                 text: '<i class="fa fa-plus"></i>Add',
                 className: 'btn btn-primary'
@@ -100,10 +100,10 @@ function delete_record(id)
             if (isConfirm) {
                 $.ajax({
                     type: "POST",
-                    url: site_url+"trouble_ticket/trouble_ticket_list",
+                    url: site_url+"maintenance_ticket/maintenance_ticket_list",
                     data: {
                         "mode" : "Delete",
-                        "iTroubleTicketId" : id
+                        "iMaintenanceTicketId" : id
                     },
                     success: function(data){
                          swal.close();

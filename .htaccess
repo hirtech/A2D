@@ -430,6 +430,28 @@ RewriteRule ^premise_circuit/premise_circuit_add? index.php?module=$0&page=m-pre
 RewriteRule ^premise_circuit/premise_circuit_add index.php?module=$0&page=m-premise_circuit_add
 #----------- premise circuit ------------
 
+#----------- Trouble Ticket ------------
+RewriteRule ^trouble_ticket/trouble_ticket_list&(.*)$  index.php?module=$0&page=m-trouble_ticket_list&%{QUERY_STRING}
+RewriteRule ^trouble_ticket/trouble_ticket_list index.php?module=$0&page=m-trouble_ticket_list
+
+RewriteRule ^trouble_ticket/trouble_ticket_edit&(.*)$ index.php?module=$0&page=m-trouble_ticket_add&%{QUERY_STRING} [L]
+RewriteRule ^trouble_ticket/trouble_ticket_edit index.php?module=$0&page=m-trouble_ticket_add
+
+RewriteRule ^trouble_ticket/trouble_ticket_add? index.php?module=$0&page=m-trouble_ticket_add&%{QUERY_STRING}
+RewriteRule ^trouble_ticket/trouble_ticket_add index.php?module=$0&page=m-trouble_ticket_add
+#----------- Trouble Ticket ------------
+
+#----------- Maintenance Ticket ------------
+RewriteRule ^maintenance_ticket/maintenance_ticket_list&(.*)$  index.php?module=$0&page=m-maintenance_ticket_list&%{QUERY_STRING}
+RewriteRule ^maintenance_ticket/maintenance_ticket_list index.php?module=$0&page=m-maintenance_ticket_list
+
+RewriteRule ^maintenance_ticket/maintenance_ticket_edit&(.*)$ index.php?module=$0&page=m-maintenance_ticket_add&%{QUERY_STRING} [L]
+RewriteRule ^maintenance_ticket/maintenance_ticket_edit index.php?module=$0&page=m-maintenance_ticket_add
+
+RewriteRule ^maintenance_ticket/maintenance_ticket_add? index.php?module=$0&page=m-maintenance_ticket_add&%{QUERY_STRING}
+RewriteRule ^maintenance_ticket/maintenance_ticket_add index.php?module=$0&page=m-maintenance_ticket_add
+#----------- Maintenance Ticket ------------
+
 #Speed Up using Caching
 # ----------------------------------
 # BEGIN Compress text files

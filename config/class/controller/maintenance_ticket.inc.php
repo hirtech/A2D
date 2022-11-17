@@ -1,6 +1,6 @@
 <?php
 include_once("security_audit_log.inc.php");
-class TroubleTicket {
+class MaintenanceTicket {
 
 	var $join_field = array();
 	var $join = array();
@@ -18,7 +18,7 @@ class TroubleTicket {
 	var $limit_clause = "";
 	var $debug_query = false;
 	
-	function TroubleTicket() {
+	function MaintenanceTicket() {
 		$this->SALObj = new Security_audit_log();
 	}
 	
@@ -68,7 +68,7 @@ class TroubleTicket {
 	{
 		global $sqlObj;
 			
-		$sql = "SELECT trouble_ticket.* ".$this->join_field_str." FROM trouble_ticket".$this->join_clause.$this->where_clause.$this->group_by_clause.$this->order_by_clause.$this->limit_clause;
+		$sql = "SELECT maintenance_ticket.* ".$this->join_field_str." FROM maintenance_ticket".$this->join_clause.$this->where_clause.$this->group_by_clause.$this->order_by_clause.$this->limit_clause;
 		$rs_db = $sqlObj->GetAll($sql);
 		//echo $sql;exit;
 		//echo "<pre>";print_r($rs_db);exit;
@@ -79,7 +79,7 @@ class TroubleTicket {
 	{
 		global $sqlObj;
 			
-		$sql = "SELECT trouble_ticket.* ".$this->join_field_str." FROM trouble_ticket".$this->join_clause.$this->where_clause.$this->group_by_clause;
+		$sql = "SELECT maintenance_ticket.* ".$this->join_field_str." FROM maintenance_ticket".$this->join_clause.$this->where_clause.$this->group_by_clause;
 		//$rs_db = $sqlObj->GetAll($sql);
 		//return count($rs_db);
 		$rs_db = $sqlObj->Execute($sql);
@@ -94,10 +94,10 @@ class TroubleTicket {
 	function delete_records($id){
 		global $sqlObj;
 		
-		$sql_del = "DELETE FROM trouble_ticket WHERE trouble_ticket.\"iTroubleTicketId\" IN (".$id.")";
+		$sql_del = "DELETE FROM maintenance_ticket WHERE maintenance_ticket.\"iMaintenanceTicketId\" IN (".$id.")";
 		$rs_del = $sqlObj->Execute($sql_del);
 		if($rs_del){
-			$sql = "DELETE FROM trouble_ticket_premise WHERE trouble_ticket_premise.\"iTroubleTicketId\" IN (".$id.")";
+			$sql = "DELETE FROM maintenance_ticket_premise WHERE maintenance_ticket_premise.\"iMaintenanceTicketId\" IN (".$id.")";
 			$rs = $sqlObj->Execute($sql);
 		}
 		return $rs_del;
@@ -107,36 +107,36 @@ class TroubleTicket {
 		global $sqlObj;
 		if($this->insert_arr){
 			//echo"<pre>";print_r($this->insert_arr);exit;
-			$sql = "INSERT INTO trouble_ticket(\"iAssignedToId\", \"iServiceOrderId\", \"iSeverity\", \"iStatus\", \"dCompletionDate\", \"tDescription\", \"dAddedDate\") VALUES (".gen_allow_null_char($this->insert_arr['iAssignedToId']).", ".gen_allow_null_char($this->insert_arr['iServiceOrderId']).", ".gen_allow_null_char($this->insert_arr['iSeverity']).", ".gen_allow_null_char($this->insert_arr['iStatus']).", ".gen_allow_null_char($this->insert_arr['dCompletionDate']).", ".gen_allow_null_char($this->insert_arr['tDescription']).",".gen_allow_null_char(date_getSystemDateTime()).")";
+			$sql = "INSERT INTO maintenance_ticket(\"iAssignedToId\", \"iServiceOrderId\", \"iSeverity\", \"iStatus\", \"dCompletionDate\", \"tDescription\", \"dAddedDate\") VALUES (".gen_allow_null_char($this->insert_arr['iAssignedToId']).", ".gen_allow_null_char($this->insert_arr['iServiceOrderId']).", ".gen_allow_null_char($this->insert_arr['iSeverity']).", ".gen_allow_null_char($this->insert_arr['iStatus']).", ".gen_allow_null_char($this->insert_arr['dCompletionDate']).", ".gen_allow_null_char($this->insert_arr['tDescription']).",".gen_allow_null_char(date_getSystemDateTime()).")";
 			//echo $sql;exit;
 			$sqlObj->Execute($sql);		
-			$iTroubleTicketId = $sqlObj->Insert_ID();
-			if($iTroubleTicketId > 0){
+			$iMaintenanceTicketId = $sqlObj->Insert_ID();
+			if($iMaintenanceTicketId > 0){
 				$premise_length = $this->insert_arr['premise_length'];
 				if($premise_length > 0){
-					$sql = "INSERT INTO trouble_ticket_premise(\"iTroubleTicketId\",\"iPremiseId\", \"dTroubleStartDate\", \"dResolvedDate\", \"dAddedDate\", \"dModifiedDate\") VALUES ";
+					$sql = "INSERT INTO maintenance_ticket_premise(\"iMaintenanceTicketId\",\"iPremiseId\", \"dMaintenanceStartDate\", \"dResolvedDate\", \"dAddedDate\", \"dModifiedDate\") VALUES ";
 					for($i=0; $i<$premise_length; $i++){
 						$iPremiseId = $this->insert_arr['iPremiseId'][$i];
-						$dTroubleStartDate = '';
+						$dMaintenanceStartDate = '';
 						$dResolvedDate = '';
-						if($this->insert_arr['dTroubleStartDate'][$i] != '')
-							$dTroubleStartDate = $this->insert_arr['dTroubleStartDate'][$i]." ".date('H:i:s');
+						if($this->insert_arr['dMaintenanceStartDate'][$i] != '')
+							$dMaintenanceStartDate = $this->insert_arr['dMaintenanceStartDate'][$i]." ".date('H:i:s');
 						if($this->insert_arr['dResolvedDate'][$i] != '')
 							$dResolvedDate =  $this->insert_arr['dResolvedDate'][$i]." ".date('H:i:s');
 
-						$sql .= "(".gen_allow_null_int($iTroubleTicketId).", ".gen_allow_null_int($iPremiseId).", ".gen_allow_null_char($dTroubleStartDate).", ".gen_allow_null_char($dResolvedDate).",".gen_allow_null_char(date_getSystemDateTime()).",".gen_allow_null_char(date_getSystemDateTime())."), ";
+						$sql .= "(".gen_allow_null_int($iMaintenanceTicketId).", ".gen_allow_null_int($iPremiseId).", ".gen_allow_null_char($dMaintenanceStartDate).", ".gen_allow_null_char($dResolvedDate).",".gen_allow_null_char(date_getSystemDateTime()).",".gen_allow_null_char(date_getSystemDateTime())."), ";
 					}
 					$sqlObj->Execute(substr($sql, 0, -2));
 				}
 			}
-			return $iTroubleTicketId;
+			return $iMaintenanceTicketId;
 		}
 	}
 
 	function update_records(){
 		global $sqlObj, $site_path;
 		if($this->update_arr){
-			$rs_db = "UPDATE trouble_ticket SET 
+			$rs_db = "UPDATE maintenance_ticket SET 
 			\"iAssignedToId\"=".gen_allow_null_char($this->update_arr['iAssignedToId']).", 
 			\"iServiceOrderId\"=".gen_allow_null_char($this->update_arr['iServiceOrderId']).", 
 			\"iSeverity\"=".gen_allow_null_char($this->update_arr['iSeverity']).", 
@@ -144,29 +144,29 @@ class TroubleTicket {
 			\"dCompletionDate\"=".gen_allow_null_char($this->update_arr['dCompletionDate']).", 
 			\"tDescription\"=".gen_allow_null_char($this->update_arr['tDescription']).", 
 			\"dModifiedDate\"=".gen_allow_null_char(date_getSystemDateTime())."
-			WHERE \"iTroubleTicketId\" = ".$this->update_arr['iTroubleTicketId'];
+			WHERE \"iMaintenanceTicketId\" = ".$this->update_arr['iMaintenanceTicketId'];
 			//echo $rs_db;exit;
 			$sqlObj->Execute($rs_db);
 			$rs_up = $sqlObj->Affected_Rows();
 			if($rs_up) {
-				$iTroubleTicketId = $this->update_arr['iTroubleTicketId'];
+				$iMaintenanceTicketId = $this->update_arr['iMaintenanceTicketId'];
 				$premise_length = $this->update_arr['premise_length'];
 
-				$sql_del = "DELETE FROM trouble_ticket_premise WHERE trouble_ticket_premise.\"iTroubleTicketId\" = '".$iTroubleTicketId."'";
+				$sql_del = "DELETE FROM maintenance_ticket_premise WHERE maintenance_ticket_premise.\"iMaintenanceTicketId\" = '".$iMaintenanceTicketId."'";
 				$rs_del = $sqlObj->Execute($sql_del);
 
 				if($premise_length > 0){
-					$sql = "INSERT INTO trouble_ticket_premise(\"iTroubleTicketId\",\"iPremiseId\", \"dTroubleStartDate\", \"dResolvedDate\", \"dAddedDate\", \"dModifiedDate\") VALUES ";
+					$sql = "INSERT INTO maintenance_ticket_premise(\"iMaintenanceTicketId\",\"iPremiseId\", \"dMaintenanceStartDate\", \"dResolvedDate\", \"dAddedDate\", \"dModifiedDate\") VALUES ";
 					for($i=0; $i<$premise_length; $i++){
 						$iPremiseId = $this->update_arr['iPremiseId'][$i];
-						$dTroubleStartDate = '';
+						$dMaintenanceStartDate = '';
 						$dResolvedDate = '';
-						if($this->update_arr['dTroubleStartDate'][$i] != '')
-							$dTroubleStartDate = $this->update_arr['dTroubleStartDate'][$i]." ".date('H:i:s');
+						if($this->update_arr['dMaintenanceStartDate'][$i] != '')
+							$dMaintenanceStartDate = $this->update_arr['dMaintenanceStartDate'][$i]." ".date('H:i:s');
 						if($this->update_arr['dResolvedDate'][$i] != '')
 							$dResolvedDate =  $this->update_arr['dResolvedDate'][$i]." ".date('H:i:s');
 
-						$sql .= "(".gen_allow_null_int($iTroubleTicketId).", ".gen_allow_null_int($iPremiseId).", ".gen_allow_null_char($dTroubleStartDate).", ".gen_allow_null_char($dResolvedDate).",".gen_allow_null_char(date_getSystemDateTime()).",".gen_allow_null_char(date_getSystemDateTime())."), ";
+						$sql .= "(".gen_allow_null_int($iMaintenanceTicketId).", ".gen_allow_null_int($iPremiseId).", ".gen_allow_null_char($dMaintenanceStartDate).", ".gen_allow_null_char($dResolvedDate).",".gen_allow_null_char(date_getSystemDateTime()).",".gen_allow_null_char(date_getSystemDateTime())."), ";
 					}
 					//echo $sql;exit;
 					$sqlObj->Execute(substr($sql, 0, -2));
@@ -177,11 +177,11 @@ class TroubleTicket {
 		}
 	}
 
-	function trouble_ticket_premise_recordset_list()
+	function maintenance_ticket_premise_recordset_list()
 	{
 		global $sqlObj;
 			
-		$sql = "SELECT trouble_ticket_premise.* ".$this->join_field_str." FROM trouble_ticket_premise".$this->join_clause.$this->where_clause.$this->group_by_clause.$this->order_by_clause.$this->limit_clause;
+		$sql = "SELECT maintenance_ticket_premise.* ".$this->join_field_str." FROM maintenance_ticket_premise".$this->join_clause.$this->where_clause.$this->group_by_clause.$this->order_by_clause.$this->limit_clause;
 		$rs_db = $sqlObj->GetAll($sql);
 		//echo $sql;exit;
 		//echo "<pre>";print_r($rs_db);exit;

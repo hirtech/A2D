@@ -2,11 +2,11 @@
 //echo "<pre>";print_r($_POST);exit;
 include_once($site_path . "scripts/session_valid.php");
 # ----------- Access Rule Condition -----------
-per_hasModuleAccess("Trouble Ticket", 'List');
-$access_group_var_delete = per_hasModuleAccess("Trouble Ticket", 'Delete', 'N');
-$access_group_var_status = per_hasModuleAccess("Trouble Ticket", 'Status', 'N');
-$access_group_var_add = per_hasModuleAccess("Trouble Ticket", 'Add', 'N');
-$access_group_var_edit = per_hasModuleAccess("Trouble Ticket", 'Edit', 'N');
+per_hasModuleAccess("Maintenance Ticket", 'List');
+$access_group_var_delete = per_hasModuleAccess("Maintenance Ticket", 'Delete', 'N');
+$access_group_var_status = per_hasModuleAccess("Maintenance Ticket", 'Status', 'N');
+$access_group_var_add = per_hasModuleAccess("Maintenance Ticket", 'Add', 'N');
+$access_group_var_edit = per_hasModuleAccess("Maintenance Ticket", 'Edit', 'N');
 # ----------- Access Rule Condition -----------
 # ------------------------------------------------------------
 # General Variables
@@ -19,7 +19,7 @@ $display_order = (isset($_REQUEST["iSortCol_0"]) ? $_REQUEST["iSortCol_0"] : '0'
 $dir = (isset($_REQUEST["sSortDir_0"]) ? $_REQUEST["sSortDir_0"] : 'desc');
 # ------------------------------------------------------------
 
-$iTroubleTicketId = $_POST['iTroubleTicketId'];
+$iMaintenanceTicketId = $_POST['iMaintenanceTicketId'];
 
 if($mode == "List"){
     $arr_param = array();
@@ -55,7 +55,7 @@ if($mode == "List"){
 
     $arr_param['sessionId']     = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
     
-    $API_URL = $site_api_url."trouble_ticket_list.json";
+    $API_URL = $site_api_url."maintenance_ticket_list.json";
     //echo $API_URL. " ".json_encode($arr_param);exit;
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $API_URL);
@@ -77,52 +77,52 @@ if($mode == "List"){
     $total = $result_arr['result']['total_record'];
     $jsonData = array('sEcho' => $sEcho, 'iTotalDisplayRecords' => $total, 'iTotalRecords' => $total, 'aaData' => array());
     $entry = $hidden_arr = array();
-    $rs_trouble_ticket = $result_arr['result']['data'];
+    $rs_maintenance_ticket = $result_arr['result']['data'];
     //echo "<pre>";print_r($result_arr);exit;
-	$ni = count($rs_trouble_ticket);
+	$ni = count($rs_maintenance_ticket);
     if($ni > 0){
         for($i=0;$i<$ni;$i++){
             $action = '';
             if($access_group_var_edit == "1"){
-                $action .= '<a class="btn btn-outline-secondary" title="Edit" href="'.$site_url.'trouble_ticket/trouble_ticket_edit&mode=Update&iTroubleTicketId=' . $rs_trouble_ticket[$i]['iTroubleTicketId'] . '"><i class="fa fa-edit"></i></a>';
+                $action .= '<a class="btn btn-outline-secondary" title="Edit" href="'.$site_url.'maintenance_ticket/maintenance_ticket_edit&mode=Update&iMaintenanceTicketId=' . $rs_maintenance_ticket[$i]['iMaintenanceTicketId'] . '"><i class="fa fa-edit"></i></a>';
             }
             if ($access_group_var_delete == "1") {
-               $action .= ' <a class="btn btn-outline-danger" title="Delete" href="javascript:void(0);" onclick="delete_record('.$rs_trouble_ticket[$i]['iTroubleTicketId'].');"><i class="fa fa-trash"></i></a>';
+               $action .= ' <a class="btn btn-outline-danger" title="Delete" href="javascript:void(0);" onclick="delete_record('.$rs_maintenance_ticket[$i]['iMaintenanceTicketId'].');"><i class="fa fa-trash"></i></a>';
             }
 
             $iSeverity = '---';
-            if($rs_trouble_ticket[$i]['iSeverity'] == 1){
+            if($rs_maintenance_ticket[$i]['iSeverity'] == 1){
                $iSeverity = "Low"; 
-            }else if($rs_trouble_ticket[$i]['iSeverity'] == 2){
+            }else if($rs_maintenance_ticket[$i]['iSeverity'] == 2){
                $iSeverity = "Medium"; 
-            }else if($rs_trouble_ticket[$i]['iSeverity'] == 3){
+            }else if($rs_maintenance_ticket[$i]['iSeverity'] == 3){
                $iSeverity = "High"; 
-            }else if($rs_trouble_ticket[$i]['iSeverity'] == 4){
+            }else if($rs_maintenance_ticket[$i]['iSeverity'] == 4){
                $iSeverity = "Critical"; 
             }
 
             $iStatus = '---';
-            if($rs_trouble_ticket[$i]['iStatus'] == 1){
+            if($rs_maintenance_ticket[$i]['iStatus'] == 1){
                $iStatus = "Not Started"; 
-            }else if($rs_trouble_ticket[$i]['iStatus'] == 2){
+            }else if($rs_maintenance_ticket[$i]['iStatus'] == 2){
                $iStatus = "In Progress"; 
-            }else if($rs_trouble_ticket[$i]['iStatus'] == 3){
+            }else if($rs_maintenance_ticket[$i]['iStatus'] == 3){
                $iStatus = "Completed"; 
             }
 
             $vServiceDetails = '';
-            if($rs_trouble_ticket[$i]['iServiceOrderId'] != ""){
-                $vServiceDetails .= "SO #".$rs_trouble_ticket[$i]['iServiceOrderId'].": ".$rs_trouble_ticket[$i]['vServiceOrder'];
+            if($rs_maintenance_ticket[$i]['iServiceOrderId'] != ""){
+                $vServiceDetails .= "SO #".$rs_maintenance_ticket[$i]['iServiceOrderId'].": ".$rs_maintenance_ticket[$i]['vServiceOrder'];
             }
 
             $entry[] = array(
-                "iTroubleTicketId"      => $rs_trouble_ticket[$i]['iTroubleTicketId'],
-                "vAssignedTo"           => $rs_trouble_ticket[$i]['vAssignedTo'],
+                "iMaintenanceTicketId"  => $rs_maintenance_ticket[$i]['iMaintenanceTicketId'],
+                "vAssignedTo"           => $rs_maintenance_ticket[$i]['vAssignedTo'],
                 "vServiceOrder"         => $vServiceDetails,
                 "iSeverity"             => $iSeverity,
                 "iStatus"               => '<span class="badge badge-'.$status_color[$iStatus].'">'.$iStatus.'<span>',
-                "dCompletionDate"       => date_getDateTimeDDMMYYYY($rs_trouble_ticket[$i]['dCompletionDate']),
-                "tDescription"          => nl2br($rs_trouble_ticket[$i]['tDescription']),
+                "dCompletionDate"       => date_getDateTimeDDMMYYYY($rs_maintenance_ticket[$i]['dCompletionDate']),
+                "tDescription"          => nl2br($rs_maintenance_ticket[$i]['tDescription']),
                 "actions"               => ($action != "") ? $action : "---"
             );
         }
@@ -136,11 +136,11 @@ if($mode == "List"){
 } else if($mode == "Delete"){
     $result = array();
     $arr_param = array();
-    $iTroubleTicketId = $_POST['iTroubleTicketId'];
+    $iMaintenanceTicketId = $_POST['iMaintenanceTicketId'];
     
-    $arr_param['iTroubleTicketId']      = $iTroubleTicketId; 
+    $arr_param['iMaintenanceTicketId']      = $iMaintenanceTicketId; 
     $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
-    $API_URL = $site_api_url."trouble_ticket_delete.json";
+    $API_URL = $site_api_url."maintenance_ticket_delete.json";
     //echo $API_URL." ".json_encode($arr_param);exit();
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $API_URL);
@@ -174,20 +174,20 @@ if($mode == "List"){
     $arr_param = array();
     if (isset($_POST) && count($_POST) > 0) {
         $arr_param = array(
-            "iTroubleTicketId"  => $_POST['iTroubleTicketId'],
-            "iAssignedToId"     => $_POST['iAssignedToId'],
-            "iServiceOrderId"   => $_POST['search_iServiceOrderId'],
-            "iSeverity"         => $_POST['iSeverity'],
-            "iStatus"           => $_POST['iStatus'],
-            "dCompletionDate"   => $_POST['dCompletionDate'],
-            "tDescription"      => $_POST['tDescription'],
-            "premise_length"    => $_POST['premise_length'],
-            "iPremiseId"        => $_POST['iPremiseId'],
-            "dTroubleStartDate" => $_POST['dTroubleStartDate'],
-            "dResolvedDate"     => $_POST['dResolvedDate'],
-            "sessionId"         => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
+            "iMaintenanceTicketId"  => $_POST['iMaintenanceTicketId'],
+            "iAssignedToId"         => $_POST['iAssignedToId'],
+            "iServiceOrderId"       => $_POST['search_iServiceOrderId'],
+            "iSeverity"             => $_POST['iSeverity'],
+            "iStatus"               => $_POST['iStatus'],
+            "dCompletionDate"       => $_POST['dCompletionDate'],
+            "tDescription"          => $_POST['tDescription'],
+            "premise_length"        => $_POST['premise_length'],
+            "iPremiseId"            => $_POST['iPremiseId'],
+            "dMaintenanceStartDate" => $_POST['dMaintenanceStartDate'],
+            "dResolvedDate"         => $_POST['dResolvedDate'],
+            "sessionId"             => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
         );
-        $API_URL = $site_api_url."trouble_ticket_edit.json";
+        $API_URL = $site_api_url."maintenance_ticket_edit.json";
         //echo $API_URL. " ".json_encode($arr_param);exit;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $API_URL);
@@ -228,20 +228,20 @@ if($mode == "List"){
 
     if (isset($_POST) && count($_POST) > 0) {
         $arr_param = array(
-            "iAssignedToId"     => $_POST['iAssignedToId'],
-            "iServiceOrderId"   => $_POST['search_iServiceOrderId'],
-            "iSeverity"         => $_POST['iSeverity'],
-            "iStatus"           => $_POST['iStatus'],
-            "dCompletionDate"   => $_POST['dCompletionDate'],
-            "tDescription"      => $_POST['tDescription'],
-            "premise_length"    => $_POST['premise_length'],
-            "iPremiseId"        => $_POST['iPremiseId'],
-            "dTroubleStartDate" => $_POST['dTroubleStartDate'],
-            "dResolvedDate"     => $_POST['dResolvedDate'],
-            "sessionId"         => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
+            "iAssignedToId"         => $_POST['iAssignedToId'],
+            "iServiceOrderId"       => $_POST['search_iServiceOrderId'],
+            "iSeverity"             => $_POST['iSeverity'],
+            "iStatus"               => $_POST['iStatus'],
+            "dCompletionDate"       => $_POST['dCompletionDate'],
+            "tDescription"          => $_POST['tDescription'],
+            "premise_length"        => $_POST['premise_length'],
+            "iPremiseId"            => $_POST['iPremiseId'],
+            "dMaintenanceStartDate" => $_POST['dMaintenanceStartDate'],
+            "dResolvedDate"         => $_POST['dResolvedDate'],
+            "sessionId"             => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
         );
 
-        $API_URL = $site_api_url."trouble_ticket_add.json";
+        $API_URL = $site_api_url."maintenance_ticket_add.json";
         //echo $API_URL." ".json_encode($arr_param);exit();
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $API_URL);
@@ -325,8 +325,8 @@ $rs_so = $rs_so1['result'];
 $smarty->assign("rs_so", $rs_so);
 ## --------------------------------
 
-$module_name = "Trouble Ticket List";
-$module_title = "Trouble Ticket";
+$module_name = "Maintenance Ticket List";
+$module_title = "Maintenance Ticket";
 $smarty->assign("module_name", $module_name);
 $smarty->assign("module_title", $module_title);
 $smarty->assign("access_group_var_add", $access_group_var_add);

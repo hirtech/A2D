@@ -5,11 +5,11 @@
 				<div class="user_list_header">
 					<h4 class="card-title float-left">{$module_name}</h4>
 
-					<form id="frmlist" name="frmlist" class="trouble_ticket_search_form">
+					<form id="frmlist" name="frmlist" class="maintenance_ticket_search_form">
 						<ul class="nav search-links float-right">
 							<li>
 								<select id="vOptions" name="vOptions" class="form-control">
-                  					<option value="iTroubleTicketId">ID</option>
+                  					<option value="iMaintenanceTicketId">ID</option>
 									<option value="vAssignedTo">Assigned To</option>
 									<option value="vServiceOrder">ServiceOrder</option>
 								</select>
@@ -32,7 +32,7 @@
                     <div class="center">
                         <a data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample" id="anchor_adv_search">Adv. Search <i class="fas fa-caret-down"></i>
                         </a>
-                        <div class="collapse" id="collapseExample"> {include file="top/top_trouble_ticket_advance_search.tpl"} </div>
+                        <div class="collapse" id="collapseExample"> {include file="top/top_maintenance_ticket_advance_search.tpl"} </div>
                     </div>
                 </div>
             </div>
@@ -60,9 +60,9 @@
 	</div> 
 </div>
 <script type="text/javascript">
-	var ajax_url = 'trouble_ticket/trouble_ticket_list&mode=List';
+	var ajax_url = 'maintenance_ticket/maintenance_ticket_list&mode=List';
 	var access_group_var_add= '{$access_group_var_add}';
 </script>
-<script src="assets/js/app_js/trouble_ticket.js"></script>
+<script src="assets/js/app_js/maintenance_ticket.js"></script>
 {include file="general/dataTables.tpl"}
 

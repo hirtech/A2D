@@ -1,5 +1,5 @@
 <div class="card card-body">
-    <form id="advfrm" name="advfrm" class="trouble_ticket_search_form">
+    <form id="advfrm" name="advfrm" class="maintenance_ticket_search_form">
         <div class="form-row">
             <div class="form-group col-md-4">
                 <label for="inputEmail4">Assigned To</label>
