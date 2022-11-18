@@ -116,7 +116,7 @@ $smarty->assign("js_date_picker_date",  date("y-m-d"));
 //echo "<pre>111111111";print_r($_SESSION);exit;
 //echo $COMPANY_COPYRIGHTS;exit();
 $smarty_array[] = '';
-$smarty_array = array_merge($smarty_array, array("SUPPORT_EMAIL", "SHOW_SAVING", "banner_url", "page_title","file", "msgs", "site_images", "site_style", "script", "file", "top_banner", "middle", "site_url", "module","module_prefix", "var_msg", "sslash", "aslash","hentites", "adminfolder", "page", "section", "stylesheet_name", "admin_url", "SITE_TITLE", "site_images_url","META_KEYWORD", "META_DESCRIPTION", "LOGO_ALT_TEXT", "META_OTHER","prefix", "REC_LIMIT","access_group_var_delete","access_group_var_status","access_group_var_add","access_group_var_edit", "access_group_var_PDF", "access_group_var_CSV","access_group_var_Respond", "page_module", "access_group_var_Calsurv", "device_detect", "user_url", "user_path", "admin_user_path", "admin_user_url", "domain_name", "domain_url", "site_api_url"));
+$smarty_array = array_merge($smarty_array, array("SUPPORT_EMAIL", "SHOW_SAVING", "banner_url", "page_title","file", "msgs", "site_images", "site_style", "script", "file", "top_banner", "middle", "site_url", "module","module_prefix", "var_msg", "sslash", "aslash","hentites", "adminfolder", "page", "section", "stylesheet_name", "admin_url", "SITE_TITLE", "site_images_url","META_KEYWORD", "META_DESCRIPTION", "LOGO_ALT_TEXT", "META_OTHER","prefix", "REC_LIMIT","access_group_var_delete","access_group_var_status","access_group_var_add","access_group_var_edit", "access_group_var_PDF", "access_group_var_CSV","access_group_var_Respond", "page_module", "access_group_var_Calsurv", "device_detect", "user_url", "user_path", "site_api_url"));
 
 for($k=0;$k<count($smarty_array);$k++)
 {

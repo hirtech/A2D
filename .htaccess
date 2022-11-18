@@ -28,6 +28,7 @@ RewriteBase /eCommunityfiber/
 
 RewriteRule ^api/v2/(.*) request_api_v2.php?version=v2
 
+
 RewriteRule ^ajax.php? ajax.php
 
 #Admin Login Module Rules
@@ -102,6 +103,7 @@ RewriteRule ^master/state_list index.php?module=$0&page=m-state_list
 RewriteRule ^master/city_list? index.php?module=$0&page=m-city_list&%{QUERY_STRING}
 RewriteRule ^master/city_list index.php?module=$0&page=m-city_list
 #---------------------
+
 #---------------------
 #Engagement Master
 RewriteRule ^master/engagement_list? index.php?module=$0&page=m-engagement_list&%{QUERY_STRING}
@@ -167,7 +169,7 @@ RewriteRule ^premise/history index.php?module=$0&page=m-premise_history
 
 #---------------------
 #Service Order
-RewriteRule ^service_order/list? index.php?module=$0&page=m-service_order_list&%{QUERY_STRING}
+RewriteRule ^service_order/list&(.*)$ index.php?module=$0&page=m-service_order_list&%{QUERY_STRING}
 RewriteRule ^service_order/list index.php?module=$0&page=m-service_order_list
 RewriteRule ^service_order/edit&(.*)$ index.php?module=$0&page=m-service_order_add&%{QUERY_STRING} [L]
 RewriteRule ^service_order/edit index.php?module=$0&page=m-service_order_add
@@ -200,42 +202,6 @@ RewriteRule ^service_order/equipment_add&(.*)$ index.php?module=$0&page=m-equipm
 RewriteRule ^service_order/equipment_add index.php?module=$0&page=m-equipment_add
 #---------------------
 
-#------Treatment Product-------------
-RewriteRule ^master/treatment_product_list&(.*)$ index.php?module=$0&page=m-treatment_product_list&%{QUERY_STRING}
-RewriteRule ^master/treatment_product_list index.php?module=$0&page=m-treatment_product_list
-#---------------------
-
-#---------------------
-#Task Larval Surveillance
-RewriteRule ^tasks/task_larval_surveillance_list&(.*)$ index.php?module=$0&page=m-task_larval_surveillance_list&%{QUERY_STRING}
-RewriteRule ^tasks/task_larval_surveillance_list index.php?module=$0&page=m-task_larval_surveillance_list
-#---------------------
-
-#---------------------
-#Task Landing Rate
-RewriteRule ^tasks/task_landing_rate_list&(.*)$  index.php?module=$0&page=m-task_landing_rate_list&%{QUERY_STRING}
-RewriteRule ^tasks/task_landing_rate_list index.php?module=$0&page=m-task_landing_rate_list
-#---------------------
-
-#---------------------
-#Task Trap
-RewriteRule ^tasks/task_trap_list?(.*)$  index.php?module=$0&page=m-task_trap_list&%{QUERY_STRING}
-RewriteRule ^tasks/task_trap_list&(.*)$  index.php?module=$0&page=m-task_trap_list&%{QUERY_STRING}
-RewriteRule ^tasks/task_trap_list index.php?module=$0&page=m-task_trap_list
-#---------------------
-
-#---------------------
-#Task Other
-RewriteRule ^tasks/task_other_list&(.*)$  index.php?module=$0&page=m-task_other_list&%{QUERY_STRING}
-RewriteRule ^tasks/task_other_list index.php?module=$0&page=m-task_other_list
-#---------------------
-
-#---------------------
-#Task Treatment
-RewriteRule ^tasks/task_treatment_list&(.*)$  index.php?module=$0&page=t-task_treatment_list&%{QUERY_STRING}
-RewriteRule ^tasks/task_treatment_list index.php?module=$0&page=t-task_treatment_list
-#---------------------
-
 #---------------------
 #Task Awarness
 RewriteRule ^tasks/task_awareness_list&(.*)$  index.php?module=$0&page=m-task_awareness_list&%{QUERY_STRING}
@@ -265,13 +231,6 @@ RewriteRule ^fiber_inquiry/add? index.php?module=$0&page=m-fiber_inquiry_add&%{Q
 RewriteRule ^fiber_inquiry/add index.php?module=$0&page=m-fiber_inquiry_add
 #---------------------
 
-
-#---------------------
-#Technician Map
-RewriteRule ^map/field? index.php?module=$0&page=m-technician&%{QUERY_STRING}
-RewriteRule ^map/field index.php?module=$0&page=m-technician
-#---------------------
-
 # Contact Modules Rules
 RewriteRule ^contact/list? index.php?module=$0&page=c-contact_list&%{QUERY_STRING}
 RewriteRule ^contact/list index.php?module=$0&page=c-contact_list
@@ -281,24 +240,6 @@ RewriteRule ^contact/add?(.*)$ index.php?module=$0&page=c-contact_add&%{QUERY_ST
 RewriteRule ^contact/add&(.*)$ index.php?module=$0&page=c-contact_add&%{QUERY_STRING}
 RewriteRule ^contact/add index.php?module=$0&page=c-contact_add
 #---------------------
-
-#---------Mosquito count trap------------
-RewriteRule ^lab_task/mosquito_count_list&(.*)$  index.php?module=$0&page=m-mosquito_count_list&%{QUERY_STRING}
-RewriteRule ^lab_task/mosquito_count_list index.php?module=$0&page=m-mosquito_count_list
-
-RewriteRule ^lab_task/task_mosquito_count&(.*)$ index.php?module=$0&page=m-task_mosquito_count&%{QUERY_STRING} [L]
-RewriteRule ^lab_task/task_mosquito_count index.php?module=$0&page=m-task_mosquito_count
-#----------------------------------------
-
-#---------Mosquito Pool------------
-RewriteRule ^lab_task/mosquito_pool_list&(.*)$  index.php?module=$0&page=m-mosquito_pool_list&%{QUERY_STRING}
-RewriteRule ^lab_task/mosquito_pool_list index.php?module=$0&page=m-mosquito_pool_list
-
-RewriteRule ^lab_task/manage_mosquito_pool_result&(.*)$ index.php?module=$0&page=m-manage_mosquito_pool_result&%{QUERY_STRING} [L]
-RewriteRule ^lab_task/manage_mosquito_pool_result index.php?module=$0&page=m-manage_mosquito_pool_result
-#----------------------------------------
-
-
 
 #---------Reports >> Pie Charts------------
 RewriteRule ^reports/pie_charts? index.php?module=$0&page=m-pie_charts&%{QUERY_STRING}
@@ -316,54 +257,10 @@ RewriteRule ^reports/heat_map index.php?module=$0&page=m-heat_map
 #-------------------------------------------
 
 #---------------------
-#Help
-RewriteRule ^help/list? index.php?module=$0&page=m-help_list&%{QUERY_STRING}
-RewriteRule ^help/list index.php?module=$0&page=m-help_list
-#---------------------
-
-#---------------------
+# Map Module
 RewriteRule ^vmap/index? index.php?module=$0&page=c-index&%{QUERY_STRING}
 RewriteRule ^vmap/api? index.php?module=$0&page=c-api&%{QUERY_STRING}
-# Map Module
-
-
-#-----County User----------------
-RewriteRule ^master/county_user_list? index.php?module=$0&page=m-county_user_list&%{QUERY_STRING}
-RewriteRule ^master/county_user_list index.php?module=$0&page=m-county_user_list
-RewriteRule ^master/county_user_edit&(.*)$ index.php?module=$0&page=m-county_user_add&%{QUERY_STRING} [L]
-RewriteRule ^master/county_user_edit index.php?module=$0&page=m-county_user_add
-RewriteRule ^master/county_user_add? index.php?module=$0&page=m-county_user_add&%{QUERY_STRING}
-RewriteRule ^master/county_user_add index.php?module=$0&page=m-county_user_add
 #---------------------
-
-#---------------------
-#Access group 
-RewriteRule ^master/county_access_group_list? index.php?module=$0&page=m-county_access_group_list&%{QUERY_STRING}
-RewriteRule ^master/county_access_group_list index.php?module=$0&page=m-county_access_group_list
-RewriteRule ^master/county_access_group_add&(.*)$ index.php?module=$0&page=m-county_access_group_add&%{QUERY_STRING}
-RewriteRule ^master/county_access_group_add index.php?module=$0&page=m-county_access_group_add
-#--------------------------
-
-#---------------------
-# Admin User Modules Rules
-RewriteRule ^master/admin_user_list? index.php?module=$0&page=m-admin_user_list&%{QUERY_STRING}
-RewriteRule ^master/admin_user_list index.php?module=$0&page=m-admin_user_list
-RewriteRule ^master/admin_user_edit&(.*)$ index.php?module=$0&page=m-admin_user_add&%{QUERY_STRING} [L]
-RewriteRule ^master/admin_user_edit index.php?module=$0&page=m-admin_user_add
-RewriteRule ^master/admin_user_add? index.php?module=$0&page=m-admin_user_add&%{QUERY_STRING}
-RewriteRule ^master/admin_user_add index.php?module=$0&page=m-admin_user_add
-#---------------------
-
-#---------------------
-#Admin User Login History
-RewriteRule ^master/admin_login_history_list&(.*)$ index.php?module=$0&page=m-admin_login_history&%{QUERY_STRING}
-RewriteRule ^master/admin_login_history_list index.php?module=$0&page=m-admin_login_history
-#---------------------
-
-#---------Import File---------------
-RewriteRule ^import/import_file? index.php?module=$0&page=i-import_file&%{QUERY_STRING}
-RewriteRule ^import/import_file index.php?module=$0&page=i-import_file
-#---------------------------------------------
 
 #-------Custom Layer------------
 RewriteRule ^custom_layer/custom_layer_list&(.*)$  index.php?module=$0&page=m-custom_layer_list&%{QUERY_STRING}
@@ -375,16 +272,6 @@ RewriteRule ^custom_layer/custom_layer_edit index.php?module=$0&page=m-custom_la
 RewriteRule ^custom_layer/custom_layer_add? index.php?module=$0&page=m-custom_layer_add&%{QUERY_STRING}
 RewriteRule ^custom_layer/custom_layer_add index.php?module=$0&page=m-custom_layer_add
 #---------------------
-
-#---------Inventory------------
-RewriteRule ^inventory/inventory_list? index.php?module=$0&page=m-inventory_list&%{QUERY_STRING}
-RewriteRule ^inventory/inventory_list&(.*)$  index.php?module=$0&page=m-inventory_list&%{QUERY_STRING}
-RewriteRule ^inventory/inventory_list index.php?module=$0&page=m-inventory_list
-
-RewriteRule ^inventory/inventory_detail&(.*)$  index.php?module=$0&page=m-inventory_detail&%{QUERY_STRING}
-RewriteRule ^inventory/inventory_detail? index.php?module=$0&page=m-inventory_detail&%{QUERY_STRING}
-RewriteRule ^inventory/inventory_detail index.php?module=$0&page=m-inventory_detail
-#------------------------------
 
 #----------- Network ------------
 RewriteRule ^network/network_list&(.*)$  index.php?module=$0&page=m-network_list&%{QUERY_STRING}

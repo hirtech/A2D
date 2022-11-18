@@ -1995,24 +1995,6 @@ switch($path) {
 			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
 		}
 		break;
-	case "help_headers." . $req_ext:
-			if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
-				$request_type = "help_headers";
-				$api_file_name = "help.php";
-				include_once($site_api_path . "api_authentication.php");
-			}else {
-				$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
-			}
-			break;
-	case "help_sliders." . $req_ext:
-		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
-			$request_type = "help_sliders";
-			$api_file_name = "help.php";
-			include_once($site_api_path . "api_authentication.php");
-		}else {
-			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
-		}
-		break;
 	case "task_trap_setLabWorkCount." . $req_ext:
 		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
 			$request_type = "task_trap_setLabWorkCount";
