@@ -723,6 +723,30 @@ class Site {
 			}
 		}
 
+		// Trouble Ticket
+		$sql = 'SELECT trouble_ticket_premise.*, \'TroubleTicket\' AS "Type" FROM trouble_ticket_premise LEFT JOIN trouble_ticket tt on trouble_ticket_premise."iTroubleTicketId" = tt."iTroubleTicketId" WHERE "iPremiseId" = '.$iPremiseId.' '.$this->group_by_clause .'order by tt."dAddedDate" desc'. $this->limit_clause;
+		$rs_st = $sqlObj->GetAll($sql);
+
+		$ni = count($rs_st);
+		if($ni > 0){
+			for($i=0;$i<$ni;$i++){
+				if($rs_st[$i]['dAddedDate'] !=  "")
+					$arr[strtotime($rs_st[$i]['dAddedDate'])][] = $rs_st[$i];
+			}
+		}
+
+		// Maintainance Ticket
+		$sql = 'SELECT maintenance_ticket_premise.*, \'MaintainanceTicket\' AS "Type" FROM maintenance_ticket_premise LEFT JOIN maintenance_ticket mt on maintenance_ticket_premise."iMaintenanceTicketId" = mt."iMaintenanceTicketId" WHERE "iPremiseId" = '.$iPremiseId.' '.$this->group_by_clause .'order by mt."dAddedDate" desc'. $this->limit_clause;
+		$rs_st = $sqlObj->GetAll($sql);
+
+		$ni = count($rs_st);
+		if($ni > 0){
+			for($i=0;$i<$ni;$i++){
+				if($rs_st[$i]['dAddedDate'] !=  "")
+					$arr[strtotime($rs_st[$i]['dAddedDate'])][] = $rs_st[$i];
+			}
+		}
+
 		krsort($arr);
 		//echo "<pre>";print_r($arr);exit;
 		$operation_arr = array();

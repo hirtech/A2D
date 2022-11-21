@@ -1153,6 +1153,12 @@ function info_popup(marker, siteid) {
 									}else if(item['Type'] == "WorkOrder") {
 										var wo_link = site_url+"service_order/workorder_add&mode=Update&iWOId="+item['id'];
 										content += "<span class='w-100 d-block  pb-2'><a href='"+wo_link+"' target='_blank'>" + item['Date'] + " " + item['Description'] + "</a></span>";
+									}else if(item['Type'] == "TroubleTicket") {
+										var tt_link = site_url+"trouble_ticket/trouble_ticket_edit&mode=Update&iTroubleTicketId="+item['id'];
+										content += "<span class='w-100 d-block  pb-2'><a href='"+tt_link+"' target='_blank'>" + item['Date'] + " " + item['Description'] + "</a></span>";
+									}else if(item['Type'] == "MaintainanceTicket") {
+										var mt_link = site_url+"/maintenance_ticket/maintenance_ticket_edit&mode=Update&iMaintenanceTicketId="+item['id'];
+										content += "<span class='w-100 d-block  pb-2'><a href='"+mt_link+"' target='_blank'>" + item['Date'] + " " + item['Description'] + "</a></span>";
 									}
 									
 								});

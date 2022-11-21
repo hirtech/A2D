@@ -4,12 +4,16 @@ include_once ($controller_path . "task_awareness.inc.php");
 include_once ($controller_path . "fiber_inquiry.inc.php");
 include_once ($controller_path . "service_order.inc.php");
 include_once ($controller_path . "workorder.inc.php");
+include_once ($controller_path . "trouble_ticket.inc.php");
+include_once ($controller_path . "maintenance_ticket.inc.php");
 # ------------------------------------------------------------
 $SiteObj = new Site();
 $TaskAwarenessObj = new TaskAwareness();
 $FiberInquiryObj = new FiberInquiry();
 $ServiceOrderObj = new ServiceOrder();
 $WorkOrderObj = new WorkOrder();
+$TroubleTicketObj = new TroubleTicket();
+$MaintenanceTicketObj = new MaintenanceTicket();
 if ($request_type == "premise_history") {
     $page_length    = isset($RES_PARA['page_length'])?trim($RES_PARA['page_length']):"";
     $start          = isset($RES_PARA['start'])?trim($RES_PARA['start']):"";
@@ -253,8 +257,126 @@ if ($request_type == "premise_history") {
                     $ind++;
                 }
             }
+
+            if ($val['Type'] == "TroubleTicket"){
+                $iTroubleTicketId = $val['iTroubleTicketId'];
+                $where_arr = array();
+                $join_fieds_arr = array();
+                $join_arr = array();
+                $where_arr[] = 'trouble_ticket_premise."iTroubleTicketId"=' . $iTroubleTicketId;
+                $where_arr[] = 'trouble_ticket_premise."iPremiseId"=' . $iPremiseId;
+                //$join_fieds_arr[] = " tt.\"vType\"";
+                $join_fieds_arr[] = "concat(u.\"vFirstName\", ' ', u.\"vLastName\") as \"vAssignedTo\" ";
+                $join_fieds_arr[] = "tt.\"iStatus\" ";
+                $join_fieds_arr[] = "tt.\"iSeverity\" ";
+                $join_fieds_arr[] = "tt.\"dAddedDate\" as added_date";
+                
+                $join_arr[] = 'LEFT JOIN trouble_ticket tt on trouble_ticket_premise."iTroubleTicketId" = tt."iTroubleTicketId"';
+                $join_arr[] = 'LEFT JOIN user_mas u on u."iUserId" = tt."iAssignedToId"';
+                $TroubleTicketObj->join_field = $join_fieds_arr;
+                $TroubleTicketObj->join = $join_arr;
+                $TroubleTicketObj->where = $where_arr;
+                $TroubleTicketObj->param['order_by'] = "tt.\"dAddedDate\" DESC";
+                $TroubleTicketObj->setClause();
+                $TroubleTicketObj->debug_query = false;
+                $tt_arr = $TroubleTicketObj->trouble_ticket_premise_recordset_list();
+                if (!empty($tt_arr)){
+                    $tt = count($tt_arr);
+                    for ($t=0;$t<$tt;$t++){
+
+                        $vSummary = '';
+                        $status = '---';
+                        $iSeverity = '---';
+                        if($tt_arr[$t]['iSeverity'] == 1){
+                           $iSeverity = "Low"; 
+                        }else if($tt_arr[$t]['iSeverity'] == 2){
+                           $iSeverity = "Medium"; 
+                        }else if($tt_arr[$t]['iSeverity'] == 3){
+                           $iSeverity = "High"; 
+                        }else if($tt_arr[$t]['iSeverity'] == 4){
+                           $iSeverity = "Critical"; 
+                        }
+
+                        if($tt_arr[$t]['iStatus'] == 1){
+                           $status = "Not Started"; 
+                        }else if($tt_arr[$t]['iStatus'] == 2){
+                           $status = "In Progress"; 
+                        }else if($tt_arr[$t]['iStatus'] == 3){
+                           $status = "Completed"; 
+                        }
+                        
+                        $vSummary .= 'Trouble Ticket #'.$tt_arr[$t]['iTroubleTicketId'].' | Assigned To: '.$tt_arr[$t]['vAssignedTo'].' | Severity: '.$iSeverity.' | Status: '.$status;
+
+                        $arr[$ind]['site_details'] = 'Trouble Ticket #'.$tt_arr[$t]['iTroubleTicketId'].' | Assigned To: '.$tt_arr[$t]['vAssignedTo'].' | Severity: '.$iSeverity.' | Status: '.$status;
+                        $arr[$ind]['dDate'] = ($tt_arr[$t]['added_date'] ? date("m/d/Y", strtotime($tt_arr[$t]['added_date'])) : '');
+                        $arr[$ind]['vSummary'] = $vSummary;
+                        $arr[$ind]['Type'] = $val['Type'];
+                        $arr[$ind]['id'] = $val['iTroubleTicketId'];
+                    }
+                    $ind++;
+                }
+            }
+
+            if ($val['Type'] == "MaintainanceTicket"){
+                $iMaintenanceTicketId = $val['iMaintenanceTicketId'];
+                $where_arr = array();
+                $join_fieds_arr = array();
+                $join_arr = array();
+                $where_arr[] = 'maintenance_ticket_premise."iMaintenanceTicketId"=' . $iMaintenanceTicketId;
+                $where_arr[] = 'maintenance_ticket_premise."iPremiseId"=' . $iPremiseId;
+                //$join_fieds_arr[] = " tt.\"vType\"";
+                $join_fieds_arr[] = "concat(u.\"vFirstName\", ' ', u.\"vLastName\") as \"vAssignedTo\" ";
+                $join_fieds_arr[] = "mt.\"iStatus\" ";
+                $join_fieds_arr[] = "mt.\"iSeverity\" ";
+                $join_fieds_arr[] = "mt.\"dAddedDate\" as added_date";
+                
+                $join_arr[] = 'LEFT JOIN maintenance_ticket mt on maintenance_ticket_premise."iMaintenanceTicketId" = mt."iMaintenanceTicketId"';
+                $join_arr[] = 'LEFT JOIN user_mas u on u."iUserId" = mt."iAssignedToId"';
+                $MaintenanceTicketObj->join_field = $join_fieds_arr;
+                $MaintenanceTicketObj->join = $join_arr;
+                $MaintenanceTicketObj->where = $where_arr;
+                $MaintenanceTicketObj->param['order_by'] = "mt.\"dAddedDate\" DESC";
+                $MaintenanceTicketObj->setClause();
+                $MaintenanceTicketObj->debug_query = false;
+                $mt_arr = $MaintenanceTicketObj->maintenance_ticket_premise_recordset_list();
+                if (!empty($mt_arr)){
+                    $tt = count($mt_arr);
+                    for ($t=0;$t<$tt;$t++){
+
+                        $vSummary = '';
+                        $status = '---';
+                        $iSeverity = '---';
+                        if($mt_arr[$t]['iSeverity'] == 1){
+                           $iSeverity = "Low"; 
+                        }else if($mt_arr[$t]['iSeverity'] == 2){
+                           $iSeverity = "Medium"; 
+                        }else if($mt_arr[$t]['iSeverity'] == 3){
+                           $iSeverity = "High"; 
+                        }else if($mt_arr[$t]['iSeverity'] == 4){
+                           $iSeverity = "Critical"; 
+                        }
+
+                        if($mt_arr[$t]['iStatus'] == 1){
+                           $status = "Not Started"; 
+                        }else if($mt_arr[$t]['iStatus'] == 2){
+                           $status = "In Progress"; 
+                        }else if($mt_arr[$t]['iStatus'] == 3){
+                           $status = "Completed"; 
+                        }
+                        
+                        $vSummary .= 'Maintenance Ticket #'.$mt_arr[$t]['iMaintenanceTicketId'].' | Assigned To: '.$mt_arr[$t]['vAssignedTo'].' | Severity: '.$iSeverity.' | Status: '.$status;
+
+                        $arr[$ind]['site_details'] = 'Maintenance Ticket #'.$mt_arr[$t]['iMaintenanceTicketId'].' | Assigned To: '.$mt_arr[$t]['vAssignedTo'].' | Severity: '.$iSeverity.' | Status: '.$status;
+                        $arr[$ind]['dDate'] = ($mt_arr[$t]['added_date'] ? date("m/d/Y", strtotime($mt_arr[$t]['added_date'])) : '');
+                        $arr[$ind]['vSummary'] = $vSummary;
+                        $arr[$ind]['Type'] = $val['Type'];
+                        $arr[$ind]['id'] = $val['iMaintenanceTicketId'];
+                    }
+                    $ind++;
+                }
+            }
         }
-        //echo "<pre>";print_r($arr);exit();
+		// echo "<pre>";print_r($arr);exit();
         $ni = count($arr);
         if ($page_type == "site_info_window") {
             $ni = count($arr);
