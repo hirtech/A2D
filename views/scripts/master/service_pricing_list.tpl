@@ -1,0 +1,144 @@
+<div class="row  no-gutters w-100">
+	<div class="col-12 mt-1">
+		<div class="card">
+			<div class="card-header  justify-content-between align-items-center">
+				<div class="user_list_header">
+					<h4 class="card-title float-left">{$module_name}</h4>
+
+					<form id="frmlist">
+						<ul class="nav search-links float-right">
+							<li>
+								<select id="vOptions" name="vOptions" class="form-control">
+									<option value="iServicePricingId">ID</option>
+									<option value="vCarrier">Carrier</option>
+									<option value="vNetwork">Network</option>
+									<option value="vServiceType">Service Type</option>
+								</select>
+							</li>
+							<li>
+							   <input type="text" name="Keyword" id="Keyword" class="form-control" value="" autocomplete="off">
+							</li>
+							<li>
+								<button type="button" id="Search" class="btn  btn-outline-warning fas fa-search" title="Search"><span class=""></span></button>
+							</li>
+							<li>
+        						<button type="button" class="btn btn-danger btn-reset fas fa-times" aria-label="Close" id="Reset" style="cursor:pointer;" title="Reset" class=""/></button>
+							</li>
+						</ul>
+					</form>
+				</div>
+			</div>
+			<div class="card-body">
+				<div class="table-responsive ">
+				<table id="datatable-grid" class="display table dataTable table-striped table-bordered editable-table " width="100%">
+					<thead>
+						<tr>
+							<th width="5%">ID</th>
+							<th width="20%">Company Name</th>
+							<th width="20%">Network</th>
+							<th width="20%">Service Type</th>
+							<th width="15%">NRC - Variable</th>
+							<th width="15%">MRC - Fixed</th>
+							<th width="5%">Action</th> 
+						</tr>
+					</thead>
+					<tbody>                            
+					</tbody>
+				</table>
+				</div>
+				<a class="btn btn-primary d-none" id="service_pricing_box" data-toggle="modal" href="#exampleModaltooltip">launch model</a>
+                <div class="modal fade" id="exampleModaltooltip" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle2" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-wmax750" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="stmodaltitle"></h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closestbox">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body col-md-12">
+                            	<form  id="frmadd" name="frmadd" action="" class="form-horizontal needs-validation" method="post" novalidate>
+                            		<input type="hidden" name="mode" id="st_mode" value="">
+                            		<input type="hidden" name="iServicePricingId" id="service_pricing_id" value="">
+                            		<div class="form-group row">
+                            			<label class="col-sm-5 col-form-label" for="iCarrierId">Carrier <span class="text-danger"> *</span></label>
+                            			<div class="col-sm-7">
+	                            			<select name="iCarrierId" id="iCarrierId" class="form-control" required>
+                                            <option value="">Select</option>
+                                            {section name="c" loop=$rs_carrier}
+                                                <option value="{$rs_carrier[c].iCompanyId}">{$rs_carrier[c].vCompanyName|gen_strip_slash}</option>
+                                            {/section}
+                                        </select>
+                                        <div class="invalid-feedback"> Please select carrier</div>
+	                            		</div>
+                            		</div> 
+                            		<div class="form-group row">
+                            			<label class="col-sm-5 col-form-label" for="iNetworkId">Network <span class="text-danger"> *</span></label>
+                            			<div class="col-sm-7">
+	                            			<select name="iNetworkId" id="iNetworkId" class="form-control" required>
+	                                            <option value="">Select</option>
+	                                            {section name="n" loop=$rs_ntwork}
+	                                            <option value="{$rs_ntwork[n].iNetworkId}">{$rs_ntwork[n].vName|gen_strip_slash}</option>
+	                                            {/section}
+	                                        </select>
+                                        	<div class="invalid-feedback"> Please select network</div>
+	                            		</div>
+                            		</div> 
+                            		<div class="form-group row">
+                            			<label class="col-sm-5 col-form-label" for="iServiceTypeId">Service Type <span class="text-danger"> *</span></label>
+                            			<div class="col-sm-7">
+	                            			<select name="iServiceTypeId" id="iServiceTypeId" class="form-control" required>
+	                                            <option value="">Select</option>
+	                                            {section name="s" loop=$rs_stype}
+	                                                <option value="{$rs_stype[s].iServiceTypeId}">{$rs_stype[s].vServiceType}</option>
+	                                            {/section}
+	                                        </select>
+	                                        <div class="invalid-feedback"> Please select service type</div>
+	                            		</div>
+                            		</div> 
+                            		<div class="form-group row">
+                            			<label class="col-sm-5 col-form-label" for="iNetworkId">NRC Variable</label>
+                            			<div class="col-sm-7">
+	                            			<div class="input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text bg-transparent border-right-0" id="basic-addon11"><i class=" fas fa-dollar-sign"></i></span>
+                                                </div>
+                                                <input type="text" class="form-control" id="iNRCVariable" name="iNRCVariable" aria-describedby="basic-addon1">
+                                            </div>
+	                            		</div>
+                            		</div> 
+                            		<div class="form-group row">
+                            			<label class="col-sm-5 col-form-label" for="iNetworkId">MRC Fixed</label>
+                            			<div class="col-sm-7">
+	                            			<div class="input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text bg-transparent border-right-0" id="basic-addon11"><i class=" fas fa-dollar-sign"></i></span>
+                                                </div>
+                                                <input type="text" class="form-control" id="iMRCFixed" name="iMRCFixed" aria-describedby="basic-addon1">
+                                            </div>
+	                            		</div>
+                            		</div> 
+                            	</form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary btn_close_modal" data-dismiss="modal" id="btn_close_modal">Close</button>
+                                 <img src="assets/images/loading-small.gif" id="save_loading" border="0" style="display:none;">
+                                <input type="submit" class="btn btn-primary" id="save_data" value="Save" name="save_data" >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+			</div>
+		</div> 
+	</div> 
+</div>
+
+
+<script type="text/javascript">
+	var ajax_url = 'master/service_pricing_list?mode=List';
+	var access_group_var_add = '{$access_group_var_add}';
+</script>
+{include file="general/dataTables.tpl"}
+
+
+<script src="assets/js/app_js/service_pricing.js"></script>

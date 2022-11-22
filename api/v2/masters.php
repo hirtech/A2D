@@ -1,4 +1,5 @@
 <?php
+//error_reporting(E_ALL);
 include_once($controller_path . "premise_type.inc.php");
 include_once($controller_path . "premise_attribute.inc.php");
 include_once($controller_path . "premise_sub_type.inc.php");
@@ -14,9 +15,10 @@ include_once($controller_path . "workorder_type.inc.php");
 include_once($controller_path . "circuit_type.inc.php");
 include_once($controller_path . "equipment_type.inc.php");
 include_once($controller_path . "equipment_manufacturer.inc.php");
+include_once($controller_path . "service_pricing.inc.php");
 include_once($function_path."image.inc.php");
 include_once($function_path."site_general.inc.php");
-
+// echo $request_type;exit();
 if($request_type == "city_list"){
     $City_Obj = new City();
     $where_arr = array();
@@ -1857,6 +1859,150 @@ if($request_type == "city_list"){
     $rs_db = $EquipmentManufacturerObj->delete_records($iEquipmentManufacturerId);
     if($rs_db){
         $response_data = array("Code" => 200, "Message" => MSG_DELETE, "iEquipmentManufacturerId" => $iEquipmentManufacturerId);
+    }else{
+        $response_data = array("Code" => 500 , "Message" => MSG_DELETE_ERROR);
+    }
+}else if($request_type == "service_pricing_list"){
+    $ServicePricingObj = new ServicePricing();
+    $where_arr = array();
+    if(!empty($RES_PARA)){
+        $iServicePricingId              = trim($RES_PARA['iServicePricingId']);
+        $vCarrier                       = trim($RES_PARA['vCarrier']);
+        $vNetwork                       = trim($RES_PARA['vNetwork']);
+        $vServiceType                   = trim($RES_PARA['vServiceType']);
+        
+        $page_length                    = isset($RES_PARA['page_length']) ? trim($RES_PARA['page_length']) : "10";
+        $start                          = isset($RES_PARA['start']) ? trim($RES_PARA['start']) : "0";
+        $sEcho                          = $RES_PARA['sEcho'];
+        $display_order                  = $RES_PARA['display_order'];
+        $dir                            = $RES_PARA['dir'];
+    }
+
+    if ($iServicePricingId != "") {
+        $where_arr[] = 'service_pricing_mas."iServicePricingId" = \''.$iServicePricingId.'\'';
+    }
+
+    if ($vCarrier != "") {
+        $where_arr[] = 'c."vCompanyName" ILIKE \''.$vCarrier.'%\'';
+    }
+
+    if ($vNetwork != "") {
+        $where_arr[] = 'n."vName" ILIKE \''.$vNetwork.'%\'';
+    }
+
+    if ($vServiceType != "") {
+        $where_arr[] = 'st."vServiceType" ILIKE \''.$vServiceType.'%\'';
+    }
+
+    switch ($display_order) {
+        case "0" : 
+            $sortname = "service_pricing_mas.\"iServicePricingId\"";
+            break;
+        case "1":
+            $sortname = "c.\"vCompanyName\"";
+            break;
+        case "2":
+            $sortname = "n.\"vName\"";
+            break;
+        case "3":
+            $sortname = "st.\"vServiceType\"";
+            break;
+        case "4":
+            $sortname = "service_pricing_mas.\"iNRCVariable\"";
+            break;
+        case "5":
+            $sortname = "service_pricing_mas.\"iMRCFixed\"";
+            break;
+        default:
+            $sortname = "service_pricing_mas.\"iServicePricingId\"";
+            break;
+    }
+    
+    $limit = "LIMIT ".$page_length." OFFSET ".$start."";
+
+    $join_fieds_arr = array();
+    $join_arr = array();
+
+    $join_fieds_arr[] = 'c."vCompanyName"';
+    $join_fieds_arr[] = 'n."vName" as "vNetwork"';
+    $join_fieds_arr[] = 'st."vServiceType"';
+    $join_arr[] = 'LEFT JOIN company_mas c on service_pricing_mas."iCarrierId" = c."iCompanyId"';
+    $join_arr[] = 'LEFT JOIN network n on service_pricing_mas."iNetworkId" = n."iNetworkId"';
+    $join_arr[] = 'LEFT JOIN service_type_mas st on service_pricing_mas."iServiceTypeId" = st."iServiceTypeId"';
+    $ServicePricingObj->join_field = $join_fieds_arr;
+    $ServicePricingObj->join = $join_arr;
+    $ServicePricingObj->where = $where_arr;
+    $ServicePricingObj->param['order_by'] = $sortname . " " . $dir;
+    $ServicePricingObj->param['limit'] = $limit;
+    $ServicePricingObj->setClause();
+    $ServicePricingObj->debug_query = false;
+    $rs_service_type = $ServicePricingObj->recordset_list();
+    $total = $ServicePricingObj->recordset_total();
+    $data = array();
+    $ni = count($rs_service_type);
+    if($ni > 0){
+        for($i=0;$i<$ni;$i++){
+            $data[] = array(
+                "iServicePricingId"        => $rs_service_type[$i]['iServicePricingId'],
+                "iCarrierId"               => $rs_service_type[$i]['iCarrierId'],
+                "vCompanyName"             => $rs_service_type[$i]['vCompanyName'],
+                "iNetworkId"               => $rs_service_type[$i]['iNetworkId'],
+                "vNetwork"                 => $rs_service_type[$i]['vNetwork'],
+                "iServiceTypeId"           => $rs_service_type[$i]['iServiceTypeId'],
+                "vServiceType"           => $rs_service_type[$i]['vServiceType'],
+                "iNRCVariable"             => $rs_service_type[$i]['iNRCVariable'],
+                "iMRCFixed"                => $rs_service_type[$i]['iMRCFixed'],
+            );
+        }
+    }
+    $result = array('data' => $data , 'total_record' => $total);
+
+    $rh = HTTPStatus(200);
+    $code = 2000;
+    $message = api_getMessage($req_ext, constant($code));
+    $response_data = array("Code" => 200, "Message" => $message, "result" => $result);
+}else if($request_type == "service_pricing_add"){
+    $ServicePricingObj = new ServicePricing();
+    $insert_arr = array(
+        "iCarrierId"            => $RES_PARA['iCarrierId'],
+        "iNetworkId"            => $RES_PARA['iNetworkId'],
+        "iServiceTypeId"        => $RES_PARA['iServiceTypeId'],
+        "iNRCVariable"          => $RES_PARA['iNRCVariable'],
+        "iMRCFixed"             => $RES_PARA['iMRCFixed'],
+    );
+    $ServicePricingObj->insert_arr = $insert_arr;
+    $ServicePricingObj->setClause();
+    $iServicePricingId = $ServicePricingObj->add_records();
+    if(isset($iServicePricingId)){
+        $response_data = array("Code" => 200, "Message" => MSG_ADD, "iServicePricingId" => $iServicePricingId);
+    }else{
+        $response_data = array("Code" => 500 , "Message" => MSG_ADD_ERROR);
+    }
+}else if($request_type == "service_pricing_edit"){
+    $ServicePricingObj = new ServicePricing();
+    $update_arr = array(
+        "iServicePricingId"     => $RES_PARA['iServicePricingId'],
+        "iCarrierId"            => $RES_PARA['iCarrierId'],
+        "iNetworkId"            => $RES_PARA['iNetworkId'],
+        "iServiceTypeId"        => $RES_PARA['iServiceTypeId'],
+        "iNRCVariable"          => $RES_PARA['iNRCVariable'],
+        "iMRCFixed"             => $RES_PARA['iMRCFixed'],
+    );
+    //echo "<pre>";print_r($update_arr);exit;
+    $ServicePricingObj->update_arr = $update_arr;
+    $ServicePricingObj->setClause();
+    $iServicePricingId = $ServicePricingObj->update_records();
+    if(isset($iServicePricingId)){
+        $response_data = array("Code" => 200, "Message" => MSG_UPDATE, "iServicePricingId" => $RES_PARA['iServicePricingId']);
+    }else{
+        $response_data = array("Code" => 500 , "Message" => MSG_UPDATE_ERROR);
+    }
+}else if($request_type == "service_pricing_delete"){
+    $ServicePricingObj = new ServicePricing();
+    $iServicePricingId = $RES_PARA['iServicePricingId'];
+    $rs_db = $ServicePricingObj->delete_records($iServicePricingId);
+    if($rs_db){
+        $response_data = array("Code" => 200, "Message" => MSG_DELETE, "iServicePricingId" => $iServicePricingId);
     }else{
         $response_data = array("Code" => 500 , "Message" => MSG_DELETE_ERROR);
     }

@@ -152,6 +152,12 @@ RewriteRule ^master/equipment_manufacturer_list? index.php?module=$0&page=m-equi
 RewriteRule ^master/equipment_manufacturer_list index.php?module=$0&page=m-equipment_manufacturer_list
 #---------------------
 
+#---------------------
+#Service Pricing Master
+RewriteRule ^master/service_pricing_list? index.php?module=$0&page=m-service_pricing_list&%{QUERY_STRING}
+RewriteRule ^master/service_pricing_list index.php?module=$0&page=m-service_pricing_list
+#---------------------
+
 #-------Site Mgmt----------------
 #Site
 RewriteRule ^premise/list index.php?module=$0&page=m-premise_list&%{QUERY_STRING}
