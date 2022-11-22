@@ -224,11 +224,11 @@ if($request_type == "trouble_ticket_list"){
     if($RES_PARA['iStatus'] == 3) { //Complete 
         $dResolvedDatecnt = 0;
         for($i=0; $i<$premise_length; $i++){
-            if(!empty($RES_PARA['dResolvedDate'][$i])) {
+            if(empty($RES_PARA['dResolvedDate'][$i])) {
                 $dResolvedDatecnt++;
             }
         }
-        if($dResolvedDatecnt == 0) {
+        if($dResolvedDatecnt > 0) {
             //echo "string";
             $is_error = 1;
             $response_data = array("Code" => 500 , "Message" => 'You cannot select complete if any premise-record below has "Date - Resolved" field blank/null', "error" => 2);
@@ -249,6 +249,11 @@ if($request_type == "trouble_ticket_list"){
         if($dCompletionDatecnt > 0) {
             $is_error = 1;
             $response_data = array("Code" => 500 , "Message" => 'Completion Date cannot be before any "Date - Resolved" below', "error" => 2);
+        }else{
+            if($RES_PARA['dCompletionDate'] == ''){
+                $is_error = 1;
+                $response_data = array("Code" => 500 , "Message" => '"Completion Date" cannot be blank/null if status is "Completed".', "error" => 2);
+            }
         }
     }
 
@@ -282,13 +287,18 @@ if($request_type == "trouble_ticket_list"){
     if($RES_PARA['iStatus'] == 3) { //Complete 
         $dResolvedDatecnt = 0;
         for($i=0; $i<$premise_length; $i++){
-            if(!empty($RES_PARA['dResolvedDate'][$i])) {
+            if(empty($RES_PARA['dResolvedDate'][$i])) {
                 $dResolvedDatecnt++;
             }
         }
-        if($dResolvedDatecnt == 0) {
+        if($dResolvedDatecnt > 0) {
             $is_error = 1;
             $response_data = array("Code" => 500 , "Message" => 'You cannot select complete if any premise-record below has "Date - Resolved" field blank/null', "error" => 2);
+        }else{
+            if($RES_PARA['dCompletionDate'] == ''){
+                $is_error = 1;
+                $response_data = array("Code" => 500 , "Message" => '"Completion Date" cannot be blank/null if status is "Completed".', "error" => 2);
+            }
         }
     }
 
