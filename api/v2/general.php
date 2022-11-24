@@ -912,12 +912,13 @@ if($request_type == "department_dropdown") {
 
     $where_arr[] = "service_order.\"iPremiseId\"='".gen_add_slash($iPremiseId)."'";
 
+    $join_fieds_arr[] = 'w."iWOId"';
     $join_fieds_arr[] = 'wt."vType" as "vWorkOrderType"';
     $join_fieds_arr[] = 's."vName" as "vPremiseName"';
     $join_fieds_arr[] = 'st."vTypeName" as "vPremiseType"';
     $join_fieds_arr[] = 'pc."iPremiseCircuitId"';
     
-    $join_arr[] = " LEFT JOIN workorder w ON service_order.\"iServiceOrderId\" = w.\"iServiceOrderId\"";
+    $join_arr[] = " LEFT JOIN workorder w ON service_order.\"iServiceOrderId\" = w.\"iServiceOrderId\" and service_order.\"iPremiseId\" = w.\"iPremiseId\"";
     $join_arr[] = " LEFT JOIN workorder_type_mas wt ON w.\"iWOTId\" = wt.\"iWOTId\"";
     $join_arr[] = " LEFT JOIN site_mas s ON service_order.\"iPremiseId\" = s.\"iSiteId\"";
     $join_arr[] = " LEFT JOIN site_type_mas st ON s.\"iSTypeId\" = st.\"iSTypeId\"";
@@ -929,20 +930,23 @@ if($request_type == "department_dropdown") {
     $ServiceOrderObj->setClause();
     $ServiceOrderObj->debug_query = false;
     $rs = $ServiceOrderObj->recordset_list();
+    //echo "<pre>";print_r($rs);exit;
     $ni = count($rs);
     if($ni > 0){
         for($i=0; $i<$ni; $i++){
-            $vPremiseDisplay = " Workorder ID#".$rs[$i]['iWOId']." (".$rs[$i]['vWorkOrderType']."; Premise ID# ".$rs[$i]['iPremiseId'].";".$rs[$i]['vPremiseName'].";".$rs[$i]['vTypeName'].")";
+            if($rs[$i]['iPremiseCircuitId'] > 0){
+                $vPremiseDisplay = " Workorder ID#".$rs[$i]['iWOId']." (".$rs[$i]['vWorkOrderType']."; Premise ID# ".$rs[$i]['iPremiseId'].";".$rs[$i]['vPremiseName'].";".$rs[$i]['vTypeName'].")";
 
-            $rs_data[$i]['iPremiseCircuitId'] = $rs[$i]['iPremiseCircuitId'];
-            $rs_data[$i]['vPremiseDisplay'] = $vPremiseDisplay;
+                $rs_data[$i]['iPremiseCircuitId'] = $rs[$i]['iPremiseCircuitId'];
+                $rs_data[$i]['vPremiseDisplay'] = $vPremiseDisplay;
+            }
         }
     }
     //echo "<pre>";print_r($rs_data);exit();
     if($rs_data){
         $response_data = array("Code" => 200, "result" => $rs_data, "total_record" => count($rs_data));
     }else{
-        $response_data = array("Code" => 500);
+        $response_data = array("Code" => 500, "result" => $rs_data);
     }
 }else if($request_type == "premise_dropdown"){
     $sql = 'SELECT s."iSiteId", s."vName", st."vTypeName" FROM site_mas s LEFT JOIN site_type_mas st ON st."iSTypeId" = s."iSTypeId" WHERE s."iStatus" = 1 ORDER BY s."vName"';

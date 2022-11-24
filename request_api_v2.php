@@ -3,8 +3,8 @@
 #-------------------------------------------------------------------------------------
 # Include necessary files.
 #-------------------------------------------------------------------------------------
-/*error_reporting(E_ALL);
-ini_set('display_errors', 0);*/
+//error_reporting(E_ALL);
+//ini_set('display_errors', 0);
 include_once("server.php");
 include_once($setting_path."api_messages.php");
 include_once($setting_path."settings_api.php");
@@ -874,6 +874,15 @@ switch($path) {
 			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
 		}
 		break;
+	case "service_pricing_delete." . $req_ext:
+		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
+			$request_type = "service_pricing_delete";
+			$api_file_name = "masters.php";
+			include_once($site_api_path . "api_authentication.php");
+		}else {
+			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
+		}
+		break;
 	case "service_pricing_add." . $req_ext:
 		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
 			$request_type = "service_pricing_add";
@@ -886,15 +895,6 @@ switch($path) {
 	case "service_pricing_edit." . $req_ext:
 		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
 			$request_type = "service_pricing_edit";
-			$api_file_name = "masters.php";
-			include_once($site_api_path . "api_authentication.php");
-		}else {
-			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
-		}
-		break;
-	case "service_pricing_delete." . $req_ext:
-		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
-			$request_type = "service_pricing_delete";
 			$api_file_name = "masters.php";
 			include_once($site_api_path . "api_authentication.php");
 		}else {
@@ -1355,6 +1355,51 @@ switch($path) {
 		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
 			$request_type = "search_workorder";
 			$api_file_name = "workorder.php";
+			include_once($site_api_path . "api_authentication.php");
+		}else {
+			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
+		}
+		break;
+	case "get_open_workorder." . $req_ext:
+		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
+			$request_type = "get_open_workorder";
+			$api_file_name = "workorder.php";
+			include_once($site_api_path . "api_authentication.php");
+		}else {
+			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
+		}
+		break;
+	case "get_workorder_for_premise_services." . $req_ext:
+		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
+			$request_type = "get_workorder_for_premise_services";
+			$api_file_name = "workorder.php";
+			include_once($site_api_path . "api_authentication.php");
+		}else {
+			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
+		}
+		break;
+	case "premise_services_list." . $req_ext:
+		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
+			$request_type = "premise_services_list";
+			$api_file_name = "premise_services.php";
+			include_once($site_api_path . "api_authentication.php");
+		}else {
+			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
+		}
+		break;
+	case "premise_services_start." . $req_ext:
+		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
+			$request_type = "premise_services_start";
+			$api_file_name = "premise_services.php";
+			include_once($site_api_path . "api_authentication.php");
+		}else {
+			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
+		}
+		break;
+		case "premise_services_suspend." . $req_ext:
+		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
+			$request_type = "premise_services_suspend";
+			$api_file_name = "premise_services.php";
 			include_once($site_api_path . "api_authentication.php");
 		}else {
 			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);

@@ -171,6 +171,10 @@ RewriteRule ^premise/add index.php?module=$0&page=m-premise_add
 #Site History
 RewriteRule ^premise/history&(.*)$ index.php?module=$0&page=m-premise_history&%{QUERY_STRING}
 RewriteRule ^premise/history index.php?module=$0&page=m-premise_history
+
+#Setup Premise Service 
+RewriteRule ^premise/setup_premise_services_list&(.*)$ index.php?module=$0&page=m-setup_premise_services_list&%{QUERY_STRING} [L]
+RewriteRule ^premise/setup_premise_services_list index.php?module=$0&page=m-setup_premise_services_list
 #---------------------
 
 #---------------------

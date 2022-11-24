@@ -150,7 +150,7 @@ if($mode == "List"){
                     <div class="dropdown-menu p-0">';
                     if(per_hasModuleAccess("Task Awareness", 'List')){
                         //$action .= '<div class="dropdown-divider"></div>';
-                        $action .= '<a class="dropdown-item" title="Awareness"  onclick="addEditDataAwareness(0,\'add\','.$rs_site[$i]['iSiteId'].')">Awareness</a>';
+                        $action .= '<a class="dropdown-item" title="Awareness"  onclick="addEditDataAwareness(0,\'add\','.$rs_site[$i]['iSiteId'].')">Awareness</a><a class="dropdown-item" title="Setup Premise Services"  href="'.$site_url.'premise/setup_premise_services_list&iPremiseId=' . $rs_site[$i]['iSiteId'] . '" target="_blank">Setup Premise Services</a>';
                     }
                     $action .= '</div>';
             }

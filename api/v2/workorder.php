@@ -370,6 +370,91 @@ if($request_type == "workorder_list"){
     $code = 2000;
     $message = api_getMessage($req_ext, constant($code));
     $response_data = array("Code" => 200, "Message" => $message, "result" => $result);
+}else if($request_type == "get_open_workorder") {
+    $rs_arr  = array();
+    $where_arr = array();
+    $join_fieds_arr = array();
+    $join_arr = array();
+
+    $WorkOrderObj->clear_variable();
+    $where_arr[] = "workorder.\"iWOSId\" = 1"; // workorder_status =  Open
+    $join_fieds_arr[] = 'wt."vType" as "vWorkorderType"';
+    $join_arr[] = 'LEFT JOIN workorder_type_mas wt on workorder."iWOTId" = wt."iWOTId"';
+    $WorkOrderObj->join_field = $join_fieds_arr;
+    $WorkOrderObj->join = $join_arr;
+    $WorkOrderObj->where = $where_arr;
+    $WorkOrderObj->param['limit'] = "0";
+    $WorkOrderObj->param['order_by'] = 'workorder."iWOId" ASC';
+    
+    $WorkOrderObj->setClause();
+    $rs_wo = $WorkOrderObj->recordset_list();
+    //echo "<pre>";print_r($rs_wo);exit;
+    for ($i = 0; $i < count($rs_wo); $i++) {
+        $rs_arr[$i]['iWOId'] = $rs_wo[$i]['iWOId'];
+        $rs_arr[$i]['vWorkOrder'] = "ID#".$rs_wo[$i]['iWOId']." (".$rs_wo[$i]['vWOProject']." | ".$rs_wo[$i]['vWorkorderType'].")";
+    }
+    //echo "<pre>";print_r($rs_arr);exit;
+    $result = array('data' => $rs_arr);
+    $rh = HTTPStatus(200);
+    $code = 2000;
+    $message = api_getMessage($req_ext, constant($code));
+    $response_data = array("Code" => 200, "Message" => $message, "result" => $result);
+}else if($request_type == "get_workorder_for_premise_services") {
+    $rs_arr  = array();
+    $iWOId = $RES_PARA['iWOId'];
+    $iServiceTypeId = $RES_PARA['iServiceTypeId'];
+    //echo $iWOId;exit;
+    if($iWOId > 0) {
+        $where_arr = array();
+        $join_fieds_arr = array();
+        $join_arr = array();
+        $WorkOrderObj->clear_variable();
+        $where_arr[] = "workorder.\"iWOId\" = '".$iWOId."'"; // workorder_status =  Open
+        $join_fieds_arr[] = 'so."vMasterMSA"';
+        $join_fieds_arr[] = 'so."vServiceOrder"';
+        $join_fieds_arr[] = 'so."iCarrierID"';
+        $join_fieds_arr[] = 'cm."vCompanyName"';
+        if($iServiceTypeId > 0){
+            $join_fieds_arr[] = 'sp."iNRCVariable"';
+            $join_fieds_arr[] = 'sp."iMRCFixed"';
+        }
+        $join_arr[] = 'LEFT JOIN service_order so on workorder."iServiceOrderId" = so."iServiceOrderId"';
+        $join_arr[] = 'LEFT JOIN company_mas cm on so."iCarrierID" = cm."iCompanyId"';
+        if($iServiceTypeId > 0){
+            $join_arr[] = "LEFT JOIN service_pricing_mas sp ON sp.\"iServicePricingId\" = ( SELECT sp1.\"iServicePricingId\" FROM service_pricing_mas AS sp1 WHERE so.\"iCarrierID\" = sp1.\"iCarrierId\" AND sp1.\iServiceTypeId\" = '".$iServiceTypeId."' ORDER BY sp1.\"iServicePricingId\" DESC LIMIT 1)";
+        }
+        $WorkOrderObj->join_field = $join_fieds_arr;
+        $WorkOrderObj->join = $join_arr;
+        $WorkOrderObj->where = $where_arr;
+        $WorkOrderObj->param['limit'] = "1";
+        $WorkOrderObj->param['order_by'] = 'workorder."iWOId" ASC';
+        
+        $WorkOrderObj->setClause();
+        $rs_wo = $WorkOrderObj->recordset_list();
+        //echo "<pre>";print_r($rs_wo);exit;
+        $rs_arr = array();
+        for ($i = 0; $i < count($rs_wo); $i++) {
+            $rs_arr[$i]['iWOId'] = $rs_wo[$i]['iWOId'];
+            $rs_arr[$i]['iServiceOrderId'] = $rs_wo[$i]['iServiceOrderId'];
+            $rs_arr[$i]['vServiceOrder'] = "ID#".$rs_wo[$i]['iServiceOrderId']." (".$rs_wo[$i]['vMasterMSA']." | ".$rs_wo[$i]['vServiceOrder'].")";
+            $rs_arr[$i]['iCarrierId'] = $rs_wo[$i]['iCarrierID'];
+            $rs_arr[$i]['vCarrierName'] = $rs_wo[$i]['vCompanyName'];
+            $rs_arr[$i]['iNRCVariable'] = (isset($rs_wo[$i]['iNRCVariable']) && $rs_wo[$i]['iNRCVariable'] != '')?$rs_wo[$i]['iNRCVariable']:"0";
+            $rs_arr[$i]['iMRCFixed'] = (isset($rs_wo[$i]['iMRCFixed']) && $rs_wo[$i]['iMRCFixed'] != '')?$rs_wo[$i]['iMRCFixed']:"0";
+        }
+        //echo "<pre>";print_r($rs_arr);exit;
+        $result = array('data' => $rs_arr);
+        $rh = HTTPStatus(200);
+        $code = 2000;
+        $message = api_getMessage($req_ext, constant($code));
+        $response_data = array("Code" => 200, "Message" => $message, "result" => $result);
+    }else{
+        $result = array('data' => $rs_arr);
+        $rh = HTTPStatus(500);
+        $code = 500;
+        $message = api_getMessage($req_ext, constant($code));
+        $response_data = array("Code" => 500, "Message" => $message, "result" => $result);
+    }
 }
 else {
 	$r = HTTPStatus(400);
