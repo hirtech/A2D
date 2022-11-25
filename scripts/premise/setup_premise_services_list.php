@@ -4,20 +4,22 @@ include_once($site_path . "scripts/session_valid.php");
 # ----------- Access Rule Condition -----------
 per_hasModuleAccess("Premise", 'List');
 
-include_once($controller_path . "premise.inc.php");
+
 $page = $_REQUEST['page'];
 $mode = isset($_REQUEST['mode']) ? $_REQUEST['mode'] : '';
 
 $iPremiseId = $_REQUEST['iPremiseId'];
+
 if($mode == "getServiceOrder"){
 	$iWOId = $_REQUEST['iWOId'];
+    $iServiceTypeId = $_REQUEST['iServiceTypeId'];
 	//Service Type Dropdown
 	$so_param = array();
-	$so_param['iStatus'] = '1';
-	$so_param['iWOId'] = $iWOId;
+	$so_param['iServiceTypeId'] = $iServiceTypeId;
+    $so_param['iWOId'] = $iWOId;
 	$so_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
 	$soAPI_URL = $site_api_url."get_workorder_for_premise_services.json";
-	// echo $soAPI_URL." ".json_encode($so_param);exit;
+	//echo $soAPI_URL." ".json_encode($so_param);exit;
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_URL, $soAPI_URL);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
@@ -97,7 +99,7 @@ if($mode == "getServiceOrder"){
         "iCarrierId"           => $_POST['iSuspendCarrierId'],
         "iPremiseCircuitId"    => $_POST['iSuspendPremiseCircuitId'],
         "iUserId"              => $_POST['iSuspendUserId'],
-        "dSuspendDate"          => $_POST['dSuspendDate'],
+        "dSuspendDate"         => $_POST['dSuspendDate'],
         "sessionId"            => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
     );
 
@@ -126,8 +128,8 @@ if($mode == "getServiceOrder"){
     }else{
         $result['iServiceTypeId']       = $result_arr['iServiceTypeId'];
         $result['iPremiseId']           = $result_arr['iPremiseId'];
-        $result['msg']      = $result_arr['Message'];
-        $result['error']    = 1 ;
+        $result['msg']                  = $result_arr['Message'];
+        $result['error']                = 1 ;
     }
     
     # Return jSON data.
@@ -136,7 +138,34 @@ if($mode == "getServiceOrder"){
     hc_exit();
     # ----------------------------------- 
 }
-//Get Premise Service List with service type
+
+/******** Get Premise Name From Premise Id ********/
+$premise_param = array();
+$premise_param['iPremiseId'] = $iPremiseId;
+$premise_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
+$premiseAPI_URL = $site_api_url."get_premise_name_from_id.json";
+//echo $premiseAPI_URL." ".json_encode($premise_param);exit;
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $premiseAPI_URL);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_HEADER, FALSE);
+curl_setopt($ch, CURLOPT_POST, TRUE);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($premise_param));
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+   "Content-Type: application/json",
+)); 
+$response_premise = curl_exec($ch);
+curl_close($ch);  
+$res_premise = json_decode($response_premise, true);
+$vPremiseName = $res_premise['result'];
+//echo "<pre>";print_r($vPremiseName);exit;
+$smarty->assign("iPremiseId", $iPremiseId);
+$smarty->assign("vPremiseName", $vPremiseName);
+/******** Get Premise Name From Premise Id ********/
+
+/******** Get Premise Service List with service type ********/
 $pservice_param = array();
 $pservice_param['iPremiseId'] = $iPremiseId;
 $pservice_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
@@ -161,12 +190,13 @@ $cnt_pservice = count($rs_pservice);
 $smarty->assign("rs_pservice", $rs_pservice);
 $smarty->assign("cnt_pservice", $cnt_pservice);
 //echo "<pre>";print_r($rs_pservice);exit;
-
+/******** Get Premise Service List with service type ********/
 
 /******* get workorder data where status = open *******/
 $wo_param = array();
+$wo_param['iPremiseId'] = $iPremiseId;
 $wo_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
-$woAPI_URL = $site_api_url."get_open_workorder.json";
+$woAPI_URL = $site_api_url."get_open_workorder_for_premise.json";
 //echo $woAPI_URL." ".json_encode($wo_param);exit;
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, $woAPI_URL);
@@ -214,17 +244,12 @@ $smarty->assign("rs_pcircuit", $rs_pcircuit);
 $iUserId = $_SESSION['sess_iUserId' . $admin_panel_session_suffix];
 $vUserName = $_SESSION['sess_vName' . $admin_panel_session_suffix];
 
-$module_name = "Setup Premise Services List";
+$module_name = "Setup Premise Services";
 $module_title = "Setup Premise Services";
-$smarty->assign("iPremiseId", $iPremiseId);
+
 $smarty->assign("module_name", $module_name);
 $smarty->assign("module_title", $module_title);
-
-$smarty->assign("access_group_var_add", $access_group_var_add);
-$smarty->assign("access_group_var_CSV", $access_group_var_CSV);
-
 $smarty->assign("dToday", date('Y-m-d H:i:s'));
 $smarty->assign("iUserId", $iUserId);
 $smarty->assign("vUserName", $vUserName);
-
 ?>

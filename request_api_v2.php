@@ -955,6 +955,15 @@ switch($path) {
 			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
 		}
 		break;
+	case "get_premise_name_from_id." . $req_ext:
+		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
+			$request_type = "get_premise_name_from_id";
+			$api_file_name = "general.php";
+			include_once($site_api_path . "api_authentication.php");
+		}else {
+			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
+		}
+		break;
 	case "premise_type_dropdown." . $req_ext:
 		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
 			$request_type = "premise_type_dropdown";
@@ -1360,9 +1369,9 @@ switch($path) {
 			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
 		}
 		break;
-	case "get_open_workorder." . $req_ext:
+	case "get_open_workorder_for_premise." . $req_ext:
 		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
-			$request_type = "get_open_workorder";
+			$request_type = "get_open_workorder_for_premise";
 			$api_file_name = "workorder.php";
 			include_once($site_api_path . "api_authentication.php");
 		}else {

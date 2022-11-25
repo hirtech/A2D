@@ -1,9 +1,14 @@
 function startPremiseServices(iPremiseId, iServiceTypeId,mode){
     $("#frmadd").removeClass('was-validated');
-    $("#stmodaltitle").html('Start Premise Service');
+    $("#stmodaltitle").html('Start Premise Service - <span class="text-primary">'+vPremiseName+' # '+iPremiseId+'</span>');
     $("#st_mode").val('Start');
-    $("#iCarrierId").val('');
     $("#iServiceTypeId").val(iServiceTypeId);
+    $("#iWOId").val('');
+    $("#iServiceOrderId").val('');
+    $("#vServiceOrder").val('');
+    $("#iCarrierId").val('');
+    $("#vCarrierName").val('');
+    $("#iPremiseCircuitId").val('');
     $("#iNRCVariable").val('');
     $("#iMRCFixed").val('');
     
@@ -12,10 +17,15 @@ function startPremiseServices(iPremiseId, iServiceTypeId,mode){
 
 function suspendPremiseServices(iPremiseId, iServiceTypeId,mode){
     $("#frmadd").removeClass('was-validated');
-    $("#stmodaltitlesuspend").html('Suspend Premise Service');
+    $("#stmodaltitlesuspend").html('Suspend Premise Service - <span class="text-primary">'+vPremiseName+' # '+iPremiseId+'</span>');
     $("#st_modesuspend").val('Suspend');
-    $("#iSuspendCarrierId").val('');
     $("#iSuspendServiceTypeId").val(iServiceTypeId);
+    $("#iWOId").val('');
+    $("#iSuspendServiceOrderId").val('');
+    $("#vSuspendServiceOrder").val('');
+    $("#iSuspendCarrierId").val('');
+    $("#vSuspendCarrierName").val('');
+    $("#iSuspendPremiseCircuitId").val('');
     
     $("#premise_services_suspend").trigger('click');
 }
@@ -32,12 +42,12 @@ function getServiceOrder(iWOId,mode){
         },
         success: function(data){
             response =JSON.parse(data);
-            var iServiceOrderId= response.data[0].iServiceOrderId;
-            var vServiceOrder= response.data[0].vServiceOrder;
-            var iCarrierId= response.data[0].iCarrierId;
-            var vCarrierName= response.data[0].vCarrierName;
-            var iNRCVariable= response.data[0].iNRCVariable;
-            var iMRCFixed= response.data[0].iMRCFixed;
+            var iServiceOrderId = response.data[0].iServiceOrderId;
+            var vServiceOrder = response.data[0].vServiceOrder;
+            var iCarrierId = response.data[0].iCarrierId;
+            var vCarrierName = response.data[0].vCarrierName;
+            var iNRCVariable = response.data[0].iNRCVariable;
+            var iMRCFixed = response.data[0].iMRCFixed;
 
             if(mode == "start"){
                 $('#iServiceOrderId').val(iServiceOrderId);

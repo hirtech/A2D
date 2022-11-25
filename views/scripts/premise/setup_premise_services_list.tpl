@@ -3,7 +3,7 @@
 		<div class="card">
 			<div class="card-header  justify-content-between align-items-center">
 				<div class="user_list_header">
-					<h4 class="card-title float-left">{$module_name}</h4>
+					<h4 class="card-title float-left">{$module_name} <span class="text-primary">{$vPremiseName} # {$iPremiseId}</span></h4>
 				</div>
 			</div>
 			<div class="card-body">
@@ -67,9 +67,7 @@
 
 <script type="text/javascript">
 	var ajax_url = 'premise/setup_premise_services_list?iSiteId={$iPremiseId}?mode=List';
-	var access_group_var_add= '{$access_group_var_add}';
-	var access_group_var_CSV= '{$access_group_var_CSV}';
-	var dStartDate= '{$dStartDate}';
+	var vPremiseName= '{$vPremiseName}';
 </script>
 {include file="general/dataTables.tpl"}
 

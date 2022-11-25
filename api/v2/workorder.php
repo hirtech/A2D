@@ -370,38 +370,48 @@ if($request_type == "workorder_list"){
     $code = 2000;
     $message = api_getMessage($req_ext, constant($code));
     $response_data = array("Code" => 200, "Message" => $message, "result" => $result);
-}else if($request_type == "get_open_workorder") {
+}else if($request_type == "get_open_workorder_for_premise") {
+    $iPremiseId = $RES_PARA['iPremiseId'];
     $rs_arr  = array();
-    $where_arr = array();
-    $join_fieds_arr = array();
-    $join_arr = array();
-
-    $WorkOrderObj->clear_variable();
-    $where_arr[] = "workorder.\"iWOSId\" = 1"; // workorder_status =  Open
-    $join_fieds_arr[] = 'wt."vType" as "vWorkorderType"';
-    $join_arr[] = 'LEFT JOIN workorder_type_mas wt on workorder."iWOTId" = wt."iWOTId"';
-    $WorkOrderObj->join_field = $join_fieds_arr;
-    $WorkOrderObj->join = $join_arr;
-    $WorkOrderObj->where = $where_arr;
-    $WorkOrderObj->param['limit'] = "0";
-    $WorkOrderObj->param['order_by'] = 'workorder."iWOId" ASC';
-    
-    $WorkOrderObj->setClause();
-    $rs_wo = $WorkOrderObj->recordset_list();
-    //echo "<pre>";print_r($rs_wo);exit;
-    for ($i = 0; $i < count($rs_wo); $i++) {
-        $rs_arr[$i]['iWOId'] = $rs_wo[$i]['iWOId'];
-        $rs_arr[$i]['vWorkOrder'] = "ID#".$rs_wo[$i]['iWOId']." (".$rs_wo[$i]['vWOProject']." | ".$rs_wo[$i]['vWorkorderType'].")";
+    if($iPremiseId > 0){
+        $where_arr = array();
+        $join_fieds_arr = array();
+        $join_arr = array();
+        $WorkOrderObj->clear_variable();
+        $where_arr[] = "workorder.\"iWOSId\" = 1"; // workorder_status =  Open
+        $where_arr[] = "workorder.\"iPremiseId\" = '".$iPremiseId."'"; 
+        $join_fieds_arr[] = 'wt."vType" as "vWorkorderType"';
+        $join_arr[] = 'LEFT JOIN workorder_type_mas wt on workorder."iWOTId" = wt."iWOTId"';
+        $WorkOrderObj->join_field = $join_fieds_arr;
+        $WorkOrderObj->join = $join_arr;
+        $WorkOrderObj->where = $where_arr;
+        $WorkOrderObj->param['limit'] = "0";
+        $WorkOrderObj->param['order_by'] = 'workorder."iWOId" ASC';
+        
+        $WorkOrderObj->setClause();
+        $rs_wo = $WorkOrderObj->recordset_list();
+        //echo "<pre>";print_r($rs_wo);exit;
+        for ($i = 0; $i < count($rs_wo); $i++) {
+            $rs_arr[$i]['iWOId'] = $rs_wo[$i]['iWOId'];
+            $rs_arr[$i]['vWorkOrder'] = "ID#".$rs_wo[$i]['iWOId']." (".$rs_wo[$i]['vWOProject']." | ".$rs_wo[$i]['vWorkorderType'].")";
+        }
+        //echo "<pre>";print_r($rs_arr);exit;
+        $result = array('data' => $rs_arr);
+        $rh = HTTPStatus(200);
+        $code = 2000;
+        $message = api_getMessage($req_ext, constant($code));
+        $response_data = array("Code" => 200, "Message" => $message, "result" => $result);
+    }else {
+        $result = array('data' => $rs_arr);
+        $rh = HTTPStatus(500);
+        $code = 500;
+        $message = api_getMessage($req_ext, constant($code));
+        $response_data = array("Code" => 500, "Message" => $message, "result" => $result);
     }
-    //echo "<pre>";print_r($rs_arr);exit;
-    $result = array('data' => $rs_arr);
-    $rh = HTTPStatus(200);
-    $code = 2000;
-    $message = api_getMessage($req_ext, constant($code));
-    $response_data = array("Code" => 200, "Message" => $message, "result" => $result);
 }else if($request_type == "get_workorder_for_premise_services") {
     $rs_arr  = array();
     $iWOId = $RES_PARA['iWOId'];
+    $iPremiseId = $RES_PARA['iPremiseId'];
     $iServiceTypeId = $RES_PARA['iServiceTypeId'];
     //echo $iWOId;exit;
     if($iWOId > 0) {
@@ -419,9 +429,11 @@ if($request_type == "workorder_list"){
             $join_fieds_arr[] = 'sp."iMRCFixed"';
         }
         $join_arr[] = 'LEFT JOIN service_order so on workorder."iServiceOrderId" = so."iServiceOrderId"';
+        $join_arr[] = 'LEFT JOIN site_mas s ON so."iPremiseId" = s."iSiteId"';
+        $join_arr[] = 'LEFT JOIN zone z ON s."iZoneId" = z."iZoneId"';
         $join_arr[] = 'LEFT JOIN company_mas cm on so."iCarrierID" = cm."iCompanyId"';
         if($iServiceTypeId > 0){
-            $join_arr[] = "LEFT JOIN service_pricing_mas sp ON sp.\"iServicePricingId\" = ( SELECT sp1.\"iServicePricingId\" FROM service_pricing_mas AS sp1 WHERE so.\"iCarrierID\" = sp1.\"iCarrierId\" AND sp1.\iServiceTypeId\" = '".$iServiceTypeId."' ORDER BY sp1.\"iServicePricingId\" DESC LIMIT 1)";
+            $join_arr[] = "LEFT JOIN service_pricing_mas sp ON sp.\"iServicePricingId\" = ( SELECT sp1.\"iServicePricingId\" FROM service_pricing_mas AS sp1 WHERE so.\"iCarrierID\" = sp1.\"iCarrierId\" AND z.\"iNetworkId\" = sp1.\"iNetworkId\" AND sp1.\"iServiceTypeId\" = '".$iServiceTypeId."' ORDER BY sp1.\"iServicePricingId\" DESC LIMIT 1)";
         }
         $WorkOrderObj->join_field = $join_fieds_arr;
         $WorkOrderObj->join = $join_arr;

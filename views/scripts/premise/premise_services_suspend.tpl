@@ -27,11 +27,10 @@
                 		</div>
             		</div> 
                     <div class="form-group row">
-                        <label class="col-sm-5 col-form-label" for="iServiceOrderId">Service Order </label>
+                        <label class="col-sm-5 col-form-label" for="iSuspendServiceOrderId">Service Order </label>
                         <div class="col-sm-7">
                             <input type="hidden" name="iSuspendServiceOrderId" id="iSuspendServiceOrderId" value="">
                             <input type="text" class="form-control readonly-color" name="vSuspendServiceOrder" id="vSuspendServiceOrder" value="" placeholder="Enter Service Order" readonly>
-                        <div class="invalid-feedback"> Please select service order</div>
                         </div>
                     </div> 
                     <div class="form-group row">
@@ -39,7 +38,6 @@
                         <div class="col-sm-7">
                             <input type="hidden" name="iSuspendCarrierId" id="iSuspendCarrierId" value="">
                             <input type="text" class="form-control readonly-color" name="vSuspendCarrierName" id="vSuspendCarrierName" value="" placeholder="Enter Carrier" readonly>
-                        <div class="invalid-feedback"> Please enter carrier</div>
                         </div>
                     </div> 
             		<div class="form-group row">
@@ -51,14 +49,12 @@
                                 <option value="{$rs_pcircuit[n].iPremiseCircuitId}">{$rs_pcircuit[n].vPremiseDisplay|gen_strip_slash}</option>
                                 {/section}
                             </select>
-                        	<div class="invalid-feedback"> Please select premise circuit</div>
                 		</div>
             		</div>
                     <div class="form-group row">
                         <label class="col-sm-5 col-form-label" for="dSuspendDate">Suspend Date </label>
                         <div class="col-sm-7">
                             <input type="text" class="form-control readonly-color" name="dSuspendDate" id="dSuspendDate" value="{$dToday}" placeholder="Enter Suspend Date" readonly>
-                        <div class="invalid-feedback"> Please enter suspend date</div>
                         </div>
                     </div>
                     <div class="form-group row">
