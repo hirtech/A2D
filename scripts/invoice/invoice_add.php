@@ -39,6 +39,8 @@ $rs_carrier = $res['result'];
 $smarty->assign("rs_carrier", $rs_carrier);
 //echo "<pre>";print_r($rs_carrier);exit;
 
+$dMonth = date_getMonthDigitWithMonthDropDown($selmonth="",$fieldId="iSBillingMonth",$first_options="Select Month", $other_parameter='required');
+$dYear = date_getYearDropDown($selday="",$fieldId="iSBillingYear",$limitStart="2022",$limitEnd="2030",$first_options="Select Year", $other_parameter='required');
 
 $module_name = "Invoice ";
 $module_title = "Invoice";
