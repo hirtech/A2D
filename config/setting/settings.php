@@ -151,4 +151,7 @@ $site_api_url = $site_url."api/v2/";
 $Access_Group_SuperAdmin= array('1','2');
 
 $EVENT_CAMPAIGN_BY_ARR = array("1" => "Premise", "2" => "Fiber Zone", "3" => "Zip Code", "4" => "City", "5" => "Network");
+
+$site_logo = $site_url."assets/images/logo.png";
+$pdf_file_path = $class_path."tcpdf/";
 ?>
