@@ -349,6 +349,17 @@ RewriteRule ^maintenance_ticket/maintenance_ticket_add? index.php?module=$0&page
 RewriteRule ^maintenance_ticket/maintenance_ticket_add index.php?module=$0&page=m-maintenance_ticket_add
 #----------- Maintenance Ticket ------------
 
+#---------Billing >> Invoice------------
+RewriteRule ^invoice/invoice_list&(.*)$  index.php?module=$0&page=m-invoice_list&%{QUERY_STRING}
+RewriteRule ^invoice/invoice_list index.php?module=$0&page=m-invoice_list
+
+RewriteRule ^invoice/invoice_add? index.php?module=$0&page=m-invoice_add&%{QUERY_STRING}
+RewriteRule ^invoice/invoice_add index.php?module=$0&page=m-invoice_add
+
+RewriteRule ^invoice/customer_invoice&(.*)$  index.php?module=$0&page=m-customer_invoice&%{QUERY_STRING}
+RewriteRule ^invoice/customer_invoice index.php?module=$0&page=m-customer_invoice
+#-------------------------------------------
+
 #Speed Up using Caching
 # ----------------------------------
 # BEGIN Compress text files

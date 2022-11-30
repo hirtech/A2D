@@ -110,6 +110,7 @@ if($mode == "List"){
     
     //print_r(json_encode($arr_param));exit();
     $API_URL = $site_api_url."premise_list.json";
+    // echo $API_URL. " ".json_encode($arr_param);exit;
     //echo $API_URL;exit;
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $API_URL);
