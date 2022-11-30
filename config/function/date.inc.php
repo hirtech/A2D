@@ -282,7 +282,7 @@ function date_getMonthDigitWithMonthDropDown($selmonth="",$fieldId="",$first_opt
 	global $vmonth, $vmonthvalue;
 
 	$monthcombo = "";
-	$monthcombo .= "<select class=\"w60\" name=\"$fieldId\" $other_parameter>";
+	$monthcombo .= "<select class=\"form-control select-my\" name=\"$fieldId\" $other_parameter>";
 	if($first_options!="")
 		$monthcombo .= "<option value=''>".$first_options."</option>";
 	for($i=0;$i<count($vmonthvalue);$i++) {
@@ -308,7 +308,7 @@ function date_getMonthDigitWithMonthDropDown($selmonth="",$fieldId="",$first_opt
 function date_getYearDropDown($selday="",$fieldId="",$limitStart="",$limitEnd="",$first_options="", $other_parameter='') {
     $daycombo = "";
 	$drop_down_id = str_replace("[]", "", $fieldId);
-  	$daycombo .= "<select class=\"w40\" id=\"$drop_down_id\" name=\"$fieldId\" $other_parameter>";
+  	$daycombo .= "<select class=\"form-control select-my\" id=\"$drop_down_id\" name=\"$fieldId\" $other_parameter>";
   	if($first_options!="")
 		$daycombo .= "<option value=''>".$first_options."</option>";
 
