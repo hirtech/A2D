@@ -96,15 +96,15 @@ class Invoice {
 			$sqlObj->Execute($sql);		
 			$iInvoiceId = $sqlObj->Insert_ID();
 			if($iInvoiceId > 0){
-				//$sql_ps = "SELECT * FROM premise_services WHERE \"iCarrierId\" = '".$this->insert_arr['iCustomerId']."' AND to_char(\"dStartDate\", 'MM') >= '".$this->insert_arr['iBillingMonth']."' AND to_char(\"dStartDate\", 'YYYY') >= '".$this->insert_arr['iBillingYear']."' ORDER BY \"iPremiseServiceId\"";
 				$sql_ps = "SELECT premise_services.*, to_char(\"dStartDate\", 'MM') as \"iBillingMonth\", to_char(\"dStartDate\", 'YYYY') as \"iBillingYear\" FROM premise_services WHERE \"iCarrierId\" = '".$this->insert_arr['iCustomerId']."' ORDER BY \"iPremiseServiceId\"";
-				//echo $sql_ps;
 				$rs_ps = $sqlObj->GetAll($sql_ps);
-				//echo "<pre>";print_r($rs_ps);exit;
 				$ni = count($rs_ps);
+				$total_amt = 0;
 				if($ni > 0) {
 					$ins_arr = [];
 					$sql = "INSERT INTO invoice_lines(\"iInvoiceId\", \"iPremiseServiceId\", \"iPremiseId\", \"iServiceTypeId\", \"iPremiseServiceStatus\", \"iNRCVariable\", \"iMRCFixed\", \"dStartDate\", \"iStatus\", \"dAddedDate\") VALUES ";
+					$total_nrc = 0;
+					$total_mrc = 0;
 					for ($i=0; $i<$ni; $i++) {
 						$iPremiseServiceId = $rs_ps[$i]['iPremiseServiceId'];
 						$iPremiseId = $rs_ps[$i]['iPremiseId'];
@@ -119,6 +119,8 @@ class Invoice {
 						if($iBillingMonth >= $this->insert_arr['iBillingMonth'] && $iBillingYear >= $this->insert_arr['iBillingYear']){
 							$iNRCVariable = $rs_ps[$i]['iNRCVariable'];
 						}
+						$total_mrc += $iMRCFixed;
+						$total_nrc += $iNRCVariable;
 						$iStatus = 1; //Active
 						$sql .= "(".gen_allow_null_int($iInvoiceId).", ".gen_allow_null_int($iPremiseServiceId).", ".gen_allow_null_int($iPremiseId).", ".gen_allow_null_int($iServiceTypeId).", ".gen_allow_null_int($iPremiseServiceStatus).", ".gen_allow_null_int($iNRCVariable).", ".gen_allow_null_int($iMRCFixed).", ".gen_allow_null_char($dStartDate).", ".gen_allow_null_int($iStatus).", ".gen_allow_null_char(date_getSystemDateTime())."), ";
 
@@ -126,6 +128,15 @@ class Invoice {
 					//echo $sql;exit;
 					$sqlObj->Execute(substr($sql, 0, -2));
 				}
+
+				// Update total amount in invoice
+				$total_amt = $total_mrc + $total_nrc;
+				$sql_updt = "UPDATE invoice set \"rTotalAmount\" = '".$total_amt."' WHERE \"iInvoiceId\" = '".$iInvoiceId."'";
+				$rs_updt = $sqlObj->Execute($sql_updt);
+
+				// Insert status in to invoice status
+				$sql_status_ins = "INSERT INTO invoice_status(\"iInvoiceId\", \"iStatus\", \"iUserId\", \"dAddedDate\") VALUES (".gen_allow_null_char($iInvoiceId).", ".gen_allow_null_char($this->insert_arr['iStatus']).", ".gen_allow_null_char($this->insert_arr['iLoginUserId']).",".gen_allow_null_char(date_getSystemDateTime()).")";
+				$sqlObj->Execute($sql_status_ins);
 			}
 			return $iInvoiceId;
 		}
@@ -140,6 +151,19 @@ class Invoice {
 		// echo $sql;exit;
 		//echo "<pre>";print_r($rs_db);exit;
 		return $rs_db;
+	}
+
+	function change_status($iInvoiceId, $iStatus, $iLoginUserId)
+	{
+		global $sqlObj;
+			
+		$sql_updt = "UPDATE invoice set \"iStatus\" = '".$iStatus."' WHERE \"iInvoiceId\" = '".$iInvoiceId."'";
+		$rs_updt = $sqlObj->Execute($sql_updt);
+
+		// Insert status in to invoice status
+		$sql_status_ins = "INSERT INTO invoice_status(\"iInvoiceId\", \"iStatus\", \"iUserId\", \"dAddedDate\") VALUES (".gen_allow_null_char($iInvoiceId).", ".gen_allow_null_char($iStatus).", ".gen_allow_null_char($iLoginUserId).",".gen_allow_null_char(date_getSystemDateTime()).")";
+		$sqlObj->Execute($sql_status_ins);
+		return $rs_updt;
 	}
 
 	function clear_variable(){

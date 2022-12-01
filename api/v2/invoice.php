@@ -197,6 +197,7 @@ if($request_type == "invoice_list"){
         "iBillingMonth" => $RES_PARA['iBillingMonth'],
         "iBillingYear"  => $RES_PARA['iBillingYear'],
         "tNotes"        => $RES_PARA['tNotes'],
+        "iLoginUserId"  => $RES_PARA['iLoginUserId'],
         "iStatus"       => "0", //Draft
     );
     $InvoiceObj->insert_arr = $insert_arr;
@@ -260,6 +261,16 @@ if($request_type == "invoice_list"){
     $code = 2000;
     $message = api_getMessage($req_ext, constant($code));
     $response_data = array("Code" => 200, "Message" => $message, "result" => $result);
+}else if($request_type == "invoice_change_status"){
+    $iInvoiceId = $RES_PARA['iInvoiceId'];
+    $iStatus = $RES_PARA['iStatus'];
+    $iLoginUserId = $RES_PARA['iLoginUserId'];
+    $rs_db = $InvoiceObj->change_status($iInvoiceId, $iStatus, $iLoginUserId);
+    if($rs_db){
+        $response_data = array("Code" => 200, "Message" => "Invoice status changed Successfully", "iInvoiceId" => $iInvoiceId, "error" => 0);
+    }else{
+        $response_data = array("Code" => 500 , "Message" => "ERROR - in Invoice status.", "error" => 1);
+    }
 }
 else {
    $r = HTTPStatus(400);

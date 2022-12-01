@@ -91,6 +91,18 @@ if($mode == "List"){
             if ($access_group_var_CSV == '1') {
                 $action .= '<a class="btn btn-outline-info" title="Download Invoice" href="'.$site_url.'invoice/customer_invoice&download=1&iInvoiceId='.$rs_invoice[$i]['iInvoiceId'].'"><i class="fas fa-download"></i></a>';
             }
+
+            $action .= ' <a class="btn btn-outline-info" title="View Invoice" href="'.$site_url.'invoice/customer_invoice&download=0&iInvoiceId='.$rs_invoice[$i]['iInvoiceId'].'"><i class="fas fa-info-circle"></i></a>';
+
+            $action .= ' <div class="btn-group">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Change status">Status</button>
+                <div class="dropdown-menu p-0">
+                    <a class="dropdown-item" href="javascript:void(0);" onclick="changeInvoiceStatus('.$rs_invoice[$i]['iInvoiceId'].', 0)">Draft</a>
+                    <a class="dropdown-item" href="javascript:void(0);" onclick="changeInvoiceStatus('.$rs_invoice[$i]['iInvoiceId'].', 1)">Sent</a>
+                    <a class="dropdown-item" href="javascript:void(0);" onclick="changeInvoiceStatus('.$rs_invoice[$i]['iInvoiceId'].', 2)">Paid</a>
+                </div>
+            </div>';
+
             if($rs_invoice[$i]['iStatus'] == 0){
                 $vStatus = "Draft";
             }else if($rs_invoice[$i]['iStatus'] == 1){
@@ -123,7 +135,6 @@ if($mode == "List"){
     hc_exit();
     # -----------------------------------
 }else if($mode == "Add"){
-
     $arr_param = array();
     // echo "<pre>";print_r($_POST);exit;
     $arr_param = array(
@@ -134,6 +145,7 @@ if($mode == "List"){
         "iBillingMonth"     => $_POST['iBillingMonth'],
         "iBillingYear"      => $_POST['iBillingYear'],
         "tNotes"            => $_POST['tNotes'],
+        "iLoginUserId"      => $_SESSION['sess_iUserId' . $admin_panel_session_suffix],
         "sessionId"         => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
     );
 
@@ -163,6 +175,47 @@ if($mode == "List"){
         $result['error']    = 1 ;
     }
     
+    # Return jSON data.
+    # -----------------------------------
+    echo json_encode($result);
+    hc_exit();
+    # ----------------------------------- 
+}else if($mode == "change_status"){
+    $result     = array();
+    $arr_param  = array();
+    $iInvoiceId = $_POST['iInvoiceId'];
+    $iStatus    = $_POST['iStatus'];
+    
+    $arr_param['iInvoiceId']    = $iInvoiceId; 
+    $arr_param['iStatus']       = $iStatus; 
+    $arr_param['iLoginUserId']  = $_SESSION['sess_iUserId' . $admin_panel_session_suffix]; 
+    $arr_param['sessionId']     = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
+    $API_URL = $site_api_url."invoice_change_status.json";
+    //echo $API_URL." ".json_encode($arr_param);exit;
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $API_URL);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_HEADER, FALSE);
+    curl_setopt($ch, CURLOPT_POST, TRUE);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($arr_param));
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+       "Content-Type: application/json",
+    ));
+
+    $response = curl_exec($ch);
+    curl_close($ch); 
+    $result_arr = json_decode($response, true); 
+    // echo "<pre>;";print_r($result_arr);exit;
+    if(isset($result_arr)){
+        $result['msg']     = $result_arr['Message'];
+        $result['error']   = $result_arr['error'] ;
+    }else{
+        $result['msg']     = "ERROR - in Invoice status.";
+        $result['error']   = 1 ;
+    }
+    # -----------------------------------
     # Return jSON data.
     # -----------------------------------
     echo json_encode($result);

@@ -16,15 +16,15 @@ var listPage = function(){
                 "aaSorting": [[0,'desc']],
                 'bAutoWidth': true,
                 "columns": [
-                    { "data": "checkbox", "sortable":true, "className": "text-center", "width" : "5%"},
-                    { "data": "iCustomerId", "sortable":true, "width" : "10%"},
-                    { "data": "vPONumber", "sortable":true, "width" : "10%"},
-                    { "data": "dInvoiceDate", "sortable":true, "className": "text-center", "width" : "15%"},
-                    { "data": "dPaymentDate", "sortable":true, "className": "text-center", "width" : "15%"},
-                    { "data": "BillingMonth", "sortable":false, "className": "text-center", "width" : "10%"},
-                    { "data": "tNotes", "sortable":true, "width" : "22%"},
-                    { "data": "iStatus", "sortable":true, "className": "text-center", "width" : "8%"},
-                    { "data": "actions", "sortable":false, "className": "text-center", "width" : "5%"},
+                    { "data": "checkbox", "sortable":true, "className": "text-center"},
+                    { "data": "iCustomerId", "sortable":true},
+                    { "data": "vPONumber", "sortable":true},
+                    { "data": "dInvoiceDate", "sortable":true, "className": "text-center"},
+                    { "data": "dPaymentDate", "sortable":true, "className": "text-center"},
+                    { "data": "BillingMonth", "sortable":false, "className": "text-center"},
+                    { "data": "tNotes", "sortable":true},
+                    { "data": "iStatus", "sortable":true, "className": "text-center"},
+                    { "data": "actions", "sortable":false, "className": "text-center"},
                 ],                
                 "autoWidth" : true,
                 "lengthMenu": PageLengthMenuArr,
@@ -110,3 +110,46 @@ $('#Search').click(function (){
     gridtable.ajax.reload();
     return false;
 });
+
+
+function changeInvoiceStatus(iInvoiceId, iStatus) {
+    swal({
+        title: "Are you sure you want to change invoice status ?",
+        text: "",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: 'confirm btn btn-lg btn-danger',
+        cancelButtonClass : 'cancel btn btn-lg btn-default',
+        confirmButtonText: 'Yes, change it!',
+        cancelButtonText: "No, cancel it!",
+        closeOnConfirm: false,
+        closeOnCancel: true,
+        },
+        function(isConfirm) {
+            if (isConfirm) {
+                $.ajax({
+                    type: "POST",
+                    url: site_url+ajax_url,
+                    data: {
+                        "mode" : "change_status",
+                        "iInvoiceId" : iInvoiceId,
+                        "iStatus" : iStatus,
+                    },
+                    success: function(data){
+                         swal.close();
+                        response =JSON.parse(data);
+                        if(response['error'] == "0"){
+                            toastr.success(response['msg']);
+                        }else{
+                            toastr.error(response['msg']);
+                        }
+                        gridtable.ajax.reload();
+                    }
+                });
+            } else {
+                swal.close();
+                //swal("Cancelled", "Your imaginary file is safe :)", "error");
+            }
+        }
+    );
+}

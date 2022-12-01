@@ -2,7 +2,8 @@
 include_once($site_path . "scripts/session_valid.php");
 $mode = isset($_REQUEST['mode']) ? $_REQUEST['mode'] : 'list';
 $iInvoiceId = $_REQUEST['iInvoiceId'];
-//echo $iInvoiceId;exit;
+$download = $_REQUEST['download'];
+//echo $download;exit;
 if($iInvoiceId  > 0){
     $arr_param = array();
     $arr_param['iInvoiceId'] = $iInvoiceId;
@@ -26,9 +27,10 @@ if($iInvoiceId  > 0){
     $rs_invoice = $res['result']['data'];
     $invoice_lines_arr = $rs_invoice[0]['invoice_lines'];
     $cnt_invoice_lines = count($invoice_lines_arr);
-    // echo "<pre>"; print_r($invoice_lines_arr);exit();
 
-    if($rs_invoice) {
+    $vBillingMonth = date("M", mktime(0, 0, 0, $rs_invoice[0]['iBillingMonth'], 10)).'-'.date("y", strtotime($rs_invoice[0]['iBillingYear']));
+    // echo "<pre>"; print_r($invoice_lines_arr);exit();
+    if($rs_invoice && $download == 1) {
         $data = '
         <style>
         table.border{border:1px solid #c2c2c2;}
@@ -68,7 +70,7 @@ if($iInvoiceId  > 0){
         $data .= '<tr>  
                     <td>&nbsp;</td>
                     <td><strong>Billing Month: </strong></td>
-                    <td style="text-align: right;">'.date("M", mktime(0, 0, 0, $rs_invoice[0]['iBillingMonth'], 10)).'-'.date("y", strtotime($rs_invoice[0]['iBillingYear'])).'</td>
+                    <td style="text-align: right;">'.$vBillingMonth.'</td>
                 </tr>'; 
         $data .= '<tr><td colspan="3">&nbsp;</td></tr>';
 
@@ -201,5 +203,29 @@ if($iInvoiceId  > 0){
         // Close and output PDF document
         // This method has several options, check the source code documentation for more information.
         $pdf->Output($pdf_name, 'D');
+    }else if($rs_invoice && $download == 0) {
+        $sTotalNRCVariable = $sTotalMRCFixed = $iSGrandTotal = 0;
+        if($cnt_invoice_lines > 0){
+            for ($j=0; $j < $cnt_invoice_lines; $j++) { 
+                $sTotalNRCVariable += $invoice_lines_arr[$j]['iNRCVariable'];
+                $sTotalMRCFixed += $invoice_lines_arr[$j]['iMRCFixed'];
+            }
+        }
+        $iSGrandTotal = $sTotalNRCVariable+$sTotalMRCFixed;
     }
 }
+
+
+
+$module_name = "Invoice ";
+$module_title = "Invoice";
+$smarty->assign("module_name", $module_name);
+$smarty->assign("module_title", $module_title);
+$smarty->assign("rs_invoice", $rs_invoice);
+$smarty->assign("invoice_lines_arr", $invoice_lines_arr);
+$smarty->assign("cnt_invoice_lines", $cnt_invoice_lines);
+$smarty->assign("site_logo", $site_logo);
+$smarty->assign("sTotalNRCVariable", $sTotalNRCVariable);
+$smarty->assign("sTotalMRCFixed", $sTotalMRCFixed);
+$smarty->assign("iSGrandTotal", $iSGrandTotal);
+$smarty->assign("vBillingMonth", $vBillingMonth);
