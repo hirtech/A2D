@@ -52,7 +52,7 @@ if($mode == "List"){
     $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
 
     $API_URL = $site_api_url."invoice_list.json";
-    // echo $API_URL. " ".json_encode($arr_param);exit;
+    //echo $API_URL. " ".json_encode($arr_param);exit;
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $API_URL);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
@@ -104,23 +104,21 @@ if($mode == "List"){
             </div>';
 
             if($rs_invoice[$i]['iStatus'] == 0){
-                $vStatus = "Draft";
+                $vStatus = '<a class="text-secondary font-weight-bold" href="javascript:void(0)" title="Invoice Status">Draft</a>';
             }else if($rs_invoice[$i]['iStatus'] == 1){
-                $vStatus = "Sent";
+                $vStatus = '<a class="text-info font-weight-bold" href="javascript:void(0)" title="Invoice Status">Sent</a>';
             }else if($rs_invoice[$i]['iStatus'] == 2){
-                $vStatus = "Paid";
-            }else{
-                $vStatus = "---";
+                $vStatus = '<a class="text-success font-weight-bold" href="javascript:void(0)" title="Invoice Status">Paid</a>';
             }
 
             $entry[] = array(
-                "checkbox"          => $rs_invoice[$i]['iInvoiceId'],
+                "iInvoiceId"        => $rs_invoice[$i]['iInvoiceId'],
                 "iCustomerId"       => $rs_invoice[$i]['vCompanyName'],
                 "vPONumber"         => $rs_invoice[$i]['vPONumber'],
                 "dInvoiceDate"      => date_getDateFMY($rs_invoice[$i]['dInvoiceDate']),
                 "dPaymentDate"      => date_getDateFMY($rs_invoice[$i]['dPaymentDate']),
                 "BillingMonth"      => $vmonthvalue[$rs_invoice[$i]['iBillingMonth']].', '.$rs_invoice[$i]['iBillingYear'],
-                "tNotes"            => nl2br($rs_invoice[$i]['tNotes']),
+                "rTotalAmount"      => gen_make_currency_format($rs_invoice[$i]['rTotalAmount']),
                 "iStatus"           => $vStatus,
                 "actions"           => ($action != "") ? $action : "---"
             );

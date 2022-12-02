@@ -131,8 +131,11 @@ if($request_type == "invoice_list"){
         case "4":
             $sortname = "invoice.\"dPaymentDate\"";
             break;
+        case "5":
+            $sortname = "invoice.\"iBillingMonth\"";
+            break;
         case "6":
-            $sortname = "invoice.\"tNotes\"";
+            $sortname = "invoice.\"rTotalAmount\"";
             break;
         case "7":
             $sortname = "invoice.\"iStatus\"";
@@ -176,7 +179,7 @@ if($request_type == "invoice_list"){
                 "dPaymentDate"      => $rs_invoice[$i]['dPaymentDate'],
                 "iBillingMonth"     => $rs_invoice[$i]['iBillingMonth'],
                 "iBillingYear"      => $rs_invoice[$i]['iBillingYear'],
-                "tNotes"            => $rs_invoice[$i]['tNotes'],
+                "rTotalAmount"      => $rs_invoice[$i]['rTotalAmount'],
                 "iStatus"           => $rs_invoice[$i]['iStatus']
             );
         }

@@ -100,15 +100,15 @@
                                     <table width="100%">
                                         <tr>
                                             <td width="80%" class="text-right"><strong>Sub Total: </strong></td>
-                                            <td width="10%" class="text-right">{$sTotalNRCVariable}</td>
-                                            <td width="10%" class="text-right">{$sTotalMRCFixed}</td>
+                                            <td width="10%" class="text-right">{$sTotalNRCVariable|gen_make_currency_format}</td>
+                                            <td width="10%" class="text-right">{$sTotalMRCFixed|gen_make_currency_format}</td>
                                         </tr>
                                         <tr>
                                             <td colspan="3">&nbsp;</td>
                                         </tr>
                                         <tr>
                                             <td class="text-right"><strong>Amount Due: </strong></td>
-                                            <td class="text-right">{$iSGrandTotal}</td>
+                                            <td class="text-right">{$iSGrandTotal|gen_make_currency_format}</td>
                                             <td class="text-right"></td>
                                         </tr>
                                         <tr>

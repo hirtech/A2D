@@ -96,7 +96,7 @@ class Invoice {
 			$sqlObj->Execute($sql);		
 			$iInvoiceId = $sqlObj->Insert_ID();
 			if($iInvoiceId > 0){
-				$sql_ps = "SELECT premise_services.*, to_char(\"dStartDate\", 'MM') as \"iBillingMonth\", to_char(\"dStartDate\", 'YYYY') as \"iBillingYear\" FROM premise_services WHERE \"iCarrierId\" = '".$this->insert_arr['iCustomerId']."' ORDER BY \"iPremiseServiceId\"";
+				$sql_ps = "SELECT premise_services.*, to_char(\"dStartDate\", 'MM') as \"iBillingMonth\", to_char(\"dStartDate\", 'YYYY') as \"iBillingYear\" FROM premise_services WHERE \"iCarrierId\" = '".$this->insert_arr['iCustomerId']."' AND (to_char(\"dStartDate\", 'MM') <= '".$this->insert_arr['iBillingMonth']."' AND to_char(\"dStartDate\", 'YYYY') <= '".$this->insert_arr['iBillingYear']."') ORDER BY \"iPremiseServiceId\"";
 				$rs_ps = $sqlObj->GetAll($sql_ps);
 				$ni = count($rs_ps);
 				$total_amt = 0;

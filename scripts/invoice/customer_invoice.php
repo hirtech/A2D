@@ -119,13 +119,13 @@ if($iInvoiceId  > 0){
             <table width="100%">';
                 $data .= '<tr>
                     <td width="80%" style="text-align:right;"><strong>Sub Total: </strong></td>
-                    <td width="10%" style="text-align:right;">'.$totalNRCVariable.'</td>
-                    <td width="10%" style="text-align:right;">'.$totalMRCFixed.'</td>
+                    <td width="10%" style="text-align:right;">'.gen_make_currency_format($totalNRCVariable).'</td>
+                    <td width="10%" style="text-align:right;">'.gen_make_currency_format($totalMRCFixed).'</td>
                 </tr>';
                 $data .= '<tr><td colspan="3">&nbsp;</td></tr>';
                 $data .= '<tr>
                         <td style="text-align:right;"><strong>Amount Due: </strong></td>
-                        <td style="text-align:right;">'.$iGrandTotal.'</td>
+                        <td style="text-align:right;">'.gen_make_currency_format($iGrandTotal).'</td>
                         <td style="text-align:right;"></td>
                     </tr>';
             $data .= '</td>

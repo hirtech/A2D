@@ -43,9 +43,9 @@
                                     <div class="invalid-feedback"> Please select invoice date</div>
                             </div>
                             <div class="col-12 mb-3">
-                                <label for="dPaymentDate">Payment Date</label>
+                                <label for="dPaymentDate">Payment Due</label>
                                 <input type="date" class="form-control" id="dPaymentDate" name="dPaymentDate" value="{$rs_invoice[0].dPaymentDate}" required> 
-                                <div class="invalid-feedback"> Please select payment date</div>
+                                <div class="invalid-feedback"> Please select payment Due</div>
                             </div>
                             <div class="col-12 mb-3">
                                 <label for="vBillingMonth">Billing Month</label>

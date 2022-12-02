@@ -41,15 +41,15 @@
 				<table id="datatable-grid" class="display table dataTable table-striped table-bordered editable-table " width="100%">
 					<thead>
 						<tr>
-							<th width="5%">ID</th>
-							<th width="10%">Customer</th>
-							<th width="10%">P.O. / S.O.</th>
-							<th width="15%">Invoice Date</th>
-							<th width="15%">Payment Date</th>
-							<th width="10%">Billing Month</th>
-							<th width="22%">Notes</th>
-							<th width="8%">Status</th>
-							<th width="5%">Action</th> 
+							<th>ID</th>
+							<th>Customer</th>
+							<th>P.O. / S.O.</th>
+							<th>Invoice Date</th>
+							<th>Payment Due</th>
+							<th>Billing Month</th>
+							<th>Amount</th>
+							<th>Status</th>
+							<th>Action</th> 
 						</tr>
 					</thead>
 					<tbody>                            
