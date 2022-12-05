@@ -137,28 +137,28 @@
         <div class="row"><h6 class="card-title font-weight-bold">Day at a Glance</h6><i class="fas fa-coffee"></i></div>
           <table class="table-sm table-striped">
             <tr>
-              <td class="card-subtitle mb-2 text-muted">Public Requests: <b>{$day_glance['public_request'].today} , {$day_glance['public_request'].yesterday}</b></td>
-              <td>{$day_glance['public_request'].diff_ratio}</td>
+              <td class="card-subtitle mb-2 text-muted">Trouble Tickets: <b>{$day_glance['trouble_ticket'].today} , {$day_glance['trouble_ticket'].yesterday}</b></td>
+              <td>{$day_glance['trouble_ticket'].diff_ratio}</td>
             </tr>
             <tr>
-              <td class="card-subtitle mb-2 text-muted">Larval Samples: <b>{$day_glance['larval_samples'].today} , {$day_glance['larval_samples'].yesterday}</b></td>
-              <td>{$day_glance['larval_samples'].diff_ratio}</td>
+              <td class="card-subtitle mb-2 text-muted">Maintenence Tickets: <b>{$day_glance['maintenance_ticket'].today} , {$day_glance['maintenance_ticket'].yesterday}</b></td>
+              <td>{$day_glance['maintenance_ticket'].diff_ratio}</td>
             </tr>
             <tr>
-              <td class="card-subtitle mb-2 text-muted">Treatments: <b>{$day_glance['treatment'].today} , {$day_glance['treatment'].yesterday}</b></td>
-              <td>{$day_glance['treatment'].diff_ratio}</td>
+              <td class="card-subtitle mb-2 text-muted">Service Orders: <b>{$day_glance['service_order'].today} , {$day_glance['service_order'].yesterday}</b></td>
+              <td>{$day_glance['service_order'].diff_ratio}</td>
             </tr>
             <tr>
-              <td class="card-subtitle mb-2 text-muted">Trap Collections: <b>{$day_glance['trap_collect'].today} , {$day_glance['trap_collect'].yesterday}</b></td>
-              <td>{$day_glance['trap_collect'].diff_ratio}</td>
+              <td class="card-subtitle mb-2 text-muted">Work Orders: <b>{$day_glance['workorder'].today} , {$day_glance['workorder'].yesterday}</b></td>
+              <td>{$day_glance['workorder'].diff_ratio}</td>
             </tr>
             <tr>
-              <td class="card-subtitle mb-2 text-muted">Mosquito Pools: <b>{$day_glance['mosq_pool'].today} , {$day_glance['mosq_pool'].yesterday}</b></td>
-              <td>{$day_glance['mosq_pool'].diff_ratio}</td>
+              <td class="card-subtitle mb-2 text-muted">Fiber Inquiry: <b>{$day_glance['fiber_inquiry'].today} , {$day_glance['fiber_inquiry'].yesterday}</b></td>
+              <td>{$day_glance['fiber_inquiry'].diff_ratio}</td>
             </tr>
             <tr>
-              <td class="card-subtitle mb-2 text-muted">Positive Pools: <b>{$day_glance['postive_pool'].today} , {$day_glance['postive_pool'].yesterday}</b></td>
-              <td>{$day_glance['postive_pool'].diff_ratio}</td>
+              <td class="card-subtitle mb-2 text-muted">Events: <b>{$day_glance['events'].today} , {$day_glance['events'].yesterday}</b></td>
+              <td>{$day_glance['events'].diff_ratio}</td>
             </tr>
           </table>                  
           *Compared to yesterday
@@ -192,28 +192,28 @@
         <div class="row"><h6 class="card-title font-weight-bold">Month at a Glance</h6><i class="fas fa-calendar-alt"></i></div>            
           <table class="table-sm table-striped">
             <tr>
-              <td class="card-subtitle mb-2 text-muted">Public Requests: <b>{$month_glance['public_request'].curr_month} , {$month_glance['public_request'].last_month}</b></td>
-              <td>{$month_glance['public_request'].diff_ratio}</td>
+              <td class="card-subtitle mb-2 text-muted">Trouble Tickets: <b>{$month_glance['trouble_ticket'].curr_month} , {$month_glance['trouble_ticket'].last_month}</b></td>
+              <td>{$month_glance['trouble_ticket'].diff_ratio}</td>
             </tr>
             <tr>
-              <td class="card-subtitle mb-2 text-muted">Larval Samples: <b>{$month_glance['larval_samples'].curr_month} , {$month_glance['larval_samples'].last_month}</b></td>
-              <td>{$month_glance['larval_samples'].diff_ratio}</td>
+              <td class="card-subtitle mb-2 text-muted">Maintenence Tickets: <b>{$month_glance['maintenance_ticket'].curr_month} , {$month_glance['maintenance_ticket'].last_month}</b></td>
+              <td>{$month_glance['maintenance_ticket'].diff_ratio}</td>
             </tr>
             <tr>
-              <td class="card-subtitle mb-2 text-muted">Treatments: <b>{$month_glance['treatment'].curr_month} , {$month_glance['treatment'].last_month}</b></td>
-              <td>{$month_glance['treatment'].diff_ratio}</td>
+              <td class="card-subtitle mb-2 text-muted">Service Orders: <b>{$month_glance['service_order'].curr_month} , {$month_glance['service_order'].last_month}</b></td>
+              <td>{$month_glance['service_order'].diff_ratio}</td>
             </tr>
             <tr>
-              <td class="card-subtitle mb-2 text-muted">Trap Collections: <b>{$month_glance['trap_collect'].curr_month} , {$month_glance['trap_collect'].last_month}</b></td>
-              <td>{$month_glance['trap_collect'].diff_ratio}</td>
+              <td class="card-subtitle mb-2 text-muted">Work Orders: <b>{$month_glance['workorder'].curr_month} , {$month_glance['workorder'].last_month}</b></td>
+              <td>{$month_glance['workorder'].diff_ratio}</td>
             </tr>
             <tr>
-              <td class="card-subtitle mb-2 text-muted">Mosquito Pools: <b>{$month_glance['mosq_pool'].curr_month} , {$month_glance['mosq_pool'].last_month}</b></td>
-              <td>{$month_glance['mosq_pool'].diff_ratio}</td>
+              <td class="card-subtitle mb-2 text-muted">Fiber Inquiry: <b>{$month_glance['fiber_inquiry'].curr_month} , {$month_glance['fiber_inquiry'].last_month}</b></td>
+              <td>{$month_glance['fiber_inquiry'].diff_ratio}</td>
             </tr>
             <tr>
-              <td class="card-subtitle mb-2 text-muted">Positive Pools: <b>{$month_glance['postive_pool'].curr_month} , {$month_glance['postive_pool'].last_month}</b></td>
-              <td>{$month_glance['postive_pool'].diff_ratio}</td>
+              <td class="card-subtitle mb-2 text-muted">Events: <b>{$month_glance['events'].curr_month} , {$month_glance['events'].last_month}</b></td>
+              <td>{$month_glance['events'].diff_ratio}</td>
             </tr>
           </table>                  
           *Compared to last month
@@ -231,28 +231,28 @@
         <div class="row"><h6 class="card-title font-weight-bold">Week at a Glance</h6><i class="fas fa-calendar-week"></i></div>            
           <table class="table-sm table-striped">
             <tr>
-              <td class="card-subtitle mb-2 text-muted">Public Requests: <b>{$week_glance['public_request'].curr_week} , {$week_glance['public_request'].last_week}</b></td>
-              <td>{$week_glance['public_request'].diff_ratio}</td>
+              <td class="card-subtitle mb-2 text-muted">Trouble Tickets: <b>{$week_glance['trouble_ticket'].curr_week} , {$week_glance['trouble_ticket'].last_week}</b></td>
+              <td>{$week_glance['trouble_ticket'].diff_ratio}</td>
             </tr>
             <tr>
-              <td class="card-subtitle mb-2 text-muted">Larval Samples: <b>{$week_glance['larval_samples'].curr_week} , {$week_glance['larval_samples'].last_week}</b></td>
-              <td>{$week_glance['larval_samples'].diff_ratio}</td>
+              <td class="card-subtitle mb-2 text-muted">Maintenence Tickets: <b>{$week_glance['maintenance_ticket'].curr_week} , {$week_glance['maintenance_ticket'].last_week}</b></td>
+              <td>{$week_glance['maintenance_ticket'].diff_ratio}</td>
             </tr>
             <tr>
-              <td class="card-subtitle mb-2 text-muted">Treatments: <b>{$week_glance['treatment'].curr_week} , {$week_glance['treatment'].last_week}</b></td>
-              <td>{$week_glance['treatment'].diff_ratio}</td>
+              <td class="card-subtitle mb-2 text-muted">Service Orders: <b>{$week_glance['service_order'].curr_week} , {$week_glance['service_order'].last_week}</b></td>
+              <td>{$week_glance['service_order'].diff_ratio}</td>
             </tr>
             <tr>
-              <td class="card-subtitle mb-2 text-muted">Trap Collections: <b>{$week_glance['trap_collect'].curr_week} , {$week_glance['trap_collect'].last_week}</b></td>
-              <td>{$week_glance['trap_collect'].diff_ratio}</td>
+              <td class="card-subtitle mb-2 text-muted">Work Orders: <b>{$week_glance['workorder'].curr_week} , {$week_glance['workorder'].last_week}</b></td>
+              <td>{$week_glance['workorder'].diff_ratio}</td>
             </tr>
             <tr>
-              <td class="card-subtitle mb-2 text-muted">Mosquito Pools: <b>{$week_glance['mosq_pool'].curr_week} , {$week_glance['mosq_pool'].last_week}</b></td>
-              <td>{$week_glance['mosq_pool'].diff_ratio}</td>
+              <td class="card-subtitle mb-2 text-muted">Fiber Inquiry: <b>{$week_glance['fiber_inquiry'].curr_week} , {$week_glance['fiber_inquiry'].last_week}</b></td>
+              <td>{$week_glance['fiber_inquiry'].diff_ratio}</td>
             </tr>
             <tr>
-              <td class="card-subtitle mb-2 text-muted">Positive Pools: <b>{$week_glance['postive_pool'].curr_week} , {$week_glance['postive_pool'].last_week}</b></td>
-              <td>{$week_glance['postive_pool'].diff_ratio}</td>
+              <td class="card-subtitle mb-2 text-muted">Events: <b>{$week_glance['events'].curr_week} , {$week_glance['events'].last_week}</b></td>
+              <td>{$week_glance['events'].diff_ratio}</td>
             </tr>
           </table>
                   
@@ -273,28 +273,28 @@
         <div class="row"><h6 class="card-title font-weight-bold">Year at a Glance</h6><i class="fas fa-calendar-alt"></i></div>            
           <table class="table-sm  table-striped">
              <tr>
-              <td class="card-subtitle mb-2 text-muted">Public Requests: <b>{$year_glance['public_request'].curr_year} , {$year_glance['public_request'].last_year}</b></td>
-              <td>{$year_glance['public_request'].diff_ratio}</td>
+              <td class="card-subtitle mb-2 text-muted">Trouble Tickets: <b>{$year_glance['trouble_ticket'].curr_year} , {$year_glance['trouble_ticket'].last_year}</b></td>
+              <td>{$year_glance['trouble_ticket'].diff_ratio}</td>
             </tr>
             <tr>
-              <td class="card-subtitle mb-2 text-muted">Larval Samples: <b>{$year_glance['larval_samples'].curr_year} , {$year_glance['larval_samples'].last_year}</b></td>
-              <td>{$year_glance['larval_samples'].diff_ratio}</td>
+              <td class="card-subtitle mb-2 text-muted">Maintenence Tickets: <b>{$year_glance['maintenance_ticket'].curr_year} , {$year_glance['maintenance_ticket'].last_year}</b></td>
+              <td>{$year_glance['maintenance_ticket'].diff_ratio}</td>
             </tr>
             <tr>
-              <td class="card-subtitle mb-2 text-muted">Treatments: <b>{$year_glance['treatment'].curr_year} , {$year_glance['treatment'].last_year}</b></td>
-              <td>{$year_glance['treatment'].diff_ratio}</td>
+              <td class="card-subtitle mb-2 text-muted">Service Orders: <b>{$year_glance['service_order'].curr_year} , {$year_glance['service_order'].last_year}</b></td>
+              <td>{$year_glance['service_order'].diff_ratio}</td>
             </tr>
             <tr>
-              <td class="card-subtitle mb-2 text-muted">Trap Collections: <b>{$year_glance['trap_collect'].curr_year} , {$year_glance['trap_collect'].last_year}</b></td>
-              <td>{$year_glance['trap_collect'].diff_ratio}</td>
+              <td class="card-subtitle mb-2 text-muted">Work Orders: <b>{$year_glance['workorder'].curr_year} , {$year_glance['workorder'].last_year}</b></td>
+              <td>{$year_glance['workorder'].diff_ratio}</td>
             </tr>
             <tr>
-              <td class="card-subtitle mb-2 text-muted">Mosquito Pools: <b>{$year_glance['mosq_pool'].curr_year} , {$year_glance['mosq_pool'].last_year}</b></td>
-              <td>{$year_glance['mosq_pool'].diff_ratio}</td>
+              <td class="card-subtitle mb-2 text-muted">Fiber Inquiry: <b>{$year_glance['fiber_inquiry'].curr_year} , {$year_glance['fiber_inquiry'].last_year}</b></td>
+              <td>{$year_glance['fiber_inquiry'].diff_ratio}</td>
             </tr>
             <tr>
-              <td class="card-subtitle mb-2 text-muted">Positive Pools: <b>{$year_glance['postive_pool'].curr_year} , {$year_glance['postive_pool'].last_year}</b></td>
-              <td>{$year_glance['postive_pool'].diff_ratio}</td>
+              <td class="card-subtitle mb-2 text-muted">Events: <b>{$year_glance['events'].curr_year} , {$year_glance['events'].last_year}</b></td>
+              <td>{$year_glance['events'].diff_ratio}</td>
             </tr>
           </table>
                   

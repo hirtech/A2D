@@ -147,13 +147,23 @@ class WorkOrder {
 		$this->limit_clause = "";
 	}
 
-	function delete_records($iWOId){
+	function recordset_glance_data($where_clause1 = "",$where_clause2 ="") {	
 		global $sqlObj;
+		if($where_clause1 != ""){
+			$where_clause1 = " WHERE ".$where_clause1 ;	
+		}
 
-        $sql_del = "DELETE FROM workorder WHERE workorder.\"iWOId\" IN (".$iWOId.")";
-		$rs_del = $sqlObj->Execute($sql_del);
+		if($where_clause2 != ""){
+			$where_clause2 = " WHERE ".$where_clause2 ;	
+		}
 
-		return $rs_del;
+		$sql_glance =  "select (SELECT count(\"iWOId\")  from  workorder ".$where_clause1." ) as wocount1, ( SELECT  count(\"iWOId\") from  workorder ".$where_clause2." ) as wocount2 ";
+		//echo $sql_glance;exit();
+		$rs_db = $sqlObj->GetAll($sql_glance);
+			
+		return $rs_db;
 	}
+
+	
 }
 ?>

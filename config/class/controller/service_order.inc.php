@@ -122,6 +122,32 @@ class ServiceOrder {
 		}
 	}
 
+	function delete_records($iServiceOrderId){
+		global $sqlObj;
+
+        $sql_del = "DELETE FROM service_order WHERE service_order.\"iServiceOrderId\" IN (".$iServiceOrderId.")";
+		$rs_del = $sqlObj->Execute($sql_del);
+
+		return $rs_del;
+	}
+
+	function recordset_glance_data($where_clause1 = "",$where_clause2 ="") {	
+		global $sqlObj;
+		if($where_clause1 != ""){
+			$where_clause1 = " WHERE ".$where_clause1 ;	
+		}
+
+		if($where_clause2 != ""){
+			$where_clause2 = " WHERE ".$where_clause2 ;	
+		}
+
+		$sql_glance =  "select (SELECT count(\"iServiceOrderId\")  from  service_order ".$where_clause1." ) as socount1, ( SELECT  count(\"iServiceOrderId\") from  service_order ".$where_clause2." ) as socount2 ";
+		//echo $sql_glance;exit();
+		$rs_db = $sqlObj->GetAll($sql_glance);
+			
+		return $rs_db;
+	}
+
 	function clear_variable(){
 		$this->join_field = array();
 		$this->join = array();
@@ -139,13 +165,5 @@ class ServiceOrder {
 		$this->limit_clause = "";
 	}
 
-	function delete_records($iServiceOrderId){
-		global $sqlObj;
-
-        $sql_del = "DELETE FROM service_order WHERE service_order.\"iServiceOrderId\" IN (".$iServiceOrderId.")";
-		$rs_del = $sqlObj->Execute($sql_del);
-
-		return $rs_del;
-	}
 }
 ?>

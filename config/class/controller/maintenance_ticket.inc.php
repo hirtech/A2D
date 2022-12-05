@@ -188,6 +188,23 @@ class MaintenanceTicket {
 		return $rs_db;
 	}
 
+	function recordset_glance_data($where_clause1 = "",$where_clause2 ="") {	
+		global $sqlObj;
+		if($where_clause1 != ""){
+			$where_clause1 = " WHERE ".$where_clause1 ;	
+		}
+
+		if($where_clause2 != ""){
+			$where_clause2 = " WHERE ".$where_clause2 ;	
+		}
+
+		$sql_glance =  "select (SELECT count(\"iMaintenanceTicketId\")  from  maintenance_ticket ".$where_clause1." ) as mtcount1, ( SELECT  count(\"iMaintenanceTicketId\") from  maintenance_ticket ".$where_clause2." ) as mtcount2 ";
+		//echo $sql_glance;exit();
+		$rs_db = $sqlObj->GetAll($sql_glance);
+			
+		return $rs_db;
+	}
+
 	function clear_variable(){
 		$this->join_field = array();
 		$this->join = array();

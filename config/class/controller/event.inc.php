@@ -194,6 +194,23 @@ class Event {
 		return $rs_db;
 	}
 
+	function recordset_glance_data($where_clause1 = "",$where_clause2 ="") {	
+		global $sqlObj;
+		if($where_clause1 != ""){
+			$where_clause1 = " WHERE ".$where_clause1 ;	
+		}
+
+		if($where_clause2 != ""){
+			$where_clause2 = " WHERE ".$where_clause2 ;	
+		}
+
+		$sql_glance =  "select (SELECT count(\"iEventId\")  from  event ".$where_clause1." ) as ecount1, ( SELECT  count(\"iEventId\") from  event ".$where_clause2." ) as ecount2 ";
+		//echo $sql_glance;exit();
+		$rs_db = $sqlObj->GetAll($sql_glance);
+			
+		return $rs_db;
+	}
+
 	function clear_variable(){
 		$this->join_field = array();
 		$this->join = array();

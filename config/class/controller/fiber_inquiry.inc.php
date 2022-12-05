@@ -201,7 +201,7 @@ class FiberInquiry {
 			$where_clause2 = " WHERE ".$where_clause2 ;	
 		}
 
-		$sql_glance =  "select (SELECT count(\"iFiberInquiryId\")  from  fiberinquiry_details ".$where_clause1." ) as srcount1 , ( SELECT  count(\"iFiberInquiryId\")  from  fiberinquiry_details  ".$where_clause2." ) as srcount2 ";
+		$sql_glance =  "select (SELECT count(\"iFiberInquiryId\")  from  fiberinquiry_details ".$where_clause1." ) as ficount1 , ( SELECT  count(\"iFiberInquiryId\")  from  fiberinquiry_details  ".$where_clause2." ) as ficount2 ";
 		//echo $sql_glance;exit();
 		$rs_db = $sqlObj->GetAll($sql_glance);
 			
