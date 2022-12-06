@@ -139,6 +139,17 @@ class ServiceType {
 		}
 	}
 
+	function servicetype_dashboard_amchart()
+	{
+		global $sqlObj;
+		// echo "con file";exit();
+		
+		$sql = 'SELECT b."vServiceType",count(a."iPremiseServiceId") FROM "public"."premise_services" as a INNER JOIN service_type_mas as b ON a."iServiceTypeId"=b."iServiceTypeId" WHERE date_part(\'year\', a."dAddedDate") = date_part(\'year\', CURRENT_DATE) GROUP BY b."vServiceType"';
+		$rs_db = $sqlObj->GetAll($sql);
+		// echo "<pre>"; print_r($rs_db);exit();
+		return $rs_db;
+	}
+
 	function clear_variable(){
 		$this->join_field = array();
 		$this->join = array();
