@@ -1563,8 +1563,8 @@ body::-webkit-scrollbar-thumb {
   background-position: center;
   background-color: #1b1b1b; }
 
-.holder-image img {
-  opacity: 0; }
+/*.holder-image img {
+  opacity: 0; }*/
 
 .info-card {
   position: relative;

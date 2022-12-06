@@ -9,7 +9,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <h5 class="card-title mb-3 mt-2" style="font-size: 18px;">HELP US LIGHT YOUR COMMUNITY!</h5>
+                    <h5 class="card-title mb-3 mt-2">HELP US LIGHT YOUR COMMUNITY!</h5>
                     <p class="card-text">Check availability of service <br>Signup with a provider <br>We will do the installation. </p>
                     <div class="row mt-4 mb-3">
                         <div class="col-6">
@@ -32,13 +32,12 @@
             <div class="card-content h-100">
                 <div class="card-body h-100 p-0">
                     <div class="info-card h-100">
-                        <div class="background-image-maker"></div>
                         <div class="holder-image">
                             <img src="{$site_url}assets/images/modern-equipment-image.jpeg" alt="" class="img-fluid">
                         </div>
-                        <div class="title px-4 text-black mb-3">
-                            <h3 class="text-black" style="font-size: 16px;">The choice is all yours.</h3>
-                            <h3 class="text-black" style="font-size: 16px;">Connect with the world with the provider of your choice for all services or have different providers deliver à la carte.</h3>
+                        <div class="title px-4 text-black mb-3 ">
+                            <h5 class="card-title mb-3 mt-2">The choice is all yours.</h5>
+                            <p class="card-text">Connect with the world with the provider of your choice for all services or have different providers deliver à la carte.</p>
                         </div>
                     </div>
                 </div>
@@ -53,7 +52,7 @@
                 <div class="row ml-1">
                     <h6 class="card-title font-weight-bold">Day at a Glance <i class="fas fa-coffee"></i></h6>
                 </div>
-                <table class="table-sm table-striped">
+                <table class="table table-striped">
                     <tr>
                         <td class="card-subtitle mb-2 text-muted">Trouble Tickets: <b>{$day_glance['trouble_ticket'].today} , {$day_glance['trouble_ticket'].yesterday}</b>
                         </td>
@@ -94,7 +93,7 @@
                 <div class="row ml-1">
                     <h6 class="card-title font-weight-bold">Month at a Glance <i class="fas fa-calendar-alt"></i></h6>
                 </div>
-                <table class="table-sm table-striped">
+                <table class="table table-striped">
                     <tr>
                         <td class="card-subtitle mb-2 text-muted">Trouble Tickets: <b>{$month_glance['trouble_ticket'].curr_month} , {$month_glance['trouble_ticket'].last_month}</b>
                         </td>
@@ -135,7 +134,7 @@
                 <div class="row ml-1">
                     <h6 class="card-title font-weight-bold">Week at a Glance <i class="fas fa-calendar-week"></i></h6>
                 </div>
-                <table class="table-sm table-striped">
+                <table class="table table-striped">
                     <tr>
                         <td class="card-subtitle mb-2 text-muted">Trouble Tickets: <b>{$week_glance['trouble_ticket'].curr_week} , {$week_glance['trouble_ticket'].last_week}</b>
                         </td>
@@ -176,7 +175,7 @@
                 <div class="row ml-1">
                     <h6 class="card-title font-weight-bold">Year at a Glance <i class="fas fa-calendar-alt"></i></h6>
                 </div>
-                <table class="table-sm  table-striped">
+                <table class="table  table-striped">
                     <tr>
                         <td class="card-subtitle mb-2 text-muted">Trouble Tickets: <b>{$year_glance['trouble_ticket'].curr_year} , {$year_glance['trouble_ticket'].last_year}</b>
                         </td>
