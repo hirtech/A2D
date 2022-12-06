@@ -1,5 +1,5 @@
 <?php
-include_once ($controller_path . "premise.inc.php");
+//error_reporting(E_ALL); ini_set('display_errors', 1);
 
 include_once ($controller_path . "trouble_ticket.inc.php");
 include_once ($controller_path . "maintenance_ticket.inc.php");
@@ -7,7 +7,8 @@ include_once ($controller_path . "service_order.inc.php");
 include_once ($controller_path . "workorder.inc.php");
 include_once ($controller_path . "fiber_inquiry.inc.php");
 include_once ($controller_path . "event.inc.php");
-
+include_once ($controller_path . "service_type.inc.php");
+// echo $request_type;exit();
 
 if ($request_type == "dashboard_glance") {
     $currentdate = date("Y-m-d");
@@ -400,162 +401,35 @@ if ($request_type == "dashboard_glance") {
     $code = 2000;
     $message = api_getMessage($req_ext, constant($code));
     $response_data = array("Code" => 200, "Message" => $message, "result" => $result);
-} else if ($request_type == "dashboard_timelinechart") {
-    $SiteObj = new Site();
-
+} else if ($request_type == "dashboard_amchart") {
+    $rs = array();
+    $ServiceTypeObj = new ServiceType();
     $where_arr = array();
     $join_fieds_arr = array();
     $join_arr = array();
-    $SiteObj->join_field = $join_fieds_arr;
-    $SiteObj->join = $join_arr;
-    $SiteObj->where = $where_arr;
-    $SiteObj->setClause();
-    $rs = $SiteObj->site_dashboard_history();
-
-    $data = array();
+    $ServiceTypeObj->join_field = $join_fieds_arr;
+    $ServiceTypeObj->join = $join_arr;
+    $ServiceTypeObj->where = $where_arr;
+    $ServiceTypeObj->setClause();
+    $rs = $ServiceTypeObj->servicetype_dashboard_amchart();
+    // echo "<pre>"; print_r($rs);exit();
     $ni = count($rs);
     if ($ni > 0) {
-        $ind = 0;
-        foreach ($rs as $key => $val) {
-
-            if ($val['Type'] == "Treatment" || $val['Type'] == "Landing Rate" || $val['Type'] == "Laravel Surveillance" || $val['Type'] == "Other") {
-                $Type = $val['Type'];
-
-                $start_d = date('d', strtotime($val['dStartDate']));
-                $start_m = date('m', strtotime($val['dStartDate']));
-                $start_y = date('Y', strtotime($val['dStartDate']));
-
-                $start_h = date('H', strtotime($val['dStartDate']));
-                $start_i = date('i', strtotime($val['dStartDate']));
-                $start_s = date('s', strtotime($val['dStartDate']));
-
-                $end_d = date('d', strtotime($val['dEndDate']));
-                $end_m = date('m', strtotime($val['dEndDate']));
-                $end_y = date('Y', strtotime($val['dEndDate']));
-
-                $end_h = date('H', strtotime($val['dEndDate']));
-                $end_i = date('i', strtotime($val['dEndDate']));
-                $end_s = date('s', strtotime($val['dEndDate']));
-
-                //$start_h = ($start_h >=0 && $start_h <=9)?ltrim($start_h,0):$start_h;
-                $start_h = ($start_h >= 0 && $start_h <= 9) ? substr($start_h, 1) : $start_h;
-                $start_i = ($start_i >= 0 && $start_i <= 9) ? substr($start_i, 1) : $start_i;
-                $start_s = ($start_s >= 0 && $start_s <= 9) ? substr($start_s, 1) : $start_s;
-
-                $end_h = ($end_h >= 0 && $end_h <= 9) ? substr($end_h, 1) : $end_h;
-                $end_i = ($end_i >= 0 && $end_i <= 9) ? substr($end_i, 1) : $end_i;
-                $end_s = ($end_s >= 0 && $end_s <= 9) ? substr($end_s, 1) : $end_s;
-            }
-            else if ($val['Type'] == "Task Trap Placed")
-            {
-                $Type = "Trap Placed";
-
-                $start_d = date('d', strtotime($val['dAddedDate']));
-                $start_m = date('m', strtotime($val['dAddedDate']));
-                $start_y = date('Y', strtotime($val['dAddedDate']));
-
-                $start_h = date('H', strtotime($val['dAddedDate']));
-                $start_i = date('i', strtotime($val['dAddedDate']));
-                $start_s = date('s', strtotime($val['dAddedDate']));
-
-                //end time 15 min to Adde Date Time
-                $endTime = date_addDateTime($val['dAddedDate'], $da=0, $ma=0, $ya=0, $ha=0, $ia=15, $sa=0);
-
-                $end_d = date('d', strtotime($endTime));
-                $end_m = date('m', strtotime($endTime));
-                $end_y = date('Y', strtotime($endTime));
-
-                $end_h = date('H', strtotime($endTime));
-                $end_i = date('i', strtotime($endTime));
-                $end_s = date('s', strtotime($endTime));
-
-                //$start_h = ($start_h >=0 && $start_h <=9)?ltrim($start_h,0):$start_h;
-                $start_h = ($start_h >= 0 && $start_h <= 9) ? substr($start_h, 1) : $start_h;
-                $start_i = ($start_i >= 0 && $start_i <= 9) ? substr($start_i, 1) : $start_i;
-                $start_s = ($start_s >= 0 && $start_s <= 9) ? substr($start_s, 1) : $start_s;
-
-                $end_h = ($end_h >= 0 && $end_h <= 9) ? substr($end_h, 1) : $end_h;
-                $end_i = ($end_i >= 0 && $end_i <= 9) ? substr($end_i, 1) : $end_i;
-                $end_s = ($end_s >= 0 && $end_s <= 9) ? substr($end_s, 1) : $end_s;
-
-            }
-            else if ($val['Type'] == "Task Trap Colected")
-            {
-                $Type = "Trap Collected";
-
-                $start_d = date('d', strtotime($val['dModifiedDate']));
-                $start_m = date('m', strtotime($val['dModifiedDate']));
-                $start_y = date('Y', strtotime($val['dModifiedDate']));
-
-                $start_h = date('H', strtotime($val['dModifiedDate']));
-                $start_i = date('i', strtotime($val['dModifiedDate']));
-                $start_s = date('s', strtotime($val['dModifiedDate']));
-
-                //end time 15 min to Modified Date Time
-                $endTime = date_addDateTime($val['dModifiedDate'], $da=0, $ma=0, $ya=0, $ha=0, $ia=15, $sa=0);
-
-                $end_d = date('d', strtotime($endTime));
-                $end_m = date('m', strtotime($endTime));
-                $end_y = date('Y', strtotime($endTime));
-
-                $end_h = date('H', strtotime($endTime));
-                $end_i = date('i', strtotime($endTime));
-                $end_s = date('s', strtotime($endTime));
-
-                //$start_h = ($start_h >=0 && $start_h <=9)?ltrim($start_h,0):$start_h;
-                $start_h = ($start_h >= 0 && $start_h <= 9) ? substr($start_h, 1) : $start_h;
-                $start_i = ($start_i >= 0 && $start_i <= 9) ? substr($start_i, 1) : $start_i;
-                $start_s = ($start_s >= 0 && $start_s <= 9) ? substr($start_s, 1) : $start_s;
-
-                $end_h = ($end_h >= 0 && $end_h <= 9) ? substr($end_h, 1) : $end_h;
-                $end_i = ($end_i >= 0 && $end_i <= 9) ? substr($end_i, 1) : $end_i;
-                $end_s = ($end_s >= 0 && $end_s <= 9) ? substr($end_s, 1) : $end_s;
-            }
-
-            //echo $val['Type'];
-            $site_details = 'Premise ' . $val['iSiteId'] . ($val['vSiteName'] ? ' (' . $val['vSiteName'] . ') ' : '');
-            if ($val['iSRId'] > 0)
-            {
-                $site_details .= "<br/>SR " . $val['iSRId'] . ($val['vContactName'] ? " (" . $val['vContactName'] . ")" : '');
-            }
-
-            $data[] = array(
-                'Technician' => $val['UserName'],
-                'Operation' => $Type,
-                'tooltip' => $site_details,
-                'start_d' => $start_d,
-                'start_m' => $start_m,
-                'start_y' => $start_y,
-                'statrh' => $start_h,
-                'satrti' => $start_i,
-                'starts' => $start_s,
-                'end_d' => $end_d,
-                'end_m' => $end_m,
-                'end_y' => $end_y,
-                'endh' => $end_h,
-                'endi' => $end_i,
-                'ends' => $end_s
-            );
-        }
         $rh = HTTPStatus(200);
         $code = 2000;
         $message = api_getMessage($req_ext, constant($code));
-        $response_data = array("Code" => 200, "Message" => $message, "result" => $data);
-    }
-    else
-    {
-
+        $response_data = array("Code" => 200, "Message" => $message, "result" => $rs);
+    } else {
         $rh = HTTPStatus(400);
         $code = 2104;
         $message = api_getMessage($req_ext, constant($code));
-        $response_data = array("Code" => 400, "Message" => $message, "result" => $data);
+        $response_data = array("Code" => 400, "Message" => $message, "result" => $rs);
     }
-}
+} 
 else {
    $r = HTTPStatus(400);
    $code = 1001;
    $message = api_getMessage($req_ext, constant($code));
    $response_data = array("Code" => 400 , "Message" => $message);
 }
-
 ?>
