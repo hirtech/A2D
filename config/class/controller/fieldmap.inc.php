@@ -441,8 +441,7 @@ class Fieldmap {
     public function getSiteSRFilterData($param){
         global $sqlObj;
         $data = array();
-
-        $premiseId= $param['premiseId'];
+        $premiseId= $param['premiseid'];
         $srId= $param['srId'];
         if($premiseId != ""){
             $sitewhere = array();
