@@ -1,4 +1,4 @@
-function addEditDataTaskOther(id,mode,iSiteId_list){
+function addEditDataTaskOther(id,mode,iPremiseId_list){
     if (typeof(infowindow) !== 'undefined' && infowindow) {
         infowindow.close();
     }
@@ -13,7 +13,7 @@ function addEditDataTaskOther(id,mode,iSiteId_list){
       $("#otechnician_id").select2().val("").trigger('change');
     //alert("addEditDataTaskother")
     //alert(JSON.stringify(siteInfoWindowTaskArr))
-    var iSiteId1 = iSiteId_list;
+    var iPremiseId1 = iPremiseId_list;
     $("#frmadd_other").removeClass('was-validated');
     if(mode == "edit"){
         $("#modal_title_other").html('Edit Task Other');
@@ -21,7 +21,7 @@ function addEditDataTaskOther(id,mode,iSiteId_list){
         if (typeof(siteInfoWindowTaskOtherArr) !== 'undefined' && siteInfoWindowTaskOtherArr.length > 0) {
             var iTOId_s = '';
             var vSiteName_s = '';
-            var iSiteId_s = '';
+            var iPremiseId_s = '';
             var dDate_s = '';
             var dStartTime_s = '';
             var dEndTime_s = '';
@@ -36,7 +36,7 @@ function addEditDataTaskOther(id,mode,iSiteId_list){
                 iTOId_s = v['iTOId'];
                 if(id == iTOId_s ){
                     vSiteName_s = v['vSiteName'];
-                    iSiteId_s = v['iSiteId'];
+                    iPremiseId_s = v['iPremiseId'];
                     dDate_s = v['dDate'];
                     dStartTime_s = v['dStartTime'];
                     dEndTime_s = v['dEndTime'];
@@ -51,7 +51,7 @@ function addEditDataTaskOther(id,mode,iSiteId_list){
             });
             $("#modal_iTOId").val(iTOId_s);
             $("#vSiteName_other").val(vSiteName_s);
-            $("#serach_iSiteId_other").val(iSiteId_s);
+            $("#serach_iPremiseId_other").val(iPremiseId_s);
             $("#modal_dDate_other").val(dDate_s);
             $("#dStartTime_other").val(dStartTime_s);
             $("#dEndTime_other").val(dEndTime_s);
@@ -64,7 +64,7 @@ function addEditDataTaskOther(id,mode,iSiteId_list){
         } else {
             $("#modal_iTOId").val($("#iTOId_"+id).val());
             $("#vSiteName_other").val($("#vSiteName_"+id).val());
-            $("#serach_iSiteId_other").val($("#iSiteId_"+id).val());
+            $("#serach_iPremiseId_other").val($("#iPremiseId_"+id).val());
             $("#modal_dDate_other").val($("#dDate_"+id).val());
             $("#dStartTime_other").val($("#dStartTime_"+id).val());
             $("#dEndTime_other").val($("#dEndTime_"+id).val());
@@ -79,12 +79,12 @@ function addEditDataTaskOther(id,mode,iSiteId_list){
         $("#modal_title_other").html('Add Task Other');
         $("#mode_title_other").val('Add');
         $("#modal_iTOId").val('');
-        if(iSiteId1 > 0){
-            $("#vSiteName_other").val(iSiteId1).trigger('change');;
-            $("#serach_iSiteId_other").val(iSiteId1);
+        if(iPremiseId1 > 0){
+            $("#vSiteName_other").val(iPremiseId1).trigger('change');;
+            $("#serach_iPremiseId_other").val(iPremiseId1);
         }else {
             $("#vSiteName_other").val('');
-            $("#serach_iSiteId_other").val();
+            $("#serach_iPremiseId_other").val();
         }
 
         $("#modal_dDate_other").val(dDate);
@@ -120,7 +120,7 @@ function addEditDataTaskOther(id,mode,iSiteId_list){
             if(list==null)
                 return {};
             else
-                return $.map(list, function(rawdata) { return { display: rawdata.display, iSiteId:rawdata.iSiteId }; });
+                return $.map(list, function(rawdata) { return { display: rawdata.display, iPremiseId:rawdata.iPremiseId }; });
         } 
       }      
     });
@@ -174,8 +174,8 @@ function addEditDataTaskOther(id,mode,iSiteId_list){
 })(jQuery);
 
 function onSiteClusteSelected(e, datum){
-    //////alert(datum['iSiteId'])
-    $("#serach_iSiteId_other").val(datum['iSiteId']);
+    //////alert(datum['iPremiseId'])
+    $("#serach_iPremiseId_other").val(datum['iPremiseId']);
     $("#vSiteName_other").val(datum['display']);
 }
 
@@ -205,7 +205,7 @@ $("#save_data_other").click(function(){
     }
     form.addClass('was-validated');
 
-    if($("#vSiteName_other").val() == "" || ($("#serach_iSiteId_other").val() == "" || $("#serach_iSiteId_other").val() == "0" )){
+    if($("#vSiteName_other").val() == "" || ($("#serach_iPremiseId_other").val() == "" || $("#serach_iPremiseId_other").val() == "0" )){
         $("#errmsg_search_site").html('Please select site');
         $("#errmsg_search_site").show();
         isError = 1;

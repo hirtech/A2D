@@ -103,7 +103,7 @@ class TaskOther {
 		global $sqlObj;
 		if($this->insert_arr){
 			//echo"<pre>";print_r($this->insert_arr);exit;
-			$sql = "INSERT INTO task_other(\"iSiteId\", \"iSRId\", \"dDate\", \"dStartDate\",\"dEndDate\", \"iTaskTypeId\", \"tNotes\", \"dAddedDate\",\"iUserId\",\"iTechnicianId\") VALUES (".gen_allow_null_char($this->insert_arr['iSiteId']).", ".gen_allow_null_char($this->insert_arr['iSRId']).", ".gen_allow_null_char($this->insert_arr['dDate']).", ".gen_allow_null_char($this->insert_arr['dStartDate']).", ".gen_allow_null_char($this->insert_arr['dEndDate']).", ".gen_allow_null_char($this->insert_arr['iTaskTypeId']).", ".gen_allow_null_char($this->insert_arr['tNotes']).",".gen_allow_null_char(date_getSystemDateTime()).",".gen_allow_null_int($this->insert_arr['iUserId']).",".gen_allow_null_int($this->insert_arr['iTechnicianId']).")";
+			$sql = "INSERT INTO task_other(\"iPremiseId\", \"iSRId\", \"dDate\", \"dStartDate\",\"dEndDate\", \"iTaskTypeId\", \"tNotes\", \"dAddedDate\",\"iUserId\",\"iTechnicianId\") VALUES (".gen_allow_null_char($this->insert_arr['iPremiseId']).", ".gen_allow_null_char($this->insert_arr['iSRId']).", ".gen_allow_null_char($this->insert_arr['dDate']).", ".gen_allow_null_char($this->insert_arr['dStartDate']).", ".gen_allow_null_char($this->insert_arr['dEndDate']).", ".gen_allow_null_char($this->insert_arr['iTaskTypeId']).", ".gen_allow_null_char($this->insert_arr['tNotes']).",".gen_allow_null_char(date_getSystemDateTime()).",".gen_allow_null_int($this->insert_arr['iUserId']).",".gen_allow_null_int($this->insert_arr['iTechnicianId']).")";
 			//echo $sql;exit;
 			$sqlObj->Execute($sql);		
 			$iTOId = $sqlObj->Insert_ID();
@@ -116,7 +116,7 @@ class TaskOther {
 		global $sqlObj, $site_path;
 		if($this->update_arr){
 			$rs_db = "UPDATE task_other SET 
-			\"iSiteId\"=".gen_allow_null_char($this->update_arr['iSiteId']).", 
+			\"iPremiseId\"=".gen_allow_null_char($this->update_arr['iPremiseId']).", 
 			\"iSRId\"=".gen_allow_null_char($this->update_arr['iSRId']).", 
 			\"dDate\"=".gen_allow_null_char($this->update_arr['dDate']).", 
 			\"dStartDate\"=".gen_allow_null_char($this->update_arr['dStartDate']).", 

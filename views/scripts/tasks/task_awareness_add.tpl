@@ -15,9 +15,9 @@
             		<div class="form-group row">
             			<label class="col-sm-2 col-form-label" for="vSiteName_awareness">Premise<span class="text-danger"> *</span></label>
             			<div class="col-sm-4">
-                			<input type="text" name="vSiteName_awareness"  class="form-control " id="vSiteName_awareness" placeholder="Search Premise Id or Premise Name" value="{if $rs_site[0].iSiteId}{if $rs_site[0].vName neq ''}{$rs_site[0].vName|gen_strip_slash} - {/if}PremiseID# {$rs_site[0].iSiteId}{/if}"  required>
+                			<input type="text" name="vSiteName_awareness"  class="form-control " id="vSiteName_awareness" placeholder="Search Premise Id or Premise Name" value="{if $rs_site[0].iPremiseId}{if $rs_site[0].vName neq ''}{$rs_site[0].vName|gen_strip_slash} - {/if}PremiseID# {$rs_site[0].iPremiseId}{/if}"  required>
                             <img class="clear_site" src="{$site_url}assets/images/icon-delete.png" style="cursor:pointer;" onclick="return clear_site();">
-                			<input type="hidden" id="serach_iSiteId_awareness" name="serach_iSiteId_awareness" value="{$rs_site[0].iSiteId}"/>
+                			<input type="hidden" id="serach_iPremiseId_awareness" name="serach_iPremiseId_awareness" value="{$rs_site[0].iPremiseId}"/>
                 			<div class="invalid-feedback" id="errmsg_search_site">Please enter premise</div>
                 		</div>
                         <label class="col-sm-2 col-form-label" for="vSR_awareness">Fiber Inquiry</label>

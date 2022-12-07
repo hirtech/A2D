@@ -103,8 +103,8 @@ class TaskTrap {
 		global $sqlObj,$admin_panel_session_suffix;
 		if($this->insert_arr){
 
-			//$sql = "INSERT INTO task_trap(\"iSiteId\", \"iSRId\", \"dTrapPlaced\", \"dTrapCollected\",\"iTrapTypeId\", \"bMalfunction\", \"tNotes\", \"dAddedDate\") VALUES (".gen_allow_null_char($this->insert_arr['iSiteId']).", ".gen_allow_null_char($this->insert_arr['iSRId']).", ".gen_allow_null_char($this->insert_arr['dTrapPlaced']).", ".gen_allow_null_char($this->insert_arr['dTrapCollected']).", ".gen_allow_null_char($this->insert_arr['iTrapTypeId']).", ".gen_allow_null_char($this->insert_arr['bMalfunction']).", ".gen_allow_null_char($this->insert_arr['tNotes']).",".gen_allow_null_char(date_getSystemDateTime()).")";
-			$sql = "INSERT INTO task_trap(\"iSiteId\", \"iSRId\", \"dTrapPlaced\", \"dTrapCollected\",\"iTrapTypeId\", \"bMalfunction\", \"tNotes\", \"dAddedDate\",\"iUserId\",\"iTechnicianId\") VALUES (".gen_allow_null_char($this->insert_arr['iSiteId']).", ".gen_allow_null_char($this->insert_arr['iSRId']).", ".gen_allow_null_char($this->insert_arr['dTrapPlaced']).", ".gen_allow_null_char($this->insert_arr['dTrapCollected']).", ".gen_allow_null_char($this->insert_arr['iTrapTypeId']).", ".gen_allow_null_char($this->insert_arr['bMalfunction']).", ".gen_allow_null_char($this->insert_arr['tNotes']).",".gen_allow_null_char(date_getSystemDateTime()).",".gen_allow_null_char($this->insert_arr['iUserId']).",".gen_allow_null_int($this->insert_arr['iTechnicianId']).")";
+			//$sql = "INSERT INTO task_trap(\"iPremiseId\", \"iSRId\", \"dTrapPlaced\", \"dTrapCollected\",\"iTrapTypeId\", \"bMalfunction\", \"tNotes\", \"dAddedDate\") VALUES (".gen_allow_null_char($this->insert_arr['iPremiseId']).", ".gen_allow_null_char($this->insert_arr['iSRId']).", ".gen_allow_null_char($this->insert_arr['dTrapPlaced']).", ".gen_allow_null_char($this->insert_arr['dTrapCollected']).", ".gen_allow_null_char($this->insert_arr['iTrapTypeId']).", ".gen_allow_null_char($this->insert_arr['bMalfunction']).", ".gen_allow_null_char($this->insert_arr['tNotes']).",".gen_allow_null_char(date_getSystemDateTime()).")";
+			$sql = "INSERT INTO task_trap(\"iPremiseId\", \"iSRId\", \"dTrapPlaced\", \"dTrapCollected\",\"iTrapTypeId\", \"bMalfunction\", \"tNotes\", \"dAddedDate\",\"iUserId\",\"iTechnicianId\") VALUES (".gen_allow_null_char($this->insert_arr['iPremiseId']).", ".gen_allow_null_char($this->insert_arr['iSRId']).", ".gen_allow_null_char($this->insert_arr['dTrapPlaced']).", ".gen_allow_null_char($this->insert_arr['dTrapCollected']).", ".gen_allow_null_char($this->insert_arr['iTrapTypeId']).", ".gen_allow_null_char($this->insert_arr['bMalfunction']).", ".gen_allow_null_char($this->insert_arr['tNotes']).",".gen_allow_null_char(date_getSystemDateTime()).",".gen_allow_null_char($this->insert_arr['iUserId']).",".gen_allow_null_int($this->insert_arr['iTechnicianId']).")";
 
 
 			//echo $sql;exit;
@@ -119,7 +119,7 @@ class TaskTrap {
 		global $sqlObj, $site_path;
 		if($this->update_arr){
 			$rs_db = "UPDATE task_trap SET 
-			\"iSiteId\"=".gen_allow_null_char($this->update_arr['iSiteId']).", 
+			\"iPremiseId\"=".gen_allow_null_char($this->update_arr['iPremiseId']).", 
 			\"iSRId\"=".gen_allow_null_char($this->update_arr['iSRId']).", 
 			\"dTrapPlaced\"=".gen_allow_null_char($this->update_arr['dTrapPlaced']).", 
 			\"dTrapCollected\"=".gen_allow_null_char($this->update_arr['dTrapCollected']).", 

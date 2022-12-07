@@ -74,7 +74,7 @@ $("#save_data").click(function(){
                 response =JSON.parse(data);
                 if(response['error'] == "0"){
                     toastr.success(response['msg']);
-                    var siteId = response['iSiteId'];
+                    var premiseId = response['iPremiseId'];
                 }else{
                     toastr.error(response['msg']);
                 }
@@ -96,7 +96,7 @@ $("#save_data").click(function(){
                             function(isConfirm) {
                                 if (isConfirm) {
                                        swal.close();
-                                       location.href = site_url+'premise/edit&mode=Update&iSiteId='+siteId+'&tabid=contact';
+                                       location.href = site_url+'premise/edit&mode=Update&iPremiseId='+premiseId+'&tabid=contact';
                                     // $("#contact").click();
                                 } else {
                                     swal.close();
@@ -677,7 +677,7 @@ function editContact(contactId){
                 $("#cntmodaltitle").html('Edit Contact');
                 $("#cnt_mode").val('Update');
            
-                $("#siteid").val($("#iSiteId").val());
+                $("#premiseId").val($("#iPremiseId").val());
                 $("#referer").val("sitecontactedit");
                 $("#cid").val(response[0].iCId);
                 $("#salutation").val(response[0].vSalutation);
@@ -747,7 +747,7 @@ $("#btn_site_document").click(function(){
         var form_data = new FormData();
         form_data.append("mode","upload_document");
         form_data.append('vFile', file_data);
-        form_data.append('iSiteId', $('#iSiteId').val());
+        form_data.append('iPremiseId', $('#iPremiseId').val());
         form_data.append('vTitle', $('#documentTitle').val());
 
        // return false;
@@ -798,7 +798,7 @@ $("#btn_site_document").click(function(){
 
 
 
-function delete_site_document(obj, iSDId, iSiteId) {
+function delete_site_document(obj, iSDId, iPremiseId) {
      swal({
         title: "Are you sure you want to delete document?",
         text: "",
@@ -822,7 +822,7 @@ function delete_site_document(obj, iSDId, iSiteId) {
                     data: {
                         'mode' : 'delete_site_docoument',
                         'iSDId':iSDId,
-                         'iSiteId':iSiteId
+                         'iPremiseId':iPremiseId
                     },
                     success: function (response) {
                         if(response['error'] == "0"){

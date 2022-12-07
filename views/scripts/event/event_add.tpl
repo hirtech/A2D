@@ -68,7 +68,7 @@
                                         <select name="iPremiseId[]" id="iPremiseId" class="form-control select" multiple>
                                             <option value="">Select</option>
                                             {section name="p" loop=$rs_premise}
-                                            <option value="{$rs_premise[p].iSiteId}"  {if $rs_premise[p].iSiteId|in_array:$iPremiseIdArr}selected{/if}>{$rs_premise[p].vName|gen_strip_slash}</option>
+                                            <option value="{$rs_premise[p].iPremiseId}"  {if $rs_premise[p].iPremiseId|in_array:$iPremiseIdArr}selected{/if}>{$rs_premise[p].vName|gen_strip_slash}</option>
                                             {/section}
                                         </select>
                                         <div class="invalid-feedback" id="errmsg_iPremiseId"> Please select premise</div>

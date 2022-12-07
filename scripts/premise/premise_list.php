@@ -49,8 +49,8 @@ if($mode == "List"){
     if ($Keyword != "") {
         $arr_param[$vOptions] = $Keyword;
     }
-    if ($_REQUEST['siteId'] != "") {
-        $arr_param['siteId'] = $_REQUEST['siteId'];
+    if ($_REQUEST['premiseId'] != "") {
+        $arr_param['premiseId'] = $_REQUEST['premiseId'];
     }
     if ($_REQUEST['iSTypeId'] != "") {
         $arr_param['iSTypeId'] = $_REQUEST['iSTypeId'];
@@ -138,27 +138,27 @@ if($mode == "List"){
         for($i=0;$i<$ni;$i++){
             $action = '';
             if($access_group_var_edit == '1'){
-               $action .= '<a class="btn btn-outline-secondary" title="Edit"  href="'.$site_url.'premise/edit&mode=Update&iSiteId=' . $rs_site[$i]['iSiteId'] . '"><i class="fa fa-edit"></i></a>';
+               $action .= '<a class="btn btn-outline-secondary" title="Edit"  href="'.$site_url.'premise/edit&mode=Update&iPremiseId=' . $rs_site[$i]['iPremiseId'] . '"><i class="fa fa-edit"></i></a>';
             }
             if ($access_group_var_delete == '1') {
-               $action .= ' <a class="btn btn-outline-danger" title="Delete" href="javascript:void(0);" onclick="delete_record('.$rs_site[$i]['iSiteId'].');"><i class="fa fa-trash"></i></a>';
+               $action .= ' <a class="btn btn-outline-danger" title="Delete" href="javascript:void(0);" onclick="delete_record('.$rs_site[$i]['iPremiseId'].');"><i class="fa fa-trash"></i></a>';
             }
             
-            $action .= ' <a class="btn btn-outline-warning" title="Premise History" target="_blank" href="'.$site_url.'premise/history&iSiteId=' . $rs_site[$i]['iSiteId'] . '&vName=' . $rs_site[$i]['vName'] . '"><i class="fas fa-history"></i></a>'; 
+            $action .= ' <a class="btn btn-outline-warning" title="Premise History" target="_blank" href="'.$site_url.'premise/history&iPremiseId=' . $rs_site[$i]['iPremiseId'] . '&vName=' . $rs_site[$i]['vName'] . '"><i class="fas fa-history"></i></a>'; 
             
             if(per_hasModuleAccess("Task Awareness", 'List')){
                 $action .= ' <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tasks</button>
                     <div class="dropdown-menu p-0">';
                     if(per_hasModuleAccess("Task Awareness", 'List')){
                         //$action .= '<div class="dropdown-divider"></div>';
-                        $action .= '<a class="dropdown-item" title="Awareness"  onclick="addEditDataAwareness(0,\'add\','.$rs_site[$i]['iSiteId'].')">Awareness</a><a class="dropdown-item" title="Setup Premise Services"  href="'.$site_url.'premise/setup_premise_services_list&iPremiseId=' . $rs_site[$i]['iSiteId'] . '" target="_blank">Setup Premise Services</a>';
+                        $action .= '<a class="dropdown-item" title="Awareness"  onclick="addEditDataAwareness(0,\'add\','.$rs_site[$i]['iPremiseId'].')">Awareness</a><a class="dropdown-item" title="Setup Premise Services"  href="'.$site_url.'premise/setup_premise_services_list&iPremiseId=' . $rs_site[$i]['iPremiseId'] . '" target="_blank">Setup Premise Services</a>';
                     }
                     $action .= '</div>';
             }
             $vAddress = $rs_site[$i]['vAddress1'].' '.$rs_site[$i]['vStreet'];
             $entry[] = array(
-                    "checkbox" => '<input type="checkbox" class="list" value="'.$rs_site[$i]['iSiteId'].'"/>',
-                    "iSiteId" => gen_strip_slash($rs_site[$i]['iSiteId']),
+                    "checkbox" => '<input type="checkbox" class="list" value="'.$rs_site[$i]['iPremiseId'].'"/>',
+                    "iPremiseId" => gen_strip_slash($rs_site[$i]['iPremiseId']),
                     "vName" => gen_strip_slash($rs_site[$i]['vName']),
                     "vSiteType" => gen_strip_slash($rs_site[$i]['vTypeName']),
                     "vSiteSubType" => gen_strip_slash($rs_site[$i]['vSubTypeName']),
@@ -233,7 +233,7 @@ else if($mode == "Add"){
         $result_site_arr = json_decode($response_site, true); 
 
         if(!empty($result_site_arr)){
-            $result['iSiteId'] = $result_site_arr['iSiteId'];
+            $result['iPremiseId'] = $result_site_arr['iPremiseId'];
             $result['msg'] = MSG_ADD;
             $result['error']= 0 ;
         }else{
@@ -255,7 +255,7 @@ else if($mode == "Add"){
     if (isset($_POST) && count($_POST) > 0) {
         //echo "<pre>";print_r($_POST);exit();
         $arr_param = array(
-            "iSiteId" => addslashes($_POST['iSiteId']),
+            "iPremiseId" => addslashes($_POST['iPremiseId']),
             "vName" => addslashes($_POST['vName']),
             "iSTypeId" => addslashes($_POST['iSTypeId']),
             "iSSTypeId" => addslashes($_POST['iSSTypeId']),
@@ -302,7 +302,7 @@ else if($mode == "Add"){
         $result_site_arr = json_decode($response_site, true); 
 
         if(!empty($result_site_arr)){
-            $result['iSiteId'] = $_POST['iSiteId'];
+            $result['iPremiseId'] = $_POST['iPremiseId'];
             $result['msg'] = MSG_UPDATE;
             $result['error']= 0 ;
         }else{
@@ -324,9 +324,9 @@ else if($mode == "Delete"){
 
     $result = array();
     $arr_param = array();
-    $iSiteId = $_POST['iSiteId'];
+    $iPremiseId = $_POST['iPremiseId'];
     
-    $arr_param['iSiteId'] = $iSiteId; 
+    $arr_param['iPremiseId'] = $iPremiseId; 
     $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
     $API_URL = $site_api_url."premise_delete.json";
     //echo "<pre>";print_r($API_URL);exit();
@@ -529,8 +529,8 @@ else if ($mode == "get_zone_from_latlong") {
     if ($Keyword != "") {
         $arr_param[$vOptions] = $Keyword;
     }
-    if ($_REQUEST['siteId'] != "") {
-        $arr_param['siteId'] = $_REQUEST['siteId'];
+    if ($_REQUEST['premiseId'] != "") {
+        $arr_param['premiseId'] = $_REQUEST['premiseId'];
     }
     if ($_REQUEST['iSTypeId'] != "") {
         $arr_param['iSTypeId'] = $_REQUEST['iSTypeId'];
@@ -627,7 +627,7 @@ else if ($mode == "get_zone_from_latlong") {
             $name = gen_strip_slash($rs_export[$e]['vName']) ;
        
             $objPHPExcel->getActiveSheet()
-            ->setCellValue('A'.($e+2), $rs_export[$e]['iSiteId'])
+            ->setCellValue('A'.($e+2), $rs_export[$e]['iPremiseId'])
             ->setCellValue('B'.($e+2), $name)
             ->setCellValue('C'.($e+2), $rs_export[$e]['vTypeName'])
             ->setCellValue('D'.($e+2), $rs_export[$e]['vSubTypeName'])
@@ -683,7 +683,7 @@ else if ($mode == "get_zone_from_latlong") {
     }
 
     $arr_param = array(
-        "iSiteId"           => $_POST['iSiteId'],
+        "iPremiseId"           => $_POST['iPremiseId'],
         "vTitle"            => $_POST['vTitle'],
         "vFile"             => $files,
         "vLoginUserName"    =>$_SESSION["sess_vName".$admin_panel_session_suffix],
@@ -721,7 +721,7 @@ else if ($mode == "get_zone_from_latlong") {
     $arr_param = array();
     $arr_param = array(
         "iSDId"             => $_POST['iSDId'],
-        "iSiteId"           => $_POST['iSiteId'],
+        "iPremiseId"           => $_POST['iPremiseId'],
         "sessionId"         => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
     );
 
@@ -746,9 +746,9 @@ else if ($mode == "get_zone_from_latlong") {
     echo json_encode($result);
     hc_exit();
 }else if($mode == "Kml"){
-    $siteId=$_REQUEST['siteId'];
+    $premiseId=$_REQUEST['premiseId'];
     $arr_param = array(
-        "iSiteId"=> $siteId,
+        "iPremiseId"=> $premiseId,
         'sessionId' => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
     );
     //echo"<pre>";print_r(json_encode($arr_param));exit;
@@ -793,7 +793,7 @@ $kml = '<?xml version="1.0" encoding="UTF-8"?>
 $draw='';
 $kml_count = count($result);
 for($k=0; $k<$kml_count; $k++){
-$iSiteId=($result[$k]["iSiteId"] ? $result[$k]["iSiteId"] :'');
+$iPremiseId=($result[$k]["iPremiseId"] ? $result[$k]["iPremiseId"] :'');
 $vName=($result[$k]["vName"] ? $result[$k]["vName"] :'');
 $vTypeName=($result[$k]["vTypeName"] ? $result[$k]["vTypeName"] :'');
 $vSubTypeName=($result[$k]["vSubTypeName"] ? '('.$result[$k]["vSubTypeName"].')' :'');
@@ -808,7 +808,7 @@ if($result[$k]["iGeometryType"]==1)
 
 $kml.=
     '<Placemark>
-        <name>Premise ID: '.$iSiteId.'</name>
+        <name>Premise ID: '.$iPremiseId.'</name>
         <description>
             <![CDATA[
               <h1>Name: '.$vName.'</h1>

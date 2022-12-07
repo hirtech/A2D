@@ -119,7 +119,7 @@ if($request_type == "trouble_ticket_list"){
         $premise_join_fieds_arr[] = 's."vAddress1"';
         $premise_join_fieds_arr[] = 's."vStreet"';
         $premise_join_arr = array();
-        $premise_join_arr[] = 'LEFT JOIN site_mas s on trouble_ticket_premise."iPremiseId" = s."iSiteId"';
+        $premise_join_arr[] = 'LEFT JOIN site_mas s on trouble_ticket_premise."iPremiseId" = s."iPremiseId"';
         $TroubleTicketObj->join_field = $premise_join_fieds_arr;
         $TroubleTicketObj->join = $premise_join_arr;
         $TroubleTicketObj->where = $premise_where_arr;

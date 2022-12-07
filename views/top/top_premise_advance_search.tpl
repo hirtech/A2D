@@ -2,10 +2,10 @@
     <form id="advfrm" name="advfrm" class="site_search_form">
         <div class="form-row">
             <div class="form-group col-md-4">
-                <label for="siteId">Premise Id</label>
+                <label for="premiseId">Premise Id</label>
                 <div class="form-row">
                     <div class="form-group col-md-12">
-                        <input type="text" name="siteId" id="siteId" value="" class="form-control">
+                        <input type="text" name="premiseId" id="premiseId" value="" class="form-control">
                     </div>
                 </div>
             </div>

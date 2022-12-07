@@ -27,7 +27,7 @@ $dir = (isset($_REQUEST["sSortDir_0"]) ? $_REQUEST["sSortDir_0"] : 'desc');
 # ------------------------------------------------------------
 $SiteObj = new Site();
 $iTLRId = $_POST['iTLRId'];
-$iSiteId = $_POST['iSiteId'];
+$iPremiseId = $_POST['iPremiseId'];
 
 if($mode == "List"){
     $arr_param = array();
@@ -38,8 +38,8 @@ if($mode == "List"){
         $arr_param[$vOptions] = $Keyword;
     }
     
-    if ($iSiteId != "") {
-        $arr_param['iSiteId'] = $iSiteId;
+    if ($iPremiseId != "") {
+        $arr_param['iPremiseId'] = $iPremiseId;
     }
     $arr_param['page_length'] = $page_length;
     $arr_param['start'] = $start;
@@ -90,7 +90,7 @@ if($mode == "List"){
                $action .= ' <a class="btn btn-outline-danger" title="Delete" href="javascript:void(0);" onclick="delete_record('.$rs_taskadult[$i]['iTLRId'].');"><i class="fa fa-trash"></i></a>';
             }
 
-            $hidden_fields = '<input type="hidden" id="iTLRId_'.$rs_taskadult[$i]['iTLRId'].'" value="'.$rs_taskadult[$i]['iTLRId'].'"><input type="hidden" id="vSiteName_'.$rs_taskadult[$i]['iTLRId'].'" value="'.$rs_taskadult[$i]['vName'].'"><input type="hidden" id="iSiteId_'.$rs_taskadult[$i]['iTLRId'].'" value="'.$rs_taskadult[$i]['iSiteId'].'"><input type="hidden" id="dDate_'.$rs_taskadult[$i]['iTLRId'].'" value="'.$rs_taskadult[$i]['dDate'].'"><input type="hidden" id="dDate_'.$rs_taskadult[$i]['iTLRId'].'" value="'.$rs_taskadult[$i]['dDate'].'"><input type="hidden" id="dStartDate_'.$rs_taskadult[$i]['iTLRId'].'" value="'.$rs_taskadult[$i]['dStartDate'].'"><input type="hidden" id="dStartTime_'.$rs_taskadult[$i]['iTLRId'].'" value="'.$rs_taskadult[$i]['dStartTime'].'"><input type="hidden" id="dEndDate_'.$rs_taskadult[$i]['iTLRId'].'" value="'.$rs_taskadult[$i]['dEndDate'].'"><input type="hidden" id="dEndTime_'.$rs_taskadult[$i]['iTLRId'].'" value="'.$rs_taskadult[$i]['dEndDate'].'"><input type="hidden" id="vMaxLandingRate_'.$rs_taskadult[$i]['iTLRId'].'" value="'.$rs_taskadult[$i]['vMaxLandingRate'].'"><input type="hidden" id="iMSpeciesId_'.$rs_taskadult[$i]['iTLRId'].'" value="'.$rs_taskadult[$i]['iMSpeciesId'].'"><input type="hidden" id="tNotes_'.$rs_taskadult[$i]['iTLRId'].'" value="'.$rs_taskadult[$i]['tNotes'].'"><input type="hidden" id="srdisplay_'.$rs_taskadult[$i]['iTLRId'].'" value="'.$rs_taskadult[$i]['sr'].'"><input type="hidden" id="iSRId_'.$rs_taskadult[$i]['iTLRId'].'" value="'.$rs_taskadult[$i]['iSRId'].'"><input type="hidden" id="iTechnicianId_'.$rs_taskadult[$i]['iTLRId'].'" value="'.$rs_taskadult[$i]['iTechnicianId'].'">';
+            $hidden_fields = '<input type="hidden" id="iTLRId_'.$rs_taskadult[$i]['iTLRId'].'" value="'.$rs_taskadult[$i]['iTLRId'].'"><input type="hidden" id="vSiteName_'.$rs_taskadult[$i]['iTLRId'].'" value="'.$rs_taskadult[$i]['vName'].'"><input type="hidden" id="iPremiseId_'.$rs_taskadult[$i]['iTLRId'].'" value="'.$rs_taskadult[$i]['iPremiseId'].'"><input type="hidden" id="dDate_'.$rs_taskadult[$i]['iTLRId'].'" value="'.$rs_taskadult[$i]['dDate'].'"><input type="hidden" id="dDate_'.$rs_taskadult[$i]['iTLRId'].'" value="'.$rs_taskadult[$i]['dDate'].'"><input type="hidden" id="dStartDate_'.$rs_taskadult[$i]['iTLRId'].'" value="'.$rs_taskadult[$i]['dStartDate'].'"><input type="hidden" id="dStartTime_'.$rs_taskadult[$i]['iTLRId'].'" value="'.$rs_taskadult[$i]['dStartTime'].'"><input type="hidden" id="dEndDate_'.$rs_taskadult[$i]['iTLRId'].'" value="'.$rs_taskadult[$i]['dEndDate'].'"><input type="hidden" id="dEndTime_'.$rs_taskadult[$i]['iTLRId'].'" value="'.$rs_taskadult[$i]['dEndDate'].'"><input type="hidden" id="vMaxLandingRate_'.$rs_taskadult[$i]['iTLRId'].'" value="'.$rs_taskadult[$i]['vMaxLandingRate'].'"><input type="hidden" id="iMSpeciesId_'.$rs_taskadult[$i]['iTLRId'].'" value="'.$rs_taskadult[$i]['iMSpeciesId'].'"><input type="hidden" id="tNotes_'.$rs_taskadult[$i]['iTLRId'].'" value="'.$rs_taskadult[$i]['tNotes'].'"><input type="hidden" id="srdisplay_'.$rs_taskadult[$i]['iTLRId'].'" value="'.$rs_taskadult[$i]['sr'].'"><input type="hidden" id="iSRId_'.$rs_taskadult[$i]['iTLRId'].'" value="'.$rs_taskadult[$i]['iSRId'].'"><input type="hidden" id="iTechnicianId_'.$rs_taskadult[$i]['iTLRId'].'" value="'.$rs_taskadult[$i]['iTechnicianId'].'">';
 
             $entry[] = array(
                 "iTLRId" => $rs_taskadult[$i]['iTLRId'],
@@ -174,7 +174,7 @@ else if($mode == "Update"){
         $arr_param = array(
             "sessionId"         => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
             "iTLRId"            => $_POST['modal_iTLRId'],
-            "iSiteId"           => $_POST['serach_iSiteId_adult'],
+            "iPremiseId"           => $_POST['serach_iPremiseId_adult'],
             "iSRId"             => $_POST['serach_iSRId_adult'],
             "dDate"             => $_POST['modal_dDate_adult'],
             "dStartDate"        => $dStartDate,
@@ -240,7 +240,7 @@ else if($mode == "Add"){
         
         $arr_param = array(
             "sessionId"         => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
-            "iSiteId"           => $_POST['serach_iSiteId_adult'],
+            "iPremiseId"           => $_POST['serach_iPremiseId_adult'],
             "iSRId"             => $_POST['serach_iSRId_adult'],
             "dDate"             => $_POST['modal_dDate_adult'],
             "dStartDate"        => $dStartDate,
@@ -354,12 +354,12 @@ else if($mode == "Add"){
     # -----------------------------------
 }
 
-if($_REQUEST['iSiteId']){
+if($_REQUEST['iPremiseId']){
     $where_arr = array();
     $join_fieds_arr = array();
     $join_arr  = array();
     $SiteObj->clear_variable();
-    $where_arr[] = 's."iSiteId" = '.$_REQUEST['iSiteId'];
+    $where_arr[] = 's."iPremiseId" = '.$_REQUEST['iPremiseId'];
 
     $SiteObj->join_field = $join_fieds_arr;
     $SiteObj->join = $join_arr;
@@ -413,7 +413,7 @@ $smarty->assign("module_title", $module_title);
 $smarty->assign("option_arr", $option_arr);
 $smarty->assign("msg", $_GET['msg']);
 $smarty->assign("flag", $_GET['flag']);
-$smarty->assign("iSiteId", $iSiteId);
+$smarty->assign("iPremiseId", $iPremiseId);
 
 $smarty->assign("access_group_var_add", $access_group_var_add);
 

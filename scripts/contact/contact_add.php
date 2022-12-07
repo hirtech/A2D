@@ -70,7 +70,7 @@ $smarty->assign("module_name", $module_name);
 $smarty->assign("primary_phone_num", $primary_phone_num);
 $smarty->assign("alternate_phone_num", $alternate_phone_num);
 
-$smarty->assign("iSiteId", $_GET['iSiteId']);
+$smarty->assign("iPremiseId", $_GET['iPremiseId']);
 $smarty->assign("referer", $_GET['referer']);
 
 ?>

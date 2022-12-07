@@ -119,7 +119,7 @@ if($request_type == "maintenance_ticket_list"){
         $premise_join_fieds_arr[] = 's."vAddress1"';
         $premise_join_fieds_arr[] = 's."vStreet"';
         $premise_join_arr = array();
-        $premise_join_arr[] = 'LEFT JOIN site_mas s on maintenance_ticket_premise."iPremiseId" = s."iSiteId"';
+        $premise_join_arr[] = 'LEFT JOIN site_mas s on maintenance_ticket_premise."iPremiseId" = s."iPremiseId"';
         $MaintenanceTicketObj->join_field = $premise_join_fieds_arr;
         $MaintenanceTicketObj->join = $premise_join_arr;
         $MaintenanceTicketObj->where = $premise_where_arr;

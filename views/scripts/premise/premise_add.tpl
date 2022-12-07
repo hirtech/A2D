@@ -32,7 +32,7 @@
                         <div class="col-12">
                     		<input type="hidden" name="groupAction" value="groupAction">
                             <input type="hidden" name="mode" id="mode" value="{$mode}">
-							<input type="hidden" name="iSiteId" id="iSiteId" value="{$rs_site[0].iSiteId}" />
+							<input type="hidden" name="iPremiseId" id="iPremiseId" value="{$rs_site[0].iPremiseId}" />
 							<input type="hidden" name="iGeometryType" id="iGeometryType" value="1" />
 							<input type="hidden" name="vAddress1" id="vAddress1" value="{$rs_site[0].vAddress1}" />
 							<input type="hidden" name="vAddress2" id="vAddress2" value="{$rs_site[0].vAddress2}" />
@@ -181,7 +181,7 @@
 							    <div id="tab3" class="tab-pane fade">
 							    	<div class="form-row">
 							    		<div class="col-md-2 mb-2">
-											<input type="button" onclick="addEditData('','add',{$rs_site[0].iSiteId},'sitecontactadd');" class="btn btn-info btn-block btn-sm" value="Create New Contact">
+											<input type="button" onclick="addEditData('','add',{$rs_site[0].iPremiseId},'sitecontactadd');" class="btn btn-info btn-block btn-sm" value="Create New Contact">
 							    		</div>
 							    	</div>
 							    	<div class="form-row">
@@ -269,7 +269,7 @@
 																<td align="center" class="text-center" ><a href="{$rs_site_doc[d].file_url}" title="Download">Download</a></td>
 																<td align="center" class="text-center" >{$rs_site_doc[d].dAddedDate}</td>
 																<td>{$rs_site_doc[d].vLoginUserName}</td>
-																<td class="action text-center" align="center"><a class="btn btn-outline-danger" title="Delete" href="javascript:void(0);" onclick="delete_site_document(this,  '{$rs_site_doc[d].iSDId}', '{$rs_site_doc[d].iSiteId}');" ><i class="fa fa-trash"></i></a>
+																<td class="action text-center" align="center"><a class="btn btn-outline-danger" title="Delete" href="javascript:void(0);" onclick="delete_site_document(this,  '{$rs_site_doc[d].iSDId}', '{$rs_site_doc[d].iPremiseId}');" ><i class="fa fa-trash"></i></a>
 																</td>
 															</tr>
 															{/section}

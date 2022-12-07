@@ -10,7 +10,7 @@
 							<li>
 								<select id="vOptions" name="vOptions" class="form-control">
                   					<option value="iTreatmentId">ID</option>
-									<option value="iSiteId">Premise Id</option>
+									<option value="iPremiseId">Premise Id</option>
 									<option value="vName">Premise Name</option>
 									<option value="vType">Type</option>
 									<option value="vTPName">Treatment Product</option>
@@ -57,9 +57,9 @@
 </div>
 {include file="scripts/tasks/task_treatment_add.tpl"}
 <script type="text/javascript">
-	var iSiteId = '{$iSiteId}';
+	var iPremiseId = '{$iPremiseId}';
 	var iTreatmentId = '{$iTreatmentId}';
-	var extra_url = (jQuery.isEmptyObject(iSiteId))?"":'&iSiteId='+iSiteId;
+	var extra_url = (jQuery.isEmptyObject(iPremiseId))?"":'&iPremiseId='+iPremiseId;
 	 extra_url += (jQuery.isEmptyObject(iTreatmentId))?"":'&iTreatmentId='+iTreatmentId;
 	var ajax_url = 'tasks/task_treatment_list&mode=List'+extra_url;
 	var access_group_var_add= '{$access_group_var_add}';

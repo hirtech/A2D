@@ -7,7 +7,7 @@ if($request_type == "task_landing_rate_list"){
    $where_arr = array();
 
    if(!empty($RES_PARA)){
-        $iSiteId            = trim($RES_PARA['iSiteId']);
+        $iPremiseId            = trim($RES_PARA['iPremiseId']);
         $iTLRId             = trim($RES_PARA['iTLRId']);
         $vName              = trim($RES_PARA['vName']);
         $vTypeName          = trim($RES_PARA['vTypeName']);
@@ -21,8 +21,8 @@ if($request_type == "task_landing_rate_list"){
         $where_arr[] = 'task_landing_rate."iTLRId"='.$iTLRId ;
     }
     
-    if ($iSiteId != "") {
-        $where_arr[] = 'task_landing_rate."iSiteId"='.$iSiteId ;
+    if ($iPremiseId != "") {
+        $where_arr[] = 'task_landing_rate."iPremiseId"='.$iPremiseId ;
     }
 
     if ($vName != "") {
@@ -68,7 +68,7 @@ if($request_type == "task_landing_rate_list"){
    $join_fieds_arr[] = 'cm."vCity"';
    $join_fieds_arr[] = "CONCAT(contact_mas.\"vFirstName\", ' ', contact_mas.\"vLastName\") AS \"vContactName\"";
    $join_arr = array();
-   $join_arr[] = 'LEFT JOIN site_mas s on s."iSiteId" = task_landing_rate."iSiteId"';
+   $join_arr[] = 'LEFT JOIN site_mas s on s."iPremiseId" = task_landing_rate."iPremiseId"';
    $join_arr[] = 'LEFT JOIN county_mas c on s."iCountyId" = c."iCountyId"';
    $join_arr[] = 'LEFT JOIN state_mas sm on s."iStateId" = sm."iStateId"';
    $join_arr[] = 'LEFT JOIN city_mas cm on s."iCityId" = cm."iCityId"';
@@ -114,7 +114,7 @@ if($request_type == "task_landing_rate_list"){
          if(!empty($iMspeciesIds)){
              $iMSpeciesId = implode("|||", $iMspeciesIds);
          }
-         $vSite = $rs_taskland[$i]['vName']."- PremiseID#".$rs_taskland[$i]['iSiteId'];
+         $vSite = $rs_taskland[$i]['vName']."- PremiseID#".$rs_taskland[$i]['iPremiseId'];
          $vAddress =  $rs_taskland[$i]['vAddress1'].' '.$rs_taskland[$i]['vStreet'].' '.$rs_taskland[$i]['vCity'].', '.$rs_taskland[$i]['vState'].' '.$rs_taskland[$i]['vCounty'];
 
          
@@ -136,14 +136,14 @@ if($request_type == "task_landing_rate_list"){
              $rs_taskland[$i]['dEndTime'] = date("H:i", strtotime(date('Y-m-d H:i:s')." +10 minutes"));
          }
 
-         $vSiteName = $rs_taskland[$i]['iSiteId']." (".$rs_taskland[$i]['vName']."; ".$rs_taskland[$i]['vTypeName'].")";
+         $vSiteName = $rs_taskland[$i]['iPremiseId']." (".$rs_taskland[$i]['vName']."; ".$rs_taskland[$i]['vTypeName'].")";
 
          $srdisplay = ($rs_taskland[$i]['iSRId'] != "" && $rs_taskland[$i]['iSRId'] != 0)?$rs_taskland[$i]['iSRId']." (".$rs_taskland[$i]['vContactName'].")":"";
          
          $data[] = array(
                 "iTLRId" => $rs_taskland[$i]['iTLRId'],
                 "vName" => gen_strip_slash($vSite),
-                "iSiteId" => $rs_taskland[$i]['iSiteId'],
+                "iPremiseId" => $rs_taskland[$i]['iPremiseId'],
                 "vAddress" => $vAddress,
                 "iSRId" => $rs_taskland[$i]['iSRId'],
                 "sr" => $srdisplay,
@@ -223,7 +223,7 @@ else if($request_type == "task_landing_rate_add"){
     
    $insert_arr = array(
       "sessionId"             => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
-      "iSiteId"               => $RES_PARA['iSiteId'],
+      "iPremiseId"               => $RES_PARA['iPremiseId'],
       "iSRId"                 => $RES_PARA['iSRId'],
       "dDate"                 => $RES_PARA['dDate'],
       "dStartDate"            => $dStartDate,
@@ -265,7 +265,7 @@ else if($request_type == "task_landing_rate_edit"){
    $update_arr = array(
       "sessionId"             => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
       "iTLRId"                => $RES_PARA['iTLRId'],
-      "iSiteId"               => $RES_PARA['iSiteId'],
+      "iPremiseId"               => $RES_PARA['iPremiseId'],
       "iSRId"                 => $RES_PARA['iSRId'],
       "dDate"                 => $RES_PARA['dDate'],
       "dStartDate"            => $dStartDate,

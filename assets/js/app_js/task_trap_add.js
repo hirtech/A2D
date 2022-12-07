@@ -1,4 +1,4 @@
-function addEditDataTaskTrap(id,mode,iSiteId_list){
+function addEditDataTaskTrap(id,mode,iPremiseId_list){
     if (typeof(infowindow) !== 'undefined' && infowindow) {
         infowindow.close();
     }
@@ -12,7 +12,7 @@ function addEditDataTaskTrap(id,mode,iSiteId_list){
     
     $("#vSR_tasktrap").typeahead('val','');
 
-    var iSiteId1 = iSiteId_list;
+    var iPremiseId1 = iPremiseId_list;
     $("#frmadd_tasktrap").removeClass('was-validated');
     $("#ttechnician_id").select2().val("").trigger('change');
     if(mode == "edit"){
@@ -21,7 +21,7 @@ function addEditDataTaskTrap(id,mode,iSiteId_list){
         if (typeof(siteInfoWindowTaskTrapArr) !== 'undefined' && siteInfoWindowTaskTrapArr.length > 0) {
             var iTTId_s = '';
             var vSiteName_s = '';
-            var iSiteId_s = '';
+            var iPremiseId_s = '';
             var dTrapPlaced_s = '';
             var dTrapCollected_s = '';
             var iTrapTypeId_s = '';
@@ -36,7 +36,7 @@ function addEditDataTaskTrap(id,mode,iSiteId_list){
                 iTTId_s = v['iTTId'];
                 if(id == iTTId_s ){
                     vSiteName_s = v['vSiteName'];
-                    iSiteId_s = v['iSiteId'];
+                    iPremiseId_s = v['iPremiseId'];
                     dTrapPlaced_s = v['dTrapPlaced'];
                     dTrapCollected_s = v['dTrapCollected'];
                     iTrapTypeId_s = v['iTrapTypeId'];
@@ -51,7 +51,7 @@ function addEditDataTaskTrap(id,mode,iSiteId_list){
             });
             $("#modal_iTTId").val(iTTId_s);
             $("#vSiteName_tasktrap").val(vSiteName_s);
-            $("#serach_iSiteId_tasktrap").val(iSiteId_s);
+            $("#serach_iPremiseId_tasktrap").val(iPremiseId_s);
 
             $("#dTrapPlaced_tasktrap").val(dTrapPlaced_s);
             $("#dTrapCollected_tasktrap").val(dTrapCollected_s);
@@ -70,7 +70,7 @@ function addEditDataTaskTrap(id,mode,iSiteId_list){
         } else {
             $("#modal_iTTId").val($("#iTTId_"+id).val());
             $("#vSiteName_tasktrap").val($("#vSiteName_"+id).val());
-            $("#serach_iSiteId_tasktrap").val($("#iSiteId_"+id).val());
+            $("#serach_iPremiseId_tasktrap").val($("#iPremiseId_"+id).val());
             $("#dTrapPlaced_tasktrap").val($("#dTrapPlaced_"+id).val());
             $("#dTrapCollected_tasktrap").val($("#dTrapCollected_"+id).val());
             $("#iTrapTypeId").select2().val($("#iTrapTypeId_"+id).val()).trigger('change');
@@ -91,12 +91,12 @@ function addEditDataTaskTrap(id,mode,iSiteId_list){
         $("#modal_title_tasktrap").html('Add Task Trap');
         $("#mode_title_tasktrap").val('Add');
         $("#modal_iTTId").val('');
-        if(iSiteId1 > 0){
-            $("#vSiteName_tasktrap").val(iSiteId1).trigger('change');;
-            $("#serach_iSiteId_tasktrap").val(iSiteId1);
+        if(iPremiseId1 > 0){
+            $("#vSiteName_tasktrap").val(iPremiseId1).trigger('change');;
+            $("#serach_iPremiseId_tasktrap").val(iPremiseId1);
         }else {
             $("#vSiteName_tasktrap").val('');
-            $("#serach_iSiteId_tasktrap").val();
+            $("#serach_iPremiseId_tasktrap").val();
         }
         //$("#dTrapPlaced_tasktrap").val(dTrapPlaced);
         $("#dTrapPlaced_tasktrap").val(dDate);
@@ -135,7 +135,7 @@ function addEditDataTaskTrap(id,mode,iSiteId_list){
             if(list==null)
                 return {};
             else
-                return $.map(list, function(rawdata) { return { display: rawdata.display, iSiteId:rawdata.iSiteId }; });
+                return $.map(list, function(rawdata) { return { display: rawdata.display, iPremiseId:rawdata.iPremiseId }; });
         } 
       }      
     });
@@ -189,8 +189,8 @@ function addEditDataTaskTrap(id,mode,iSiteId_list){
 })(jQuery);
 
 function onSiteClusteSelected(e, datum){
-    //////alert(datum['iSiteId'])
-    $("#serach_iSiteId_tasktrap").val(datum['iSiteId']);
+    //////alert(datum['iPremiseId'])
+    $("#serach_iPremiseId_tasktrap").val(datum['iPremiseId']);
     $("#vSiteName_tasktrap").val(datum['display']);
 }
 
@@ -229,7 +229,7 @@ $("#save_data_tasktrap").click(function(){
         event.stopPropagation();
         isError = 1;
     }
-    if($("#vSiteName_tasktrap").val() == "" || ($("#serach_iSiteId_tasktrap").val() == "" || $("#serach_iSiteId_tasktrap").val() == "0" )){
+    if($("#vSiteName_tasktrap").val() == "" || ($("#serach_iPremiseId_tasktrap").val() == "" || $("#serach_iPremiseId_tasktrap").val() == "0" )){
         $("#errmsg_search_site").html('Please select site');
         $("#errmsg_search_site").show();
         isError = 1;

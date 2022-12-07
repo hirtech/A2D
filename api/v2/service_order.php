@@ -235,10 +235,10 @@ if($request_type == "service_order_list"){
     $join_fieds_arr[] = 'st3."vServiceType" as "vServiceType3"';
     
     $join_arr = array();
-    $join_arr[] = 'LEFT JOIN site_mas s on service_order."iPremiseId" = s."iSiteId"';
+    $join_arr[] = 'LEFT JOIN site_mas s on service_order."iPremiseId" = s."iPremiseId"';
     $join_arr[] = 'LEFT JOIN zipcode_mas on s."iZipcode" = zipcode_mas."iZipcode"';
     if($vSContactName != '') {
-        $join_arr[] = 'LEFT JOIN site_contact sc on s."iSiteId" = sc."iSiteId"';
+        $join_arr[] = 'LEFT JOIN site_contact sc on s."iPremiseId" = sc."iPremiseId"';
         $join_arr[] = 'LEFT JOIN contact_mas on sc."iCId" = contact_mas."iCId"';
     }
     $join_arr[] = 'LEFT JOIN zone z on s."iZoneId" = z."iZoneId"';
@@ -255,7 +255,7 @@ if($request_type == "service_order_list"){
     $ServiceOrderObj->join = $join_arr;
     $ServiceOrderObj->where = $where_arr;
     if($vSContactName != '') {
-        $ServiceOrderObj->param['group_by'] = 'sc."iCId", sc."iSiteId"';
+        $ServiceOrderObj->param['group_by'] = 'sc."iCId", sc."iPremiseId"';
     }
     $ServiceOrderObj->param['order_by'] = $sortname . " " . $dir;
     $ServiceOrderObj->param['limit'] = $limit;
@@ -392,7 +392,7 @@ if($request_type == "service_order_list"){
         $where_arr[] = " (service_order.\"iServiceOrderId\" = '".intval($vServiceOrder)."' OR service_order.\"vMasterMSA\" ILIKE '%".trim($vServiceOrder)."%' OR service_order.\"vServiceOrder\" ILIKE '%".trim($vServiceOrder)."%' OR concat(s.\"vAddress1\", ' ', s.\"vStreet\") ILIKE '%".trim($vServiceOrder)."%') ";
     } 
     $join_fieds_arr[] = "concat(s.\"vAddress1\", ' ', s.\"vStreet\") as \"vPremiseAddress\"";
-    $join_arr[] = 'LEFT JOIN site_mas s on s."iSiteId" = service_order."iPremiseId"';
+    $join_arr[] = 'LEFT JOIN site_mas s on s."iPremiseId" = service_order."iPremiseId"';
 
     $ServiceOrderObj->join_field = $join_fieds_arr;
     $ServiceOrderObj->join = $join_arr;

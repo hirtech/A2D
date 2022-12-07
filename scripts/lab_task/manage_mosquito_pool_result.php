@@ -258,7 +258,7 @@ if($_REQUEST['iTTId']){
     $join_fieds_arr[] = 'tt."vTrapName"';
     $join_arr = array();
     $join_arr[] = 'LEFT JOIN trap_type_mas tt on tt."iTrapTypeId" = task_trap."iTrapTypeId"';
-    $join_arr[] = 'LEFT JOIN site_mas s on s."iSiteId" = task_trap."iSiteId"';
+    $join_arr[] = 'LEFT JOIN site_mas s on s."iPremiseId" = task_trap."iPremiseId"';
     $join_arr[] = 'LEFT JOIN county_mas c on s."iCountyId" = c."iCountyId"';
     $join_arr[] = 'LEFT JOIN state_mas sm on s."iStateId" = sm."iStateId"';
     $join_arr[] = 'LEFT JOIN city_mas cm on s."iCityId" = cm."iCityId"';
@@ -272,14 +272,14 @@ if($_REQUEST['iTTId']){
     $rs_taskTrap = $TaskTrapObj->recordset_list();
     $nt = count($rs_taskTrap);
     if($nt > 0){
-    	$vSite = $rs_taskTrap[0]['vName']."- PremiseID#".$rs_taskTrap[0]['iSiteId'];
+    	$vSite = $rs_taskTrap[0]['vName']."- PremiseID#".$rs_taskTrap[0]['iPremiseId'];
         $vAddress =  $rs_taskTrap[0]['vAddress1'].' '.$rs_taskTrap[0]['vStreet'].' '.$rs_taskTrap[0]['vCity'].', '.$rs_taskTrap[0]['vState'].' '.$rs_taskTrap[0]['vCounty'];
 
-        $vSiteName = $rs_taskTrap[0]['iSiteId']." (".$rs_taskTrap[0]['vName']."; ".$rs_taskTrap[0]['vTypeName'].")";
+        $vSiteName = $rs_taskTrap[0]['iPremiseId']." (".$rs_taskTrap[0]['vName']."; ".$rs_taskTrap[0]['vTypeName'].")";
 
         $trap_data = array(
                 "iTTId" => $rs_taskTrap[0]['iTTId'],
-                "iSiteId" => $rs_taskTrap[0]['iSiteId'],
+                "iPremiseId" => $rs_taskTrap[0]['iPremiseId'],
                 "vSiteName" => gen_strip_slash($vSite),
                 "vSiteAddress" => $vAddress,
                 "dTrapPlaced" => date_getDateTimeDDMMYYYY($rs_taskTrap[0]['dTrapPlaced']),
@@ -318,7 +318,7 @@ if($_REQUEST['iTTId']){
     $join_fieds_arr[] = 'tmp."bLabWorkComplete" as poollabworkcomplete';
     $join_arr = array();
     $join_arr[] = 'LEFT JOIN trap_type_mas tt on tt."iTrapTypeId" = task_trap."iTrapTypeId"';
-    $join_arr[] = 'LEFT JOIN site_mas s on s."iSiteId" = task_trap."iSiteId"';
+    $join_arr[] = 'LEFT JOIN site_mas s on s."iPremiseId" = task_trap."iPremiseId"';
     $join_arr[] = 'LEFT JOIN county_mas c on s."iCountyId" = c."iCountyId"';
     $join_arr[] = 'LEFT JOIN state_mas sm on s."iStateId" = sm."iStateId"';
     $join_arr[] = 'LEFT JOIN city_mas cm on s."iCityId" = cm."iCityId"';
@@ -336,16 +336,16 @@ if($_REQUEST['iTTId']){
    // echo "<pre>";print_r($rs_taskTrap);exit();
     $nt = count($rs_taskTrap);
     if($nt > 0){
-    	$vSite = $rs_taskTrap[0]['vName']."- PremiseID#".$rs_taskTrap[0]['iSiteId'];
+    	$vSite = $rs_taskTrap[0]['vName']."- PremiseID#".$rs_taskTrap[0]['iPremiseId'];
         $vAddress =  $rs_taskTrap[0]['vAddress1'].' '.$rs_taskTrap[0]['vStreet'].' '.$rs_taskTrap[0]['vCity'].', '.$rs_taskTrap[0]['vState'].' '.$rs_taskTrap[0]['vCounty'];
 
-        $vSiteName = $rs_taskTrap[0]['iSiteId']." (".$rs_taskTrap[0]['vName']."; ".$rs_taskTrap[0]['vTypeName'].")";
+        $vSiteName = $rs_taskTrap[0]['iPremiseId']." (".$rs_taskTrap[0]['vName']."; ".$rs_taskTrap[0]['vTypeName'].")";
 
         $poolbLabWorkComplete = ($rs_taskTrap[0]['poollabworkcomplete']=='t')?'1':'0';
 
         $trap_data = array(
                 "iTTId" => $rs_taskTrap[0]['iTTId'],
-                "iSiteId" => $rs_taskTrap[0]['iSiteId'],
+                "iPremiseId" => $rs_taskTrap[0]['iPremiseId'],
                 "vSiteName" => gen_strip_slash($vSite),
                 "vSiteAddress" => $vAddress,
                 "dTrapPlaced" => date_getDateTimeDDMMYYYY($rs_taskTrap[0]['dTrapPlaced']),

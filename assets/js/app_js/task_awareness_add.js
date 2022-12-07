@@ -1,4 +1,4 @@
-function addEditDataAwareness(id,mode,iSiteId_list){
+function addEditDataAwareness(id,mode,iPremiseId_list){
     if (typeof(infowindow) !== 'undefined' && infowindow) {
         infowindow.close();
     }
@@ -11,7 +11,7 @@ function addEditDataAwareness(id,mode,iSiteId_list){
     $("#vSiteName_awareness").typeahead('val','');
     $("#vSR_awareness").typeahead('val','');
     $("#otechnician_id").select2().val("").trigger('change');
-    var iSiteId1 = iSiteId_list;
+    var iPremiseId1 = iPremiseId_list;
     $("#frmadd_awareness").removeClass('was-validated');
     if(mode == "edit"){
         $("#modal_title_awareness").html('Edit Awareness');
@@ -19,7 +19,7 @@ function addEditDataAwareness(id,mode,iSiteId_list){
         if (typeof(siteInfoWindowTaskAwarenessArr) !== 'undefined' && siteInfoWindowTaskAwarenessArr.length > 0) {
             var iAId_s = '';
             var vSiteName_s = '';
-            var iSiteId_s = '';
+            var iPremiseId_s = '';
             var dDate_s = '';
             var dStartTime_s = '';
             var dEndTime_s = '';
@@ -34,7 +34,7 @@ function addEditDataAwareness(id,mode,iSiteId_list){
                 iAId_s = v['iAId'];
                 if(id == iAId_s ){
                     vSiteName_s = v['vSiteName'];
-                    iSiteId_s = v['iSiteId'];
+                    iPremiseId_s = v['iPremiseId'];
                     dDate_s = v['dDate'];
                     dStartTime_s = v['dStartTime'];
                     dEndTime_s = v['dEndTime'];
@@ -49,7 +49,7 @@ function addEditDataAwareness(id,mode,iSiteId_list){
             });
             $("#modal_iAId").val(iAId_s);
             $("#vSiteName_awareness").val(vSiteName_s);
-            $("#serach_iSiteId_awareness").val(iSiteId_s);
+            $("#serach_iPremiseId_awareness").val(iPremiseId_s);
             $("#modal_dDate_awareness").val(dDate_s);
             $("#dStartTime_awareness").val(dStartTime_s);
             $("#dEndTime_awareness").val(dEndTime_s);
@@ -62,7 +62,7 @@ function addEditDataAwareness(id,mode,iSiteId_list){
         } else {
             $("#modal_iAId").val($("#iAId_"+id).val());
             $("#vSiteName_awareness").val($("#vSiteName_"+id).val());
-            $("#serach_iSiteId_awareness").val($("#iSiteId_"+id).val());
+            $("#serach_iPremiseId_awareness").val($("#iPremiseId_"+id).val());
             $("#modal_dDate_awareness").val($("#dDate_"+id).val());
             $("#dStartTime_awareness").val($("#dStartTime_"+id).val());
             $("#dEndTime_awareness").val($("#dEndTime_"+id).val());
@@ -77,12 +77,12 @@ function addEditDataAwareness(id,mode,iSiteId_list){
         $("#modal_title_awareness").html('Add Awareness');
         $("#mode_title_awareness").val('Add');
         $("#modal_iAId").val('');
-        if(iSiteId1 > 0){
-            $("#vSiteName_awareness").val(iSiteId1).trigger('change');;
-            $("#serach_iSiteId_awareness").val(iSiteId1);
+        if(iPremiseId1 > 0){
+            $("#vSiteName_awareness").val(iPremiseId1).trigger('change');;
+            $("#serach_iPremiseId_awareness").val(iPremiseId1);
         }else {
             $("#vSiteName_awareness").val('');
-            $("#serach_iSiteId_awareness").val();
+            $("#serach_iPremiseId_awareness").val();
         }
 
         $("#modal_dDate_awareness").val(dDate);
@@ -116,7 +116,7 @@ function addEditDataAwareness(id,mode,iSiteId_list){
             if(list==null)
                 return {};
             else
-                return $.map(list, function(rawdata) { return { display: rawdata.display, iSiteId:rawdata.iSiteId }; });
+                return $.map(list, function(rawdata) { return { display: rawdata.display, iPremiseId:rawdata.iPremiseId }; });
         } 
       }      
     });
@@ -170,8 +170,8 @@ function addEditDataAwareness(id,mode,iSiteId_list){
 })(jQuery);
 
 function onSiteClusteSelected(e, datum){
-    //////alert(datum['iSiteId'])
-    $("#serach_iSiteId_awareness").val(datum['iSiteId']);
+    //////alert(datum['iPremiseId'])
+    $("#serach_iPremiseId_awareness").val(datum['iPremiseId']);
     $("#vSiteName_awareness").val(datum['display']);
 }
 
@@ -201,7 +201,7 @@ $("#save_data_awareness").click(function(){
     }
     form.addClass('was-validated');
 
-    if($("#vSiteName_awareness").val() == "" || ($("#serach_iSiteId_awareness").val() == "" || $("#serach_iSiteId_awareness").val() == "0" )){
+    if($("#vSiteName_awareness").val() == "" || ($("#serach_iPremiseId_awareness").val() == "" || $("#serach_iPremiseId_awareness").val() == "0" )){
         $("#errmsg_search_site").html('Please select site');
         $("#errmsg_search_site").show();
         isError = 1;
@@ -251,7 +251,7 @@ $("#save_data_awareness").click(function(){
 
 function clear_site(){
     $("#vSiteName_awareness").val('');
-    $("#serach_iSiteId_awareness").val('');
+    $("#serach_iPremiseId_awareness").val('');
 }
 
 function clear_sr(){

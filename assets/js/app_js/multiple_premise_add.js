@@ -29,7 +29,7 @@ $("#save_data_batch_premises").click(function(){
                 }else{
                     toastr.error(response['msg']);
                 }
-				var url = site_url+'/vmap/index&mode=filter_sites&iSiteId='+response['sites'];
+				var url = site_url+'/vmap/index&mode=filter_sites&iPremiseId='+response['sites'];
 					window.open(url);
             }
         });

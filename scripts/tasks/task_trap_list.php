@@ -27,7 +27,7 @@ $dir = (isset($_REQUEST["sSortDir_0"]) ? $_REQUEST["sSortDir_0"] : 'desc');
 $SiteObj = new Site();
 
 $iTTId = $_REQUEST['iTTId'];
-$iSiteId = $_REQUEST['iSiteId'];
+$iPremiseId = $_REQUEST['iPremiseId'];
 
 
 if($mode == "List"){
@@ -41,8 +41,8 @@ if($mode == "List"){
         $arr_param[$vOptions] = $Keyword;
     }
 
-    if ($iSiteId != "") {
-        $arr_param['iSiteId'] = $iSiteId;
+    if ($iPremiseId != "") {
+        $arr_param['iPremiseId'] = $iPremiseId;
     }
 
     if ($iTTId != "") {
@@ -97,7 +97,7 @@ if($mode == "List"){
                $action .= ' <a class="btn btn-outline-danger" title="Delete" href="javascript:void(0);" onclick="delete_record('.$rs_taskTrap[$i]['iTTId'].');"><i class="fa fa-trash"></i></a>';
             }
 
-            $hidden_fields = '<input type="hidden" id="iTTId_'.$rs_taskTrap[$i]['iTTId'].'" value="'.$rs_taskTrap[$i]['iTTId'].'"><input type="hidden" id="vSiteName_'.$rs_taskTrap[$i]['iTTId'].'" value="'.$rs_taskTrap[$i]['vName'].'"><input type="hidden" id="iSiteId_'.$rs_taskTrap[$i]['iTTId'].'" value="'.$rs_taskTrap[$i]['iSiteId'].'"><input type="hidden" id="iSRId_'.$rs_taskTrap[$i]['iTTId'].'" value="'.$rs_taskTrap[$i]['iSRId'].'"><input type="hidden" id="dTrapPlaced_'.$rs_taskTrap[$i]['iTTId'].'" value="'.$rs_taskTrap[$i]['dTrapPlaced'].'"><input type="hidden" id="dTrapCollected_'.$rs_taskTrap[$i]['iTTId'].'" value="'.$rs_taskTrap[$i]['dTrapCollected'].'"><input type="hidden" id="iTrapTypeId_'.$rs_taskTrap[$i]['iTTId'].'" value="'.$rs_taskTrap[$i]['iTrapTypeId'].'"><input type="hidden" id="bMalfunction_'.$rs_taskTrap[$i]['iTTId'].'" value="'.$rs_taskTrap[$i]['bMalfunction'].'"><input type="hidden" id="tNotes_'.$rs_taskTrap[$i]['iTTId'].'" value="'.$rs_taskTrap[$i]['tNotes'].'"><input type="hidden" id="srdisplay_'.$rs_taskTrap[$i]['iTTId'].'" value="'.$rs_taskTrap[$i]['sr'].'"><input type="hidden" id="iSRId_'.$rs_taskTrap[$i]['iTTId'].'" value="'.$rs_taskTrap[$i]['iSRId'].'"><input type="hidden" id="iTechnicianId_'.$rs_taskTrap[$i]['iTTId'].'" value="'.$rs_taskTrap[$i]['iTechnicianId'].'">';
+            $hidden_fields = '<input type="hidden" id="iTTId_'.$rs_taskTrap[$i]['iTTId'].'" value="'.$rs_taskTrap[$i]['iTTId'].'"><input type="hidden" id="vSiteName_'.$rs_taskTrap[$i]['iTTId'].'" value="'.$rs_taskTrap[$i]['vName'].'"><input type="hidden" id="iPremiseId_'.$rs_taskTrap[$i]['iTTId'].'" value="'.$rs_taskTrap[$i]['iPremiseId'].'"><input type="hidden" id="iSRId_'.$rs_taskTrap[$i]['iTTId'].'" value="'.$rs_taskTrap[$i]['iSRId'].'"><input type="hidden" id="dTrapPlaced_'.$rs_taskTrap[$i]['iTTId'].'" value="'.$rs_taskTrap[$i]['dTrapPlaced'].'"><input type="hidden" id="dTrapCollected_'.$rs_taskTrap[$i]['iTTId'].'" value="'.$rs_taskTrap[$i]['dTrapCollected'].'"><input type="hidden" id="iTrapTypeId_'.$rs_taskTrap[$i]['iTTId'].'" value="'.$rs_taskTrap[$i]['iTrapTypeId'].'"><input type="hidden" id="bMalfunction_'.$rs_taskTrap[$i]['iTTId'].'" value="'.$rs_taskTrap[$i]['bMalfunction'].'"><input type="hidden" id="tNotes_'.$rs_taskTrap[$i]['iTTId'].'" value="'.$rs_taskTrap[$i]['tNotes'].'"><input type="hidden" id="srdisplay_'.$rs_taskTrap[$i]['iTTId'].'" value="'.$rs_taskTrap[$i]['sr'].'"><input type="hidden" id="iSRId_'.$rs_taskTrap[$i]['iTTId'].'" value="'.$rs_taskTrap[$i]['iSRId'].'"><input type="hidden" id="iTechnicianId_'.$rs_taskTrap[$i]['iTTId'].'" value="'.$rs_taskTrap[$i]['iTechnicianId'].'">';
 
             $entry[] = array(
                 "iTTId" => $rs_taskTrap[$i]['iTTId'],
@@ -169,7 +169,7 @@ else if($mode == "Update"){
         $arr_param = array(
             "sessionId"         => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
             "iTTId"             => $_POST['modal_iTTId'],
-            "iSiteId"           => $_POST['serach_iSiteId_tasktrap'],
+            "iPremiseId"           => $_POST['serach_iPremiseId_tasktrap'],
             "iSRId"             => $_POST['serach_iSRId_tasktrap'],
             "dTrapPlaced"       => $_POST['dTrapPlaced_tasktrap'],
             "dTrapCollected"    => $_POST['dTrapCollected_tasktrap'],
@@ -226,7 +226,7 @@ else if($mode == "Add"){
        
         $arr_param = array(
             "sessionId"         => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
-            "iSiteId"           => $_POST['serach_iSiteId_tasktrap'],
+            "iPremiseId"           => $_POST['serach_iPremiseId_tasktrap'],
             "iSRId"             => $_POST['serach_iSRId_tasktrap'],
             "dTrapPlaced"       => $_POST['dTrapPlaced_tasktrap'],
             "dTrapCollected"    => $_POST['dTrapCollected_tasktrap'],
@@ -387,12 +387,12 @@ else if($mode == "Add"){
     hc_exit(); 
 }
 
-if($_REQUEST['iSiteId']){
+if($_REQUEST['iPremiseId']){
     $where_arr = array();
     $join_fieds_arr = array();
     $join_arr  = array();
     $SiteObj->clear_variable();
-    $where_arr[] = 's."iSiteId" = '.$_REQUEST['iSiteId'];
+    $where_arr[] = 's."iPremiseId" = '.$_REQUEST['iPremiseId'];
 
     $SiteObj->join_field = $join_fieds_arr;
     $SiteObj->join = $join_arr;
@@ -447,7 +447,7 @@ $smarty->assign("module_title", $module_title);
 $smarty->assign("option_arr", $option_arr);
 $smarty->assign("msg", $_GET['msg']);
 $smarty->assign("flag", $_GET['flag']);
-$smarty->assign("iSiteId", $iSiteId);
+$smarty->assign("iPremiseId", $iPremiseId);
 $smarty->assign("iTTId", $iTTId);
 
 $smarty->assign("access_group_var_add", $access_group_var_add);

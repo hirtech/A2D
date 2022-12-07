@@ -28,7 +28,7 @@ $display_order = (isset($_REQUEST["iSortCol_0"]) ? $_REQUEST["iSortCol_0"] : '0'
 $dir = (isset($_REQUEST["sSortDir_0"]) ? $_REQUEST["sSortDir_0"] : 'desc');
 # ------------------------------------------------------------
 //echo "<pre>";print_r($access_group_var_delete);exit();
-$iSiteId = $_REQUEST['iSiteId'];
+$iPremiseId = $_REQUEST['iPremiseId'];
 
 if($mode == "List"){
     $arr_param = array();
@@ -54,8 +54,8 @@ if($mode == "List"){
         $arr_param[$vOptions] = $Keyword;
     }
     
-    if ($iSiteId != "") {
-        $arr_param['iSiteId'] = $iSiteId;
+    if ($iPremiseId != "") {
+        $arr_param['iPremiseId'] = $iPremiseId;
     }
     $arr_param['page_length'] = $page_length;
     $arr_param['start'] = $start;
@@ -105,7 +105,7 @@ if($mode == "List"){
                $action .= ' <a class="btn btn-outline-danger" title="Delete" href="javascript:void(0);" onclick="delete_record('.$rs_tasklarval[$i]['iTLSId'].');"><i class="fa fa-trash"></i></a>';
             }
 
-            $hidden_fields = '<input type="hidden" id="iTLSId_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['iTLSId'].'"><input type="hidden" id="vSiteName_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['vName'].'"><input type="hidden" id="iSiteId_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['iSiteId'].'"><input type="hidden" id="iDips_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['iDips'].'"><input type="hidden" id="dDate_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['dDate'].'"><input type="hidden" id="dDate_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['dDate'].'"><input type="hidden" id="dStartDate_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['dStartDate'].'"><input type="hidden" id="dStartTime_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['dStartTime'].'"><input type="hidden" id="dEndDate_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['dEndDate'].'"><input type="hidden" id="dEndTime_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['dEndTime'].'"><input type="hidden" id="iGenus_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['iGenus'].'"><input type="hidden" id="iCount_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['iCount'].'"><input type="hidden" id="bEggs_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['bEggs'].'"><input type="hidden" id="bInstar1_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['bInstar1'].'"><input type="hidden" id="bInstar2_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['bInstar2'].'"><input type="hidden" id="bInstar3_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['bInstar3'].'"><input type="hidden" id="bInstar4_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['bInstar4'].'"><input type="hidden" id="iGenus2_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['iGenus2'].'"><input type="hidden" id="iCount2_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['iCount2'].'"><input type="hidden" id="bEggs2_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['bEggs2'].'"><input type="hidden" id="bInstar12_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['bInstar12'].'"><input type="hidden" id="bInstar22_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['bInstar22'].'"><input type="hidden" id="bInstar32_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['bInstar32'].'"><input type="hidden" id="bInstar42_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['bInstar42'].'"><input type="hidden" id="bPupae_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['bPupae'].'"><input type="hidden" id="bAdult_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['bAdult'].'"><input type="hidden" id="bPupae2_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['bPupae2'].'"><input type="hidden" id="bAdult2_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['bAdult2'].'"><input type="hidden" id="tNotes_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['tNotes'].'"><input type="hidden" id="srdisplay_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['sr'].'"><input type="hidden" id="iSRId_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['iSRId'].'"><input type="hidden" id="iTechnicianId_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['iTechnicianId'].'">';
+            $hidden_fields = '<input type="hidden" id="iTLSId_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['iTLSId'].'"><input type="hidden" id="vSiteName_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['vName'].'"><input type="hidden" id="iPremiseId_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['iPremiseId'].'"><input type="hidden" id="iDips_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['iDips'].'"><input type="hidden" id="dDate_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['dDate'].'"><input type="hidden" id="dDate_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['dDate'].'"><input type="hidden" id="dStartDate_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['dStartDate'].'"><input type="hidden" id="dStartTime_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['dStartTime'].'"><input type="hidden" id="dEndDate_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['dEndDate'].'"><input type="hidden" id="dEndTime_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['dEndTime'].'"><input type="hidden" id="iGenus_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['iGenus'].'"><input type="hidden" id="iCount_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['iCount'].'"><input type="hidden" id="bEggs_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['bEggs'].'"><input type="hidden" id="bInstar1_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['bInstar1'].'"><input type="hidden" id="bInstar2_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['bInstar2'].'"><input type="hidden" id="bInstar3_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['bInstar3'].'"><input type="hidden" id="bInstar4_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['bInstar4'].'"><input type="hidden" id="iGenus2_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['iGenus2'].'"><input type="hidden" id="iCount2_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['iCount2'].'"><input type="hidden" id="bEggs2_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['bEggs2'].'"><input type="hidden" id="bInstar12_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['bInstar12'].'"><input type="hidden" id="bInstar22_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['bInstar22'].'"><input type="hidden" id="bInstar32_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['bInstar32'].'"><input type="hidden" id="bInstar42_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['bInstar42'].'"><input type="hidden" id="bPupae_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['bPupae'].'"><input type="hidden" id="bAdult_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['bAdult'].'"><input type="hidden" id="bPupae2_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['bPupae2'].'"><input type="hidden" id="bAdult2_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['bAdult2'].'"><input type="hidden" id="tNotes_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['tNotes'].'"><input type="hidden" id="srdisplay_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['sr'].'"><input type="hidden" id="iSRId_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['iSRId'].'"><input type="hidden" id="iTechnicianId_'.$rs_tasklarval[$i]['iTLSId'].'" value="'.$rs_tasklarval[$i]['iTechnicianId'].'">';
 
             $entry[] = array(
                 "iTLSId" => $rs_tasklarval[$i]['iTLSId'],
@@ -146,7 +146,7 @@ if($mode == "List"){
 
         $arr_param = array(
             "sessionId"     => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
-            "iSiteId"       => $_POST['serach_iSiteId_larval'],
+            "iPremiseId"       => $_POST['serach_iPremiseId_larval'],
             "iSRId"         => $_POST['iSRId'],
             "dDate"         => $_POST['modal_dDate'],
             "dStartDate"    => $dStartDate,
@@ -237,7 +237,7 @@ if($mode == "List"){
         $arr_param = array(
             "sessionId"     => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
             "iTLSId"        => $_POST['modal_iTLSId'],
-            "iSiteId"       => $_POST['serach_iSiteId_larval'],
+            "iPremiseId"       => $_POST['serach_iPremiseId_larval'],
             "iSRId"         => $_POST['iSRId'],
             "dDate"         => $_POST['modal_dDate'],
             "dStartDate"    => $dStartDate,
@@ -411,12 +411,12 @@ if($mode == "List"){
     # -----------------------------------
 }
 
-if($_REQUEST['iSiteId']){
+if($_REQUEST['iPremiseId']){
     $where_arr = array();
     $join_fieds_arr = array();
     $join_arr  = array();
     $SiteObj->clear_variable();
-    $where_arr[] = 's."iSiteId" = '.$_REQUEST['iSiteId'];
+    $where_arr[] = 's."iPremiseId" = '.$_REQUEST['iPremiseId'];
 
     $SiteObj->join_field = $join_fieds_arr;
     $SiteObj->join = $join_arr;
@@ -449,7 +449,7 @@ $smarty->assign("module_title", $module_title);
 $smarty->assign("option_arr", $option_arr);
 $smarty->assign("msg", $_GET['msg']);
 $smarty->assign("flag", $_GET['flag']);
-$smarty->assign("iSiteId", $iSiteId);
+$smarty->assign("iPremiseId", $iPremiseId);
 
 $smarty->assign("access_group_var_add", $access_group_var_add);
 

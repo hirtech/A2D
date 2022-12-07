@@ -66,7 +66,7 @@
 {include file="scripts/premise/premise_services_suspend.tpl"}
 
 <script type="text/javascript">
-	var ajax_url = 'premise/setup_premise_services_list?iSiteId={$iPremiseId}?mode=List';
+	var ajax_url = 'premise/setup_premise_services_list?iPremiseId={$iPremiseId}?mode=List';
 	var vPremiseName= '{$vPremiseName}';
 </script>
 {include file="general/dataTables.tpl"}

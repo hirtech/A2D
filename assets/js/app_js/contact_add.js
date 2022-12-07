@@ -5,7 +5,7 @@
 
 })(jQuery);
 
-function addEditData(id,mode,siteid,referer){
+function addEditData(id,mode,premiseid,referer){
 
     $("#contactfrmadd").removeClass('was-validated');
         $("#primary_msg").html("").hide();
@@ -16,7 +16,7 @@ function addEditData(id,mode,siteid,referer){
         $("#cntmodaltitle").html('Edit Contact');
         $("#cnt_mode").val('Update');
    
-        $("#siteid").val(siteid);
+        $("#premiseid").val(premiseid);
         $("#referer").val(referer);
         $("#cid").val($('#cnt_id_'+id).val());
         $("#salutation").val($('#cnt_salution_'+id).val());
@@ -40,7 +40,7 @@ function addEditData(id,mode,siteid,referer){
     }else{
         $("#cntmodaltitle").html('Add Contact');
         $("#cnt_mode").val('Add');
-        $("#siteid").val(siteid);
+        $("#premiseid").val(premiseid);
         $("#referer").val(referer);
         $("#cid").val('');
         $("#salutation").val('Mr.');

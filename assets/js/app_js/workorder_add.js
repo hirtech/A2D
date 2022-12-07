@@ -21,7 +21,7 @@ $(document).ready(function() {
                 if(list==null)
                     return {};
                 else
-                    return $.map(list, function(rawdata) { return { display: rawdata.display, iSiteId:rawdata.iSiteId }; });
+                    return $.map(list, function(rawdata) { return { display: rawdata.display, iPremiseId:rawdata.iPremiseId }; });
             } 
         }
     });
@@ -70,7 +70,7 @@ $(document).ready(function() {
 });
 
 function onPremiseClusteSelected(e, datum){
-    $("#search_iPremiseId").val(datum['iSiteId']);
+    $("#search_iPremiseId").val(datum['iPremiseId']);
     $("#vPremiseName").val(datum['display']);
 }
 

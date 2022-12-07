@@ -81,7 +81,7 @@ if($request_type == "premise_circuit_list"){
     $join_arr[] = " LEFT JOIN workorder w ON premise_circuit.\"iWOId\" = w.\"iWOId\"";
     $join_arr[] = " LEFT JOIN workorder_type_mas wt ON w.\"iWOTId\" = wt.\"iWOTId\"";
     $join_arr[] = " LEFT JOIN service_order so ON w.\"iServiceOrderId\" = so.\"iServiceOrderId\"";
-    $join_arr[] = " LEFT JOIN site_mas s ON so.\"iPremiseId\" = s.\"iSiteId\"";
+    $join_arr[] = " LEFT JOIN site_mas s ON so.\"iPremiseId\" = s.\"iPremiseId\"";
     $join_arr[] = " LEFT JOIN site_type_mas st ON s.\"iSTypeId\" = st.\"iSTypeId\"";
     $join_arr[] = " LEFT JOIN circuit ON premise_circuit.\"iCircuitId\" = circuit.\"iCircuitId\"";
     $PremiseCircuitObj->join_field = $join_fieds_arr;
@@ -133,7 +133,7 @@ if($request_type == "premise_circuit_list"){
     }    
 }else if($request_type == "premise_circuit_add"){
 	//The network from the workorder/premise
-	$sql_wonetwork = "SELECT z.\"iNetworkId\" FROM workorder w JOIN service_order so ON w.\"iServiceOrderId\" = so.\"iServiceOrderId\" JOIN site_mas s ON so.\"iPremiseId\" = s.\"iSiteId\" JOIN zone z ON s.\"iZoneId\" = z.\"iZoneId\" WHERE w.\"iWOId\" = '".$RES_PARA['iWOId']."' ORDER BY z.\"iNetworkId\" DESC LIMIT 1 ";
+	$sql_wonetwork = "SELECT z.\"iNetworkId\" FROM workorder w JOIN service_order so ON w.\"iServiceOrderId\" = so.\"iServiceOrderId\" JOIN site_mas s ON so.\"iPremiseId\" = s.\"iPremiseId\" JOIN zone z ON s.\"iZoneId\" = z.\"iZoneId\" WHERE w.\"iWOId\" = '".$RES_PARA['iWOId']."' ORDER BY z.\"iNetworkId\" DESC LIMIT 1 ";
 	$rs_wonetwork = $sqlObj->GetAll($sql_wonetwork);
 	//echo $sql_wonetwork."<pre>";print_r($rs_wonetwork);
 	$iWONetworkId = 0;
@@ -171,7 +171,7 @@ if($request_type == "premise_circuit_list"){
 	}
 }else if($request_type == "premise_circuit_edit"){
 	//The network from the workorder/premise
-    $sql_wonetwork = "SELECT z.\"iNetworkId\" FROM workorder w JOIN service_order so ON w.\"iServiceOrderId\" = so.\"iServiceOrderId\" JOIN site_mas s ON so.\"iPremiseId\" = s.\"iSiteId\" JOIN zone z ON s.\"iZoneId\" = z.\"iZoneId\" WHERE w.\"iWOId\" = '".$RES_PARA['iWOId']."' ORDER BY z.\"iNetworkId\" DESC LIMIT 1 ";
+    $sql_wonetwork = "SELECT z.\"iNetworkId\" FROM workorder w JOIN service_order so ON w.\"iServiceOrderId\" = so.\"iServiceOrderId\" JOIN site_mas s ON so.\"iPremiseId\" = s.\"iPremiseId\" JOIN zone z ON s.\"iZoneId\" = z.\"iZoneId\" WHERE w.\"iWOId\" = '".$RES_PARA['iWOId']."' ORDER BY z.\"iNetworkId\" DESC LIMIT 1 ";
     $rs_wonetwork = $sqlObj->GetAll($sql_wonetwork);
     //echo $sql_wonetwork."<pre>";print_r($rs_wonetwork);
     $iWONetworkId = 0;

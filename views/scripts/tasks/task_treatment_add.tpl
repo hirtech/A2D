@@ -15,8 +15,8 @@
             		<div class="form-group row">
             			<label class="col-sm-2 col-form-label" for="modal_vSiteName_treatment">Premise  <span class="text-danger"> *</span></label>
             			<div class="col-sm-4">
-                			<input type="text" name="vSiteName_treatment"  class="form-control " id="modal_vSiteName_treatment" placeholder="Search Premise Id or Premise Name" value="{if $rs_site[0].iSiteId}{if $rs_site[0].vName neq ''}{$rs_site[0].vName|gen_strip_slash} - {/if}PremiseID# {$rs_site[0].iSiteId}{/if}"  required>
-                			<input type="hidden" id="serach_iSiteId_treatment" name="serach_iSiteId_treatment" value="{$rs_site[0].iSiteId}"/>
+                			<input type="text" name="vSiteName_treatment"  class="form-control " id="modal_vSiteName_treatment" placeholder="Search Premise Id or Premise Name" value="{if $rs_site[0].iPremiseId}{if $rs_site[0].vName neq ''}{$rs_site[0].vName|gen_strip_slash} - {/if}PremiseID# {$rs_site[0].iPremiseId}{/if}"  required>
+                			<input type="hidden" id="serach_iPremiseId_treatment" name="serach_iPremiseId_treatment" value="{$rs_site[0].iPremiseId}"/>
                             <div class="invalid-feedback" id="errmsg_search_site">Please enter premise</div>
                 		</div>
                         <label class="col-sm-2 col-form-label" for="vSR_other">SR</label>

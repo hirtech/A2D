@@ -163,7 +163,7 @@ if($request_type == "workorder_list"){
             $sortname = "workorder.\"iWOId\"";
             break;
         case "1":
-            $sortname = "s.\"iSiteId\"";
+            $sortname = "s.\"iPremiseId\"";
             break;
         case "2":
             $sortname = "workorder.\"iServiceOrderId\"";
@@ -202,7 +202,7 @@ if($request_type == "workorder_list"){
     $join_fieds_arr[] = 'wt."vType"';
     $join_fieds_arr[] = "concat(u.\"vFirstName\", ' ', u.\"vLastName\") as \"vRequestor\"";
     $join_fieds_arr[] = "concat(u1.\"vFirstName\", ' ', u1.\"vLastName\") as \"vAssignedTo\"";
-    $join_arr[] = 'LEFT JOIN site_mas s on workorder."iPremiseId" = s."iSiteId"';
+    $join_arr[] = 'LEFT JOIN site_mas s on workorder."iPremiseId" = s."iPremiseId"';
     $join_arr[] = 'LEFT JOIN site_type_mas st on s."iSTypeId" = st."iSTypeId"';
     $join_arr[] = 'LEFT JOIN zipcode_mas on s."iZipcode" = zipcode_mas."iZipcode"';
     $join_arr[] = 'LEFT JOIN zone z on s."iZoneId" = z."iZoneId"';
@@ -334,19 +334,19 @@ if($request_type == "workorder_list"){
     $ext_where_arr =array();
     foreach($exp_keyword as $vl){
         if(trim($vl) != '')
-            $ext_where_arr[] = " (s.\"vName\" ILIKE '%".trim($vl)."%' OR concat(s.\"vAddress1\", ' ', s.\"vStreet\") ILIKE '%".trim($vl)."%' OR CAST(s.\"iSiteId\" AS TEXT) LIKE '".intval($vl)."%' OR CAST(workorder.\"iWOId\" AS TEXT) LIKE '".intval($vl)."%' OR wt.\"vType\" ILIKE '%".trim($vl)."%')";
+            $ext_where_arr[] = " (s.\"vName\" ILIKE '%".trim($vl)."%' OR concat(s.\"vAddress1\", ' ', s.\"vStreet\") ILIKE '%".trim($vl)."%' OR CAST(s.\"iPremiseId\" AS TEXT) LIKE '".intval($vl)."%' OR CAST(workorder.\"iWOId\" AS TEXT) LIKE '".intval($vl)."%' OR wt.\"vType\" ILIKE '%".trim($vl)."%')";
     }
     if(count($ext_where_arr) > 0){
         $ext_where = implode(" AND ", $ext_where_arr);
         $where_arr[] = $ext_where;
     }else{
-        $where_arr[] = " (s.\"vName\" ILIKE '%".trim($vWorkOrder)."%' OR concat(s.\"vAddress1\", ' ', s.\"vStreet\") ILIKE '%".trim($vWorkOrder)."%'  OR CAST(s.\"iSiteId\" AS TEXT) LIKE '".intval($vWorkOrder)."%' OR CAST(workorder.\"iWOId\" AS TEXT) LIKE '".intval($vWorkOrder)."%' OR wt.\"vType\" ILIKE '%".trim($vWorkOrder)."%')";
+        $where_arr[] = " (s.\"vName\" ILIKE '%".trim($vWorkOrder)."%' OR concat(s.\"vAddress1\", ' ', s.\"vStreet\") ILIKE '%".trim($vWorkOrder)."%'  OR CAST(s.\"iPremiseId\" AS TEXT) LIKE '".intval($vWorkOrder)."%' OR CAST(workorder.\"iWOId\" AS TEXT) LIKE '".intval($vWorkOrder)."%' OR wt.\"vType\" ILIKE '%".trim($vWorkOrder)."%')";
     }     
     $join_fieds_arr[] = 's."vName" as "vPremiseName"';
     $join_fieds_arr[] = 'st."vTypeName"';
     $join_fieds_arr[] = 'wt."vType" as "vWorkorderType"';
     $join_arr[] = 'LEFT JOIN service_order so on workorder."iServiceOrderId" = so."iServiceOrderId"';
-    $join_arr[] = 'LEFT JOIN site_mas s on so."iPremiseId" = s."iSiteId"';
+    $join_arr[] = 'LEFT JOIN site_mas s on so."iPremiseId" = s."iPremiseId"';
     $join_arr[] = 'LEFT JOIN site_type_mas st on s."iSTypeId" = st."iSTypeId"';
     $join_arr[] = 'LEFT JOIN workorder_type_mas wt on workorder."iWOTId" = wt."iWOTId"';
     $WorkOrderObj->join_field = $join_fieds_arr;
@@ -429,7 +429,7 @@ if($request_type == "workorder_list"){
             $join_fieds_arr[] = 'sp."iMRCFixed"';
         }
         $join_arr[] = 'LEFT JOIN service_order so on workorder."iServiceOrderId" = so."iServiceOrderId"';
-        $join_arr[] = 'LEFT JOIN site_mas s ON so."iPremiseId" = s."iSiteId"';
+        $join_arr[] = 'LEFT JOIN site_mas s ON so."iPremiseId" = s."iPremiseId"';
         $join_arr[] = 'LEFT JOIN zone z ON s."iZoneId" = z."iZoneId"';
         $join_arr[] = 'LEFT JOIN company_mas cm on so."iCarrierID" = cm."iCompanyId"';
         if($iServiceTypeId > 0){

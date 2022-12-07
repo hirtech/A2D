@@ -1,4 +1,4 @@
-function addEditDataTaskAdult(id,mode,iSiteId_list){
+function addEditDataTaskAdult(id,mode,iPremiseId_list){
     if (typeof(infowindow) !== 'undefined' && infowindow) {
         infowindow.close();
     }
@@ -9,7 +9,7 @@ function addEditDataTaskAdult(id,mode,iSiteId_list){
     $("#errmsg_dEndTime_adult").hide();
     //alert("addEditDataTaskAdult")
 
-    var iSiteId1 = iSiteId_list;
+    var iPremiseId1 = iPremiseId_list;
     $("#frmadd_adult").removeClass('was-validated');
     $("#vSiteName_adult").typeahead('val','');
       $("#vSR_adult").typeahead('val','');
@@ -20,7 +20,7 @@ function addEditDataTaskAdult(id,mode,iSiteId_list){
         if (typeof(siteInfoWindowTaskLandingArr) !== 'undefined' && siteInfoWindowTaskLandingArr.length > 0) {
             var iTLRId_s = '';
             var vSiteName_s = '';
-            var iSiteId_s = '';
+            var iPremiseId_s = '';
             var dDate_s = '';
             var dStartTime_s = '';
             var dEndTime_s = '';
@@ -37,7 +37,7 @@ function addEditDataTaskAdult(id,mode,iSiteId_list){
                 iTLRId_s = v['iTLRId'];
                 if(id == iTLRId_s ){
                     vSiteName_s = v['vSiteName'];
-                    iSiteId_s = v['iSiteId'];
+                    iPremiseId_s = v['iPremiseId'];
                     dDate_s = v['dDate'];
                     dStartTime_s = v['dStartTime'];
                     dEndTime_s = v['dEndTime'];
@@ -60,7 +60,7 @@ function addEditDataTaskAdult(id,mode,iSiteId_list){
 
             $("#modal_iTLRId").val(iTLRId_s);
             $("#vSiteName_adult").val(vSiteName_s);
-            $("#serach_iSiteId_adult").val(iSiteId_s);
+            $("#serach_iPremiseId_adult").val(iPremiseId_s);
             $("#modal_dDate_adult").val(dDate_s);
             $("#dStartTime_adult").val(dStartTime_s);
             $("#dEndTime_adult").val(dEndTime_s);
@@ -75,11 +75,11 @@ function addEditDataTaskAdult(id,mode,iSiteId_list){
             var iMSpeciesIds = $("#iMSpeciesId_"+id).val();
        
             var iMSpeciesId = iMSpeciesIds.split("|||");
-            //alert($("#iSiteId_"+id).val())
+            //alert($("#iPremiseId_"+id).val())
             //alert($("#vMaxLandingRate_"+id).val())
             $("#modal_iTLRId").val($("#iTLRId_"+id).val());
             $("#vSiteName_adult").val($("#vSiteName_"+id).val());
-            $("#serach_iSiteId_adult").val($("#iSiteId_"+id).val());
+            $("#serach_iPremiseId_adult").val($("#iPremiseId_"+id).val());
             $("#modal_dDate_adult").val($("#dDate_"+id).val());
             $("#dStartTime_adult").val($("#dStartTime_"+id).val());
             $("#dEndTime_adult").val($("#dEndTime_"+id).val());
@@ -99,12 +99,12 @@ function addEditDataTaskAdult(id,mode,iSiteId_list){
         $("#modal_title_adult").html('Add Task Landing Rate');
         $("#mode_title_adult").val('Add');
         $("#modal_iTLRId").val('');
-        if(iSiteId1 > 0){
-            $("#vSiteName_adult").val(iSiteId1).trigger('change');;
-            $("#serach_iSiteId_adult").val(iSiteId1);
+        if(iPremiseId1 > 0){
+            $("#vSiteName_adult").val(iPremiseId1).trigger('change');;
+            $("#serach_iPremiseId_adult").val(iPremiseId1);
         }else {
             $("#vSiteName_adult").val('');
-            $("#serach_iSiteId_adult").val('');
+            $("#serach_iPremiseId_adult").val('');
         }
         $("#modal_dDate_adult").val(dDate);
         $("#dStartTime_adult").val(dStartTime);
@@ -142,7 +142,7 @@ var selectedsr     = null;
             if(list==null)
                 return {};
             else
-                return $.map(list, function(rawdata) { return { display: rawdata.display, iSiteId:rawdata.iSiteId }; });
+                return $.map(list, function(rawdata) { return { display: rawdata.display, iPremiseId:rawdata.iPremiseId }; });
         } 
       }      
     });
@@ -198,8 +198,8 @@ var selectedsr     = null;
 })(jQuery);
 
 function onSiteClusteSelected(e, datum){
-    //////alert(datum['iSiteId'])
-    $("#serach_iSiteId_adult").val(datum['iSiteId']);
+    //////alert(datum['iPremiseId'])
+    $("#serach_iPremiseId_adult").val(datum['iPremiseId']);
     $("#vSiteName_adult").val(datum['display']);
 }
 
@@ -229,7 +229,7 @@ $("#save_data_adult").click(function(){
     }
         form.addClass('was-validated');
         
-    if($("#vSiteName_adult").val() == "" || ($("#serach_iSiteId_adult").val() == "" || $("#serach_iSiteId_adult").val() == "0" )){
+    if($("#vSiteName_adult").val() == "" || ($("#serach_iPremiseId_adult").val() == "" || $("#serach_iPremiseId_adult").val() == "0" )){
         $("#errmsg_search_site").html('Please select site');
         $("#errmsg_search_site").show();
         isError = 1;

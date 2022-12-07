@@ -28,8 +28,8 @@ if($mode == "List"){
         $arr_param[$vOptions] = $Keyword;
     }
     
-    if ($iSiteId != "") {
-        $arr_param['iSiteId'] = $iSiteId;
+    if ($iPremiseId != "") {
+        $arr_param['iPremiseId'] = $iPremiseId;
     }
     $arr_param['page_length'] = $page_length;
     $arr_param['start'] = $start;

@@ -5,7 +5,7 @@ $TaskOtherObj = new TaskOther();
 if($request_type == "task_other_list"){
 	$where_arr = array();
     if(!empty($RES_PARA)){
-        $iSiteId     = trim($RES_PARA['iSiteId']);
+        $iPremiseId     = trim($RES_PARA['iPremiseId']);
         $iTOId       = trim($RES_PARA['iTOId']);
         $vName       = trim($RES_PARA['vName']);
         $vTypeName   = trim($RES_PARA['vTypeName']);
@@ -18,8 +18,8 @@ if($request_type == "task_other_list"){
     if ($iTOId != "") {
         $where_arr[] = 'task_other."iTOId"='.$iTOId ;
     }
-    if ($iSiteId != "") {
-        $where_arr[] = 'task_other."iSiteId"='.$iSiteId ;
+    if ($iPremiseId != "") {
+        $where_arr[] = 'task_other."iPremiseId"='.$iPremiseId ;
     }
     if ($vName != "") {
         $where_arr[] = "s.\"vName\" ILIKE '" . $vName . "%'";
@@ -61,7 +61,7 @@ if($request_type == "task_other_list"){
     $join_fieds_arr[] = "CONCAT(contact_mas.\"vFirstName\", ' ', contact_mas.\"vLastName\") AS \"vContactName\"";
     $join_arr = array();
     $join_arr[] = 'LEFT JOIN task_type_mas t on t."iTaskTypeId" = task_other."iTaskTypeId"';
-    $join_arr[] = 'LEFT JOIN site_mas s on s."iSiteId" = task_other."iSiteId"';
+    $join_arr[] = 'LEFT JOIN site_mas s on s."iPremiseId" = task_other."iPremiseId"';
     $join_arr[] = 'LEFT JOIN county_mas c on s."iCountyId" = c."iCountyId"';
     $join_arr[] = 'LEFT JOIN state_mas sm on s."iStateId" = sm."iStateId"';
     $join_arr[] = 'LEFT JOIN city_mas cm on s."iCityId" = cm."iCityId"';
@@ -85,7 +85,7 @@ if($request_type == "task_other_list"){
 
     if($ni > 0){
         for($i=0;$i<$ni;$i++){
-        	$vSite = $rs_taskadult[$i]['vName']."- PremiseID#".$rs_taskadult[$i]['iSiteId'];
+        	$vSite = $rs_taskadult[$i]['vName']."- PremiseID#".$rs_taskadult[$i]['iPremiseId'];
         	$vAddress =  $rs_taskadult[$i]['vAddress1'].' '.$rs_taskadult[$i]['vStreet'].' '.$rs_taskadult[$i]['vCity'].', '.$rs_taskadult[$i]['vState'].' '.$rs_taskadult[$i]['vCounty'];
             if($rs_taskadult[$i]['dStartDate'] != '')
             {
@@ -103,12 +103,12 @@ if($request_type == "task_other_list"){
             {
                 $rs_taskadult[$i]['dEndTime'] = date("H:i", strtotime(date('Y-m-d H:i:s')." +10 minutes"));
             }
-            $vSiteName = $rs_taskadult[$i]['iSiteId']." (".$rs_taskadult[$i]['vName']."; ".$rs_taskadult[$i]['vTypeName'].")";
+            $vSiteName = $rs_taskadult[$i]['iPremiseId']." (".$rs_taskadult[$i]['vName']."; ".$rs_taskadult[$i]['vTypeName'].")";
             $srdisplay = ($rs_taskadult[$i]['iSRId'] != "")?$rs_taskadult[$i]['iSRId']." (".$rs_taskadult[$i]['vContactName'].")":"";
 
         	$data[] = array(
                 "iTOId" => $rs_taskadult[$i]['iTOId'],
-                "iSiteId" => $rs_taskadult[$i]['iSiteId'],
+                "iPremiseId" => $rs_taskadult[$i]['iPremiseId'],
                 "vName" => $vSite,
                 "vAddress" => $vAddress,
                 "iSRId" => $rs_taskadult[$i]['iSRId'],
@@ -139,7 +139,7 @@ if($request_type == "task_other_list"){
 else if($request_type == "task_other_add"){
    //echo "<pre>";print_r($RES_PARA);exit;
     $insert_arr = array(
-        "iSiteId"               => $RES_PARA['iSiteId'],
+        "iPremiseId"               => $RES_PARA['iPremiseId'],
         "iSRId"                 => $RES_PARA['iSRId'],
         "dDate"                 => $RES_PARA['dDate'],
         "dStartDate"            => $RES_PARA['dStartDate'],
@@ -166,7 +166,7 @@ else if($request_type == "task_other_edit"){
    
     $update_arr = array(
         "iTOId"                 => $RES_PARA['iTOId'],
-        "iSiteId"               => $RES_PARA['iSiteId'],
+        "iPremiseId"               => $RES_PARA['iPremiseId'],
         "iSRId"                 => $RES_PARA['iSRId'],
         "dDate"                 => $RES_PARA['dDate'],
         "dStartDate"            => $RES_PARA['dStartDate'],

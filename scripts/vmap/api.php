@@ -47,7 +47,7 @@ if(isset($_POST) &&  !in_array($_POST['action'],array("getSerachSiteData","getSe
                         $latLngArr = explode(" ", $latlng);
 
                             //print_r($latLngArr);
-                        $geoArr['sites'][$site['siteid']]['polygon'][] = array(
+                        $geoArr['sites'][$site['premiseid']]['polygon'][] = array(
                             'lat' => (float) $latLngArr[1],
                             'lng' => (float) $latLngArr[0]
                             );
@@ -58,18 +58,18 @@ if(isset($_POST) &&  !in_array($_POST['action'],array("getSerachSiteData","getSe
                         $polyCenter = str_replace(")", '', $center);
                         $polyCenterArr = explode(" ", $polyCenter);
                             //print_r($polyCenterArr); die;
-                        $geoArr['sites'][$site['siteid']]['polyCenter'] = array(
+                        $geoArr['sites'][$site['premiseid']]['polyCenter'] = array(
                             'lat' => (float) $polyCenterArr[1],
                             'lng' => (float) $polyCenterArr[0]
                             );
                     }
-                    $geoArr['sites'][$site['siteid']]['icon'] = $mapObj->getSiteTypeIcon($site['stypeid']);
-                    $geoArr['sites'][$site['siteid']]['cityid'] = $site['iCityId'];
-                    $geoArr['sites'][$site['siteid']]['zoneid'] = $site['iZoneId'];
-                    $geoArr['sites'][$site['siteid']]['stypeid'] = $site['stypeid'];
-                    $geoArr['sites'][$site['siteid']]['sstypeid'] = $site['sstypeid'];
+                    $geoArr['sites'][$site['premiseid']]['icon'] = $mapObj->getSiteTypeIcon($site['stypeid']);
+                    $geoArr['sites'][$site['premiseid']]['cityid'] = $site['iCityId'];
+                    $geoArr['sites'][$site['premiseid']]['zoneid'] = $site['iZoneId'];
+                    $geoArr['sites'][$site['premiseid']]['stypeid'] = $site['stypeid'];
+                    $geoArr['sites'][$site['premiseid']]['sstypeid'] = $site['sstypeid'];
 
-                    $geoArr['sites'][$site['siteid']]['sattributeid'] = $site['sattributeid'];
+                    $geoArr['sites'][$site['premiseid']]['sattributeid'] = $site['sattributeid'];
                 } else if(isset($site['point']) && $site['point'] != ''){
 
                     $point = str_replace("POINT(", '', $site['point']);
@@ -79,17 +79,17 @@ if(isset($_POST) &&  !in_array($_POST['action'],array("getSerachSiteData","getSe
 
                         //print_r($latLngArr);
 
-                    $geoArr['sites'][$site['siteid']]['point'][] =  array(
+                    $geoArr['sites'][$site['premiseid']]['point'][] =  array(
                         'lat' => (float) $pointArr[1],
                         'lng' => (float) $pointArr[0]
                         );
                     $i++;
-                    $geoArr['sites'][$site['siteid']]['icon'] = $mapObj->getSiteTypeIcon($site['stypeid']);
-                    $geoArr['sites'][$site['siteid']]['cityid'] = $site['iCityId'];
-                    $geoArr['sites'][$site['siteid']]['zoneid'] = $site['iZoneId'];
-                    $geoArr['sites'][$site['siteid']]['stypeid'] = $site['stypeid'];
-                    $geoArr['sites'][$site['siteid']]['sstypeid'] = $site['sstypeid'];
-                    $geoArr['sites'][$site['siteid']]['sattributeid'] =explode(",", $site['sattributeid']) ;
+                    $geoArr['sites'][$site['premiseid']]['icon'] = $mapObj->getSiteTypeIcon($site['stypeid']);
+                    $geoArr['sites'][$site['premiseid']]['cityid'] = $site['iCityId'];
+                    $geoArr['sites'][$site['premiseid']]['zoneid'] = $site['iZoneId'];
+                    $geoArr['sites'][$site['premiseid']]['stypeid'] = $site['stypeid'];
+                    $geoArr['sites'][$site['premiseid']]['sstypeid'] = $site['sstypeid'];
+                    $geoArr['sites'][$site['premiseid']]['sattributeid'] =explode(",", $site['sattributeid']) ;
                 } else if(isset($site['poly_line']) && $site['poly_line'] != ''){
                     $polyLine = str_replace("LINESTRING(", '', $site['poly_line']);
                     $polyLine = str_replace(")", '', $polyLine);
@@ -104,19 +104,19 @@ if(isset($_POST) &&  !in_array($_POST['action'],array("getSerachSiteData","getSe
                         $polyLineLatLngArr = explode(" ", $latlng);
 
                             //print_r($latLngArr);
-                        $geoArr['sites'][$site['siteid']]['poly_line'][] = array(
+                        $geoArr['sites'][$site['premiseid']]['poly_line'][] = array(
                             'lat' => (float) $polyLineLatLngArr[1],
                             'lng' => (float) $polyLineLatLngArr[0]
                             );
                         $i++;
                     }
 
-                    $geoArr['sites'][$site['siteid']]['icon'] = $mapObj->getSiteTypeIcon($site['stypeid']);
-                    $geoArr['sites'][$site['siteid']]['cityid'] = $site['iCityId'];
-                    $geoArr['sites'][$site['siteid']]['zoneid'] = $site['iZoneId'];
-                    $geoArr['sites'][$site['siteid']]['stypeid'] = $site['stypeid'];
-                    $geoArr['sites'][$site['siteid']]['sstypeid'] = $site['sstypeid'];
-                    $geoArr['sites'][$site['siteid']]['sattributeid'] = $site['sattributeid'];
+                    $geoArr['sites'][$site['premiseid']]['icon'] = $mapObj->getSiteTypeIcon($site['stypeid']);
+                    $geoArr['sites'][$site['premiseid']]['cityid'] = $site['iCityId'];
+                    $geoArr['sites'][$site['premiseid']]['zoneid'] = $site['iZoneId'];
+                    $geoArr['sites'][$site['premiseid']]['stypeid'] = $site['stypeid'];
+                    $geoArr['sites'][$site['premiseid']]['sstypeid'] = $site['sstypeid'];
+                    $geoArr['sites'][$site['premiseid']]['sattributeid'] = $site['sattributeid'];
                 } 
 
 
@@ -256,7 +256,7 @@ if(isset($_POST) &&  !in_array($_POST['action'],array("getSerachSiteData","getSe
             foreach($polyArr as $latlng){
                 $latLngArr = explode(" ", $latlng);
 
-                $siteData[$site['siteid']]['polygon'][] = array(
+                $siteData[$site['premiseid']]['polygon'][] = array(
                     'lat' => (float) $latLngArr[1],
                     'lng' => (float) $latLngArr[0]
                     );
@@ -267,15 +267,15 @@ if(isset($_POST) &&  !in_array($_POST['action'],array("getSerachSiteData","getSe
                 $polyCenter = str_replace(")", '', $center);
                 $polyCenterArr = explode(" ", $polyCenter);
 
-                $siteData[$site['siteid']]['polyCenter'] = array(
+                $siteData[$site['premiseid']]['polyCenter'] = array(
                     'lat' => (float) $polyCenterArr[1],
                     'lng' => (float) $polyCenterArr[0]
                     );
             }
-            $siteData[$site['siteid']]['icon'] = $mapObj->getSiteTypeIcon($site['stypeid']);
-            $siteData[$site['siteid']]['cityid'] = $site['iCityId'];
-            $siteData[$site['siteid']]['zoneid'] = $site['iZoneId'];
-            $siteData[$site['siteid']]['stypeid'] = $site['stypeid'];
+            $siteData[$site['premiseid']]['icon'] = $mapObj->getSiteTypeIcon($site['stypeid']);
+            $siteData[$site['premiseid']]['cityid'] = $site['iCityId'];
+            $siteData[$site['premiseid']]['zoneid'] = $site['iZoneId'];
+            $siteData[$site['premiseid']]['stypeid'] = $site['stypeid'];
         } else if(isset($site['point']) && $site['point'] != ''){
 
             $point = str_replace("POINT(", '', $site['point']);
@@ -285,15 +285,15 @@ if(isset($_POST) &&  !in_array($_POST['action'],array("getSerachSiteData","getSe
 
                 //print_r($latLngArr);
 
-            $siteData[$site['siteid']]['point'][] =  array(
+            $siteData[$site['premiseid']]['point'][] =  array(
                 'lat' => (float) $pointArr[1],
                 'lng' => (float) $pointArr[0]
                 );
             $i++;
-            $siteData[$site['siteid']]['icon'] = $mapObj->getSiteTypeIcon($site['stypeid']);
-            $siteData[$site['siteid']]['cityid'] = $site['iCityId'];
-            $siteData[$site['siteid']]['zoneid'] = $site['iZoneId'];
-            $siteData[$site['siteid']]['stypeid'] = $site['stypeid'];
+            $siteData[$site['premiseid']]['icon'] = $mapObj->getSiteTypeIcon($site['stypeid']);
+            $siteData[$site['premiseid']]['cityid'] = $site['iCityId'];
+            $siteData[$site['premiseid']]['zoneid'] = $site['iZoneId'];
+            $siteData[$site['premiseid']]['stypeid'] = $site['stypeid'];
         } else if(isset($site['poly_line']) && $site['poly_line'] != ''){
             $polyLine = str_replace("LINESTRING(", '', $site['poly_line']);
             $polyLine = str_replace(")", '', $polyLine);
@@ -308,17 +308,17 @@ if(isset($_POST) &&  !in_array($_POST['action'],array("getSerachSiteData","getSe
                 $polyLineLatLngArr = explode(" ", $latlng);
 
                     //print_r($latLngArr);
-                $siteData[$site['siteid']]['poly_line'][] = array(
+                $siteData[$site['premiseid']]['poly_line'][] = array(
                     'lat' => (float) $polyLineLatLngArr[1],
                     'lng' => (float) $polyLineLatLngArr[0]
                     );
                 $i++;
             }
 
-            $siteData[$site['siteid']]['icon'] = $mapObj->getSiteTypeIcon($site['stypeid']);
-            $siteData[$site['siteid']]['cityid'] = $site['iCityId'];
-            $siteData[$site['siteid']]['zoneid'] = $site['iZoneId'];
-            $siteData[$site['siteid']]['stypeid'] = $site['stypeid'];
+            $siteData[$site['premiseid']]['icon'] = $mapObj->getSiteTypeIcon($site['stypeid']);
+            $siteData[$site['premiseid']]['cityid'] = $site['iCityId'];
+            $siteData[$site['premiseid']]['zoneid'] = $site['iZoneId'];
+            $siteData[$site['premiseid']]['stypeid'] = $site['stypeid'];
         } 
     }
    // print_r($siteData);exit();
@@ -416,7 +416,7 @@ if(isset($_POST) &&  !in_array($_POST['action'],array("getSerachSiteData","getSe
             foreach($polyArr as $latlng){
                 $latLngArr = explode(" ", $latlng);
 
-                $siteData[$site['siteid']]['polygon'][] = array(
+                $siteData[$site['premiseid']]['polygon'][] = array(
                     'lat' => (float) $latLngArr[1],
                     'lng' => (float) $latLngArr[0]
                     );
@@ -427,15 +427,15 @@ if(isset($_POST) &&  !in_array($_POST['action'],array("getSerachSiteData","getSe
                 $polyCenter = str_replace(")", '', $center);
                 $polyCenterArr = explode(" ", $polyCenter);
 
-                $siteData[$site['siteid']]['polyCenter'] = array(
+                $siteData[$site['premiseid']]['polyCenter'] = array(
                     'lat' => (float) $polyCenterArr[1],
                     'lng' => (float) $polyCenterArr[0]
                     );
             }
-            $siteData[$site['siteid']]['icon'] = $mapObj->getSiteTypeIcon($site['stypeid']);
-            $siteData[$site['siteid']]['cityid'] = $site['iCityId'];
-            $siteData[$site['siteid']]['zoneid'] = $site['iZoneId'];
-            $siteData[$site['siteid']]['stypeid'] = $site['stypeid'];
+            $siteData[$site['premiseid']]['icon'] = $mapObj->getSiteTypeIcon($site['stypeid']);
+            $siteData[$site['premiseid']]['cityid'] = $site['iCityId'];
+            $siteData[$site['premiseid']]['zoneid'] = $site['iZoneId'];
+            $siteData[$site['premiseid']]['stypeid'] = $site['stypeid'];
         } else if(isset($site['point']) && $site['point'] != ''){
 
             $point = str_replace("POINT(", '', $site['point']);
@@ -445,15 +445,15 @@ if(isset($_POST) &&  !in_array($_POST['action'],array("getSerachSiteData","getSe
 
                 //print_r($latLngArr);
 
-            $siteData[$site['siteid']]['point'][] =  array(
+            $siteData[$site['premiseid']]['point'][] =  array(
                 'lat' => (float) $pointArr[1],
                 'lng' => (float) $pointArr[0]
                 );
             $i++;
-            $siteData[$site['siteid']]['icon'] = $mapObj->getSiteTypeIcon($site['stypeid']);
-            $siteData[$site['siteid']]['cityid'] = $site['iCityId'];
-            $siteData[$site['siteid']]['zoneid'] = $site['iZoneId'];
-            $siteData[$site['siteid']]['stypeid'] = $site['stypeid'];
+            $siteData[$site['premiseid']]['icon'] = $mapObj->getSiteTypeIcon($site['stypeid']);
+            $siteData[$site['premiseid']]['cityid'] = $site['iCityId'];
+            $siteData[$site['premiseid']]['zoneid'] = $site['iZoneId'];
+            $siteData[$site['premiseid']]['stypeid'] = $site['stypeid'];
         } else if(isset($site['poly_line']) && $site['poly_line'] != ''){
             $polyLine = str_replace("LINESTRING(", '', $site['poly_line']);
             $polyLine = str_replace(")", '', $polyLine);
@@ -468,17 +468,17 @@ if(isset($_POST) &&  !in_array($_POST['action'],array("getSerachSiteData","getSe
                 $polyLineLatLngArr = explode(" ", $latlng);
 
                     //print_r($latLngArr);
-                $siteData[$site['siteid']]['poly_line'][] = array(
+                $siteData[$site['premiseid']]['poly_line'][] = array(
                     'lat' => (float) $polyLineLatLngArr[1],
                     'lng' => (float) $polyLineLatLngArr[0]
                     );
                 $i++;
             }
 
-            $siteData[$site['siteid']]['icon'] = $mapObj->getSiteTypeIcon($site['stypeid']);
-            $siteData[$site['siteid']]['cityid'] = $site['iCityId'];
-            $siteData[$site['siteid']]['zoneid'] = $site['iZoneId'];
-            $siteData[$site['siteid']]['stypeid'] = $site['stypeid'];
+            $siteData[$site['premiseid']]['icon'] = $mapObj->getSiteTypeIcon($site['stypeid']);
+            $siteData[$site['premiseid']]['cityid'] = $site['iCityId'];
+            $siteData[$site['premiseid']]['zoneid'] = $site['iZoneId'];
+            $siteData[$site['premiseid']]['stypeid'] = $site['stypeid'];
         } 
     }
 

@@ -21,7 +21,7 @@ if($request_type == "premise_list"){
         $display_order      = $RES_PARA['display_order'];
         $dir                = $RES_PARA['dir'];
 
-        $siteId				= $RES_PARA['siteId'];
+        $premiseId			= $RES_PARA['premiseId'];
         $iSTypeId			= $RES_PARA['iSTypeId'];
         $iSSTypeId			= $RES_PARA['iSSTypeId'];
         $iGeometryType		= $RES_PARA['iGeometryType'];
@@ -54,8 +54,8 @@ if($request_type == "premise_list"){
         $where_arr[] = "s.\"iStatus\"='".$iStatus."'";
     }
 
-	if ($siteId != "") {
-        $where_arr[] = "s.\"iSiteId\"='".$siteId."'";
+	if ($premiseId != "") {
+        $where_arr[] = "s.\"iPremiseId\"='".$premiseId."'";
     }
     if ($iSTypeId != "") {
         $where_arr[] = "s.\"iSTypeId\"='".$iSTypeId."'";
@@ -146,7 +146,7 @@ if($request_type == "premise_list"){
 
 	switch ($display_order) {
         case "1":
-            $sortname = "s.\"iSiteId\"";
+            $sortname = "s.\"iPremiseId\"";
             break;
         case "2":
             $sortname = "s.\"vName\"";
@@ -173,7 +173,7 @@ if($request_type == "premise_list"){
             $sortname = 's."iStatus"';
             break;
         case "1":
-            $sortname = "s.\"iSiteId\"";
+            $sortname = "s.\"iPremiseId\"";
             break;
     }
     $limit = "LIMIT ".$page_length." OFFSET ".$start."";
@@ -213,7 +213,7 @@ if($request_type == "premise_list"){
 		for($i=0;$i<$ni;$i++){
             $vAddress = $rs_site[$i]['vAddress1'].' '.$rs_site[$i]['vStreet'];
 			$data[] = array(
-                "iSiteId" => gen_strip_slash($rs_site[$i]['iSiteId']),
+                "iPremiseId" => gen_strip_slash($rs_site[$i]['iPremiseId']),
 				"vName" => gen_strip_slash($rs_site[$i]['vName']),
 				"vTypeName" => gen_strip_slash($rs_site[$i]['vTypeName']),
 				"vSubTypeName" => gen_strip_slash($rs_site[$i]['vSubTypeName']),
@@ -265,7 +265,7 @@ if($request_type == "premise_list"){
     $rs_db = $SiteObj->add_records();
 
     if($rs_db){
-        $response_data = array("Code" => 200, "Message" => MSG_ADD, "iSiteId" => $rs_db);
+        $response_data = array("Code" => 200, "Message" => MSG_ADD, "iPremiseId" => $rs_db);
     }
     else{
         $response_data = array("Code" => 500 , "Message" => MSG_ADD_ERROR);
@@ -273,7 +273,7 @@ if($request_type == "premise_list"){
 }else if($request_type == "premise_edit"){
 	$SiteObj = new Site();
 	$update_arr = array(
-        "iSiteId"				 => $RES_PARA['iSiteId'],
+        "iPremiseId"				 => $RES_PARA['iPremiseId'],
         "vName"				 => $RES_PARA['vName'],
 		"iSTypeId"			 => $RES_PARA['iSTypeId'],
 		"iSSTypeId"			 => $RES_PARA['iSSTypeId'],
@@ -310,18 +310,18 @@ if($request_type == "premise_list"){
         $response_data = array("Code" => 500 , "Message" => MSG_ADD_ERROR);
     }
 }else if($request_type == "premise_delete"){
-	$iSiteId = $RES_PARA['iSiteId'];
+	$iPremiseId = $RES_PARA['iPremiseId'];
    	$SiteObj = new Site();
-    $rs_db = $SiteObj->delete_single_record($iSiteId);
+    $rs_db = $SiteObj->delete_single_record($iPremiseId);
     if($rs_db){
-        $response_data = array("Code" => 200, "Message" => MSG_DELETE, "iSiteId" => $iSiteId);
+        $response_data = array("Code" => 200, "Message" => MSG_DELETE, "iPremiseId" => $iPremiseId);
     }else{
         $response_data = array("Code" => 500 , "Message" => MSG_DELETE_ERROR);
     }
 }else if($request_type == "getPremiseContactData"){
 	$SiteObj = new Site();
-	$iSiteId = isset($RES_PARA['iSiteId'])?trim($RES_PARA['iSiteId']):"0";
-	if($iSiteId > 0) {
+	$iPremiseId = isset($RES_PARA['iPremiseId'])?trim($RES_PARA['iPremiseId']):"0";
+	if($iPremiseId > 0) {
 		$SiteObj->clear_variable();
 		$where_arr = array();
 		$join_arr = array();
@@ -330,7 +330,7 @@ if($request_type == "premise_list"){
 		$join_fieds_arr[] =  'contact_mas."vPhone"';
 		$join_fieds_arr[] = 'contact_mas."iCId"';
 		$join_arr[] = 'INNER JOIN contact_mas ON site_contact."iCId" = contact_mas."iCId"';
-		$where_arr[] = 'site_contact."iSiteId"='.$iSiteId;
+		$where_arr[] = 'site_contact."iPremiseId"='.$iPremiseId;
 		$SiteObj->join_field = $join_fieds_arr;
 		$SiteObj->join = $join_arr;
 		$SiteObj->where = $where_arr;
@@ -349,13 +349,13 @@ if($request_type == "premise_list"){
 	}
 }else if($request_type == "getPremiseDocumentData"){
 	$SiteObj = new Site();
-	$iSiteId = isset($RES_PARA['iSiteId'])?trim($RES_PARA['iSiteId']):"0";
-	if($iSiteId > 0) {
+	$iPremiseId = isset($RES_PARA['iPremiseId'])?trim($RES_PARA['iPremiseId']):"0";
+	if($iPremiseId > 0) {
 		$SiteObj->clear_variable();
         $join_fieds_arr = array();
         $join_arr = array();
         $where_arr = array();
-        $where_arr[] = '"iSiteId" = '.$iSiteId;
+        $where_arr[] = '"iPremiseId" = '.$iPremiseId;
         $SiteObj->join_field = $join_fieds_arr;
         $SiteObj->join = $join_arr;
         $SiteObj->where = $where_arr;
@@ -422,7 +422,7 @@ if($request_type == "premise_list"){
    //echo $file_name;exit;
    if($file_name != ""){
         $insert_arr = array(
-            "iSiteId"			=> $RES_PARA['iSiteId'],
+            "iPremiseId"			=> $RES_PARA['iPremiseId'],
             "vTitle"			=> $RES_PARA['vTitle'],
             "vLoginUserName"    => $RES_PARA['vLoginUserName'],
             "vFile"				=> $file_name,
@@ -445,7 +445,7 @@ if($request_type == "premise_list"){
             $join_fieds_arr = array();
             $join_arr = array();
             $where_arr = array();
-            $where_arr[] = '"iSiteId" = ' . $RES_PARA['iSiteId'];
+            $where_arr[] = '"iPremiseId" = ' . $RES_PARA['iPremiseId'];
             $SiteObj->join_field = $join_fieds_arr;
             $SiteObj->join = $join_arr;
             $SiteObj->where = $where_arr;
@@ -474,7 +474,7 @@ if($request_type == "premise_list"){
                 }
 
                 if(count($iSDId_arr) > 0){                    
-                    $map_photo_span = '<br /><a href="'.$site_url.'map/technician?site_selected=1&iSiteId='.$RES_PARA['iSiteId'].'&iSDId='.implode(',', $iSDId_arr).'" target="_blank"><input type="button" id="map_photos" class="btn btn-primary" value="Map Photos"></a>';
+                    $map_photo_span = '<br /><a href="'.$site_url.'map/technician?site_selected=1&iPremiseId='.$RES_PARA['iPremiseId'].'&iSDId='.implode(',', $iSDId_arr).'" target="_blank"><input type="button" id="map_photos" class="btn btn-primary" value="Map Photos"></a>';
                 }
             }
 
@@ -501,7 +501,7 @@ if($request_type == "premise_list"){
                             $cnt_exif++;
                         }
                     }
-                    $table_row .= '<tr><td>' . $rs_site_doc[0]['vTitle'] . '<input type="hidden" name="file_exif_gps" id="file_exif_gps_'.$rs_site_doc[$d]['file_exif_gps'].'" value="'.$rs_site_doc[$d]['file_exif_gps'].'"></td><td class="text-center" ><div align="center"><a href="' . $site_url . 'download.php?vFileName_path=' . base64_encode($download_path) . '&vFileName_url=' . base64_encode($download_url) . '&file_name=' . base64_encode($file_name_arr[1]) . '" title="Download">Downlaod</a></div></td><td class="text-center" ><div align="center">' . $dAddedDate . '</div></td><td>' . $rs_site_doc[0]['vLoginUserName'] . '</td><td class="action text-center" align="center"> <a class="btn btn-outline-danger" title="Delete" href="javascript:void(0);" onclick="delete_site_document(this, \'' . $rs_site_doc[0]['iSDId'] . '\',\''.$RES_PARA['iSiteId'].'\');" ><i class="fa fa-trash"></i></a></td></tr>';
+                    $table_row .= '<tr><td>' . $rs_site_doc[0]['vTitle'] . '<input type="hidden" name="file_exif_gps" id="file_exif_gps_'.$rs_site_doc[$d]['file_exif_gps'].'" value="'.$rs_site_doc[$d]['file_exif_gps'].'"></td><td class="text-center" ><div align="center"><a href="' . $site_url . 'download.php?vFileName_path=' . base64_encode($download_path) . '&vFileName_url=' . base64_encode($download_url) . '&file_name=' . base64_encode($file_name_arr[1]) . '" title="Download">Downlaod</a></div></td><td class="text-center" ><div align="center">' . $dAddedDate . '</div></td><td>' . $rs_site_doc[0]['vLoginUserName'] . '</td><td class="action text-center" align="center"> <a class="btn btn-outline-danger" title="Delete" href="javascript:void(0);" onclick="delete_site_document(this, \'' . $rs_site_doc[0]['iSDId'] . '\',\''.$RES_PARA['iPremiseId'].'\');" ><i class="fa fa-trash"></i></a></td></tr>';
                 }
             }
 			$result['error'] = '0' ;
@@ -529,12 +529,12 @@ if($request_type == "premise_list"){
    $result = array();
    $map_photo_span  = ""; 
    $iSDId = isset($RES_PARA['iSDId'])?trim($RES_PARA['iSDId']):"0";
-   $iSiteId = isset($RES_PARA['iSiteId'])?trim($RES_PARA['iSiteId']):"0";
+   $iPremiseId = isset($RES_PARA['iPremiseId'])?trim($RES_PARA['iPremiseId']):"0";
    $err_msg = array();
    if($iSDId == "" || $iSDId==0){
       $err_msg[] = " Premise document id is not valid";
    }
-   if($iSiteId == "" || $iSiteId==0){
+   if($iPremiseId == "" || $iPremiseId==0){
       $err_msg[] = " Premise id is not valid";
    }
 
@@ -564,7 +564,7 @@ if($request_type == "premise_list"){
 				$join_arr = array();
 				$where_arr = array();
 
-				$where_arr[] = '"iSiteId" = ' .$iSiteId;
+				$where_arr[] = '"iPremiseId" = ' .$iPremiseId;
 				$SiteObj->join_field = $join_fieds_arr;
 				$SiteObj->join = $join_arr;
 				$SiteObj->where = $where_arr;
@@ -593,7 +593,7 @@ if($request_type == "premise_list"){
 					}
 
 					if(count($iSDId_arr) > 0){
-						$map_photo_span = '<br /><a href="'.$site_url.'map/technician?iSiteId='.$iSiteId.'&iSDId='.implode(',', $iSDId_arr).'" target="_blank"><input type="button" id="map_photos" class="btn btn-primary" value="Map Photos"></a>';
+						$map_photo_span = '<br /><a href="'.$site_url.'map/technician?iPremiseId='.$iPremiseId.'&iSDId='.implode(',', $iSDId_arr).'" target="_blank"><input type="button" id="map_photos" class="btn btn-primary" value="Map Photos"></a>';
 					}
 				}
 				$result['msg'] = MSG_DELETE;
@@ -648,7 +648,7 @@ if($request_type == "premise_list"){
      //$where_arr[] = '(s."vName" ILIKE \'%'.$ext_where.'%\' )';
      $where_arr[] = $ext_where;
    }else{
-         $where_arr[] = '(s."vName" ILIKE \'%'.$vSiteName_other.'%\' OR s."iSiteId" = '.intval($vSiteName_other).')';
+         $where_arr[] = '(s."vName" ILIKE \'%'.$vSiteName_other.'%\' OR s."iPremiseId" = '.intval($vSiteName_other).')';
    }     
     $where_arr[] = 's."iStatus" = 1';
     $join_fieds_arr[] = 'st."vTypeName"';
@@ -657,14 +657,14 @@ if($request_type == "premise_list"){
     $SiteObj->join = $join_arr;
     $SiteObj->where = $where_arr;
     $SiteObj->param['limit'] = "0";
-    $SiteObj->param['order_by'] = 's."iSiteId" DESC';
+    $SiteObj->param['order_by'] = 's."iPremiseId" DESC';
     
     $SiteObj->setClause();
     $rs_site = $SiteObj->recordset_list();
     for ($i = 0; $i < count($rs_site); $i++) {
         $rs_arr[] = array(
-         'display' => $rs_site[$i]['iSiteId']." (".$rs_site[$i]['vName']."; ".$rs_site[$i]['vTypeName'].")",
-         "iSiteId" => $rs_site[$i]['iSiteId'],
+         'display' => $rs_site[$i]['iPremiseId']." (".$rs_site[$i]['vName']."; ".$rs_site[$i]['vTypeName'].")",
+         "iPremiseId" => $rs_site[$i]['iPremiseId'],
          "vName" => $rs_site[$i]['vName']
         );
     }
@@ -712,13 +712,13 @@ if($request_type == "premise_list"){
     $ext_where_arr =array();
     foreach($exp_keyword as $vl){
         if(trim($vl) != '')
-            $ext_where_arr[] = " (s.\"vName\" ILIKE '%".trim($vl)."%' OR concat(s.\"vAddress1\", ' ', s.\"vStreet\") ILIKE '%".trim($vl)."%' OR CAST(s.\"iSiteId\" AS TEXT) LIKE '".intval($vl)."%')";
+            $ext_where_arr[] = " (s.\"vName\" ILIKE '%".trim($vl)."%' OR concat(s.\"vAddress1\", ' ', s.\"vStreet\") ILIKE '%".trim($vl)."%' OR CAST(s.\"iPremiseId\" AS TEXT) LIKE '".intval($vl)."%')";
     }
     if(count($ext_where_arr) > 0){
         $ext_where = implode(" AND ", $ext_where_arr);
         $where_arr[] = $ext_where;
     }else{
-        $where_arr[] = " (s.\"vName\" ILIKE '%".trim($vSiteName_other)."%' OR concat(s.\"vAddress1\", ' ', s.\"vStreet\") ILIKE '%".trim($vSiteName_other)."%'  OR CAST(s.\"iSiteId\" AS TEXT) LIKE '".intval($vSiteName_other)."%')";
+        $where_arr[] = " (s.\"vName\" ILIKE '%".trim($vSiteName_other)."%' OR concat(s.\"vAddress1\", ' ', s.\"vStreet\") ILIKE '%".trim($vSiteName_other)."%'  OR CAST(s.\"iPremiseId\" AS TEXT) LIKE '".intval($vSiteName_other)."%')";
     }     
     $where_arr[] = 's."iStatus" = 1';
     $join_fieds_arr[] = 'st."vTypeName"';
@@ -727,14 +727,14 @@ if($request_type == "premise_list"){
     $SiteObj->join = $join_arr;
     $SiteObj->where = $where_arr;
     $SiteObj->param['limit'] = "0";
-    $SiteObj->param['order_by'] = 's."iSiteId" DESC';
+    $SiteObj->param['order_by'] = 's."iPremiseId" DESC';
     
     $SiteObj->setClause();
     $rs_site = $SiteObj->recordset_list();
     for ($i = 0; $i < count($rs_site); $i++) {
         $rs_arr[] = array(
-			'display' => $rs_site[$i]['iSiteId']." (".$rs_site[$i]['vName']."; ".$rs_site[$i]['vTypeName'].")",
-			"iSiteId" => $rs_site[$i]['iSiteId'],
+			'display' => $rs_site[$i]['iPremiseId']." (".$rs_site[$i]['vName']."; ".$rs_site[$i]['vTypeName'].")",
+			"iPremiseId" => $rs_site[$i]['iPremiseId'],
 			"vName" => $rs_site[$i]['vName'],
 			"vAddress" => $rs_site[$i]['vAddress1']. " ".$rs_site[$i]['vStreet']
         );

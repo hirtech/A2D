@@ -10,7 +10,7 @@
 							<li>
 								<select id="vOptions" name="vOptions" class="form-control">
                   					<option value="iTTId">ID</option>
-									<option value="iSiteId">Premise Id</option>
+									<option value="iPremiseId">Premise Id</option>
 									<option value="vName">Premise Name</option>
 									<option value="vTypeName">Premise Type</option>
 								</select>

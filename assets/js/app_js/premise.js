@@ -16,7 +16,7 @@ var listPage = function(){
             'bAutoWidth': true,
             "columns": [
             { "data": "checkbox", "sortable":false, "className": "text-center", "width" : "1%"},
-            { "data": "iSiteId", "className": "text-center", "width" : "8%"},
+            { "data": "iPremiseId", "className": "text-center", "width" : "8%"},
             { "data": "vName" , "width" : "10%"},
             { "data": "vSiteType", "width" : "10%" },
             { "data": "vSiteSubType", "width" : "10%"},
@@ -96,7 +96,7 @@ var listPage = function(){
 					$.each($("input[class='list']:checked"), function(e)
 					{
 						site_list_id.push($(this).val());
-						location.href = site_url+"premise/list?mode=Kml&siteId="+site_list_id;
+						location.href = site_url+"premise/list?mode=Kml&premiseId="+site_list_id;
 					});
 				}
 				else{
@@ -114,7 +114,7 @@ var listPage = function(){
                     $.each($("input[class='list']:checked"), function(e)
                     {
                         site_list_id.push($(this).val());
-                        location.href = site_url+"vmap/index&mode=filter_sites&iSiteId="+site_list_id;
+                        location.href = site_url+"vmap/index&mode=filter_sites&iPremiseId="+site_list_id;
                     });
                 }
                 else{
@@ -161,7 +161,7 @@ function delete_record(id)
                 url: site_url+"premise/list",
                 data: {
                     "mode" : "Delete",
-                    "iSiteId" : id
+                    "iPremiseId" : id
                 },
                 success: function(data){
                     swal.close();
@@ -189,7 +189,7 @@ $('#AdvSearchSubmit').click(function () {
 
 $('#AdvSearchReset').click(function () {
     //alert('1111');
-    $('#siteId').val("");
+    $('#premiseId').val("");
     $('#SiteFilterOpDD').val("Contains");
     $('#siteName').val("");
     $('#iSTypeId').val("");
@@ -221,16 +221,16 @@ function exportExcelSheet(){
 
     var order = gridtable.order(); //Get sorting data of datatable
 
-    var site_id_arr = [];
+    var premise_id_arr = [];
     if ($('#datatable-grid input:checked').length > 0){
         $.each($("input[class='list']:checked"), function(e)
         {
-            site_id_arr.push($(this).val());
+            premise_id_arr.push($(this).val());
             
         });
     }
     var data = $(".site_search_form").serializeArray();
-    data.push({name :'siteid_arr' , value: site_id_arr});
+    data.push({name :'premiseid_arr' , value: premise_id_arr});
     data.push({name :'pagenum' , value: pagenum});
     data.push({name :'page_length' , value: page_length});
     data.push({name :'sort_col' , value: order[0][0]});

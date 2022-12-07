@@ -21,7 +21,7 @@ $(document).ready(function() {
                 if(list==null)
                     return {};
                 else
-                    return $.map(list, function(rawdata) { return { display: rawdata.display, iSiteId:rawdata.iSiteId, vName:rawdata.vName, vAddress:rawdata.vAddress }; });
+                    return $.map(list, function(rawdata) { return { display: rawdata.display, iPremiseId:rawdata.iPremiseId, vName:rawdata.vName, vAddress:rawdata.vAddress }; });
             } 
         }
     });
@@ -81,7 +81,7 @@ function onPremiseClusteSelected(e, datum){
     $("#vPremiseName").typeahead('val','');
     var str = '';
     str += '<tr>';
-        str += '<td class="text-center"><input type="hidden" name="iPremiseId[]" value="'+datum['iSiteId']+'" class="form-control">'+datum['iSiteId']+'</td>';
+        str += '<td class="text-center"><input type="hidden" name="iPremiseId[]" value="'+datum['iPremiseId']+'" class="form-control">'+datum['iPremiseId']+'</td>';
         str += '<td>'+datum['vName']+'</td>';
         str += '<td>'+datum['vAddress']+'</td>';
         str += '<td><input type="date" class="form-control" name="dTroubleStartDate[]" value="'+dTodayDate+'"></td>';

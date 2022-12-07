@@ -27,7 +27,7 @@ $dir = (isset($_REQUEST["sSortDir_0"]) ? $_REQUEST["sSortDir_0"] : 'desc');
 
 $SiteObj = new Site();
 
-$iSiteId = $_REQUEST['iSiteId'];
+$iPremiseId = $_REQUEST['iPremiseId'];
 $iTreatmentId = $_REQUEST['iTreatmentId'];
 
 if($mode == "List"){
@@ -39,8 +39,8 @@ if($mode == "List"){
         $arr_param[$vOptions] = $Keyword;
     }
     
-    if ($iSiteId != "") {
-        $arr_param['iSiteId'] = $iSiteId;
+    if ($iPremiseId != "") {
+        $arr_param['iPremiseId'] = $iPremiseId;
     } 
 
     if ($iTreatmentId != "") {
@@ -96,7 +96,7 @@ if($mode == "List"){
                $action .= ' <a class="btn btn-outline-danger" title="Delete" href="javascript:void(0);" onclick="delete_record('.$rs_data[$i]['iTreatmentId'].');"><i class="fa fa-trash"></i></a>';
             }
 
-            $hidden_fields = '<input type="hidden" id="tt_iTreatmentId_'.$rs_data[$i]['iTreatmentId'].'" value="'.$rs_data[$i]['iTreatmentId'].'"><input type="hidden" id="tt_vSiteName_'.$rs_data[$i]['iTreatmentId'].'" value="'.$rs_data[$i]['vSiteName'].'"><input type="hidden" id="tt_iSiteId_'.$rs_data[$i]['iTreatmentId'].'" value="'.$rs_data[$i]['iSiteId'].'"><input type="hidden" id="tt_dDate_'.$rs_data[$i]['iTreatmentId'].'" value="'.$rs_data[$i]['dDate'].'"><input type="hidden" id="tt_dStartDate_'.$rs_data[$i]['iTreatmentId'].'" value="'.$rs_data[$i]['dStartDate'].'"><input type="hidden" id="tt_dStartTime_'.$rs_data[$i]['iTreatmentId'].'" value="'.$rs_data[$i]['dStartTime'].'"><input type="hidden" id="tt_dEndDate_'.$rs_data[$i]['iTreatmentId'].'" value="'.$rs_data[$i]['dEndDate'].'"><input type="hidden" id="tt_dEndTime_'.$rs_data[$i]['iTreatmentId'].'" value="'.$rs_data[$i]['dEndTime'].'"><input type="hidden" id="tt_vType_'.$rs_data[$i]['iTreatmentId'].'" value="'.$rs_data[$i]['vType'].'"><input type="hidden" id="tt_iTPId_'.$rs_data[$i]['iTreatmentId'].'" value="'.$rs_data[$i]['iTPId'].'"><input type="hidden" id="tt_iTPName_'.$rs_data[$i]['iTreatmentId'].'" value="'.$rs_data[$i]['vTPName'].'"><input type="hidden" id="tt_vAppRate_'.$rs_data[$i]['iTreatmentId'].'" value="'.$rs_data[$i]['ApplicationRate'].'"><input type="hidden" id="tt_vArea_'.$rs_data[$i]['iTreatmentId'].'" value="'.$rs_data[$i]['vArea'].'"><input type="hidden" id="tt_vAreaTreated_'.$rs_data[$i]['iTreatmentId'].'" value="'.$rs_data[$i]['vAreaTreated'].'"><input type="hidden" id="tt_vAmountApplied_'.$rs_data[$i]['iTreatmentId'].'" value="'.$rs_data[$i]['vAmountApplied'].'"><input type="hidden" id="tt_iUId_'.$rs_data[$i]['iTreatmentId'].'" value="'.$rs_data[$i]['iUId'].'"><input type="hidden" id="tt_iUParentId_'.$rs_data[$i]['iTreatmentId'].'" value="'.$rs_data[$i]['iUnitParentId'].'"><input type="hidden" id="tt_srdisplay_'.$rs_data[$i]['iTreatmentId'].'" value="'.$rs_data[$i]['sr'].'"><input type="hidden" id="tt_iSRId_'.$rs_data[$i]['iTreatmentId'].'" value="'.$rs_data[$i]['iSRId'].'"><input type="hidden" id="iTechnicianId_'.$rs_data[$i]['iTreatmentId'].'" value="'.$rs_data[$i]['iTechnicianId'].'">';
+            $hidden_fields = '<input type="hidden" id="tt_iTreatmentId_'.$rs_data[$i]['iTreatmentId'].'" value="'.$rs_data[$i]['iTreatmentId'].'"><input type="hidden" id="tt_vSiteName_'.$rs_data[$i]['iTreatmentId'].'" value="'.$rs_data[$i]['vSiteName'].'"><input type="hidden" id="tt_iPremiseId_'.$rs_data[$i]['iTreatmentId'].'" value="'.$rs_data[$i]['iPremiseId'].'"><input type="hidden" id="tt_dDate_'.$rs_data[$i]['iTreatmentId'].'" value="'.$rs_data[$i]['dDate'].'"><input type="hidden" id="tt_dStartDate_'.$rs_data[$i]['iTreatmentId'].'" value="'.$rs_data[$i]['dStartDate'].'"><input type="hidden" id="tt_dStartTime_'.$rs_data[$i]['iTreatmentId'].'" value="'.$rs_data[$i]['dStartTime'].'"><input type="hidden" id="tt_dEndDate_'.$rs_data[$i]['iTreatmentId'].'" value="'.$rs_data[$i]['dEndDate'].'"><input type="hidden" id="tt_dEndTime_'.$rs_data[$i]['iTreatmentId'].'" value="'.$rs_data[$i]['dEndTime'].'"><input type="hidden" id="tt_vType_'.$rs_data[$i]['iTreatmentId'].'" value="'.$rs_data[$i]['vType'].'"><input type="hidden" id="tt_iTPId_'.$rs_data[$i]['iTreatmentId'].'" value="'.$rs_data[$i]['iTPId'].'"><input type="hidden" id="tt_iTPName_'.$rs_data[$i]['iTreatmentId'].'" value="'.$rs_data[$i]['vTPName'].'"><input type="hidden" id="tt_vAppRate_'.$rs_data[$i]['iTreatmentId'].'" value="'.$rs_data[$i]['ApplicationRate'].'"><input type="hidden" id="tt_vArea_'.$rs_data[$i]['iTreatmentId'].'" value="'.$rs_data[$i]['vArea'].'"><input type="hidden" id="tt_vAreaTreated_'.$rs_data[$i]['iTreatmentId'].'" value="'.$rs_data[$i]['vAreaTreated'].'"><input type="hidden" id="tt_vAmountApplied_'.$rs_data[$i]['iTreatmentId'].'" value="'.$rs_data[$i]['vAmountApplied'].'"><input type="hidden" id="tt_iUId_'.$rs_data[$i]['iTreatmentId'].'" value="'.$rs_data[$i]['iUId'].'"><input type="hidden" id="tt_iUParentId_'.$rs_data[$i]['iTreatmentId'].'" value="'.$rs_data[$i]['iUnitParentId'].'"><input type="hidden" id="tt_srdisplay_'.$rs_data[$i]['iTreatmentId'].'" value="'.$rs_data[$i]['sr'].'"><input type="hidden" id="tt_iSRId_'.$rs_data[$i]['iTreatmentId'].'" value="'.$rs_data[$i]['iSRId'].'"><input type="hidden" id="iTechnicianId_'.$rs_data[$i]['iTreatmentId'].'" value="'.$rs_data[$i]['iTechnicianId'].'">';
 
             $entry[] = array(
                 "iTreatmentId" => $rs_data[$i]['iTreatmentId'],
@@ -233,7 +233,7 @@ if($mode == "List"){
 
         $arr_param = array(
             "sessionId" => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
-            "iSiteId"        => $_POST['serach_iSiteId_treatment'],
+            "iPremiseId"        => $_POST['serach_iPremiseId_treatment'],
             "iSRId"          => $_POST['serach_iSRId_treatment'],
             "dDate"          => $_POST['dDate_treatment'],
             "vType"          => $_POST['vType_treatment'],
@@ -339,7 +339,7 @@ if($mode == "List"){
         $arr_param = array(
             "sessionId" => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
             "iTreatmentId"   => $_POST['modal_iTreatmentId'],
-            "iSiteId"        => $_POST['serach_iSiteId_treatment'],
+            "iPremiseId"        => $_POST['serach_iPremiseId_treatment'],
             "iSRId"          => $_POST['serach_iSRId_treatment'],
             "dDate"          => $_POST['dDate_treatment'],
             "vType"          => $_POST['vType_treatment'],
@@ -427,12 +427,12 @@ if($mode == "List"){
     # -----------------------------------
 }
 
-if($_REQUEST['iSiteId']){
+if($_REQUEST['iPremiseId']){
     $where_arr = array();
     $join_fieds_arr = array();
     $join_arr  = array();
     $SiteObj->clear_variable();
-    $where_arr[] = 's."iSiteId" = '.$_REQUEST['iSiteId'];
+    $where_arr[] = 's."iPremiseId" = '.$_REQUEST['iPremiseId'];
 
     $SiteObj->join_field = $join_fieds_arr;
     $SiteObj->join = $join_arr;
@@ -486,7 +486,7 @@ $smarty->assign("module_name", $module_name);
 $smarty->assign("module_title", $module_title);
 $smarty->assign("msg", $_GET['msg']);
 $smarty->assign("flag", $_GET['flag']);
-$smarty->assign("iSiteId", $iSiteId);
+$smarty->assign("iPremiseId", $iPremiseId);
 $smarty->assign("iTreatmentId", $iTreatmentId);
 
 $smarty->assign("access_group_var_add", $access_group_var_add);

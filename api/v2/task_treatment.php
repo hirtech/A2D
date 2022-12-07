@@ -11,7 +11,7 @@ if($request_type == "task_treatment_list"){
     
    if(!empty($RES_PARA)){
         $iTreatmentId       = trim($RES_PARA['iTreatmentId']);
-        $iSiteId            = trim($RES_PARA['iSiteId']);
+        $iPremiseId            = trim($RES_PARA['iPremiseId']);
         $vName              = trim($RES_PARA['vName']);
         $vTypeName          = trim($RES_PARA['vTypeName']);
         $vType              = trim($RES_PARA['vType']);
@@ -27,8 +27,8 @@ if($request_type == "task_treatment_list"){
         $where_arr[] = 'task_treatment."iTreatmentId"='.$iTreatmentId ;
     }
     
-    if ($iSiteId != "") {
-        $where_arr[] = 'task_treatment."iSiteId"='.$iSiteId ;
+    if ($iPremiseId != "") {
+        $where_arr[] = 'task_treatment."iPremiseId"='.$iPremiseId ;
     }
 
     if ($vName != "") {
@@ -80,7 +80,7 @@ if($request_type == "task_treatment_list"){
     $join_fieds_arr[] = 'unit_mas."vUnit"';
     $join_fieds_arr[] = "CONCAT(contact_mas.\"vFirstName\", ' ', contact_mas.\"vLastName\") AS \"vContactName\"";
     $join_arr = array();
-    $join_arr[] = 'LEFT JOIN site_mas s on s."iSiteId" = task_treatment."iSiteId"';
+    $join_arr[] = 'LEFT JOIN site_mas s on s."iPremiseId" = task_treatment."iPremiseId"';
     $join_arr[] = 'LEFT JOIN treatment_product t on t."iTPId" = task_treatment."iTPId"';
     $join_arr[] = 'LEFT JOIN unit_mas  on unit_mas."iUId" = task_treatment."iUId"';
     $join_arr[] = 'LEFT JOIN site_type_mas st on s."iSTypeId" = st."iSTypeId"';
@@ -127,7 +127,7 @@ if($request_type == "task_treatment_list"){
 
             $applicationRate = $appRate . "(".$minRate.$maxRate.")".$unitName."/".$tragetappRate;
 
-        	$vSite = $rs_data[$i]['vName']."- PremiseID#".$rs_data[$i]['iSiteId'];
+        	$vSite = $rs_data[$i]['vName']."- PremiseID#".$rs_data[$i]['iPremiseId'];
 
             if($rs_data[$i]['dStartDate'] != '')
             {
@@ -147,13 +147,13 @@ if($request_type == "task_treatment_list"){
                 $rs_data[$i]['dEndTime'] = date("H:i", strtotime(date('Y-m-d H:i:s')." +10 minutes"));
             }
 
-            $vSiteName = $rs_data[$i]['iSiteId']." (".$rs_data[$i]['vName']."; ".$rs_data[$i]['vTypeName'].")";
+            $vSiteName = $rs_data[$i]['iPremiseId']." (".$rs_data[$i]['vName']."; ".$rs_data[$i]['vTypeName'].")";
 
             $srdisplay = ($rs_data[$i]['iSRId'] != "")?$rs_data[$i]['iSRId']." (".$rs_data[$i]['vContactName'].")":"";
 
         	$data[] = array(
                 "iTreatmentId" => $rs_data[$i]['iTreatmentId'],
-                "iSiteId" => $rs_data[$i]['iSiteId'],
+                "iPremiseId" => $rs_data[$i]['iPremiseId'],
                 "vSiteName" => $vSite,
                 "iSRId" => $rs_data[$i]['iSRId'],
                 "sr" => $srdisplay,
@@ -188,7 +188,7 @@ if($request_type == "task_treatment_list"){
    
 }else if($request_type =="task_treatment_add"){
     $insert_arr = array(
-        "iSiteId"          => $RES_PARA['iSiteId'],
+        "iPremiseId"          => $RES_PARA['iPremiseId'],
         "iSRId"            => $RES_PARA['iSRId'],
         "dDate"            => $RES_PARA['dDate'],
         "vType"            => $RES_PARA['vType'],
@@ -245,7 +245,7 @@ if($request_type == "task_treatment_list"){
     }else{
         $update_arr = array(
             "iTreatmentId"     => $RES_PARA['iTreatmentId'],
-            "iSiteId"          => $RES_PARA['iSiteId'],
+            "iPremiseId"          => $RES_PARA['iPremiseId'],
             "iSRId"            => $RES_PARA['iSRId'],
             "dDate"            => $RES_PARA['dDate'],
             "vType"            => $RES_PARA['vType'],

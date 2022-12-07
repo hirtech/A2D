@@ -93,7 +93,7 @@ if($request_type == "invoice_list"){
         $premise_join_fieds_arr = array();
         $premise_join_fieds_arr[] = 's."vName"';
         $premise_join_arr = array();
-        $premise_join_arr[] = 'LEFT JOIN site_mas s on invoice_lines."iPremiseId" = s."iSiteId"';
+        $premise_join_arr[] = 'LEFT JOIN site_mas s on invoice_lines."iPremiseId" = s."iPremiseId"';
         $InvoiceObj->join_field = $premise_join_fieds_arr;
         $InvoiceObj->join = $premise_join_arr;
         $InvoiceObj->where = $premise_where_arr;
@@ -242,7 +242,7 @@ if($request_type == "invoice_list"){
         $join_fieds_arr[] = 'sst."vSubTypeName" as "vPremiseSubType"';
         $join_fieds_arr[] = 'n."vName" as "vNetwork"';
         $join_fieds_arr[] = 'stm."vServiceType"';
-        $join_arr[] = 'LEFT JOIN site_mas s ON invoice_lines."iPremiseId" = s."iSiteId"';
+        $join_arr[] = 'LEFT JOIN site_mas s ON invoice_lines."iPremiseId" = s."iPremiseId"';
         $join_arr[] = 'LEFT JOIN site_type_mas st ON s."iSTypeId" = st."iSTypeId"';
         $join_arr[] = 'LEFT JOIN site_sub_type_mas sst ON s."iSSTypeId" = sst."iSSTypeId"';
         $join_arr[] = 'LEFT JOIN zone z ON s."iZoneId" = z."iZoneId"';

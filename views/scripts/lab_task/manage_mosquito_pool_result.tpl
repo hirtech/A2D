@@ -12,7 +12,7 @@
 				<div class="col-12">
 						<p> Pool Id : {$trap_pool_data.iTMPId} ({$trap_pool_data.vPool}; Number in Pool: {$trap_pool_data.iNumberinPool}) </p>
 						<p>Trap Id : {$trap_pool_data.iTTId} ({$trap_pool_data.vTrapName};Placed {$trap_pool_data.dTrapPlaced}; Collected {$trap_pool_data.dTrapCollected})</p>
-						<p>Premise Id: {$trap_pool_data.iSiteId} ({$trap_pool_data.vSiteName})</p>
+						<p>Premise Id: {$trap_pool_data.iPremiseId} ({$trap_pool_data.vSiteName})</p>
 						<p>Premise Id: {$trap_pool_data.vSiteAddress}</p>
 					</div>
 					<div class="col-12 mt-3">

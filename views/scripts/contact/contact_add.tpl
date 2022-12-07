@@ -24,7 +24,7 @@
                             <input type="hidden" name="mode" id="mode" value="{$mode}">
                             <input type="hidden" name="vCountry" id="vCountry" value="US">
                             <input type="hidden" name="iCId" id="iCId" value="{$rs_contact[0].iCId}"> 
-                            <input type="hidden" name="iSiteId" id="iSiteId" value="{$iSiteId}" />
+                            <input type="hidden" name="iPremiseId" id="iPremiseId" value="{$iPremiseId}" />
                             <input type="hidden" name="referer" id="referer" value="{$referer}" />
                             <div class="form-row">
                                 <div class="col-6">

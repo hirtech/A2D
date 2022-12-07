@@ -8,7 +8,7 @@ if($request_type == "task_trap_list"){
 
     $where_arr = array();
     if(!empty($RES_PARA)){
-        $iSiteId      = trim($RES_PARA['iSiteId']);
+        $iPremiseId      = trim($RES_PARA['iPremiseId']);
         $iTTId        = trim($RES_PARA['iTTId']);
         $vName        = trim($RES_PARA['vName']);
         $vTypeName    = trim($RES_PARA['vTypeName']);
@@ -21,8 +21,8 @@ if($request_type == "task_trap_list"){
     if ($iTTId != "") {
         $where_arr[] = 'task_trap."iTTId"='.$iTTId ;
     }
-    if ($iSiteId != "") {
-        $where_arr[] = 'task_trap."iSiteId"='.$iSiteId ;
+    if ($iPremiseId != "") {
+        $where_arr[] = 'task_trap."iPremiseId"='.$iPremiseId ;
     }
 
     if ($vName != "") {
@@ -67,7 +67,7 @@ if($request_type == "task_trap_list"){
     $join_fieds_arr[] = "CONCAT(contact_mas.\"vFirstName\", ' ', contact_mas.\"vLastName\") AS \"vContactName\"";
     $join_arr = array();
     $join_arr[] = 'LEFT JOIN trap_type_mas tt on tt."iTrapTypeId" = task_trap."iTrapTypeId"';
-    $join_arr[] = 'LEFT JOIN site_mas s on s."iSiteId" = task_trap."iSiteId"';
+    $join_arr[] = 'LEFT JOIN site_mas s on s."iPremiseId" = task_trap."iPremiseId"';
     $join_arr[] = 'LEFT JOIN county_mas c on s."iCountyId" = c."iCountyId"';
     $join_arr[] = 'LEFT JOIN state_mas sm on s."iStateId" = sm."iStateId"';
     $join_arr[] = 'LEFT JOIN city_mas cm on s."iCityId" = cm."iCityId"';
@@ -92,16 +92,16 @@ if($request_type == "task_trap_list"){
     if($ni > 0){
         for($i=0;$i<$ni;$i++){
 
-        	$vSite = $rs_taskTrap[$i]['vName']."- PremiseID#".$rs_taskTrap[$i]['iSiteId'];
+        	$vSite = $rs_taskTrap[$i]['vName']."- PremiseID#".$rs_taskTrap[$i]['iPremiseId'];
         	$vAddress =  $rs_taskTrap[$i]['vAddress1'].' '.$rs_taskTrap[$i]['vStreet'].' '.$rs_taskTrap[$i]['vCity'].', '.$rs_taskTrap[$i]['vState'].' '.$rs_taskTrap[$i]['vCounty'];
 
-            //$vSiteName = $rs_taskTrap[$i]['iSiteId']." (".$rs_taskTrap[$i]['vName']."; ".$rs_taskTrap[$i]['vTypeName'].")";
+            //$vSiteName = $rs_taskTrap[$i]['iPremiseId']." (".$rs_taskTrap[$i]['vName']."; ".$rs_taskTrap[$i]['vTypeName'].")";
 
             $srdisplay = ($rs_taskTrap[$i]['iSRId'] != "")?$rs_taskTrap[$i]['iSRId']." (".$rs_taskTrap[$i]['vContactName'].")":"";
                 
             $data[] = array(
                 "iTTId" => $rs_taskTrap[$i]['iTTId'],
-                "iSiteId" =>  $rs_taskTrap[$i]['iSiteId'],
+                "iPremiseId" =>  $rs_taskTrap[$i]['iPremiseId'],
                 "vName" => $vSite,
                 "vAddress" => $vAddress,
                 "iSRId" =>  $rs_taskTrap[$i]['iSRId'],
@@ -129,7 +129,7 @@ else if($request_type == "task_trap_add"){
    $TaskTrapObj->clear_variable();
    $insert_arr = array(
         "sessionId"         => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
-        "iSiteId"           => $RES_PARA['iSiteId'],
+        "iPremiseId"           => $RES_PARA['iPremiseId'],
         "iSRId"             => $RES_PARA['iSRId'],
         "dTrapPlaced"       => $RES_PARA['dTrapPlaced'],
         "dTrapCollected"    => $RES_PARA['dTrapCollected'],
@@ -161,7 +161,7 @@ else if($request_type == "task_trap_edit"){
    $update_arr = array(
         "sessionId"         => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
         "iTTId"             => $RES_PARA['iTTId'],
-        "iSiteId"           => $RES_PARA['iSiteId'],
+        "iPremiseId"           => $RES_PARA['iPremiseId'],
         "iSRId"             => $RES_PARA['iSRId'],
         "dTrapPlaced"       => $RES_PARA['dTrapPlaced'],
         "dTrapCollected"    => $RES_PARA['dTrapCollected'],

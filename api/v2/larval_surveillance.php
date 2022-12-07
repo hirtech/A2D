@@ -6,7 +6,7 @@ include_once($function_path."image.inc.php");
 if($request_type == "task_larval_surveillance_list"){
    $where_arr = array();
    if(!empty($RES_PARA)){
-      $iSiteId           = trim($RES_PARA['iSiteId']);
+      $iPremiseId           = trim($RES_PARA['iPremiseId']);
       $iTLSId            = trim($RES_PARA['iTLSId']);
       $vName             = trim($RES_PARA['vName']);
       $vTypeName         = trim($RES_PARA['vTypeName']);
@@ -19,8 +19,8 @@ if($request_type == "task_larval_surveillance_list"){
    if ($iTLSId != "") {
       $where_arr[] = 'task_larval_surveillance."iTLSId"='.$iTLSId ;
    }    
-   if ($iSiteId != "") {
-      $where_arr[] = 'task_larval_surveillance."iSiteId"='.$iSiteId ;
+   if ($iPremiseId != "") {
+      $where_arr[] = 'task_larval_surveillance."iPremiseId"='.$iPremiseId ;
    }
    if ($vName != "") {
       $where_arr[] = "s.\"vName\" ILIKE '" . $vName . "%'";
@@ -63,7 +63,7 @@ if($request_type == "task_larval_surveillance_list"){
    $join_fieds_arr[] = 'cm."vCity"';
    $join_fieds_arr[] = "CONCAT(contact_mas.\"vFirstName\", ' ', contact_mas.\"vLastName\") AS \"vContactName\"";
    $join_arr = array();
-   $join_arr[] = 'LEFT JOIN site_mas s on s."iSiteId" = task_larval_surveillance."iSiteId"';
+   $join_arr[] = 'LEFT JOIN site_mas s on s."iPremiseId" = task_larval_surveillance."iPremiseId"';
    $join_arr[] = 'LEFT JOIN county_mas c on s."iCountyId" = c."iCountyId"';
    $join_arr[] = 'LEFT JOIN state_mas sm on s."iStateId" = sm."iStateId"';
    $join_arr[] = 'LEFT JOIN city_mas cm on s."iCityId" = cm."iCityId"';
@@ -86,7 +86,7 @@ if($request_type == "task_larval_surveillance_list"){
    $ni = count($rs_tasklarval);
    if($ni > 0){
       for($i=0;$i<$ni;$i++){
-         $vSite = $rs_tasklarval[$i]['vName']."- PremiseID#".$rs_tasklarval[$i]['iSiteId'];
+         $vSite = $rs_tasklarval[$i]['vName']."- PremiseID#".$rs_tasklarval[$i]['iPremiseId'];
          $vAddress =  $rs_tasklarval[$i]['vAddress1'].' '.$rs_tasklarval[$i]['vStreet'].' '.$rs_tasklarval[$i]['vCity'].', '.$rs_tasklarval[$i]['vState'].' '.$rs_tasklarval[$i]['vCounty'];
 
          $stages = '';
@@ -200,13 +200,13 @@ if($request_type == "task_larval_surveillance_list"){
              $rs_tasklarval[$i]['dEndTime'] = date("H:i", strtotime(date('Y-m-d H:i:s')." +10 minutes"));
          }
 
-         $vSiteName = $rs_tasklarval[$i]['iSiteId']." (".$rs_tasklarval[$i]['vName']."; ".$rs_tasklarval[$i]['vTypeName'].")";
+         $vSiteName = $rs_tasklarval[$i]['iPremiseId']." (".$rs_tasklarval[$i]['vName']."; ".$rs_tasklarval[$i]['vTypeName'].")";
 
          $srdisplay = ($rs_tasklarval[$i]['iSRId'] != "0" && $rs_tasklarval[$i]['iSRId'] != "" )?$rs_tasklarval[$i]['iSRId']." (".$rs_tasklarval[$i]['vContactName'].")":"";
 
          $data[] = array(
                "iTLSId" => $rs_tasklarval[$i]['iTLSId'],
-               "iSiteId" => $rs_tasklarval[$i]['iSiteId'],
+               "iPremiseId" => $rs_tasklarval[$i]['iPremiseId'],
                "vName" => $vSite,
                "vAddress" => $vAddress,
                "iSRId" => $rs_tasklarval[$i]['iSRId'],
@@ -256,7 +256,7 @@ else if($request_type == "task_larval_surveillance_add"){
    //echo "<pre>";print_r($RES_PARA);exit;
    $insert_arr = array(
       "sessionId"     => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
-      "iSiteId"       => $RES_PARA['iSiteId'],
+      "iPremiseId"       => $RES_PARA['iPremiseId'],
       "iSRId"         => $RES_PARA['iSRId'],
       "dDate"         => $RES_PARA['dDate'],
       "dStartDate"    => $RES_PARA['dStartDate'],
@@ -307,7 +307,7 @@ else if($request_type == "task_larval_surveillance_edit"){
    $update_arr = array(
       "sessionId"     => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
       "iTLSId"        => $RES_PARA['iTLSId'],
-      "iSiteId"       => $RES_PARA['iSiteId'],
+      "iPremiseId"       => $RES_PARA['iPremiseId'],
       "iSRId"         => $RES_PARA['iSRId'],
       "dDate"         => $RES_PARA['dDate'],
       "dStartDate"    => $RES_PARA['dStartDate'],

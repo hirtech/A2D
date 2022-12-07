@@ -62,48 +62,48 @@ function getMapData(siteTypes, sAttr, skCity, skZones, sr, custlayer, siteSubTyp
 					
 					}
 					if (response.sites !== undefined) {
-						$.each(siteData, function(siteid, item) {
-								//console.log(siteData[siteid]);
-								if (siteData[siteid].polygon !== undefined) {
+						$.each(siteData, function(premiseid, item) {
+								//console.log(siteData[premiseid]);
+								if (siteData[premiseid].polygon !== undefined) {
 									
-									//console.log(siteData[siteid].polygon);
+									//console.log(siteData[premiseid].polygon);
 							    	//console.log('-------------');
-									showPolygonMap(siteData[siteid].polygon, map, siteData[siteid].icon, siteid);
-									if (siteData[siteid].polyCenter !== undefined) {
+									showPolygonMap(siteData[premiseid].polygon, map, siteData[premiseid].icon, premiseid);
+									if (siteData[premiseid].polyCenter !== undefined) {
 										/*var centerPoint = {
-											lat: siteData[siteid].polyCenter['lat']+ (Math.random() / 10000),
-											lng: siteData[siteid].polyCenter['lng']+ (Math.random() / 10000)
+											lat: siteData[premiseid].polyCenter['lat']+ (Math.random() / 10000),
+											lng: siteData[premiseid].polyCenter['lng']+ (Math.random() / 10000)
 										};*/
 										var centerPoint = {
-											lat: siteData[siteid].polyCenter['lat']+ mathRandLat,
-											lng: siteData[siteid].polyCenter['lng']+ mathRandLng
+											lat: siteData[premiseid].polyCenter['lat']+ mathRandLat,
+											lng: siteData[premiseid].polyCenter['lng']+ mathRandLng
 										};
-										showPolyCenter(centerPoint, map, siteData[siteid].icon, siteid);
+										showPolyCenter(centerPoint, map, siteData[premiseid].icon, premiseid);
 									}
 								}
-								if (siteData[siteid].poly_line !== undefined) {
+								if (siteData[premiseid].poly_line !== undefined) {
 									
-									showPolyLineMap(siteData[siteid].poly_line, map, siteData[siteid].icon, siteid);
+									showPolyLineMap(siteData[premiseid].poly_line, map, siteData[premiseid].icon, premiseid);
 								}
-								if (siteData[siteid].point !== undefined) {
+								if (siteData[premiseid].point !== undefined) {
 									
-									for (i = 0; i < siteData[siteid].point.length; i++) {
+									for (i = 0; i < siteData[premiseid].point.length; i++) {
 										
 										/*var pointMatrix = {
-											lat: siteData[siteid].point[i]['lat']+ (Math.random() / 10000),
-											lng: siteData[siteid].point[i]['lng']+ (Math.random() / 10000)
+											lat: siteData[premiseid].point[i]['lat']+ (Math.random() / 10000),
+											lng: siteData[premiseid].point[i]['lng']+ (Math.random() / 10000)
 										};*/
 										var pointMatrix = {
-											lat: siteData[siteid].point[i]['lat']+ mathRandLat,
-											lng: siteData[siteid].point[i]['lng']+ mathRandLng
+											lat: siteData[premiseid].point[i]['lat']+ mathRandLat,
+											lng: siteData[premiseid].point[i]['lng']+ mathRandLng
 										};
 										
-										showPointMap(pointMatrix, map, siteData[siteid].icon, siteid);
-										var vName = siteData[siteid].vName;
-										var vAddress = siteData[siteid].vAddress;
-										var vRequestType = siteData[siteid].vRequestType;
-										var vAssignTo = siteData[siteid].vAssignTo;
-										var vStatus = siteData[siteid].vStatus;
+										showPointMap(pointMatrix, map, siteData[premiseid].icon, premiseid);
+										var vName = siteData[premiseid].vName;
+										var vAddress = siteData[premiseid].vAddress;
+										var vRequestType = siteData[premiseid].vRequestType;
+										var vAssignTo = siteData[premiseid].vAssignTo;
+										var vStatus = siteData[premiseid].vStatus;
 									}
 								}
 						});
@@ -500,7 +500,7 @@ function getCurrentlatlong($setposition = false){
 }
 
 
-function showPolygonMapForfieldtask(sitePath, map, icon, siteid,Fieldtask) {
+function showPolygonMapForfieldtask(sitePath, map, icon, premiseid,Fieldtask) {
 
 	polygonObj[pl] = new google.maps.Polygon({
 		path: sitePath,
@@ -513,15 +513,15 @@ function showPolygonMapForfieldtask(sitePath, map, icon, siteid,Fieldtask) {
 	});
 
 	$site_map = polygonObj[pl];
-	info_fieldtask_popup($site_map, siteid,Fieldtask);
+	info_fieldtask_popup($site_map, premiseid,Fieldtask);
 	
-	infoPolygonArea($site_map, siteid);
+	infoPolygonArea($site_map, premiseid);
         
 	polygonObj[pl].setMap(map);
 	pl++;
 }
 
-function showPointMapForfieldtask(sitePath, map, icon, siteid,Fieldtask,count) {
+function showPointMapForfieldtask(sitePath, map, icon, premiseid,Fieldtask,count) {
 	/*map.setCenter({lat: 41.595526, lng: -72.687145}); */
     color: 'white';
 	if(count >=0 && count <=10)
@@ -564,7 +564,7 @@ function showPointMapForfieldtask(sitePath, map, icon, siteid,Fieldtask,count) {
 		label: {color: 'black', fontSize: '12px', fontWeight: '600',text: count}
 	});
 	$site_map = siteMarker[pCount];
-	info_fieldtask_popup($site_map, siteid,Fieldtask);
+	info_fieldtask_popup($site_map, premiseid,Fieldtask);
 	siteMarker[pCount].setMap(map);
 
     //Extend each marker's position in LatLngBounds object.
@@ -573,7 +573,7 @@ function showPointMapForfieldtask(sitePath, map, icon, siteid,Fieldtask,count) {
 	pCount++;
 }
 
-function showPolyLineMapForfieldtask(sitePath, map, icon, siteid,Fieldtask) {
+function showPolyLineMapForfieldtask(sitePath, map, icon, premiseid,Fieldtask) {
 	polyLineObj[pline] = new google.maps.Polyline({
 		path: sitePath,
 		strokeColor: '#FF0000',
@@ -585,7 +585,7 @@ function showPolyLineMapForfieldtask(sitePath, map, icon, siteid,Fieldtask) {
 	});
 
 	$site_map = polyLineObj[pline];
-	info_fieldtask_popup($site_map, siteid,Fieldtask);
+	info_fieldtask_popup($site_map, premiseid,Fieldtask);
 	polyLineObj[pline].setMap(map);
 
 	//Extend each marker's position in LatLngBounds object.
@@ -597,7 +597,7 @@ function showPolyLineMapForfieldtask(sitePath, map, icon, siteid,Fieldtask) {
 	pline++;
 }
 
-function showPolyCenterForfieldtask(sitePath, map, icon, siteid,Fieldtask) {
+function showPolyCenterForfieldtask(sitePath, map, icon, premiseid,Fieldtask) {
 	pCenterMarker[pCenter] = new google.maps.Marker({
 		position: sitePath,
 		map: map,
@@ -606,7 +606,7 @@ function showPolyCenterForfieldtask(sitePath, map, icon, siteid,Fieldtask) {
 
 	$site_map = pCenterMarker[pCenter];
 	
-	info_fieldtask_popup($site_map, siteid,Fieldtask);
+	info_fieldtask_popup($site_map, premiseid,Fieldtask);
 	pCenterMarker[pCenter].setMap(map);
 
 	//Extend each marker's position in LatLngBounds object.
@@ -615,7 +615,7 @@ function showPolyCenterForfieldtask(sitePath, map, icon, siteid,Fieldtask) {
 	pCenter++;
 }
 
-function showPolygonMap(sitePath, map, icon, siteid) {
+function showPolygonMap(sitePath, map, icon, premiseid) {
 
 	polygonObj[pl] = new google.maps.Polygon({
 		path: sitePath,
@@ -628,9 +628,9 @@ function showPolygonMap(sitePath, map, icon, siteid) {
 	});
 
 	$site_map = polygonObj[pl];
-	info_popup($site_map, siteid);
+	info_popup($site_map, premiseid);
 
-	infoPolygonArea($site_map, siteid);
+	infoPolygonArea($site_map, premiseid);
         
 	polygonObj[pl].setMap(map);
 	pl++;
@@ -663,7 +663,7 @@ function showZonePolygonMap(sitePath, map) {
 	zCount++;
 }
 
-function showPointMapForSr(sitePath, map, icon, siteid, vName, vAddress, vRequestType, vAssignTo, vStatus) {
+function showPointMapForSr(sitePath, map, icon, premiseid, vName, vAddress, vRequestType, vAssignTo, vStatus) {
 	/*map.setCenter({lat: 41.595526, lng: -72.687145}); */
 	//console.log('pCount=>'+pCount);
 	srlayerMarker[srCount] = new google.maps.Marker({
@@ -676,7 +676,7 @@ function showPointMapForSr(sitePath, map, icon, siteid, vName, vAddress, vReques
 	//}
 	$sr_map = srlayerMarker[srCount];
 	gmarkers.push($sr_map);
-	srinfo_popup($sr_map, siteid, vName, vAddress, vRequestType, vAssignTo, vStatus);
+	srinfo_popup($sr_map, premiseid, vName, vAddress, vRequestType, vAssignTo, vStatus);
 	srlayerMarker[srCount].setMap(map);
 
 	//Extend each marker's position in LatLngBounds object.
@@ -696,13 +696,13 @@ function showPointMapForSr(sitePath, map, icon, siteid, vName, vAddress, vReques
 	}
 	$sr_map = siteMarker[pCount];
 
-	srinfo_popup($sr_map, siteid, vName, vAddress, vRequestType, vAssignTo, vStatus);
+	srinfo_popup($sr_map, premiseid, vName, vAddress, vRequestType, vAssignTo, vStatus);
 	siteMarker[pCount].setMap(map);
 	pCount++;
 	gmarkers.push($sr_map);*/
 }
 
-function showPointMap(sitePath, map, icon, siteid) {
+function showPointMap(sitePath, map, icon, premiseid) {
 	//alert(sitePath);
 	/*map.setCenter({lat: 41.595526, lng: -72.687145}); */
 	siteMarker[pCount] = new google.maps.Marker({
@@ -715,7 +715,7 @@ function showPointMap(sitePath, map, icon, siteid) {
 	//}
 	$site_map = siteMarker[pCount];
 	gmarkers.push($site_map);
-	info_popup($site_map, siteid);
+	info_popup($site_map, premiseid);
 	siteMarker[pCount].setMap(map);
 
 	//Extend each marker's position in LatLngBounds object.
@@ -724,7 +724,7 @@ function showPointMap(sitePath, map, icon, siteid) {
 	pCount++;
 }
 
-function showPolyLineMap(sitePath, map, icon, siteid) {
+function showPolyLineMap(sitePath, map, icon, premiseid) {
 	
 	polyLineObj[pline] = new google.maps.Polyline({
 		path: sitePath,
@@ -739,7 +739,7 @@ function showPolyLineMap(sitePath, map, icon, siteid) {
 		newLocation(sitePath.lat,sitePath.lng);
 	//}
 	$site_map = polyLineObj[pline];
-	info_popup($site_map, siteid);
+	info_popup($site_map, premiseid);
 	polyLineObj[pline].setMap(map);
 
 	//Extend each marker's position in LatLngBounds object.
@@ -751,7 +751,7 @@ function showPolyLineMap(sitePath, map, icon, siteid) {
 	pline++;
 }
 
-function showPolyCenter(sitePath, map, icon, siteid) {
+function showPolyCenter(sitePath, map, icon, premiseid) {
 	pCenterMarker[pCenter] = new google.maps.Marker({
 		position: sitePath,
 		map: map,
@@ -761,7 +761,7 @@ function showPolyCenter(sitePath, map, icon, siteid) {
 		newLocation(sitePath.lat,sitePath.lng);
 	//}
 	$site_map = pCenterMarker[pCenter];
-	info_popup($site_map, siteid);
+	info_popup($site_map, premiseid);
 	pCenterMarker[pCenter].setMap(map);
 
 	//Extend each marker's position in LatLngBounds object.
@@ -1059,10 +1059,10 @@ function clearMap() {
 			
 }
 
-function info_popup(marker, siteid) {
-	//console.log(siteid);
+function info_popup(marker, premiseid) {
+	//console.log(premiseid);
 
-	google.maps.event.addListener(marker, 'click', ( function(marker, siteid) {
+	google.maps.event.addListener(marker, 'click', ( function(marker, premiseid) {
 		return function(arg) {
 			 
 
@@ -1072,7 +1072,7 @@ function info_popup(marker, siteid) {
 				type: "POST",
 				dataType: "json",
 				url: site_url + "vmap/index",
-				data: 'mode=site_map&iSiteId=' + siteid,
+				data: 'mode=site_map&iPremiseId=' + premiseid,
 				success: function(data) {
 
 					if (data.site.length > 0) {
@@ -1110,7 +1110,7 @@ function info_popup(marker, siteid) {
 							address_str += " ," + data.site[0]['vState'];
 						}
 						content += "<div CELLPADDING=5 CELLSPACING=5 class=info_box id=info_box>";
-						content += "<h5 class='border-bottom pb-2 mb-3'>Premise ID " + data.site[0]['iSiteId'] + " " + vName + "</h5>";
+						content += "<h5 class='border-bottom pb-2 mb-3'>Premise ID " + data.site[0]['iPremiseId'] + " " + vName + "</h5>";
 						content += "<h6>" + type_str + "</h6>";
 						content += "<strong>" + address_str + "</strong>";
 						content += "<div class='button mt-3'>";
@@ -1119,19 +1119,19 @@ function info_popup(marker, siteid) {
 						if (data.site[0]['ServiceOrderCount'] > 0) {
 							ServiceOrderCount = data.site[0]['ServiceOrderCount'];
 						}
-						content += "<a class='btn btn-primary  mr-2 text-white' title='Awareness' onclick=addEditDataAwareness(0,'add','" + siteid + "')>Awareness</a>";
+						content += "<a class='btn btn-primary  mr-2 text-white' title='Awareness' onclick=addEditDataAwareness(0,'add','" + premiseid + "')>Awareness</a>";
 						content += "<a class='btn btn-primary  mr-2 text-white' title='Inquiry'>Inquiry</a>";
-						content += "<a class='btn btn-primary  mr-2 text-white' title='Service Order' onclick=mapRedirectServiceOrder('" + ServiceOrderCount + "','" + siteid + "')>Service Order</a>";
+						content += "<a class='btn btn-primary  mr-2 text-white' title='Service Order' onclick=mapRedirectServiceOrder('" + ServiceOrderCount + "','" + premiseid + "')>Service Order</a>";
 
 						var WorkOrderCount = 0;
 						if (data.site[0]['WorkOrderCount'] > 0) {
 							WorkOrderCount = data.site[0]['WorkOrderCount'];
 						}
-						content += "<a class='btn btn-primary  mr-2 text-white' title='Work Order' onclick=mapRedirectWorkOrder('" + WorkOrderCount + "','" + siteid + "')>Work Order</a>";
+						content += "<a class='btn btn-primary  mr-2 text-white' title='Work Order' onclick=mapRedirectWorkOrder('" + WorkOrderCount + "','" + premiseid + "')>Work Order</a>";
 						content += "<a class='btn btn-primary  mr-2 text-white' title='Circuit'>Circuit</a>";
 						content += "<a class='btn btn-primary  mr-2 text-white' title='Trouble'>Trouble</a>";
 						content += "<a class='btn btn-primary  mr-2 text-white' title='Other'>Other</a>";
-						content += "<a class='btn btn-primary  mr-2 text-white'  title='Other' href='" + site_url + "premise/edit&mode=Update&iSiteId=" + siteid + "' target='_blank'>Edit Premise</a>";
+						content += "<a class='btn btn-primary  mr-2 text-white'  title='Other' href='" + site_url + "premise/edit&mode=Update&iPremiseId=" + premiseid + "' target='_blank'>Edit Premise</a>";
 						
 						content += "</div>";
 						
@@ -1184,12 +1184,12 @@ function info_popup(marker, siteid) {
 			});
 			google.maps.event.clearListeners(marker, 'mouseout');
 		}
-	})(marker, siteid));
+	})(marker, premiseid));
 }
 
-function srinfo_popup(marker, siteid, vName, vAddress, vRequestType, vAssignTo, vStatus) {
+function srinfo_popup(marker, premiseid, vName, vAddress, vRequestType, vAssignTo, vStatus) {
 	var full_name = vName;
-	google.maps.event.addListener(marker, 'click', (function(marker, siteid, full_name, vAddress, vRequestType, vAssignTo, vStatus) {
+	google.maps.event.addListener(marker, 'click', (function(marker, premiseid, full_name, vAddress, vRequestType, vAssignTo, vStatus) {
 		return function() {
 			var content = "";
 			__marker__ = marker;
@@ -1216,11 +1216,11 @@ function srinfo_popup(marker, siteid, vName, vAddress, vRequestType, vAssignTo, 
 			}
 			
 			content += "<div CELLPADDING=5 CELLSPACING=5 class=info_box id=info_box>";
-			content += "<h5 class='border-bottom pb-2 mb-3'>Fiber Inquiry Id " + siteid + " " + vName + "</h5>";
+			content += "<h5 class='border-bottom pb-2 mb-3'>Fiber Inquiry Id " + premiseid + " " + vName + "</h5>";
 			content += "<div class='d-flex'><h6>" + vRequestType + "</h6></div>";
 			content += "<div class='d-flex'><span>" + vAddress + "</span></div>";
 			content += "<div class='d-flex'><b>Status : </b>&nbsp;<span>" + vStatus + "</span></div>";
-			content += "<div class='button mt-3'><a class='btn btn-primary  mr-2 text-white' href='" + site_url + "fiber_inquiry/edit&mode=Update&iFiberInquiryId=" + siteid + "' target='_blank'>Edit Fiber Inquiry</a></div>";
+			content += "<div class='button mt-3'><a class='btn btn-primary  mr-2 text-white' href='" + site_url + "fiber_inquiry/edit&mode=Update&iFiberInquiryId=" + premiseid + "' target='_blank'>Edit Fiber Inquiry</a></div>";
 			content += "</div>";
 			if (infowindow) {
 				infowindow.close();
@@ -1233,11 +1233,11 @@ function srinfo_popup(marker, siteid, vName, vAddress, vRequestType, vAssignTo, 
 			gmarkers.push(marker);
 			google.maps.event.clearListeners(marker, 'mouseout');
 		}
-	})(marker, siteid, full_name, vAddress, vRequestType, vAssignTo, vStatus));
+	})(marker, premiseid, full_name, vAddress, vRequestType, vAssignTo, vStatus));
 }
-function info_fieldtask_popup(marker, siteid, Fieldtask) {
+function info_fieldtask_popup(marker, premiseid, Fieldtask) {
 	// calculate single files task after add multi select //
-	google.maps.event.addListener(marker, 'click', (function(marker, siteid, Fieldtask) {
+	google.maps.event.addListener(marker, 'click', (function(marker, premiseid, Fieldtask) {
 		return function() {
 			var content = "";
 			__marker__ = marker;
@@ -1245,7 +1245,7 @@ function info_fieldtask_popup(marker, siteid, Fieldtask) {
 				type: "POST",
 				dataType: "json",
 				url: site_url + "vmap/index",
-				data: 'mode=site_map_'+Fieldtask[0]+'&iSiteId=' + siteid+"&fieldtask="+Fieldtask[0],
+				data: 'mode=site_map_'+Fieldtask[0]+'&iPremiseId=' + premiseid+"&fieldtask="+Fieldtask[0],
 				success: function(data){
 					if (infowindow) {
 						infowindow.close();
@@ -1259,7 +1259,7 @@ function info_fieldtask_popup(marker, siteid, Fieldtask) {
 			});
 			google.maps.event.clearListeners(marker, 'mouseout');
 		}
-	})(marker, siteid, Fieldtask));
+	})(marker, premiseid, Fieldtask));
 }
 
 function deleteMarkers() {
@@ -1332,7 +1332,7 @@ function getSiteSRFilterData(siteFilter,srFilter){
 			url: 'vmap/api/',
 			data: {
 				action: "getSiteSRFilterData",
-				siteId: siteFilter.join(","),
+				premiseid: siteFilter.join(","),
 				srId: srFilter.join(","),
 			},
 			cache: true,
@@ -1350,21 +1350,21 @@ function getSiteSRFilterData(siteFilter,srFilter){
 					var ccount = 0;
 					if(siteData !== undefined && jQuery.isEmptyObject(siteData) == false){
 						
-						$.each(siteData, function(siteid, item) {
-								if (siteData[siteid].polygon !== undefined) {
+						$.each(siteData, function(premiseid, item) {
+								if (siteData[premiseid].polygon !== undefined) {
 								
 									sitesrFilterMarker[ccount] = new google.maps.Polygon({
-                                        path: siteData[siteid].polygon,
+                                        path: siteData[premiseid].polygon,
                                         strokeColor: '#FF0000',
                                         strokeOpacity: 0.8,
                                         strokeWeight: 2,
                                         fillColor: '#FF0000',
                                         fillOpacity: 0.35,
-                                        icon: siteData[siteid].icon,
+                                        icon: siteData[premiseid].icon,
                                     });
 
                                     $site_map = sitesrFilterMarker[ccount];
-                                    info_popup($site_map, siteid);
+                                    info_popup($site_map, premiseid);
                                     sitesrFilterMarker[ccount].setMap(map);
                                     //Extend each marker's position in LatLngBounds object.
                                     /*latlngbounds.extend(sitesrFilterMarker[ccount].position);*/
@@ -1374,26 +1374,26 @@ function getSiteSRFilterData(siteFilter,srFilter){
 
                                     ccount++;
 
-                                    if (siteData[siteid].polyCenter !== undefined) {
+                                    if (siteData[premiseid].polyCenter !== undefined) {
                                        /* var centerPoint = {
-                                            lat: siteData[siteid].polyCenter['lat'] + (Math.random() / 10000),
-                                            lng: siteData[siteid].polyCenter['lng'] + (Math.random() / 10000)
+                                            lat: siteData[premiseid].polyCenter['lat'] + (Math.random() / 10000),
+                                            lng: siteData[premiseid].polyCenter['lng'] + (Math.random() / 10000)
                                         };*/
                                         var centerPoint = {
-                                            lat: siteData[siteid].polyCenter['lat'] + mathRandLat,
-                                            lng: siteData[siteid].polyCenter['lng'] + mathRandLng
+                                            lat: siteData[premiseid].polyCenter['lat'] + mathRandLat,
+                                            lng: siteData[premiseid].polyCenter['lng'] + mathRandLng
                                         };
                                         
                                         sitesrFilterMarker[ccount] = new google.maps.Marker({
                                             position: centerPoint,
                                             map: map,
-                                            icon: siteData[siteid].icon,
+                                            icon: siteData[premiseid].icon,
                                         });
                                         //if (siteFilter.length != 0) {
                                             newLocation(centerPoint.lat, centerPoint.lng);
                                         //}
                                         $site_map = sitesrFilterMarker[ccount];
-                                        info_popup($site_map, siteid);
+                                        info_popup($site_map, premiseid);
                                         sitesrFilterMarker[ccount].setMap(map);
 
                                         //Extend each marker's position in LatLngBounds object.
@@ -1404,22 +1404,22 @@ function getSiteSRFilterData(siteFilter,srFilter){
                                     }
 									ccount++;
 								}
-								if (siteData[siteid].poly_line !== undefined) {
+								if (siteData[premiseid].poly_line !== undefined) {
 									
 									sitesrFilterMarker[ccount] = new google.maps.Polyline({
-                                        path: siteData[siteid].poly_line,
+                                        path: siteData[premiseid].poly_line,
                                         strokeColor: '#FF0000',
                                         strokeOpacity: 0.8,
                                         strokeWeight: 2,
                                         fillColor: '#FF0000',
                                         fillOpacity: 0.35,
-                                        icon: siteData[siteid].icon,
+                                        icon: siteData[premiseid].icon,
                                     });
-                                    //if (siteData[siteid].length != 0) {
-                                        newLocation(siteData[siteid].poly_line.lat, siteData[siteid].poly_line.lng);
+                                    //if (siteData[premiseid].length != 0) {
+                                        newLocation(siteData[premiseid].poly_line.lat, siteData[premiseid].poly_line.lng);
                                     //}
                                     $site_map = sitesrFilterMarker[ccount];
-                                    info_popup($site_map, siteid);
+                                    info_popup($site_map, premiseid);
                                     sitesrFilterMarker[ccount].setMap(map);
 
                                     //Extend each marker's position in LatLngBounds object.
@@ -1430,30 +1430,30 @@ function getSiteSRFilterData(siteFilter,srFilter){
 
                                     ccount++;
 								}
-								if (siteData[siteid].point !== undefined) {
+								if (siteData[premiseid].point !== undefined) {
 									
-									for (i = 0; i < siteData[siteid].point.length; i++) {
+									for (i = 0; i < siteData[premiseid].point.length; i++) {
                                         /*var pointMatrix = {
-                                            lat: siteData[siteid].point[i]['lat'] + (Math.random() / 10000),
-                                            lng: siteData[siteid].point[i]['lng'] + (Math.random() / 10000)
+                                            lat: siteData[premiseid].point[i]['lat'] + (Math.random() / 10000),
+                                            lng: siteData[premiseid].point[i]['lng'] + (Math.random() / 10000)
                                         };*/
                                         var pointMatrix = {
-                                            lat: siteData[siteid].point[i]['lat'] + mathRandLat,
-                                            lng: siteData[siteid].point[i]['lng'] + mathRandLng
+                                            lat: siteData[premiseid].point[i]['lat'] + mathRandLat,
+                                            lng: siteData[premiseid].point[i]['lng'] + mathRandLng
                                         };
-                                        //showPointMap(pointMatrix, map, siteData[siteid].icon, siteid);
+                                        //showPointMap(pointMatrix, map, siteData[premiseid].icon, premiseid);
 
                                         sitesrFilterMarker[ccount] = new google.maps.Marker({
                                             map: map,
                                             position: pointMatrix,
-                                            icon: siteData[siteid].icon
+                                            icon: siteData[premiseid].icon
                                         });
-                                        //if (siteData[siteid].length != 0) {
+                                        //if (siteData[premiseid].length != 0) {
                                             newLocation(pointMatrix.lat, pointMatrix.lng);
                                        // }
                                         $site_map = sitesrFilterMarker[ccount];
                                         gmarkers.push($site_map);
-                                        info_popup($site_map, siteid);
+                                        info_popup($site_map, premiseid);
                                         sitesrFilterMarker[ccount].setMap(map);
 
                                         //Extend each marker's position in LatLngBounds object.
@@ -1461,45 +1461,45 @@ function getSiteSRFilterData(siteFilter,srFilter){
 
                                         ccount++;
 
-                                        var vName = siteData[siteid].vName;
-                                        var vAddress = siteData[siteid].vAddress;
-                                        var vRequestType = siteData[siteid].vRequestType;
-                                        var vAssignTo = siteData[siteid].vAssignTo;
-                                        var vStatus = siteData[siteid].vStatus;
+                                        var vName = siteData[premiseid].vName;
+                                        var vAddress = siteData[premiseid].vAddress;
+                                        var vRequestType = siteData[premiseid].vRequestType;
+                                        var vAssignTo = siteData[premiseid].vAssignTo;
+                                        var vStatus = siteData[premiseid].vStatus;
                                     }
 								}
 							
 						});
 					}
 					if(srData !== undefined && jQuery.isEmptyObject(srData) == false){
-						$.each(srData, function(siteid, item) {
-							if (srData[siteid].point !== undefined) {
-                                    for (i = 0; i < srData[siteid].point.length; i++) {
+						$.each(srData, function(premiseid, item) {
+							if (srData[premiseid].point !== undefined) {
+                                    for (i = 0; i < srData[premiseid].point.length; i++) {
                                         /*var pointMatrix = {
-                                            lat: srData[siteid].point[i]['lat']+ (Math.random() / 10000),
-                                            lng: srData[siteid].point[i]['lng']+ (Math.random() / 10000)
+                                            lat: srData[premiseid].point[i]['lat']+ (Math.random() / 10000),
+                                            lng: srData[premiseid].point[i]['lng']+ (Math.random() / 10000)
                                         };*/
                                         var pointMatrix = {
-                                            lat: srData[siteid].point[i]['lat']+ mathRandLat,
-                                            lng: srData[siteid].point[i]['lng']+ mathRandLng
+                                            lat: srData[premiseid].point[i]['lat']+ mathRandLat,
+                                            lng: srData[premiseid].point[i]['lng']+ mathRandLng
                                         };
-                                        var vName = srData[siteid].vName;
-                                        var vAddress = srData[siteid].vAddress;
-                                        var vRequestType = srData[siteid].vRequestType;
-                                        var vAssignTo = srData[siteid].vAssignTo;
-                                        var vStatus = srData[siteid].vStatus;
+                                        var vName = srData[premiseid].vName;
+                                        var vAddress = srData[premiseid].vAddress;
+                                        var vRequestType = srData[premiseid].vRequestType;
+                                        var vAssignTo = srData[premiseid].vAssignTo;
+                                        var vStatus = srData[premiseid].vStatus;
                                         
                                         sitesrFilterMarker[ccount] = new google.maps.Marker({
                                             map: map,
                                             position: pointMatrix,
-                                            icon: srData[siteid].icon
+                                            icon: srData[premiseid].icon
                                         });
-                                        //if (srData[siteid].length != 0) {
+                                        //if (srData[premiseid].length != 0) {
                                             newLocation(pointMatrix.lat,pointMatrix.lng);
                                        // }
                                         $sr_map = sitesrFilterMarker[ccount];
 
-                                        srinfo_popup($sr_map, siteid, vName, vAddress, vRequestType, vAssignTo, vStatus);
+                                        srinfo_popup($sr_map, premiseid, vName, vAddress, vRequestType, vAssignTo, vStatus);
                                         sitesrFilterMarker[ccount].setMap(map);
 
                                         //Extend each marker's position in LatLngBounds object.
@@ -1530,7 +1530,7 @@ function getSiteSRFilterData(siteFilter,srFilter){
     }
 }
 
-function addInstaTreatData(mode,siteid){
+function addInstaTreatData(mode,premiseid){
 		infowindow.close();
 
 	 $.ajax({
@@ -1538,7 +1538,7 @@ function addInstaTreatData(mode,siteid){
             url: site_url + "vmap/index",
             data: {
                 mode: "AddInstaTreat",
-                siteId: siteid,
+                premiseid: premiseid,
             },
             cache: true,
             dataType:'json',
@@ -1608,22 +1608,22 @@ $("#nearbysite").click(function(){
 					//sncount =0;
 					var siteData = JSON.parse(data);
 	                    if(Object.keys(siteData).length > 0){
-	                        $.each(siteData, function(siteid, item) {
-	                            if (siteData[siteid].polygon !== undefined) {
-	                                //showPolygonMap(siteData[siteid].polygon, map, siteData[siteid].icon, siteid,iTMPId,iTTId);
+	                        $.each(siteData, function(premiseid, item) {
+	                            if (siteData[premiseid].polygon !== undefined) {
+	                                //showPolygonMap(siteData[premiseid].polygon, map, siteData[premiseid].icon, premiseid,iTMPId,iTTId);
 
 	                                siteNearDataMarker[sncount] = new google.maps.Polygon({
-	                                    path: siteData[siteid].polygon,
+	                                    path: siteData[premiseid].polygon,
 	                                    strokeColor: '#FF0000',
 	                                    strokeOpacity: 0.8,
 	                                    strokeWeight: 2,
 	                                    fillColor: '#FF0000',
 	                                    fillOpacity: 0.35,
-	                                    icon: siteData[siteid].icon,
+	                                    icon: siteData[premiseid].icon,
 	                                });
 
 	                                $site_map = siteNearDataMarker[sncount];
-	                                info_popup($site_map, siteid);
+	                                info_popup($site_map, premiseid);
 	                                siteNearDataMarker[sncount].setMap(map);
 									//Extend each marker's position in LatLngBounds object.
 	                                /*latlngbounds.extend(siteNearDataMarker[sncount].position);*/
@@ -1633,28 +1633,28 @@ $("#nearbysite").click(function(){
 
 	                                sncount++;
 
-	                                if (siteData[siteid].polyCenter !== undefined) {
+	                                if (siteData[premiseid].polyCenter !== undefined) {
 	                                   /* var centerPoint = {
-	                                        lat: siteData[siteid].polyCenter['lat'] + (Math.random() / 10000),
-	                                        lng: siteData[siteid].polyCenter['lng'] + (Math.random() / 10000)
+	                                        lat: siteData[premiseid].polyCenter['lat'] + (Math.random() / 10000),
+	                                        lng: siteData[premiseid].polyCenter['lng'] + (Math.random() / 10000)
 	                                    };*/
 	                                    var centerPoint = {
-	                                        lat: siteData[siteid].polyCenter['lat'] + mathRandLat,
-	                                        lng: siteData[siteid].polyCenter['lng'] + mathRandLng
+	                                        lat: siteData[premiseid].polyCenter['lat'] + mathRandLat,
+	                                        lng: siteData[premiseid].polyCenter['lng'] + mathRandLng
 	                                    };
-	                                    //showPolyCenter(centerPoint, map, siteData[siteid].icon, siteid);
+	                                    //showPolyCenter(centerPoint, map, siteData[premiseid].icon, premiseid);
 
 	                                    siteNearDataMarker[sncount] = new google.maps.Marker({
 	                                        position: centerPoint,
 	                                        map: map,
-	                                        icon: siteData[siteid].icon,
+	                                        icon: siteData[premiseid].icon,
 	                                    });
-	                                    /*if (siteData[siteid].length != 0) {
+	                                    /*if (siteData[premiseid].length != 0) {
 	                                        newLocation(centerPoint.lat, centerPoint.lng);
 	                                    }*/
 	                                    newLocation(centerPoint.lat, centerPoint.lng);
 	                                    $site_map = siteNearDataMarker[sncount];
-	                                    info_popup($site_map, siteid);
+	                                    info_popup($site_map, premiseid);
 	                                    siteNearDataMarker[sncount].setMap(map);
 
 	                                    //Extend each marker's position in LatLngBounds object.
@@ -1664,24 +1664,24 @@ $("#nearbysite").click(function(){
 
 	                                }
 	                            }
-	                            if (siteData[siteid].poly_line !== undefined) {
-	                                //showPolyLineMap(siteData[siteid].poly_line, map, siteData[siteid].icon, siteid);
+	                            if (siteData[premiseid].poly_line !== undefined) {
+	                                //showPolyLineMap(siteData[premiseid].poly_line, map, siteData[premiseid].icon, premiseid);
 
 	                                siteNearDataMarker[sncount] = new google.maps.Polyline({
-	                                    path: siteData[siteid].poly_line,
+	                                    path: siteData[premiseid].poly_line,
 	                                    strokeColor: '#FF0000',
 	                                    strokeOpacity: 0.8,
 	                                    strokeWeight: 2,
 	                                    fillColor: '#FF0000',
 	                                    fillOpacity: 0.35,
-	                                    icon: siteData[siteid].icon,
+	                                    icon: siteData[premiseid].icon,
 	                                });
-	                                /*if (siteData[siteid].length != 0) {
-	                                    newLocation(siteData[siteid].poly_line.lat, siteData[siteid].poly_line.lng);
+	                                /*if (siteData[premiseid].length != 0) {
+	                                    newLocation(siteData[premiseid].poly_line.lat, siteData[premiseid].poly_line.lng);
 	                                }*/
-	                                newLocation(siteData[siteid].poly_line.lat, siteData[siteid].poly_line.lng);
+	                                newLocation(siteData[premiseid].poly_line.lat, siteData[premiseid].poly_line.lng);
 	                                $site_map = siteNearDataMarker[sncount];
-	                                info_popup($site_map, siteid);
+	                                info_popup($site_map, premiseid);
 	                                siteNearDataMarker[sncount].setMap(map);
 
 	                                //Extend each marker's position in LatLngBounds object.
@@ -1692,29 +1692,29 @@ $("#nearbysite").click(function(){
 
 	                                sncount++;
 	                            }
-	                            if (siteData[siteid].point !== undefined) {
-	                                //console.log(siteid);
-	                                for (i = 0; i < siteData[siteid].point.length; i++) {
+	                            if (siteData[premiseid].point !== undefined) {
+	                                //console.log(premiseid);
+	                                for (i = 0; i < siteData[premiseid].point.length; i++) {
 	                                    /*var pointMatrix = {
-	                                        lat: siteData[siteid].point[i]['lat'] + (Math.random() / 10000),
-	                                        lng: siteData[siteid].point[i]['lng'] + (Math.random() / 10000)
+	                                        lat: siteData[premiseid].point[i]['lat'] + (Math.random() / 10000),
+	                                        lng: siteData[premiseid].point[i]['lng'] + (Math.random() / 10000)
 	                                    };*/
 	                                    var pointMatrix = {
-	                                        lat: siteData[siteid].point[i]['lat'] + mathRandLat,
-	                                        lng: siteData[siteid].point[i]['lng'] + mathRandLng
+	                                        lat: siteData[premiseid].point[i]['lat'] + mathRandLat,
+	                                        lng: siteData[premiseid].point[i]['lng'] + mathRandLng
 	                                    };
 	                                    
 	                                    siteNearDataMarker[sncount] = new google.maps.Marker({
 	                                        map: map,
 	                                        position: pointMatrix,
-	                                        icon: siteData[siteid].icon,
+	                                        icon: siteData[premiseid].icon,
 	                                        draggable:true,
 	                                    });
 	                                    
 	                                    newLocation(pointMatrix.lat, pointMatrix.lng);
 	                                    $site_map = siteNearDataMarker[sncount];
 	                                    gmarkers.push($site_map);
-	                                    info_popup($site_map, siteid);
+	                                    info_popup($site_map, premiseid);
 	                                    siteNearDataMarker[sncount].setMap(map);
 
 	                                    //Extend each marker's position in LatLngBounds object.
@@ -1722,11 +1722,11 @@ $("#nearbysite").click(function(){
 
 	                                    sncount++;
 
-	                                    var vName = siteData[siteid].vName;
-	                                    var vAddress = siteData[siteid].vAddress;
-	                                    var vRequestType = siteData[siteid].vRequestType;
-	                                    var vAssignTo = siteData[siteid].vAssignTo;
-	                                    var vStatus = siteData[siteid].vStatus;
+	                                    var vName = siteData[premiseid].vName;
+	                                    var vAddress = siteData[premiseid].vAddress;
+	                                    var vRequestType = siteData[premiseid].vRequestType;
+	                                    var vAssignTo = siteData[premiseid].vAssignTo;
+	                                    var vStatus = siteData[premiseid].vStatus;
 	                                }
 	                            }
 	                        });
@@ -1751,10 +1751,10 @@ $("#nearbysite").click(function(){
 });
 
 
-function infoPolygonArea($site_map, siteid)
+function infoPolygonArea($site_map, premiseid)
 {
 	//show polygon area
-  google.maps.event.addListener($site_map, 'mouseover', ( function($site_map, siteid) {
+  google.maps.event.addListener($site_map, 'mouseover', ( function($site_map, premiseid) {
       return function(arg) {
           var polyArea = google.maps.geometry.spherical.computeArea($site_map.getPath()); //in sq. meter
 
@@ -1781,7 +1781,7 @@ function infoPolygonArea($site_map, siteid)
           }
           });
       }
-  })($site_map, siteid));
+  })($site_map, premiseid));
 }
 
 function mapRedirectServiceOrder(ServiceOrderLength, iPremiseId) {

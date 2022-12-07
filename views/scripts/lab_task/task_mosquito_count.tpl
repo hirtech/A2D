@@ -12,7 +12,7 @@
                 {if $trap_data|@count gt 0}
                 <div class="col-12">
                     <p>Trap Id : {$trap_data.iTTId} ({$trap_data.vTrapName};Placed {$trap_data.dTrapPlaced}; Collected {$trap_data.dTrapCollected})</p>
-                    <p>Premise Id: {$trap_data.iSiteId} ({$trap_data.vSiteName})</p>
+                    <p>Premise Id: {$trap_data.iPremiseId} ({$trap_data.vSiteName})</p>
                     <p>{$trap_data.vSiteAddress}</p>
                 </div>
                 <div class="col-12 mt-3">

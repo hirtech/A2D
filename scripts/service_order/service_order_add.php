@@ -24,7 +24,7 @@ if($mode == "Update") {
     $where_arr[] = "service_order.\"iServiceOrderId\"='".gen_add_slash($iServiceOrderId)."'";
 
     $join_fieds_arr[] = 's."vName" as "vPremiseName"';
-    $join_arr[] = 'LEFT JOIN site_mas s ON service_order."iPremiseId" = s."iSiteId"';
+    $join_arr[] = 'LEFT JOIN site_mas s ON service_order."iPremiseId" = s."iPremiseId"';
     $ServiceOrderObj->join_field = $join_fieds_arr;
     $ServiceOrderObj->join = $join_arr;
     $ServiceOrderObj->where = $where_arr;

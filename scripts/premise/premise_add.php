@@ -32,11 +32,11 @@ $mode = (($_REQUEST['mode'] != "") ? $_REQUEST['mode'] : "Add");
 $rs_site = array();
 $iSAttributeIdArr = array();
 if($mode == "Update") {
-    $iSiteId = $_REQUEST['iSiteId'];
+    $iPremiseId = $_REQUEST['iPremiseId'];
     $where_arr = array();
     $join_fieds_arr = array();
     $join_arr  = array();
-    $where_arr[] = "s.\"iSiteId\"='".gen_add_slash($iSiteId)."'";
+    $where_arr[] = "s.\"iPremiseId\"='".gen_add_slash($iPremiseId)."'";
     $join_fieds_arr[] = 'ST_AsText(s."vPolygonLatLong") as "vPolygonLatLong"';
     $join_fieds_arr[] = 'ST_AsText(s."vPolyLineLatLong") as "vPolyLineLatLong"';
     $join_fieds_arr[] = 'c."vCounty"';
@@ -58,7 +58,7 @@ if($mode == "Update") {
         $where_arr = array();
         $join_fieds_arr = array();
         $join_arr  = array();
-        $where_arr[] = "site_attribute.\"iSiteId\"='".$iSiteId."'";
+        $where_arr[] = "site_attribute.\"iPremiseId\"='".$iPremiseId."'";
         $SiteObj->where = $where_arr;
         $SiteObj->param['order_by'] = "site_attribute.\"iSAId\"";
         $SiteObj->setClause();
@@ -73,7 +73,7 @@ if($mode == "Update") {
 
         //Site contact
         $premise_contact_arr_param = array(
-            "iSiteId"       => $iSiteId,
+            "iPremiseId"       => $iPremiseId,
             "sessionId"     => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
         );
         $PREMISE_CONTACT_API_URL = $site_api_url."getPremiseContactData.json";
@@ -98,7 +98,7 @@ if($mode == "Update") {
 
         //site document
         $premise_document_arr_param = array(
-            "iSiteId"       => $iSiteId,
+            "iPremiseId"       => $iPremiseId,
             "sessionId"     => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
         );
         $PREMISE_DOCUMENT_API_URL = $site_api_url."getPremiseDocumentData.json";

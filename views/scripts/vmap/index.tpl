@@ -818,16 +818,16 @@ p.area-text2 {
                                 <!-- <input type="hidden" name="vLongitude" id="vLongitude" value="-81.819111"> -->
                                 <input type="hidden" name="vLongitude" id="vLongitude" value="">
                                 <div class="form-group row">
-                                    <label for="iSiteId" class="col-sm-4 col-form-label">Premise Id</label>
+                                    <label for="iPremiseId" class="col-sm-4 col-form-label">Premise Id</label>
                                     <div class="col-sm-8">
-                                        <input type="text" name="iSiteId" class="form-control" id="iSiteId" placeholder="Premise Id">
+                                        <input type="text" name="iPremiseId" class="form-control" id="iPremiseId" placeholder="Premise Id">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="vName" class="col-sm-4 col-form-label">Premise Name</label>
                                     <div class="col-sm-8">
                                         <input type="text" name="vName" class="form-control" id="vName" placeholder="Premise Name">
-                                        <input type="hidden" id="serach_iSiteId" name="serach_iSiteId" value="">
+                                        <input type="hidden" id="serach_iPremiseId" name="serach_iPremiseId" value="">
                                         <img class="clear_site_address remove_site_name" id="clear_site_address_id" src="assets/images/icon-delete.png" onclick="return clear_site_address()" />
                                     </div>
                                 </div>
@@ -984,7 +984,7 @@ let mode ="";
 let currentlatitude="";
 let currentlongitude="";
 let stmeter = 804.672;
-let tmpsiteId_Arr = [];
+let tmppremiseId_Arr = [];
 let tmpsrId_Arr = [];
 let mathRandLat =(Math.random() / 10000);
 let mathRandLng  =(Math.random() / 10000);

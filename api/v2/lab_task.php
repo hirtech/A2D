@@ -18,7 +18,7 @@ if($request_type == "task_mosquito_pool_list"){
     $join_arr = array();
     //echo"<pre>";print_r($request_type);exit;
     if(!empty($RES_PARA)){
-        $iSiteId            = $RES_PARA['iSiteId'];
+        $iPremiseId            = $RES_PARA['iPremiseId'];
         $iTMPId             = $RES_PARA['iTMPId'];
         $vName              = $RES_PARA['vName'];
         $vTypeName           = $RES_PARA['vTypeName'];
@@ -33,8 +33,8 @@ if($request_type == "task_mosquito_pool_list"){
         $where_arr[] = 'task_mosquito_pool."iTMPId"='.$iTMPId ;
     }
     
-    if ($iSiteId != "") {
-        $where_arr[] = 'task_trap."iSiteId"='.$iSiteId ;
+    if ($iPremiseId != "") {
+        $where_arr[] = 'task_trap."iPremiseId"='.$iPremiseId ;
     }
 
     if ($vName != "") {
@@ -86,7 +86,7 @@ if($request_type == "task_mosquito_pool_list"){
     $join_fieds_arr[] = 'sm."vState"';
     $join_fieds_arr[] = 'cm."vCity"';
     $join_fieds_arr[] = 'tt."vTrapName"';
-    $join_fieds_arr[] = 'task_trap."iSiteId"';
+    $join_fieds_arr[] = 'task_trap."iPremiseId"';
     $join_fieds_arr[] = 'task_trap."iSRId"';
     $join_fieds_arr[] = 'task_trap."dTrapPlaced"';
     $join_fieds_arr[] = 'task_trap."dTrapCollected"';
@@ -94,7 +94,7 @@ if($request_type == "task_mosquito_pool_list"){
     $join_fieds_arr[] = 'task_trap."tNotes"';
     $join_arr[] = 'LEFT JOIN task_trap  on task_trap."iTTId" = task_mosquito_pool."iTTId"';
     $join_arr[] = 'LEFT JOIN trap_type_mas tt on tt."iTrapTypeId" = task_trap."iTrapTypeId"';
-    $join_arr[] = 'LEFT JOIN site_mas s on s."iSiteId" = task_trap."iSiteId"';
+    $join_arr[] = 'LEFT JOIN site_mas s on s."iPremiseId" = task_trap."iPremiseId"';
     $join_arr[] = 'LEFT JOIN county_mas c on s."iCountyId" = c."iCountyId"';
     $join_arr[] = 'LEFT JOIN state_mas sm on s."iStateId" = sm."iStateId"';
     $join_arr[] = 'LEFT JOIN city_mas cm on s."iCityId" = cm."iCityId"';
@@ -159,10 +159,10 @@ if($request_type == "task_mosquito_pool_list"){
             if($test_result != "")
                 $test_result = substr($test_result, 0, -6);
 
-            $vSite = $rs_data[$i]['vName']."- PremiseID#".$rs_data[$i]['iSiteId'];
+            $vSite = $rs_data[$i]['vName']."- PremiseID#".$rs_data[$i]['iPremiseId'];
             $vAddress =  $rs_data[$i]['vAddress1'].' '.$rs_data[$i]['vStreet'].' '.$rs_data[$i]['vCity'].', '.$rs_data[$i]['vState'].' '.$rs_data[$i]['vCounty'];
 
-            $vSiteName = $rs_data[$i]['iSiteId']." (".$rs_data[$i]['vName']."; ".$rs_data[$i]['vTypeName'].")";
+            $vSiteName = $rs_data[$i]['iPremiseId']." (".$rs_data[$i]['vName']."; ".$rs_data[$i]['vTypeName'].")";
 
             $data[] = array(
                 "iTMPId" => $rs_data[$i]['iTMPId'],
@@ -310,7 +310,7 @@ else if($request_type == "trap_mosquito_count_list"){
 
     if(!empty($RES_PARA)){
         
-        $iSiteId            = $RES_PARA['iSiteId'];
+        $iPremiseId            = $RES_PARA['iPremiseId'];
         $iTTId              = $RES_PARA['iTTId'];
         $vName              = $RES_PARA['vName'];
         $vTypeName          = $RES_PARA['vTypeName'];
@@ -326,8 +326,8 @@ else if($request_type == "trap_mosquito_count_list"){
         $where_arr[] = 'task_trap."iTTId"='.$iTTId ;
     }
     
-    if ($iSiteId != "") {
-        $where_arr[] = 'task_trap."iSiteId"='.$iSiteId ;
+    if ($iPremiseId != "") {
+        $where_arr[] = 'task_trap."iPremiseId"='.$iPremiseId ;
     }
 
     if ($vName != "") {
@@ -372,7 +372,7 @@ else if($request_type == "trap_mosquito_count_list"){
     $join_fieds_arr[] = 'tt."vTrapName"';
     $join_arr = array();
     $join_arr[] = 'LEFT JOIN trap_type_mas tt on tt."iTrapTypeId" = task_trap."iTrapTypeId"';
-    $join_arr[] = 'LEFT JOIN site_mas s on s."iSiteId" = task_trap."iSiteId"';
+    $join_arr[] = 'LEFT JOIN site_mas s on s."iPremiseId" = task_trap."iPremiseId"';
     $join_arr[] = 'LEFT JOIN county_mas c on s."iCountyId" = c."iCountyId"';
     $join_arr[] = 'LEFT JOIN state_mas sm on s."iStateId" = sm."iStateId"';
     $join_arr[] = 'LEFT JOIN city_mas cm on s."iCityId" = cm."iCityId"';
@@ -418,7 +418,7 @@ else if($request_type == "trap_mosquito_count_list"){
             }
             $mosquito_count_total = intval($male)+intval($female);
 
-            $vSite = $rs_data[$i]['vName']."- PremiseID#".$rs_data[$i]['iSiteId'];
+            $vSite = $rs_data[$i]['vName']."- PremiseID#".$rs_data[$i]['iPremiseId'];
             $vAddress =  $rs_data[$i]['vAddress1'].' '.$rs_data[$i]['vStreet'].' '.$rs_data[$i]['vCity'].', '.$rs_data[$i]['vState'].' '.$rs_data[$i]['vCounty'];
 
             $action = '';
@@ -427,7 +427,7 @@ else if($request_type == "trap_mosquito_count_list"){
                $action .= '<a class="btn btn-outline-secondary" title="Edit" href="'.$site_url.'lab_task/task_mosquito_count&mode=list&iTTId='.$rs_data[$i]['iTTId'].'"><i class="fa fa-edit"></i></a>';
             }
 
-            $vSiteName = $rs_data[$i]['iSiteId']." (".$rs_data[$i]['vName']."; ".$rs_data[$i]['vTypeName'].")";
+            $vSiteName = $rs_data[$i]['iPremiseId']." (".$rs_data[$i]['vName']."; ".$rs_data[$i]['vTypeName'].")";
 
             $data[] = array(
                 "iTTId" => $rs_data[$i]['iTTId'],

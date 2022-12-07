@@ -12,7 +12,7 @@
             	<form  id="contactfrmadd" name="contactfrmadd" action="" class="form-horizontal needs-validation" method="post" novalidate>
             		<input type="hidden" name="mode" id="cnt_mode" value="">
                     <input type="hidden" name="iCId" id="cid" value=""> 
-                    <input type="hidden" name="iSiteId" id="siteid" value="" />
+                    <input type="hidden" name="iPremiseId" id="premiseid" value="" />
                     <input type="hidden" name="referer" id="referer" value="" />
             		<div class="form-group row">
             			<label class="col-sm-3" for="salutation">Salutation  <span class="text-danger"> *</span></label>

@@ -10,7 +10,7 @@
 							<li>
 								<select id="vOptions" name="vOptions" class="form-control">
                   					<option value="iTTId">ID</option>
-									<option value="iSiteId">Premise Id</option>
+									<option value="iPremiseId">Premise Id</option>
 									<option value="vName">Premise Name</option>
 									<option value="vTypeName">Premise Type</option>
 									<option value="iSRId">SR Id</option>
@@ -55,9 +55,9 @@
 </div>
 {include file="scripts/tasks/task_trap_add.tpl"}
 <script type="text/javascript">
-	var iSiteId = '{$iSiteId}';
+	var iPremiseId = '{$iPremiseId}';
 	var iTTId = '{$iTTId}';
-	var extra_url = (jQuery.isEmptyObject(iSiteId))?"":'&iSiteId='+iSiteId;
+	var extra_url = (jQuery.isEmptyObject(iPremiseId))?"":'&iPremiseId='+iPremiseId;
 	 extra_url += (jQuery.isEmptyObject(iTTId))?"":'&iTTId='+iTTId;
 	var ajax_url = 'tasks/task_trap_list&mode=List'+extra_url;
 	//console.log(ajax_url);

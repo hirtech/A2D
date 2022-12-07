@@ -56,7 +56,7 @@ if ($request_type == "premise_history") {
                 $join_fieds_arr[] = " site_type_mas.\"vTypeName\"";
                 $join_fieds_arr[] = "concat(\"vFirstName\",' ', \"vLastName\") as \"vContactName\" ";
                 $join_arr[] = 'LEFT JOIN engagement_mas e on e."iEngagementId" = awareness."iEngagementId"';
-                $join_arr[] = 'LEFT JOIN site_mas s on s."iSiteId" = awareness."iPremiseId"';
+                $join_arr[] = 'LEFT JOIN site_mas s on s."iPremiseId" = awareness."iPremiseId"';
                 $join_arr[] = 'LEFT JOIN site_type_mas on site_type_mas."iSTypeId" = s."iSTypeId"';
                 $join_arr[] = 'LEFT JOIN fiberinquiry_details on fiberinquiry_details."iFiberInquiryId" = awareness."iFiberInquiryId"';
                 $join_arr[] = 'LEFT JOIN contact_mas on contact_mas."iCId" = fiberinquiry_details."iCId"';

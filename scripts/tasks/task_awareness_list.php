@@ -75,7 +75,7 @@ if($mode == "List"){
                $action .= ' <a class="btn btn-outline-danger" title="Delete" href="javascript:void(0);" onclick="delete_record('.$rs_awareness[$i]['iAId'].');"><i class="fa fa-trash"></i></a>';
             }
 
-            $hidden_fields = '<input type="hidden" id="iAId_'.$rs_awareness[$i]['iAId'].'" value="'.$rs_awareness[$i]['iAId'].'"><input type="hidden" id="vSiteName_'.$rs_awareness[$i]['iAId'].'" value="'.$rs_awareness[$i]['vName'].'"><input type="hidden" id="iSiteId_'.$rs_awareness[$i]['iAId'].'" value="'.$rs_awareness[$i]['iPremiseId'].'"><input type="hidden" id="dDate_'.$rs_awareness[$i]['iAId'].'" value="'.$rs_awareness[$i]['dDate'].'"><input type="hidden" id="dStartDate_'.$rs_awareness[$i]['iAId'].'" value="'.$rs_awareness[$i]['dStartDate'].'"><input type="hidden" id="dStartTime_'.$rs_awareness[$i]['iAId'].'" value="'.$rs_awareness[$i]['dStartTime'].'"><input type="hidden" id="dEndDate_'.$rs_awareness[$i]['iAId'].'" value="'.$rs_awareness[$i]['dEndDate'].'"><input type="hidden" id="dEndTime_'.$rs_awareness[$i]['iAId'].'" value="'.$rs_awareness[$i]['dEndTime'].'"><input type="hidden" id="iEngagementId_'.$rs_awareness[$i]['iAId'].'" value="'.$rs_awareness[$i]['iEngagementId'].'"><input type="hidden" id="tNotes_'.$rs_awareness[$i]['iAId'].'" value="'.$rs_awareness[$i]['tNotes'].'"><input type="hidden" id="srdisplay_'.$rs_awareness[$i]['iAId'].'" value="'.$rs_awareness[$i]['vFiberInquiry'].'"><input type="hidden" id="iSRId_'.$rs_awareness[$i]['iAId'].'" value="'.$rs_awareness[$i]['iFiberInquiryId'].'"><input type="hidden" id="iTechnicianId_'.$rs_awareness[$i]['iAId'].'" value="'.$rs_awareness[$i]['iTechnicianId'].'">';
+            $hidden_fields = '<input type="hidden" id="iAId_'.$rs_awareness[$i]['iAId'].'" value="'.$rs_awareness[$i]['iAId'].'"><input type="hidden" id="vSiteName_'.$rs_awareness[$i]['iAId'].'" value="'.$rs_awareness[$i]['vName'].'"><input type="hidden" id="iPremiseId_'.$rs_awareness[$i]['iAId'].'" value="'.$rs_awareness[$i]['iPremiseId'].'"><input type="hidden" id="dDate_'.$rs_awareness[$i]['iAId'].'" value="'.$rs_awareness[$i]['dDate'].'"><input type="hidden" id="dStartDate_'.$rs_awareness[$i]['iAId'].'" value="'.$rs_awareness[$i]['dStartDate'].'"><input type="hidden" id="dStartTime_'.$rs_awareness[$i]['iAId'].'" value="'.$rs_awareness[$i]['dStartTime'].'"><input type="hidden" id="dEndDate_'.$rs_awareness[$i]['iAId'].'" value="'.$rs_awareness[$i]['dEndDate'].'"><input type="hidden" id="dEndTime_'.$rs_awareness[$i]['iAId'].'" value="'.$rs_awareness[$i]['dEndTime'].'"><input type="hidden" id="iEngagementId_'.$rs_awareness[$i]['iAId'].'" value="'.$rs_awareness[$i]['iEngagementId'].'"><input type="hidden" id="tNotes_'.$rs_awareness[$i]['iAId'].'" value="'.$rs_awareness[$i]['tNotes'].'"><input type="hidden" id="srdisplay_'.$rs_awareness[$i]['iAId'].'" value="'.$rs_awareness[$i]['vFiberInquiry'].'"><input type="hidden" id="iSRId_'.$rs_awareness[$i]['iAId'].'" value="'.$rs_awareness[$i]['iFiberInquiryId'].'"><input type="hidden" id="iTechnicianId_'.$rs_awareness[$i]['iAId'].'" value="'.$rs_awareness[$i]['iTechnicianId'].'">';
 
             $entry[] = array(
                 "iAId"          => $rs_awareness[$i]['iAId'],
@@ -149,7 +149,7 @@ if($mode == "List"){
         $arr_param = array(
             "sessionId"         => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
             "iAId"              => $_POST['modal_iAId'],
-            "iPremiseId"        => $_POST['serach_iSiteId_awareness'],
+            "iPremiseId"        => $_POST['serach_iPremiseId_awareness'],
             "iFiberInquiryId"   => $_POST['serach_iSRId_awareness'],
             "dDate"             => $_POST['modal_dDate_awareness'],
             "dStartDate"        => $dStartDate,
@@ -210,7 +210,7 @@ if($mode == "List"){
 
         $arr_param = array(
             "sessionId"         => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
-            "iPremiseId"        => $_POST['serach_iSiteId_awareness'],
+            "iPremiseId"        => $_POST['serach_iPremiseId_awareness'],
             "iFiberInquiryId"   => $_POST['serach_iSRId_awareness'],
             "dDate"             => $_POST['modal_dDate_awareness'],
             "dStartDate"        => $dStartDate,

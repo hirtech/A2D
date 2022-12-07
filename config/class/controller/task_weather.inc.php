@@ -88,7 +88,7 @@ class TaskWeather {
 	function add_records(){
 		global $sqlObj;
 		if($this->insert_arr){
-			$sql = 'INSERT INTO task_weather ("iSiteId", "dDate", "dStartDate", "dEndDate", "vCondition","iWindSpeed","vWindDirection", "dAddedDate") VALUES ('.gen_allow_null_int($this->insert_arr['iSiteId']).', '.gen_allow_null_char($this->insert_arr['dDate']).', '.gen_allow_null_char($this->insert_arr['dStartDate']).', '.gen_allow_null_char($this->insert_arr['dEndDate']).', '.gen_allow_null_char($this->insert_arr['vCondition']).', '.gen_allow_null_int($this->insert_arr['iWindSpeed']).', '.gen_allow_null_char($this->insert_arr['vWindDirection']).', '.gen_allow_null_char(date_getSystemDateTime()).')';
+			$sql = 'INSERT INTO task_weather ("iPremiseId", "dDate", "dStartDate", "dEndDate", "vCondition","iWindSpeed","vWindDirection", "dAddedDate") VALUES ('.gen_allow_null_int($this->insert_arr['iPremiseId']).', '.gen_allow_null_char($this->insert_arr['dDate']).', '.gen_allow_null_char($this->insert_arr['dStartDate']).', '.gen_allow_null_char($this->insert_arr['dEndDate']).', '.gen_allow_null_char($this->insert_arr['vCondition']).', '.gen_allow_null_int($this->insert_arr['iWindSpeed']).', '.gen_allow_null_char($this->insert_arr['vWindDirection']).', '.gen_allow_null_char(date_getSystemDateTime()).')';
 			
 			$sqlObj->Execute($sql);		
 			$rs_db = $sqlObj-> Insert_ID();

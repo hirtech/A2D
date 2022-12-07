@@ -80,11 +80,11 @@ $mode = isset($_REQUEST['mode']) ? $_REQUEST['mode'] : 'list';
 //echo print_r($_REQUEST);exit();
 if($mode == "site_map")
 {
-    $iSiteId = $_REQUEST['iSiteId'];
+    $iPremiseId = $_REQUEST['iPremiseId'];
     $where_arr = array();
     $join_fieds_arr = array();
     $join_arr  = array();
-    $where_arr[] = "s.\"iSiteId\"='".gen_add_slash($iSiteId)."'";
+    $where_arr[] = "s.\"iPremiseId\"='".gen_add_slash($iPremiseId)."'";
 	
     $join_fieds_arr[] = 'c."vCounty"';
     $join_fieds_arr[] = 'sm."vState"';
@@ -112,7 +112,7 @@ if($mode == "site_map")
         $where_arr = array();
         $join_fieds_arr = array();
         $join_arr  = array();
-        $where_arr[] = "\"iPremiseId\"='".gen_add_slash($iSiteId)."'";
+        $where_arr[] = "\"iPremiseId\"='".gen_add_slash($iPremiseId)."'";
         $ServiceOrderObj->join_field = $join_fieds_arr;
         $ServiceOrderObj->join = $join_arr;
         $ServiceOrderObj->where = $where_arr;
@@ -125,7 +125,7 @@ if($mode == "site_map")
         $where_arr = array();
         $join_fieds_arr = array();
         $join_arr  = array();
-        $where_arr[] = "\"iPremiseId\"='".gen_add_slash($iSiteId)."'";
+        $where_arr[] = "\"iPremiseId\"='".gen_add_slash($iPremiseId)."'";
         $WorkOrderObj->join_field = $join_fieds_arr;
         $WorkOrderObj->join = $join_arr;
         $WorkOrderObj->where = $where_arr;
@@ -140,7 +140,7 @@ if($mode == "site_map")
     $where_arr = array();
     $join_fieds_arr = array();
     $join_arr  = array();
-    $where_arr[] = "\"iSiteId\"='".gen_add_slash($iSiteId)."'";
+    $where_arr[] = "\"iPremiseId\"='".gen_add_slash($iPremiseId)."'";
     $join_fieds_arr[] = '"iSAttributeId"';
     $join_fieds_arr[] = 'sam."vAttribute"';
     $join_arr[] = 'LEFT JOIN site_attribute sa on sa."iSAttributeId" = site_attribute_mas."iSAttributeId"';
@@ -160,7 +160,7 @@ if($mode == "site_map")
 		$rs_site['site_attribute'] = implode(',', $att_array);
 	}
 
-    $arr_param['iPremiseId'] = $iSiteId;
+    $arr_param['iPremiseId'] = $iPremiseId;
     $arr_param['page_type'] = "site_info_window";
     $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
     
@@ -191,12 +191,12 @@ if($mode == "site_map")
 }
 if($mode == "site_map_landing_rate")
 {
-    $iSiteId = $_REQUEST['iSiteId'];
+    $iPremiseId = $_REQUEST['iPremiseId'];
     
     $where_arr = array();
     $join_fieds_arr = array();
     $join_arr  = array();
-    $where_arr[] = "s.\"iSiteId\"='".gen_add_slash($iSiteId)."'";
+    $where_arr[] = "s.\"iPremiseId\"='".gen_add_slash($iPremiseId)."'";
     //$where_arr[] = "tlr.\"dDate\"='".date('Y-m-d')."'";
 
     $join_fieds_arr[] = 'c."vCounty"';
@@ -213,7 +213,7 @@ if($mode == "site_map_landing_rate")
     $join_arr[] = 'LEFT JOIN county_mas c on s."iCountyId" = c."iCountyId"';
     $join_arr[] = 'LEFT JOIN state_mas sm on s."iStateId" = sm."iStateId"';
     $join_arr[] = 'LEFT JOIN city_mas cm on s."iCityId" = cm."iCityId"';
-    $join_arr[] = 'LEFT JOIN task_landing_rate tlr on s."iSiteId" = tlr."iSiteId"';
+    $join_arr[] = 'LEFT JOIN task_landing_rate tlr on s."iPremiseId" = tlr."iPremiseId"';
 
     $SiteObj->join_field = $join_fieds_arr;
     $SiteObj->join = $join_arr;
@@ -227,7 +227,7 @@ if($mode == "site_map_landing_rate")
     $where_arr = array();
     $join_fieds_arr = array();
     $join_arr  = array();
-    $where_arr[] = "\"iSiteId\"='".gen_add_slash($iSiteId)."'";
+    $where_arr[] = "\"iPremiseId\"='".gen_add_slash($iPremiseId)."'";
     $join_fieds_arr[] = '"iSAttributeId"';
     $join_fieds_arr[] = 'sam."vAttribute"';
     $join_arr[] = 'LEFT JOIN site_attribute sa on sa."iSAttributeId" = site_attribute_mas."iSAttributeId"';
@@ -254,12 +254,12 @@ if($mode == "site_map_landing_rate")
 }
 else if($mode == "site_map_larval")
 {
-    $iSiteId = $_REQUEST['iSiteId'];
+    $iPremiseId = $_REQUEST['iPremiseId'];
     
     $where_arr = array();
     $join_fieds_arr = array();
     $join_arr  = array();
-    $where_arr[] = "s.\"iSiteId\"='".gen_add_slash($iSiteId)."'";
+    $where_arr[] = "s.\"iPremiseId\"='".gen_add_slash($iPremiseId)."'";
    // $where_arr[] = "tls.\"dDate\"='".date('Y-m-d')."'";
     $join_fieds_arr[] = 'c."vCounty"';
     $join_fieds_arr[] = 'sm."vState"';
@@ -297,7 +297,7 @@ else if($mode == "site_map_larval")
     $join_arr[] = 'LEFT JOIN county_mas c on s."iCountyId" = c."iCountyId"';
     $join_arr[] = 'LEFT JOIN state_mas sm on s."iStateId" = sm."iStateId"';
     $join_arr[] = 'LEFT JOIN city_mas cm on s."iCityId" = cm."iCityId"';
-    $join_arr[] = 'LEFT JOIN task_larval_surveillance tls on s."iSiteId" = tls."iSiteId"';
+    $join_arr[] = 'LEFT JOIN task_larval_surveillance tls on s."iPremiseId" = tls."iPremiseId"';
 
     $SiteObj->join_field = $join_fieds_arr;
     $SiteObj->join = $join_arr;
@@ -311,7 +311,7 @@ else if($mode == "site_map_larval")
     $where_arr = array();
     $join_fieds_arr = array();
     $join_arr  = array();
-    $where_arr[] = "\"iSiteId\"='".gen_add_slash($iSiteId)."'";
+    $where_arr[] = "\"iPremiseId\"='".gen_add_slash($iPremiseId)."'";
     $join_fieds_arr[] = '"iSAttributeId"';
     $join_fieds_arr[] = 'sam."vAttribute"';
     $join_arr[] = 'LEFT JOIN site_attribute sa on sa."iSAttributeId" = site_attribute_mas."iSAttributeId"';
@@ -362,7 +362,7 @@ else if ($mode == "site_map_positive") {
         $join_fieds_arr[] = 'tmp."bLabWorkComplete" as poollabworkcomplete';
         $join_arr = array();
         $join_arr[] = 'LEFT JOIN trap_type_mas tt on tt."iTrapTypeId" = task_trap."iTrapTypeId"';
-        $join_arr[] = 'LEFT JOIN site_mas s on s."iSiteId" = task_trap."iSiteId"';
+        $join_arr[] = 'LEFT JOIN site_mas s on s."iPremiseId" = task_trap."iPremiseId"';
         $join_arr[] = 'LEFT JOIN county_mas c on s."iCountyId" = c."iCountyId"';
         $join_arr[] = 'LEFT JOIN state_mas sm on s."iStateId" = sm."iStateId"';
         $join_arr[] = 'LEFT JOIN city_mas cm on s."iCityId" = cm."iCityId"';
@@ -380,16 +380,16 @@ else if ($mode == "site_map_positive") {
        // echo "<pre>";print_r($rs_taskTrap);exit();
         $nt = count($rs_taskTrap);
         if($nt > 0){
-            $vSite = $rs_taskTrap[0]['vName']."- PremiseID#".$rs_taskTrap[0]['iSiteId'];
+            $vSite = $rs_taskTrap[0]['vName']."- PremiseID#".$rs_taskTrap[0]['iPremiseId'];
             $vAddress =  $rs_taskTrap[0]['vAddress1'].' '.$rs_taskTrap[0]['vStreet'].' '.$rs_taskTrap[0]['vCity'].', '.$rs_taskTrap[0]['vState'].' '.$rs_taskTrap[0]['vCounty'];
 
-            $vSiteName = $rs_taskTrap[0]['iSiteId']." (".$rs_taskTrap[0]['vName']."; ".$rs_taskTrap[0]['vTypeName'].")";
+            $vSiteName = $rs_taskTrap[0]['iPremiseId']." (".$rs_taskTrap[0]['vName']."; ".$rs_taskTrap[0]['vTypeName'].")";
 
             $poolbLabWorkComplete = ($rs_taskTrap[0]['poollabworkcomplete']=='t')?'1':'0';
 
             $trap_data = array(
                     "iTTId" => $rs_taskTrap[0]['iTTId'],
-                    "iSiteId" => $rs_taskTrap[0]['iSiteId'],
+                    "iPremiseId" => $rs_taskTrap[0]['iPremiseId'],
                     "vSiteName" => gen_strip_slash($vSite),
                     "vSiteAddress" => $vAddress,
                     "dTrapPlaced" => date_getDateTimeDDMMYYYY($rs_taskTrap[0]['dTrapPlaced']),
@@ -458,7 +458,7 @@ else if($mode == "search_site"){
     hc_exit();
     # -----------------------------------
 }
-else if($mode == "serach_iSiteId"){
+else if($mode == "serach_iPremiseId"){
     $vLatitude = trim($_REQUEST['vLatitude']);
     $vLongitude = trim($_REQUEST['vLongitude']);
     $where_arr = array();
@@ -476,7 +476,7 @@ else if($mode == "serach_iSiteId"){
     $site_list_id ='';
     foreach ($rs_site['site'] as $key => $site_rows) {
         # code...
-        $site_list[] = $site_rows['iSiteId'];
+        $site_list[] = $site_rows['iPremiseId'];
     }
     $site_list_id = implode(',', $site_list);
     echo $site_list_id;
@@ -492,7 +492,7 @@ else if($mode == "AddInstaTreat"){
 
     $arr_param = array(
         "sessionId" => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
-        "iSiteId"        => $_POST['siteId'],
+        "iPremiseId"        => $_POST['premiseId'],
         "dDate"          => $dDate,
         "vType"          => 'Spot Treatment',
         "dStartDate"     => $dStartDate,
@@ -663,11 +663,11 @@ function setSiteHistory($data)
                 $hidden_arr = array();
                 
                 if($val['Type'] == "Awareness") {
-                    $hidden_fields = '<input type="hidden" id="iAId_' . $operation_type_data['iAId'] . '" value="' . $operation_type_data['iAId'] . '"><input type="hidden" id="vSiteName_' . $operation_type_data['iAId'] . '" value="' . $operation_type_data['vSiteName'] . '"><input type="hidden" id="iSiteId_' . $operation_type_data['iAId'] . '" value="' . $operation_type_data['iPremiseId'] . '"><input type="hidden" id="dDate_' . $operation_type_data['iAId'] . '" value="' . $operation_type_data['dDate'] . '"><input type="hidden" id="dStartDate_' . $operation_type_data['iAId'] . '" value="' . $operation_type_data['dStartDate'] . '"><input type="hidden" id="dStartTime_' . $operation_type_data['iAId'] . '" value="' . $operation_type_data['dStartTime'] . '"><input type="hidden" id="dEndDate_' . $operation_type_data['iAId'] . '" value="' . $operation_type_data['dEndDate'] . '"><input type="hidden" id="dEndTime_' . $operation_type_data['iAId'] . '" value="' . $operation_type_data['dEndTime'] . '"><input type="hidden" id="iEngagementId_' . $operation_type_data['iAId'] . '" value="' . $operation_type_data['iEngagementId'] . '"><input type="hidden" id="tNotes_' . $operation_type_data['iAId'] . '" value="' . $operation_type_data['tNotes'] . '"><input type="hidden" id="srdisplay_' . $operation_type_data['iAId'] . '" value="' . $operation_type_data['srdisplay'] . '"><input type="hidden" id="iSRId_' . $operation_type_data['iAId'] . '" value="' . $operation_type_data['iFiberInquiryId'] . '"><input type="hidden" id="iTechnicianId_' . $operation_type_data['iAId'] . '" value="' . $operation_type_data['iTechnicianId'] . '">';
+                    $hidden_fields = '<input type="hidden" id="iAId_' . $operation_type_data['iAId'] . '" value="' . $operation_type_data['iAId'] . '"><input type="hidden" id="vSiteName_' . $operation_type_data['iAId'] . '" value="' . $operation_type_data['vSiteName'] . '"><input type="hidden" id="iPremiseId_' . $operation_type_data['iAId'] . '" value="' . $operation_type_data['iPremiseId'] . '"><input type="hidden" id="dDate_' . $operation_type_data['iAId'] . '" value="' . $operation_type_data['dDate'] . '"><input type="hidden" id="dStartDate_' . $operation_type_data['iAId'] . '" value="' . $operation_type_data['dStartDate'] . '"><input type="hidden" id="dStartTime_' . $operation_type_data['iAId'] . '" value="' . $operation_type_data['dStartTime'] . '"><input type="hidden" id="dEndDate_' . $operation_type_data['iAId'] . '" value="' . $operation_type_data['dEndDate'] . '"><input type="hidden" id="dEndTime_' . $operation_type_data['iAId'] . '" value="' . $operation_type_data['dEndTime'] . '"><input type="hidden" id="iEngagementId_' . $operation_type_data['iAId'] . '" value="' . $operation_type_data['iEngagementId'] . '"><input type="hidden" id="tNotes_' . $operation_type_data['iAId'] . '" value="' . $operation_type_data['tNotes'] . '"><input type="hidden" id="srdisplay_' . $operation_type_data['iAId'] . '" value="' . $operation_type_data['srdisplay'] . '"><input type="hidden" id="iSRId_' . $operation_type_data['iAId'] . '" value="' . $operation_type_data['iFiberInquiryId'] . '"><input type="hidden" id="iTechnicianId_' . $operation_type_data['iAId'] . '" value="' . $operation_type_data['iTechnicianId'] . '">';
                     $hidden_arr = array(
                             "iAId"          => $operation_type_data['iAId'],
                             "vSiteName"     => $operation_type_data['vSiteName'],
-                            "iSiteId"       => $operation_type_data['iPremiseId'],
+                            "iPremiseId"       => $operation_type_data['iPremiseId'],
                             "dDate"         => $operation_type_data['dDate'],
                             "dStartDate"    => $operation_type_data['dStartDate'],
                             "dStartTime"    => $operation_type_data['dStartTime'],

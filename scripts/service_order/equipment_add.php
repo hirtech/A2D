@@ -24,7 +24,7 @@ if($mode == "Update") {
     $where_arr[] = "equipment.\"iEquipmentId\"='".gen_add_slash($iEquipmentId)."'";
 
     $join_fieds_arr[] = 's."vName" as "vPremiseName"';
-    $join_arr[] = 'LEFT JOIN site_mas s ON equipment."iPremiseId" = s."iSiteId"';
+    $join_arr[] = 'LEFT JOIN site_mas s ON equipment."iPremiseId" = s."iPremiseId"';
     $EquipmentObj->join_field = $join_fieds_arr;
     $EquipmentObj->join = $join_arr;
     $EquipmentObj->where = $where_arr;

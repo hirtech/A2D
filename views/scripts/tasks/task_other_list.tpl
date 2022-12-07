@@ -10,7 +10,7 @@
 							<li>
 								<select id="vOptions" name="vOptions" class="form-control">
                   					<option value="iTOId">ID</option>
-									<option value="iSiteId">Premise Id</option>
+									<option value="iPremiseId">Premise Id</option>
 									<option value="vName">Premise Name</option>
 									<option value="vTypeName">Premise Type</option>
 									<option value="iSRId">SR Id</option>
@@ -56,8 +56,8 @@
 </div>
 {include file="scripts/tasks/task_other_add.tpl"}
 <script type="text/javascript">
-	var iSiteId = '{$iSiteId}';
-	var extra_url = (jQuery.isEmptyObject(iSiteId))?"":'&iSiteId='+iSiteId;
+	var iPremiseId = '{$iPremiseId}';
+	var extra_url = (jQuery.isEmptyObject(iPremiseId))?"":'&iPremiseId='+iPremiseId;
 	var ajax_url = 'tasks/task_other_list&mode=List'+extra_url;
 	var access_group_var_add= '{$access_group_var_add}';
 	var dDate= '{$dDate}';

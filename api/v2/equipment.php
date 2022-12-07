@@ -135,7 +135,7 @@ if($request_type == "equipment_list"){
     $join_arr[] = 'LEFT JOIN equipment_model em on equipment."iEquipmentModelId" = em."iEquipmentModelId"';
     $join_arr[] = 'LEFT JOIN material_mas m on equipment."iMaterialId" = m."iMaterialId"';
     $join_arr[] = 'LEFT JOIN power_mas p on equipment."iPowerId" = p."iPowerId"';
-    $join_arr[] = 'LEFT JOIN site_mas s on equipment."iPremiseId" = s."iSiteId"';
+    $join_arr[] = 'LEFT JOIN site_mas s on equipment."iPremiseId" = s."iPremiseId"';
     $join_arr[] = 'LEFT JOIN site_type_mas st on s."iSTypeId" = st."iSTypeId"';
     $join_arr[] = 'LEFT JOIN install_type_mas it on equipment."iInstallTypeId" = it."iInstallTypeId"';
     $join_arr[] = 'LEFT JOIN link_type_mas lt on equipment."iLinkTypeId" = lt."iLinkTypeId"';

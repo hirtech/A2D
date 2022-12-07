@@ -22,7 +22,7 @@ $display_order = (isset($_REQUEST["iSortCol_0"]) ? $_REQUEST["iSortCol_0"] : '1'
 $dir = (isset($_REQUEST["sSortDir_0"]) ? $_REQUEST["sSortDir_0"] : 'desc');
 # ------------------------------------------------------------
 
-$iSiteId = $_REQUEST['iSiteId'];
+$iPremiseId = $_REQUEST['iPremiseId'];
 $vName = $_REQUEST['vName'];
 if($mode == "History"){
     $arr_param['page_length']   = $page_length;
@@ -30,7 +30,7 @@ if($mode == "History"){
     $arr_param['sEcho']         = $sEcho;
     $arr_param['display_order'] = $display_order;
     $arr_param['dir']           = $dir;
-    $arr_param['iPremiseId']    = $_REQUEST['iSiteId'];
+    $arr_param['iPremiseId']    = $_REQUEST['iPremiseId'];
     $arr_param['sessionId']     = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
     
     $API_URL = $site_api_url."premise_history.json";
@@ -97,8 +97,8 @@ $module_name = "Premise History";
 $module_title = "Premise History";
 $smarty->assign("module_name", $module_name);
 $smarty->assign("module_title", $module_title);
-$smarty->assign("iSiteId", $iSiteId);
+$smarty->assign("iPremiseId", $iPremiseId);
 $smarty->assign("vName", $vName);
-$smarty->assign("iSiteId", $iSiteId);
+$smarty->assign("iPremiseId", $iPremiseId);
 
 ?>

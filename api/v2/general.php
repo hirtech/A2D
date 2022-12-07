@@ -921,7 +921,7 @@ if($request_type == "department_dropdown") {
     
     $join_arr[] = " LEFT JOIN workorder w ON service_order.\"iServiceOrderId\" = w.\"iServiceOrderId\" and service_order.\"iPremiseId\" = w.\"iPremiseId\"";
     //$join_arr[] = " LEFT JOIN workorder_type_mas wt ON w.\"iWOTId\" = wt.\"iWOTId\"";
-    $join_arr[] = " LEFT JOIN site_mas s ON service_order.\"iPremiseId\" = s.\"iSiteId\"";
+    $join_arr[] = " LEFT JOIN site_mas s ON service_order.\"iPremiseId\" = s.\"iPremiseId\"";
     $join_arr[] = " LEFT JOIN site_type_mas st ON s.\"iSTypeId\" = st.\"iSTypeId\"";
     $join_arr[] = " LEFT JOIN premise_circuit pc ON w.\"iWOId\" = pc.\"iWOId\"";
     $join_arr[] = " LEFT JOIN circuit c ON pc.\"iCircuitId\" = c.\"iCircuitId\"";
@@ -952,14 +952,14 @@ if($request_type == "department_dropdown") {
         $response_data = array("Code" => 500, "result" => $rs_data);
     }
 }else if($request_type == "premise_dropdown"){
-    $sql = 'SELECT s."iSiteId", s."vName", st."vTypeName" FROM site_mas s LEFT JOIN site_type_mas st ON st."iSTypeId" = s."iSTypeId" WHERE s."iStatus" = 1 ORDER BY s."vName"';
+    $sql = 'SELECT s."iPremiseId", s."vName", st."vTypeName" FROM site_mas s LEFT JOIN site_type_mas st ON st."iSTypeId" = s."iSTypeId" WHERE s."iStatus" = 1 ORDER BY s."vName"';
     $rs = $sqlObj->GetAll($sql);
 	$site_data = array();
     if($rs){
 		$ni = count($rs);
 		for($i=0; $i<$ni; $i++) {
-			$site_data[$i]['iSiteId'] = $rs[$i]['iSiteId'];
-			$site_data[$i]['vName'] = $rs[$i]['iSiteId']."(".$rs[$i]['vName'].";".$rs[$i]['vTypeName'].")";
+			$site_data[$i]['iPremiseId'] = $rs[$i]['iPremiseId'];
+			$site_data[$i]['vName'] = $rs[$i]['iPremiseId']."(".$rs[$i]['vName'].";".$rs[$i]['vTypeName'].")";
 		}
         $response_data = array("Code" => 200, "result" => $site_data, "total_record" => count($site_data));
     }else{
@@ -969,7 +969,7 @@ if($request_type == "department_dropdown") {
     $iPremiseId = $RES_PARA['iPremiseId'];
     $vPremiseName = '';
     if($iPremiseId > 0){
-        $sql = 'SELECT s."iSiteId", s."vName", st."vTypeName" FROM site_mas s LEFT JOIN site_type_mas st ON st."iSTypeId" = s."iSTypeId" WHERE s."iSiteId" = '.$iPremiseId.' LIMIT 1';
+        $sql = 'SELECT s."iPremiseId", s."vName", st."vTypeName" FROM site_mas s LEFT JOIN site_type_mas st ON st."iSTypeId" = s."iSTypeId" WHERE s."iPremiseId" = '.$iPremiseId.' LIMIT 1';
         $rs = $sqlObj->GetAll($sql);
         //echo "<pre>";print_r($rs);exit;
         

@@ -44,7 +44,7 @@ if($mode == "Update") {
         $where_arr[] = "maintenance_ticket_premise.\"iMaintenanceTicketId\"='".gen_add_slash($iMaintenanceTicketId)."'";
         $join_fieds_arr[] = 's."vName" as "vPremiseName"';
         $join_fieds_arr[] = 'concat(s."vAddress1", \' \', s."vStreet") as "vAddress"';
-        $join_arr[] = 'LEFT JOIN site_mas s on maintenance_ticket_premise."iPremiseId" = s."iSiteId"';
+        $join_arr[] = 'LEFT JOIN site_mas s on maintenance_ticket_premise."iPremiseId" = s."iPremiseId"';
 
         $MaintenanceTicketObj->join_field = $join_fieds_arr;
         $MaintenanceTicketObj->join = $join_arr;

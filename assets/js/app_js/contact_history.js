@@ -27,7 +27,7 @@ function showContactHistory(id,fname,lname){
             if ( site_details_list.length > 0 ) {
                 for (var i=0;i<site_details_list.length;++i)
                 {
-                    html +='<tr><td class="text-center">'+site_details_list[i].iSiteId+'</td><td>'+site_details_list[i].vName+'</td></tr>';
+                    html +='<tr><td class="text-center">'+site_details_list[i].iPremiseId+'</td><td>'+site_details_list[i].vName+'</td></tr>';
                 }
             }
             else

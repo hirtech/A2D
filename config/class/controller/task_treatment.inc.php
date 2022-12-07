@@ -92,7 +92,7 @@ class TaskTreatment {
 	function add_records(){
 		global $sqlObj;
 		if($this->insert_arr){
-			$sql = "INSERT INTO task_treatment (\"iSiteId\", \"iSRId\", \"dDate\", \"vType\", \"dStartDate\",\"dEndDate\", \"iTPId\", \"vArea\", \"vAreaTreated\",\"vAmountApplied\",\"iUId\", \"dAddedDate\",\"iUserId\",\"iTechnicianId\") VALUES (".gen_allow_null_char($this->insert_arr['iSiteId']).", ".gen_allow_null_char($this->insert_arr['iSRId']).", ".gen_allow_null_char($this->insert_arr['dDate']).", ".gen_allow_null_char($this->insert_arr['vType']).", ".gen_allow_null_char($this->insert_arr['dStartDate']).", ".gen_allow_null_char($this->insert_arr['dEndDate']).", ".gen_allow_null_char($this->insert_arr['iTPId']).", ".gen_allow_null_char($this->insert_arr['vArea']).", ".gen_allow_null_char($this->insert_arr['vAreaTreated']).", ".gen_allow_null_char($this->insert_arr['vAmountApplied']).",".gen_allow_null_char($this->insert_arr['iUId']).",".gen_allow_null_char(date_getSystemDateTime()).",".gen_allow_null_int($this->insert_arr['iUserId']).",".gen_allow_null_int($this->insert_arr['iTechnicianId']).")";
+			$sql = "INSERT INTO task_treatment (\"iPremiseId\", \"iSRId\", \"dDate\", \"vType\", \"dStartDate\",\"dEndDate\", \"iTPId\", \"vArea\", \"vAreaTreated\",\"vAmountApplied\",\"iUId\", \"dAddedDate\",\"iUserId\",\"iTechnicianId\") VALUES (".gen_allow_null_char($this->insert_arr['iPremiseId']).", ".gen_allow_null_char($this->insert_arr['iSRId']).", ".gen_allow_null_char($this->insert_arr['dDate']).", ".gen_allow_null_char($this->insert_arr['vType']).", ".gen_allow_null_char($this->insert_arr['dStartDate']).", ".gen_allow_null_char($this->insert_arr['dEndDate']).", ".gen_allow_null_char($this->insert_arr['iTPId']).", ".gen_allow_null_char($this->insert_arr['vArea']).", ".gen_allow_null_char($this->insert_arr['vAreaTreated']).", ".gen_allow_null_char($this->insert_arr['vAmountApplied']).",".gen_allow_null_char($this->insert_arr['iUId']).",".gen_allow_null_char(date_getSystemDateTime()).",".gen_allow_null_int($this->insert_arr['iUserId']).",".gen_allow_null_int($this->insert_arr['iTechnicianId']).")";
 			
 			$sqlObj->Execute($sql);		
 			$iTreatmentId = $sqlObj->Insert_ID();
@@ -113,7 +113,7 @@ class TaskTreatment {
 		global $sqlObj;
 		if($this->update_arr){
 			$rs_db = "UPDATE task_treatment SET 
-			\"iSiteId\"=".gen_allow_null_char($this->update_arr['iSiteId']).", 
+			\"iPremiseId\"=".gen_allow_null_char($this->update_arr['iPremiseId']).", 
 			\"iSRId\"=".gen_allow_null_char($this->update_arr['iSRId']).", 
 			\"dDate\"=".gen_allow_null_char($this->update_arr['dDate']).", 
 			\"vType\"=".gen_allow_null_char($this->update_arr['vType']).", 
