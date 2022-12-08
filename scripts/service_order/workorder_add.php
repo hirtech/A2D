@@ -27,7 +27,7 @@ if($mode == "Update") {
     $join_fieds_arr[] = 'st."vTypeName"';
     $join_fieds_arr[] = 'so."vMasterMSA"';
     $join_fieds_arr[] = 'so."vServiceOrder"';
-    $join_arr[] = 'LEFT JOIN site_mas s ON workorder."iPremiseId" = s."iPremiseId"';
+    $join_arr[] = 'LEFT JOIN premise_mas s ON workorder."iPremiseId" = s."iPremiseId"';
     $join_arr[] = 'LEFT JOIN site_type_mas st on s."iSTypeId" = st."iSTypeId"';
     $join_arr[] = 'LEFT JOIN service_order so ON workorder."iServiceOrderId" = so."iServiceOrderId"';
     $WorkOrderObj->join_field = $join_fieds_arr;

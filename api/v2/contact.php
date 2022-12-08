@@ -309,13 +309,13 @@ else if($request_type == "contact_history"){
     if($id != '') {
         $where_arr[] = 'site_contact."iCId" = '.$id.'';
     }
-    $join_arr[] = 'inner JOIN site_mas on site_mas."iPremiseId" = site_contact."iPremiseId"';
-    $join_fieds_arr[] = "site_mas.\"vName\"";
-    $join_fieds_arr[] = "site_mas.\"iPremiseId\"";
+    $join_arr[] = 'inner JOIN premise_mas on premise_mas."iPremiseId" = site_contact."iPremiseId"';
+    $join_fieds_arr[] = "premise_mas.\"vName\"";
+    $join_fieds_arr[] = "premise_mas.\"iPremiseId\"";
     $ContactObj->join_field = $join_fieds_arr;
     $ContactObj->join = $join_arr;
     $ContactObj->where = $where_arr;
-    $ContactObj->param['order_by'] = 'site_mas."iPremiseId"';
+    $ContactObj->param['order_by'] = 'premise_mas."iPremiseId"';
     $ContactObj->setClause();
     $ContactObj->debug_query = false;
     $rs_contact =  $ContactObj->contact_site_details_list();

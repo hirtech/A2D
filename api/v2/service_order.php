@@ -235,7 +235,7 @@ if($request_type == "service_order_list"){
     $join_fieds_arr[] = 'st3."vServiceType" as "vServiceType3"';
     
     $join_arr = array();
-    $join_arr[] = 'LEFT JOIN site_mas s on service_order."iPremiseId" = s."iPremiseId"';
+    $join_arr[] = 'LEFT JOIN premise_mas s on service_order."iPremiseId" = s."iPremiseId"';
     $join_arr[] = 'LEFT JOIN zipcode_mas on s."iZipcode" = zipcode_mas."iZipcode"';
     if($vSContactName != '') {
         $join_arr[] = 'LEFT JOIN site_contact sc on s."iPremiseId" = sc."iPremiseId"';
@@ -392,7 +392,7 @@ if($request_type == "service_order_list"){
         $where_arr[] = " (service_order.\"iServiceOrderId\" = '".intval($vServiceOrder)."' OR service_order.\"vMasterMSA\" ILIKE '%".trim($vServiceOrder)."%' OR service_order.\"vServiceOrder\" ILIKE '%".trim($vServiceOrder)."%' OR concat(s.\"vAddress1\", ' ', s.\"vStreet\") ILIKE '%".trim($vServiceOrder)."%') ";
     } 
     $join_fieds_arr[] = "concat(s.\"vAddress1\", ' ', s.\"vStreet\") as \"vPremiseAddress\"";
-    $join_arr[] = 'LEFT JOIN site_mas s on s."iPremiseId" = service_order."iPremiseId"';
+    $join_arr[] = 'LEFT JOIN premise_mas s on s."iPremiseId" = service_order."iPremiseId"';
 
     $ServiceOrderObj->join_field = $join_fieds_arr;
     $ServiceOrderObj->join = $join_arr;

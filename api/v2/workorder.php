@@ -202,7 +202,7 @@ if($request_type == "workorder_list"){
     $join_fieds_arr[] = 'wt."vType"';
     $join_fieds_arr[] = "concat(u.\"vFirstName\", ' ', u.\"vLastName\") as \"vRequestor\"";
     $join_fieds_arr[] = "concat(u1.\"vFirstName\", ' ', u1.\"vLastName\") as \"vAssignedTo\"";
-    $join_arr[] = 'LEFT JOIN site_mas s on workorder."iPremiseId" = s."iPremiseId"';
+    $join_arr[] = 'LEFT JOIN premise_mas s on workorder."iPremiseId" = s."iPremiseId"';
     $join_arr[] = 'LEFT JOIN site_type_mas st on s."iSTypeId" = st."iSTypeId"';
     $join_arr[] = 'LEFT JOIN zipcode_mas on s."iZipcode" = zipcode_mas."iZipcode"';
     $join_arr[] = 'LEFT JOIN zone z on s."iZoneId" = z."iZoneId"';
@@ -346,7 +346,7 @@ if($request_type == "workorder_list"){
     $join_fieds_arr[] = 'st."vTypeName"';
     $join_fieds_arr[] = 'wt."vType" as "vWorkorderType"';
     $join_arr[] = 'LEFT JOIN service_order so on workorder."iServiceOrderId" = so."iServiceOrderId"';
-    $join_arr[] = 'LEFT JOIN site_mas s on so."iPremiseId" = s."iPremiseId"';
+    $join_arr[] = 'LEFT JOIN premise_mas s on so."iPremiseId" = s."iPremiseId"';
     $join_arr[] = 'LEFT JOIN site_type_mas st on s."iSTypeId" = st."iSTypeId"';
     $join_arr[] = 'LEFT JOIN workorder_type_mas wt on workorder."iWOTId" = wt."iWOTId"';
     $WorkOrderObj->join_field = $join_fieds_arr;
@@ -429,7 +429,7 @@ if($request_type == "workorder_list"){
             $join_fieds_arr[] = 'sp."iMRCFixed"';
         }
         $join_arr[] = 'LEFT JOIN service_order so on workorder."iServiceOrderId" = so."iServiceOrderId"';
-        $join_arr[] = 'LEFT JOIN site_mas s ON so."iPremiseId" = s."iPremiseId"';
+        $join_arr[] = 'LEFT JOIN premise_mas s ON so."iPremiseId" = s."iPremiseId"';
         $join_arr[] = 'LEFT JOIN zone z ON s."iZoneId" = z."iZoneId"';
         $join_arr[] = 'LEFT JOIN company_mas cm on so."iCarrierID" = cm."iCompanyId"';
         if($iServiceTypeId > 0){

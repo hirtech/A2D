@@ -78,7 +78,7 @@ if($request_type == "event_list"){
             $premise_join_fieds_arr = array();
             $premise_join_fieds_arr[] = 's."vName"';
             $premise_join_arr = array();
-            $premise_join_arr[] = 'LEFT JOIN site_mas s on event_campaign_coverage."iCampaignCoverageId" = s."iPremiseId"';
+            $premise_join_arr[] = 'LEFT JOIN premise_mas s on event_campaign_coverage."iCampaignCoverageId" = s."iPremiseId"';
             $EventObj->join_field = $premise_join_fieds_arr;
             $EventObj->join = $premise_join_arr;
             $EventObj->where = $premise_where_arr;
@@ -271,7 +271,7 @@ if($request_type == "event_list"){
         for($i=0;$i<$ni;$i++){
             $vCampaignCoverage = '';
             if($rs_event[$i]['iCampaignBy'] == 1) { // Premise
-                $sql = "SELECT e.\"iCampaignCoverageId\", s.\"vName\", st.\"vTypeName\" from event_campaign_coverage e, site_mas s LEFT JOIN site_type_mas st ON s.\"iSTypeId\" = st.\"iSTypeId\" where e.\"iCampaignBy\" = 1 and e.\"iCampaignCoverageId\" = s.\"iPremiseId\" and e.\"iEventId\" = '".$rs_event[$i]['iEventId']."' Order BY s.\"iPremiseId\"";
+                $sql = "SELECT e.\"iCampaignCoverageId\", s.\"vName\", st.\"vTypeName\" from event_campaign_coverage e, premise_mas s LEFT JOIN site_type_mas st ON s.\"iSTypeId\" = st.\"iSTypeId\" where e.\"iCampaignBy\" = 1 and e.\"iCampaignCoverageId\" = s.\"iPremiseId\" and e.\"iEventId\" = '".$rs_event[$i]['iEventId']."' Order BY s.\"iPremiseId\"";
                 $rs = $sqlObj->GetAll($sql);
                 //echo $sql;exit;
                 $ci = count($rs);

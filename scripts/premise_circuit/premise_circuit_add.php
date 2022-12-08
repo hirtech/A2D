@@ -37,7 +37,7 @@ if($mode == "Update") {
     $join_arr[] = " LEFT JOIN workorder w ON premise_circuit.\"iWOId\" = w.\"iWOId\"";
     $join_arr[] = " LEFT JOIN workorder_type_mas wt ON w.\"iWOTId\" = wt.\"iWOTId\"";
     $join_arr[] = " LEFT JOIN service_order so ON w.\"iServiceOrderId\" = so.\"iServiceOrderId\"";
-    $join_arr[] = " LEFT JOIN site_mas s ON so.\"iPremiseId\" = s.\"iPremiseId\"";
+    $join_arr[] = " LEFT JOIN premise_mas s ON so.\"iPremiseId\" = s.\"iPremiseId\"";
     $join_arr[] = " LEFT JOIN site_type_mas st ON s.\"iSTypeId\" = st.\"iSTypeId\"";
     $PremiseCircuitObj->join_field = $join_fieds_arr;
     $PremiseCircuitObj->join = $join_arr;

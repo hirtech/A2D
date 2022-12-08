@@ -66,7 +66,7 @@ class Site {
 	
 	function recordset_list() {
 		global $sqlObj;
-		$sql = "SELECT s.* " . $this->join_field_str . " FROM \"site_mas\" s" . $this->join_clause . $this->where_clause . $this->group_by_clause . $this->order_by_clause . $this->limit_clause;
+		$sql = "SELECT s.* " . $this->join_field_str . " FROM \"premise_mas\" s" . $this->join_clause . $this->where_clause . $this->group_by_clause . $this->order_by_clause . $this->limit_clause;
 		//echo $sql;exit();
 		//file_put_contents($site_path."logs/a.txt", $sql);
 		## Function to write query in temp file.
@@ -78,8 +78,8 @@ class Site {
 
 	function recordset_list_for_zone() {
 		global $sqlObj;
-		//$sql = "SELECT DISTINCT ON (s.\"iPremiseId\") s.* " . $this->join_field_str . " FROM \"site_mas\" s" . $this->join_clause . $this->where_clause . $this->group_by_clause . $this->order_by_clause . $this->limit_clause;
-		$sql = "SELECT s.* " . $this->join_field_str . " FROM \"site_mas\" s" . $this->join_clause . $this->where_clause . $this->group_by_clause . $this->order_by_clause . $this->limit_clause;
+		//$sql = "SELECT DISTINCT ON (s.\"iPremiseId\") s.* " . $this->join_field_str . " FROM \"premise_mas\" s" . $this->join_clause . $this->where_clause . $this->group_by_clause . $this->order_by_clause . $this->limit_clause;
+		$sql = "SELECT s.* " . $this->join_field_str . " FROM \"premise_mas\" s" . $this->join_clause . $this->where_clause . $this->group_by_clause . $this->order_by_clause . $this->limit_clause;
 		//file_put_contents($site_path."logs/a.txt", $sql);
 		## Function to write query in temp file.
 		//gen_writeDataInTmpFile($sql);
@@ -119,7 +119,7 @@ class Site {
 				}
 			}
 			else if($this->action=="Delete"){
-				$sql = 'DELETE FROM site_mas WHERE "iPremiseId" IN ('.$this->ids.')';
+				$sql = 'DELETE FROM premise_mas WHERE "iPremiseId" IN ('.$this->ids.')';
 				$sqlObj->Execute($sql);
 			}
 
@@ -139,7 +139,7 @@ class Site {
 	function recordset_total() {
 		global $sqlObj;
 			
-		$sql = "SELECT s.* " . $this->join_field_str . " FROM site_mas s" . $this->join_clause . $this->where_clause . $this->group_by_clause;
+		$sql = "SELECT s.* " . $this->join_field_str . " FROM premise_mas s" . $this->join_clause . $this->where_clause . $this->group_by_clause;
 		//$rs_db = $sqlObj->GetAll($sql);
 		$rs_db = $sqlObj->Execute($sql);
 		if($rs_db === false) $count = 0;
@@ -152,7 +152,7 @@ class Site {
 
 		//echo "<pre>";print_r($_POST);exit;
 		global $sqlObj;
-		$sql = "DELETE FROM site_mas" . $this->join_clause . $this->where_clause . $this->group_by_clause . $this->order_by_clause . $this->limit_clause;
+		$sql = "DELETE FROM premise_mas" . $this->join_clause . $this->where_clause . $this->group_by_clause . $this->order_by_clause . $this->limit_clause;
 		//echo $sql;exit;
 		$sqlObj->Execute($sql);
 		$rs_del =$sqlObj->Affected_Rows();
@@ -172,7 +172,7 @@ class Site {
 	function delete_single_record($iPremiseId) {
         global $sqlObj;
        
-        $sql = "DELETE FROM site_mas WHERE \"iPremiseId\" = ".$iPremiseId;
+        $sql = "DELETE FROM premise_mas WHERE \"iPremiseId\" = ".$iPremiseId;
         $rs_del = $sqlObj->Execute($sql);
 
         $sql = "DELETE FROM site_attribute WHERE \"iPremiseId\" = ".$iPremiseId;
@@ -273,7 +273,7 @@ class Site {
 			echo $vPolyLineLatLong."<br/>";
 			exit;*/
 
-			$sql_ins = 'INSERT INTO site_mas ("vName",  "iSTypeId", "iSSTypeId",  "vAddress1", "vAddress2", "vStreet", "vCrossStreet", "iZipcode", "iGeometryType", "iZoneId", "vLatitude", "vLongitude", "vNewLatitude", "vNewLongitude", "vPointLatLong", "vPolygonLatLong", "vPolyLineLatLong", "dAddedDate", "iStatus", "vLoginUserName", "iStateId", "iCountyId", "iCityId") VALUES ('.gen_allow_null_char($this->insert_arr['vName']).', '.gen_allow_null_int($this->insert_arr['iSTypeId']).', '.gen_allow_null_int($this->insert_arr['iSSTypeId']).', '.gen_allow_null_char($this->insert_arr['vAddress1']).', '.gen_allow_null_char($this->insert_arr['vAddress2']).', '.gen_allow_null_char($this->insert_arr['vStreet']).', '.gen_allow_null_char($this->insert_arr['vCrossStreet']).', '.gen_allow_null_int($this->insert_arr['iZipcode']).', '.gen_allow_null_int($this->insert_arr['iGeometryType']).', '.gen_allow_null_int($this->insert_arr['iZoneId']).', '.gen_allow_null_char($vLatitude).', '.gen_allow_null_char($vLongitude).', '.gen_allow_null_char($vNewLatitude).', '.gen_allow_null_char($vNewLongitude).', '.$vPointLatLong.', '.$vPolygonLatLong.', '.$vPolyLineLatLong.', '.gen_allow_null_char(date_getSystemDateTime()).', '.gen_allow_null_int($this->insert_arr['iStatus']).', '.gen_allow_null_char($this->insert_arr['vLoginUserName']).', '.gen_allow_null_char($this->insert_arr['iStateId']).', '.gen_allow_null_char($this->insert_arr['iCountyId']).', '.gen_allow_null_char($this->insert_arr['iCityId']).')';
+			$sql_ins = 'INSERT INTO premise_mas ("vName",  "iSTypeId", "iSSTypeId",  "vAddress1", "vAddress2", "vStreet", "vCrossStreet", "iZipcode", "iGeometryType", "iZoneId", "vLatitude", "vLongitude", "vNewLatitude", "vNewLongitude", "vPointLatLong", "vPolygonLatLong", "vPolyLineLatLong", "dAddedDate", "iStatus", "vLoginUserName", "iStateId", "iCountyId", "iCityId") VALUES ('.gen_allow_null_char($this->insert_arr['vName']).', '.gen_allow_null_int($this->insert_arr['iSTypeId']).', '.gen_allow_null_int($this->insert_arr['iSSTypeId']).', '.gen_allow_null_char($this->insert_arr['vAddress1']).', '.gen_allow_null_char($this->insert_arr['vAddress2']).', '.gen_allow_null_char($this->insert_arr['vStreet']).', '.gen_allow_null_char($this->insert_arr['vCrossStreet']).', '.gen_allow_null_int($this->insert_arr['iZipcode']).', '.gen_allow_null_int($this->insert_arr['iGeometryType']).', '.gen_allow_null_int($this->insert_arr['iZoneId']).', '.gen_allow_null_char($vLatitude).', '.gen_allow_null_char($vLongitude).', '.gen_allow_null_char($vNewLatitude).', '.gen_allow_null_char($vNewLongitude).', '.$vPointLatLong.', '.$vPolygonLatLong.', '.$vPolyLineLatLong.', '.gen_allow_null_char(date_getSystemDateTime()).', '.gen_allow_null_int($this->insert_arr['iStatus']).', '.gen_allow_null_char($this->insert_arr['vLoginUserName']).', '.gen_allow_null_char($this->insert_arr['iStateId']).', '.gen_allow_null_char($this->insert_arr['iCountyId']).', '.gen_allow_null_char($this->insert_arr['iCityId']).')';
 		    //echo $sql_ins;exit();
 			$sqlObj->Execute($sql_ins);
 			$iPremiseId = $sqlObj->Insert_ID();
@@ -383,7 +383,7 @@ class Site {
 			// echo $vPolygonLatLong."<br/>";
 			// echo $vPolyLineLatLong."<br/>";
 			//exit;
-			$sql_updt = 'UPDATE site_mas set "vName" = '.gen_allow_null_char($this->update_arr['vName']).', "iSTypeId" = '.gen_allow_null_int($this->update_arr['iSTypeId']).', "iSSTypeId" = '.gen_allow_null_int($this->update_arr['iSSTypeId']).', "vAddress1" = '.gen_allow_null_char($this->update_arr['vAddress1']).', "vAddress2" = '.gen_allow_null_char($this->update_arr['vAddress2']).', "vStreet" = '.gen_allow_null_char($this->update_arr['vStreet']).', "vCrossStreet" = '.gen_allow_null_char($this->update_arr['vCrossStreet']).', "iZipcode" = '.gen_allow_null_int($this->update_arr['iZipcode']).', "iGeometryType" = '.gen_allow_null_int($this->update_arr['iGeometryType']).', "iZoneId" = '.gen_allow_null_int($this->update_arr['iZoneId']).', "vLatitude" = '.gen_allow_null_char($vLatitude).', "vLongitude" = '.gen_allow_null_char($vLongitude).', "vNewLatitude" = '.gen_allow_null_char($vNewLatitude).', "vNewLongitude" = '.gen_allow_null_char($vNewLongitude).', "vPointLatLong" = '.$vPointLatLong.', "vPolygonLatLong" = '.$vPolygonLatLong.', "vPolyLineLatLong" = '.$vPolyLineLatLong.', "dModifiedDate" = '.gen_allow_null_char(date_getSystemDateTime()).', "iStatus" = '.gen_allow_null_int($this->update_arr['iStatus']).', "iStateId" = '.gen_allow_null_char($this->update_arr['iStateId']).', "iCountyId" = '.gen_allow_null_char($this->update_arr['iCountyId']).', "iCityId" = '.gen_allow_null_char($this->update_arr['iCityId']).' WHERE "iPremiseId" = '.$this->update_arr['iPremiseId'].'';
+			$sql_updt = 'UPDATE premise_mas set "vName" = '.gen_allow_null_char($this->update_arr['vName']).', "iSTypeId" = '.gen_allow_null_int($this->update_arr['iSTypeId']).', "iSSTypeId" = '.gen_allow_null_int($this->update_arr['iSSTypeId']).', "vAddress1" = '.gen_allow_null_char($this->update_arr['vAddress1']).', "vAddress2" = '.gen_allow_null_char($this->update_arr['vAddress2']).', "vStreet" = '.gen_allow_null_char($this->update_arr['vStreet']).', "vCrossStreet" = '.gen_allow_null_char($this->update_arr['vCrossStreet']).', "iZipcode" = '.gen_allow_null_int($this->update_arr['iZipcode']).', "iGeometryType" = '.gen_allow_null_int($this->update_arr['iGeometryType']).', "iZoneId" = '.gen_allow_null_int($this->update_arr['iZoneId']).', "vLatitude" = '.gen_allow_null_char($vLatitude).', "vLongitude" = '.gen_allow_null_char($vLongitude).', "vNewLatitude" = '.gen_allow_null_char($vNewLatitude).', "vNewLongitude" = '.gen_allow_null_char($vNewLongitude).', "vPointLatLong" = '.$vPointLatLong.', "vPolygonLatLong" = '.$vPolygonLatLong.', "vPolyLineLatLong" = '.$vPolyLineLatLong.', "dModifiedDate" = '.gen_allow_null_char(date_getSystemDateTime()).', "iStatus" = '.gen_allow_null_int($this->update_arr['iStatus']).', "iStateId" = '.gen_allow_null_char($this->update_arr['iStateId']).', "iCountyId" = '.gen_allow_null_char($this->update_arr['iCountyId']).', "iCityId" = '.gen_allow_null_char($this->update_arr['iCityId']).' WHERE "iPremiseId" = '.$this->update_arr['iPremiseId'].'';
 			//echo $sql_updt;exit();
 			$rs_up = $sqlObj->Execute($sql_updt);
 
@@ -637,7 +637,7 @@ class Site {
 							$iGeometryType = 1;
 							$iStatus = 1;
 							
-							$sql_ins = 'INSERT INTO site_mas ("vName",  "iSTypeId", "iSSTypeId",  "vAddress1", "vAddress2", "vStreet", "vCrossStreet", "iZipcode", "iGeometryType", "iZoneId", "vLatitude", "vLongitude", "vPointLatLong", "dAddedDate",  "vLoginUserName", "iStatus","iStateId", "iCountyId", "iCityId") VALUES ('.gen_allow_null_char($vName).', '.gen_allow_null_int($iSTypeId).', '.gen_allow_null_int($iSSTypeId).', '.gen_allow_null_char($vAddress1).', '.gen_allow_null_char($vAddress2).', '.gen_allow_null_char($vStreet).', '.gen_allow_null_char($vCrossStreet).', '.gen_allow_null_int($iZipcode).', '.gen_allow_null_int($iGeometryType).', '.gen_allow_null_int($iZoneId).', '.gen_allow_null_char($vLatitude).', '.gen_allow_null_char($vLongitude).', ST_GEOMFROMTEXT(\'POINT('.$vLongitude.' '.$vLatitude .')\', 4326), '.gen_allow_null_char(date_getSystemDateTime()).', '.gen_allow_null_char($vLoginUserName).', '.gen_allow_null_int($iStatus).', '.gen_allow_null_int($iStateId).', '.gen_allow_null_int($iCountyId).', '.gen_allow_null_int($iCityId).')';
+							$sql_ins = 'INSERT INTO premise_mas ("vName",  "iSTypeId", "iSSTypeId",  "vAddress1", "vAddress2", "vStreet", "vCrossStreet", "iZipcode", "iGeometryType", "iZoneId", "vLatitude", "vLongitude", "vPointLatLong", "dAddedDate",  "vLoginUserName", "iStatus","iStateId", "iCountyId", "iCityId") VALUES ('.gen_allow_null_char($vName).', '.gen_allow_null_int($iSTypeId).', '.gen_allow_null_int($iSSTypeId).', '.gen_allow_null_char($vAddress1).', '.gen_allow_null_char($vAddress2).', '.gen_allow_null_char($vStreet).', '.gen_allow_null_char($vCrossStreet).', '.gen_allow_null_int($iZipcode).', '.gen_allow_null_int($iGeometryType).', '.gen_allow_null_int($iZoneId).', '.gen_allow_null_char($vLatitude).', '.gen_allow_null_char($vLongitude).', ST_GEOMFROMTEXT(\'POINT('.$vLongitude.' '.$vLatitude .')\', 4326), '.gen_allow_null_char(date_getSystemDateTime()).', '.gen_allow_null_char($vLoginUserName).', '.gen_allow_null_int($iStatus).', '.gen_allow_null_int($iStateId).', '.gen_allow_null_int($iCountyId).', '.gen_allow_null_int($iCityId).')';
 						    //echo $sql_ins."\n";
 							$rs_site = $sqlObj->Execute($sql_ins);
 							if($rs_site){
@@ -790,7 +790,7 @@ class Site {
 		global $sqlObj;
 		$arr = array();
 		//get traetment data
-		$sql = "SELECT task_treatment.*, 'Treatment' AS \"Type\" , s.\"vName\" as  \"vSiteName\" ,sr_details.\"iSRId\" ,sr_details.\"iCId\" , concat(contact_mas.\"vFirstName\",' ', contact_mas.\"vLastName\") as \"vContactName\" ,concat(user_mas.\"vFirstName\",' ', user_mas.\"vLastName\") as \"UserName\" FROM task_treatment LEFT JOIN site_mas s on s.\"iPremiseId\" = task_treatment.\"iPremiseId\" LEFT JOIN sr_details on sr_details.\"iSRId\" = task_treatment.\"iSRId\" LEFT JOIN contact_mas on contact_mas.\"iCId\" = sr_details.\"iCId\" LEFT JOIN user_mas on user_mas.\"iUserId\" = task_treatment.\"iUserId\" WHERE task_treatment.\"dDate\" >= (NOW() - INTERVAL '24 hours' )  Order by task_treatment.\"dDate\" ";
+		$sql = "SELECT task_treatment.*, 'Treatment' AS \"Type\" , s.\"vName\" as  \"vSiteName\" ,sr_details.\"iSRId\" ,sr_details.\"iCId\" , concat(contact_mas.\"vFirstName\",' ', contact_mas.\"vLastName\") as \"vContactName\" ,concat(user_mas.\"vFirstName\",' ', user_mas.\"vLastName\") as \"UserName\" FROM task_treatment LEFT JOIN premise_mas s on s.\"iPremiseId\" = task_treatment.\"iPremiseId\" LEFT JOIN sr_details on sr_details.\"iSRId\" = task_treatment.\"iSRId\" LEFT JOIN contact_mas on contact_mas.\"iCId\" = sr_details.\"iCId\" LEFT JOIN user_mas on user_mas.\"iUserId\" = task_treatment.\"iUserId\" WHERE task_treatment.\"dDate\" >= (NOW() - INTERVAL '24 hours' )  Order by task_treatment.\"dDate\" ";
 		//echo $sql;exit();
 		$rs_st = $sqlObj->GetAll($sql);
 		$ni = count($rs_st);
@@ -802,7 +802,7 @@ class Site {
 		}
 
 		//get landing rate data
-		$sql = "SELECT task_landing_rate.*, 'Landing Rate' AS \"Type\" ,s.\"vName\",sr_details.\"iSRId\", sr_details.\"iCId\",concat(contact_mas.\"vFirstName\",' ', contact_mas.\"vLastName\") as \"vContactName\" ,concat(user_mas.\"vFirstName\",' ', user_mas.\"vLastName\") as \"UserName\"  FROM task_landing_rate LEFT JOIN site_mas s on s.\"iPremiseId\" = task_landing_rate.\"iPremiseId\" LEFT JOIN sr_details on sr_details.\"iSRId\" = task_landing_rate.\"iSRId\" LEFT JOIN contact_mas on contact_mas.\"iCId\" = sr_details.\"iCId\" LEFT JOIN user_mas on user_mas.\"iUserId\" = task_landing_rate.\"iUserId\" WHERE task_landing_rate.\"dDate\" >= (NOW() - INTERVAL '24 hours' )  Order by task_landing_rate.\"dDate\" ";
+		$sql = "SELECT task_landing_rate.*, 'Landing Rate' AS \"Type\" ,s.\"vName\",sr_details.\"iSRId\", sr_details.\"iCId\",concat(contact_mas.\"vFirstName\",' ', contact_mas.\"vLastName\") as \"vContactName\" ,concat(user_mas.\"vFirstName\",' ', user_mas.\"vLastName\") as \"UserName\"  FROM task_landing_rate LEFT JOIN premise_mas s on s.\"iPremiseId\" = task_landing_rate.\"iPremiseId\" LEFT JOIN sr_details on sr_details.\"iSRId\" = task_landing_rate.\"iSRId\" LEFT JOIN contact_mas on contact_mas.\"iCId\" = sr_details.\"iCId\" LEFT JOIN user_mas on user_mas.\"iUserId\" = task_landing_rate.\"iUserId\" WHERE task_landing_rate.\"dDate\" >= (NOW() - INTERVAL '24 hours' )  Order by task_landing_rate.\"dDate\" ";
 		$rs_st = $sqlObj->GetAll($sql);
 		$ni = count($rs_st);
 		if($ni > 0){
@@ -813,7 +813,7 @@ class Site {
 		}
 
 		//get trap data
-		 $sql = "SELECT task_trap.*, 'Task Trap' AS \"Type\" , s.\"vName\" as  \"vSiteName\" ,sr_details.\"iSRId\" ,sr_details.\"iCId\" , concat(contact_mas.\"vFirstName\",' ', contact_mas.\"vLastName\") as \"vContactName\" ,concat(user_mas.\"vFirstName\",' ', user_mas.\"vLastName\") as \"UserName\"  FROM task_trap LEFT JOIN site_mas s on s.\"iPremiseId\" = task_trap.\"iPremiseId\" LEFT JOIN sr_details on sr_details.\"iSRId\" = task_trap.\"iSRId\" LEFT JOIN contact_mas on contact_mas.\"iCId\" = sr_details.\"iCId\" LEFT JOIN user_mas on user_mas.\"iUserId\" = task_trap.\"iUserId\"  WHERE task_trap.\"dTrapPlaced\" >= (NOW() - INTERVAL '24 hours' ) order by task_trap.\"dTrapPlaced\" desc ";
+		 $sql = "SELECT task_trap.*, 'Task Trap' AS \"Type\" , s.\"vName\" as  \"vSiteName\" ,sr_details.\"iSRId\" ,sr_details.\"iCId\" , concat(contact_mas.\"vFirstName\",' ', contact_mas.\"vLastName\") as \"vContactName\" ,concat(user_mas.\"vFirstName\",' ', user_mas.\"vLastName\") as \"UserName\"  FROM task_trap LEFT JOIN premise_mas s on s.\"iPremiseId\" = task_trap.\"iPremiseId\" LEFT JOIN sr_details on sr_details.\"iSRId\" = task_trap.\"iSRId\" LEFT JOIN contact_mas on contact_mas.\"iCId\" = sr_details.\"iCId\" LEFT JOIN user_mas on user_mas.\"iUserId\" = task_trap.\"iUserId\"  WHERE task_trap.\"dTrapPlaced\" >= (NOW() - INTERVAL '24 hours' ) order by task_trap.\"dTrapPlaced\" desc ";
 		// echo $sql;exit();
 		$rs_st = $sqlObj->GetAll($sql);
 		$ni = count($rs_st);
@@ -825,7 +825,7 @@ class Site {
 		}
 
 		//get larval surveillance data
-		$sql = "SELECT task_larval_surveillance.*, 'Laravel Surveillance' AS \"Type\" , s.\"vName\" as  \"vSiteName\" ,sr_details.\"iSRId\" ,sr_details.\"iCId\" , concat(contact_mas.\"vFirstName\",' ', contact_mas.\"vLastName\") as \"vContactName\" ,concat(user_mas.\"vFirstName\",' ', user_mas.\"vLastName\") as \"UserName\"  FROM task_larval_surveillance LEFT JOIN site_mas s on s.\"iPremiseId\" = task_larval_surveillance.\"iPremiseId\"  LEFT JOIN sr_details on sr_details.\"iSRId\" = task_larval_surveillance.\"iSRId\" LEFT JOIN contact_mas on contact_mas.\"iCId\" = sr_details.\"iCId\" LEFT JOIN user_mas on user_mas.\"iUserId\" = task_larval_surveillance.\"iUserId\" WHERE task_larval_surveillance.\"dDate\" >= (NOW() - INTERVAL '24 hours' )   Order by task_larval_surveillance.\"dDate\" ";
+		$sql = "SELECT task_larval_surveillance.*, 'Laravel Surveillance' AS \"Type\" , s.\"vName\" as  \"vSiteName\" ,sr_details.\"iSRId\" ,sr_details.\"iCId\" , concat(contact_mas.\"vFirstName\",' ', contact_mas.\"vLastName\") as \"vContactName\" ,concat(user_mas.\"vFirstName\",' ', user_mas.\"vLastName\") as \"UserName\"  FROM task_larval_surveillance LEFT JOIN premise_mas s on s.\"iPremiseId\" = task_larval_surveillance.\"iPremiseId\"  LEFT JOIN sr_details on sr_details.\"iSRId\" = task_larval_surveillance.\"iSRId\" LEFT JOIN contact_mas on contact_mas.\"iCId\" = sr_details.\"iCId\" LEFT JOIN user_mas on user_mas.\"iUserId\" = task_larval_surveillance.\"iUserId\" WHERE task_larval_surveillance.\"dDate\" >= (NOW() - INTERVAL '24 hours' )   Order by task_larval_surveillance.\"dDate\" ";
 		$rs_st = $sqlObj->GetAll($sql);
 		$ni = count($rs_st);
 		if($ni > 0){
@@ -836,7 +836,7 @@ class Site {
 		}
 
 		//get task other data
-		$sql = "SELECT task_other.*, 'Other' AS \"Type\", s.\"vName\" as  \"vSiteName\" ,sr_details.\"iSRId\" ,sr_details.\"iCId\" , concat(contact_mas.\"vFirstName\",' ', contact_mas.\"vLastName\") as \"vContactName\" ,concat(user_mas.\"vFirstName\",' ', user_mas.\"vLastName\") as \"UserName\"  FROM task_other LEFT JOIN site_mas s on s.\"iPremiseId\" = task_other.\"iPremiseId\" LEFT JOIN sr_details on sr_details.\"iSRId\" = task_other.\"iSRId\" LEFT JOIN contact_mas on contact_mas.\"iCId\" = sr_details.\"iCId\" LEFT JOIN user_mas on user_mas.\"iUserId\" = task_other.\"iUserId\" WHERE task_other.\"dDate\" >= (NOW() - INTERVAL '24 hours' ) Order by task_other.\"dDate\" ";
+		$sql = "SELECT task_other.*, 'Other' AS \"Type\", s.\"vName\" as  \"vSiteName\" ,sr_details.\"iSRId\" ,sr_details.\"iCId\" , concat(contact_mas.\"vFirstName\",' ', contact_mas.\"vLastName\") as \"vContactName\" ,concat(user_mas.\"vFirstName\",' ', user_mas.\"vLastName\") as \"UserName\"  FROM task_other LEFT JOIN premise_mas s on s.\"iPremiseId\" = task_other.\"iPremiseId\" LEFT JOIN sr_details on sr_details.\"iSRId\" = task_other.\"iSRId\" LEFT JOIN contact_mas on contact_mas.\"iCId\" = sr_details.\"iCId\" LEFT JOIN user_mas on user_mas.\"iUserId\" = task_other.\"iUserId\" WHERE task_other.\"dDate\" >= (NOW() - INTERVAL '24 hours' ) Order by task_other.\"dDate\" ";
 		$rs_st = $sqlObj->GetAll($sql);
 		$ni = count($rs_st);
 		if($ni > 0){
@@ -872,7 +872,7 @@ class Site {
 		global $sqlObj;
 		$arr = array();
 		//get traetment data
-		$sql = "SELECT task_treatment.*, 'Treatment' AS \"Type\" , s.\"vName\" as  \"vSiteName\" ,sr_details.\"iSRId\" ,sr_details.\"iCId\" , concat(contact_mas.\"vFirstName\",' ', contact_mas.\"vLastName\") as \"vContactName\" ,concat(user_mas.\"vFirstName\",' ', user_mas.\"vLastName\") as \"UserName\" FROM task_treatment LEFT JOIN site_mas s on s.\"iPremiseId\" = task_treatment.\"iPremiseId\" LEFT JOIN sr_details on sr_details.\"iSRId\" = task_treatment.\"iSRId\" LEFT JOIN contact_mas on contact_mas.\"iCId\" = sr_details.\"iCId\" LEFT JOIN user_mas on user_mas.\"iUserId\" = task_treatment.\"iUserId\" WHERE task_treatment.\"dAddedDate\" >= (NOW() - INTERVAL '8 hours' )  Order by task_treatment.\"dAddedDate\" ";
+		$sql = "SELECT task_treatment.*, 'Treatment' AS \"Type\" , s.\"vName\" as  \"vSiteName\" ,sr_details.\"iSRId\" ,sr_details.\"iCId\" , concat(contact_mas.\"vFirstName\",' ', contact_mas.\"vLastName\") as \"vContactName\" ,concat(user_mas.\"vFirstName\",' ', user_mas.\"vLastName\") as \"UserName\" FROM task_treatment LEFT JOIN premise_mas s on s.\"iPremiseId\" = task_treatment.\"iPremiseId\" LEFT JOIN sr_details on sr_details.\"iSRId\" = task_treatment.\"iSRId\" LEFT JOIN contact_mas on contact_mas.\"iCId\" = sr_details.\"iCId\" LEFT JOIN user_mas on user_mas.\"iUserId\" = task_treatment.\"iUserId\" WHERE task_treatment.\"dAddedDate\" >= (NOW() - INTERVAL '8 hours' )  Order by task_treatment.\"dAddedDate\" ";
 		//echo $sql;exit();
 		$rs_st = $sqlObj->GetAll($sql);
 		$ni = count($rs_st);
@@ -884,7 +884,7 @@ class Site {
 		}
 
 		//get landing rate data
-		$sql = "SELECT task_landing_rate.*, 'Landing Rate' AS \"Type\" ,s.\"vName\",sr_details.\"iSRId\", sr_details.\"iCId\",concat(contact_mas.\"vFirstName\",' ', contact_mas.\"vLastName\") as \"vContactName\" ,concat(user_mas.\"vFirstName\",' ', user_mas.\"vLastName\") as \"UserName\"  FROM task_landing_rate LEFT JOIN site_mas s on s.\"iPremiseId\" = task_landing_rate.\"iPremiseId\" LEFT JOIN sr_details on sr_details.\"iSRId\" = task_landing_rate.\"iSRId\" LEFT JOIN contact_mas on contact_mas.\"iCId\" = sr_details.\"iCId\" LEFT JOIN user_mas on user_mas.\"iUserId\" = task_landing_rate.\"iUserId\" WHERE task_landing_rate.\"dAddedDate\" >= (NOW() - INTERVAL '8 hours' )  Order by task_landing_rate.\"dAddedDate\" ";
+		$sql = "SELECT task_landing_rate.*, 'Landing Rate' AS \"Type\" ,s.\"vName\",sr_details.\"iSRId\", sr_details.\"iCId\",concat(contact_mas.\"vFirstName\",' ', contact_mas.\"vLastName\") as \"vContactName\" ,concat(user_mas.\"vFirstName\",' ', user_mas.\"vLastName\") as \"UserName\"  FROM task_landing_rate LEFT JOIN premise_mas s on s.\"iPremiseId\" = task_landing_rate.\"iPremiseId\" LEFT JOIN sr_details on sr_details.\"iSRId\" = task_landing_rate.\"iSRId\" LEFT JOIN contact_mas on contact_mas.\"iCId\" = sr_details.\"iCId\" LEFT JOIN user_mas on user_mas.\"iUserId\" = task_landing_rate.\"iUserId\" WHERE task_landing_rate.\"dAddedDate\" >= (NOW() - INTERVAL '8 hours' )  Order by task_landing_rate.\"dAddedDate\" ";
 		$rs_st = $sqlObj->GetAll($sql);
 		$ni = count($rs_st);
 		if($ni > 0){
@@ -895,7 +895,7 @@ class Site {
 		}
 
 		/*//get trap data
-		 $sql = "SELECT task_trap.*, 'Task Trap' AS \"Type\" , s.\"vName\" as  \"vSiteName\" ,sr_details.\"iSRId\" ,sr_details.\"iCId\" , concat(contact_mas.\"vFirstName\",' ', contact_mas.\"vLastName\") as \"vContactName\" ,concat(user_mas.\"vFirstName\",' ', user_mas.\"vLastName\") as \"UserName\"  FROM task_trap LEFT JOIN site_mas s on s.\"iPremiseId\" = task_trap.\"iPremiseId\" LEFT JOIN sr_details on sr_details.\"iSRId\" = task_trap.\"iSRId\" LEFT JOIN contact_mas on contact_mas.\"iCId\" = sr_details.\"iCId\" LEFT JOIN user_mas on user_mas.\"iUserId\" = task_trap.\"iUserId\"  WHERE task_trap.\"dAddedDate\" >= (NOW() - INTERVAL '8 hours' ) order by task_trap.\"dAddedDate\" desc ";
+		 $sql = "SELECT task_trap.*, 'Task Trap' AS \"Type\" , s.\"vName\" as  \"vSiteName\" ,sr_details.\"iSRId\" ,sr_details.\"iCId\" , concat(contact_mas.\"vFirstName\",' ', contact_mas.\"vLastName\") as \"vContactName\" ,concat(user_mas.\"vFirstName\",' ', user_mas.\"vLastName\") as \"UserName\"  FROM task_trap LEFT JOIN premise_mas s on s.\"iPremiseId\" = task_trap.\"iPremiseId\" LEFT JOIN sr_details on sr_details.\"iSRId\" = task_trap.\"iSRId\" LEFT JOIN contact_mas on contact_mas.\"iCId\" = sr_details.\"iCId\" LEFT JOIN user_mas on user_mas.\"iUserId\" = task_trap.\"iUserId\"  WHERE task_trap.\"dAddedDate\" >= (NOW() - INTERVAL '8 hours' ) order by task_trap.\"dAddedDate\" desc ";
 		// echo $sql;exit();
 		$rs_st = $sqlObj->GetAll($sql);
 		$ni = count($rs_st);
@@ -907,7 +907,7 @@ class Site {
 		}*/
 
 		//get trap placed data
-		 $sql = "SELECT task_trap.*, 'Task Trap Placed' AS \"Type\" , s.\"vName\" as  \"vSiteName\" ,sr_details.\"iSRId\" ,sr_details.\"iCId\" , concat(contact_mas.\"vFirstName\",' ', contact_mas.\"vLastName\") as \"vContactName\" ,concat(user_mas.\"vFirstName\",' ', user_mas.\"vLastName\") as \"UserName\"  FROM task_trap LEFT JOIN site_mas s on s.\"iPremiseId\" = task_trap.\"iPremiseId\" LEFT JOIN sr_details on sr_details.\"iSRId\" = task_trap.\"iSRId\" LEFT JOIN contact_mas on contact_mas.\"iCId\" = sr_details.\"iCId\" LEFT JOIN user_mas on user_mas.\"iUserId\" = task_trap.\"iUserId\"  WHERE task_trap.\"dTrapPlaced\" = NOW()::Date order by task_trap.\"dAddedDate\" desc ";
+		 $sql = "SELECT task_trap.*, 'Task Trap Placed' AS \"Type\" , s.\"vName\" as  \"vSiteName\" ,sr_details.\"iSRId\" ,sr_details.\"iCId\" , concat(contact_mas.\"vFirstName\",' ', contact_mas.\"vLastName\") as \"vContactName\" ,concat(user_mas.\"vFirstName\",' ', user_mas.\"vLastName\") as \"UserName\"  FROM task_trap LEFT JOIN premise_mas s on s.\"iPremiseId\" = task_trap.\"iPremiseId\" LEFT JOIN sr_details on sr_details.\"iSRId\" = task_trap.\"iSRId\" LEFT JOIN contact_mas on contact_mas.\"iCId\" = sr_details.\"iCId\" LEFT JOIN user_mas on user_mas.\"iUserId\" = task_trap.\"iUserId\"  WHERE task_trap.\"dTrapPlaced\" = NOW()::Date order by task_trap.\"dAddedDate\" desc ";
 		// echo $sql;exit();
 		$rs_st = $sqlObj->GetAll($sql);
 		$ni = count($rs_st);
@@ -918,7 +918,7 @@ class Site {
 			}
 		}
 		//get trap Colected  data
-		 $sql = "SELECT task_trap.*, 'Task Trap Colected' AS \"Type\" , s.\"vName\" as  \"vSiteName\" ,sr_details.\"iSRId\" ,sr_details.\"iCId\" , concat(contact_mas.\"vFirstName\",' ', contact_mas.\"vLastName\") as \"vContactName\" ,concat(user_mas.\"vFirstName\",' ', user_mas.\"vLastName\") as \"UserName\"  FROM task_trap LEFT JOIN site_mas s on s.\"iPremiseId\" = task_trap.\"iPremiseId\" LEFT JOIN sr_details on sr_details.\"iSRId\" = task_trap.\"iSRId\" LEFT JOIN contact_mas on contact_mas.\"iCId\" = sr_details.\"iCId\" LEFT JOIN user_mas on user_mas.\"iUserId\" = task_trap.\"iUserId\"  WHERE task_trap.\"dTrapCollected\" = NOW()::Date order by task_trap.\"dAddedDate\" desc ";
+		 $sql = "SELECT task_trap.*, 'Task Trap Colected' AS \"Type\" , s.\"vName\" as  \"vSiteName\" ,sr_details.\"iSRId\" ,sr_details.\"iCId\" , concat(contact_mas.\"vFirstName\",' ', contact_mas.\"vLastName\") as \"vContactName\" ,concat(user_mas.\"vFirstName\",' ', user_mas.\"vLastName\") as \"UserName\"  FROM task_trap LEFT JOIN premise_mas s on s.\"iPremiseId\" = task_trap.\"iPremiseId\" LEFT JOIN sr_details on sr_details.\"iSRId\" = task_trap.\"iSRId\" LEFT JOIN contact_mas on contact_mas.\"iCId\" = sr_details.\"iCId\" LEFT JOIN user_mas on user_mas.\"iUserId\" = task_trap.\"iUserId\"  WHERE task_trap.\"dTrapCollected\" = NOW()::Date order by task_trap.\"dAddedDate\" desc ";
 			// echo $sql;exit();
 			$rs_st = $sqlObj->GetAll($sql);
 			$ni = count($rs_st);
@@ -930,7 +930,7 @@ class Site {
 			}
 
 		//get larval surveillance data
-		$sql = "SELECT task_larval_surveillance.*, 'Laravel Surveillance' AS \"Type\" , s.\"vName\" as  \"vSiteName\" ,sr_details.\"iSRId\" ,sr_details.\"iCId\" , concat(contact_mas.\"vFirstName\",' ', contact_mas.\"vLastName\") as \"vContactName\" ,concat(user_mas.\"vFirstName\",' ', user_mas.\"vLastName\") as \"UserName\"  FROM task_larval_surveillance LEFT JOIN site_mas s on s.\"iPremiseId\" = task_larval_surveillance.\"iPremiseId\"  LEFT JOIN sr_details on sr_details.\"iSRId\" = task_larval_surveillance.\"iSRId\" LEFT JOIN contact_mas on contact_mas.\"iCId\" = sr_details.\"iCId\" LEFT JOIN user_mas on user_mas.\"iUserId\" = task_larval_surveillance.\"iUserId\" WHERE task_larval_surveillance.\"dAddedDate\" >= (NOW() - INTERVAL '8 hours' )   Order by task_larval_surveillance.\"dAddedDate\" ";
+		$sql = "SELECT task_larval_surveillance.*, 'Laravel Surveillance' AS \"Type\" , s.\"vName\" as  \"vSiteName\" ,sr_details.\"iSRId\" ,sr_details.\"iCId\" , concat(contact_mas.\"vFirstName\",' ', contact_mas.\"vLastName\") as \"vContactName\" ,concat(user_mas.\"vFirstName\",' ', user_mas.\"vLastName\") as \"UserName\"  FROM task_larval_surveillance LEFT JOIN premise_mas s on s.\"iPremiseId\" = task_larval_surveillance.\"iPremiseId\"  LEFT JOIN sr_details on sr_details.\"iSRId\" = task_larval_surveillance.\"iSRId\" LEFT JOIN contact_mas on contact_mas.\"iCId\" = sr_details.\"iCId\" LEFT JOIN user_mas on user_mas.\"iUserId\" = task_larval_surveillance.\"iUserId\" WHERE task_larval_surveillance.\"dAddedDate\" >= (NOW() - INTERVAL '8 hours' )   Order by task_larval_surveillance.\"dAddedDate\" ";
 		$rs_st = $sqlObj->GetAll($sql);
 		$ni = count($rs_st);
 		if($ni > 0){
@@ -941,7 +941,7 @@ class Site {
 		}
 
 		//get task other data
-		$sql = "SELECT task_other.*, 'Other' AS \"Type\", s.\"vName\" as  \"vSiteName\" ,sr_details.\"iSRId\" ,sr_details.\"iCId\" , concat(contact_mas.\"vFirstName\",' ', contact_mas.\"vLastName\") as \"vContactName\" ,concat(user_mas.\"vFirstName\",' ', user_mas.\"vLastName\") as \"UserName\"  FROM task_other LEFT JOIN site_mas s on s.\"iPremiseId\" = task_other.\"iPremiseId\" LEFT JOIN sr_details on sr_details.\"iSRId\" = task_other.\"iSRId\" LEFT JOIN contact_mas on contact_mas.\"iCId\" = sr_details.\"iCId\" LEFT JOIN user_mas on user_mas.\"iUserId\" = task_other.\"iUserId\" WHERE task_other.\"dAddedDate\" >= (NOW() - INTERVAL '8 hours' ) Order by task_other.\"dAddedDate\" ";
+		$sql = "SELECT task_other.*, 'Other' AS \"Type\", s.\"vName\" as  \"vSiteName\" ,sr_details.\"iSRId\" ,sr_details.\"iCId\" , concat(contact_mas.\"vFirstName\",' ', contact_mas.\"vLastName\") as \"vContactName\" ,concat(user_mas.\"vFirstName\",' ', user_mas.\"vLastName\") as \"UserName\"  FROM task_other LEFT JOIN premise_mas s on s.\"iPremiseId\" = task_other.\"iPremiseId\" LEFT JOIN sr_details on sr_details.\"iSRId\" = task_other.\"iSRId\" LEFT JOIN contact_mas on contact_mas.\"iCId\" = sr_details.\"iCId\" LEFT JOIN user_mas on user_mas.\"iUserId\" = task_other.\"iUserId\" WHERE task_other.\"dAddedDate\" >= (NOW() - INTERVAL '8 hours' ) Order by task_other.\"dAddedDate\" ";
 		$rs_st = $sqlObj->GetAll($sql);
 		$ni = count($rs_st);
 		if($ni > 0){
@@ -999,7 +999,7 @@ class Site {
 		global $sqlObj;
 		
 		if($this->ids){
-			$sql = 'UPDATE site_mas SET "dModifiedDate" = '.gen_allow_null_char(date_getSystemDateTime()).', "dDeletedDate" = '.gen_allow_null_char(date_getSystemDateTime()).', "iStatus" =  2  WHERE "iPremiseId" = '.$this->ids.'';
+			$sql = 'UPDATE premise_mas SET "dModifiedDate" = '.gen_allow_null_char(date_getSystemDateTime()).', "dDeletedDate" = '.gen_allow_null_char(date_getSystemDateTime()).', "iStatus" =  2  WHERE "iPremiseId" = '.$this->ids.'';
 			$rs_up =$sqlObj->Execute($sql);
 		}
 		

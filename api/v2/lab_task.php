@@ -94,7 +94,7 @@ if($request_type == "task_mosquito_pool_list"){
     $join_fieds_arr[] = 'task_trap."tNotes"';
     $join_arr[] = 'LEFT JOIN task_trap  on task_trap."iTTId" = task_mosquito_pool."iTTId"';
     $join_arr[] = 'LEFT JOIN trap_type_mas tt on tt."iTrapTypeId" = task_trap."iTrapTypeId"';
-    $join_arr[] = 'LEFT JOIN site_mas s on s."iPremiseId" = task_trap."iPremiseId"';
+    $join_arr[] = 'LEFT JOIN premise_mas s on s."iPremiseId" = task_trap."iPremiseId"';
     $join_arr[] = 'LEFT JOIN county_mas c on s."iCountyId" = c."iCountyId"';
     $join_arr[] = 'LEFT JOIN state_mas sm on s."iStateId" = sm."iStateId"';
     $join_arr[] = 'LEFT JOIN city_mas cm on s."iCityId" = cm."iCityId"';
@@ -372,7 +372,7 @@ else if($request_type == "trap_mosquito_count_list"){
     $join_fieds_arr[] = 'tt."vTrapName"';
     $join_arr = array();
     $join_arr[] = 'LEFT JOIN trap_type_mas tt on tt."iTrapTypeId" = task_trap."iTrapTypeId"';
-    $join_arr[] = 'LEFT JOIN site_mas s on s."iPremiseId" = task_trap."iPremiseId"';
+    $join_arr[] = 'LEFT JOIN premise_mas s on s."iPremiseId" = task_trap."iPremiseId"';
     $join_arr[] = 'LEFT JOIN county_mas c on s."iCountyId" = c."iCountyId"';
     $join_arr[] = 'LEFT JOIN state_mas sm on s."iStateId" = sm."iStateId"';
     $join_arr[] = 'LEFT JOIN city_mas cm on s."iCityId" = cm."iCityId"';

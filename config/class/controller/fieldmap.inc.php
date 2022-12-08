@@ -115,7 +115,7 @@ class Fieldmap {
 
         $whereQuery1 = implode(" AND ", $where1);
 
-        $sql_attr = 'SELECT sa."iPremiseId", sa."iSAttributeId" FROM "site_attribute" sa INNER JOIN site_mas s ON sa."iPremiseId" = s."iPremiseId" WHERE '.$whereQuery1.' ORDER BY sa."iPremiseId"';
+        $sql_attr = 'SELECT sa."iPremiseId", sa."iSAttributeId" FROM "site_attribute" sa INNER JOIN premise_mas s ON sa."iPremiseId" = s."iPremiseId" WHERE '.$whereQuery1.' ORDER BY sa."iPremiseId"';
         $rs_sql_attr = $sqlObj->GetAll($sql_attr);
         $ai = count($rs_sql_attr);
         $attr_arr = [];
@@ -124,7 +124,7 @@ class Fieldmap {
         }
         //echo "<pre>";print_r($attr_arr);exit;
 
-        $filterSql = 'SELECT "iPremiseId" as premiseid, "iSTypeId" as sTypeId, "iSSTypeId" as sSTypeId, "iCityId", "iZoneId", st_astext(ST_Centroid("vPolygonLatLong")) as polyCenter, st_astext("vPolygonLatLong") as polygon, st_astext("vPointLatLong") as point, st_astext("vPolyLineLatLong") as poly_line FROM "site_mas" WHERE '.$whereQuery.' ORDER BY premiseid';
+        $filterSql = 'SELECT "iPremiseId" as premiseid, "iSTypeId" as sTypeId, "iSSTypeId" as sSTypeId, "iCityId", "iZoneId", st_astext(ST_Centroid("vPolygonLatLong")) as polyCenter, st_astext("vPolygonLatLong") as polygon, st_astext("vPointLatLong") as point, st_astext("vPolyLineLatLong") as poly_line FROM "premise_mas" WHERE '.$whereQuery.' ORDER BY premiseid';
         $data['sites'] = $sqlObj->GetAll($filterSql);
         //echo "<pre>";print_r($data['sites']);exit;
         if(!empty($data['sites'])) {
@@ -395,7 +395,7 @@ class Fieldmap {
         $where[] ='"iStatus" = 1';
 
         $whereQuery = implode(" AND ", $where);
-        $siteSql = 'SELECT "iPremiseId" as premiseid, "iSTypeId" as sTypeId, "iSSTypeId" as sSTypeId, "iCityId", "iZoneId", st_astext(ST_Centroid("vPolygonLatLong")) as polyCenter, st_astext("vPolygonLatLong") as polygon, st_astext("vPointLatLong") as point, st_astext("vPolyLineLatLong") as poly_line FROM site_mas WHERE '.$whereQuery;
+        $siteSql = 'SELECT "iPremiseId" as premiseid, "iSTypeId" as sTypeId, "iSSTypeId" as sSTypeId, "iCityId", "iZoneId", st_astext(ST_Centroid("vPolygonLatLong")) as polyCenter, st_astext("vPolygonLatLong") as polygon, st_astext("vPointLatLong") as point, st_astext("vPolyLineLatLong") as poly_line FROM premise_mas WHERE '.$whereQuery;
         //echo $siteSql;exit();
         $data['siteData'] = $sqlObj->GetAll($siteSql);
         // print_r($data);exit();
@@ -451,7 +451,7 @@ class Fieldmap {
             $sitewhere[] ='"iStatus" = 1';
 
             $sitewhereQuery = implode(" AND ", $sitewhere);
-            $siteSql = 'SELECT "iPremiseId" as premiseid, "iSTypeId" as sTypeId, "iSSTypeId" as sSTypeId, "iCityId", "iZoneId", st_astext(ST_Centroid("vPolygonLatLong")) as polyCenter, st_astext("vPolygonLatLong") as polygon, st_astext("vPointLatLong") as point, st_astext("vPolyLineLatLong") as poly_line FROM "site_mas" WHERE '.$sitewhereQuery;
+            $siteSql = 'SELECT "iPremiseId" as premiseid, "iSTypeId" as sTypeId, "iSSTypeId" as sSTypeId, "iCityId", "iZoneId", st_astext(ST_Centroid("vPolygonLatLong")) as polyCenter, st_astext("vPolygonLatLong") as polygon, st_astext("vPointLatLong") as point, st_astext("vPolyLineLatLong") as poly_line FROM "premise_mas" WHERE '.$sitewhereQuery;
             //echo $siteSql;exit();
             $data['siteData'] = $sqlObj->GetAll($siteSql);
         }
@@ -479,8 +479,8 @@ class Fieldmap {
         $lat = $param['lat'];
         $meter = $param['meter'];
 
-        //$sql = "SELECT s.* FROM site_mas as s where ST_DWithin(ST_SetSRID(ST_MakePoint(s.\"vLongitude\",s.\"vLatitude\"), 4326)::geography, ST_MakePoint(". $long . ", " . $lat . ")::geography, ".$meter.") Order by s.\"iPremiseId\" DESC ";
-        $sql = "SELECT \"iPremiseId\" as premiseid, \"iSTypeId\" as sTypeId, \"iSSTypeId\" as sSTypeId \"iCityId\", \"iZoneId\", st_astext(ST_Centroid(\"vPolygonLatLong\")) as polyCenter, st_astext(\"vPolygonLatLong\") as polygon, st_astext(\"vPointLatLong\") as point, st_astext(\"vPolyLineLatLong\") as poly_line FROM site_mas as s where ST_DWithin(ST_SetSRID(ST_MakePoint(s.\"vLongitude\",s.\"vLatitude\"), 4326)::geography, ST_MakePoint(". $long . ", " . $lat . ")::geography, ".$meter.") Order by s.\"iPremiseId\" DESC ";
+        //$sql = "SELECT s.* FROM premise_mas as s where ST_DWithin(ST_SetSRID(ST_MakePoint(s.\"vLongitude\",s.\"vLatitude\"), 4326)::geography, ST_MakePoint(". $long . ", " . $lat . ")::geography, ".$meter.") Order by s.\"iPremiseId\" DESC ";
+        $sql = "SELECT \"iPremiseId\" as premiseid, \"iSTypeId\" as sTypeId, \"iSSTypeId\" as sSTypeId \"iCityId\", \"iZoneId\", st_astext(ST_Centroid(\"vPolygonLatLong\")) as polyCenter, st_astext(\"vPolygonLatLong\") as polygon, st_astext(\"vPointLatLong\") as point, st_astext(\"vPolyLineLatLong\") as poly_line FROM premise_mas as s where ST_DWithin(ST_SetSRID(ST_MakePoint(s.\"vLongitude\",s.\"vLatitude\"), 4326)::geography, ST_MakePoint(". $long . ", " . $lat . ")::geography, ".$meter.") Order by s.\"iPremiseId\" DESC ";
         //echo $sql;exit();
         $rs_db = $sqlObj->GetAll($sql);
 
@@ -507,15 +507,15 @@ class Fieldmap {
         }
         $sIds = implode(",", $sIdsArr);
         
-        $where_arr[] = ' site_mas."iSTypeId" IN('.$sIds.')';
-        $where_arr[] ='  site_mas."iStatus" = 1';
+        $where_arr[] = ' premise_mas."iSTypeId" IN('.$sIds.')';
+        $where_arr[] ='  premise_mas."iStatus" = 1';
         if((isset($last_sync_date) && $last_sync_date != "")){
-            $where_arr[] = " (( DATE(site_mas.\"dAddedDate\") >= '" . $last_sync_date . "' AND DATE(site_mas.\"dAddedDate\") <= '" . $current_date. "')  OR (DATE(site_mas.\"dModifiedDate\") >= '" . $last_sync_date . "' AND DATE(site_mas.\"dModifiedDate\") <= '" . $current_date. "' ))";
+            $where_arr[] = " (( DATE(premise_mas.\"dAddedDate\") >= '" . $last_sync_date . "' AND DATE(premise_mas.\"dAddedDate\") <= '" . $current_date. "')  OR (DATE(premise_mas.\"dModifiedDate\") >= '" . $last_sync_date . "' AND DATE(premise_mas.\"dModifiedDate\") <= '" . $current_date. "' ))";
         }
 
         $whereQuery = (!empty($where_arr))?' WHERE '.implode(" AND ", $where_arr):'';
 
-        $sql_attr = 'SELECT sa."iPremiseId", sa."iSAttributeId" FROM "site_attribute" sa INNER JOIN site_mas  ON sa."iPremiseId" = site_mas."iPremiseId"  '.$whereQuery.' ORDER BY sa."iPremiseId"';
+        $sql_attr = 'SELECT sa."iPremiseId", sa."iSAttributeId" FROM "site_attribute" sa INNER JOIN premise_mas  ON sa."iPremiseId" = premise_mas."iPremiseId"  '.$whereQuery.' ORDER BY sa."iPremiseId"';
         $rs_sql_attr = $sqlObj->GetAll($sql_attr);
         $ai = count($rs_sql_attr);
         $attr_arr = [];
@@ -524,7 +524,7 @@ class Fieldmap {
         }
 
 
-        $filterSql = 'SELECT site_mas."iPremiseId", site_mas."vName",site_mas."iSTypeId",site_mas."iSSTypeId", site_mas."vAddress1", site_mas."vAddress2", site_mas."vStreet", site_mas."vCrossStreet", site_mas."iZipcode", site_mas."iStateId", site_mas."iCountyId", site_mas."iCityId", site_mas."iGeometryType", site_mas."iZoneId", site_mas."dAddedDate",  site_mas."dModifiedDate",  site_mas."iStatus",  ST_AsGeoJSON(site_mas."vPointLatLong") as vPointLatLong,  ST_AsGeoJSON(site_mas."vPolygonLatLong") as vPolygonLatLong,  ST_AsGeoJSON(site_mas."vPolyLineLatLong") as vPolyLineLatLong, site_type_mas."icon" FROM "site_mas" Left Join site_type_mas on site_mas."iSTypeId" = site_type_mas."iSTypeId" '.$whereQuery.' ORDER BY site_mas."iPremiseId" ';
+        $filterSql = 'SELECT premise_mas."iPremiseId", premise_mas."vName",premise_mas."iSTypeId",premise_mas."iSSTypeId", premise_mas."vAddress1", premise_mas."vAddress2", premise_mas."vStreet", premise_mas."vCrossStreet", premise_mas."iZipcode", premise_mas."iStateId", premise_mas."iCountyId", premise_mas."iCityId", premise_mas."iGeometryType", premise_mas."iZoneId", premise_mas."dAddedDate",  premise_mas."dModifiedDate",  premise_mas."iStatus",  ST_AsGeoJSON(premise_mas."vPointLatLong") as vPointLatLong,  ST_AsGeoJSON(premise_mas."vPolygonLatLong") as vPolygonLatLong,  ST_AsGeoJSON(premise_mas."vPolyLineLatLong") as vPolyLineLatLong, site_type_mas."icon" FROM "premise_mas" Left Join site_type_mas on premise_mas."iSTypeId" = site_type_mas."iSTypeId" '.$whereQuery.' ORDER BY premise_mas."iPremiseId" ';
         $site_data = $sqlObj->GetAll($filterSql);
 
         $data['sites'] = $site_data;

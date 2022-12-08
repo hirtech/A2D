@@ -61,7 +61,7 @@ if($request_type == "task_awareness_list"){
     $join_fieds_arr[] = "CONCAT(contact_mas.\"vFirstName\", ' ', contact_mas.\"vLastName\") AS \"vContactName\"";
     $join_arr = array();
     $join_arr[] = 'LEFT JOIN engagement_mas e on e."iEngagementId" = awareness."iEngagementId"';
-    $join_arr[] = 'LEFT JOIN site_mas s on s."iPremiseId" = awareness."iPremiseId"';
+    $join_arr[] = 'LEFT JOIN premise_mas s on s."iPremiseId" = awareness."iPremiseId"';
     $join_arr[] = 'LEFT JOIN county_mas c on s."iCountyId" = c."iCountyId"';
     $join_arr[] = 'LEFT JOIN state_mas sm on s."iStateId" = sm."iStateId"';
     $join_arr[] = 'LEFT JOIN city_mas cm on s."iCityId" = cm."iCityId"';

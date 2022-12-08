@@ -80,7 +80,7 @@ if($request_type == "task_treatment_list"){
     $join_fieds_arr[] = 'unit_mas."vUnit"';
     $join_fieds_arr[] = "CONCAT(contact_mas.\"vFirstName\", ' ', contact_mas.\"vLastName\") AS \"vContactName\"";
     $join_arr = array();
-    $join_arr[] = 'LEFT JOIN site_mas s on s."iPremiseId" = task_treatment."iPremiseId"';
+    $join_arr[] = 'LEFT JOIN premise_mas s on s."iPremiseId" = task_treatment."iPremiseId"';
     $join_arr[] = 'LEFT JOIN treatment_product t on t."iTPId" = task_treatment."iTPId"';
     $join_arr[] = 'LEFT JOIN unit_mas  on unit_mas."iUId" = task_treatment."iUId"';
     $join_arr[] = 'LEFT JOIN site_type_mas st on s."iSTypeId" = st."iSTypeId"';

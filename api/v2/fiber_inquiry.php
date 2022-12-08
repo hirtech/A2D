@@ -9,9 +9,9 @@ include_once($controller_path . "task_other.inc.php");
 if($request_type == "fiber_inquiry_edit"){
     //$vLatitude = number_format($RES_PARA['vLatitude'], 6, '.', '');
     //$vLongitude = number_format($RES_PARA['vLongitude'], 6, '.', '');
-    //$sql_premise = "SELECT s.\"iPremiseId\", s.\"vName\" FROM site_mas s WHERE  St_Within(ST_GeometryFromText('POINT(".$vLongitude." ".$vLatitude.")', 4326)::geometry, (s.\"vPointLatLong\")::geometry)='t'ORDER BY s.\"iPremiseId\" DESC LIMIT 1";
+    //$sql_premise = "SELECT s.\"iPremiseId\", s.\"vName\" FROM premise_mas s WHERE  St_Within(ST_GeometryFromText('POINT(".$vLongitude." ".$vLatitude.")', 4326)::geometry, (s.\"vPointLatLong\")::geometry)='t'ORDER BY s.\"iPremiseId\" DESC LIMIT 1";
 
-    $sql_premise = "SELECT s.\"iPremiseId\", s.\"vName\" FROM site_mas s WHERE s.\"vLongitude\" = '".$RES_PARA['vLongitude']."' AND  s.\"vLatitude\" = '".$RES_PARA['vLatitude']."' ORDER BY s.\"iPremiseId\" DESC LIMIT 1";    
+    $sql_premise = "SELECT s.\"iPremiseId\", s.\"vName\" FROM premise_mas s WHERE s.\"vLongitude\" = '".$RES_PARA['vLongitude']."' AND  s.\"vLatitude\" = '".$RES_PARA['vLatitude']."' ORDER BY s.\"iPremiseId\" DESC LIMIT 1";    
     $rs_premise = $sqlObj->GetAll($sql_premise);
     $iMatchingPremiseId = 0;
     if(!empty($rs_premise)){
@@ -71,8 +71,8 @@ if($request_type == "fiber_inquiry_edit"){
 }else if($request_type == "fiber_inquiry_add") {
     //$vLatitude = number_format($RES_PARA['vLatitude'], 6, '.', '');
     //$vLongitude = number_format($RES_PARA['vLongitude'], 6, '.', '');
-    //$sql_premise = "SELECT s.\"iPremiseId\", s.\"vName\" FROM site_mas s WHERE  St_Within(ST_GeometryFromText('POINT(".$vLongitude." ".$vLatitude.")', 4326)::geometry, (s.\"vPointLatLong\")::geometry)='t'ORDER BY s.\"iPremiseId\" DESC LIMIT 1"; 
-    $sql_premise = "SELECT s.\"iPremiseId\", s.\"vName\" FROM site_mas s WHERE s.\"vLongitude\" = '".$RES_PARA['vLongitude']."' AND  s.\"vLatitude\" = '".$RES_PARA['vLatitude']."' ORDER BY s.\"iPremiseId\" DESC LIMIT 1";
+    //$sql_premise = "SELECT s.\"iPremiseId\", s.\"vName\" FROM premise_mas s WHERE  St_Within(ST_GeometryFromText('POINT(".$vLongitude." ".$vLatitude.")', 4326)::geometry, (s.\"vPointLatLong\")::geometry)='t'ORDER BY s.\"iPremiseId\" DESC LIMIT 1"; 
+    $sql_premise = "SELECT s.\"iPremiseId\", s.\"vName\" FROM premise_mas s WHERE s.\"vLongitude\" = '".$RES_PARA['vLongitude']."' AND  s.\"vLatitude\" = '".$RES_PARA['vLatitude']."' ORDER BY s.\"iPremiseId\" DESC LIMIT 1";
     $rs_premise = $sqlObj->GetAll($sql_premise);
     $iMatchingPremiseId = 0;
     if(!empty($rs_premise)){
@@ -469,7 +469,7 @@ if($request_type == "fiber_inquiry_edit"){
             $join_fieds_arr[] = " fiberinquiry_details.\"iFiberInquiryId\"";
             $join_fieds_arr[] = " fiberinquiry_details.\"iCId\"";
             $join_fieds_arr[] = "concat(\"vFirstName\",' ', \"vLastName\") as \"vContactName\" ";
-            $join_arr[] = 'LEFT JOIN site_mas s on s."iPremiseId" = task_larval_surveillance."iPremiseId"';
+            $join_arr[] = 'LEFT JOIN premise_mas s on s."iPremiseId" = task_larval_surveillance."iPremiseId"';
             $join_arr[] = 'LEFT JOIN site_type_mas on site_type_mas."iSTypeId" = s."iSTypeId"';
             $join_arr[] = 'LEFT JOIN site_sub_type_mas on site_sub_type_mas."iSSTypeId" = s."iSSTypeId"';
             $join_arr[] = 'LEFT JOIN fiberinquiry_details on fiberinquiry_details."iFiberInquiryId" = task_larval_surveillance."iSRId"';
@@ -605,7 +605,7 @@ if($request_type == "fiber_inquiry_edit"){
             //$join_fieds_arr[] = " site_attribute_mas.\"vAttribute\"";
             $join_fieds_arr[] = " unit_mas.\"vUnit\"";
             $join_fieds_arr[] = " treatment_product.\"vName\"";
-            $join_arr[] = 'LEFT JOIN site_mas s on s."iPremiseId" = task_treatment."iPremiseId"';
+            $join_arr[] = 'LEFT JOIN premise_mas s on s."iPremiseId" = task_treatment."iPremiseId"';
             $join_arr[] = 'LEFT JOIN site_type_mas on site_type_mas."iSTypeId" = s."iSTypeId"';
             //$join_arr[] = 'LEFT JOIN site_attribute on site_attribute."iPremiseId" = s."iPremiseId"';
             //$join_arr[] = 'LEFT JOIN site_attribute_mas on site_attribute_mas."iSAttributeId" = site_attribute."iSAttributeId"';
@@ -690,7 +690,7 @@ if($request_type == "fiber_inquiry_edit"){
             $join_fieds_arr[] = "concat(\"vFirstName\",' ', \"vLastName\") as \"vContactName\" ";
             //$join_fieds_arr[] = " site_attribute_mas.\"vAttribute\"";
             //$join_fieds_arr[] = " mosquito_species_mas.\"tDescription\"";
-            $join_arr[] = 'LEFT JOIN site_mas s on s."iPremiseId" = task_landing_rate."iPremiseId"';
+            $join_arr[] = 'LEFT JOIN premise_mas s on s."iPremiseId" = task_landing_rate."iPremiseId"';
             $join_arr[] = 'LEFT JOIN site_type_mas on site_type_mas."iSTypeId" = s."iSTypeId"';
             $join_arr[] = 'LEFT JOIN site_sub_type_mas on site_sub_type_mas."iSSTypeId" = s."iSSTypeId"';
             $join_arr[] = 'LEFT JOIN fiberinquiry_details on fiberinquiry_details."iFiberInquiryId" = task_landing_rate."iSRId"';
@@ -794,7 +794,7 @@ if($request_type == "fiber_inquiry_edit"){
             $join_fieds_arr[] = " fiberinquiry_details.\"iCId\"";
             $join_fieds_arr[] = "concat(\"vFirstName\",' ', \"vLastName\") as \"vContactName\" ";
             //$join_fieds_arr[] = " site_attribute_mas.\"vAttribute\"";
-            $join_arr[] = 'LEFT JOIN site_mas s on s."iPremiseId" = task_trap."iPremiseId"';
+            $join_arr[] = 'LEFT JOIN premise_mas s on s."iPremiseId" = task_trap."iPremiseId"';
             $join_arr[] = 'LEFT JOIN site_type_mas on site_type_mas."iSTypeId" = s."iSTypeId"';
             $join_arr[] = 'LEFT JOIN site_sub_type_mas on site_sub_type_mas."iSSTypeId" = s."iSSTypeId"';
             $join_arr[] = 'LEFT JOIN fiberinquiry_details on fiberinquiry_details."iFiberInquiryId" = task_trap."iSRId"';
@@ -872,7 +872,7 @@ if($request_type == "fiber_inquiry_edit"){
             $join_fieds_arr[] = " fiberinquiry_details.\"iCId\"";
             $join_fieds_arr[] = "concat(\"vFirstName\",' ', \"vLastName\") as \"vContactName\" ";
             //$join_fieds_arr[] = " site_attribute_mas.\"vAttribute\"";
-            $join_arr[] = 'LEFT JOIN site_mas s on s."iPremiseId" = task_other."iPremiseId"';
+            $join_arr[] = 'LEFT JOIN premise_mas s on s."iPremiseId" = task_other."iPremiseId"';
             $join_fieds_arr[] = " task_type_mas.\"vTypeName\" as \"task_name\" ";
             $join_arr[] = 'LEFT JOIN site_type_mas on site_type_mas."iSTypeId" = s."iSTypeId"';
             $join_arr[] = 'LEFT JOIN site_sub_type_mas on site_sub_type_mas."iSSTypeId" = s."iSSTypeId"';

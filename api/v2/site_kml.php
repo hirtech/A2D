@@ -11,7 +11,7 @@ if($request_type == "exportkml"){
 
 		$sql_kml = 'SELECT a."iPremiseId",a."vName",b."vTypeName",c."vSubTypeName",STRING_AGG(i."vAttribute",\',\' order by h."iSAttributeId"),
 		a."vAddress1"||\',\'||a."vStreet"||\',\'||d."vCity"||\',\'||replace(e."vCounty",\' County\',\'\')||\',\'||f."vStateCode"||\',\'||g."vZipcode" as "vAddress" ,
-		a."iGeometryType",a."iZoneId", z."vZoneName",ST_AsKML(a."vPointLatLong") as "vPointKML" ,ST_AsKML(a."vPolygonLatLong") as "vPolygonKML" ,ST_AsKML(a."vPolyLineLatLong") as "vPolyLineKML" FROM site_mas as a 
+		a."iGeometryType",a."iZoneId", z."vZoneName",ST_AsKML(a."vPointLatLong") as "vPointKML" ,ST_AsKML(a."vPolygonLatLong") as "vPolygonKML" ,ST_AsKML(a."vPolyLineLatLong") as "vPolyLineKML" FROM premise_mas as a 
 		left join site_type_mas as b on a."iSTypeId"=b."iSTypeId"
 		left join site_sub_type_mas as c on a."iSSTypeId"=c."iSSTypeId" 
 		left join city_mas as d on a."iCityId"=d."iCityId"
