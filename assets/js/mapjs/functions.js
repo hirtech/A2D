@@ -10,14 +10,14 @@ function getMapData(siteTypes, sAttr, skCity, skZones, sr, custlayer, siteSubTyp
 	console.log("positive : " + positive);
 	console.log("siteFilter : " + siteFilter);
 	console.log("srFilter : " + srFilter);*/
-//	console.log('1111');
+	//	console.log('1111');
 	//console.log('custome layer=>'+custlayer)
 	//alert(fieldtask);
 	//var latlngbounds = new google.maps.LatLngBounds();
 	
 	//siteMarker.length = 0;
 	clearMap();
-	 if(siteTypes != "" || sAttr != "" || skCity != "" || skZones != "" || sr != "" ||  custlayer != ""|| siteSubTypes != ""){
+	if(siteTypes != "" || sAttr != "" || skCity != "" || skZones != "" || sr != "" ||  custlayer != ""|| siteSubTypes != ""){
 		if(typeof siteSubTypes == "undefined"){
 			siteSubTypes = [];
 		}
@@ -52,20 +52,16 @@ function getMapData(siteTypes, sAttr, skCity, skZones, sr, custlayer, siteSubTyp
 					var response = JSON.parse(data);
 					var siteData = response.sites;
 					var ressrdata = "";
-					
 					//var srcount = 0;
 					if (response.polyZone !== undefined) {
 						$.each(response.polyZone, function(zoneid, item) {
 							showZonePolygonMap(item, map);
-							
 						});
-					
 					}
 					if (response.sites !== undefined) {
 						$.each(siteData, function(premiseid, item) {
 								//console.log(siteData[premiseid]);
 								if (siteData[premiseid].polygon !== undefined) {
-									
 									//console.log(siteData[premiseid].polygon);
 							    	//console.log('-------------');
 									showPolygonMap(siteData[premiseid].polygon, map, siteData[premiseid].icon, premiseid);
@@ -107,14 +103,13 @@ function getMapData(siteTypes, sAttr, skCity, skZones, sr, custlayer, siteSubTyp
 									}
 								}
 						});
-          }
-         	
-          
-          if (response.sr !== undefined ) {
-            ressrdata = response.sr;
-            $.each(ressrdata, function(id, item) {
-              if (ressrdata[id].point !== undefined) {
-                for (i = 0; i < ressrdata[id].point.length; i++) {
+          			}
+
+          			if (response.sr !== undefined ) {
+			            ressrdata = response.sr;
+			            $.each(ressrdata, function(id, item) {
+			              	if (ressrdata[id].point !== undefined) {
+			                	for (i = 0; i < ressrdata[id].point.length; i++) {
 									/*var pointMatrix = {
 										lat: ressrdata[id].point[i]['lat']+ (Math.random() / 10000),
 										lng: ressrdata[id].point[i]['lng']+ (Math.random() / 10000)
@@ -131,11 +126,10 @@ function getMapData(siteTypes, sAttr, skCity, skZones, sr, custlayer, siteSubTyp
 									showPointMapForSr(pointMatrix, map, ressrdata[id].icon, id, vName, vAddress, vRequestType, vAssignTo, vStatus);
 									//srcount++;
 								}
-            	}
-            });
-          }
+			            	}
+			            });
+          			}
          
-					
 					//custom layer kml data
 					if (response.customlayer !== undefined) {
 						$.each(response.customlayer, function(id, item) {
@@ -147,79 +141,51 @@ function getMapData(siteTypes, sAttr, skCity, skZones, sr, custlayer, siteSubTyp
 	                          preserveViewport: false,
 	                          map: map
 	                        });
-
-
 							kml.vName = item['vName'];
                         	customeLayerArr.push(kml);
 						});
-
-			                var kmls = customeLayerArr.length;
-			                if (kmls > 0) {
-			                	//info window
-			                    for (i = 0; i < kmls; i++) {
-			                        //customeLayerArr[i].setMap(map);
-									var obj = {
-										'vname':customeLayerArr[i].vName,							
-									};
-									customeLayerArr[i].objInfo = obj;
-									if(customeLayerArr[i]) {
-										 google.maps.event.addListener(customeLayerArr[i], 'click', function(evt) {
-											
-											if(infowindow_customlayer) {
-												infowindow_customlayer.close();
-											}
-
-											infowindow_customlayer = new google.maps.InfoWindow({
-													content: this.objInfo.vname,
-													zIndex: 100,
-													pixelOffset:evt.pixelOffset, 
-      												position:evt.latLng
-											});
-													
-											infowindow_customlayer.open(map,customeLayerArr[i]);
-
-										 })
-									}
-			                    }
-			                }
+		                var kmls = customeLayerArr.length;
+		                if (kmls > 0) {
+		                	//info window
+		                    for (i = 0; i < kmls; i++) {
+		                        //customeLayerArr[i].setMap(map);
+								var obj = {
+									'vname':customeLayerArr[i].vName,							
+								};
+								customeLayerArr[i].objInfo = obj;
+								if(customeLayerArr[i]) {
+									google.maps.event.addListener(customeLayerArr[i], 'click', function(evt) {
+										if(infowindow_customlayer) {
+											infowindow_customlayer.close();
+										}
+										infowindow_customlayer = new google.maps.InfoWindow({
+												content: this.objInfo.vname,
+												zIndex: 100,
+												pixelOffset:evt.pixelOffset, 
+  												position:evt.latLng
+										});
+										infowindow_customlayer.open(map,customeLayerArr[i]);
+									})
+								}
+		                    }
+		                }
 					}
 
 					if(jQuery.isEmptyObject(response) == false){
-
 						if (response.length > 0){
-							
 							markerCluster = new MarkerClusterer(map, siteMarker, {
 							// var markerCluster = new google.maps.Map(map, siteMarker, {
 								imagePath: imagePath
 							});
-
 							//Center map and adjust Zoom based on the position of all markers.
 	                        map.setCenter(latlngbounds.getCenter());
 	                        map.fitBounds(latlngbounds);
 						}
 					}
-					//console.log(latlngbounds);
-
-					/*if (srcount != 0){
-						srlayermarkerCluster = new MarkerClusterer(map, srlayerMarker, {
-						imagePath: imagePath
-						});
-					}*/
-					/*if (siteData){
-						var mapmarkers =  [siteMarker, pCenterMarker, polygonObj]; // add additional markers to the array if you have them
-						
-						 var markerCluster = new google.maps.Map(map, mapmarkers, {
-							imagePath: imagePath
-						});
-					}*/
-
 				} else {
 					console.log('no data found');
-					//alert("No sites found");
 					clearMap();
-				
 				}
-				 
 				$(".loading").hide();
 			}
 		});
@@ -227,31 +193,31 @@ function getMapData(siteTypes, sAttr, skCity, skZones, sr, custlayer, siteSubTyp
 }
 
 const map_styles = {
-  default: [],
-  hide: [
-    {
-      featureType: "poi.business",
-      stylers: [{ visibility: "off" }],
-    },
-    {
-      featureType: "transit",
-      elementType: "labels.icon",
-      stylers: [{ visibility: "off" }],
-    },
-    {
-        featureType: 'transit',
-        elementType: 'labels.icon',
-        stylers: [{ visibility: 'off' }]
-      },
-      {
-      	featureType: 'poi',
-        stylers: [{ visibility: 'off' }]
-      },
-      {
-        featureType: 'road',
-        stylers: [{ visibility: 'off' }]
-      },
-  ],
+  	default: [],
+  	hide: [
+	    {
+	      	featureType: "poi.business",
+	      	stylers: [{ visibility: "off" }],
+	    },
+	    {
+	      	featureType: "transit",
+	      	elementType: "labels.icon",
+	      	stylers: [{ visibility: "off" }],
+	    },
+	    {
+	        featureType: 'transit',
+	        elementType: 'labels.icon',
+	        stylers: [{ visibility: 'off' }]
+	    },
+	    {
+	      	featureType: 'poi',
+	        stylers: [{ visibility: 'off' }]
+	    },
+	    {
+	        featureType: 'road',
+	        stylers: [{ visibility: 'off' }]
+	    },
+    ],
 };
 function initMap() {
 	map = new google.maps.Map(document.getElementById('map'), {
@@ -274,13 +240,14 @@ function initMap() {
 	});
 	map.setCenter({lat: parseFloat(MAP_LAT), lng: parseFloat(MAP_LONG)}); 
 	/*hide features(label) on the map*/
-   map.setOptions({ styles: map_styles["hide"] });
+    map.setOptions({ styles: map_styles["hide"] });
 
 	/*const locationButton = document.createElement("button");
   	locationButton.textContent = "Current Location";
   	locationButton.classList.add("btn");
   	map.controls[google.maps.ControlPosition.TOP_LEFT].push(locationButton);
-*/
+  	*/
+
   	let controlCurrentPosition = document.createElement("button");
   	controlCurrentPosition.style.color = "rgb(25,25,25)";
  	controlCurrentPosition.style.background = "rgb(255,255,255)";
@@ -293,114 +260,9 @@ function initMap() {
   	controlCurrentPosition.textContent = "Current Location";
 	map.controls[google.maps.ControlPosition.TOP_LEFT].push(controlCurrentPosition);
 
-
 	controlCurrentPosition.addEventListener("click", function(){
-    
 		getCurrentlatlong(true);
-
-	    	// Try HTML5 geolocation.
-	    	/**************************************/
-			/*if(navigator.geolocation){
-	           // timeout at 60000 milliseconds (60 seconds)
-	           var options = {timeout:60000};
-	           navigator.geolocation.getCurrentPosition(showLocation, errorHandler, options);
-	        } else{
-	           alert("Sorry, browser does not support geolocation!");
-	        }*/
-	        /**************************************/
-		  /*if (navigator.geolocation) {
-		      	navigator.geolocation.getCurrentPosition(
-			        (position) => {
-			          const pos = {
-			            lat: position.coords.latitude,
-			            lng: position.coords.longitude,
-			          };
-
-			          infoWindow.setPosition(pos);
-			          infoWindow.setContent("Location found.");
-			          infoWindow.open(map);
-			          map.setCenter(pos);
-			        },
-		        () => {
-		          handleLocationError(true, infoWindow, map.getCenter());
-		        }
-		      );
-		    } else {alert(2222);
-		      // Browser doesn't support Geolocation
-		      handleLocationError(false, infoWindow, map.getCenter());
-		    }*/
-		    /*if (navigator.geolocation) {
-		    navigator.geolocation.getCurrentPosition(function(position) {
-		        var pos = {
-		            lat: position.coords.latitude,
-		            lng: position.coords.longitude
-		        };
-		        var lat_and_long = pos.lat+","+pos.lng;
-		        alert(lat_and_long);
-		    });
-		    }*/
-
-		      /*$.ajax({
-		    url: 'https://www.googleapis.com/geolocation/v1/geolocate?key='+GOOGLE_GEOCODE_API_KEY,
-		    data: JSON.stringify({ "considerIp": "true" }),
-		    type: 'POST',
-		    contentType: 'application/json',
-		    success: function(data) {
-		      if(data.location) {
-		        alert(data.location.lat + ', ' + data.location.lng);
-		      } else {
-		        alert('not found');
-		      }
-		    }
-		  });*/
   	});
-
-
-	/*controlCurrentPosition.addEventListener("click", function(){
-		 var apiGeolocationSuccess = function(position) {
-		    alert("API geolocation success!\n\nlat = " + position.coords.latitude + "\nlng = " + position.coords.longitude);
-		};
-
-		var tryAPIGeolocation = function() {
-		    jQuery.post( "https://www.googleapis.com/geolocation/v1/geolocate?key="+GOOGLE_GEOCODE_API_KEY+"", function(success) {
-		        apiGeolocationSuccess({coords: {latitude: success.location.lat, longitude: success.location.lng}});
-		  })
-		  .fail(function(err) {
-		    alert("API Geolocation error! \n\n"+err);
-		  });
-		};
-
-		var browserGeolocationSuccess = function(position) {
-		    alert("Browser geolocation success!\n\nlat = " + position.coords.latitude + "\nlng = " + position.coords.longitude);
-		};
-
-		var browserGeolocationFail = function(error) {
-		  switch (error.code) {
-		    case error.TIMEOUT:
-		      alert("Browser geolocation error !\n\nTimeout.");
-		      break;
-		    case error.PERMISSION_DENIED:
-		      if(error.message.indexOf("Only secure origins are allowed") == 0) {
-		        tryAPIGeolocation();
-		      }
-		      break;
-		    case error.POSITION_UNAVAILABLE:
-		      alert("Browser geolocation error !\n\nPosition unavailable.");
-		      break;
-		  }
-		};
-
-		var tryGeolocation = function() {
-		  if (navigator.geolocation) {
-		    navigator.geolocation.getCurrentPosition(
-		        browserGeolocationSuccess,
-		      browserGeolocationFail,
-		      {maximumAge: 50000, timeout: 20000, enableHighAccuracy: true});
-		  }
-		};
-
-		tryGeolocation();
-	});*/
 }
 function showLocation(position) {
     var latitude = position.coords.latitude;
@@ -416,7 +278,6 @@ function showLocation(position) {
             lat: latitude,
             lng: longitude
         };
-
         //Extend each marker's position in LatLngBounds object.
         latlngbounds.extend(posMatrix);
 
@@ -425,6 +286,7 @@ function showLocation(position) {
         //alert('111');
 	}
 }
+
 function errorHandler(err) {
 	if(err.code == 1) {
 		alert("Error: Access is denied!");
@@ -433,75 +295,44 @@ function errorHandler(err) {
 	}
 }
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-  /*infoWindow.setPosition(pos);
-  infoWindow.setContent(
-    browserHasGeolocation
-      ? "Error: The Geolocation service failed."
-      : "Error: Your browser doesn't support geolocation."
-  );
-  infoWindow.open(map);*/
-  console.log(browserHasGeolocation);
+	/*infoWindow.setPosition(pos);
+	  infoWindow.setContent(
+	    browserHasGeolocation
+	      ? "Error: The Geolocation service failed."
+	      : "Error: Your browser doesn't support geolocation."
+	);
+	infoWindow.open(map);*/
+    console.log(browserHasGeolocation);
 }
 
 function getCurrentlatlong($setposition = false){
-	/*$.ajax({
-	    url: site_url+"vmap/index",
-	    data: { "mode": "getCurrentLocation" },
-	    type: 'POST',
-		dataType: "json",
-	    success: function(data) {
-	     	//console.log("current location=>"+data);
-	     	currentlatitude = data['geo']['latitude'];
-	     	currentlongitude = data['geo']['longitude'];
-	     	//alert('current lat=>'+currentlatitude+"=>long=>"+currentlongitude);
-			var bounds = new google.maps.LatLngBounds();
-	     	if($setposition == true && currentlatitude != "" && currentlongitude != "")
-	     	{
-	            var posMatrix = {
-	                lat: currentlatitude,
-	                lng: currentlongitude
-	            };
-
-	            //Extend each marker's position in LatLngBounds object.
-                //latlngbounds.extend(posMatrix);
-                bounds.extend(posMatrix);
-
-	            map.setCenter(bounds.getCenter());
-	            map.fitBounds(bounds);
-	            //alert('111');
-			}
-	    }
-	});*/
 	if (navigator.geolocation) {
-	      	navigator.geolocation.getCurrentPosition(
-		        (position) => {
-		          const pos = {
-		            lat: position.coords.latitude,
-		            lng: position.coords.longitude,
-		          };
+	    navigator.geolocation.getCurrentPosition((position) => {
+	        const pos = {
+	            lat: position.coords.latitude,
+	            lng: position.coords.longitude,
+	        };
 
-		          /*infoWindow.setPosition(pos);
-		          infoWindow.setContent("Location found.");
-		          infoWindow.open(map);*/
-		          	currentlatitude = position.coords.latitude;
-	     			currentlongitude = position.coords.longitude;
-	     			console.log('lat=>'+position.coords.latitude);
-	     			console.log('lang=>'+position.coords.longitude);
-		          map.setCenter(pos);
-		        },
-	        () => {
-	          handleLocationError(true, infoWindow, map.getCenter());
-	        }
-	      );
-	    } else {alert(2222);
-	      // Browser doesn't support Geolocation
-	      handleLocationError(false, infoWindow, map.getCenter());
-	    }
+	        /*infoWindow.setPosition(pos);
+	        infoWindow.setContent("Location found.");
+	        infoWindow.open(map);*/
+          	currentlatitude = position.coords.latitude;
+ 			currentlongitude = position.coords.longitude;
+ 			console.log('lat=>'+position.coords.latitude);
+ 			console.log('lang=>'+position.coords.longitude);
+           map.setCenter(pos);
+	    },() => {
+          	handleLocationError(true, infoWindow, map.getCenter());
+        });
+    } else {
+    	alert(2222);
+        // Browser doesn't support Geolocation
+        handleLocationError(false, infoWindow, map.getCenter());
+    }
 }
 
 
 function showPolygonMapForfieldtask(sitePath, map, icon, premiseid,Fieldtask) {
-
 	polygonObj[pl] = new google.maps.Polygon({
 		path: sitePath,
 		strokeColor: '#FF0000',
@@ -681,25 +512,7 @@ function showPointMapForSr(sitePath, map, icon, premiseid, vName, vAddress, vReq
 
 	//Extend each marker's position in LatLngBounds object.
     latlngbounds.extend(srlayerMarker[srCount].position);
-
-
 	srCount++;
-
-
-	/*siteMarker[pCount] = new google.maps.Marker({
-		map: map,
-		position: sitePath,
-		icon: icon
-	});
-	if (srFilter.length != 0) {
-		newLocation(sitePath.lat,sitePath.lng);
-	}
-	$sr_map = siteMarker[pCount];
-
-	srinfo_popup($sr_map, premiseid, vName, vAddress, vRequestType, vAssignTo, vStatus);
-	siteMarker[pCount].setMap(map);
-	pCount++;
-	gmarkers.push($sr_map);*/
 }
 
 function showPointMap(sitePath, map, icon, premiseid) {
@@ -725,7 +538,6 @@ function showPointMap(sitePath, map, icon, premiseid) {
 }
 
 function showPolyLineMap(sitePath, map, icon, premiseid) {
-	
 	polyLineObj[pline] = new google.maps.Polyline({
 		path: sitePath,
 		strokeColor: '#FF0000',
@@ -766,16 +578,12 @@ function showPolyCenter(sitePath, map, icon, premiseid) {
 
 	//Extend each marker's position in LatLngBounds object.
     latlngbounds.extend(pCenterMarker[pCenter].position);
-
-
 	pCenter++;
 }
 
 // Handles click events on a map, and adds a new point to the Polyline.
 function addLatLng(event) {
 	var path = poly.getPath();
-
-
 	// Because path is an MVCArray, we can simply append a new coordinate
 	// and it will automatically appear.
 	path.push(event.latLng);
@@ -801,8 +609,6 @@ function addLatLng(event) {
 // Handles click events on a map, and adds a new point to the Polyline.
 function addLatLngPoly(event) {
 	var path = poly.getPath();
-
-
 	// Because path is an MVCArray, we can simply append a new coordinate
 	// and it will automatically appear.
 	path.push(event.latLng);
@@ -825,22 +631,10 @@ function addLatLngPoly(event) {
 	$("#areainft").val(sqFeet.toFixed(2));
 	
 	polygonCount++;
-
 }
 
 // Handles click events on a map, and adds Circle Shape.
 function addLatLngCircle(event) {
-
-	/*if (cityCircle !== undefined) {
-		console.log('clear Circle');
-		cityCircle.setMap(null);
-		//initMap();
-		if (circleMarker !== undefined) {
-			for (var i = 0; i < circleMarker.length; i++) {
-				circleMarker[i].setMap(null);
-			}
-		}
-	}*/
 	//console.log('CIRCLE=>'+typeof cityCircle);
 	if (typeof cityCircle == "object") {
 		//console.log('clear Circle');
@@ -851,7 +645,7 @@ function addLatLngCircle(event) {
 			for (var i = 0; i < circleMarker.length; i++) {
 				circleMarker[i].setMap(null);
 			}
-		}
+	}
 
 	//console.log(cmCount);
 	circleMarker[cmCount] = new google.maps.Marker({
@@ -954,8 +748,6 @@ function getCustomLayerJson() {
 
 function clearMap() {
 	console.log('11');
-
-
 	if (polygonObj.length > 0) {
         for (i = 0; i < polygonObj.length; i++) {
             polygonObj[i].setMap(null);
@@ -1013,25 +805,8 @@ function clearMap() {
 	if (srlayerMarker !== undefined) {
 		srlayerMarker = [];
 	}
-	/*if (fieldmap_sr_arr !== undefined) {
-		fieldmap_sr_arr = [];
 
-	}
-	*/
-
-	/*siteTypes.length = 0;
-	sAttr.length = 0;
-	skCity.length = 0;
-	skZones.length = 0;
-	fieldmap_sr_arr.length = 0;
-	larval.length = 0;
-	Fieldtask.length = 0;
-	siteMarker.length = 0;
-	zonePolygonObj.length = 0;
-	polyLineObj.length=0;*/
-
-
-	 var clayers = customeLayerArr.length;
+	var clayers = customeLayerArr.length;
     if (clayers > 0) {
         for (i = 0; i < clayers; i++) {
             customeLayerArr[i].setMap(null);
@@ -1052,20 +827,14 @@ function clearMap() {
         
     }
 
-  console.log('resetmap');
+    console.log('resetmap');
     initMap();
-
-
-			
 }
 
 function info_popup(marker, premiseid) {
 	//console.log(premiseid);
-
 	google.maps.event.addListener(marker, 'click', ( function(marker, premiseid) {
 		return function(arg) {
-			 
-
 			var content = "";
 			__marker__ = marker;
 			$.ajax({
@@ -1294,7 +1063,6 @@ function newLocation(newLat,newLng)
 function clearMapTest(variable) {
 	if(variable == "srlayer"){
 		//console.log('11');
-
 	    if (srlayerMarker.length > 0) {
 	        for (i = 0; i < srlayerMarker.length; i++) {
 	            srlayerMarker[i].setMap(null);
@@ -1531,45 +1299,34 @@ function getSiteSRFilterData(siteFilter,srFilter){
 }
 
 function addInstaTreatData(mode,premiseid){
-		infowindow.close();
+	infowindow.close();
 
-	 $.ajax({
-            type: "POST",
-            url: site_url + "vmap/index",
-            data: {
-                mode: "AddInstaTreat",
-                premiseid: premiseid,
-            },
-            cache: true,
-            dataType:'json',
-            beforeSend: function() {
-               $(".loading").show();
-            },
-            success: function(data) {
-
-            	  $(".loading").hide();
-            	 if(data['error'] == "0"){
-                    toastr.success(data['msg']);
-                }else{
-                    toastr.error(data['msg']);
-                }
+	$.ajax({
+        type: "POST",
+        url: site_url + "vmap/index",
+        data: {
+            mode: "AddInstaTreat",
+            premiseid: premiseid,
+        },
+        cache: true,
+        dataType:'json',
+        beforeSend: function() {
+           $(".loading").show();
+        },
+        success: function(data) {
+        	$(".loading").hide();
+        	if(data['error'] == "0"){
+                toastr.success(data['msg']);
+            }else{
+                toastr.error(data['msg']);
             }
-        });
-}
-/* function setMapOnAlltest(map) {
-        for (let i = 0; i < srMarker.length; i++) {
-          srMarker[i].setMap(map);
         }
-      } // Removes the markers from the map, but keeps them in the array.
+    });
+}
 
-      function clearMarkerstest() {
-        setMapOnAlltest(null);
-      } // Shows any markers currently in the array.*/
 /*show all site-icons within 0.5 mile radius of the user current location*/
-
 $("#nearbysite").click(function(){
 	var latlngbounds = new google.maps.LatLngBounds();
-	 
 	//sitesearchMarker.setMap(null);
     if (siteNearDataMarker.length > 0) {
         for (i = 0; i < siteNearDataMarker.length; i++) {
@@ -1581,10 +1338,9 @@ $("#nearbysite").click(function(){
 
     siteNearDataMarker = [];
     siteNearDataMarker.length = 0;
-     sncount =0;
+    sncount =0;
     if (this.checked) {
 		getCurrentlatlong('');
-
 		setTimeout(function(){
 			//alert(currentlongitude+"=>"+currentlatitude);
 			/*get nearby 0.5mile site*/
@@ -1747,7 +1503,6 @@ $("#nearbysite").click(function(){
 	}else{
 		//alert('unchecked');
 	}
-
 });
 
 
@@ -1792,7 +1547,6 @@ function mapRedirectServiceOrder(ServiceOrderLength, iPremiseId) {
 		alert("No service order exists for this premise");return false;
 	}
 }
-
 
 function mapRedirectWorkOrder(WorkOrderLength, iPremiseId) {
 	if(WorkOrderLength > 0){

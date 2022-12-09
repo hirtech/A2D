@@ -16,7 +16,7 @@ let  infoWindow;
 
 $(document).ready(function() {
     console.log("Api ready!");
-   // alert(mode);
+    // alert(mode);
     initMap();
     
     if (mode == 'filter_sites') {
@@ -31,9 +31,9 @@ $(document).ready(function() {
      
     }
     
-    	generateJson();
-    	generateSRJson();
-    	getCustomLayerJson();
+	generateJson();
+	generateSRJson();
+	getCustomLayerJson();
        
     $(document).on("click", "#showDistance", function() {
         console.log("Distance Ready!!");
@@ -44,7 +44,6 @@ $(document).ready(function() {
         if ($("#showCircle").prop("checked")) {
             $("#showCircle").prop("checked", false);
         }
-
         clearMapTool();
 
         clearMap();
@@ -69,18 +68,7 @@ $(document).ready(function() {
                     zoneLatLngPolyline[k] = google.maps.event.addListener(zonePolygonObj[k], 'click', addLatLng);
                 }
             }
-            
         }
-        /*else{
-            $("#distanceinmiles").val('');
-            $("#distanceinft").val('');
-            poly.setMap(null);
-            if (polylineMarker.length > 0) {
-                for (let i = 0; i < polylineMarker.length; i++) {
-                    polylineMarker[i].setMap(null);
-                }
-            }
-        }*/
     });
     $(document).on("click", "#showArea", function() {
         console.log("Polygon Ready!!");
@@ -93,7 +81,6 @@ $(document).ready(function() {
         }
 
         clearMapTool();
-
         clearMap();
         resetButton();
         clearFilterData();
@@ -108,7 +95,7 @@ $(document).ready(function() {
             poly.setMap(map);
 
             // Add a listener for the click event
-           listenerLatLngPoly =map.addListener('click', addLatLngPoly);
+            listenerLatLngPoly =map.addListener('click', addLatLngPoly);
 
             //Add a listener event for zone draw polyline
             if(zCount > 0){
@@ -117,13 +104,10 @@ $(document).ready(function() {
                 }
             }
         }
-        /*else{
-            $("#areainmiles").val('');
-            $("#areainft").val('');
-        }*/
     });
+
     $(document).on("click", "#showCircle", function() {
-       // console.log("Circle Ready!!");
+        // console.log("Circle Ready!!");
         if ($("#showDistance").prop("checked")) {
             $("#showDistance").prop("checked", false);
         }
@@ -148,19 +132,13 @@ $(document).ready(function() {
                 }
             }
         }
-        /*else{
-            $("#rCircle").val('');
-            $("#areaCircle").val('');
-        }*/
-
     });
+
     $(document).on("click", ".map-tool-checkbox", function() {
-        
         $(".selectSiteData").each(function() {
             if ($(this).prop("checked")) {
                 $(this).prop("checked", false);
             }
-
         });
         
         if ($("#selectAllsType").prop("checked") && $("#selectAllsType").val() != 'Yes') {
@@ -182,7 +160,6 @@ $(document).ready(function() {
         //initMap();
         clearMap();
         var checksone = checkZoneSelected();
-
         if(checksone == true){
             if ($("#selectAllsType").prop("checked") && $("#selectAllsType").val() != 'Yes') {
                 $("#selectAllsType").prop("checked", false);
@@ -220,7 +197,6 @@ $(document).ready(function() {
                     siteSubTypes.push($(this).val());
             });
             $.each($("input[name='sAttr[]']:checked"), function() {
-               
                 sAttr.push($(this).val());
             });
             $.each($("input[name='city[]']:checked"), function() {
@@ -231,14 +207,12 @@ $(document).ready(function() {
                
                 skZones.push($(this).val());
             });
-
         }else{
             siteTypes = [];
             siteSubTypes = [];
             sAttr = []; 
             skCity = [];
             skZones = [];
-
             alert('Please select zone');
         }
         resetButton();
@@ -250,7 +224,6 @@ $(document).ready(function() {
         //initMap();
         clearMap();
         var checksone = checkZoneSelected();
-
         if(checksone == true){
             if ($("#selectAllsType").prop("checked") && $("#selectAllsType").val() != 'Yes') {
                 $("#selectAllsType").prop("checked", false);
@@ -312,7 +285,6 @@ $(document).ready(function() {
 
     $(document).on("click", "#selectAllsType", function() {
         console.log("Select Premise Types");
-       
         clearMap();
         var checksone = checkZoneSelected();
         siteTypes = [];
@@ -326,7 +298,6 @@ $(document).ready(function() {
                     siteTypes.push($(this).val());
                 });
                 //console.log(siteTypes);
-               
             } else {
                 $(".selectAllsType").prop("checked", false);
                 $("#selectAllsType").val("No");
@@ -342,17 +313,15 @@ $(document).ready(function() {
             sAttr = []; 
             skCity = [];
             skZones = [];
-
             alert('Please select zone');
         }
         resetButton();
         clearFilterData();
         getMapData(siteTypes, sAttr, skCity, skZones, fieldmap_sr_arr,  custLayer, siteSubTypes);
-
     });
+
     $(document).on("click", "#selectAllsAttr", function() {
         console.log("Select Site Attr");
-       
         clearMap();
         var checksone = checkZoneSelected();
         sAttr = [];
@@ -387,9 +356,9 @@ $(document).ready(function() {
         clearFilterData();
 		getMapData(siteTypes, sAttr, skCity, skZones, fieldmap_sr_arr, custLayer, siteSubTypes);
     });
+
     $(document).on("click", "#selectAllCity", function() {
         console.log("Select Site Attr");
-      
         clearMap();
         var checksone = checkZoneSelected();
         skCity = [];
@@ -423,13 +392,12 @@ $(document).ready(function() {
         resetButton();
         clearFilterData();
         getMapData(siteTypes, sAttr, skCity, skZones, fieldmap_sr_arr, custLayer, siteSubTypes);
-
     });
+
     $(document).on("click", "#selectAllZone", function() {
         console.log("Select Site Zones");
-       // initMap();
-       clearMap();
-
+        // initMap();
+        clearMap();
         skZones  = [];
         if ($("#selectAllZone").prop("checked")) {
             $(".selectAllZone").prop("checked", true);
@@ -460,29 +428,23 @@ $(document).ready(function() {
     });
 
     $(document).on("click", ".selectAllsServices", function() {
-        
         clearMap();
         if ($("#selectAllsServices").prop("checked")) {
             $.each($("input[name='selectAllsServices']:checked"), function() {
                 fieldmap_sr_arr.push($(this).val());
             });
         } else {
-
             fieldmap_sr_arr = [];
-      
         }
         resetButton();
         clearLayersData();
         getMapData(siteTypes, sAttr, skCity, skZones, fieldmap_sr_arr, custLayer, siteSubTypes);
-        
     });
 
     $(document).on("click", "#selectAllCustLayer", function() {
         //console.log("Select Custom Layer");
-
         clearMap();
         custLayer = [];
-
         if ($("#selectAllCustLayer").prop("checked")) {
             $(".selectAllCustLayer").prop("checked", true);
             $("#selectAllCustLayer").val("Yes");
@@ -492,7 +454,6 @@ $(document).ready(function() {
                 custLayer.push($(this).val());
             });
             //console.log(custLayer);
-           
         } else {
             $(".selectAllCustLayer").prop("checked", false);
             $("#selectAllCustLayer").val("No");
@@ -505,7 +466,6 @@ $(document).ready(function() {
         resetButton();
         clearLayersData();
         getMapData(siteTypes, sAttr, skCity, skZones, fieldmap_sr_arr, custLayer, siteSubTypes);
-
     });
 
     $(document).on("click",".selectAllCustLayer",function(){
@@ -520,10 +480,9 @@ $(document).ready(function() {
         resetButton();
         clearLayersData();
         getMapData(siteTypes, sAttr, skCity, skZones, fieldmap_sr_arr, custLayer);
-   
     });
-
 });
+
 /*Check Zone's */
 function checkZoneSelected(){
     var zone_cnt = 0;
@@ -543,7 +502,6 @@ function checkZoneSelected(){
     }else{
         return true;
     }
-
 }
 // search Premise Name 
 var selectedsr = null;
@@ -590,8 +548,6 @@ var selectedsr = null;
         .blur(function() {
             $(".tt-dropdown-menu").hide();
         });
-
-
 })(jQuery);
 
 function onSiteClusteSelected(e, datum) {
@@ -601,7 +557,6 @@ function onSiteClusteSelected(e, datum) {
 }
 
 $("#search_site_map").click(function() {
-
     var empty = 0;
     var s = 0;
     var one_filled;
@@ -609,7 +564,7 @@ $("#search_site_map").click(function() {
     var srData = [];
     var action;
 
-     if (sitesearchMarker.length > 0) {
+    if (sitesearchMarker.length > 0) {
         for (i = 0; i < sitesearchMarker.length; i++) {
             sitesearchMarker[i].setMap(null);
         }
@@ -666,9 +621,7 @@ $("#search_site_map").click(function() {
                     }
                 }
             });
-
         }
-
         if (siteData && siteData.length > 0) {
             action = "getSerachSiteData";
         } else if (srData && srData.length > 0) {
@@ -678,7 +631,6 @@ $("#search_site_map").click(function() {
         clearFilterData();
         clearMap();
         setTimeout(function () {
-
             if((jQuery.isEmptyObject(srData) == false && srData.length > 0) || (jQuery.isEmptyObject(siteData) == false && siteData.length > 0)){
                
                 $.ajax({
@@ -1101,6 +1053,7 @@ $("#btn_map_addsite").click(function(){
         }
     });
 });
+
 function  addSite() {
     if(addSiteMarker == null){
         swal("No position found !");
@@ -1158,12 +1111,12 @@ $("#btn_map_addbatchsite").click(function() {
                 addBatchSiteMarker.push(mrk);
                 $("#batchsitedivmsg").html('<p>When Finished, press the <b>\'Done\'</b> Button below.</p><div class="d-flex"><input type="button" class=" col-sm-6  btn-primary " id="btn_done_addbatchsite" value="Done"><button type="button" class="ml-1  col-sm-6  btn-danger " id="btn_cancle_addbatchsite">Cancel</button></div>');
 
-                if ($.isEmptyObject(mapAddZoneBatchSiteListner) == false) {
+                /*if ($.isEmptyObject(mapAddZoneBatchSiteListner) == false) {
                     for (g = 0; g < zCount; g++) {
                         google.maps.event.removeListener(mapAddZoneBatchSiteListner[g]);
                     }
                     mapAddZoneBatchSiteListner = [];
-                }
+                }*/
 
                 $("#btn_done_addbatchsite").click(function() {
                     addBatchSite();
@@ -1221,7 +1174,6 @@ function cancleAddBatchSite(){
     $("#btn_map_addbatchsite").addClass('d-flex').removeClass('d-none');           
 }
 /**************** Add Batch-create Premises ****************/
-
 
 function clearLayersData(){
     siteTypes = [];
