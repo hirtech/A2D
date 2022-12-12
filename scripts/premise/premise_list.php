@@ -126,13 +126,14 @@ if($mode == "List"){
     ));
     //
     $response = curl_exec($ch);
+    //echo "<pre>"; print_r($response);exit();
     curl_close($ch);  
-    //echo "<pre>";print_r($response);exit();
     $result_arr = json_decode($response, true);
     $total = $result_arr['result']['total_record'];
     $jsonData = array('sEcho' => $sEcho, 'iTotalDisplayRecords' => $total, 'iTotalRecords' => $total, 'aaData' => array());
     $entry = $hidden_arr = array();
     $rs_site = $result_arr['result']['data'];
+   //echo "<pre>"; print_r($rs_site);exit();
     $ni = count($rs_site);
     if($ni > 0){
         for($i=0;$i<$ni;$i++){
@@ -151,27 +152,29 @@ if($mode == "List"){
                     <div class="dropdown-menu p-0">';
                     if(per_hasModuleAccess("Task Awareness", 'List')){
                         //$action .= '<div class="dropdown-divider"></div>';
-                        $action .= '<a class="dropdown-item" title="Awareness"  onclick="addEditDataAwareness(0,\'add\','.$rs_site[$i]['iPremiseId'].')">Awareness</a><a class="dropdown-item" title="Setup Premise Services"  href="'.$site_url.'premise/setup_premise_services_list&iPremiseId=' . $rs_site[$i]['iPremiseId'] . '" target="_blank">Setup Premise Services</a>';
+                        $action .= '<a class="dropdown-item" title="Awareness"  onclick="addEditDataAwareness(0,\'add\','.$rs_site[$i]['iPremiseId'].')">Awareness</a>';
                     }
+                    //href="'.$site_url.'premise/setup_premise_services_list&iPremiseId=' . $rs_site[$i]['iPremiseId'] . '"
+                    $action .= '<a class="dropdown-item" title="Setup Premise Services"   onclick="setupPremiseService('.$rs_site[$i]['iPremiseId'].', '.$rs_site[$i]['premice_circuit_count'].')">Setup Premise Services</a>';
                     $action .= '</div>';
             }
             $vAddress = $rs_site[$i]['vAddress1'].' '.$rs_site[$i]['vStreet'];
             $entry[] = array(
-                    "checkbox" => '<input type="checkbox" class="list" value="'.$rs_site[$i]['iPremiseId'].'"/>',
-                    "iPremiseId" => gen_strip_slash($rs_site[$i]['iPremiseId']),
-                    "vName" => gen_strip_slash($rs_site[$i]['vName']),
-                    "vSiteType" => gen_strip_slash($rs_site[$i]['vTypeName']),
-                    "vSiteSubType" => gen_strip_slash($rs_site[$i]['vSubTypeName']),
-                    "vAddress" => $rs_site[$i]['vAddress'],
-                    'vCity' => $rs_site[$i]['vCity'],
-                    'vState' => $rs_site[$i]['vState'],
-                    'vZoneName' => $rs_site[$i]['vZoneName'],
-                    'vNetwork' => $rs_site[$i]['vNetwork'],
-                    'vCounty' => $rs_site[$i]['vCounty'],
-                    "iStatus" => '<span data-toggle="tooltip" data-placement="top" title="'.gen_status($rs_site[$i]['iStatus']).'" class="badge badge-pill badge-'.$status_color[ gen_status($rs_site[$i]['iStatus'])].'">&nbsp;</span>',
-                    "actions" => ($action!="")?$action:"---"
-           
-                );
+                "checkbox" => '<input type="checkbox" class="list" value="'.$rs_site[$i]['iPremiseId'].'"/>',
+                "iPremiseId" => gen_strip_slash($rs_site[$i]['iPremiseId']),
+                "vName" => gen_strip_slash($rs_site[$i]['vName']),
+                "vSiteType" => gen_strip_slash($rs_site[$i]['vTypeName']),
+                "vSiteSubType" => gen_strip_slash($rs_site[$i]['vSubTypeName']),
+                "vAddress" => $rs_site[$i]['vAddress'],
+                'vCity' => $rs_site[$i]['vCity'],
+                'vState' => $rs_site[$i]['vState'],
+                'vZoneName' => $rs_site[$i]['vZoneName'],
+                'vNetwork' => $rs_site[$i]['vNetwork'],
+                'vCounty' => $rs_site[$i]['vCounty'],
+                "vCircuitName" => $rs_site[$i]['vCircuitName'],
+                "actions" => ($action!="")?$action:"---"
+       
+            );
         }
     }
    // echo "<pre>";print_r($entry);

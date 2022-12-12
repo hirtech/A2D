@@ -43,12 +43,14 @@
             		<div class="form-group row">
             			<label class="col-sm-5 col-form-label" for="iSuspendPremiseCircuitId">Premise Circuit</label>
             			<div class="col-sm-7">
-                			<select name="iSuspendPremiseCircuitId" id="iSuspendPremiseCircuitId" class="form-control">
+                            <input type="hidden" class="form-control readonly-color" name="iSuspendPremiseCircuitId" id="iSuspendPremiseCircuitId" value="" readonly>
+                            <input type="text" class="form-control readonly-color" name="vSuspendPremiseCircuit" id="vSuspendPremiseCircuit" value="" readonly>
+                			<!-- <select name="iSuspendPremiseCircuitId" id="iSuspendPremiseCircuitId" class="form-control">
                                 <option value="">Select Premise Circuit</option>
                                 {section name="n" loop=$rs_pcircuit}
                                 <option value="{$rs_pcircuit[n].iPremiseCircuitId}">{$rs_pcircuit[n].vPremiseDisplay|gen_strip_slash}</option>
                                 {/section}
-                            </select>
+                            </select> -->
                 		</div>
             		</div>
                     <div class="form-group row">

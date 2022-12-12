@@ -52,7 +52,7 @@
 							<th>State</th>
 							<th>Zone Name</th>
 							<th>Network</th>
-							<th>Status</th>
+							<th>Premise Circuit</th>
 							<th>Action</th> 
 						</tr>
 					</thead>

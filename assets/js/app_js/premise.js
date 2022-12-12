@@ -15,18 +15,18 @@ var listPage = function(){
             "aaSorting": [[1,'desc']],
             'bAutoWidth': true,
             "columns": [
-            { "data": "checkbox", "sortable":false, "className": "text-center", "width" : "1%"},
-            { "data": "iPremiseId", "className": "text-center", "width" : "8%"},
-            { "data": "vName" , "width" : "10%"},
-            { "data": "vSiteType", "width" : "10%" },
-            { "data": "vSiteSubType", "width" : "10%"},
-            { "data": "vAddress", "sortable":false, "width" : "10%"},
-            { "data": "vCity", "width" : "8%"},
-            { "data": "vState", "width" : "8%"},
-            { "data": "vZoneName", "width" : "8%"},
-            { "data": "vNetwork", "width" : "8%"},
-            { "data": "iStatus", "className": "text-center", "width" : "6%"},
-            { "data": "actions", "sortable":false, "className": "text-center", "width" : "14%"},
+            { "data": "checkbox", "sortable":false, "className": "text-center"},
+            { "data": "iPremiseId", "className": "text-center"},
+            { "data": "vName"},
+            { "data": "vSiteType"},
+            { "data": "vSiteSubType"},
+            { "data": "vAddress", "sortable":false},
+            { "data": "vCity"},
+            { "data": "vState"},
+            { "data": "vZoneName"},
+            { "data": "vNetwork"},
+            { "data": "vCircuitName", "sortable":false, "className": "text-center"},
+            { "data": "actions", "sortable":false, "className": "text-center"},
             ],
             "autoWidth" : true,
             "lengthMenu": PageLengthMenuArr,
@@ -253,4 +253,26 @@ function exportExcelSheet(){
        }
    });
   return false;
+}
+
+
+function setupPremiseService(premise_id, premise_circuit_count) {
+    if(premise_circuit_count > 0) {
+        window.location = site_url+"premise/setup_premise_services_list&iPremiseId="+premise_id;
+    }else {
+        swal({
+            title: "Cannot setup services. Please setup the premise-circuit for this premise first",
+            text: "",
+            type: "info",
+            confirmButtonClass: "confirm btn btn-lg btn-warning",
+            confirmButtonText: 'Okay',
+            closeOnConfirm: false,
+            },
+            function(isConfirm) {
+                swal.close();
+                toastr.success(response['msg']);
+                location.href =  site_url+'fiber_inquiry/list';
+            }
+        );
+    }
 }

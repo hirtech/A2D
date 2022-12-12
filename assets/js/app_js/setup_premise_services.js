@@ -48,6 +48,8 @@ function getServiceOrder(iWOId,mode){
             var vCarrierName = response.data[0].vCarrierName;
             var iNRCVariable = response.data[0].iNRCVariable;
             var iMRCFixed = response.data[0].iMRCFixed;
+            var iPremiseCircuitId = response.data[0].iPremiseCircuitId;
+            var premise_circuit = response.data[0].premise_circuit;
 
             if(mode == "start"){
                 $('#iServiceOrderId').val(iServiceOrderId);
@@ -56,11 +58,15 @@ function getServiceOrder(iWOId,mode){
                 $('#vCarrierName').val(vCarrierName);
                 $('#iNRCVariable').val(iNRCVariable);
                 $('#iMRCFixed').val(iMRCFixed);
+                $('#iPremiseCircuitId').val(iPremiseCircuitId);
+                $('#vPremiseCircuit').val(premise_circuit);
             }else if(mode == "suspend"){
                 $('#iSuspendServiceOrderId').val(iServiceOrderId);
                 $('#vSuspendServiceOrder').val(vServiceOrder);
                 $('#iSuspendCarrierId').val(iCarrierId);
                 $('#vSuspendCarrierName').val(vCarrierName);
+                $('#iSuspendPremiseCircuitId').val(iPremiseCircuitId);
+                $('#vSuspendPremiseCircuit').val(premise_circuit);
             }
         }
     });

@@ -446,6 +446,11 @@ if($request_type == "workorder_list"){
         //echo "<pre>";print_r($rs_wo);exit;
         $rs_arr = array();
         for ($i = 0; $i < count($rs_wo); $i++) {
+
+			$sql =  'SELECT pc."iPremiseCircuitId", c."vCircuitName",c."iCircuitId" FROM workorder w JOIN premise_circuit pc ON w."iWOId"=pc."iWOId" LEFT JOIN circuit c ON pc."iCircuitId"=c."iCircuitId" WHERE w."iPremiseId"= '.$rs_wo[$i]['iPremiseId'].' AND w."iWOId" = '.$iWOId.' Order BY "iPremiseCircuitId" LIMIT 1';
+			$rs_pc = $sqlObj->GetAll($sql);
+			
+
             $rs_arr[$i]['iWOId'] = $rs_wo[$i]['iWOId'];
             $rs_arr[$i]['iServiceOrderId'] = $rs_wo[$i]['iServiceOrderId'];
             $rs_arr[$i]['vServiceOrder'] = "ID#".$rs_wo[$i]['iServiceOrderId']." (".$rs_wo[$i]['vMasterMSA']." | ".$rs_wo[$i]['vServiceOrder'].")";
@@ -453,6 +458,14 @@ if($request_type == "workorder_list"){
             $rs_arr[$i]['vCarrierName'] = $rs_wo[$i]['vCompanyName'];
             $rs_arr[$i]['iNRCVariable'] = (isset($rs_wo[$i]['iNRCVariable']) && $rs_wo[$i]['iNRCVariable'] != '')?$rs_wo[$i]['iNRCVariable']:"0";
             $rs_arr[$i]['iMRCFixed'] = (isset($rs_wo[$i]['iMRCFixed']) && $rs_wo[$i]['iMRCFixed'] != '')?$rs_wo[$i]['iMRCFixed']:"0";
+
+			$rs_arr[$i]['iPremiseCircuitId'] = '0';
+			$rs_arr[$i]['premise_circuit'] = '';
+			if(count($rs_pc) > 0) {
+				$vPremiseDisplay = " Premise Circuit ID#".$rs_pc[0]['iPremiseCircuitId']." (".$rs_pc[0]['vCircuitName'].")";
+				$rs_arr[$i]['iPremiseCircuitId'] = $rs_pc[0]['iPremiseCircuitId'];
+                $rs_arr[$i]['premise_circuit'] = $vPremiseDisplay;
+			}
         }
         //echo "<pre>";print_r($rs_arr);exit;
         $result = array('data' => $rs_arr);

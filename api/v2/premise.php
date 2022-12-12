@@ -169,9 +169,6 @@ if($request_type == "premise_list"){
         case "9":
             $sortname = 'n."vName"';
             break;
-        case "10":
-            $sortname = 's."iStatus"';
-            break;
         case "1":
             $sortname = "s.\"iPremiseId\"";
             break;
@@ -202,15 +199,26 @@ if($request_type == "premise_list"){
     $SiteObj->setClause();
     $SiteObj->debug_query = false;
     $rs_site = $SiteObj->recordset_list();
-	//echo "<pre>";print_r($rs_site);exit();
     // Paging Total Records
     $total = $SiteObj->recordset_total();
 
 	$data = array();
 	$ni = count($rs_site);
-
 	if($ni > 0){
 		for($i=0;$i<$ni;$i++){
+            $sql = 'SELECT c."vCircuitName",c."iCircuitId" FROM workorder w JOIN premise_circuit pc ON w."iWOId"=pc."iWOId" LEFT JOIN circuit c ON pc."iCircuitId"=c."iCircuitId" WHERE w."iPremiseId"= '.$rs_site[$i]['iPremiseId'];
+            $rs_db = $sqlObj->GetAll($sql);
+
+            $vCircuitName = "";
+            for($j=0;$j<count($rs_db);$j++){
+                if(count($rs_db) > 1){
+                    $vCircuitName = $rs_db[$j]['vCircuitName']."<br>";
+                }else if(count($rs_db) == 1){
+                    $vCircuitName = $rs_db[$j]['vCircuitName'];
+                }else{
+                    $vCircuitName = "";
+                }
+            }
             $vAddress = $rs_site[$i]['vAddress1'].' '.$rs_site[$i]['vStreet'];
 			$data[] = array(
                 "iPremiseId" => gen_strip_slash($rs_site[$i]['iPremiseId']),
@@ -223,10 +231,12 @@ if($request_type == "premise_list"){
 				'vZoneName' => $rs_site[$i]['vZoneName'],
 				'vNetwork' => $rs_site[$i]['vNetwork'],
 				'vCounty' => $rs_site[$i]['vCounty'],
-				'iStatus' => $rs_site[$i]['iStatus'],
+                'vCircuitName' => $vCircuitName,
+                'premice_circuit_count' => count($rs_db),
             );
 		}
 	}
+    // echo "<pre>1"; print_r($data);exit();
 	$result = array('data' => $data , 'total_record' => $total);
 
     $rh = HTTPStatus(200);

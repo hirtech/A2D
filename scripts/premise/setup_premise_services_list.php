@@ -218,7 +218,7 @@ $smarty->assign("rs_wo", $rs_wo);
 /******* get workorder data where status = open *******/
 
 /******* get Premise Circuit Data *******/
-$pcircuit_param['iPremiseId'] = $iPremiseId;
+/*$pcircuit_param['iPremiseId'] = $iPremiseId;
 $pcircuit_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
 $pcircuitAPI_URL = $site_api_url."premise_circuit_dropdown.json";
 //echo $pcircuitAPI_URL. " ".json_encode($pcircuit_param);exit;
@@ -237,7 +237,7 @@ $response_pcircuit = curl_exec($ch);
 curl_close($ch);  
 $res_pcircuit = json_decode($response_pcircuit, true);
 $rs_pcircuit = $res_pcircuit['result'];
-$smarty->assign("rs_pcircuit", $rs_pcircuit);
+$smarty->assign("rs_pcircuit", $rs_pcircuit);*/
 //echo "<pre>";print_r($rs_pcircuit);exit;
 /******* get Premise Circuit Data *******/
 //echo "<pre>";print_r($_SESSION);exit;
