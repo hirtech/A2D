@@ -140,7 +140,7 @@ var listPage = function(){
                 }
             },
             text: 'Batch Edit',
-            className: 'btn btn-warning'
+            className: 'btn btn-dark'
         });
         
     }
