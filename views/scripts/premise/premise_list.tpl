@@ -64,6 +64,7 @@
 		</div> 
 	</div> 
 </div>
+{include file="scripts/premise/batch_addedit_popup.tpl"}
 {include file="scripts/tasks/task_awareness_add.tpl"}
 
 <script type="text/javascript">

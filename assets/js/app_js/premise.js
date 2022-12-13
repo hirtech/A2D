@@ -124,6 +124,24 @@ var listPage = function(){
             text: 'Map Selected',
             className: 'btn btn-warning'
         });
+
+        gridtable.button().add( 6, {
+            action: function ( e, dt, node, config ) {
+                var site_list_id = [];
+                if ($('#datatable-grid input:checked').length > 0){
+                    $.each($("input[class='list']:checked"), function(e)
+                    {
+                        site_list_id.push($(this).val());
+                        addEditData('','edit',site_list_id,'batch');
+                    });
+                }
+                else{
+                    alert("Please Select At least One PREMISE");
+                }
+            },
+            text: 'Batch Edit',
+            className: 'btn btn-warning'
+        });
         
     }
     return {
@@ -276,3 +294,89 @@ function setupPremiseService(premise_id, premise_circuit_count) {
         );
     }
 }
+
+function addEditData(id,mode,premiseid,referer){
+    $("#batchfrmadd").removeClass('was-validated');
+    $("#batmodaltitle").html('Edit Multiple Premises in a Single Batch');
+    $("#bat_mode").val('edit_premises_single_batch');
+    $("#premiseid").val(premiseid);
+    $("#iSTypeId").val('');
+    $("#iSSTypeId1").val('');
+    $("#iStatus").val(1);
+    
+    $("#batch_modalbox").trigger('click');
+}
+
+function getSiteSubType(sTypeid){
+   $("#iSSTypeId").html('<option value="">---Select---</option>');
+   if(sTypeid != ""){
+        $.ajax({
+            type: "POST",
+            url: site_url+"premise/add",
+            data: {
+                "mode" : "getSiteSubType",
+                "iSiteTypeId" : sTypeid
+            },
+            success: function(data){
+                response =JSON.parse(data);
+
+                var option ="<option value=''>---Select---</option>";
+                if(response.length > 0 ){
+                    $.each(response,function(i,val){
+                        option +="<option value='"+response[i]['iSSTypeId']+"'>"+response[i]['vSubTypeName']+"</option>";
+                    });
+                }
+                console.log(option);
+                //return false;
+                $("#iSSTypeId1").html(option);
+
+                $("#iSSTypeId1").focus();
+            }
+        });
+   }
+}
+
+
+$("#bat_save_data").click(function(){
+    var checkerr =0;
+    $('#bat_save_loading').show();
+    $("#bat_save_data").prop('disabled', true);
+
+    var form = $("#batchfrmadd");
+    var isError = 0;
+    if (form[0].checkValidity() === false) {
+        event.preventDefault();
+        event.stopPropagation();
+        isError = 1;
+    }
+    form.addClass('was-validated');
+    if(isError == 0){           
+        var form_data = $('#batchfrmadd').serializeArray();
+        $.ajax({
+            type: "POST",
+            //dataType: "json",
+            url: site_url + "premise/list",
+            data: form_data,
+            cache: false,
+            success: function (data) {
+                $('#bat_save_loading').hide();
+                $("#bat_save_data").prop('disabled', false);
+                $("#closestbox").trigger('click');
+                response =JSON.parse(data);
+                if(response['error'] == "0"){
+                    toastr.success(response['msg']);
+                }else{
+                    toastr.error(response['msg']);
+                }
+                gridtable.ajax.reload();
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                //alert(errorThrown);
+            }
+        });
+        return false; 
+    }else{
+        $('#bat_save_loading').hide();
+        $("#bat_save_data").prop('disabled', false);
+    }
+});

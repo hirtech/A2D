@@ -185,8 +185,7 @@ if($mode == "List"){
     echo json_encode($jsonData);
     hc_exit();
     # -----------------------------------
-}
-else if($mode == "Add"){
+}else if($mode == "Add"){
     $arr_param = array();
     if (isset($_POST) && count($_POST) > 0) {
         $arr_param = array(
@@ -322,8 +321,7 @@ else if($mode == "Add"){
     echo json_encode($result);
     hc_exit();
     # -----------------------------------
-}
-else if($mode == "Delete"){
+}else if($mode == "Delete"){
 
     $result = array();
     $arr_param = array();
@@ -362,8 +360,7 @@ else if($mode == "Delete"){
     echo json_encode($result);
     hc_exit();
     # ----------------------------------- 
-} 
-else if ($mode == "get_zone_from_latlong") {
+} else if ($mode == "get_zone_from_latlong") {
     //echo"<pre>";print_r($_REQUEST);exit;
 
     $lat = number_format($_REQUEST['lat'],6);
@@ -432,7 +429,7 @@ else if ($mode == "get_zone_from_latlong") {
     echo json_encode($jsonData);
     hc_exit();
 
-} else if ($mode == "get_state") {
+}else if ($mode == "get_state") {
 
     $jsonData = array();
     $vStateCode = trim($_REQUEST['vStateCode']);
@@ -494,7 +491,7 @@ else if ($mode == "get_zone_from_latlong") {
 
     echo json_encode($jsonData);
     hc_exit();
-} else if ($mode == "get_city") {
+}else if ($mode == "get_city") {
 
     $vCity = trim($_REQUEST['city']);
     $vCounty = trim($_REQUEST['county']);
@@ -525,7 +522,7 @@ else if ($mode == "get_zone_from_latlong") {
     $jsonData =$res['result'];
     echo json_encode($jsonData);
     hc_exit();
-} else if($mode== "Excel"){
+}else if($mode== "Excel"){
    $arr_param = array();
     $vOptions = $_REQUEST['vOptions'];
     $Keyword = addslashes(trim($_REQUEST['Keyword']));
@@ -676,7 +673,7 @@ else if ($mode == "get_zone_from_latlong") {
 
    echo json_encode($result_arr);
    exit;
-} else if($mode == "upload_document"){
+}else if($mode == "upload_document"){
     $arr_param = array();
     $files = "";
     if(isset($_FILES["vFile"])){
@@ -909,6 +906,56 @@ $kml .= '</kml>';
     echo json_encode($result);
     hc_exit();
     
+}else if($mode == "edit_premises_single_batch"){
+    $arr_param = array();
+    if (isset($_POST) && count($_POST) > 0) {
+        //echo "<pre>";print_r($_POST);exit();
+        $arr_param = array(
+            "iPremiseId"        => addslashes($_POST['iPremiseId']),
+            "iSTypeId"          => addslashes($_POST['iSTypeId']),
+            "iSSTypeId"         => addslashes($_POST['iSSTypeId1']),
+            "iStatus"           => $_POST['iStatus'],
+            "vLoginUserName"    =>$_SESSION["sess_vName".$admin_panel_session_suffix],
+            "sessionId"         => $_SESSION["we_api_session_id".$admin_panel_session_suffix],
+        );
+        //echo "<pre>";print_r($site_arr);exit();
+        $API_URL = $site_api_url."premise_batch_edit.json";
+        //echo $API_URL. " ".json_encode($arr_param);exit;
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $API_URL);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_HEADER, FALSE);
+        curl_setopt($ch, CURLOPT_POST, TRUE);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($arr_param));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+           "Content-Type: application/json",
+        ));
+
+        $response_site = curl_exec($ch);
+        curl_close($ch); 
+        $result_site_arr = json_decode($response_site, true);
+        // echo "<pre>"; print_r($result_site_arr);exit(); 
+
+        if(!empty($result_site_arr)){
+            $result['iPremiseId'] = $_POST['iPremiseId'];
+            $result['msg'] = MSG_UPDATE;
+            $result['error']= 0 ;
+        }else{
+            $result['msg'] = MSG_UPDATE_ERROR;
+            $result['error']= 1 ;
+        }
+    }else {
+        $result['msg'] = MSG_UPDATE_ERROR;
+        $result['error']= 1 ;
+    }
+    # -----------------------------------
+    # Return jSON data.
+    # -----------------------------------
+    echo json_encode($result);
+    hc_exit();
+    # -----------------------------------
 }
 
 # Premise Type Dropdown

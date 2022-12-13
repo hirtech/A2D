@@ -457,6 +457,19 @@ class Site {
 		}
 	}
 
+	function edit_batch_records() {
+		global $sqlObj, $admin_panel_session_suffix;
+		
+		if($this->update_arr) {
+			
+			$sql_updt = 'UPDATE premise_mas set "iSTypeId" = '.gen_allow_null_int($this->update_arr['iSTypeId']).', "iSSTypeId" = '.gen_allow_null_int($this->update_arr['iSSTypeId']).', "dModifiedDate" = '.gen_allow_null_char(date_getSystemDateTime()).', "iStatus" = '.gen_allow_null_int($this->update_arr['iStatus']).' WHERE "iPremiseId" IN ('.$this->update_arr['iPremiseId'].')';
+			//echo $sql_updt;exit();
+			$rs_up = $sqlObj->Execute($sql_updt);
+
+			return $rs_up;
+		}
+	}
+
 	function site_attribute_list(){
 		global $sqlObj;
 		$sql = "SELECT site_attribute.* " . $this->join_field_str . " FROM \"site_attribute\" " . $this->join_clause . $this->where_clause . $this->group_by_clause . $this->order_by_clause . $this->limit_clause;

@@ -756,6 +756,25 @@ if($request_type == "premise_list"){
     $code = 2000;
     $message = api_getMessage($req_ext, constant($code));
     $response_data = array("Code" => 200, "Message" => $message, "result" => $result);
+}else if($request_type == "premise_batch_edit"){
+    $SiteObj = new Site();
+    $update_arr = array(
+        "iPremiseId"         => $RES_PARA['iPremiseId'],
+        "iSTypeId"           => $RES_PARA['iSTypeId'],
+        "iSSTypeId"          => $RES_PARA['iSSTypeId'],
+        "iStatus"            => $RES_PARA['iStatus']
+    );
+    // echo "<pre>";print_r($update_arr);exit;
+    $SiteObj->update_arr = $update_arr;
+    $SiteObj->setClause();
+    $rs_db = $SiteObj->edit_batch_records();
+
+    if($rs_db){
+        $response_data = array("Code" => 200, "Message" => MSG_UPDATE);
+    }
+    else{
+        $response_data = array("Code" => 500 , "Message" => MSG_UPDATE_ERROR);
+    }
 }
 else {
    $r = HTTPStatus(400);
