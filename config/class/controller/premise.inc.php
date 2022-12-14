@@ -88,54 +88,6 @@ class Site {
 		return $rs_db;
 	}
 
-	function action_records(){
-		global $sqlObj;
-		if($this->ids) {
-			if($this->action=="Assign") {
-				
-				/*----------------- Convert From Public to internal SR --------------------------*/
-				// Converted - public
-				$sql = "UPDATE service_request_status SET \"iSRSMId\" = '4' WHERE \"iSRId\" = ".$_POST['iSRId']." AND \"iType\" = '1'"; 
-				$sqlObj->Execute($sql);
-				
-				// Open - internal
-				$sql = "INSERT INTO service_request_status(\"iSRId\", \"iSRSMId\", \"iType\") VALUES (".gen_allow_null_int($_POST['iSRId']).", '2', '2')";
-				$sqlObj->Execute($sql);				
-				/*----------------- Convert From Public to internal SR --------------------------*/	
-				
-				
-				//$sql = "DELETE FROM service_request_sites WHERE \"iPremiseId\" IN (".$this->ids.")";
-				$sql = "DELETE FROM service_request_sites WHERE \"iSRId\" IN (".$_POST['iSRId'].")";
-				$sqlObj->Execute($sql);
-				
-				$id_arr = explode(',', $this->ids);
-				$ni = count($id_arr);
-				if($ni > 0) { // Open - internal
-					$sql = "INSERT INTO service_request_sites(\"iSRId\", \"iPremiseId\") VALUES ";
-					for($i=0;$i<$ni;$i++){
-						$sql .= "(".gen_allow_null_int($_POST['iSRId']).", ".gen_allow_null_int($id_arr[$i])."), ";
-					}
-					$sqlObj->Execute(substr($sql, 0, -2));
-				}
-			}
-			else if($this->action=="Delete"){
-				$sql = 'DELETE FROM premise_mas WHERE "iPremiseId" IN ('.$this->ids.')';
-				$sqlObj->Execute($sql);
-			}
-
-			$rs_db =$sqlObj->Affected_Rows();
-		}
-
-		/*-------------- Log Entry -------------*/
-		$this->SALObj->type = 1;
-		$this->SALObj->module_name = "Site";
-		$this->SALObj->action = $this->action;
-		$this->SALObj->audit_log_entry();
-		/*-------------- Log Entry -------------*/
-
-		return $rs_db;
-	}
-
 	function recordset_total() {
 		global $sqlObj;
 			
@@ -149,7 +101,6 @@ class Site {
 	}
 
 	function delete_records(){
-
 		//echo "<pre>";print_r($_POST);exit;
 		global $sqlObj;
 		$sql = "DELETE FROM premise_mas" . $this->join_clause . $this->where_clause . $this->group_by_clause . $this->order_by_clause . $this->limit_clause;
@@ -158,6 +109,9 @@ class Site {
 		$rs_del =$sqlObj->Affected_Rows();
 
         $sql = "DELETE FROM site_attribute WHERE \"iPremiseId\" IN (" . $_POST['iPremiseId'] . ")";
+        $sqlObj->Execute($sql);
+
+        $sql = "DELETE FROM site_contact WHERE \"iPremiseId\" IN (" . $_POST['iPremiseId'] . ")";
         $sqlObj->Execute($sql);
 
 		/*-------------- Log Entry -------------*/
@@ -459,14 +413,27 @@ class Site {
 
 	function edit_batch_records() {
 		global $sqlObj, $admin_panel_session_suffix;
-		
+		// echo "<pre>123"; print_r($this->update_arr);exit();
+		$query_arr = array();
+		$query_str = "";
 		if($this->update_arr) {
-			
-			$sql_updt = 'UPDATE premise_mas set "iSTypeId" = '.gen_allow_null_int($this->update_arr['iSTypeId']).', "iSSTypeId" = '.gen_allow_null_int($this->update_arr['iSSTypeId']).', "dModifiedDate" = '.gen_allow_null_char(date_getSystemDateTime()).', "iStatus" = '.gen_allow_null_int($this->update_arr['iStatus']).' WHERE "iPremiseId" IN ('.$this->update_arr['iPremiseId'].')';
-			//echo $sql_updt;exit();
-			$rs_up = $sqlObj->Execute($sql_updt);
-
-			return $rs_up;
+			if($this->update_arr['iSTypeId'] != ''){
+				$query_arr[] = '"iSTypeId" = '.gen_allow_null_int($this->update_arr['iSTypeId']);
+			}
+			if($this->update_arr['iSSTypeId'] != ''){
+				$query_arr[] = '"iSSTypeId" = '.gen_allow_null_int($this->update_arr['iSSTypeId']);
+			}
+			if($this->update_arr['iStatus'] != ''){
+				$query_arr[] = '"iStatus" = '.gen_allow_null_int($this->update_arr['iStatus']);
+			}
+			if(!empty($query_arr)){
+				$query_str = implode(",", $query_arr);
+				$sql_updt = 'UPDATE premise_mas set '.$query_str.' WHERE "iPremiseId" IN ('.$this->update_arr['iPremiseId'].')';
+				//echo $sql_updt;exit();
+				$rs_up = $sqlObj->Execute($sql_updt);
+				return $rs_up;
+			}
+			else return "";
 		}
 	}
 

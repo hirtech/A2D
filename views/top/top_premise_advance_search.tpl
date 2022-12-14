@@ -112,23 +112,20 @@
                 </div>
             </div>
             <div class="form-group col-md-4">
-                <label for="inputEmail4">Network</label>
                 <div class="form-row">
-                    <div class="form-group col-md-12">
+                    <div class="form-group col-md-6">
+                    <label for="inputEmail4">Network</label>
                         <select name="iNetworkId" id="iNetworkId" class="form-control col-md-12">
                             <option value="">-- Select --</option> {section name="n" loop=$rs_ntwork} <option value="{$rs_ntwork[n].iNetworkId}">{$rs_ntwork[n].vName|gen_strip_slash}</option> {/section}
                         </select>
                     </div>
-                </div>
-            </div>
-            <div class="form-group col-md-4">
-                <label for="inputEmail4">Status</label>
-                <div class="form-row">
-                    <div class="form-group col-md-12">
+                    <div class="form-group col-md-6">
+                        <label for="inputEmail4">Status</label>
                         <select name="status" id="status" class="form-control">
                             <option value="">-- Select --</option>
-                            <option value="1">Active</option>
-                            <option value="0">Inactive</option>
+                            <option value="1">On-Net</option>
+                            <option value="0">Off-Net</option>
+                            <option value="2">Near-Net</option>
                         </select>
                     </div>
                 </div>

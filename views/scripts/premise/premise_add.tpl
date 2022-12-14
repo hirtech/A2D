@@ -112,8 +112,8 @@
 							       				<div class="col-12">
 							       				 	<label for="iStatus">Status</label>
 					                                <select name="iStatus" id="iStatus" class="select">
-														<option value="1"  {if $rs_site[0].iStatus eq '1'} selected {/if} {if $mode eq 'Add'} selected{/if}>On-Net</option>
-														<option value="0" {if $rs_site[0].iStatus eq '0'} selected {/if}>Off-Net</option>
+														<option value="1"  {if $rs_site[0].iStatus eq '1'} selected {/if}>On-Net</option>
+														<option value="0" {if $rs_site[0].iStatus eq '0'} selected {/if} {if $mode eq 'Add'} selected{/if}>Off-Net</option>
 														<option value="2" {if $rs_site[0].iStatus eq '2'} selected {/if}>Near-Net</option>
 													</select>
 												</div>

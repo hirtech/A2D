@@ -1,7 +1,7 @@
 <?
 $mod_access_arr = per_getAssocArray($_SESSION["sess_iAGroupId".$admin_panel_session_suffix],'');
 // ****** Menu ****** //
-$sql_menu = 'SELECT * FROM menu_mas WHERE "iStatus" = 1 ORDER BY "iParentId", "iDisplayOrder"';
+$sql_menu = 'SELECT * FROM menu_mas WHERE "iStatus" = 1 ORDER BY "iParentId","iSubParentId", "iDisplayOrder"';
 $rs_menu = $sqlObj->GetAll($sql_menu);
 //echo "<pre>";print_r($rs_menu);exit;
 $mi = count($rs_menu);
@@ -39,7 +39,11 @@ if($mi > 0) {
 			$checkaccess = ($rs_menu[$m]['vAccessModule'] != "")?(($mod_access_arr[$rs_menu[$m]['vAccessModule']]['eList'] == 'Y')?1:0):0;
 			if($checkaccess == 1){
 				$rs_menu[$m]['vClassId'] = 'menu-'.$rs_menu[$m]['iParentId'];
-				$menu_arr[$rs_menu[$m]['iParentId']]['submenu'][] = $rs_menu[$m];
+				if($rs_menu[$m]['iSubParentId'] == '' || $rs_menu[$m]['iSubParentId'] == '0'){
+					$menu_arr[$rs_menu[$m]['iParentId']]['submenu'][$rs_menu[$m]['iMenuId']] = $rs_menu[$m];
+				}else {
+					$menu_arr[$rs_menu[$m]['iParentId']]['submenu'][$rs_menu[$m]['iSubParentId']]['ssubmenu'][] = $rs_menu[$m]; 
+				}
 			}
 		}
 	}

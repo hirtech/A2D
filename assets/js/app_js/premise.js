@@ -26,6 +26,7 @@ var listPage = function(){
             { "data": "vZoneName"},
             { "data": "vNetwork"},
             { "data": "vCircuitName", "sortable":false, "className": "text-center"},
+            { "data": "iStatus", "sortable":false, "className": "text-center"},
             { "data": "actions", "sortable":false, "className": "text-center"},
             ],
             "autoWidth" : true,
@@ -300,9 +301,9 @@ function addEditData(id,mode,premiseid,referer){
     $("#batmodaltitle").html('Edit Multiple Premises in a Single Batch');
     $("#bat_mode").val('edit_premises_single_batch');
     $("#premiseid").val(premiseid);
-    $("#iSTypeId").val('');
-    $("#iSSTypeId1").val('');
-    $("#iStatus").val(1);
+    $("#iSTypeId1").select2().val('').trigger('change');
+    $("#iSSTypeId1").select2().val('').trigger('change');
+    $("#iStatus").select2().val('').trigger('change');
     
     $("#batch_modalbox").trigger('click');
 }
@@ -338,45 +339,57 @@ function getSiteSubType(sTypeid){
 
 
 $("#bat_save_data").click(function(){
-    var checkerr =0;
-    $('#bat_save_loading').show();
-    $("#bat_save_data").prop('disabled', true);
-
-    var form = $("#batchfrmadd");
-    var isError = 0;
-    if (form[0].checkValidity() === false) {
-        event.preventDefault();
-        event.stopPropagation();
-        isError = 1;
-    }
-    form.addClass('was-validated');
-    if(isError == 0){           
-        var form_data = $('#batchfrmadd').serializeArray();
-        $.ajax({
-            type: "POST",
-            //dataType: "json",
-            url: site_url + "premise/list",
-            data: form_data,
-            cache: false,
-            success: function (data) {
-                $('#bat_save_loading').hide();
-                $("#bat_save_data").prop('disabled', false);
-                $("#closestbox").trigger('click');
-                response =JSON.parse(data);
-                if(response['error'] == "0"){
-                    toastr.success(response['msg']);
-                }else{
-                    toastr.error(response['msg']);
-                }
-                gridtable.ajax.reload();
-            },
-            error: function(xhr, textStatus, errorThrown) {
-                //alert(errorThrown);
-            }
-        });
-        return false; 
+    var premise_type = $("#iSTypeId1").val();
+    var premise_sub_type = $("#iSSTypeId1").val();
+    var status = $("#iStatus").val();
+    // alert(premise_type);
+    // alert(premise_sub_type);
+    // alert(status);
+    // return false;
+    if(premise_type == "" && premise_sub_type == "" && status == ""){
+        toastr.error("Please select any one field to proceed further.");
+        return false;
     }else{
-        $('#bat_save_loading').hide();
-        $("#bat_save_data").prop('disabled', false);
+        var checkerr =0;
+        $('#bat_save_loading').show();
+        $("#bat_save_data").prop('disabled', true);
+
+        var form = $("#batchfrmadd");
+        var isError = 0;
+        if (form[0].checkValidity() === false) {
+            event.preventDefault();
+            event.stopPropagation();
+            isError = 1;
+        }
+        form.addClass('was-validated');
+        if(isError == 0){           
+            var form_data = $('#batchfrmadd').serializeArray();
+            $.ajax({
+                type: "POST",
+                //dataType: "json",
+                url: site_url + "premise/list",
+                data: form_data,
+                cache: false,
+                success: function (data) {
+                    response =JSON.parse(data);
+                    if(response['error'] == "0"){
+                        $('#bat_save_loading').hide();
+                        $("#bat_save_data").prop('disabled', false);
+                        $("#closestbox").trigger('click');
+                        toastr.success(response['msg']);
+                    }else{
+                        toastr.error(response['msg']);
+                    }
+                    gridtable.ajax.reload();
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    //alert(errorThrown);
+                }
+            });
+            return false; 
+        }else{
+            $('#bat_save_loading').hide();
+            $("#bat_save_data").prop('disabled', false);
+        }
     }
 });

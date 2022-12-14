@@ -51,7 +51,15 @@ if($request_type == "premise_list"){
     }
 
 	if ($iStatus != "") {
-        $where_arr[] = "s.\"iStatus\"='".$iStatus."'";
+        if(strtolower($iStatus) == "on-net" || $iStatus == "On-Net" || $iStatus == "On"){
+            $where_arr[] = "s.\"iStatus\" = '1'";
+        }
+        else if(strtolower($iStatus) == "off-net" || $iStatus == "Off-Net" || $iStatus == "On"){
+            $where_arr[] = "s.\"iStatus\" = '0'";
+        }
+        else if(strtolower($iStatus) == "near-net" || $iStatus == "Near-Net" || $iStatus == "Near"){
+            $where_arr[] = "s.\"iStatus\" = '2'";
+        }
     }
 
 	if ($premiseId != "") {
@@ -199,6 +207,7 @@ if($request_type == "premise_list"){
     $SiteObj->setClause();
     $SiteObj->debug_query = false;
     $rs_site = $SiteObj->recordset_list();
+    // echo "<pre>"; print_r($rs_site);exit();
     // Paging Total Records
     $total = $SiteObj->recordset_total();
 
@@ -232,6 +241,7 @@ if($request_type == "premise_list"){
 				'vNetwork' => $rs_site[$i]['vNetwork'],
 				'vCounty' => $rs_site[$i]['vCounty'],
                 'vCircuitName' => $vCircuitName,
+                'iStatus' => $rs_site[$i]['iStatus'],
                 'premice_circuit_count' => count($rs_db),
             );
 		}
@@ -768,11 +778,10 @@ if($request_type == "premise_list"){
     $SiteObj->update_arr = $update_arr;
     $SiteObj->setClause();
     $rs_db = $SiteObj->edit_batch_records();
-
-    if($rs_db){
+    // echo "<pre>"; print_r($rs_db);exit();
+    if(!empty($rs_db)){
         $response_data = array("Code" => 200, "Message" => MSG_UPDATE);
-    }
-    else{
+    }else{
         $response_data = array("Code" => 500 , "Message" => MSG_UPDATE_ERROR);
     }
 }

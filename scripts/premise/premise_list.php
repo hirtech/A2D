@@ -95,9 +95,9 @@ if($mode == "List"){
         $arr_param['iNetworkId'] = $_REQUEST['iNetworkId'];
     }
     
-    if($_REQUEST['status'] != ""){
-        $arr_param['status'] = $_REQUEST['status'];
-    }
+    // if ($_REQUEST['status'] != "") {
+    //     $arr_param['status'] = $_REQUEST['status'];
+    // }
 
     $arr_param['page_length'] = $page_length;
     $arr_param['start'] = $start;
@@ -126,18 +126,18 @@ if($mode == "List"){
     ));
     //
     $response = curl_exec($ch);
-    //echo "<pre>"; print_r($response);exit();
+    // echo "<pre>"; print_r($response);exit();
     curl_close($ch);  
     $result_arr = json_decode($response, true);
     $total = $result_arr['result']['total_record'];
     $jsonData = array('sEcho' => $sEcho, 'iTotalDisplayRecords' => $total, 'iTotalRecords' => $total, 'aaData' => array());
     $entry = $hidden_arr = array();
     $rs_site = $result_arr['result']['data'];
-   //echo "<pre>"; print_r($rs_site);exit();
+    // echo "<pre>"; print_r($rs_site);exit();
     $ni = count($rs_site);
     if($ni > 0){
         for($i=0;$i<$ni;$i++){
-            $action = '';
+            $action = $status = '';
             if($access_group_var_edit == '1'){
                $action .= '<a class="btn btn-outline-secondary" title="Edit"  href="'.$site_url.'premise/edit&mode=Update&iPremiseId=' . $rs_site[$i]['iPremiseId'] . '"><i class="fa fa-edit"></i></a>';
             }
@@ -146,6 +146,14 @@ if($mode == "List"){
             }
             
             $action .= ' <a class="btn btn-outline-warning" title="Premise History" target="_blank" href="'.$site_url.'premise/history&iPremiseId=' . $rs_site[$i]['iPremiseId'] . '&vName=' . $rs_site[$i]['vName'] . '"><i class="fas fa-history"></i></a>'; 
+
+            if($rs_site[$i]['iStatus'] == 0){
+                $status = '<span title="Off-Net" class="btn btn-danger">Off-Net</span>';
+            }else if($rs_site[$i]['iStatus'] == 1){
+                $status = '<span title="On-Net" class="btn btn-success">On-Net</span>';
+            }else if($rs_site[$i]['iStatus'] == 2){
+                $status = '<span title="Near-Net" class="btn btn-warning">Near-Net</span>';
+            }
             
             if(per_hasModuleAccess("Task Awareness", 'List')){
                 $action .= ' <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tasks</button>
@@ -172,6 +180,7 @@ if($mode == "List"){
                 'vNetwork' => $rs_site[$i]['vNetwork'],
                 'vCounty' => $rs_site[$i]['vCounty'],
                 "vCircuitName" => $rs_site[$i]['vCircuitName'],
+                "iStatus" => $status,
                 "actions" => ($action!="")?$action:"---"
        
             );
@@ -912,7 +921,7 @@ $kml .= '</kml>';
         //echo "<pre>";print_r($_POST);exit();
         $arr_param = array(
             "iPremiseId"        => addslashes($_POST['iPremiseId']),
-            "iSTypeId"          => addslashes($_POST['iSTypeId']),
+            "iSTypeId"          => addslashes($_POST['iSTypeId1']),
             "iSSTypeId"         => addslashes($_POST['iSSTypeId1']),
             "iStatus"           => $_POST['iStatus'],
             "vLoginUserName"    =>$_SESSION["sess_vName".$admin_panel_session_suffix],
@@ -920,7 +929,7 @@ $kml .= '</kml>';
         );
         //echo "<pre>";print_r($site_arr);exit();
         $API_URL = $site_api_url."premise_batch_edit.json";
-        //echo $API_URL. " ".json_encode($arr_param);exit;
+        // echo $API_URL. " ".json_encode($arr_param);exit;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $API_URL);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
@@ -934,9 +943,9 @@ $kml .= '</kml>';
         ));
 
         $response_site = curl_exec($ch);
+        // echo "<pre>"; print_r($response_site);exit();
         curl_close($ch); 
-        $result_site_arr = json_decode($response_site, true);
-        // echo "<pre>"; print_r($result_site_arr);exit(); 
+        $result_site_arr = json_decode($response_site, true); 
 
         if(!empty($result_site_arr)){
             $result['iPremiseId'] = $_POST['iPremiseId'];
