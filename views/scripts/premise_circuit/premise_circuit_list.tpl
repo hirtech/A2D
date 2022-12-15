@@ -16,6 +16,9 @@
 									<option value="vWorkOrderType">WorkOrder Type</option>
 									<option value="iCircuitId">Circuit ID</option>
 									<option value="vCircuitName">Circuit Name</option>
+									<option value="iConnectionTypeId">Connection Type ID</option>
+									<option value="vConnectionTypeName">Connection Type</option>
+									<option value="vStatus">Status</option>
 								</select>
 							</li>
 							<li>
@@ -40,6 +43,8 @@
 							<th>Premise</th>
 							<th>WorkOrder</th>
 							<th>Circuit Name</th>
+							<th>Connection Type</th>
+							<th>Status</th>
 							<th>Action</th> 
 						</tr>
 					</thead>

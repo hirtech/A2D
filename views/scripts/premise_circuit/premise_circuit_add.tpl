@@ -43,6 +43,28 @@
                                         </select>
                                         <div class="invalid-feedback"> Please select Circuit</div>
                                     </div>
+                                    <div class="col-12 mb-3">
+                                        <label for="iConnectionTypeId">Connection Type </label>
+                                        <select name="iConnectionTypeId" id="iConnectionTypeId" class="form-control">
+                                            <option value="">Select</option>
+                                            {section name="c" loop=$rs_cntype}
+                                                <option value="{$rs_cntype[c].iConnectionTypeId}" {if $rs_cntype[c].iConnectionTypeId eq $rs_data[0].iConnectionTypeId}selected{/if}>{$rs_cntype[c].vConnectionTypeName|gen_strip_slash}</option>
+                                            {/section}
+                                        </select>
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <label for="iStatus">Status</label>
+                                        <select name="iStatus" id="iStatus" class="select">
+                                            <option value="1"  {if $rs_data[0].iStatus eq 1} selected {/if}>Created</option>
+                                            <option value="2" {if $rs_data[0].iStatus eq 2} selected {/if}>In Progress</option>
+                                            <option value="3" {if $rs_data[0].iStatus eq 3} selected {/if}>Delayed</option>
+                                            <option value="4" {if $rs_data[0].iStatus eq 4} selected {/if}>Connected</option>
+                                            <option value="5" {if $rs_data[0].iStatus eq 5} selected {/if}>Active</option>
+                                            <option value="6" {if $rs_data[0].iStatus eq 6} selected {/if}>Suspended</option>
+                                            <option value="7" {if $rs_data[0].iStatus eq 7} selected {/if}>Trouble</option>
+                                            <option value="8" {if $rs_data[0].iStatus eq 8} selected {/if}>Disconnected</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -97,8 +97,27 @@ $("#save_data").click(function(){
                         );
                     }
                 }else{
-                    toastr.success(response['msg']);
-                    setTimeout(function () { location.href = site_url+'premise_circuit/premise_circuit_list';}, 3500);
+                    if($("#iStatus").val() == 4 || $("#iStatus").val() == 5) {
+                        var premise_id = response['iPremiseId'];
+                        var msg = "Congratulations - Premise "+premise_id+" is not On-Net";
+                        swal({
+                            title: msg,
+                            text: "",
+                            type: "success",
+                            confirmButtonClass: confirm_Button_Class,
+                            confirmButtonText: 'Okay',
+                            closeOnConfirm: false,
+                            },
+                            function(isConfirm) {
+                                swal.close();
+                                toastr.success(response['msg']);
+                                setTimeout(function () { location.href = site_url+'premise_circuit/premise_circuit_list';}, 3500);
+                            }
+                        );
+                    }else {
+                        toastr.success(response['msg']);
+                        setTimeout(function () { location.href = site_url+'premise_circuit/premise_circuit_list';}, 3500);
+                    }
                 }
             }
         });

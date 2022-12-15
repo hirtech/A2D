@@ -78,7 +78,7 @@ class Site {
 
 	function recordset_list_for_zone() {
 		global $sqlObj;
-		//$sql = "SELECT DISTINCT ON (s.\"iPremiseId\") s.* " . $this->join_field_str . " FROM \"premise_mas\" s" . $this->join_clause . $this->where_clause . $this->group_by_clause . $this->order_by_clause . $this->limit_clause;
+		
 		$sql = "SELECT s.* " . $this->join_field_str . " FROM \"premise_mas\" s" . $this->join_clause . $this->where_clause . $this->group_by_clause . $this->order_by_clause . $this->limit_clause;
 		//file_put_contents($site_path."logs/a.txt", $sql);
 		## Function to write query in temp file.
@@ -151,83 +151,32 @@ class Site {
 			$vNewLongitude 		= $this->insert_arr['vNewLongitude'];
 
 			$vPointLatLong = gen_allow_null_char('');
-			$vPolygonLatLong = gen_allow_null_char('');
-			$vPolyLineLatLong = gen_allow_null_char('');
 
-			if($iGeometryType == 1){
-				if($this->insert_arr['pointlatlong'] != ""){
-					$search_arr  = ["POINT(", ")"];
-					$replace_arr  = ["", ""];
-					$new_polygonstr = str_replace($search_arr, $replace_arr, $this->insert_arr['pointlatlong']);
-					$point_arr = explode(" ", $new_polygonstr);
-					$vLongitude = $point_arr[0];
-					$vLatitude = $point_arr[1];
-				}
-
-				if($vNewLatitude != '' && $vNewLongitude != ''){
-					$vPointLatLong = 'ST_GEOMFROMTEXT(\'POINT('.$vNewLongitude.' '.$vNewLatitude .')\', 4326)';
-				}else if($vLatitude != '' && $vLongitude != ''){
-					$vPointLatLong = 'ST_GEOMFROMTEXT(\'POINT('.$vLongitude.' '.$vLatitude.')\', 4326)';
-				}
-			} else if($iGeometryType == 2){
-				if($this->insert_arr['vPolygonLatLong'] != ''){
-					//echo $_POST['vPolygonLatLong'];
-					$search_arr  = ["POLYGON((", "))"];
-					$replace_arr  = ["", ""];
-					$new_polygonstr = str_replace($search_arr, $replace_arr, $this->insert_arr['vPolygonLatLong']);
-					$poly_arr = explode(",", $new_polygonstr);
-					$pi = count($poly_arr);
-					//echo "<pre>";print_r($poly_arr);//exit();
-					if(!empty($poly_arr)) {
-						$first_str = $poly_arr[0];
-						$last_str = $poly_arr[$pi-1];
-						$last_str_arr = explode(" ", $last_str);
-						$vLatitude =number_format($last_str_arr[1], 6);
-						$vLongitude = number_format($last_str_arr[0], 6);
-						$final_str = $vLongitude. " ".$vLatitude;
-						if($first_str != $final_str) {
-							$poly_arr[$pi]=$first_str;
-						}
-
-					}
-					$final_poly_str = "POLYGON((";
-					foreach ($poly_arr as $key => $value) {
-						if($key >0) {
-							$final_poly_str .= ",";
-						}
-						$final_poly_str .= $value;
-					}
-					$final_poly_str .= "))";
-					/*echo $final_poly_str."\n";exit;*/
-					$vPolygonLatLong = 'ST_GeomFromText(\''.$final_poly_str.'\', 4326)';
-					//$vPolygonLatLong = 'ST_GeomFromText(\''.$_POST['vPolygonLatLong'].'\', 4326)';
-				}
+			if($this->insert_arr['pointlatlong'] != ""){
+				$search_arr  = ["POINT(", ")"];
+				$replace_arr  = ["", ""];
+				$new_polygonstr = str_replace($search_arr, $replace_arr, $this->insert_arr['pointlatlong']);
+				$point_arr = explode(" ", $new_polygonstr);
+				$vLongitude = $point_arr[0];
+				$vLatitude = $point_arr[1];
 			}
-			else if($iGeometryType == 3){
-				if($this->insert_arr['vPolyLineLatLong'] != ''){
-					$search_arr  = ["LINESTRING(", ")"];
-					$replace_arr  = ["", ""];
-					$new_polygonstr = str_replace($search_arr, $replace_arr, $this->insert_arr['vPolyLineLatLong']);
-					$poly_arr = explode(",", $new_polygonstr);
-					$pi = count($poly_arr);
-					if(!empty($poly_arr)) {
-						$first_str = $poly_arr[0];
-						$last_str = $poly_arr[$pi-1];
-						$last_str_arr = explode(" ", $first_str);						
-						$vLatitude =number_format($last_str_arr[1], 6);
-						$vLongitude = number_format($last_str_arr[0], 6);
-						
-					}
-					$vPolyLineLatLong ='ST_GeomFromText(\''.$this->insert_arr['vPolyLineLatLong'].'\', 4326)';
+
+			if($vNewLatitude != '' && $vNewLongitude != ''){
+				$vPointLatLong = 'ST_GEOMFROMTEXT(\'POINT('.$vNewLongitude.' '.$vNewLatitude .')\', 4326)';
+			}else if($vLatitude != '' && $vLongitude != ''){
+				$vPointLatLong = 'ST_GEOMFROMTEXT(\'POINT('.$vLongitude.' '.$vLatitude.')\', 4326)';
+			} 
+
+			$iStatus = $this->insert_arr['iStatus'];
+			if($this->insert_arr['iZoneId'] > 0){
+				$sql_zone = "SELECT \"iNetworkId\" FROM zone WHERE \"iZoneId\" = '".$this->insert_arr['iZoneId']."' AND \"iNetworkId\" > 0 LIMIT 1";
+				$rs_zone = $sqlObj->GetAll($sql_zone);
+				if(!empty($rs_zone)) {
+					$iStatus = 2; // Near-Net
 				}
 			}
 
-			/*echo $vPointLatLong."<br/>";
-			echo $vPolygonLatLong."<br/>";
-			echo $vPolyLineLatLong."<br/>";
-			exit;*/
-
-			$sql_ins = 'INSERT INTO premise_mas ("vName",  "iSTypeId", "iSSTypeId",  "vAddress1", "vAddress2", "vStreet", "vCrossStreet", "iZipcode", "iGeometryType", "iZoneId", "vLatitude", "vLongitude", "vNewLatitude", "vNewLongitude", "vPointLatLong", "vPolygonLatLong", "vPolyLineLatLong", "dAddedDate", "iStatus", "vLoginUserName", "iStateId", "iCountyId", "iCityId") VALUES ('.gen_allow_null_char($this->insert_arr['vName']).', '.gen_allow_null_int($this->insert_arr['iSTypeId']).', '.gen_allow_null_int($this->insert_arr['iSSTypeId']).', '.gen_allow_null_char($this->insert_arr['vAddress1']).', '.gen_allow_null_char($this->insert_arr['vAddress2']).', '.gen_allow_null_char($this->insert_arr['vStreet']).', '.gen_allow_null_char($this->insert_arr['vCrossStreet']).', '.gen_allow_null_int($this->insert_arr['iZipcode']).', '.gen_allow_null_int($this->insert_arr['iGeometryType']).', '.gen_allow_null_int($this->insert_arr['iZoneId']).', '.gen_allow_null_char($vLatitude).', '.gen_allow_null_char($vLongitude).', '.gen_allow_null_char($vNewLatitude).', '.gen_allow_null_char($vNewLongitude).', '.$vPointLatLong.', '.$vPolygonLatLong.', '.$vPolyLineLatLong.', '.gen_allow_null_char(date_getSystemDateTime()).', '.gen_allow_null_int($this->insert_arr['iStatus']).', '.gen_allow_null_char($this->insert_arr['vLoginUserName']).', '.gen_allow_null_char($this->insert_arr['iStateId']).', '.gen_allow_null_char($this->insert_arr['iCountyId']).', '.gen_allow_null_char($this->insert_arr['iCityId']).')';
+			$sql_ins = 'INSERT INTO premise_mas ("vName",  "iSTypeId", "iSSTypeId",  "vAddress1", "vAddress2", "vStreet", "vCrossStreet", "iZipcode", "iGeometryType", "iZoneId", "vLatitude", "vLongitude", "vNewLatitude", "vNewLongitude", "vPointLatLong", "dAddedDate", "iStatus", "vLoginUserName", "iStateId", "iCountyId", "iCityId") VALUES ('.gen_allow_null_char($this->insert_arr['vName']).', '.gen_allow_null_int($this->insert_arr['iSTypeId']).', '.gen_allow_null_int($this->insert_arr['iSSTypeId']).', '.gen_allow_null_char($this->insert_arr['vAddress1']).', '.gen_allow_null_char($this->insert_arr['vAddress2']).', '.gen_allow_null_char($this->insert_arr['vStreet']).', '.gen_allow_null_char($this->insert_arr['vCrossStreet']).', '.gen_allow_null_int($this->insert_arr['iZipcode']).', '.gen_allow_null_int($this->insert_arr['iGeometryType']).', '.gen_allow_null_int($this->insert_arr['iZoneId']).', '.gen_allow_null_char($vLatitude).', '.gen_allow_null_char($vLongitude).', '.gen_allow_null_char($vNewLatitude).', '.gen_allow_null_char($vNewLongitude).', '.$vPointLatLong.', '.gen_allow_null_char(date_getSystemDateTime()).', '.gen_allow_null_int($iStatus).', '.gen_allow_null_char($this->insert_arr['vLoginUserName']).', '.gen_allow_null_char($this->insert_arr['iStateId']).', '.gen_allow_null_char($this->insert_arr['iCountyId']).', '.gen_allow_null_char($this->insert_arr['iCityId']).')';
 		    //echo $sql_ins;exit();
 			$sqlObj->Execute($sql_ins);
 			$iPremiseId = $sqlObj->Insert_ID();
@@ -263,81 +212,32 @@ class Site {
 			$vNewLongitude 		= $this->update_arr['vNewLongitude'];
 
 			$vPointLatLong = gen_allow_null_char('');
-			$vPolygonLatLong = gen_allow_null_char('');
-			$vPolyLineLatLong = gen_allow_null_char('');
 
-			if($iGeometryType == 1){
-				if($this->update_arr['pointlatlong'] != ""){
-					$search_arr  = ["POINT(", ")"];
-					$replace_arr  = ["", ""];
-					$new_polygonstr = str_replace($search_arr, $replace_arr, $this->update_arr['pointlatlong']);
-					$point_arr = explode(" ", $new_polygonstr);
-					$vLongitude = $point_arr[0];
-					$vLatitude = $point_arr[1];
-				}
-
-				if($vNewLatitude != '' && $vNewLongitude != ''){
-					$vPointLatLong = 'ST_GEOMFROMTEXT(\'POINT('.$this->update_arr['vNewLongitude'].' '.$this->update_arr['vNewLatitude'] .')\', 4326)';
-				}else if($vLatitude != '' && $vLongitude != ''){
-					$vPointLatLong = 'ST_GEOMFROMTEXT(\'POINT('.$vLongitude.' '.$vLatitude .')\', 4326)';
-				}
-			} else if($iGeometryType == 2){
-				if($this->update_arr['vPolygonLatLong'] != ''){
-					//echo $_POST['vPolygonLatLong'];
-					$search_arr  = ["POLYGON((", "))"];
-					$replace_arr  = ["", ""];
-					$new_polygonstr = str_replace($search_arr, $replace_arr, $this->update_arr['vPolygonLatLong']);
-					$poly_arr = explode(",", $new_polygonstr);
-					$pi = count($poly_arr);
-					//echo "<pre>";print_r($poly_arr);//exit();
-					if(!empty($poly_arr)) {
-						$first_str = $poly_arr[0];
-						$last_str = $poly_arr[$pi-1];
-						$last_str_arr = explode(" ", $last_str);						
-						$vLatitude =number_format($last_str_arr[1], 6);
-						$vLongitude = number_format($last_str_arr[0], 6);
-						$final_str = $vLongitude. " ".$vLatitude;
-						if($first_str != $final_str) {
-							$poly_arr[$pi]=$first_str;
-						}
-					}
-					$final_poly_str = "POLYGON((";
-					foreach ($poly_arr as $key => $value) {
-						if($key >0) {
-							$final_poly_str .= ",";
-						}
-						$final_poly_str .= $value;
-					}
-					$final_poly_str .= "))";
-					//echo $final_poly_str."\n";
-					$vPolygonLatLong = 'ST_GeomFromText(\''.$final_poly_str.'\', 4326)';
-					//$vPolygonLatLong = 'ST_GeomFromText(\''.$_POST['vPolygonLatLong'].'\', 4326)';
-				}
-			}
-			else if($iGeometryType == 3){
-				if($this->update_arr['vPolyLineLatLong'] != ''){
-					$search_arr  = ["LINESTRING(", ")"];
-					$replace_arr  = ["", ""];
-					$new_polygonstr = str_replace($search_arr, $replace_arr, $this->update_arr['vPolyLineLatLong']);
-					$poly_arr = explode(",", $new_polygonstr);
-					$pi = count($poly_arr);
-					if(!empty($poly_arr)) {
-						$first_str = $poly_arr[0];
-						$last_str = $poly_arr[$pi-1];
-						$last_str_arr = explode(" ", $first_str);						
-						$vLatitude =number_format($last_str_arr[1], 6);
-						$vLongitude = number_format($last_str_arr[0], 6);
-						
-					}
-					$vPolyLineLatLong ='ST_GeomFromText(\''.$this->update_arr['vPolyLineLatLong'].'\', 4326)';
-				}
+			if($this->update_arr['pointlatlong'] != ""){
+				$search_arr  = ["POINT(", ")"];
+				$replace_arr  = ["", ""];
+				$new_polygonstr = str_replace($search_arr, $replace_arr, $this->update_arr['pointlatlong']);
+				$point_arr = explode(" ", $new_polygonstr);
+				$vLongitude = $point_arr[0];
+				$vLatitude = $point_arr[1];
 			}
 
-			// echo $vPointLatLong."<br/>";
-			// echo $vPolygonLatLong."<br/>";
-			// echo $vPolyLineLatLong."<br/>";
-			//exit;
-			$sql_updt = 'UPDATE premise_mas set "vName" = '.gen_allow_null_char($this->update_arr['vName']).', "iSTypeId" = '.gen_allow_null_int($this->update_arr['iSTypeId']).', "iSSTypeId" = '.gen_allow_null_int($this->update_arr['iSSTypeId']).', "vAddress1" = '.gen_allow_null_char($this->update_arr['vAddress1']).', "vAddress2" = '.gen_allow_null_char($this->update_arr['vAddress2']).', "vStreet" = '.gen_allow_null_char($this->update_arr['vStreet']).', "vCrossStreet" = '.gen_allow_null_char($this->update_arr['vCrossStreet']).', "iZipcode" = '.gen_allow_null_int($this->update_arr['iZipcode']).', "iGeometryType" = '.gen_allow_null_int($this->update_arr['iGeometryType']).', "iZoneId" = '.gen_allow_null_int($this->update_arr['iZoneId']).', "vLatitude" = '.gen_allow_null_char($vLatitude).', "vLongitude" = '.gen_allow_null_char($vLongitude).', "vNewLatitude" = '.gen_allow_null_char($vNewLatitude).', "vNewLongitude" = '.gen_allow_null_char($vNewLongitude).', "vPointLatLong" = '.$vPointLatLong.', "vPolygonLatLong" = '.$vPolygonLatLong.', "vPolyLineLatLong" = '.$vPolyLineLatLong.', "dModifiedDate" = '.gen_allow_null_char(date_getSystemDateTime()).', "iStatus" = '.gen_allow_null_int($this->update_arr['iStatus']).', "iStateId" = '.gen_allow_null_char($this->update_arr['iStateId']).', "iCountyId" = '.gen_allow_null_char($this->update_arr['iCountyId']).', "iCityId" = '.gen_allow_null_char($this->update_arr['iCityId']).' WHERE "iPremiseId" = '.$this->update_arr['iPremiseId'].'';
+			if($vNewLatitude != '' && $vNewLongitude != ''){
+				$vPointLatLong = 'ST_GEOMFROMTEXT(\'POINT('.$this->update_arr['vNewLongitude'].' '.$this->update_arr['vNewLatitude'] .')\', 4326)';
+			}else if($vLatitude != '' && $vLongitude != ''){
+				$vPointLatLong = 'ST_GEOMFROMTEXT(\'POINT('.$vLongitude.' '.$vLatitude .')\', 4326)';
+			}
+
+			$iStatus = $this->update_arr['iStatus'];
+			/*if($this->update_arr['iZoneId'] > 0){
+				$sql_zone = "SELECT \"iNetworkId\" FROM zone WHERE \"iZoneId\" = '".$this->update_arr['iZoneId']."' AND \"iNetworkId\" > 0 LIMIT 1";
+				$rs_zone = $sqlObj->GetAll($sql_zone);
+				if(!empty($rs_zone)) {
+					$iStatus = 2; // Near-Net
+				}
+			}*/
+
+			$sql_updt = 'UPDATE premise_mas set "vName" = '.gen_allow_null_char($this->update_arr['vName']).', "iSTypeId" = '.gen_allow_null_int($this->update_arr['iSTypeId']).', "iSSTypeId" = '.gen_allow_null_int($this->update_arr['iSSTypeId']).', "vAddress1" = '.gen_allow_null_char($this->update_arr['vAddress1']).', "vAddress2" = '.gen_allow_null_char($this->update_arr['vAddress2']).', "vStreet" = '.gen_allow_null_char($this->update_arr['vStreet']).', "vCrossStreet" = '.gen_allow_null_char($this->update_arr['vCrossStreet']).', "iZipcode" = '.gen_allow_null_int($this->update_arr['iZipcode']).', "iGeometryType" = '.gen_allow_null_int($this->update_arr['iGeometryType']).', "iZoneId" = '.gen_allow_null_int($this->update_arr['iZoneId']).', "vLatitude" = '.gen_allow_null_char($vLatitude).', "vLongitude" = '.gen_allow_null_char($vLongitude).', "vNewLatitude" = '.gen_allow_null_char($vNewLatitude).', "vNewLongitude" = '.gen_allow_null_char($vNewLongitude).', "vPointLatLong" = '.$vPointLatLong.', "dModifiedDate" = '.gen_allow_null_char(date_getSystemDateTime()).', "iStatus" = '.gen_allow_null_int($iStatus).', "iStateId" = '.gen_allow_null_char($this->update_arr['iStateId']).', "iCountyId" = '.gen_allow_null_char($this->update_arr['iCountyId']).', "iCityId" = '.gen_allow_null_char($this->update_arr['iCityId']).' WHERE "iPremiseId" = '.$this->update_arr['iPremiseId'].'';
 			//echo $sql_updt;exit();
 			$rs_up = $sqlObj->Execute($sql_updt);
 
@@ -413,7 +313,7 @@ class Site {
 
 	function edit_batch_records() {
 		global $sqlObj, $admin_panel_session_suffix;
-		// echo "<pre>123"; print_r($this->update_arr);exit();
+
 		$query_arr = array();
 		$query_str = "";
 		if($this->update_arr) {
@@ -450,7 +350,6 @@ class Site {
 		return $rs_db;
 	}
 	
-	## Created by PN as on Saturday, December 06, 2014
 	## Function will retun zipcode id according its state, country and city id. If not exist will insert it and will send newly inserted id...
 	private function getZipcodeId($vZipcode, $iStateId, $iCountyId, $iCityId) {
 		global $sqlObj;
@@ -465,9 +364,6 @@ class Site {
 		}
 	}
 	
-
-	
-	
 	public function getContactPhoneNumbers($iCId) {
 		global $sqlObj;
 		$sql = "SELECT * FROM contact_phone WHERE \"iCId\"=".$iCId;
@@ -476,7 +372,6 @@ class Site {
 		return $sqlObj->GetAll($sql);
 	}
 	
-
 	private function setPhoneNumberValue($arr=array(), $sep_sign=" ") {
 		if(count($arr)) {
 			$vPhone="";
@@ -501,18 +396,19 @@ class Site {
 		if($this->insert_arr) {
 			$sql = 'INSERT INTO site_documents ("iPremiseId", "vTitle", "vFile", "dAddedDate", "vLoginUserName") VALUES ('.gen_allow_null_char($this->insert_arr['iPremiseId']).', '.gen_allow_null_char($this->insert_arr['vTitle']).', '.gen_allow_null_char($this->insert_arr['vFile']).', '.gen_allow_null_char(date_getSystemDateTime()).', '.gen_allow_null_char($this->insert_arr['vLoginUserName']).')';
 			//echo $sql;exit();
-			
 			$sqlObj->Execute($sql);
 			$iSDId = $sqlObj->Insert_ID();
 			return $iSDId;			
 		}
 	}
+
 	function get_site_document_list() {
 		global $sqlObj;
 		
 		$sql = 'SELECT * ' . $this->join_field_str . ' FROM site_documents' . $this->join_clause . $this->where_clause . $this->group_by_clause . $this->order_by_clause . $this->limit_clause;
 		return $sqlObj->GetAll($sql);
 	}
+
 	function delete_site_document(){
 		global $sqlObj;
 		
@@ -529,7 +425,6 @@ class Site {
 		
 		global $sqlObj, $GOOGLE_GEOCODE_API_KEY, $admin_panel_session_suffix;
 		//echo "<pre>";print_r($this->insert_arr);exit;
-
 		$search_arr = array("(", ")");
 		$replace_arr = array("", "");
 
@@ -647,8 +542,6 @@ class Site {
 		return $site_arr;
 	}
 
-	//Ended by bhavik desai
-
 	function site_history_list($iPremiseId = 0) {
 		//echo "111";exit();
 		global $sqlObj;
@@ -764,88 +657,6 @@ class Site {
 		$this->group_by_clause="";
 		$this->limit_clause = "";
 	}
-
-	/*function site_dashboard_history(){
-		//get last hours data
-		global $sqlObj;
-		$arr = array();
-		//get traetment data
-		$sql = "SELECT task_treatment.*, 'Treatment' AS \"Type\" , s.\"vName\" as  \"vSiteName\" ,sr_details.\"iSRId\" ,sr_details.\"iCId\" , concat(contact_mas.\"vFirstName\",' ', contact_mas.\"vLastName\") as \"vContactName\" ,concat(user_mas.\"vFirstName\",' ', user_mas.\"vLastName\") as \"UserName\" FROM task_treatment LEFT JOIN premise_mas s on s.\"iPremiseId\" = task_treatment.\"iPremiseId\" LEFT JOIN sr_details on sr_details.\"iSRId\" = task_treatment.\"iSRId\" LEFT JOIN contact_mas on contact_mas.\"iCId\" = sr_details.\"iCId\" LEFT JOIN user_mas on user_mas.\"iUserId\" = task_treatment.\"iUserId\" WHERE task_treatment.\"dDate\" >= (NOW() - INTERVAL '24 hours' )  Order by task_treatment.\"dDate\" ";
-		//echo $sql;exit();
-		$rs_st = $sqlObj->GetAll($sql);
-		$ni = count($rs_st);
-		if($ni > 0){
-			for($i=0;$i<$ni;$i++){
-				if($rs_st[$i]['dDate'] !=  "")
-					$arr[strtotime($rs_st[$i]['dDate'])][] = $rs_st[$i];
-			}
-		}
-
-		//get landing rate data
-		$sql = "SELECT task_landing_rate.*, 'Landing Rate' AS \"Type\" ,s.\"vName\",sr_details.\"iSRId\", sr_details.\"iCId\",concat(contact_mas.\"vFirstName\",' ', contact_mas.\"vLastName\") as \"vContactName\" ,concat(user_mas.\"vFirstName\",' ', user_mas.\"vLastName\") as \"UserName\"  FROM task_landing_rate LEFT JOIN premise_mas s on s.\"iPremiseId\" = task_landing_rate.\"iPremiseId\" LEFT JOIN sr_details on sr_details.\"iSRId\" = task_landing_rate.\"iSRId\" LEFT JOIN contact_mas on contact_mas.\"iCId\" = sr_details.\"iCId\" LEFT JOIN user_mas on user_mas.\"iUserId\" = task_landing_rate.\"iUserId\" WHERE task_landing_rate.\"dDate\" >= (NOW() - INTERVAL '24 hours' )  Order by task_landing_rate.\"dDate\" ";
-		$rs_st = $sqlObj->GetAll($sql);
-		$ni = count($rs_st);
-		if($ni > 0){
-			for($i=0;$i<$ni;$i++){
-				if($rs_st[$i]['dDate'] !=  "")
-					$arr[strtotime($rs_st[$i]['dDate'])][] = $rs_st[$i];
-			}
-		}
-
-		//get trap data
-		 $sql = "SELECT task_trap.*, 'Task Trap' AS \"Type\" , s.\"vName\" as  \"vSiteName\" ,sr_details.\"iSRId\" ,sr_details.\"iCId\" , concat(contact_mas.\"vFirstName\",' ', contact_mas.\"vLastName\") as \"vContactName\" ,concat(user_mas.\"vFirstName\",' ', user_mas.\"vLastName\") as \"UserName\"  FROM task_trap LEFT JOIN premise_mas s on s.\"iPremiseId\" = task_trap.\"iPremiseId\" LEFT JOIN sr_details on sr_details.\"iSRId\" = task_trap.\"iSRId\" LEFT JOIN contact_mas on contact_mas.\"iCId\" = sr_details.\"iCId\" LEFT JOIN user_mas on user_mas.\"iUserId\" = task_trap.\"iUserId\"  WHERE task_trap.\"dTrapPlaced\" >= (NOW() - INTERVAL '24 hours' ) order by task_trap.\"dTrapPlaced\" desc ";
-		// echo $sql;exit();
-		$rs_st = $sqlObj->GetAll($sql);
-		$ni = count($rs_st);
-		if($ni > 0){
-			for($i=0;$i<$ni;$i++){
-				if($rs_st[$i]['dTrapPlaced'] !=  "")
-					$arr[strtotime($rs_st[$i]['dTrapPlaced'])][] = $rs_st[$i];
-			}
-		}
-
-		//get larval surveillance data
-		$sql = "SELECT task_larval_surveillance.*, 'Laravel Surveillance' AS \"Type\" , s.\"vName\" as  \"vSiteName\" ,sr_details.\"iSRId\" ,sr_details.\"iCId\" , concat(contact_mas.\"vFirstName\",' ', contact_mas.\"vLastName\") as \"vContactName\" ,concat(user_mas.\"vFirstName\",' ', user_mas.\"vLastName\") as \"UserName\"  FROM task_larval_surveillance LEFT JOIN premise_mas s on s.\"iPremiseId\" = task_larval_surveillance.\"iPremiseId\"  LEFT JOIN sr_details on sr_details.\"iSRId\" = task_larval_surveillance.\"iSRId\" LEFT JOIN contact_mas on contact_mas.\"iCId\" = sr_details.\"iCId\" LEFT JOIN user_mas on user_mas.\"iUserId\" = task_larval_surveillance.\"iUserId\" WHERE task_larval_surveillance.\"dDate\" >= (NOW() - INTERVAL '24 hours' )   Order by task_larval_surveillance.\"dDate\" ";
-		$rs_st = $sqlObj->GetAll($sql);
-		$ni = count($rs_st);
-		if($ni > 0){
-			for($i=0;$i<$ni;$i++){
-				if($rs_st[$i]['dDate'] !=  "")
-					$arr[strtotime($rs_st[$i]['dDate'])][] = $rs_st[$i];
-			}
-		}
-
-		//get task other data
-		$sql = "SELECT task_other.*, 'Other' AS \"Type\", s.\"vName\" as  \"vSiteName\" ,sr_details.\"iSRId\" ,sr_details.\"iCId\" , concat(contact_mas.\"vFirstName\",' ', contact_mas.\"vLastName\") as \"vContactName\" ,concat(user_mas.\"vFirstName\",' ', user_mas.\"vLastName\") as \"UserName\"  FROM task_other LEFT JOIN premise_mas s on s.\"iPremiseId\" = task_other.\"iPremiseId\" LEFT JOIN sr_details on sr_details.\"iSRId\" = task_other.\"iSRId\" LEFT JOIN contact_mas on contact_mas.\"iCId\" = sr_details.\"iCId\" LEFT JOIN user_mas on user_mas.\"iUserId\" = task_other.\"iUserId\" WHERE task_other.\"dDate\" >= (NOW() - INTERVAL '24 hours' ) Order by task_other.\"dDate\" ";
-		$rs_st = $sqlObj->GetAll($sql);
-		$ni = count($rs_st);
-		if($ni > 0){
-			for($i=0;$i<$ni;$i++){
-				if($rs_st[$i]['dDate'] !=  "")
-					$arr[strtotime($rs_st[$i]['dDate'])][] = $rs_st[$i];
-			}
-		}
-
-		krsort($arr);
-
-		$operation_arr = array();
-
-		$ai = count($arr);
-		if($ai > 0){
-			foreach($arr as $key=>$val_arr){
-				if(is_array($val_arr)){
-					$vi = count($val_arr);
-					if($vi > 0){
-						for($v=0;$v<$vi;$v++){
-							$operation_arr[] = $val_arr[$v];
-						}
-					}
-				}
-			}
-		}
-		
-		return $operation_arr;
-	}*/
 
 	function site_dashboard_history(){
 		//get last hours data

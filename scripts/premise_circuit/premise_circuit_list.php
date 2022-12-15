@@ -78,11 +78,34 @@ if($mode == "List"){
             $vPremise = $rs_list[$i]['iPremiseId']." (".$rs_list[$i]['vPremiseName']."; ".$rs_list[$i]['vPremiseType'].")";
             $vWorkOrder = $rs_list[$i]['iWOId']." (".$rs_list[$i]['vWorkOrderType'].")";
 
+            $vStatus = '---';
+            if($rs_list[$i]['iStatus'] == 1){
+                $vStatus = '<span title="Created" class="btn btn-primary">Created</span>';
+            }else if($rs_list[$i]['iStatus'] == 2){
+                $vStatus = '<span title="In Progress" class="btn btn-secondary">In Progress</span>';
+            }else if($rs_list[$i]['iStatus'] == 3){
+                $vStatus = '<span title="Delayed" class="btn btn-warning">Delayed</span>';
+            }else if($rs_list[$i]['iStatus'] == 4){
+                $vStatus = '<span title="Connected" class="btn btn-success">Connected</span>';
+            }else if($rs_list[$i]['iStatus'] == 5){
+                $vStatus = '<span title="Active" class="btn btn-info">Active</span>';
+            }else if($rs_list[$i]['iStatus'] == 6){
+                $vStatus = 'Suspended';
+                $vStatus = '<span title="Suspended" class="btn btn-danger">Suspended</span>';
+            }else if($rs_list[$i]['iStatus'] == 7){
+                $vStatus = '<span title="Trouble" class="btn btn-dark">Trouble</span>';
+            }else if($rs_list[$i]['iStatus'] == 8){
+                $vStatus = 'Disconnected';
+                $vStatus = '<span title="Disconnected" class="btn btn-danger">Disconnected</span>';
+            }
+
             $entry[] = array(
                 "iPremiseCircuitId"     => $rs_list[$i]['iPremiseCircuitId'],
                 "vPremise"              => $vPremise,
                 "vWorkOrder"            => $vWorkOrder,
                 "vCircuitName"          => $rs_list[$i]['vCircuitName'],
+                "vConnectionTypeName"   => $rs_list[$i]['vConnectionTypeName'],
+                "iStatus"               => $vStatus,
                 "actions"               => ($action!="")?$action:"---"       
             );
         }
@@ -137,6 +160,9 @@ if($mode == "List"){
     $arr_param = array(
         "iWOId"             => $_POST['search_iWOId'],
         "iCircuitId"        => $_POST['iCircuitId'],
+        "iConnectionTypeId" => $_POST['iConnectionTypeId'],
+        "iStatus"           => $_POST['iStatus'],
+        "iLoginUserId"      => $_SESSION['sess_iUserId' . $admin_panel_session_suffix],
         "sessionId"         => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
     );
 
@@ -179,6 +205,9 @@ if($mode == "List"){
         'iPremiseCircuitId' => $_POST['iPremiseCircuitId'],
         "iWOId"             => $_POST['search_iWOId'],
         "iCircuitId"        => $_POST['iCircuitId'],
+        "iConnectionTypeId" => $_POST['iConnectionTypeId'],
+        "iStatus"           => $_POST['iStatus'],
+        "iLoginUserId"      => $_SESSION['sess_iUserId' . $admin_panel_session_suffix],
         "sessionId"         => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
     );
     
@@ -269,17 +298,40 @@ if($mode == "List"){
                  ->setCellValue('A1', 'Id')
                  ->setCellValue('B1', 'Premise')
                  ->setCellValue('C1', 'WorkOrder')
-                 ->setCellValue('D1', 'Circuit Name');
+                 ->setCellValue('D1', 'Circuit Name')
+                 ->setCellValue('E1', 'Connetion Type')
+                 ->setCellValue('F1', 'Status');
     
         for($e=0; $e<$cnt_export; $e++) {
             $vPremise = $rs_export[$e]['iPremiseId']." (".$rs_export[$e]['vPremiseName']."; ".$rs_export[$e]['vPremiseType'].")";
             $vWorkOrder = $rs_export[$e]['iWOId']." (".$rs_export[$e]['vWorkOrderType'].")";
 
+            $vStatus = '---';
+            if($rs_export[$e]['iStatus'] == 1){
+                $vStatus = 'Created';
+            }else if($rs_export[$e]['iStatus'] == 2){
+                $vStatus = 'In Progress';
+            }else if($rs_export[$e]['iStatus'] == 3){
+                $vStatus = 'Delayed';
+            }else if($rs_export[$e]['iStatus'] == 4){
+                $vStatus = 'Connected';
+            }else if($rs_export[$e]['iStatus'] == 5){
+                $vStatus = 'Active';
+            }else if($rs_export[$e]['iStatus'] == 6){
+                $vStatus = 'Suspended';
+            }else if($rs_export[$e]['iStatus'] == 7){
+                $vStatus = 'Trouble';
+            }else if($rs_export[$e]['iStatus'] == 8){
+                $vStatus = 'Disconnected';
+            }
+
             $objPHPExcel->getActiveSheet()
             ->setCellValue('A'.($e+2), $rs_export[$e]['iPremiseCircuitId'])
             ->setCellValue('B'.($e+2), $vPremise)
             ->setCellValue('C'.($e+2), $vWorkOrder)
-            ->setCellValue('D'.($e+2), $rs_export[$e]['vCircuitName']);
+            ->setCellValue('D'.($e+2), $rs_export[$e]['vCircuitName'])
+            ->setCellValue('E'.($e+2), $rs_export[$e]['vConnectionTypeName'])
+            ->setCellValue('F'.($e+2), $vStatus);
          }
                         
         /* Set Auto width of each comlumn */
@@ -287,9 +339,11 @@ if($mode == "List"){
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
         
         /* Set Font to Bold for each comlumn */
-        $objPHPExcel->getActiveSheet()->getStyle('A1:D1')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A1:F1')->getFont()->setBold(true);
         
 
         /* Set Alignment of Selected Columns */

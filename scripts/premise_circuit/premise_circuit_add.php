@@ -107,6 +107,30 @@ $smarty->assign("rs_circuit", $rs_circuit);
 //echo"<pre>";print_r($rs_circuit);exit;
 /*************** Circuit Dropdown ***************/
 
+//Connection Type Dropdown
+$cntype_param = array();
+$cntype_param['iStatus'] = '1';
+$cntype_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
+$cntypeAPI_URL = $site_api_url."connection_type_dropdown.json";
+//echo $cntypeAPI_URL." ".json_encode($cntype_param);exit;
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $cntypeAPI_URL);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_HEADER, FALSE);
+curl_setopt($ch, CURLOPT_POST, TRUE);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($cntype_param));
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+   "Content-Type: application/json",
+)); 
+$response_cntype = curl_exec($ch);
+curl_close($ch);  
+$res_cntype = json_decode($response_cntype, true);
+$rs_cntype = $res_cntype['result'];
+$smarty->assign("rs_cntype", $rs_cntype);
+//echo "<pre>";print_r($rs_cntype);exit;
+
 $module_name = "Premise Circuit";
 $module_title = "Premise Circuit";
 $smarty->assign("module_name", $module_name);

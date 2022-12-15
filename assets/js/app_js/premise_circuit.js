@@ -20,6 +20,8 @@ var listPage = function(){
                     { "data": "vPremise", "sortable":true},
                     { "data": "vWorkOrder", "sortable":true},
                     { "data": "vCircuitName", "sortable":true},
+                    { "data": "vConnectionTypeName", "sortable":true},
+                    { "data": "iStatus", "sortable":true, "className": "text-center"},
                     { "data": "actions", "sortable":false, "className": "text-center"},
                 ],            
                 "autoWidth" : true,
