@@ -468,15 +468,8 @@ $smarty->assign("rs_sitetype", $rs_sitetype);
 $smarty->assign("rs_siteattr", $rs_siteattr);
 $smarty->assign("rs_site", $rs_site);
 $smarty->assign("iSAttributeIdArr", $iSAttributeIdArr);
-
 $smarty->assign("rs_site_contact", $rs_site_contact);
-
 $smarty->assign("rs_site_doc", $rs_site_doc);
-
-$smarty->assign("msg", $_GET['msg']);
-$smarty->assign("flag", $_GET['flag']);
-
-
 $smarty->assign("access_group_var_edit", $access_group_var_edit);
 
 $smarty->assign("tabid",$_REQUEST['tabid']);

@@ -293,7 +293,5 @@ $smarty->assign("module_name", $module_name);
 $smarty->assign("module_title", $module_title);
 $smarty->assign("option_arr", $option_arr);
 $smarty->assign("rs_county",$rs_county);
-$smarty->assign("msg", $_GET['msg']);
-$smarty->assign("flag", $_GET['flag']);
 $smarty->assign("mode", $mode);
 $smarty->assign("access_group_var_add",$access_group_var_add);

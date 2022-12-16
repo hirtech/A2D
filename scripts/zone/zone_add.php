@@ -89,9 +89,6 @@ $smarty->assign("module_title", $module_title);
 $smarty->assign("mode", $mode);
 $smarty->assign("GOOGLE_GEOCODE_API_KEY", $GOOGLE_GEOCODE_API_KEY);
 
-$smarty->assign("msg", $_GET['msg']);
-$smarty->assign("flag", $_GET['flag']);
-
 $smarty->assign("rs_data", $rs_data);
 $smarty->assign("network_arr", $network_arr);
 

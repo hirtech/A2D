@@ -7,9 +7,7 @@ $access_group_var_delete = per_hasModuleAccess("Premise", 'Delete', 'N');
 $access_group_var_status = per_hasModuleAccess("Premise", 'Status', 'N');
 $access_group_var_add = per_hasModuleAccess("Premise", 'Add', 'N');
 $access_group_var_edit = per_hasModuleAccess("Premise", 'Edit', 'N');
-$access_group_var_PDF = per_hasModuleAccess("Premise", 'PDF', 'N');
 $access_group_var_CSV = per_hasModuleAccess("Premise", 'CSV', 'N');
-$access_group_var_Respond = per_hasModuleAccess("Premise", 'Respond', 'N');
 # ----------- Access Rule Condition -----------
 
 
@@ -1086,13 +1084,8 @@ $module_name = "Premise List";
 $module_title = "Premise";
 $smarty->assign("module_name", $module_name);
 $smarty->assign("module_title", $module_title);
-$smarty->assign("option_arr", $option_arr);
-$smarty->assign("msg", $_GET['msg']);
-$smarty->assign("flag", $_GET['flag']);
-
 $smarty->assign("access_group_var_add", $access_group_var_add);
 $smarty->assign("access_group_var_CSV", $access_group_var_CSV);
-
 $smarty->assign("dDate", date('Y-m-d'));
 $smarty->assign("dStartTime", date("H:i", time()));
 $smarty->assign("dEndTime", date("H:i", strtotime(date('Y-m-d H:i:s')." +10 minutes")));

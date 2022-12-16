@@ -6,9 +6,7 @@ $access_group_var_delete = per_hasModuleAccess("Fiber Inquiry", 'Delete', 'N');
 $access_group_var_status = per_hasModuleAccess("Fiber Inquiry", 'Status', 'N');
 $access_group_var_add = per_hasModuleAccess("Fiber Inquiry", 'Add', 'N');
 $access_group_var_edit = per_hasModuleAccess("Fiber Inquiry", 'Edit', 'N');
-$access_group_var_PDF = per_hasModuleAccess("Fiber Inquiry", 'PDF', 'N');
 $access_group_var_CSV = per_hasModuleAccess("Fiber Inquiry", 'CSV', 'N');
-$access_group_var_Respond = per_hasModuleAccess("Fiber Inquiry", 'Respond', 'N');
 # ----------- Access Rule Condition -----------
 
 include_once($site_path . "scripts/session_valid.php");

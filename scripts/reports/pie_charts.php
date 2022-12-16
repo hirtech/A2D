@@ -148,6 +148,4 @@ $module_name = "Pie / Bar Charts";
 $module_title = "Pie / Bar Charts";
 $smarty->assign("module_name", $module_name);
 $smarty->assign("module_title", $module_title);
-$smarty->assign("msg", $_GET['msg']);
-$smarty->assign("flag", $_GET['flag']);
 ?>

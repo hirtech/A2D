@@ -6,9 +6,7 @@ $access_group_var_delete = per_hasModuleAccess("Equipment", 'Delete', 'N');
 $access_group_var_status = per_hasModuleAccess("Equipment", 'Status', 'N');
 $access_group_var_add = per_hasModuleAccess("Equipment", 'Add', 'N');
 $access_group_var_edit = per_hasModuleAccess("Equipment", 'Edit', 'N');
-$access_group_var_PDF = per_hasModuleAccess("Equipment", 'PDF', 'N');
 $access_group_var_CSV = per_hasModuleAccess("Equipment", 'CSV', 'N');
-$access_group_var_Respond = per_hasModuleAccess("Equipment", 'Respond', 'N');
 # ----------- Access Rule Condition -----------
 # ------------------------------------------------------------
 # General Variables

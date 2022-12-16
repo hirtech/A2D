@@ -6,7 +6,6 @@ $access_group_var_delete = per_hasModuleAccess("Premise", 'Delete', 'N');
 $access_group_var_status = per_hasModuleAccess("Premise", 'Status', 'N');
 $access_group_var_add = per_hasModuleAccess("Premise", 'Add', 'N');
 $access_group_var_edit = per_hasModuleAccess("Premise", 'Edit', 'N');
-$access_group_var_PDF = per_hasModuleAccess("Premise", 'PDF', 'N');
 $access_group_var_CSV = per_hasModuleAccess("Premise", 'CSV', 'N');
 # ----------- Access Rule Condition -----------
 

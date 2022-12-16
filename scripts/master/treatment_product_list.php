@@ -6,9 +6,7 @@ $access_group_var_delete = per_hasModuleAccess("Treatment Product", 'Delete', 'N
 $access_group_var_status = per_hasModuleAccess("Treatment Product", 'Status', 'N');
 $access_group_var_add = per_hasModuleAccess("Treatment Product", 'Add', 'N');
 $access_group_var_edit = per_hasModuleAccess("Treatment Product", 'Edit', 'N');
-$access_group_var_PDF = per_hasModuleAccess("Treatment Product", 'PDF', 'N');
 $access_group_var_CSV = per_hasModuleAccess("Treatment Product", 'CSV', 'N');
-$access_group_var_Respond = per_hasModuleAccess("Treatment Product", 'Respond', 'N');
 # ----------- Access Rule Condition -----------
 # General Variables
 # ------------------------------------------------------------

@@ -4,7 +4,6 @@ include_once($site_path . "scripts/session_valid.php");
 # ----------- Access Rule Condition -----------
 per_hasModuleAccess("Login History", 'List');
 $access_group_var_delete = per_hasModuleAccess("Login History", 'Delete', 'N');
-$access_group_var_PDF = per_hasModuleAccess("Login History", 'PDF', 'N');
 $access_group_var_CSV = per_hasModuleAccess("Login History", 'CSV', 'N');
 # ----------- Access Rule Condition -----------
 

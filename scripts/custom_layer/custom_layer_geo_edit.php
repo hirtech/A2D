@@ -613,5 +613,4 @@ $module_name = "Custom Layer Geo Edit [".$vName."]";
 $smarty->assign("mode", $mode);
 $smarty->assign("module_name", $module_name);
 $smarty->assign("iCLId", $_REQUEST['iCLId']);
-
 ?>

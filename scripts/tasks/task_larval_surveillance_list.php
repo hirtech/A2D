@@ -6,9 +6,7 @@ $access_group_var_delete = per_hasModuleAccess("Task Larval Surveillance", 'Dele
 $access_group_var_status = per_hasModuleAccess("Task Larval Surveillance", 'Status', 'N');
 $access_group_var_add = per_hasModuleAccess("Task Larval Surveillance", 'Add', 'N');
 $access_group_var_edit = per_hasModuleAccess("Task Larval Surveillance", 'Edit', 'N');
-$access_group_var_PDF = per_hasModuleAccess("Task Larval Surveillance", 'PDF', 'N');
 $access_group_var_CSV = per_hasModuleAccess("Task Larval Surveillance", 'CSV', 'N');
-$access_group_var_Respond = per_hasModuleAccess("Task Larval Surveillance", 'Respond', 'N');
 # ----------- Access Rule Condition -----------
 
 include_once($site_path . "scripts/session_valid.php");
@@ -446,9 +444,6 @@ $module_name = "Task Larval Surveillance List";
 $module_title = "Task Larval Surveillance";
 $smarty->assign("module_name", $module_name);
 $smarty->assign("module_title", $module_title);
-$smarty->assign("option_arr", $option_arr);
-$smarty->assign("msg", $_GET['msg']);
-$smarty->assign("flag", $_GET['flag']);
 $smarty->assign("iPremiseId", $iPremiseId);
 
 $smarty->assign("access_group_var_add", $access_group_var_add);

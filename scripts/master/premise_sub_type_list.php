@@ -342,9 +342,6 @@ $module_name = "Premise Sub Type List";
 $module_title = "Premise Sub Type";
 $smarty->assign("module_name", $module_name);
 $smarty->assign("module_title", $module_title);
-$smarty->assign("option_arr", $option_arr);
-$smarty->assign("msg", $_GET['msg']);
-$smarty->assign("flag", $_GET['flag']);
 $smarty->assign("rs_sitetype", $rs_stlist);
 $smarty->assign("access_group_var_add",$access_group_var_add);
 ?>

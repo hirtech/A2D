@@ -7,7 +7,6 @@ $access_group_var_delete = per_hasModuleAccess("Premise Circuit", 'Delete', 'N')
 $access_group_var_status = per_hasModuleAccess("Premise Circuit", 'Status', 'N');
 $access_group_var_add = per_hasModuleAccess("Premise Circuit", 'Add', 'N');
 $access_group_var_edit = per_hasModuleAccess("Premise Circuit", 'Edit', 'N');
-$access_group_var_PDF = per_hasModuleAccess("Premise Circuit", 'PDF', 'N');
 $access_group_var_CSV = per_hasModuleAccess("Premise Circuit", 'CSV', 'N');
 # ------------------------------------------------------------
 # General Variables
@@ -374,10 +373,6 @@ $module_name = "Premise Circuit List";
 $module_title = "Premise Circuit";
 $smarty->assign("module_name", $module_name);
 $smarty->assign("module_title", $module_title);
-$smarty->assign("msg", $_GET['msg']);
-$smarty->assign("flag", $_GET['flag']); 
-
 $smarty->assign("access_group_var_add", $access_group_var_add);
 $smarty->assign("access_group_var_CSV", $access_group_var_CSV);
-
 ?>

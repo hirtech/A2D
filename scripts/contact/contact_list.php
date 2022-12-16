@@ -6,9 +6,7 @@ per_hasModuleAccess("Contact", 'List');
 $access_group_var_delete = per_hasModuleAccess("Contact", 'Delete', 'N');
 $access_group_var_add = per_hasModuleAccess("Contact", 'Add', 'N');
 $access_group_var_edit = per_hasModuleAccess("Contact", 'Edit', 'N');
-$access_group_var_PDF = per_hasModuleAccess("Contact", 'PDF', 'N');
 $access_group_var_CSV = per_hasModuleAccess("Contact", 'CSV', 'N');
-$access_group_var_Respond = per_hasModuleAccess("Contact", 'Respond', 'N');
 # ----------- Access Rule Condition -----------
 
 include_once($controller_path . "contact.inc.php");
@@ -542,11 +540,7 @@ $module_name = "Contact List";
 $module_title = "Contact";
 $smarty->assign("module_name", $module_name);
 $smarty->assign("module_title", $module_title);
-$smarty->assign("option_arr", $option_arr);
-$smarty->assign("msg", $_GET['msg']);
-$smarty->assign("flag", $_GET['flag']);
 $smarty->assign("iAGroupId", $_GET['iAGroupId']);
 $smarty->assign("access_group_var_add", $access_group_var_add);
 $smarty->assign("access_group_var_CSV", $access_group_var_CSV);
-
 ?>

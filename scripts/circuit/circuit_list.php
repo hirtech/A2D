@@ -7,7 +7,6 @@ $access_group_var_delete = per_hasModuleAccess("Circuit", 'Delete', 'N');
 $access_group_var_status = per_hasModuleAccess("Circuit", 'Status', 'N');
 $access_group_var_add = per_hasModuleAccess("Circuit", 'Add', 'N');
 $access_group_var_edit = per_hasModuleAccess("Circuit", 'Edit', 'N');
-$access_group_var_PDF = per_hasModuleAccess("Circuit", 'PDF', 'N');
 $access_group_var_CSV = per_hasModuleAccess("Circuit", 'CSV', 'N');
 # ------------------------------------------------------------
 # General Variables
@@ -315,10 +314,6 @@ $module_name = "Circuit List";
 $module_title = "Circuit";
 $smarty->assign("module_name", $module_name);
 $smarty->assign("module_title", $module_title);
-$smarty->assign("msg", $_GET['msg']);
-$smarty->assign("flag", $_GET['flag']); 
-
 $smarty->assign("access_group_var_add", $access_group_var_add);
 $smarty->assign("access_group_var_CSV", $access_group_var_CSV);
-
 ?>

@@ -6,9 +6,7 @@ $access_group_var_delete = per_hasModuleAccess("Work Order", 'Delete', 'N');
 $access_group_var_status = per_hasModuleAccess("Work Order", 'Status', 'N');
 $access_group_var_add = per_hasModuleAccess("Work Order", 'Add', 'N');
 $access_group_var_edit = per_hasModuleAccess("Work Order", 'Edit', 'N');
-$access_group_var_PDF = per_hasModuleAccess("Work Order", 'PDF', 'N');
 $access_group_var_CSV = per_hasModuleAccess("Work Order", 'CSV', 'N');
-$access_group_var_Respond = per_hasModuleAccess("Work Order", 'Respond', 'N');
 # ----------- Access Rule Condition -----------
 # ------------------------------------------------------------
 # General Variables

@@ -55,6 +55,4 @@ $module_name = "Heat Map";
 $module_title = "Heat Map";
 $smarty->assign("module_name", $module_name);
 $smarty->assign("module_title", $module_title);
-$smarty->assign("msg", $_GET['msg']);
-$smarty->assign("flag", $_GET['flag']);
 ?>
