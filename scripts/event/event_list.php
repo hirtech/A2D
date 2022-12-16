@@ -104,7 +104,7 @@ if($mode == "List"){
                 "vEventType"        => $rs_event[$i]['vEventType'],
                 "vCampaignBy"       => $EVENT_CAMPAIGN_BY_ARR[$rs_event[$i]['iCampaignBy']],
                 "vCampaignCoverage" => $rs_event[$i]['vCampaignCoverage'],
-                "iStatus"           => '<span class="badge badge-'.$status_color[$iStatus].'">'.$iStatus.'<span>',
+                "iStatus"           => '<span class="btn btn-'.$status_color[$iStatus].'">'.$iStatus.'<span>',
                 "dCompletedDate"    => date_getDateTimeDDMMYYYY($rs_event[$i]['dCompletedDate']),
                 "actions"           => ($action != "") ? $action : "---"
             );

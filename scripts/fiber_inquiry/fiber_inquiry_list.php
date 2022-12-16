@@ -112,6 +112,17 @@ if($mode == "List"){
                 $action .= ' <a class="btn btn-outline-danger" title="Delete" href="javascript:void(0);" onclick="delete_record('.$rs_sr[$i]['iFiberInquiryId'].');"><i class="fa fa-trash"></i></a>';
             }
 
+            $vStatus = '';
+            if($rs_sr[$i]['iStatus'] == 1) { // Draft
+                $vStatus = '<span class="btn btn-primary">'.$rs_sr[$i]['vStatus'].'<span>';
+            }else if($rs_sr[$i]['iStatus'] == 2) { // Assigned
+                $vStatus = '<span class="btn btn-secondary">'.$rs_sr[$i]['vStatus'].'<span>';
+            }else if($rs_sr[$i]['iStatus'] == 3) { // Review
+                $vStatus = '<span class="btn btn-info">'.$rs_sr[$i]['vStatus'].'<span>';
+            }else if($rs_sr[$i]['iStatus'] == 4) { // Complete
+                $vStatus = '<span class="btn btn-success">'.$rs_sr[$i]['vStatus'].'<span>';
+            }
+
             $entry[] = array(
                 "checkbox"           => '<input type="checkbox" class="list" value="'.$rs_sr[$i]['iFiberInquiryId'].'"/>',
                 "iFiberInquiryId"    => $rs_sr[$i]['iFiberInquiryId'],
@@ -122,7 +133,7 @@ if($mode == "List"){
                 "vCounty"            => $rs_sr[$i]['vCounty'],
                 "vZoneName"          => $rs_sr[$i]['vZoneName'],
                 "vNetwork"           => $rs_sr[$i]['vNetwork'],
-                "vStatus"            => $rs_sr[$i]['vStatus'],
+                "vStatus"            => $vStatus,
                 "actions"            => ($action!="")?$action:"---"
             );
         }

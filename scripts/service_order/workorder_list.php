@@ -107,7 +107,7 @@ if($mode == "List") {
 
             $vStatus = '---';
             if($vStatus != ""){
-                $vStatus = '<span class="badge badge-'.$status_color[$rs_order[$i]['vStatus']].'">'.$rs_order[$i]['vStatus'].'<span>';
+                $vStatus = '<span class="btn btn-'.$status_color[$rs_order[$i]['vStatus']].'">'.$rs_order[$i]['vStatus'].'<span>';
             }
             
 

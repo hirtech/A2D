@@ -120,7 +120,7 @@ if($mode == "List"){
                 "vAssignedTo"           => $rs_trouble_ticket[$i]['vAssignedTo'],
                 "vServiceOrder"         => $vServiceDetails,
                 "iSeverity"             => $iSeverity,
-                "iStatus"               => '<span class="badge badge-'.$status_color[$iStatus].'">'.$iStatus.'<span>',
+                "iStatus"               => '<span class="btn btn-'.$status_color[$iStatus].'">'.$iStatus.'<span>',
                 "dCompletionDate"       => date_getDateTimeDDMMYYYY($rs_trouble_ticket[$i]['dCompletionDate']),
                 "tDescription"          => nl2br($rs_trouble_ticket[$i]['tDescription']),
                 "actions"               => ($action != "") ? $action : "---"

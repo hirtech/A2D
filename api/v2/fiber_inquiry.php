@@ -352,6 +352,7 @@ if($request_type == "fiber_inquiry_edit"){
                     "vCounty" => $rs_sr[$i]['vCounty'],
                     "vZoneName" => $rs_sr[$i]['vZoneName'],
                     "vNetwork" => $rs_sr[$i]['vNetwork'],
+                    "iStatus" => $rs_sr[$i]['iStatus'],
                     "vStatus" => $vStatus
                 );
             }
