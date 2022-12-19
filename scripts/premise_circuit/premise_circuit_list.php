@@ -40,7 +40,7 @@ if($mode == "List"){
     $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
 
     $API_URL = $site_api_url."premise_circuit_list.json";
-    //echo $API_URL." ".json_encode($arr_param);exit;
+    // echo $API_URL." ".json_encode($arr_param);exit;
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $API_URL);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
@@ -58,6 +58,7 @@ if($mode == "List"){
     curl_close($ch);  
    
     $result_arr = json_decode($response, true);
+    // echo "<pre>"; print_r($result_arr);exit();
 
     $total = $result_arr['result']['total_record'];
     $jsonData = array('sEcho' => $sEcho, 'iTotalDisplayRecords' => $total, 'iTotalRecords' => $total, 'aaData' => array());
@@ -65,7 +66,7 @@ if($mode == "List"){
     $rs_list = $result_arr['result']['data'];
     $ni = count($rs_list);
     if($ni > 0){
-        for($i=0;$i<$ni;$i++){
+        for($i=0;$i<$ni;$i++){ 
             $action = '';
             if($access_group_var_edit == "1"){
                $action .= '<a class="btn btn-outline-secondary" title="Edit" href="'.$site_url.'premise_circuit/premise_circuit_edit&mode=Update&iPremiseCircuitId=' . $rs_list[$i]['iPremiseCircuitId'] . '"><i class="fa fa-edit"></i></a>';
@@ -104,6 +105,8 @@ if($mode == "List"){
                 "vWorkOrder"            => $vWorkOrder,
                 "vCircuitName"          => $rs_list[$i]['vCircuitName'],
                 "vConnectionTypeName"   => $rs_list[$i]['vConnectionTypeName'],
+                "vCarrierServices"      => $rs_list[$i]['vCarrierServices'],
+                "vEquipment"            => $rs_list[$i]['vEquipment'],
                 "iStatus"               => $vStatus,
                 "actions"               => ($action!="")?$action:"---"       
             );
@@ -182,12 +185,14 @@ if($mode == "List"){
     curl_close($ch); 
     $result_arr = json_decode($response, true); 
     //echo "<pre>";print_r($result_arr);exit();
-    if(isset($result_arr['iPremiseCircuitId'])){       
+    if(isset($result_arr['iPremiseCircuitId'])){    
+		$result['iPremiseId'] = $result_arr['iPremiseId'];
         $result['msg'] = MSG_ADD;
         $result['error'] = 0 ;
         $result['matching_network'] = $result_arr['matching_network'];
     }else{
         //$result['msg'] = MSG_ADD_ERROR;
+		$result['iPremiseId'] = $result_arr['iPremiseId'];
         $result['msg'] = $result_arr['Message'];
         $result['error']= 1 ;
         $result['matching_network'] = $result_arr['matching_network'];
@@ -227,12 +232,13 @@ if($mode == "List"){
     $response = curl_exec($ch);
     curl_close($ch); 
     $result_arr = json_decode($response, true);
-    //echo "<pre>";print_r($result_arr);exit;
     if($result_arr && $result_arr['matching_network'] == 1){
+        $result['iPremiseId'] = $result_arr['iPremiseId'];
         $result['msg'] = MSG_UPDATE;
         $result['error']= 0 ;
         $result['matching_network'] = $result_arr['matching_network'];
     }else{
+		$result['iPremiseId'] = $result_arr['iPremiseId'];
         $result['msg'] = MSG_UPDATE_ERROR;
         $result['error']= 1 ;
         $result['matching_network'] = $result_arr['matching_network'];

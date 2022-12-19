@@ -97,7 +97,7 @@ if($request_type == "premise_circuit_list"){
         case "4":
             $sortname = "connection_type_mas.\"vConnectionTypeName\"";
             break;
-         case "5":
+         case "7":
             $sortname = "premise_circuit.\"iStatus\"";
             break;
         default:
@@ -131,7 +131,7 @@ if($request_type == "premise_circuit_list"){
     $PremiseCircuitObj->setClause();
     $PremiseCircuitObj->debug_query = false;
     $rs_list = $PremiseCircuitObj->recordset_list();
-
+    // echo "<pre>"; print_r($rs_list);exit();
     // Paging Total Records
     $total_record = $PremiseCircuitObj->recordset_total();
     // Paging Total Records
@@ -141,6 +141,37 @@ if($request_type == "premise_circuit_list"){
 
     if($ni > 0){
         for($i=0;$i<$ni;$i++){
+            $sql_comp = 'SELECT DISTINCT(ps."iServiceOrderId"),ps."iWOId",cm."vCompanyName",stm."vServiceType" FROM premise_circuit pc LEFT JOIN premise_services ps ON pc."iPremiseCircuitId"= ps."iPremiseCircuitId" LEFT JOIN company_mas cm ON ps."iCarrierId"= cm."iCompanyId" LEFT JOIN service_type_mas stm ON ps."iServiceTypeId"= stm."iServiceTypeId" WHERE pc."iPremiseCircuitId"='.$rs_list[$i]['iPremiseCircuitId'];
+            $rs_comp = $sqlObj->GetAll($sql_comp);
+            // echo "<pre>"; print_r($rs_comp);exit();
+            $vCarrierServices = "";
+            if(count($rs_comp) > 0){
+                for($j=0;$j<count($rs_comp);$j++){
+                    if($rs_comp[$j]['iServiceOrderId'] > 0 && $rs_comp[$j]['iWOId'] > 0 && $rs_comp[$j]['vCompanyName'] != "" && $rs_comp[$j]['vServiceType'] != ""){
+                        $vSoURL = $site_url."service_order/edit&mode=Update&iServiceOrderId=".$rs_comp[$j]['iServiceOrderId'];
+                        $vWoURL = $site_url."service_order/workorder_add&mode=Update&iWOId=".$rs_comp[$j]['iWOId'];
+                        $vCarrierServices .= "<a href='".$vSoURL."'target='_blank'>SO#".$rs_comp[$j]['iServiceOrderId']."</a> | <a href='".$vWoURL."'target='_blank'>WO#".$rs_comp[$j]['iWOId']."</a> | ".$rs_comp[$j]['vCompanyName']." | ".$rs_comp[$j]['vServiceType']."<br>";
+                    }else{
+                        $vCarrierServices .= "---";
+                    }
+                }
+            }
+
+            $sql_equipment = 'SELECT e."iEquipmentId", e."vMACAddress",em."vModelName",em."iEquipmentModelId" FROM premise_circuit pc LEFT JOIN equipment e ON pc."iPremiseCircuitId"= e."iPremiseCircuitId" LEFT JOIN equipment_model em ON e."iEquipmentModelId"= em."iEquipmentModelId" WHERE pc."iPremiseCircuitId"='.$rs_list[$i]['iPremiseCircuitId'];
+            $rs_equipment = $sqlObj->GetAll($sql_equipment);
+            $vEquipment = "";
+            if(count($rs_equipment) > 0){
+                for($k=0;$k<count($rs_equipment);$k++){
+                    if($rs_equipment[$k]['iEquipmentModelId'] > 0 && $rs_equipment[$k]['vMACAddress'] != "" && $rs_equipment[$k]['vModelName'] != ""){
+
+                        $vEqupment_url = $site_url."service_order/equipment_add&mode=Update&iEquipmentId=".$rs_equipment[$k]['iEquipmentId'];
+                        $vEquipment .= "<a href='".$vEqupment_url."'target='_blank'>ID#".$rs_equipment[$k]['iEquipmentId']." | ".$rs_equipment[$k]['vModelName']." | ".$rs_equipment[$k]['vMACAddress']."<br>";
+                    }else{
+                        $vEquipment .= "---";
+                    }
+                }
+            }
+
 	        $data[] = array(
                 "iPremiseCircuitId"     => $rs_list[$i]['iPremiseCircuitId'],
                 "iWOId"                 => $rs_list[$i]['iWOId'],
@@ -152,6 +183,8 @@ if($request_type == "premise_circuit_list"){
                 "vCircuitName"          => $rs_list[$i]['vCircuitName'],
                 "iConnectionTypeId"     => $rs_list[$i]['iConnectionTypeId'],
                 "vConnectionTypeName"   => $rs_list[$i]['vConnectionTypeName'],
+                "vCarrierServices"      => $vCarrierServices,
+                "vEquipment"            => $vEquipment,
                 "iStatus"               => $rs_list[$i]['iStatus'],
             );
         }
@@ -198,6 +231,7 @@ if($request_type == "premise_circuit_list"){
 		$matching_network = 1;
 		$insert_arr = array(
 			"iWOId"			    => $RES_PARA['iWOId'],
+            "iPremiseId"        => $iPremiseId,
 			"iCircuitId"        => $RES_PARA['iCircuitId'],
             "iConnectionTypeId" => $RES_PARA['iConnectionTypeId'],
             "iStatus"           => $RES_PARA['iStatus'],
@@ -242,6 +276,7 @@ if($request_type == "premise_circuit_list"){
 		$update_arr = array(
 			"iPremiseCircuitId" => $RES_PARA['iPremiseCircuitId'],
             "iWOId"             => $RES_PARA['iWOId'],
+            "iPremiseId"        => $iPremiseId,
             "iCircuitId"        => $RES_PARA['iCircuitId'],
             "iConnectionTypeId" => $RES_PARA['iConnectionTypeId'],
             "iStatus"           => $RES_PARA['iStatus'],

@@ -645,32 +645,32 @@ if($request_type == "premise_list"){
       $response_data = array("Code" => 500 , "Message" => implode("\n",$err_msg), "result" => $result);
    }
 }else if($request_type == "search_premise"){
-   $rs_arr  = array();
-   $where_arr = array();
-   $join_fieds_arr = array();
-   $join_arr = array();
+    $rs_arr  = array();
+    $where_arr = array();
+    $join_fieds_arr = array();
+    $join_arr = array();
 
-   $vSiteName_other = $RES_PARA['siteName'];
+    $vSiteName_other = $RES_PARA['siteName'];
      
-   $SiteObj = new Site();
-   $SiteObj->clear_variable();
+    $SiteObj = new Site();
+    $SiteObj->clear_variable();
 
-   $letters = str_replace("'","",$vSiteName_other);
-   $exp_keyword = explode("\\",$letters);
+    $letters = str_replace("'","",$vSiteName_other);
+    $exp_keyword = explode("\\",$letters);
   
-   $ext_where_arr =array();
-   foreach($exp_keyword as $vl){
-     if(trim($vl) != '')
-         $ext_where_arr[] = " s.\"vName\" ILIKE '%".trim($vl)."%' ";
-   }
-   if(count($ext_where_arr) > 0){
-     $ext_where = implode(" AND ", $ext_where_arr);
-     //$where_arr[] = '(s."vName" ILIKE \'%'.$ext_where.'%\' )';
-     $where_arr[] = $ext_where;
-   }else{
-         $where_arr[] = '(s."vName" ILIKE \'%'.$vSiteName_other.'%\' OR s."iPremiseId" = '.intval($vSiteName_other).')';
-   }     
-    $where_arr[] = 's."iStatus" = 1';
+    $ext_where_arr =array();
+    foreach($exp_keyword as $vl){
+        if(trim($vl) != '')
+            $ext_where_arr[] = " s.\"vName\" ILIKE '%".trim($vl)."%' ";
+    }
+    if(count($ext_where_arr) > 0){
+        $ext_where = implode(" AND ", $ext_where_arr);
+        //$where_arr[] = '(s."vName" ILIKE \'%'.$ext_where.'%\' )';
+        $where_arr[] = $ext_where;
+    }else{
+        $where_arr[] = '(s."vName" ILIKE \'%'.$vSiteName_other.'%\' OR s."iPremiseId" = '.intval($vSiteName_other).')';
+    }     
+    //$where_arr[] = 's."iStatus" = 1';
     $join_fieds_arr[] = 'st."vTypeName"';
     $join_arr[] = 'LEFT JOIN site_type_mas st on s."iSTypeId" = st."iSTypeId"';
     $SiteObj->join_field = $join_fieds_arr;
@@ -740,7 +740,7 @@ if($request_type == "premise_list"){
     }else{
         $where_arr[] = " (s.\"vName\" ILIKE '%".trim($vSiteName_other)."%' OR concat(s.\"vAddress1\", ' ', s.\"vStreet\") ILIKE '%".trim($vSiteName_other)."%'  OR CAST(s.\"iPremiseId\" AS TEXT) LIKE '".intval($vSiteName_other)."%')";
     }     
-    $where_arr[] = 's."iStatus" = 1';
+    //$where_arr[] = 's."iStatus" = 1';
     $join_fieds_arr[] = 'st."vTypeName"';
     $join_arr[] = 'LEFT JOIN site_type_mas st on s."iSTypeId" = st."iSTypeId"';
     $SiteObj->join_field = $join_fieds_arr;

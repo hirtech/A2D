@@ -39,13 +39,15 @@
 				<table id="datatable-grid" class="display table dataTable table-striped table-bordered editable-table" width="100%">
 					<thead>
 						<tr>
-							<th>Id</th>
-							<th>Premise</th>
-							<th>WorkOrder</th>
-							<th>Circuit Name</th>
-							<th>Connection Type</th>
-							<th>Status</th>
-							<th>Action</th> 
+							<th width="1%">Id</th>
+							<th width="20%">Premise</th>
+							<th width="7%">WorkOrder</th>
+							<th width="7%">Circuit Name</th>
+							<th width="7%">Connection Type</th>
+							<th width="25%">Carrier Services</th>
+							<th width="20%">Equipment</th>
+							<th width="7%">Status</th>
+							<th width="6%">Action</th> 
 						</tr>
 					</thead>
 					<tbody>                            

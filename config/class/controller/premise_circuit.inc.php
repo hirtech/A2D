@@ -106,6 +106,12 @@ class PremiseCircuit {
 				// Insert status in to invoice status
 				$sql_status_ins = "INSERT INTO premise_circuit_status(\"iPremiseCircuitId\", \"iStatus\", \"iUserId\", \"dAddedDate\") VALUES (".gen_allow_null_char($iPremiseCircuitId).", ".gen_allow_null_char($this->insert_arr['iStatus']).", ".gen_allow_null_char($this->insert_arr['iLoginUserId']).",".gen_allow_null_char(date_getSystemDateTime()).")";
 				$sqlObj->Execute($sql_status_ins);
+
+				//Change the premise-status to "On-Net" when premise-circuit status is "Connected" or "Active"
+				if($this->insert_arr['iPremiseId'] > 0 && ($this->insert_arr['iStatus'] == 4 || $this->insert_arr['iStatus'] == 5)) {
+					$sql_premise = "UPDATE premise_mas SET \"iStatus\" = 1 WHERE \"iPremiseId\" = '".$this->insert_arr['iPremiseId']."'";
+					$sqlObj->Execute($sql_premise);
+				}
 			}
 			return $iPremiseCircuitId;
 		}
@@ -123,6 +129,12 @@ class PremiseCircuit {
 				// Insert status in to invoice status
 				$sql_status_ins = "INSERT INTO premise_circuit_status(\"iPremiseCircuitId\", \"iStatus\", \"iUserId\", \"dAddedDate\") VALUES (".gen_allow_null_char($this->update_arr['iPremiseCircuitId']).", ".gen_allow_null_char($this->update_arr['iStatus']).", ".gen_allow_null_char($this->update_arr['iLoginUserId']).",".gen_allow_null_char(date_getSystemDateTime()).")";
 				$sqlObj->Execute($sql_status_ins);
+
+				//Change the premise-status to "On-Net" when premise-circuit status is "Connected" or "Active"
+				if($this->update_arr['iPremiseId'] > 0 && ($this->update_arr['iStatus'] == 4 || $this->update_arr['iStatus'] == 5)) {
+					$sql_premise = "UPDATE premise_mas SET \"iStatus\" = 1 WHERE \"iPremiseId\" = '".$this->update_arr['iPremiseId']."'";
+					$sqlObj->Execute($sql_premise);
+				}
 			}
 			return $rs_db;
 		}

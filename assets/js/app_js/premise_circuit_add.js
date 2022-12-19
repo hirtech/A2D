@@ -99,7 +99,7 @@ $("#save_data").click(function(){
                 }else{
                     if($("#iStatus").val() == 4 || $("#iStatus").val() == 5) {
                         var premise_id = response['iPremiseId'];
-                        var msg = "Congratulations - Premise "+premise_id+" is not On-Net";
+                        var msg = "Congratulations - Premise status for ID "+premise_id+" is now On-Net";
                         swal({
                             title: msg,
                             text: "",

@@ -21,6 +21,8 @@ var listPage = function(){
                     { "data": "vWorkOrder", "sortable":true},
                     { "data": "vCircuitName", "sortable":true},
                     { "data": "vConnectionTypeName", "sortable":true},
+                    { "data": "vCarrierServices", "sortable":false},
+                    { "data": "vEquipment", "sortable":false},
                     { "data": "iStatus", "sortable":true, "className": "text-center"},
                     { "data": "actions", "sortable":false, "className": "text-center"},
                 ],            
