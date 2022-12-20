@@ -88,30 +88,29 @@
                                     <div class="col-12 mb-3">
                                         <label for="iSOStatus">Service Order Status <span class="text-danger">*</span></label>
                                         <select name="iSOStatus" id="iSOStatus" class="select">
-                                                <option value="1"  {if $rs_sorder[0].iSOStatus eq '1'} selected {/if}>Created</option>
-                                                <option value="2" {if $rs_sorder[0].iSOStatus eq '2'} selected {/if} {if $mode eq 'Add'} selected{/if}>In-Review</option>
-                                                <option value="3" {if $rs_sorder[0].iSOStatus eq '3'} selected {/if}>Approved</option>
+                                                <option value="1"  {if $rs_sorder[0].iSOStatus eq 1} selected {/if}>Created</option>
+                                                <option value="2" {if $rs_sorder[0].iSOStatus eq 2} selected {/if} >In-Review</option>
+                                                <option value="3" {if $rs_sorder[0].iSOStatus eq 3} selected {/if}>Approved</option>
                                             </select>
                                         <div class="invalid-feedback"> Please select service order status</div>
                                     </div>
                                     <div class="col-12 mb-3">
                                         <label for="iCStatus">Connection Status <span class="text-danger">*</span></label>
                                         <select name="iCStatus" id="iCStatus" class="select">
-                                                <option value="1"  {if $rs_sorder[0].iCStatus eq '1'} selected {/if}>Created</option>
-                                                <option value="2" {if $rs_sorder[0].iCStatus eq '2'} selected {/if} {if $mode eq 'Add'} selected{/if}>In-Progress</option>
-                                                <option value="3" {if $rs_sorder[0].iCStatus eq '3'} selected {/if}>Completed</option>
-                                                <option value="4" {if $rs_sorder[0].iCStatus eq '4'} selected {/if}>On-Net</option>
+                                                <option value="1"  {if $rs_sorder[0].iCStatus eq 1} selected {/if}>Created</option>
+                                                <option value="2" {if $rs_sorder[0].iCStatus eq 2} selected {/if}>In-Progress</option>
+                                                <option value="4" {if $rs_sorder[0].iCStatus eq 4} selected {/if}>On-Net</option>
                                             </select>
                                         <div class="invalid-feedback"> Please select connection status</div>
                                     </div>
                                     <div class="col-12 mb-3">
                                         <label for="iSStatus">Service Status <span class="text-danger">*</span></label>
                                         <select name="iSStatus" id="iSStatus" class="select">
-                                                <option value="1"  {if $rs_sorder[0].iSStatus eq '1'} selected {/if}>Active</option>
-                                                <option value="0" {if $rs_sorder[0].iSStatus eq '0'} selected {/if} {if $mode eq 'Add'} selected{/if}>Pending</option>
-                                                <option value="2" {if $rs_sorder[0].iSStatus eq '2'} selected {/if}>Suspended</option>
-                                                <option value="3" {if $rs_sorder[0].iSStatus eq '3'} selected {/if}>Trouble</option>
-                                                <option value="4" {if $rs_sorder[0].iSStatus eq '4'} selected {/if}>Disconnected</option>
+                                                <option value="0" {if $rs_sorder[0].iSStatus eq 0} selected {/if} >Pending</option>
+                                                <option value="1"  {if $rs_sorder[0].iSStatus eq 1} selected {/if}>Active</option>
+                                                <option value="2" {if $rs_sorder[0].iSStatus eq 2} selected {/if}>Suspended</option>
+                                                <option value="3" {if $rs_sorder[0].iSStatus eq 3} selected {/if}>Trouble</option>
+                                                <option value="4" {if $rs_sorder[0].iSStatus eq 4} selected {/if}>Disconnected</option>
                                             </select>
                                         <div class="invalid-feedback"> Please select service status</div>
                                     </div>
