@@ -90,7 +90,7 @@ class ServiceOrder {
 
 		global $sqlObj, $admin_panel_session_suffix, $function_path;
 
-		$sql = "INSERT INTO service_order(\"vMasterMSA\", \"vServiceOrder\", \"iCarrierID\",\"vSalesRepName\", \"vSalesRepEmail\", \"iPremiseId\", \"iConnectionTypeId\", \"iService1\", \"iService2\", \"iService3\", \"tComments\", \"iUserCreatedBy\", \"dAddedDate\") VALUES (".gen_allow_null_char($this->insert_arr['vMasterMSA']).", ".gen_allow_null_char($this->insert_arr['vServiceOrder']).", ".gen_allow_null_int($this->insert_arr['iCarrierID']).", ".gen_allow_null_char($this->insert_arr['vSalesRepName']).", ".gen_allow_null_char($this->insert_arr['vSalesRepEmail']).", ".gen_allow_null_int($this->insert_arr['iPremiseId']).", ".gen_allow_null_int($this->insert_arr['iConnectionTypeId']).", ".gen_allow_null_int($this->insert_arr['iService1']).", ".gen_allow_null_int($this->insert_arr['iService2']).", ".gen_allow_null_int($this->insert_arr['iService3']).", ".gen_allow_null_char($this->insert_arr['tComments']).", ".gen_allow_null_int($this->insert_arr['iUserCreatedBy']).",  ".gen_allow_null_char(date_getSystemDateTime()).")";
+		$sql = "INSERT INTO service_order(\"vMasterMSA\", \"vServiceOrder\", \"iCarrierID\",\"vSalesRepName\", \"vSalesRepEmail\", \"iPremiseId\", \"iConnectionTypeId\", \"iService1\", \"iSOStatus\", \"iCStatus\", \"iSStatus\", \"tComments\", \"iUserCreatedBy\", \"dAddedDate\") VALUES (".gen_allow_null_char($this->insert_arr['vMasterMSA']).", ".gen_allow_null_char($this->insert_arr['vServiceOrder']).", ".gen_allow_null_int($this->insert_arr['iCarrierID']).", ".gen_allow_null_char($this->insert_arr['vSalesRepName']).", ".gen_allow_null_char($this->insert_arr['vSalesRepEmail']).", ".gen_allow_null_int($this->insert_arr['iPremiseId']).", ".gen_allow_null_int($this->insert_arr['iConnectionTypeId']).", ".gen_allow_null_int($this->insert_arr['iService1']).", ".gen_allow_null_int($this->insert_arr['iSOStatus']).", ".gen_allow_null_int($this->insert_arr['iCStatus']).", ".gen_allow_null_int($this->insert_arr['iSStatus']).", ".gen_allow_null_char($this->insert_arr['tComments']).", ".gen_allow_null_int($this->insert_arr['iUserCreatedBy']).",  ".gen_allow_null_char(date_getSystemDateTime()).")";
 		//echo $sql;exit;
 		$sqlObj->Execute($sql);		
 		$iServiceOrderId = $sqlObj->Insert_ID();
@@ -110,8 +110,9 @@ class ServiceOrder {
 			\"iPremiseId\" = ".gen_allow_null_int($this->update_arr['iPremiseId']).", 
 			\"iConnectionTypeId\" = ".gen_allow_null_int($this->update_arr['iConnectionTypeId']).", 
 			\"iService1\" = ".gen_allow_null_int($this->update_arr['iService1']).", 
-			\"iService2\" = ".gen_allow_null_int($this->update_arr['iService2']).", 
-			\"iService3\" = ".gen_allow_null_int($this->update_arr['iService3']).", 
+			\"iSOStatus\" = ".gen_allow_null_int($this->update_arr['iSOStatus']).", 
+			\"iCStatus\" = ".gen_allow_null_int($this->update_arr['iCStatus']).", 
+			\"iSStatus\" = ".gen_allow_null_int($this->update_arr['iSStatus']).", 
 			\"tComments\" = ".gen_allow_null_char($this->update_arr['tComments']).", 
 			\"iUserModifiedBy\" = ".gen_allow_null_int($this->update_arr['iUserModifiedBy']).", 
 			\"dModifiedDate\"=".gen_allow_null_char(date_getSystemDateTime())." WHERE \"iServiceOrderId\" = ".$this->update_arr['iServiceOrderId'];

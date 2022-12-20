@@ -141,16 +141,14 @@ if($request_type == "premise_circuit_list"){
 
     if($ni > 0){
         for($i=0;$i<$ni;$i++){
-            $sql_comp = 'SELECT DISTINCT(ps."iServiceOrderId"),ps."iWOId",cm."vCompanyName",stm."vServiceType" FROM premise_circuit pc LEFT JOIN premise_services ps ON pc."iPremiseCircuitId"= ps."iPremiseCircuitId" LEFT JOIN company_mas cm ON ps."iCarrierId"= cm."iCompanyId" LEFT JOIN service_type_mas stm ON ps."iServiceTypeId"= stm."iServiceTypeId" WHERE pc."iPremiseCircuitId"='.$rs_list[$i]['iPremiseCircuitId'];
+            $sql_comp = 'SELECT DISTINCT(ps."iServiceOrderId"),ps."iWOId",cm."vCompanyName",stm."vServiceType" FROM premise_circuit pc JOIN premise_services ps ON pc."iPremiseCircuitId"= ps."iPremiseCircuitId" LEFT JOIN company_mas cm ON ps."iCarrierId"= cm."iCompanyId" LEFT JOIN service_type_mas stm ON ps."iServiceTypeId"= stm."iServiceTypeId" WHERE pc."iPremiseCircuitId"='.$rs_list[$i]['iPremiseCircuitId'].' AND ps."dStartDate" IS NOT NULL';
             $rs_comp = $sqlObj->GetAll($sql_comp);
             // echo "<pre>"; print_r($rs_comp);exit();
             $vCarrierServices = "";
             if(count($rs_comp) > 0){
                 for($j=0;$j<count($rs_comp);$j++){
                     if($rs_comp[$j]['iServiceOrderId'] > 0 && $rs_comp[$j]['iWOId'] > 0 && $rs_comp[$j]['vCompanyName'] != "" && $rs_comp[$j]['vServiceType'] != ""){
-                        $vSoURL = $site_url."service_order/edit&mode=Update&iServiceOrderId=".$rs_comp[$j]['iServiceOrderId'];
-                        $vWoURL = $site_url."service_order/workorder_add&mode=Update&iWOId=".$rs_comp[$j]['iWOId'];
-                        $vCarrierServices .= "<a href='".$vSoURL."'target='_blank'>SO#".$rs_comp[$j]['iServiceOrderId']."</a> | <a href='".$vWoURL."'target='_blank'>WO#".$rs_comp[$j]['iWOId']."</a> | ".$rs_comp[$j]['vCompanyName']." | ".$rs_comp[$j]['vServiceType']."<br>";
+                        $vCarrierServices .= "SO#".$rs_comp[$j]['iServiceOrderId']." | WO#".$rs_comp[$j]['iWOId']." | ".$rs_comp[$j]['vCompanyName']." | ".$rs_comp[$j]['vServiceType']."<br>";
                     }else{
                         $vCarrierServices .= "---";
                     }
@@ -165,7 +163,7 @@ if($request_type == "premise_circuit_list"){
                     if($rs_equipment[$k]['iEquipmentModelId'] > 0 && $rs_equipment[$k]['vMACAddress'] != "" && $rs_equipment[$k]['vModelName'] != ""){
 
                         $vEqupment_url = $site_url."service_order/equipment_add&mode=Update&iEquipmentId=".$rs_equipment[$k]['iEquipmentId'];
-                        $vEquipment .= "<a href='".$vEqupment_url."'target='_blank'>ID#".$rs_equipment[$k]['iEquipmentId']." | ".$rs_equipment[$k]['vModelName']." | ".$rs_equipment[$k]['vMACAddress']."<br>";
+                        $vEquipment .= "<a class='text-primary' href='".$vEqupment_url."' target='_blank'>ID#".$rs_equipment[$k]['iEquipmentId']." | ".$rs_equipment[$k]['vModelName']." | ".$rs_equipment[$k]['vMACAddress']."<br>";
                     }else{
                         $vEquipment .= "---";
                     }

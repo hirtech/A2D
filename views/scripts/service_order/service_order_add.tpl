@@ -58,7 +58,7 @@
                                     </div>
                                     <div class="col-12 mb-3">
                                         <label for="iPremiseId">Premise <span class="text-danger">*</span></label>
-                                        <input type="text" name="vPremiseName"  class="form-control " id="vPremiseName" placeholder="Search Premise Id or Premise Name" value="{if $rs_sorder[0].iPremiseId}{if $rs_sorder[0].vPremiseName neq ''}{$rs_sorder[0].vPremiseName|gen_strip_slash} - {/if}PremiseID# {$rs_sorder[0].iPremiseId}{/if}"  required>
+                                        <input type="text" name="vPremiseName"  class="form-control " id="vPremiseName" placeholder="Search Premise Id or Premise Name" value="{$rs_sorder[0].iPremiseId} ({$rs_sorder[0].vPremiseName|gen_strip_slash})"  required>
                                         <input type="hidden" id="search_iPremiseId" name="search_iPremiseId" value="{$rs_sorder[0].iPremiseId}"/>
                                         <img class="clear_address" src="assets/images/icon-delete.png" style="cursor:pointer;" onclick="return clear_serach_premise();">
                                         <div class="invalid-feedback" id="errmsg_search_premise">Please enter premise</div>
@@ -76,7 +76,7 @@
                                         <div class="invalid-feedback"> Please select connection type</div>
                                     </div>
                                     <div class="col-12 mb-3">
-                                        <label for="iService1">Service 1 <span class="text-danger">*</span></label>
+                                        <label for="iService1">Service<span class="text-danger">*</span></label>
                                         <select name="iService1" id="iService1" class="form-control" required>
                                             <option value="">Select</option>
                                             {section name="s" loop=$rs_stype}
@@ -86,24 +86,34 @@
                                         <div class="invalid-feedback"> Please select service type</div>
                                     </div>
                                     <div class="col-12 mb-3">
-                                        <label for="iService2">Service 2 <span class="text-danger">*</span></label>
-                                        <select name="iService2" id="iService2" class="form-control" required>
-                                            <option value="">Select</option>
-                                            {section name="s" loop=$rs_stype}
-                                                <option value="{$rs_stype[s].iServiceTypeId}" {if $rs_stype[s].iServiceTypeId eq $rs_sorder[0].iService2}selected{/if}>{$rs_stype[s].vServiceType}</option>
-                                            {/section}
-                                        </select>
-                                        <div class="invalid-feedback"> Please select service2</div>
+                                        <label for="iSOStatus">Service Order Status <span class="text-danger">*</span></label>
+                                        <select name="iSOStatus" id="iSOStatus" class="select">
+                                                <option value="1"  {if $rs_sorder[0].iSOStatus eq '1'} selected {/if}>Created</option>
+                                                <option value="2" {if $rs_sorder[0].iSOStatus eq '2'} selected {/if} {if $mode eq 'Add'} selected{/if}>In-Review</option>
+                                                <option value="3" {if $rs_sorder[0].iSOStatus eq '3'} selected {/if}>Approved</option>
+                                            </select>
+                                        <div class="invalid-feedback"> Please select service order status</div>
                                     </div>
                                     <div class="col-12 mb-3">
-                                        <label for="iService3">Service 3 <span class="text-danger">*</span></label>
-                                        <select name="iService3" id="iService3" class="form-control" required>
-                                            <option value="">Select</option>
-                                            {section name="s" loop=$rs_stype}
-                                                <option value="{$rs_stype[s].iServiceTypeId}" {if $rs_stype[s].iServiceTypeId eq $rs_sorder[0].iService3}selected{/if}>{$rs_stype[s].vServiceType}</option>
-                                            {/section}
-                                        </select>
-                                        <div class="invalid-feedback"> Please select service3</div>
+                                        <label for="iCStatus">Connection Status <span class="text-danger">*</span></label>
+                                        <select name="iCStatus" id="iCStatus" class="select">
+                                                <option value="1"  {if $rs_sorder[0].iCStatus eq '1'} selected {/if}>Created</option>
+                                                <option value="2" {if $rs_sorder[0].iCStatus eq '2'} selected {/if} {if $mode eq 'Add'} selected{/if}>In-Progress</option>
+                                                <option value="3" {if $rs_sorder[0].iCStatus eq '3'} selected {/if}>Completed</option>
+                                                <option value="4" {if $rs_sorder[0].iCStatus eq '4'} selected {/if}>On-Net</option>
+                                            </select>
+                                        <div class="invalid-feedback"> Please select connection status</div>
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <label for="iSStatus">Service Status <span class="text-danger">*</span></label>
+                                        <select name="iSStatus" id="iSStatus" class="select">
+                                                <option value="1"  {if $rs_sorder[0].iSStatus eq '1'} selected {/if}>Active</option>
+                                                <option value="0" {if $rs_sorder[0].iSStatus eq '0'} selected {/if} {if $mode eq 'Add'} selected{/if}>Pending</option>
+                                                <option value="2" {if $rs_sorder[0].iSStatus eq '2'} selected {/if}>Suspended</option>
+                                                <option value="3" {if $rs_sorder[0].iSStatus eq '3'} selected {/if}>Trouble</option>
+                                                <option value="4" {if $rs_sorder[0].iSStatus eq '4'} selected {/if}>Disconnected</option>
+                                            </select>
+                                        <div class="invalid-feedback"> Please select service status</div>
                                     </div>
                                     <div class="col-12 mb-3">
                                         <label for="tComments">Comments</label>

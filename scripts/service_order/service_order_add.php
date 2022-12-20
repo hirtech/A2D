@@ -16,6 +16,7 @@ $access_group_var_edit = per_hasModuleAccess("Service Order", 'Edit', 'N');
 # ----------- Access Rule Condition -----------
 include_once($controller_path . "service_order.inc.php");
 $ServiceOrderObj = new ServiceOrder();
+$iPremiseId = $_REQUEST['iPremiseId'];
 if($mode == "Update") {
     $iServiceOrderId = $_REQUEST['iServiceOrderId'];
     $where_arr = array();
@@ -60,6 +61,33 @@ if($mode == "Update") {
     echo  json_encode($result_arr['result']['data']);
     hc_exit();
     # -----------------------------------
+}else {
+    if($iPremiseId > 0){
+        /******** Get Premise Name From Premise Id ********/
+        $premise_param = array();
+        $premise_param['iPremiseId']    = $iPremiseId;
+        $premise_param['sessionId']     = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
+        $premiseAPI_URL = $site_api_url."get_premise_name_from_id.json";
+        //echo $premiseAPI_URL." ".json_encode($premise_param);exit;
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $premiseAPI_URL);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_HEADER, FALSE);
+        curl_setopt($ch, CURLOPT_POST, TRUE);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($premise_param));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+           "Content-Type: application/json",
+        )); 
+        $response_premise = curl_exec($ch);
+        curl_close($ch);  
+        $res_premise = json_decode($response_premise, true);
+        $vPremiseName = $res_premise['result'];
+        //echo "<pre>";print_r($vPremiseName);exit;
+        $rs_sorder[0]['iPremiseId'] = $iPremiseId;
+        $rs_sorder[0]['vPremiseName'] = $vPremiseName;
+    }
 }
 
 //Carrier (Company) Dropdown

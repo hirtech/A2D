@@ -106,16 +106,16 @@ if($mode == "List") {
                 $vSalesRepName .= "<strong>Email:</strong> ".$rs_order[$i]['vSalesRepEmail']."<br/>";
             }
 
-            $vServiceDetails = '';
-            if($rs_order[$i]['vServiceType1'] != ""){
-                $vServiceDetails .= "<strong>Service 1:</strong> ".$rs_order[$i]['vServiceType1']."<br/>";
-            }
-            if($rs_order[$i]['vServiceType2'] != ""){
-                $vServiceDetails .= "<strong>Service 2:</strong> ".$rs_order[$i]['vServiceType2']."<br/>";
-            }
-            if($rs_order[$i]['vServiceType3'] != ""){
-                $vServiceDetails .= "<strong>Service 3:</strong> ".$rs_order[$i]['vServiceType3']."<br/>";
-            }
+            // $vServiceDetails = '';
+            // if($rs_order[$i]['vServiceType1'] != ""){
+            //     $vServiceDetails .= "<strong>Service 1:</strong> ".$rs_order[$i]['vServiceType1']."<br/>";
+            // }
+            // if($rs_order[$i]['vServiceType2'] != ""){
+            //     $vServiceDetails .= "<strong>Service 2:</strong> ".$rs_order[$i]['vServiceType2']."<br/>";
+            // }
+            // if($rs_order[$i]['vServiceType3'] != ""){
+            //     $vServiceDetails .= "<strong>Service 3:</strong> ".$rs_order[$i]['vServiceType3']."<br/>";
+            // }
             $vPremise = $rs_order[$i]['iPremiseId']." (".$rs_order[$i]['vPremiseName']."; ".$rs_order[$i]['vPremiseType'].")";
 
             $entry[] = array(
@@ -127,7 +127,7 @@ if($mode == "List") {
                 "iPremiseId"            => $vPremise,
                 "iConnectionTypeId"     => $rs_order[$i]['vConnectionTypeName'],
                 "vConnectionTypeName"   => $rs_order[$i]['vConnectionTypeName'],
-                "iServiceDetails"       => $vServiceDetails,
+                "iServiceDetails"       => $rs_order[$i]['vServiceType1'],
                 "tComments"             => $rs_order[$i]['tComments'],
                 "actions"               => ($action!="")?$action:"---"
             );
@@ -149,8 +149,9 @@ if($mode == "List") {
         "iPremiseId"            => $_POST['search_iPremiseId'],
         "iConnectionTypeId"     => $_POST['iConnectionTypeId'],
         "iService1"             => $_POST['iService1'],
-        "iService2"             => $_POST['iService2'],
-        "iService3"             => $_POST['iService3'],
+        "iSOStatus"             => $_POST['iSOStatus'],
+        "iCStatus"              => $_POST['iCStatus'],
+        "iSStatus"              => $_POST['iSStatus'],
         "tComments"             => trim($_POST['tComments']),
         "iUserModifiedBy"       => $_SESSION["sess_iUserId".$admin_panel_session_suffix],
         "sessionId"             => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
@@ -194,15 +195,16 @@ if($mode == "List") {
         "iPremiseId"            => $_POST['search_iPremiseId'],
         "iConnectionTypeId"     => $_POST['iConnectionTypeId'],
         "iService1"             => $_POST['iService1'],
-        "iService2"             => $_POST['iService2'],
-        "iService3"             => $_POST['iService3'],
+        "iSOStatus"             => $_POST['iSOStatus'],
+        "iCStatus"              => $_POST['iCStatus'],
+        "iSStatus"              => $_POST['iSStatus'],
         "tComments"             => trim($_POST['tComments']),
         "iUserCreatedBy"        => $_SESSION["sess_iUserId".$admin_panel_session_suffix],
         "sessionId"             => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
     );
 
     $API_URL = $site_api_url."service_order_add.json";
-    //echo $API_URL." ".json_encode($arr_param);exit;
+    // echo $API_URL." ".json_encode($arr_param);exit;
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $API_URL);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);

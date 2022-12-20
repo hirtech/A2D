@@ -153,15 +153,41 @@ if($mode == "List"){
                 $status = '<span title="Near-Net" class="btn btn-warning">Near-Net</span>';
             }
             
-            if(per_hasModuleAccess("Task Awareness", 'List')){
+            if(per_hasModuleAccess("Task Awareness", 'List') || per_hasModuleAccess("Premise", 'List') || per_hasModuleAccess("Service Order", 'List') || per_hasModuleAccess("Work Order", 'List') || per_hasModuleAccess("Equipment", 'List') || per_hasModuleAccess("Service Order", 'Add') || per_hasModuleAccess("Work Order", 'Add') || per_hasModuleAccess("Premise Circuit", 'Add')){
                 $action .= ' <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tasks</button>
                     <div class="dropdown-menu p-0">';
+                    
+                    if(per_hasModuleAccess("Service Order", 'List')){
+                        $vSOURL = $site_url."service_order/list&iPremiseId=".$rs_site[$i]['iPremiseId'];
+                        $action .= '<a class="dropdown-item" title="View Service Orders" target="_blank" href="'.$vSOURL.'">View Service Orders</a>';
+                    }
+                    if(per_hasModuleAccess("Work Order", 'List')){
+                        $vWOURL = $site_url."service_order/workorder_list&iPremiseId=".$rs_site[$i]['iPremiseId'];
+                        $action .= '<a class="dropdown-item" title="View Work Orders" target="_blank" href="'.$vWOURL.'">View Work Orders</a>';
+                    }
+                    if(per_hasModuleAccess("Equipment", 'List')){
+                        $vEqupment_url = $site_url."service_order/equipment_list&iPremiseId=".$rs_site[$i]['iPremiseId'];
+                        $action .= '<a class="dropdown-item" title="View Equipment" target="_blank" href="'.$vEqupment_url.'">View Equipment</a>';
+                    }
+                    $action .= '<div class="dropdown-divider"></div>';
+                    if(per_hasModuleAccess("Service Order", 'Add')){
+                        $vSOAURL = $site_url."service_order/add&iPremiseId=".$rs_site[$i]['iPremiseId'];
+                        $action .= '<a class="dropdown-item" title="Setup Service Order" target="_blank" href="'.$vSOAURL.'">Setup Service Order</a>';
+                    }
+                    if(per_hasModuleAccess("Work Order", 'Add')){
+                        $vWOAURL = $site_url."service_order/workorder_add&iPremiseId=".$rs_site[$i]['iPremiseId'];
+                        $action .= '<a class="dropdown-item" title="Setup Work Order" target="_blank" href="'.$vWOAURL.'">Setup Work Order</a>';
+                    }
+                    /*if(per_hasModuleAccess("Premise Circuit", 'Add')){
+                        $vPCAURL = $site_url."premise_circuit/premise_circuit_add&iPremiseId=".$rs_site[$i]['iPremiseId'];
+                        $action .= '<a class="dropdown-item" title="Setup Premise Circuit" target="_blank" href="'.$vPCAURL.'">Setup Premise Circuit</a>';
+                    }*/
+
+                    $action .= '<a class="dropdown-item" title="Setup Premise Services"   onclick="setupPremiseService('.$rs_site[$i]['iPremiseId'].', '.$rs_site[$i]['premice_circuit_count'].')">Setup Premise Services</a>';
+                    $action .= '<div class="dropdown-divider"></div>';
                     if(per_hasModuleAccess("Task Awareness", 'List')){
-                        //$action .= '<div class="dropdown-divider"></div>';
                         $action .= '<a class="dropdown-item" title="Awareness"  onclick="addEditDataAwareness(0,\'add\','.$rs_site[$i]['iPremiseId'].')">Awareness</a>';
                     }
-                    //href="'.$site_url.'premise/setup_premise_services_list&iPremiseId=' . $rs_site[$i]['iPremiseId'] . '"
-                    $action .= '<a class="dropdown-item" title="Setup Premise Services"   onclick="setupPremiseService('.$rs_site[$i]['iPremiseId'].', '.$rs_site[$i]['premice_circuit_count'].')">Setup Premise Services</a>';
                     $action .= '</div>';
             }
             $vAddress = $rs_site[$i]['vAddress1'].' '.$rs_site[$i]['vStreet'];

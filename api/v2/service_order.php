@@ -74,7 +74,7 @@ if($request_type == "service_order_list"){
     }
 
     if ($vServiceType != "") {
-        $where_arr[] = "(st1.\"vServiceType\" ILIKE '%".$vServiceType."%' OR st2.\"vServiceType\" ILIKE '%".$vServiceType."%' OR st3.\"vServiceType\" ILIKE '%".$vServiceType."%')";
+        $where_arr[] = "(st1.\"vServiceType\" ILIKE '%".$vServiceType."%')";
     }
 
     if ($vSContactName != "") {
@@ -190,7 +190,7 @@ if($request_type == "service_order_list"){
     }
 
     if ($iSServiceType != "") {
-        $where_arr[] = "(service_order.\"iService1\" = '".$iSServiceType."' OR service_order.\"iService2\"  = '".$iSServiceType."' OR service_order.\"iService3\" = '".$iSServiceType."')";
+        $where_arr[] = "(service_order.\"iService1\" = '".$iSServiceType."')";
     }
 
     switch ($display_order) {
@@ -315,8 +315,9 @@ if($request_type == "service_order_list"){
         "iPremiseId"            => $RES_PARA['iPremiseId'],
         "iConnectionTypeId"     => $RES_PARA['iConnectionTypeId'],
         "iService1"             => $RES_PARA['iService1'],
-        "iService2"             => $RES_PARA['iService2'],
-        "iService3"             => $RES_PARA['iService3'],
+        "iSOStatus"             => $RES_PARA['iSOStatus'],
+        "iCStatus"              => $RES_PARA['iCStatus'],
+        "iSStatus"              => $RES_PARA['iSStatus'],
         "tComments"             => $RES_PARA['tComments'],
         "iUserModifiedBy"       => $RES_PARA['iUserModifiedBy'],
     );
@@ -353,8 +354,9 @@ if($request_type == "service_order_list"){
         "iPremiseId"            => $RES_PARA['iPremiseId'],
         "iConnectionTypeId"     => $RES_PARA['iConnectionTypeId'],
         "iService1"             => $RES_PARA['iService1'],
-        "iService2"             => $RES_PARA['iService2'],
-        "iService3"             => $RES_PARA['iService3'],
+        "iSOStatus"             => $RES_PARA['iSOStatus'],
+        "iCStatus"              => $RES_PARA['iCStatus'],
+        "iSStatus"              => $RES_PARA['iSStatus'],
         "tComments"             => $RES_PARA['tComments'],
         "iUserCreatedBy"		=> $RES_PARA['iUserCreatedBy'],
     );

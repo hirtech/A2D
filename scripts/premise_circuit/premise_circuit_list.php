@@ -75,8 +75,19 @@ if($mode == "List"){
                $action .= ' <a class="btn btn-outline-danger" title="Delete" href="javascript:void(0);" onclick="delete_record('.$rs_list[$i]['iPremiseCircuitId'].');"><i class="fa fa-trash"></i></a>';
             }
 
-            $vPremise = $rs_list[$i]['iPremiseId']." (".$rs_list[$i]['vPremiseName']."; ".$rs_list[$i]['vPremiseType'].")";
-            $vWorkOrder = $rs_list[$i]['iWOId']." (".$rs_list[$i]['vWorkOrderType'].")";
+            $vPremise = '';
+            if($rs_list[$i]['iPremiseId'] > 0){
+                $vPremiseURL = $site_url."premise/edit&mode=Update&iPremiseId=".$rs_list[$i]['iPremiseId'];
+                $vPremise = "<a class='text-primary' href='".$vPremiseURL."' target='_blank'>".$rs_list[$i]['iPremiseId']." (".$rs_list[$i]['vPremiseName']."; ".$rs_list[$i]['vPremiseType'].")</a>";
+            }
+
+            $vWorkOrder = '';
+            if($rs_list[$i]['iWOId'] > 0){
+                $vWoURL = $site_url."service_order/workorder_add&mode=Update&iWOId=".$rs_list[$i]['iWOId'];
+
+                $vWorkOrder = "<a class='text-primary' href='".$vWoURL."' target='_blank'>".$rs_list[$i]['iWOId']." (".$rs_list[$i]['vWorkOrderType'].")</a>";
+            }
+            
 
             $vStatus = '---';
             if($rs_list[$i]['iStatus'] == 1){
@@ -98,6 +109,8 @@ if($mode == "List"){
                 $vStatus = 'Disconnected';
                 $vStatus = '<span title="Disconnected" class="btn btn-danger">Disconnected</span>';
             }
+
+            
 
             $entry[] = array(
                 "iPremiseCircuitId"     => $rs_list[$i]['iPremiseCircuitId'],
