@@ -63,8 +63,6 @@
                                         <img class="clear_address" src="assets/images/icon-delete.png" style="cursor:pointer;" onclick="return clear_serach_premise();">
                                         <div class="invalid-feedback" id="errmsg_search_premise">Please enter premise</div>
                                     </div>
-                                </div>
-                                <div class="col-6">
                                     <div class="col-12 mb-3">
                                         <label for="iConnectionTypeId">Connection Type <span class="text-danger">*</span></label>
                                         <select name="iConnectionTypeId" id="iConnectionTypeId" class="form-control" required>
@@ -75,6 +73,9 @@
                                         </select>
                                         <div class="invalid-feedback"> Please select connection type</div>
                                     </div>
+                                </div>
+                                <div class="col-6">
+                                    
                                     <div class="col-12 mb-3">
                                         <label for="iService1">Service<span class="text-danger">*</span></label>
                                         <select name="iService1" id="iService1" class="form-control" required>
