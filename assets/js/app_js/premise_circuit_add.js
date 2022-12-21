@@ -8,6 +8,36 @@ $(document).ready(function() {
         });
     });
 
+    var clusterp = new Bloodhound({
+        datumTokenizer: function(d) { return d.tokens; },
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        remote: {
+            url: site_url+'premise_circuit/premise_circuit_add&mode=search_premise',
+            replace: function(url, uriEncodedQuery) {
+                var newUrl = url + '&vPremiseName=' + uriEncodedQuery;
+                return newUrl;
+            },
+            filter: function(list) {
+                if(list==null)
+                    return {};
+                else
+                    return $.map(list, function(rawdata) { return { display: rawdata.display, iPremiseId:rawdata.iPremiseId }; });
+            } 
+        }
+    });
+    clusterp.initialize();
+    select = false;
+    $('#vPremiseName').typeahead({hint: false, highlight: true,minLength: 1 }, 
+    {
+        displayKey: 'display',
+        source: clusterp.ttAdapter(),
+    })
+    .on('typeahead:selected', onPremiseClusteSelected)
+    .off('blur')
+    .blur(function() {
+        $(".tt-dropdown-menu").hide();
+    });
+    
     var cluster = new Bloodhound({
         datumTokenizer: function(d) { return d.tokens; },
         queryTokenizer: Bloodhound.tokenizers.whitespace,
@@ -39,11 +69,20 @@ $(document).ready(function() {
     });
 });
 
+function onPremiseClusteSelected(e, datum){
+    $("#search_iPremiseId").val(datum['iPremiseId']);
+    $("#vPremiseName").val(datum['display']);
+}
+
 function onWorkOrderClusteSelected(e, datum){
     $("#search_iWOId").val(datum['iWOId']);
     $("#vWorkOrder").val(datum['display']);
 }
 
+function clear_serach_premise(){
+    $("#vPremiseName").typeahead('val','');
+    $("#search_iPremiseId").val('');
+}
 function clear_serach_workorder(){
     $("#vWorkOrder").typeahead('val','');
     $("#search_iWOId").val('');

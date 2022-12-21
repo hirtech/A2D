@@ -141,7 +141,7 @@ if($request_type == "premise_circuit_list"){
 
     if($ni > 0){
         for($i=0;$i<$ni;$i++){
-            $sql_comp = 'SELECT DISTINCT(ps."iServiceOrderId"),ps."iWOId",cm."vCompanyName",stm."vServiceType" FROM premise_circuit pc JOIN premise_services ps ON pc."iPremiseCircuitId"= ps."iPremiseCircuitId" LEFT JOIN company_mas cm ON ps."iCarrierId"= cm."iCompanyId" LEFT JOIN service_type_mas stm ON ps."iServiceTypeId"= stm."iServiceTypeId" WHERE pc."iPremiseCircuitId"='.$rs_list[$i]['iPremiseCircuitId'].' AND ps."dStartDate" IS NOT NULL';
+            $sql_comp = 'SELECT DISTINCT(ps."iServiceOrderId"),ps."iWOId",cm."vCompanyName",stm."vServiceType" FROM premise_circuit pc JOIN premise_services ps ON pc."iPremiseCircuitId"= ps."iPremiseCircuitId" LEFT JOIN company_mas cm ON ps."iCarrierId"= cm."iCompanyId" LEFT JOIN service_type_mas stm ON ps."iServiceTypeId"= stm."iServiceTypeId" WHERE pc."iPremiseCircuitId"='.$rs_list[$i]['iPremiseCircuitId'].' AND ps."isSuspended" != 1 AND ps."dStartDate" IS NOT NULL';
             $rs_comp = $sqlObj->GetAll($sql_comp);
             // echo "<pre>"; print_r($rs_comp);exit();
             $vCarrierServices = "";
@@ -209,10 +209,10 @@ if($request_type == "premise_circuit_list"){
 	$rs_wonetwork = $sqlObj->GetAll($sql_wonetwork);
 	//echo $sql_wonetwork."<pre>";print_r($rs_wonetwork);
 	$iWONetworkId = 0;
-    $iPremiseId = 0;
+    // $iPremiseId = 0;
 	if(!empty($sql_wonetwork)) {
 		$iWONetworkId = $rs_wonetwork[0]['iNetworkId'];
-        $iPremiseId = $rs_wonetwork[0]['iPremiseId'];
+        // $iPremiseId = $rs_wonetwork[0]['iPremiseId'];
 	}
 
 	//The network of the circuit
@@ -229,7 +229,7 @@ if($request_type == "premise_circuit_list"){
 		$matching_network = 1;
 		$insert_arr = array(
 			"iWOId"			    => $RES_PARA['iWOId'],
-            "iPremiseId"        => $iPremiseId,
+            "iPremiseId"        => $RES_PARA['iPremiseId'],
 			"iCircuitId"        => $RES_PARA['iCircuitId'],
             "iConnectionTypeId" => $RES_PARA['iConnectionTypeId'],
             "iStatus"           => $RES_PARA['iStatus'],
@@ -242,10 +242,10 @@ if($request_type == "premise_circuit_list"){
 			$response_data = array("Code" => 200, "Message" => MSG_ADD, "iPremiseCircuitId" => $iPremiseCircuitId, "iPremiseId" => $iPremiseId, "matching_network" => $matching_network);
 		}
 		else{
-			$response_data = array("Code" => 500 , "Message" => MSG_ADD_ERROR, "iPremiseId" => $iPremiseId, "matching_network" => $matching_network);
+			$response_data = array("Code" => 500 , "Message" => MSG_ADD_ERROR, "iPremiseId" => $RES_PARA['iPremiseId'], "matching_network" => $matching_network);
 		}
 	}else {
-		$response_data = array("Code" => 500 , "Message" => MSG_ADD_ERROR, "iPremiseId" => $iPremiseId, "matching_network" => $matching_network);
+		$response_data = array("Code" => 500 , "Message" => MSG_ADD_ERROR, "iPremiseId" => $RES_PARA['iPremiseId'], "matching_network" => $matching_network);
 	}
 }else if($request_type == "premise_circuit_edit"){
 	//The network from the workorder/premise
@@ -253,10 +253,10 @@ if($request_type == "premise_circuit_list"){
     $rs_wonetwork = $sqlObj->GetAll($sql_wonetwork);
     //echo $sql_wonetwork."<pre>";print_r($rs_wonetwork);
     $iWONetworkId = 0;
-    $iPremiseId = 0;
+    // $iPremiseId = 0;
     if(!empty($sql_wonetwork)) {
         $iWONetworkId = $rs_wonetwork[0]['iNetworkId'];
-        $iPremiseId = $rs_wonetwork[0]['iPremiseId'];
+        // $iPremiseId = $rs_wonetwork[0]['iPremiseId'];
     }
 
     //The network of the circuit
@@ -274,7 +274,7 @@ if($request_type == "premise_circuit_list"){
 		$update_arr = array(
 			"iPremiseCircuitId" => $RES_PARA['iPremiseCircuitId'],
             "iWOId"             => $RES_PARA['iWOId'],
-            "iPremiseId"        => $iPremiseId,
+            "iPremiseId"        => $RES_PARA['iPremiseId'],
             "iCircuitId"        => $RES_PARA['iCircuitId'],
             "iConnectionTypeId" => $RES_PARA['iConnectionTypeId'],
             "iStatus"           => $RES_PARA['iStatus'],
@@ -289,10 +289,10 @@ if($request_type == "premise_circuit_list"){
 			$response_data = array("Code" => 200, "Message" => MSG_UPDATE, "iPremiseCircuitId" => $RES_PARA['iPremiseCircuitId'], "iPremiseId" => $iPremiseId, "matching_network" => $matching_network);
 		}
 		else{
-			$response_data = array("Code" => 500 , "Message" => MSG_ADD_ERROR, "iPremiseId" => $iPremiseId, "matching_network" => $matching_network);
+			$response_data = array("Code" => 500 , "Message" => MSG_ADD_ERROR, "iPremiseId" => $RES_PARA['iPremiseId'], "matching_network" => $matching_network);
 		}
 	}else{
-		$response_data = array("Code" => 500 , "Message" => MSG_ADD_ERROR, "iPremiseId" => $iPremiseId, "matching_network" => $matching_network);
+		$response_data = array("Code" => 500 , "Message" => MSG_ADD_ERROR, "iPremiseId" => $RES_PARA['iPremiseId'], "matching_network" => $matching_network);
 	}
 }
 else {

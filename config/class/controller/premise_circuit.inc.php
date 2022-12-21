@@ -98,7 +98,7 @@ class PremiseCircuit {
 	function add_records(){
 		global $sqlObj, $premise_circuit_path, $premise_circuit_url;
 		if($this->insert_arr){
-			$sql = "INSERT INTO premise_circuit(\"iWOId\", \"iCircuitId\", \"dAddedDate\", \"iConnectionTypeId\", \"iStatus\")VALUES ('".$this->insert_arr['iWOId']."', '".$this->insert_arr['iCircuitId']."', ".gen_allow_null_char(date_getSystemDateTime()).", '".$this->insert_arr['iConnectionTypeId']."', '".$this->insert_arr['iStatus']."')";
+			$sql = "INSERT INTO premise_circuit(\"iWOId\",\"iPremiseId\", \"iCircuitId\", \"dAddedDate\", \"iConnectionTypeId\", \"iStatus\")VALUES ('".$this->insert_arr['iWOId']."','".$this->insert_arr['iPremiseId']."', '".$this->insert_arr['iCircuitId']."', ".gen_allow_null_char(date_getSystemDateTime()).", '".$this->insert_arr['iConnectionTypeId']."', '".$this->insert_arr['iStatus']."')";
 			//echo $sql;exit;
 			$sqlObj->Execute($sql);
 			$iPremiseCircuitId = $sqlObj->Insert_ID();
@@ -121,7 +121,7 @@ class PremiseCircuit {
 		global $sqlObj, $premise_circuit_path, $premise_circuit_url;
 
 		if($this->update_arr){
-			$rs_db = "UPDATE premise_circuit SET \"iWOId\"='".$this->update_arr['iWOId']."', \"iCircuitId\"='".$this->update_arr['iCircuitId']."',\"dModifiedDate\" = ".gen_allow_null_char(date_getSystemDateTime()).",\"iConnectionTypeId\" = ".gen_allow_null_char($this->update_arr['iConnectionTypeId']).",\"iStatus\" = ".gen_allow_null_char($this->update_arr['iStatus'])." WHERE \"iPremiseCircuitId\"='".$this->update_arr['iPremiseCircuitId']."'";
+			$rs_db = "UPDATE premise_circuit SET \"iWOId\"='".$this->update_arr['iWOId']."',\"iPremiseId\"='".$this->update_arr['iPremiseId']."', \"iCircuitId\"='".$this->update_arr['iCircuitId']."',\"dModifiedDate\" = ".gen_allow_null_char(date_getSystemDateTime()).",\"iConnectionTypeId\" = ".gen_allow_null_char($this->update_arr['iConnectionTypeId']).",\"iStatus\" = ".gen_allow_null_char($this->update_arr['iStatus'])." WHERE \"iPremiseCircuitId\"='".$this->update_arr['iPremiseCircuitId']."'";
 			//echo $rs_db;exit;
 			$sqlObj->Execute($rs_db);
 			$rs_db = $sqlObj->Affected_Rows();

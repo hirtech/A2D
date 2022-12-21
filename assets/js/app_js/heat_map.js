@@ -41,7 +41,9 @@ $("#create_heat_map").click(function(){
 function initMap() {
    var arr = [];
    for(var h=0; h<heatmap_arr.length; h++) {
-      arr[h] = new google.maps.LatLng(parseFloat(heatmap_arr[h].vLatitude), parseFloat(heatmap_arr[h].vLongitude));
+      if(heatmap_arr[h].vLatitude != null && heatmap_arr[h].vLongitude != null){
+         arr[h] = new google.maps.LatLng(parseFloat(heatmap_arr[h].vLatitude), parseFloat(heatmap_arr[h].vLongitude));
+      }
    }
    //alert(JSON.stringify(arr));
    //alert(MAP_LATITUDE)

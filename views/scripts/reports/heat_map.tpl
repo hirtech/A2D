@@ -19,14 +19,13 @@
                                     <label for="vLayer">Layer <span class="required  text-danger" aria-required="true">*</span></label>
                                     <select name="vLayer" id="vLayer" class="form-control" required >
                                        <option value="">--- Select ---</option>
-                                       <option value="1">Service Request</option>
-                                       <option value="2">Landing Rates</option>
-                                       <option value="3">Larval Surveillance</option>
-                                       <option value="4">Treatment</option>
-                                       <option value="5">Other Tasks</option>
-                                       <option value="6">Trap Collected</option>
-                                       <option value="7">Mosquito Count</option>
-                                       <option value="8">Positive Pools</option>
+                                       <option value="1">Premise Circuits by Status</option>
+                                       <option value="2">Premise by Connection Status</option>
+                                       <option value="3">Inquiries by Network</option>
+                                       <option value="4">Inquiries by Fiber Zone</option>
+                                       <option value="5">Service Orders by Network</option>
+                                       <option value="6">Trouble Tickets by Network</option>
+                                       <option value="7">Maintenance Tickets by Network</option>
                                    </select>
                                    <div class="invalid-feedback">
                                       Please Select Layer.

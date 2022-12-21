@@ -15,7 +15,7 @@ function startPremiseServices(iPremiseId, iServiceTypeId,mode){
     $("#premise_services_start").trigger('click');
 }
 
-function suspendPremiseServices(iPremiseId, iServiceTypeId,mode){
+function suspendPremiseServices(iPremiseId, iServiceTypeId,mode,iPremiseServiceId){
     $("#frmadd").removeClass('was-validated');
     $("#stmodaltitlesuspend").html('Suspend Premise Service - <span class="text-primary">'+vPremiseName+' # '+iPremiseId+'</span>');
     $("#st_modesuspend").val('Suspend');
@@ -26,6 +26,7 @@ function suspendPremiseServices(iPremiseId, iServiceTypeId,mode){
     $("#iSuspendCarrierId").val('');
     $("#vSuspendCarrierName").val('');
     $("#iSuspendPremiseCircuitId").val('');
+    $("#iLastStartedPremiseServiceId").val(iPremiseServiceId);
     
     $("#premise_services_suspend").trigger('click');
 }

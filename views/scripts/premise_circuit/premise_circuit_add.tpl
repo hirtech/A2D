@@ -27,8 +27,15 @@
                             <div class="form-row">
                                 <div class="col-6">
                                     <div class="col-12 mb-3">
+                                        <label for="iPremiseId">Premise <span class="text-danger">*</span></label>
+                                        <input type="text" name="vPremiseName"  class="form-control " id="vPremiseName" placeholder="Search Premise Id or Premise Name" value="{$rs_data[0].vPremiseDisplay}"  required>
+                                        <input type="hidden" id="search_iPremiseId" name="search_iPremiseId" value="{$rs_sorder[0].iPremiseId}"/>
+                                        <img class="clear_address" src="assets/images/icon-delete.png" style="cursor:pointer;" onclick="return clear_serach_premise();">
+                                        <div class="invalid-feedback" id="errmsg_search_premise">Please enter premise</div>
+                                    </div>
+                                    <div class="col-12 mb-3">
                                         <label for="iWOId">Work Order <span class="text-danger">*</span></label>
-                                        <input type="text" name="vWorkOrder"  class="form-control " id="vWorkOrder" placeholder="Search Premise ID, Premise, Address, or Workorder ID or Workorder Type" value="{$rs_data[0].vPremiseDisplay}"  required>
+                                        <input type="text" name="vWorkOrder"  class="form-control " id="vWorkOrder" placeholder="Search Premise ID, Premise, Address, or Workorder ID or Workorder Type" value="{$rs_data[0].vWODisplay}"  required>
                                         <input type="hidden" id="search_iWOId" name="search_iWOId" value="{$rs_data[0].iWOId}"/>
                                         <img class="clear_address" src="assets/images/icon-delete.png" style="cursor:pointer;" onclick="return clear_serach_workorder();">
                                         <div class="invalid-feedback" id="errmsg_search_workorder">Please select workorder</div>

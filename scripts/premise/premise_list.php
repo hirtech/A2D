@@ -178,10 +178,10 @@ if($mode == "List"){
                         $vWOAURL = $site_url."service_order/workorder_add&iPremiseId=".$rs_site[$i]['iPremiseId'];
                         $action .= '<a class="dropdown-item" title="Setup Work Order" target="_blank" href="'.$vWOAURL.'">Setup Work Order</a>';
                     }
-                    /*if(per_hasModuleAccess("Premise Circuit", 'Add')){
+                    if(per_hasModuleAccess("Premise Circuit", 'Add')){
                         $vPCAURL = $site_url."premise_circuit/premise_circuit_add&iPremiseId=".$rs_site[$i]['iPremiseId'];
                         $action .= '<a class="dropdown-item" title="Setup Premise Circuit" target="_blank" href="'.$vPCAURL.'">Setup Premise Circuit</a>';
-                    }*/
+                    }
 
                     $action .= '<a class="dropdown-item" title="Setup Premise Services"   onclick="setupPremiseService('.$rs_site[$i]['iPremiseId'].', '.$rs_site[$i]['premice_circuit_count'].')">Setup Premise Services</a>';
                     $action .= '<div class="dropdown-divider"></div>';

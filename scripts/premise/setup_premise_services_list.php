@@ -52,6 +52,7 @@ if($mode == "getServiceOrder"){
         "iNRCVariable"         => $_POST['iNRCVariable'],
         "iMRCFixed"            => $_POST['iMRCFixed'],
         "dStartDate"           => $_POST['dStartDate'],
+        "isSuspended"		   => 0,
         "sessionId"            => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
     );
 
@@ -92,15 +93,16 @@ if($mode == "getServiceOrder"){
 }else if($mode == "Suspend"){
     $arr_param = array();
     $arr_param = array(
-        "iPremiseId"           => $_POST['iPremiseId'],
-        "iServiceTypeId"       => $_POST['iSuspendServiceTypeId'],
-        "iWOId"                => $_POST['iWOId'],
-        "iServiceOrderId"      => $_POST['iSuspendServiceOrderId'],
-        "iCarrierId"           => $_POST['iSuspendCarrierId'],
-        "iPremiseCircuitId"    => $_POST['iSuspendPremiseCircuitId'],
-        "iUserId"              => $_POST['iSuspendUserId'],
-        "dSuspendDate"         => $_POST['dSuspendDate'],
-        "sessionId"            => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
+        "iPremiseId"                    => $_POST['iPremiseId'],
+        "iServiceTypeId"                => $_POST['iSuspendServiceTypeId'],
+        "iWOId"                         => $_POST['iWOId'],
+        "iServiceOrderId"               => $_POST['iSuspendServiceOrderId'],
+        "iCarrierId"                    => $_POST['iSuspendCarrierId'],
+        "iPremiseCircuitId"             => $_POST['iSuspendPremiseCircuitId'],
+        "iUserId"                       => $_POST['iSuspendUserId'],
+        "dSuspendDate"                  => $_POST['dSuspendDate'],
+        "iLastStartedPremiseServiceId"  => $_POST['iLastStartedPremiseServiceId'],
+        "sessionId"                     => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
     );
 
     $API_URL = $site_api_url."premise_services_suspend.json";

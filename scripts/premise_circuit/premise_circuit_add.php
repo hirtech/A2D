@@ -21,7 +21,7 @@ $access_group_var_edit = per_hasModuleAccess("Premise Circuit", 'Edit', 'N');
 include_once($controller_path . "premise_circuit.inc.php");
 
 $PremiseCircuitObj = new PremiseCircuit();
-
+$iPremiseId = $_REQUEST['iPremiseId'];
 if($mode == "Update") {
     $iPremiseCircuitId = $_REQUEST['iPremiseCircuitId'];
     $where_arr = array();
@@ -47,10 +47,11 @@ if($mode == "Update") {
     $PremiseCircuitObj->debug_query = false;
     $rs_data = $PremiseCircuitObj->recordset_list();
     if(!empty($rs_data)) {
-        $vPremiseDisplay = " Workorder ID#".$rs_data[0]['iWOId']." (".$rs_data[0]['vWorkOrderType']."; Premise ID# ".$rs_data[0]['iPremiseId'].";".$rs_data[0]['vPremiseName'].";".$rs_data[0]['vTypeName'].")";
+        $vWODisplay = " Workorder ID#".$rs_data[0]['iWOId']." (".$rs_data[0]['vWorkOrderType']."; Premise ID# ".$rs_data[0]['iPremiseId'].";".$rs_data[0]['vPremiseName'].";".$rs_data[0]['vPremiseType'].")";
 
+        $rs_data[0]['vWODisplay'] = $vWODisplay;
+        $vPremiseDisplay = $rs_data[0]['iPremiseId']." (".$rs_data[0]['vPremiseName'].";".$rs_data[0]['vPremiseType'].")";
         $rs_data[0]['vPremiseDisplay'] = $vPremiseDisplay;
-        $rs_data[0]['vWorkOrder'] = $vWorkOrder;
     }
     //echo "<pre>";print_r($rs_data);exit;
 }else if($mode == "search_workorder"){
@@ -81,6 +82,61 @@ if($mode == "Update") {
     echo  json_encode($result_arr['result']['data']);
     hc_exit();
     # -----------------------------------
+}else if($mode =="search_premise"){
+    $arr_param = array();
+    $vPremiseName = trim($_REQUEST['vPremiseName']);
+    $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
+    $arr_param['siteName'] = $vPremiseName;
+    $API_URL = $site_api_url."search_premise_address.json";
+    //echo $API_URL." ".json_encode($arr_param);exit;
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $API_URL);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_HEADER, FALSE);
+    curl_setopt($ch, CURLOPT_POST, TRUE);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($arr_param));
+
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+       "Content-Type: application/json",
+    ));
+    $response = curl_exec($ch);
+    curl_close($ch);  
+    $result_arr = json_decode($response, true);
+    # -----------------------------------
+    # Return data.
+    # -----------------------------------
+    echo  json_encode($result_arr['result']['data']);
+    hc_exit();
+    # -----------------------------------
+}else {
+    if($iPremiseId > 0){
+        /******** Get Premise Name From Premise Id ********/
+        $premise_param = array();
+        $premise_param['iPremiseId']    = $iPremiseId;
+        $premise_param['sessionId']     = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
+        $premiseAPI_URL = $site_api_url."get_premise_name_from_id.json";
+        //echo $premiseAPI_URL." ".json_encode($premise_param);exit;
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $premiseAPI_URL);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_HEADER, FALSE);
+        curl_setopt($ch, CURLOPT_POST, TRUE);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($premise_param));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+           "Content-Type: application/json",
+        )); 
+        $response_premise = curl_exec($ch);
+        curl_close($ch);  
+        $res_premise = json_decode($response_premise, true);
+        $vPremiseName = $res_premise['result'];
+        //echo "<pre>";print_r($vPremiseName);exit;
+        $rs_data[0]['iPremiseId'] = $iPremiseId;
+        $rs_data[0]['vPremiseDisplay'] = $vPremiseName;
+    }
 }
 
 /*************** Circuit Dropdown***************/

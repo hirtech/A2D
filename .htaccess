@@ -323,7 +323,7 @@ RewriteRule ^premise_circuit/premise_circuit_list index.php?module=$0&page=m-pre
 RewriteRule ^premise_circuit/premise_circuit_edit&(.*)$ index.php?module=$0&page=m-premise_circuit_add&%{QUERY_STRING} [L]
 RewriteRule ^premise_circuit/premise_circuit_edit index.php?module=$0&page=m-premise_circuit_add
 
-RewriteRule ^premise_circuit/premise_circuit_add? index.php?module=$0&page=m-premise_circuit_add&%{QUERY_STRING}
+RewriteRule ^premise_circuit/premise_circuit_add?(.*)$ index.php?module=$0&page=m-premise_circuit_add&%{QUERY_STRING}
 RewriteRule ^premise_circuit/premise_circuit_add index.php?module=$0&page=m-premise_circuit_add
 #----------- premise circuit ------------
 

@@ -113,7 +113,8 @@ if($request_type == "premise_services_list"){
         "iUserId"                   => $RES_PARA['iUserId'],
         "iNRCVariable"              => $RES_PARA['iNRCVariable'],
         "iMRCFixed"                 => $RES_PARA['iMRCFixed'],
-        "dStartDate"                => $RES_PARA['dStartDate']
+        "dStartDate"                => $RES_PARA['dStartDate'],
+        "isSuspended"				=> $RES_PARA['isSuspended']
     );
     // echo "<pre>";print_r($insert_arr);exit;
     $PremiseServicesObj->insert_arr = $insert_arr;
@@ -128,15 +129,16 @@ if($request_type == "premise_services_list"){
     }
 }else if($request_type == "premise_services_suspend"){
     $insert_arr = array(
-        "iPremiseId"                => $RES_PARA['iPremiseId'],
-        "iServiceTypeId"            => $RES_PARA['iServiceTypeId'],
-        "iWOId"                     => $RES_PARA['iWOId'],
-        "iStatus"                   => 2,
-        "iServiceOrderId"           => $RES_PARA['iServiceOrderId'],
-        "iCarrierId"                => $RES_PARA['iCarrierId'],
-        "iPremiseCircuitId"         => $RES_PARA['iPremiseCircuitId'],
-        "iUserId"                   => $RES_PARA['iUserId'],
-        "dSuspendDate"               => $RES_PARA['dSuspendDate']
+        "iPremiseId"                    => $RES_PARA['iPremiseId'],
+        "iServiceTypeId"                => $RES_PARA['iServiceTypeId'],
+        "iWOId"                         => $RES_PARA['iWOId'],
+        "iStatus"                       => 2,
+        "iServiceOrderId"               => $RES_PARA['iServiceOrderId'],
+        "iCarrierId"                    => $RES_PARA['iCarrierId'],
+        "iPremiseCircuitId"             => $RES_PARA['iPremiseCircuitId'],
+        "iUserId"                       => $RES_PARA['iUserId'],
+        "dSuspendDate"                  => $RES_PARA['dSuspendDate'],
+        "iLastStartedPremiseServiceId"  => $RES_PARA['iLastStartedPremiseServiceId']
     );
     // echo "<pre>";print_r($insert_arr);exit;
     $PremiseServicesObj->insert_arr = $insert_arr;

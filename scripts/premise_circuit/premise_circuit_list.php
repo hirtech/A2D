@@ -173,6 +173,7 @@ if($mode == "List"){
     $arr_param = array();
     //echo "<pre>";print_r($_POST);exit;
     $arr_param = array(
+        "iPremiseId"        => $_POST['search_iPremiseId'],
         "iWOId"             => $_POST['search_iWOId'],
         "iCircuitId"        => $_POST['iCircuitId'],
         "iConnectionTypeId" => $_POST['iConnectionTypeId'],
@@ -220,6 +221,7 @@ if($mode == "List"){
 
     $arr_param = array(
         'iPremiseCircuitId' => $_POST['iPremiseCircuitId'],
+        "iPremiseId"        => $_POST['search_iPremiseId'],
         "iWOId"             => $_POST['search_iWOId'],
         "iCircuitId"        => $_POST['iCircuitId'],
         "iConnectionTypeId" => $_POST['iConnectionTypeId'],

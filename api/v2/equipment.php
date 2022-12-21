@@ -19,6 +19,7 @@ if($request_type == "equipment_list"){
         $display_order          = $RES_PARA['display_order'];
         $dir                    = $RES_PARA['dir'];
         $order_by               = $RES_PARA['order_by'];
+        $iFieldmapPremiseId     = $RES_PARA['iFieldmapPremiseId'];
 
 		$iSEquipmentModelId		= $RES_PARA['iSEquipmentModelId'];
 		$iSMaterialId			= $RES_PARA['iSMaterialId'];
@@ -32,6 +33,10 @@ if($request_type == "equipment_list"){
 		$iSOperationalStatusId	= $RES_PARA['iSOperationalStatusId'];
     }
 
+    if ($iFieldmapPremiseId != "") {
+        $where_arr[] = 'equipment."iPremiseId"='.$iFieldmapPremiseId ;
+    }
+    
     if ($iEquipmentId != "") {
         $where_arr[] = 'equipment."iEquipmentId"='.$iEquipmentId ;
     }
@@ -195,7 +200,7 @@ if($request_type == "equipment_list"){
     }
 
     $result = array('data' => $data , 'total_record' => $total);
-
+    
     $rh = HTTPStatus(200);
     $code = 2000;
     $message = api_getMessage($req_ext, constant($code));

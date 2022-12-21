@@ -42,7 +42,7 @@
 				                                    	<a class="btn btn-outline-primary" title="Start" href="javascript:void(0);" onclick="startPremiseServices('{$iPremiseId}','{$rs_pservice[s].iServiceTypeId}','premise_services_start')"><i class="fas fa-play-circle"></i></a>
 				                                    	{/if}
 				                                    	{if $rs_pservice[s].iStatus eq 1}
-				                                    	<a class="btn btn-outline-danger" title="Suspend" href="javascript:void(0);" onclick="suspendPremiseServices('{$iPremiseId}','{$rs_pservice[s].iServiceTypeId}','premise_services_suspend')"><i class="fas fa-stop-circle"></i></a>
+				                                    	<a class="btn btn-outline-danger" title="Suspend" href="javascript:void(0);" onclick="suspendPremiseServices('{$iPremiseId}','{$rs_pservice[s].iServiceTypeId}','premise_services_suspend','{$rs_pservice[s].iPremiseServiceId}')"><i class="fas fa-stop-circle"></i></a>
 				                                    	{/if}
 				                                    </td>
 				                                </tr>

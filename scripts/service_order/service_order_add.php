@@ -89,7 +89,6 @@ if($mode == "Update") {
         $rs_sorder[0]['vPremiseName'] = $vPremiseName;
     }
 }
-
 //Carrier (Company) Dropdown
 $carrier_param = array();
 $carrier_param['iStatus'] = '1';

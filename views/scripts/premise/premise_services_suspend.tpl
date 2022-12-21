@@ -14,6 +14,7 @@
             		<input type="hidden" name="mode" id="st_modesuspend" value="">
             		<input type="hidden" name="iSuspendServiceTypeId" id="iSuspendServiceTypeId" value="">
                     <input type="hidden" name="iPremiseId" id="iPremiseId" value="{$iPremiseId}">
+                    <input type="hidden" name="iLastStartedPremiseServiceId" id="iLastStartedPremiseServiceId" value="">
             		<div class="form-group row">
             			<label class="col-sm-5 col-form-label" for="iWOId">Work Order <span class="text-danger"> *</span></label>
             			<div class="col-sm-7">

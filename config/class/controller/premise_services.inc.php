@@ -77,7 +77,7 @@ class PremiseServices {
 	function start_records(){
 		global $sqlObj;
 		if($this->insert_arr){
-			$sql = "INSERT INTO premise_services( \"iPremiseId\", \"iServiceTypeId\", \"iWOId\", \"iStatus\", \"iServiceOrderId\", \"iCarrierId\", \"iPremiseCircuitId\", \"iUserId\", \"iNRCVariable\", \"iMRCFixed\", \"dStartDate\", \"dAddedDate\")VALUES (".gen_allow_null_char($this->insert_arr['iPremiseId']).", ".gen_allow_null_char($this->insert_arr['iServiceTypeId']).", ".gen_allow_null_char($this->insert_arr['iWOId']).", ".gen_allow_null_char($this->insert_arr['iStatus']).", ".gen_allow_null_char($this->insert_arr['iServiceOrderId']).", ".gen_allow_null_char($this->insert_arr['iCarrierId']).", ".gen_allow_null_char($this->insert_arr['iPremiseCircuitId']).", ".gen_allow_null_char($this->insert_arr['iUserId']).", ".gen_allow_null_char($this->insert_arr['iNRCVariable']).", ".gen_allow_null_char($this->insert_arr['iMRCFixed']).", ".gen_allow_null_char($this->insert_arr['dStartDate']).", ".gen_allow_null_char(date_getSystemDateTime()).")";
+			$sql = "INSERT INTO premise_services( \"iPremiseId\", \"iServiceTypeId\", \"iWOId\", \"iStatus\", \"iServiceOrderId\", \"iCarrierId\", \"iPremiseCircuitId\", \"iUserId\", \"iNRCVariable\", \"iMRCFixed\", \"dStartDate\", \"dAddedDate\", \"isSuspended\")VALUES (".gen_allow_null_char($this->insert_arr['iPremiseId']).", ".gen_allow_null_char($this->insert_arr['iServiceTypeId']).", ".gen_allow_null_char($this->insert_arr['iWOId']).", ".gen_allow_null_char($this->insert_arr['iStatus']).", ".gen_allow_null_char($this->insert_arr['iServiceOrderId']).", ".gen_allow_null_char($this->insert_arr['iCarrierId']).", ".gen_allow_null_char($this->insert_arr['iPremiseCircuitId']).", ".gen_allow_null_char($this->insert_arr['iUserId']).", ".gen_allow_null_char($this->insert_arr['iNRCVariable']).", ".gen_allow_null_char($this->insert_arr['iMRCFixed']).", ".gen_allow_null_char($this->insert_arr['dStartDate']).", ".gen_allow_null_char(date_getSystemDateTime()).", ".gen_allow_null_char($this->insert_arr['isSuspended']).")";
 			
 			$sqlObj->Execute($sql);		
 			$rs_db = $sqlObj-> Insert_ID();
@@ -99,6 +99,13 @@ class PremiseServices {
 			
 			$sqlObj->Execute($sql);		
 			$rs_db = $sqlObj-> Insert_ID();
+			if($rs_db){ 
+				$iPremiseServiceId = $this->insert_arr['iLastStartedPremiseServiceId'];
+				if($iPremiseServiceId > 0) {
+					$sql = "UPDATE premise_services set \"isSuspended\" = 1 WHERE \"iPremiseServiceId\" = ".$iPremiseServiceId;
+					$rs = $sqlObj->Execute($sql);	
+				}
+			}
 
 			/*-------------- Log Entry -------------*/
 			$this->SALObj->type = 0;

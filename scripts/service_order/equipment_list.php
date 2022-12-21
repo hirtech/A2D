@@ -35,6 +35,7 @@ if($mode == "List") {
     $arr_param['sEcho']         = $sEcho;
     $arr_param['display_order'] = $display_order;
     $arr_param['dir']           = $dir;
+    $arr_param['iFieldmapPremiseId']    = $iPremiseId;
 
     $arr_param['iSEquipmentModelId']        = $_REQUEST['iSEquipmentModelId'];
     $arr_param['iSMaterialId']              = $_REQUEST['iSMaterialId'];
