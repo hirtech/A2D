@@ -16,13 +16,15 @@ var listPage = function(){
                 "aaSorting": [[0,'desc']],
                 'bAutoWidth': true,
                 "columns": [
-                    { "data": "checkbox", "sortable":true, "className": "text-center", "width" : "5%"},
-                    { "data": "iCarrierId", "sortable":true, "width" : "20%"},
-                    { "data": "iNetworkId", "sortable":true, "className": "text-center", "width" : "20%"},
-                    { "data": "iServiceTypeId", "sortable":true, "className": "text-center", "width" : "20%"},
-                    { "data": "iNRCVariable", "sortable":true, "className": "text-center", "width" : "15%"},
-                    { "data": "iMRCFixed", "sortable":true, "className": "text-center", "width" : "15%"},
-                    { "data": "actions", "sortable":false, "className": "text-center", "width" : "5%"},
+                    { "data": "checkbox", "sortable":true, "className": "text-center"},
+                    { "data": "iCarrierId", "sortable":true},
+                    { "data": "iNetworkId", "sortable":true, "className": "text-center"},
+                    { "data": "iConnectionTypeId", "sortable":true, "className": "text-center"},
+                    { "data": "iServiceTypeId", "sortable":true, "className": "text-center"},
+                    { "data": "iNRCVariable", "sortable":true, "className": "text-center"},
+                    { "data": "iMRCFixed", "sortable":true, "className": "text-center"},
+                    { "data": "vFile", "sortable":false, "className": "text-center"},
+                    { "data": "actions", "sortable":false, "className": "text-center"},
                 ],                
                 "autoWidth" : true,
                 "lengthMenu": PageLengthMenuArr,
@@ -97,9 +99,22 @@ function addEditData(id,mode){
         $("#service_pricing_id").val(id);
         $("#iCarrierId").val($("#iCarrierId_"+id).val());
         $("#iNetworkId").val($("#iNetworkId_"+id).val());
+        $("#iConnectionTypeId").val($("#iConnectionTypeId_"+id).val());
         $("#iServiceTypeId").val($("#iServiceTypeId_"+id).val());
+        $("#iServiceLevel").val($("#iServiceLevel_"+id).val());
         $("#iNRCVariable").val($("#iNRCVariable_"+id).val());
         $("#iMRCFixed").val($("#iMRCFixed_"+id).val());
+
+        $("#vFile").val('');
+        $("#vFile_old").val($("#vFile_"+id).val());
+
+        if($("#vFile_"+id).val() != ""){
+            var str = '<a href="'+$("#vFile_"+id).val()+'" title="Download"><i class="fa fa-download"></i></a>';
+            $("#icon_image").html(str);
+        }else{
+
+            $("#icon_image").html('');
+        }
        
     }else{
         $("#stmodaltitle").html('Add Service Pricing');
@@ -107,9 +122,14 @@ function addEditData(id,mode){
         $("#iServicePricingId").val('');
         $("#iCarrierId").val('');
         $("#iNetworkId").val('');
+        $("#iConnectionTypeId").val('');
         $("#iServiceTypeId").val('');
+        $("#iServiceLevel").val('');
         $("#iNRCVariable").val('');
         $("#iMRCFixed").val('');
+        $("#vFile").val('');
+        $("#vFile_old").val('');
+        $("#icon_image").html('');
     }
     $("#service_pricing_box").trigger('click');
 }
@@ -130,17 +150,22 @@ $("#save_data").click(function(){
     form.addClass('was-validated');
 
     if(isError == 0){
-        var data_str = $("#frmadd").serializeArray();
+        //var data_str = $("#frmadd").serializeArray();
+        var formData = new FormData(form[0]);
         $.ajax({
             type: "POST",
             url: site_url+"master/service_pricing_list",
-            data: data_str,
-            success: function(data){
+            data: formData,
+            cache:false,
+            contentType: false,
+            processData: false,
+            dataType : 'json',
+            success: function(response){
                 $('#save_loading').hide();
                 $("#save_data").prop('disabled', false);
                 
                 $("#closestbox").trigger('click');
-                response =JSON.parse(data);
+                //response =JSON.parse(data);
                 if(response['error'] == "0"){
                     toastr.success(response['msg']);
                 }else{

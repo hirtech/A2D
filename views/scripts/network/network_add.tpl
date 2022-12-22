@@ -51,6 +51,8 @@
                                         <select name="iStatus" id="iStatus" class="form-control">
                                             <option value="1" {if $rs_data[0]['iStatus'] eq '1' } selected {/if}>Active</option>
                                             <option value="0" {if $rs_data[0]['iStatus'] eq '0' } selected {/if}>Inactive</option>
+                                            <option value="2" {if $rs_data[0]['iStatus'] eq '2' } selected {/if}>Created</option>
+                                            <option value="3" {if $rs_data[0]['iStatus'] eq '3' } selected {/if}>Planning</option>
                                         </select>
                                 	</div>
                                 </div>

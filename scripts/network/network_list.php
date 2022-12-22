@@ -83,12 +83,22 @@ if($mode == "List"){
             if ($access_group_var_delete == "1") {
                $action .= ' <a class="btn btn-outline-danger" title="Delete" href="javascript:void(0);" onclick="delete_record('.$rs_list[$i]['iNetworkId'].');"><i class="fa fa-trash"></i></a>';
             }
+            $status = "";
+            if($rs_list[$i]['iStatus'] == 0){
+                $status = '<span title="Inactive" class="btn btn-danger">Inactive</span>';
+            }else if($rs_list[$i]['iStatus'] == 1){
+                $status = '<span title="Active" class="btn btn-success">Active</span>';
+            }else if($rs_list[$i]['iStatus'] == 2){
+                $status = '<span title="Created" class="btn btn-prmiary">Created</span>';
+            }else if($rs_list[$i]['iStatus'] == 3){
+                $status = '<span title="Planning" class="btn btn-secondary">Planning</span>';
+            }
 
             $entry[] = array(
                 "iNetworkId" => $rs_list[$i]['iNetworkId'],
                 "checkbox" => '<input type="checkbox" class="list" value="'.$rs_list[$i]['iNetworkId'].'"/>',
                 "vName" => $rs_list[$i]['vName'],
-                "iStatus" => '<span data-toggle="tooltip" data-placement="top" title="'.gen_status($rs_list[$i]['iStatus']).'" class="badge badge-pill badge-'.$status_color[ gen_status($rs_list[$i]['iStatus'])].'">&nbsp;</span>',
+                "iStatus" => $status,
                 "actions" => ($action!="")?$action:"---"       
             );
         }

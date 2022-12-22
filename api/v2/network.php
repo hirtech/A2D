@@ -38,6 +38,12 @@ if($request_type == "network_list"){
         else if(strtolower($iStatus) == "inactive"){
             $where_arr[] = "\"iStatus\" = '0'";
         }
+        else if(strtolower($iStatus) == "created"){
+            $where_arr[] = "\"iStatus\" = '2'";
+        }
+        else if(strtolower($iStatus) == "planning"){
+            $where_arr[] = "\"iStatus\" = '3'";
+        }
     } 
 
     switch ($display_order) {

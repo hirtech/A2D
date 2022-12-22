@@ -17,6 +17,8 @@ $sEcho = (isset($_REQUEST["sEcho"]) ? $_REQUEST["sEcho"] : '0');
 $display_order = (isset($_REQUEST["iSortCol_0"]) ? $_REQUEST["iSortCol_0"] : '0');
 $dir = (isset($_REQUEST["sSortDir_0"]) ? $_REQUEST["sSortDir_0"] : 'desc');
 # ------------------------------------------------------------
+include_once($function_path."image.inc.php");
+
 if($mode == "List"){
     $arr_param = array();
     $vOptions = $_REQUEST['vOptions'];
@@ -73,13 +75,28 @@ if($mode == "List"){
                 $action .= '<a class="btn btn-outline-danger" title="Delete" href="javascript:;" onclick="delete_record('.$rs_service_pricing[$i]['iServicePricingId'].');"><i class="fa fa-trash"></i></a>';
             }
 
+            $site_vFile = "";
+            $site_vFile_image = "";
+            if($rs_service_pricing[$i]['vFile'] !=""  && file_exists($service_pricing_path."".$rs_service_pricing[$i]['vFile'])){
+                $site_vFile_image = $service_pricing_url."".$rs_service_pricing[$i]['vFile'];
+                $site_vFile = '<img src="'.$site_vFile_image.'" alt="" class="img-fluid rounded-circle">';
+            }
+
+            $vFile_d = "";
+            $vFile_url = "";
+            if($rs_service_pricing[$i]['vFile'] !=""  && file_exists($service_pricing_path.$rs_service_pricing[$i]['vFile'])){
+                $vFile_url = $service_pricing_url.$rs_service_pricing[$i]['vFile'];
+                $vFile_d = '<a href="'.$vFile_url.'" title="Download"><i class="fa fa-download"></i></a>';
+            }
             $entry[] = array(                        
                 "checkbox"          =>$rs_service_pricing[$i]['iServicePricingId'].'<input type="hidden" id="service_pricing_id_'.$rs_service_pricing[$i]['iServicePricingId'].'" value="'.$rs_service_pricing[$i]['iServicePricingId'].'">',
                 "iCarrierId"        =>gen_strip_slash($rs_service_pricing[$i]['vCompanyName']).'<input type="hidden" id="iCarrierId_'.$rs_service_pricing[$i]['iServicePricingId'].'" value="'.$rs_service_pricing[$i]['iCarrierId'].'">',
                 "iNetworkId"        =>gen_strip_slash($rs_service_pricing[$i]['vNetwork']).'<input type="hidden" id="iNetworkId_'.$rs_service_pricing[$i]['iServicePricingId'].'" value="'.$rs_service_pricing[$i]['iNetworkId'].'">',
-                "iServiceTypeId"    =>gen_strip_slash($rs_service_pricing[$i]['vServiceType']).'<input type="hidden" id="iServiceTypeId_'.$rs_service_pricing[$i]['iServicePricingId'].'" value="'.$rs_service_pricing[$i]['iServiceTypeId'].'">',
+                "iConnectionTypeId"        =>gen_strip_slash($rs_service_pricing[$i]['vNetwork']).'<input type="hidden" id="iConnectionTypeId_'.$rs_service_pricing[$i]['iServicePricingId'].'" value="'.$rs_service_pricing[$i]['iConnectionTypeId'].'">',
+                "iServiceTypeId"    =>gen_strip_slash($rs_service_pricing[$i]['vServiceType']).'<input type="hidden" id="iServiceTypeId_'.$rs_service_pricing[$i]['iServicePricingId'].'" value="'.$rs_service_pricing[$i]['iServiceTypeId'].'"><input type="hidden" id="iServiceLevel_'.$rs_service_pricing[$i]['iServicePricingId'].'" value="'.$rs_service_pricing[$i]['iServiceLevel'].'">',
                 "iNRCVariable"      => $rs_service_pricing[$i]['iNRCVariable'].'<input type="hidden" id="iNRCVariable_'.$rs_service_pricing[$i]['iServicePricingId'].'" value="'.$rs_service_pricing[$i]['iNRCVariable'].'">',
                 "iMRCFixed"         => $rs_service_pricing[$i]['iMRCFixed'].'<input type="hidden" id="iMRCFixed_'.$rs_service_pricing[$i]['iServicePricingId'].'" value="'.$rs_service_pricing[$i]['iMRCFixed'].'">',
+                "vFile" =>$vFile_d.'<input type="hidden" id="vFile_'.$rs_service_pricing[$i]['iServicePricingId'].'" value="'.$vFile_url.'">',
                 "actions" => ($action == "")?"---":$action
             );
         }
@@ -131,14 +148,25 @@ if($mode == "List"){
     # -----------------------------------    
 }else if($mode == "Update"){
     $arr_param = array();
-    //echo "<pre>";print_r($_POST);exit;
+    //echo "<pre>";print_r($_FILES);exit;
+    if(isset($_FILES["vFile"])){
+        $file_arr = img_fileUpload("vFile", $service_pricing_path, '', $valid_ext = array('docx', 'doc', 'pdf'));
+        $file_name = $file_arr[0];
+        $file_msg =  $file_arr[1];
+    } else {
+        $file_name = $_POST['vFile_old'];
+    }
+
     $arr_param = array(
         "iServicePricingId"         => $_POST['iServicePricingId'],
         "iCarrierId"                => $_POST['iCarrierId'],
         "iNetworkId"                => $_POST['iNetworkId'],
+        "iConnectionTypeId"         => $_POST['iConnectionTypeId'],
         "iServiceTypeId"            => $_POST['iServiceTypeId'],
+        "iServiceLevel"             => $_POST['iServiceLevel'],
         "iNRCVariable"              => $_POST['iNRCVariable'],
         "iMRCFixed"                 => $_POST['iMRCFixed'],
+        "vFile"                     => $file_name,
         "sessionId"                 => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
     );
 
@@ -160,7 +188,7 @@ if($mode == "List"){
     $result_arr = json_decode($response, true); 
     //echo "<pre>;";print_r($result_arr);exit;
     if(isset($result_arr['iServicePricingId'])){
-        $result['iServicePricingId']  = $iServicePricingId;
+        $result['iServicePricingId']  = $result_arr['iServicePricingId'];
         $result['msg']      = $result_arr['Message'];
         $result['error']    = 0 ;
     }else{
@@ -174,12 +202,23 @@ if($mode == "List"){
     # ----------------------------------- 
 }else if($mode == "Add"){
     $arr_param = array();
+    $files = "";
+    //echo "<pre>";print_r($_FILES);exit;
+    if(isset($_FILES["vFile"])){
+        $file_arr = img_fileUpload("vFile", $service_pricing_path, '', $valid_ext = array('docx', 'doc', 'pdf'));
+        $file_name = $file_arr[0];
+        $file_msg =  $file_arr[1];
+    }
+
     $arr_param = array(
         "iCarrierId"                => $_POST['iCarrierId'],
         "iNetworkId"                => $_POST['iNetworkId'],
+        "iConnectionTypeId"         => $_POST['iConnectionTypeId'],
         "iServiceTypeId"            => $_POST['iServiceTypeId'],
+        "iServiceLevel"             => $_POST['iServiceLevel'],
         "iNRCVariable"              => $_POST['iNRCVariable'],
         "iMRCFixed"                 => $_POST['iMRCFixed'],
+        "vFile"                     => $file_name,
         "sessionId"                 => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
     );
 
@@ -201,7 +240,7 @@ if($mode == "List"){
     $result_arr = json_decode($response, true); 
     //echo "<pre>;";print_r($result_arr);exit;
     if(isset($result_arr['iServicePricingId'])){
-        $result['iServicePricingId']    = $iServicePricingId;
+        $result['iServicePricingId']    = $result_arr['iServicePricingId'];
         $result['msg']                  = $result_arr['Message'];
         $result['error']                = 0 ;
     }else{
@@ -379,6 +418,28 @@ $res_stype = json_decode($response_stype, true);
 $rs_stype = $res_stype['result'];
 $smarty->assign("rs_stype", $rs_stype);
 //echo "<pre>";print_r($rs_stype);exit;
+
+/*-------------------------- Connection Type -------------------------- */
+$ctype_arr_param = array();
+$ctype_arr_param['iStatus']   = 1;
+$ctype_arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
+$ctype_API_URL = $site_api_url."connection_type_dropdown.json";
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $ctype_API_URL);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_HEADER, FALSE);
+curl_setopt($ch, CURLOPT_POST, TRUE);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($ctype_arr_param));
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+   "Content-Type: application/json",
+)); 
+$response_ctype = curl_exec($ch);
+curl_close($ch);  
+$res_ctype = json_decode($response_ctype, true);
+$smarty->assign("rs_ctype", $res_ctype['result']);
+/*-------------------------- Connection Type -------------------------- */
 
 $module_name = "Service Pricing List";
 $module_title = "Service Pricing";

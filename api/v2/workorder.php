@@ -325,6 +325,7 @@ if($request_type == "workorder_list"){
     $join_arr = array();
 
     $vWorkOrder = $RES_PARA['vWorkOrder'];
+    $iPremiseId = $RES_PARA['iPremiseId'];
      
     $WorkOrderObj->clear_variable();
 
@@ -341,7 +342,10 @@ if($request_type == "workorder_list"){
         $where_arr[] = $ext_where;
     }else{
         $where_arr[] = " (s.\"vName\" ILIKE '%".trim($vWorkOrder)."%' OR concat(s.\"vAddress1\", ' ', s.\"vStreet\") ILIKE '%".trim($vWorkOrder)."%'  OR CAST(s.\"iPremiseId\" AS TEXT) LIKE '".intval($vWorkOrder)."%' OR CAST(workorder.\"iWOId\" AS TEXT) LIKE '".intval($vWorkOrder)."%' OR wt.\"vType\" ILIKE '%".trim($vWorkOrder)."%')";
-    }     
+    } 
+    if ($iPremiseId != "") {
+        $where_arr[] = 'workorder."iPremiseId"='.$iPremiseId ;
+    }    
     $join_fieds_arr[] = 's."vName" as "vPremiseName"';
     $join_fieds_arr[] = 'st."vTypeName"';
     $join_fieds_arr[] = 'wt."vType" as "vWorkorderType"';
@@ -447,9 +451,9 @@ if($request_type == "workorder_list"){
         $rs_arr = array();
         for ($i = 0; $i < count($rs_wo); $i++) {
 
-			$sql =  'SELECT pc."iPremiseCircuitId", c."vCircuitName",c."iCircuitId" FROM workorder w JOIN premise_circuit pc ON w."iWOId"=pc."iWOId" LEFT JOIN circuit c ON pc."iCircuitId"=c."iCircuitId" WHERE w."iPremiseId"= '.$rs_wo[$i]['iPremiseId'].' AND w."iWOId" = '.$iWOId.' Order BY "iPremiseCircuitId" LIMIT 1';
+			//$sql =  'SELECT pc."iPremiseCircuitId", c."vCircuitName",c."iCircuitId" FROM workorder w JOIN premise_circuit pc ON w."iWOId"=pc."iWOId" LEFT JOIN circuit c ON pc."iCircuitId"=c."iCircuitId" WHERE w."iPremiseId"= '.$rs_wo[$i]['iPremiseId'].' AND w."iWOId" = '.$iWOId.' Order BY "iPremiseCircuitId" LIMIT 1';
+            $sql =  'SELECT pc."iPremiseCircuitId", c."vCircuitName",c."iCircuitId" FROM workorder w JOIN premise_circuit pc ON w."iWOId"=pc."iWOId" LEFT JOIN circuit c ON pc."iCircuitId"=c."iCircuitId" WHERE w."iPremiseId"= '.$rs_wo[$i]['iPremiseId'].' Order BY "iPremiseCircuitId" LIMIT 1';
 			$rs_pc = $sqlObj->GetAll($sql);
-			
 
             $rs_arr[$i]['iWOId'] = $rs_wo[$i]['iWOId'];
             $rs_arr[$i]['iServiceOrderId'] = $rs_wo[$i]['iServiceOrderId'];

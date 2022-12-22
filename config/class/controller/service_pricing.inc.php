@@ -107,10 +107,9 @@ class ServicePricing {
 	function add_records(){
 		global $sqlObj;
 		if($this->insert_arr){
-			$sql = "INSERT INTO service_pricing_mas( \"iCarrierId\", \"iNetworkId\", \"iServiceTypeId\", \"iNRCVariable\", \"iMRCFixed\", \"dAddedDate\")VALUES (".gen_allow_null_char($this->insert_arr['iCarrierId']).", ".gen_allow_null_char($this->insert_arr['iNetworkId']).", ".gen_allow_null_char($this->insert_arr['iServiceTypeId']).", ".gen_allow_null_char($this->insert_arr['iNRCVariable']).", ".gen_allow_null_char($this->insert_arr['iMRCFixed']).", ".gen_allow_null_char(date_getSystemDateTime()).")";
-			
+			$sql = "INSERT INTO service_pricing_mas( \"iCarrierId\", \"iNetworkId\", \"iConnectionTypeId\", \"iServiceTypeId\", \"iServiceLevel\", \"iNRCVariable\", \"iMRCFixed\", \"vFile\", \"dAddedDate\")VALUES (".gen_allow_null_char($this->insert_arr['iCarrierId']).", ".gen_allow_null_char($this->insert_arr['iNetworkId']).", ".gen_allow_null_char($this->insert_arr['iConnectionTypeId']).", ".gen_allow_null_char($this->insert_arr['iServiceTypeId']).", ".gen_allow_null_char($this->insert_arr['iServiceLevel']).", ".gen_allow_null_char($this->insert_arr['iNRCVariable']).", ".gen_allow_null_char($this->insert_arr['iMRCFixed']).", ".gen_allow_null_char($this->insert_arr['vFile']).", ".gen_allow_null_char(date_getSystemDateTime()).")";
 			$sqlObj->Execute($sql);		
-			$rs_db = $sqlObj-> Insert_ID();
+			$iServicePricingId = $sqlObj-> Insert_ID();
 
 			/*-------------- Log Entry -------------*/
 			$this->SALObj->type = 0;
@@ -118,14 +117,14 @@ class ServicePricing {
 			$this->SALObj->audit_log_entry();
 			/*-------------- Log Entry -------------*/
 
-			return $rs_db;
+			return $iServicePricingId;
 		}
 	}
 
 	function update_records(){
 		global $sqlObj, $site_path;
 		if($this->update_arr){
-			$rs_db = "UPDATE service_pricing_mas SET  \"iCarrierId\"=".gen_allow_null_char($this->update_arr['iCarrierId']).", \"iNetworkId\"=".gen_allow_null_char($this->update_arr['iNetworkId']).", \"iServiceTypeId\"=".gen_allow_null_char($this->update_arr['iServiceTypeId']).", \"iNRCVariable\"=".gen_allow_null_char($this->update_arr['iNRCVariable']).", \"iMRCFixed\"=".gen_allow_null_char($this->update_arr['iMRCFixed']).", \"dModifiedDate\" = ".gen_allow_null_char(date_getSystemDateTime())." WHERE \"iServicePricingId\" = ".$this->update_arr['iServicePricingId'];
+			$rs_db = "UPDATE service_pricing_mas SET  \"iCarrierId\"=".gen_allow_null_char($this->update_arr['iCarrierId']).", \"iNetworkId\"=".gen_allow_null_char($this->update_arr['iNetworkId']).", \"iConnectionTypeId\"=".gen_allow_null_char($this->update_arr['iConnectionTypeId']).", \"iServiceTypeId\"=".gen_allow_null_char($this->update_arr['iServiceTypeId']).", \"iServiceLevel\"=".gen_allow_null_char($this->update_arr['iServiceLevel']).", \"iNRCVariable\"=".gen_allow_null_char($this->update_arr['iNRCVariable']).", \"iMRCFixed\"=".gen_allow_null_char($this->update_arr['iMRCFixed']).", \"vFile\"=".gen_allow_null_char($this->update_arr['vFile']).", \"dModifiedDate\" = ".gen_allow_null_char(date_getSystemDateTime())." WHERE \"iServicePricingId\" = ".$this->update_arr['iServicePricingId'];
 			//echo $rs_db;exit;
 			$sqlObj->Execute($rs_db);
 			$rs_up = $sqlObj->Affected_Rows();

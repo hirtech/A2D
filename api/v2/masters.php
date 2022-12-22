@@ -1948,10 +1948,14 @@ if($request_type == "city_list"){
                 "vCompanyName"             => $rs_service_type[$i]['vCompanyName'],
                 "iNetworkId"               => $rs_service_type[$i]['iNetworkId'],
                 "vNetwork"                 => $rs_service_type[$i]['vNetwork'],
+                "iConnectionTypeId"        => $rs_service_type[$i]['iConnectionTypeId'],
+                "vConnectionTypeName"      => $rs_service_type[$i]['vConnectionTypeName'],
                 "iServiceTypeId"           => $rs_service_type[$i]['iServiceTypeId'],
-                "vServiceType"           => $rs_service_type[$i]['vServiceType'],
+                "iServiceLevel"            => $rs_service_type[$i]['iServiceLevel'],
+                "vServiceType"             => $rs_service_type[$i]['vServiceType'],
                 "iNRCVariable"             => $rs_service_type[$i]['iNRCVariable'],
                 "iMRCFixed"                => $rs_service_type[$i]['iMRCFixed'],
+                "vFile"                    => $rs_service_type[$i]['vFile'],
             );
         }
     }
@@ -1963,12 +1967,16 @@ if($request_type == "city_list"){
     $response_data = array("Code" => 200, "Message" => $message, "result" => $result);
 }else if($request_type == "service_pricing_add"){
     $ServicePricingObj = new ServicePricing();
+    
     $insert_arr = array(
         "iCarrierId"            => $RES_PARA['iCarrierId'],
         "iNetworkId"            => $RES_PARA['iNetworkId'],
+        "iConnectionTypeId"     => $RES_PARA['iConnectionTypeId'],
         "iServiceTypeId"        => $RES_PARA['iServiceTypeId'],
+        "iServiceLevel"         => $RES_PARA['iServiceLevel'],
         "iNRCVariable"          => $RES_PARA['iNRCVariable'],
         "iMRCFixed"             => $RES_PARA['iMRCFixed'],
+        "vFile"                 => $RES_PARA['vFile'],
     );
     $ServicePricingObj->insert_arr = $insert_arr;
     $ServicePricingObj->setClause();
@@ -1978,21 +1986,25 @@ if($request_type == "city_list"){
     }else{
         $response_data = array("Code" => 500 , "Message" => MSG_ADD_ERROR);
     }
+    
 }else if($request_type == "service_pricing_edit"){
     $ServicePricingObj = new ServicePricing();
     $update_arr = array(
         "iServicePricingId"     => $RES_PARA['iServicePricingId'],
         "iCarrierId"            => $RES_PARA['iCarrierId'],
         "iNetworkId"            => $RES_PARA['iNetworkId'],
+        "iConnectionTypeId"     => $RES_PARA['iConnectionTypeId'],
         "iServiceTypeId"        => $RES_PARA['iServiceTypeId'],
+        "iServiceLevel"         => $RES_PARA['iServiceLevel'],
         "iNRCVariable"          => $RES_PARA['iNRCVariable'],
         "iMRCFixed"             => $RES_PARA['iMRCFixed'],
+        "vFile"                 => $RES_PARA['vFile'],
     );
     //echo "<pre>";print_r($update_arr);exit;
     $ServicePricingObj->update_arr = $update_arr;
     $ServicePricingObj->setClause();
-    $iServicePricingId = $ServicePricingObj->update_records();
-    if(isset($iServicePricingId)){
+    $iServicePricingId1 = $ServicePricingObj->update_records();
+    if(isset($iServicePricingId1)){
         $response_data = array("Code" => 200, "Message" => MSG_UPDATE, "iServicePricingId" => $RES_PARA['iServicePricingId']);
     }else{
         $response_data = array("Code" => 500 , "Message" => MSG_UPDATE_ERROR);

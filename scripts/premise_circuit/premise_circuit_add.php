@@ -56,9 +56,12 @@ if($mode == "Update") {
     //echo "<pre>";print_r($rs_data);exit;
 }else if($mode == "search_workorder"){
     $arr_param = array();
+    //echo "<pre>";print_r($_REQUEST);exit;
     $vWorkOrder = trim($_REQUEST['vWorkOrder']);
+    $iPremiseId = trim($_REQUEST['iPremiseId']);
     $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
     $arr_param['vWorkOrder'] = $vWorkOrder;
+    $arr_param['iPremiseId'] = $iPremiseId;
     $API_URL = $site_api_url."search_workorder.json";
     //echo $API_URL." ".json_encode($arr_param);exit;
     $ch = curl_init();
@@ -135,7 +138,7 @@ if($mode == "Update") {
         $vPremiseName = $res_premise['result'];
         //echo "<pre>";print_r($vPremiseName);exit;
         $rs_data[0]['iPremiseId'] = $iPremiseId;
-        $rs_data[0]['vPremiseDisplay'] = $vPremiseName;
+        $rs_data[0]['vPremiseDisplay'] = $iPremiseId." (".$vPremiseName.")";
     }
 }
 

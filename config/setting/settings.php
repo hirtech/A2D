@@ -141,6 +141,10 @@ $custom_layer_url = $site_storage_images_url."kml/";
 $network_path = $site_storage_images_path."netowrk_kml/";
 $network_url = $site_storage_images_url."netowrk_kml/";
 
+#Service Pricing file
+$service_pricing_path = $site_storage_images_path."service_pricing/";
+$service_pricing_url = $site_storage_images_url."service_pricing/";
+
 #Zone
 $zone_path = $site_storage_images_path."zone/";
 $zone_url = $site_storage_images_url."zone/";

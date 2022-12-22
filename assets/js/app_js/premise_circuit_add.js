@@ -44,7 +44,7 @@ $(document).ready(function() {
         remote: {
             url: site_url+'premise_circuit/premise_circuit_add?mode=search_workorder',
             replace: function(url, uriEncodedQuery) {
-                var newUrl = url + '&vWorkOrder=' + uriEncodedQuery;
+                var newUrl = url + '&vWorkOrder=' + uriEncodedQuery+'&iPremiseId=' + $("#search_iPremiseId").val();
                 return newUrl;
             },
             filter: function(list) {
@@ -72,6 +72,8 @@ $(document).ready(function() {
 function onPremiseClusteSelected(e, datum){
     $("#search_iPremiseId").val(datum['iPremiseId']);
     $("#vPremiseName").val(datum['display']);
+    $("#search_iWOId").val('');
+    $("#vWorkOrder").val('');
 }
 
 function onWorkOrderClusteSelected(e, datum){
