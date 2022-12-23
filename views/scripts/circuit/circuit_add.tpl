@@ -25,7 +25,7 @@
                             <input type="hidden" name="mode" id="mode" value="{$mode}">
                             <input type="hidden" name="iCircuitId" id="iCircuitId" value="{$rs_data[0]['iCircuitId']}">
                             <div class="form-row">
-                                <div class="col-6">
+                                <div class="col-5">
                                     <div class="col-12 mb-3">
                                         <label for="iCircuitTypeId">Circuit Type <span class="text-danger">*</span></label>
                                         <select name="iCircuitTypeId" id="iCircuitTypeId" class="form-control" required>
@@ -54,6 +54,41 @@
                                         </div>
                                     </div>
                                 </div>
+                                {if $mode eq 'Update'}
+                                <div class="col-7">
+                                    <div class="col-12 mb-3">
+                                        <h5 class="text-dark font-weight-bold">Premise Circuit</h5>
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <table class="table layout-primary" border="1">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col" class="text-center">Premise Circuit</th>
+                                                    <th scope="col" class="text-center">Premise</th>
+                                                    <th scope="col">Address</th>
+                                                    <th scope="col" class="text-center">Premise Circuit Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class ="premise_data">
+                                                {if $cnt_premise_circuit  > 0}
+                                                {section name="p" loop=$premise_circuit_arr}
+                                                <tr>
+                                                    <td class="text-center">{$premise_circuit_arr[p].iPremiseCircuitId}</td>
+                                                    <td class="text-center">{$premise_circuit_arr[p].iPremiseId}</td>
+                                                    <td>{$premise_circuit_arr[p].vAddress}</td>
+                                                    <td class="text-center">{$premise_circuit_arr[p].vStatus}</td>
+                                                </tr>
+                                                {/section}
+                                                {else}
+                                                <tr>
+                                                    <td colspan="6" class="text-center"><b>No Records Found!</b></td>
+                                                </tr>
+                                                {/if}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                {/if}
                             </div>
                         </div>
                     </div>

@@ -7,15 +7,32 @@
 					<form id="frmlist" name="frmlist" class="site_search_form">
 						<ul class="nav search-links float-right">
 							<li>
-								<select id="vOptions" name="vOptions" class="form-control">
-									<option value="vName">Premise Name</option>
+								<select id="vOptions" name="vOptions" class="form-control" onchange="getDropdown(this.value);">
 									<option value="vTypeName">Premise Type</option>
 									<option value="vSubTypeName">Premise Sub Type</option>
-                  					<option value="iStatus">Status</option>
+									<option value="vNetwork">Network</option>
+                  					<option value="vFiberZone">Fiber Zone</option>
 								</select>
 							</li>
-							<li>
-							   <input type="text" name="Keyword" id="Keyword" class="form-control" value="" autocomplete="off">
+							<li id="premise_type_dd">
+		                        <select name="typeId" id="typeId" class="form-control col-md-12 search_filter_dd">
+		                            <option value="">-- Select --</option> {section name="z" loop=$rs_site_type} <option value="{$rs_site_type[z].iSTypeId}">{$rs_site_type[z].vTypeName|gen_strip_slash}</option> {/section}
+		                        </select>
+							</li>
+							<li id="premise_subtype_dd" style="display: none">
+		                        <select name="sTypeId" id="sTypeId" class="form-control col-md-12 search_filter_dd">
+		                            <option value="">-- Select --</option> {section name="z" loop=$rs_site_sub_type} <option value="{$rs_site_sub_type[z].iSSTypeId}">{$rs_site_sub_type[z].vSubTypeName|gen_strip_slash}</option> {/section}
+		                        </select>
+							</li>
+							<li id="network_dd" style="display: none">
+		                        <select name="networkId" id="networkId" class="form-control col-md-12 search_filter_dd">
+		                            <option value="">-- Select --</option> {section name="n" loop=$rs_ntwork} <option value="{$rs_ntwork[n].iNetworkId}">{$rs_ntwork[n].vName|gen_strip_slash}</option> {/section}
+		                        </select>
+							</li>
+							<li id="zone_dd" style="display: none">
+		                        <select name="zoneId" id="zoneId" class="form-control col-md-12 search_filter_dd">
+		                            <option value="">-- Select --</option> {section name="z" loop=$rs_zone} <option value="{$rs_zone[z].iZoneId}">{$rs_zone[z].vZoneName|gen_strip_slash}</option> {/section}
+		                        </select>
 							</li>
 							<li>
 								<button type="button" id="Search" class="btn  btn-outline-warning fas fa-search" title="Search"><span class=""></span></button>

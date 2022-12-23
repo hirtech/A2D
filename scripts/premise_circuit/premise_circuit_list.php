@@ -101,16 +101,12 @@ if($mode == "List"){
             }else if($rs_list[$i]['iStatus'] == 5){
                 $vStatus = '<span title="Active" class="btn btn-info">Active</span>';
             }else if($rs_list[$i]['iStatus'] == 6){
-                $vStatus = 'Suspended';
                 $vStatus = '<span title="Suspended" class="btn btn-danger">Suspended</span>';
             }else if($rs_list[$i]['iStatus'] == 7){
                 $vStatus = '<span title="Trouble" class="btn btn-dark">Trouble</span>';
             }else if($rs_list[$i]['iStatus'] == 8){
-                $vStatus = 'Disconnected';
                 $vStatus = '<span title="Disconnected" class="btn btn-danger">Disconnected</span>';
             }
-
-            
 
             $entry[] = array(
                 "iPremiseCircuitId"     => $rs_list[$i]['iPremiseCircuitId'],

@@ -294,6 +294,56 @@ if($request_type == "premise_circuit_list"){
 	}else{
 		$response_data = array("Code" => 500 , "Message" => MSG_ADD_ERROR, "iPremiseId" => $RES_PARA['iPremiseId'], "matching_network" => $matching_network);
 	}
+}else if($request_type == "get_premise_circuit_from_circuit_id"){
+    $iCircuitId = $RES_PARA['iCircuitId'];
+    $where_arr = array();
+    $join_fieds_arr = array();
+    $join_arr = array();
+    $where_arr[] = "premise_circuit.\"iCircuitId\" = '".$iCircuitId."'";
+    $join_fieds_arr[] = 's."vName" as "vPremiseName"';
+    $join_fieds_arr[] = "concat(s.\"vAddress1\", ' ', s.\"vStreet\") as \"vAddress\"";
+    $join_fieds_arr[] = 'c."vCity"';
+    $join_arr[] = " LEFT JOIN premise_mas s ON premise_circuit.\"iPremiseId\" = s.\"iPremiseId\"";
+    $join_arr[] = " LEFT JOIN city_mas c ON s.\"iCityId\" = c.\"iCityId\"";
+    $PremiseCircuitObj->join_field = $join_fieds_arr;
+    $PremiseCircuitObj->join = $join_arr;
+    $PremiseCircuitObj->where = $where_arr;
+    $PremiseCircuitObj->param['order_by'] = "premise_circuit.\"iPremiseCircuitId\" DESC";
+    $PremiseCircuitObj->setClause();
+    $PremiseCircuitObj->debug_query = false;
+    $rs_list = $PremiseCircuitObj->recordset_list();
+    $ni = count($rs_list);
+    //echo "<pre>";print_r($rs_list);exit;
+    if($ni > 0) {
+        for($i=0; $i<$ni; $i++){
+            $vStatus = '---';
+            if($rs_list[$i]['iStatus'] == 1){
+                $vStatus = '<span title="Created" class="btn btn-primary">Created</span>';
+            }else if($rs_list[$i]['iStatus'] == 2){
+                $vStatus = '<span title="In Progress" class="btn btn-secondary">In Progress</span>';
+            }else if($rs_list[$i]['iStatus'] == 3){
+                $vStatus = '<span title="Delayed" class="btn btn-warning">Delayed</span>';
+            }else if($rs_list[$i]['iStatus'] == 4){
+                $vStatus = '<span title="Connected" class="btn btn-success">Connected</span>';
+            }else if($rs_list[$i]['iStatus'] == 5){
+                $vStatus = '<span title="Active" class="btn btn-info">Active</span>';
+            }else if($rs_list[$i]['iStatus'] == 6){
+                $vStatus = '<span title="Suspended" class="btn btn-danger">Suspended</span>';
+            }else if($rs_list[$i]['iStatus'] == 7){
+                $vStatus = '<span title="Trouble" class="btn btn-dark">Trouble</span>';
+            }else if($rs_list[$i]['iStatus'] == 8){
+                $vStatus = '<span title="Disconnected" class="btn btn-danger">Disconnected</span>';
+            }
+            $rs_list[$i]['vStatus'] = $vStatus;
+
+            if($rs_list[$i]['vCity'] != '') {
+                $rs_list[$i]['vAddress'] = $rs_list[$i]['vAddress'].", ".$rs_list[$i]['vCity'];
+            }
+        }
+        $response_data = array("Code" => 200, "result" => $rs_list, "total_record" => count($rs_list));
+    }else{
+        $response_data = array("Code" => 500, "result" => $rs_list, "total_record" => count($rs_list));
+    }
 }
 else {
    $r = HTTPStatus(400);

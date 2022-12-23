@@ -11,7 +11,9 @@
 									<option value="iServicePricingId">ID</option>
 									<option value="vCarrier">Carrier</option>
 									<option value="vNetwork">Network</option>
+									<option value="vConnectionType">Connection Type</option>
 									<option value="vServiceType">Service Type</option>
+									<option value="vServiceLevel">Service Level</option>
 								</select>
 							</li>
 							<li>
@@ -33,10 +35,11 @@
 						<thead>
 							<tr>
 								<th>ID</th>
-								<th>Company Name</th>
+								<th>Carrier</th>
 								<th>Network</th>
 								<th>Connection Type</th>
 								<th>Service Type</th>
+								<th>Service Level</th>
 								<th>NRC - Variable</th>
 								<th>MRC - Fixed</th>
 								<th>Document</th> 

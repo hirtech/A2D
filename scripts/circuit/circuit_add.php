@@ -34,6 +34,34 @@ if($mode == "Update") {
     $CircuitObj->param['limit'] = "LIMIT 1";
     $CircuitObj->setClause();
     $rs_data = $CircuitObj->recordset_list();
+    if(!empty($rs_data)) {
+        ## --------------------------------
+        # Get Premise Circuit Data from Circuit
+        $arr_param = array();
+        $arr_param = array(
+            "iCircuitId"    => $rs_data[0]['iCircuitId'],
+            "sessionId"     => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
+        );
+        $API_URL = $site_api_url."get_premise_circuit_from_circuit_id.json";
+        //echo $API_URL." ".json_encode($arr_param);exit;
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $API_URL);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_HEADER, FALSE);
+        curl_setopt($ch, CURLOPT_POST, TRUE);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($arr_param));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+           "Content-Type: application/json",
+        ));
+        $response_pc = curl_exec($ch);
+        curl_close($ch); 
+        $rs_pc = json_decode($response_pc, true); 
+        $premise_circuit_arr = $rs_pc['result'];
+        $cnt_premise_circuit = count($premise_circuit_arr);
+        ## --------------------------------
+    }
 }
 
 
@@ -92,5 +120,7 @@ $smarty->assign("module_name", $module_name);
 $smarty->assign("module_title", $module_title);
 $smarty->assign("mode", $mode);
 $smarty->assign("rs_data", $rs_data);
+$smarty->assign("cnt_premise_circuit", $cnt_premise_circuit);
+$smarty->assign("premise_circuit_arr", $premise_circuit_arr);
 $smarty->assign("network_arr", $network_arr);
 ?>

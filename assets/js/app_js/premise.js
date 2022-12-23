@@ -393,3 +393,39 @@ $("#bat_save_data").click(function(){
         }
     }
 });
+
+function getDropdown(vOptions) {
+    $('#premise_type_dd').show();
+    if(vOptions == "vTypeName"){
+        reset_all_fields();
+        $('#premise_type_dd').show();
+        $('#premise_subtype_dd').hide();
+        $('#network_dd').hide();
+        $('#zone_dd').hide();
+    }else if(vOptions == "vSubTypeName"){
+        reset_all_fields();
+        $('#premise_subtype_dd').show();
+        $('#premise_type_dd').hide();
+        $('#network_dd').hide();
+        $('#zone_dd').hide();
+    }else if(vOptions == "vNetwork"){
+        reset_all_fields();
+        $('#network_dd').show();
+        $('#premise_type_dd').hide();
+        $('#premise_subtype_dd').hide();
+        $('#zone_dd').hide();
+    }else if(vOptions == "vFiberZone"){
+        reset_all_fields();
+        $('#zone_dd').show();
+        $('#premise_type_dd').hide();
+        $('#premise_subtype_dd').hide();
+        $('#network_dd').hide();
+    }
+}
+
+function reset_all_fields(){
+  $('#typeId').val('');
+  $('#sTypeId').val('');
+  $('#networkId').val('');
+  $('#zoneId').val('');
+}

@@ -102,8 +102,13 @@ class PremiseServices {
 			if($rs_db){ 
 				$iPremiseServiceId = $this->insert_arr['iLastStartedPremiseServiceId'];
 				if($iPremiseServiceId > 0) {
+					# When new premise service is started suspend the previous service for the same service type.
 					$sql = "UPDATE premise_services set \"isSuspended\" = 1 WHERE \"iPremiseServiceId\" = ".$iPremiseServiceId;
 					$rs = $sqlObj->Execute($sql);	
+
+					# When premise service is suspended, also change the Service Status as disconnected in service order.
+					$sqls = "UPDATE service_order set \"iSStatus\" = 4 WHERE \"iServiceOrderId\" = ".$this->insert_arr['iServiceOrderId'];
+					$rss = $sqlObj->Execute($sqls);
 				}
 			}
 

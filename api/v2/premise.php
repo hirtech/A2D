@@ -14,6 +14,8 @@ if($request_type == "premise_list"){
         $vName				= trim($RES_PARA['vName']);
         $vTypeName			= trim($RES_PARA['vTypeName']);
         $vSubTypeName		= trim($RES_PARA['vSubTypeName']);
+        $vNetwork           = trim($RES_PARA['vNetwork']);
+        $vFiberZone         = trim($RES_PARA['vFiberZone']);
         $iStatus			= trim($RES_PARA['iStatus']);
         $page_length        = isset($RES_PARA['page_length']) ? trim($RES_PARA['page_length']) : "10";
         $start              = isset($RES_PARA['start']) ? trim($RES_PARA['start']) : "0";
@@ -43,11 +45,19 @@ if($request_type == "premise_list"){
     }
 
 	if ($vTypeName != "") {
-        $where_arr[] = "st.\"vTypeName\"='".$vTypeName."'";
+        $where_arr[] = "s.\"iSTypeId\"='".$vTypeName."'";
     }
 
 	if ($vSubTypeName != "") {
-        $where_arr[] = "sst.\"vSubTypeName\"='".$vSubTypeName."'";
+        $where_arr[] = "s.\"iSSTypeId\"='".$vSubTypeName."'";
+    }
+
+    if ($vNetwork != "") {
+        $where_arr[] = "z.\"iNetworkId\"='".$vNetwork."'";
+    }
+
+    if ($vFiberZone != "") {
+        $where_arr[] = "s.\"iZoneId\"='".$vFiberZone."'";
     }
 
 	if ($iStatus != "") {
@@ -190,6 +200,7 @@ if($request_type == "premise_list"){
     $join_fieds_arr[] = 'sm."vState"';
     $join_fieds_arr[] = 'cm."vCity"';
     $join_fieds_arr[] = 'z."vZoneName"';
+    $join_fieds_arr[] = 'z."iNetworkId"';
     $join_fieds_arr[] = 'n."vName" as "vNetwork"';
     $join_arr = array();
     $join_arr[] = 'LEFT JOIN county_mas c on s."iCountyId" = c."iCountyId"';

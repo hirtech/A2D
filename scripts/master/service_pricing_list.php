@@ -88,16 +88,29 @@ if($mode == "List"){
                 $vFile_url = $service_pricing_url.$rs_service_pricing[$i]['vFile'];
                 $vFile_d = '<a href="'.$vFile_url.'" title="Download"><i class="fa fa-download"></i></a>';
             }
+
+            $iServiceLevel = "";
+            if($rs_service_pricing[$i]['iServiceLevel'] == 1){
+                $iServiceLevel = "Best Effort";  
+            }else if($rs_service_pricing[$i]['iServiceLevel'] == 2){
+                $iServiceLevel = "Business Class";  
+            }else if($rs_service_pricing[$i]['iServiceLevel'] == 3){
+                $iServiceLevel = "SLA";  
+            }else if($rs_service_pricing[$i]['iServiceLevel'] == 4){
+                $iServiceLevel = "High Availability";  
+            }
+
             $entry[] = array(                        
-                "checkbox"          =>$rs_service_pricing[$i]['iServicePricingId'].'<input type="hidden" id="service_pricing_id_'.$rs_service_pricing[$i]['iServicePricingId'].'" value="'.$rs_service_pricing[$i]['iServicePricingId'].'">',
-                "iCarrierId"        =>gen_strip_slash($rs_service_pricing[$i]['vCompanyName']).'<input type="hidden" id="iCarrierId_'.$rs_service_pricing[$i]['iServicePricingId'].'" value="'.$rs_service_pricing[$i]['iCarrierId'].'">',
-                "iNetworkId"        =>gen_strip_slash($rs_service_pricing[$i]['vNetwork']).'<input type="hidden" id="iNetworkId_'.$rs_service_pricing[$i]['iServicePricingId'].'" value="'.$rs_service_pricing[$i]['iNetworkId'].'">',
-                "iConnectionTypeId"        =>gen_strip_slash($rs_service_pricing[$i]['vNetwork']).'<input type="hidden" id="iConnectionTypeId_'.$rs_service_pricing[$i]['iServicePricingId'].'" value="'.$rs_service_pricing[$i]['iConnectionTypeId'].'">',
-                "iServiceTypeId"    =>gen_strip_slash($rs_service_pricing[$i]['vServiceType']).'<input type="hidden" id="iServiceTypeId_'.$rs_service_pricing[$i]['iServicePricingId'].'" value="'.$rs_service_pricing[$i]['iServiceTypeId'].'"><input type="hidden" id="iServiceLevel_'.$rs_service_pricing[$i]['iServicePricingId'].'" value="'.$rs_service_pricing[$i]['iServiceLevel'].'">',
+                "checkbox"          => $rs_service_pricing[$i]['iServicePricingId'].'<input type="hidden" id="service_pricing_id_'.$rs_service_pricing[$i]['iServicePricingId'].'" value="'.$rs_service_pricing[$i]['iServicePricingId'].'">',
+                "iCarrierId"        => gen_strip_slash($rs_service_pricing[$i]['vCompanyName']).'<input type="hidden" id="iCarrierId_'.$rs_service_pricing[$i]['iServicePricingId'].'" value="'.$rs_service_pricing[$i]['iCarrierId'].'">',
+                "iNetworkId"        => gen_strip_slash($rs_service_pricing[$i]['vNetwork']).'<input type="hidden" id="iNetworkId_'.$rs_service_pricing[$i]['iServicePricingId'].'" value="'.$rs_service_pricing[$i]['iNetworkId'].'">',
+                "iConnectionTypeId" => gen_strip_slash($rs_service_pricing[$i]['vConnectionTypeName']).'<input type="hidden" id="iConnectionTypeId_'.$rs_service_pricing[$i]['iServicePricingId'].'" value="'.$rs_service_pricing[$i]['iConnectionTypeId'].'">',
+                "iServiceTypeId"    => gen_strip_slash($rs_service_pricing[$i]['vServiceType']).'<input type="hidden" id="iServiceTypeId_'.$rs_service_pricing[$i]['iServicePricingId'].'" value="'.$rs_service_pricing[$i]['iServiceTypeId'].'">',
+                "iServiceLevel"      => $iServiceLevel.'<input type="hidden" id="iServiceLevel_'.$rs_service_pricing[$i]['iServicePricingId'].'" value="'.$rs_service_pricing[$i]['iServiceLevel'].'">',
                 "iNRCVariable"      => $rs_service_pricing[$i]['iNRCVariable'].'<input type="hidden" id="iNRCVariable_'.$rs_service_pricing[$i]['iServicePricingId'].'" value="'.$rs_service_pricing[$i]['iNRCVariable'].'">',
                 "iMRCFixed"         => $rs_service_pricing[$i]['iMRCFixed'].'<input type="hidden" id="iMRCFixed_'.$rs_service_pricing[$i]['iServicePricingId'].'" value="'.$rs_service_pricing[$i]['iMRCFixed'].'">',
-                "vFile" =>$vFile_d.'<input type="hidden" id="vFile_'.$rs_service_pricing[$i]['iServicePricingId'].'" value="'.$vFile_url.'">',
-                "actions" => ($action == "")?"---":$action
+                "vFile"             => $vFile_d.'<input type="hidden" id="vFile_'.$rs_service_pricing[$i]['iServicePricingId'].'" value="'.$vFile_url.'">',
+                "actions"           => ($action == "")?"---":$action
             );
         }
     }
@@ -295,20 +308,43 @@ if($mode == "List"){
 
         $objPHPExcel->setActiveSheetIndex(0)
                 ->setCellValue('A1', 'Id')
-                ->setCellValue('B1', 'Company Name')
+                ->setCellValue('B1', 'Carrier')
                 ->setCellValue('C1', 'Network')
-                ->setCellValue('D1', 'Service')
-                ->setCellValue('E1', 'NRC - Variable')
-                ->setCellValue('F1', 'MRC - Fixed');
+                ->setCellValue('D1', 'Connection Type')
+                ->setCellValue('E1', 'Service Type')
+                ->setCellValue('F1', 'Service Level')
+                ->setCellValue('G1', 'NRC - Variable')
+                ->setCellValue('H1', 'MRC - Fixed')
+                ->setCellValue('I1', 'Document URL');
     
         for($e=0; $e<$cnt_export; $e++) {
+
+            $vServiceLevel = "";
+            if($rs_export[$e]['iServiceLevel'] == 1){
+                $vServiceLevel = "Best Effort";  
+            }else if($rs_export[$e]['iServiceLevel'] == 2){
+                $vServiceLevel = "Business Class";  
+            }else if($rs_export[$e]['iServiceLevel'] == 3){
+                $vServiceLevel = "SLA";  
+            }else if($rs_export[$e]['iServiceLevel'] == 4){
+                $vServiceLevel = "High Availability";  
+            }
+
+            $vDocumentURL = "";
+            if($rs_export[$e]['vFile'] !=""  && file_exists($service_pricing_path.$rs_export[$e]['vFile'])){
+                $vDocumentURL = $service_pricing_url.$rs_export[$e]['vFile'];
+            }
+
             $objPHPExcel->getActiveSheet()
             ->setCellValue('A'.($e+2), $rs_export[$e]['iServicePricingId'])
-            ->setCellValue('B'.($e+2), $rs_export[$e]['iCarrierId'])
-            ->setCellValue('C'.($e+2), $rs_export[$e]['iNetworkId'])
-            ->setCellValue('D'.($e+2), $rs_export[$e]['iServiceTypeId'])
-            ->setCellValue('E'.($e+2), $rs_export[$e]['iNRCVariable'])
-            ->setCellValue('F'.($e+2), $rs_export[$e]['iMRCFixed']);
+            ->setCellValue('B'.($e+2), $rs_export[$e]['vCompanyName'])
+            ->setCellValue('C'.($e+2), $rs_export[$e]['vNetwork'])
+            ->setCellValue('D'.($e+2), $rs_export[$e]['vConnectionTypeName'])
+            ->setCellValue('E'.($e+2), $rs_export[$e]['vServiceType'])
+            ->setCellValue('F'.($e+2), $vServiceLevel)
+            ->setCellValue('G'.($e+2), $rs_export[$e]['iNRCVariable'])
+            ->setCellValue('H'.($e+2), $rs_export[$e]['iMRCFixed'])
+            ->setCellValue('I'.($e+2), $vDocumentURL);
         }
                             
         /* Set Auto width of each comlumn */
@@ -318,9 +354,12 @@ if($mode == "List"){
         $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
         
         /* Set Font to Bold for each comlumn */
-        $objPHPExcel->getActiveSheet()->getStyle('A1:F1')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A1:I1')->getFont()->setBold(true);
         
 
         /* Set Alignment of Selected Columns */

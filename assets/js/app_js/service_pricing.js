@@ -18,9 +18,10 @@ var listPage = function(){
                 "columns": [
                     { "data": "checkbox", "sortable":true, "className": "text-center"},
                     { "data": "iCarrierId", "sortable":true},
-                    { "data": "iNetworkId", "sortable":true, "className": "text-center"},
-                    { "data": "iConnectionTypeId", "sortable":true, "className": "text-center"},
+                    { "data": "iNetworkId", "sortable":true},
+                    { "data": "iConnectionTypeId", "sortable":true},
                     { "data": "iServiceTypeId", "sortable":true, "className": "text-center"},
+                    { "data": "iServiceLevel", "sortable":true},
                     { "data": "iNRCVariable", "sortable":true, "className": "text-center"},
                     { "data": "iMRCFixed", "sortable":true, "className": "text-center"},
                     { "data": "vFile", "sortable":false, "className": "text-center"},

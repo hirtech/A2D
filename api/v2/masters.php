@@ -1869,7 +1869,9 @@ if($request_type == "city_list"){
         $iServicePricingId              = trim($RES_PARA['iServicePricingId']);
         $vCarrier                       = trim($RES_PARA['vCarrier']);
         $vNetwork                       = trim($RES_PARA['vNetwork']);
+        $vConnectionType                = trim($RES_PARA['vConnectionType']);
         $vServiceType                   = trim($RES_PARA['vServiceType']);
+        $vServiceLevel                  = trim($RES_PARA['vServiceLevel']);
         
         $page_length                    = isset($RES_PARA['page_length']) ? trim($RES_PARA['page_length']) : "10";
         $start                          = isset($RES_PARA['start']) ? trim($RES_PARA['start']) : "0";
@@ -1887,11 +1889,28 @@ if($request_type == "city_list"){
     }
 
     if ($vNetwork != "") {
-        $where_arr[] = 'n."vName" ILIKE \''.$vNetwork.'%\'';
+        $where_arr[] = 'n."vName" ILIKE \'%'.$vNetwork.'%\'';
+    }
+
+    if ($vConnectionType != "") {
+        $where_arr[] = 'cm."vConnectionTypeName" ILIKE \'%'.$vConnectionType.'%\'';
     }
 
     if ($vServiceType != "") {
         $where_arr[] = 'st."vServiceType" ILIKE \''.$vServiceType.'%\'';
+    }
+
+    if ($vServiceLevel != "") {
+        if($vServiceLevel == "Best Effort" || strtolower($vServiceLevel) == "best effort" || $vServiceLevel == "Best" || strtolower($vServiceLevel) == "best"){
+            $where_arr[] = 'service_pricing_mas."iServiceLevel" = 1';  
+        }else if($vServiceLevel == "Business Class" || strtolower($vServiceLevel) == "business class" || $vServiceLevel == "Business" || strtolower($vServiceLevel) == "business"){
+            $where_arr[] = 'service_pricing_mas."iServiceLevel" = 2';    
+        }else if($vServiceLevel == "SLA" || strtolower($vServiceLevel) == "sla"){
+            $where_arr[] = 'service_pricing_mas."iServiceLevel" = 3';    
+        }else if($vServiceLevel == "High Availability" || strtolower($vServiceLevel) == "high availability" || $vServiceLevel == "High" || strtolower($vServiceLevel) == "high"){
+            $iServiceLevel = "High Availability";  
+            $where_arr[] = 'service_pricing_mas."iServiceLevel" = 4';    
+        }
     }
 
     switch ($display_order) {
@@ -1905,12 +1924,18 @@ if($request_type == "city_list"){
             $sortname = "n.\"vName\"";
             break;
         case "3":
-            $sortname = "st.\"vServiceType\"";
+            $sortname = "cm.\"vConnectionTypeName\"";
             break;
         case "4":
-            $sortname = "service_pricing_mas.\"iNRCVariable\"";
+            $sortname = "st.\"vServiceType\"";
             break;
         case "5":
+            $sortname = "service_pricing_mas.\"iServiceLevel\"";
+            break;
+        case "6":
+            $sortname = "service_pricing_mas.\"iNRCVariable\"";
+            break;
+        case "7":
             $sortname = "service_pricing_mas.\"iMRCFixed\"";
             break;
         default:
@@ -1925,8 +1950,10 @@ if($request_type == "city_list"){
 
     $join_fieds_arr[] = 'c."vCompanyName"';
     $join_fieds_arr[] = 'n."vName" as "vNetwork"';
+    $join_fieds_arr[] = 'cm."vConnectionTypeName"';
     $join_fieds_arr[] = 'st."vServiceType"';
     $join_arr[] = 'LEFT JOIN company_mas c on service_pricing_mas."iCarrierId" = c."iCompanyId"';
+    $join_arr[] = 'LEFT JOIN connection_type_mas cm on service_pricing_mas."iConnectionTypeId" = cm."iConnectionTypeId"';
     $join_arr[] = 'LEFT JOIN network n on service_pricing_mas."iNetworkId" = n."iNetworkId"';
     $join_arr[] = 'LEFT JOIN service_type_mas st on service_pricing_mas."iServiceTypeId" = st."iServiceTypeId"';
     $ServicePricingObj->join_field = $join_fieds_arr;
@@ -1953,6 +1980,7 @@ if($request_type == "city_list"){
                 "iServiceTypeId"           => $rs_service_type[$i]['iServiceTypeId'],
                 "iServiceLevel"            => $rs_service_type[$i]['iServiceLevel'],
                 "vServiceType"             => $rs_service_type[$i]['vServiceType'],
+                "iServiceLevel"            => $rs_service_type[$i]['iServiceLevel'],
                 "iNRCVariable"             => $rs_service_type[$i]['iNRCVariable'],
                 "iMRCFixed"                => $rs_service_type[$i]['iMRCFixed'],
                 "vFile"                    => $rs_service_type[$i]['vFile'],

@@ -41,11 +41,20 @@ $SiteObj = new Site();
 //echo "<pre>";print_r($access_group_var_delete);exit();
 //echo $mode;exit();
 if($mode == "List"){
+    // echo "<pre>"; print_r($_REQUEST);exit();
     $arr_param = array();
     $vOptions = $_REQUEST['vOptions'];
-    $Keyword = addslashes(trim($_REQUEST['Keyword']));
-    if ($Keyword != "") {
-        $arr_param[$vOptions] = $Keyword;
+    if($vOptions == "vTypeName"){
+        $searchId = $_REQUEST['typeId'];
+    }else if($vOptions == "vSubTypeName"){
+        $searchId = $_REQUEST['sTypeId'];
+    }else if($vOptions == "vNetwork"){
+        $searchId = $_REQUEST['networkId'];
+    }else if($vOptions == "vFiberZone"){
+        $searchId = $_REQUEST['zoneId'];
+    }
+    if ($searchId != "") {
+        $arr_param[$vOptions] = $searchId;
     }
     if ($_REQUEST['premiseId'] != "") {
         $arr_param['premiseId'] = $_REQUEST['premiseId'];
