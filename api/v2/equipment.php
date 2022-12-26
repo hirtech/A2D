@@ -6,43 +6,64 @@ if($request_type == "equipment_list"){
     $where_arr = array();
     if(!empty($RES_PARA)){
         $iEquipmentId		= $RES_PARA['iEquipmentId'];
-        $vModelName			= $RES_PARA['vModelName'];
+
+        $vNetwork           = trim($RES_PARA['vNetwork']);
+        $vOStatus           = trim($RES_PARA['vOStatus']);
+        $vSModelName        = trim($RES_PARA['vSModelName']);
+        $vMaterial          = trim($RES_PARA['vMaterial']);
+        $vPType             = trim($RES_PARA['vPType']);
+        $vGrounded          = trim($RES_PARA['vGrounded']);
+        $vIType             = trim($RES_PARA['vIType']);
+        $vLType             = trim($RES_PARA['vLType']);
+
         $vSerialNumber		= $RES_PARA['vSerialNumber'];
         $vMACAddress		= $RES_PARA['vMACAddress'];
         $vIPAddress			= $RES_PARA['vIPAddress'];
         $vSize				= $RES_PARA['vSize'];
         $vWeight			= $RES_PARA['vWeight'];
+		$iSPremiseId        = $RES_PARA['iSPremiseId'];
+		$PremiseFilterOpDD  = $RES_PARA['PremiseFilterOpDD'];
+		$vPremiseName       = $RES_PARA['vPremiseName'];
 
-        $page_length            = isset($RES_PARA['page_length']) ? trim($RES_PARA['page_length']) : "10";
-        $start                  = isset($RES_PARA['start']) ? trim($RES_PARA['start']) : "0";
-        $sEcho                  = $RES_PARA['sEcho'];
-        $display_order          = $RES_PARA['display_order'];
-        $dir                    = $RES_PARA['dir'];
-        $order_by               = $RES_PARA['order_by'];
-        $iFieldmapPremiseId     = $RES_PARA['iFieldmapPremiseId'];
+        $page_length        = isset($RES_PARA['page_length']) ? trim($RES_PARA['page_length']) : "10";
+        $start              = isset($RES_PARA['start']) ? trim($RES_PARA['start']) : "0";
+        $sEcho              = $RES_PARA['sEcho'];
+        $display_order      = $RES_PARA['display_order'];
+        $dir                = $RES_PARA['dir'];
+        $order_by           = $RES_PARA['order_by'];
+        $iFieldmapPremiseId = $RES_PARA['iFieldmapPremiseId'];
 
-		$iSEquipmentModelId		= $RES_PARA['iSEquipmentModelId'];
-		$iSMaterialId			= $RES_PARA['iSMaterialId'];
-		$iSPowerId              = $RES_PARA['iSPowerId'];
-		$iSGrounded             = $RES_PARA['iSGrounded'];
-		$iSPremiseId            = $RES_PARA['iSPremiseId'];
-		$PremiseFilterOpDD      = $RES_PARA['PremiseFilterOpDD'];
-		$vPremiseName           = $RES_PARA['vPremiseName'];
-		$iSInstallTypeId        = $RES_PARA['iSInstallTypeId'];
-		$iSLinkTypeId			= $RES_PARA['iSLinkTypeId'];
-		$iSOperationalStatusId	= $RES_PARA['iSOperationalStatusId'];
     }
 
     if ($iFieldmapPremiseId != "") {
         $where_arr[] = 'equipment."iPremiseId"='.$iFieldmapPremiseId ;
     }
-    
-    if ($iEquipmentId != "") {
-        $where_arr[] = 'equipment."iEquipmentId"='.$iEquipmentId ;
+
+    if ($vNetwork != "") {
+        $where_arr[] = "zone.\"iNetworkId\"=".$vNetwork;
     }
-    if ($vModelName != "") {
-        $where_arr[] = "em.\"vModelName\" ILIKE '%".$vModelName."%'" ;
+    if ($vOStatus != "") {
+        $where_arr[] = "equipment.\"iOperationalStatusId\"=".$vOStatus;
     }
+    if ($vSModelName != "") {
+        $where_arr[] = "equipment.\"iEquipmentModelId\" =".$vSModelName;
+    }
+    if ($vMaterial != "") {
+        $where_arr[] = "equipment.\"iMaterialId\"=".$vMaterial;
+    }
+    if ($vPType != "") {
+        $where_arr[] = "equipment.\"iPowerId\"=".$vPType;
+    }
+    if ($vGrounded != "") {
+        $where_arr[] = "equipment.\"iGrounded\"=".$vGrounded;
+    }
+    if ($vIType != "") {
+        $where_arr[] = "equipment.\"iInstallTypeId\"=".$vIType;
+    }
+    if ($vLType != "") {
+        $where_arr[] = "equipment.\"iLinkTypeId\"=".$vLType;
+    }
+
     if ($vSerialNumber != "") {
         $where_arr[] = "equipment.\"vSerialNumber\" ILIKE '".$vSerialNumber."%'" ;
     }
@@ -58,46 +79,25 @@ if($request_type == "equipment_list"){
 	if ($vWeight != "") {
         $where_arr[] = "equipment.\"vWeight\" ILIKE '".$vWeight."%'" ;
     }
-	if ($iSEquipmentModelId != "") {
-        $where_arr[] = 'equipment."iEquipmentModelId"='.$iSEquipmentModelId ;
-    }
-	if ($iSMaterialId != "") {
-        $where_arr[] = 'equipment."iMaterialId"='.$iSMaterialId ;
-    }
-	if ($iSPowerId != "") {
-        $where_arr[] = 'equipment."iPowerId"='.$iSPowerId ;
-    }
-	if ($iSGrounded != "") {
-        $where_arr[] = 'equipment."iGrounded"='.$iSGrounded ;
-    }
 	if ($iSPremiseId != "") {
         $where_arr[] = 'equipment."iPremiseId"='.$iSPremiseId ;
     }
-
 	if ($vPremiseName != "") {
         if ($PremiseFilterOpDD != "") {
             if ($PremiseFilterOpDD == "Begins") {
-                $where_arr[] = 'n."vName" ILIKE \''.$vPremiseName.'%\'';
+                $where_arr[] = 's."vName" ILIKE \''.$vPremiseName.'%\'';
             } else if ($PremiseFilterOpDD == "Ends") {
-                $where_arr[] = 'n."vName"  ILIKE \'%'.$vPremiseName.'\'';
+                $where_arr[] = 's."vName"  ILIKE \'%'.$vPremiseName.'\'';
             } else if ($PremiseFilterOpDD == "Contains") {
-                $where_arr[] = 'n."vName"  ILIKE \'%'.$vPremiseName.'%\'';
+                $where_arr[] = 's."vName"  ILIKE \'%'.$vPremiseName.'%\'';
             } else if ($PremiseFilterOpDD == "Exactly") {
-                $where_arr[] = 'n."vName" = \''.$vPremiseName.'\'';
+                $where_arr[] = 's."vName" = \''.$vPremiseName.'\'';
             }
         } else {
-            $where_arr[] = 'n."vName" ILIKE \''.$vPremiseName.'%\'';
+            $where_arr[] = 's."vName" ILIKE \''.$vPremiseName.'%\'';
         }
     }
-	if ($iSInstallTypeId != "") {
-        $where_arr[] = 'equipment."iInstallTypeId"='.$iSInstallTypeId ;
-    }
-	if ($iSLinkTypeId != "") {
-        $where_arr[] = 'equipment."iLinkTypeId"='.$iSLinkTypeId ;
-    }
-	if ($iSOperationalStatusId != "") {
-        $where_arr[] = 'equipment."iOperationalStatusId"='.$iSOperationalStatusId ;
-    }
+
     switch ($display_order) {
         case "0":
             $sortname = "equipment.\"iEquipmentId\"";
@@ -117,7 +117,10 @@ if($request_type == "equipment_list"){
         case "5":
             $sortname = "equipment.\"iPremiseId\"";
             break;
-		case "6":
+        case "6":
+            $sortname = "equipment.\"iPremiseCircuitId\"";
+            break;
+		case "7":
             $sortname = "os.\"vOperationalStatus\"";
             break;
         default:
@@ -137,14 +140,19 @@ if($request_type == "equipment_list"){
 	$join_fieds_arr[] = 'it."vInstallType"';
 	$join_fieds_arr[] = 'lt."vLinkType"';
 	$join_fieds_arr[] = 'os."vOperationalStatus"';
+    $join_fieds_arr[] = 'zone."iNetworkId"';
+    $join_fieds_arr[] = 'circuit."vCircuitName"';
     $join_arr[] = 'LEFT JOIN equipment_model em on equipment."iEquipmentModelId" = em."iEquipmentModelId"';
     $join_arr[] = 'LEFT JOIN material_mas m on equipment."iMaterialId" = m."iMaterialId"';
     $join_arr[] = 'LEFT JOIN power_mas p on equipment."iPowerId" = p."iPowerId"';
     $join_arr[] = 'LEFT JOIN premise_mas s on equipment."iPremiseId" = s."iPremiseId"';
+    $join_arr[] = 'LEFT JOIN zone on s."iZoneId" = zone."iZoneId"';
     $join_arr[] = 'LEFT JOIN site_type_mas st on s."iSTypeId" = st."iSTypeId"';
     $join_arr[] = 'LEFT JOIN install_type_mas it on equipment."iInstallTypeId" = it."iInstallTypeId"';
     $join_arr[] = 'LEFT JOIN link_type_mas lt on equipment."iLinkTypeId" = lt."iLinkTypeId"';
     $join_arr[] = 'LEFT JOIN operational_status_mas os on equipment."iOperationalStatusId" = os."iOperationalStatusId"';
+    $join_arr[] = 'LEFT JOIN premise_circuit on equipment."iPremiseCircuitId" = premise_circuit."iPremiseCircuitId"';
+    $join_arr[] = 'LEFT JOIN circuit on premise_circuit."iCircuitId" = circuit."iCircuitId"';
     $EquipmentObj->join_field = $join_fieds_arr;
     $EquipmentObj->join = $join_arr;
     $EquipmentObj->where = $where_arr;
@@ -195,6 +203,8 @@ if($request_type == "equipment_list"){
                 "dProvisionDate"		=> $rs_equipment[$i]['dProvisionDate'],
                 "iOperationalStatusId"  => $rs_equipment[$i]['iOperationalStatusId'],
                 "vOperationalStatus"	=> $rs_equipment[$i]['vOperationalStatus'],
+                "iNetworkId"            => $rs_equipment[$i]['iNetworkId'],
+                "vCircuitName"          => $rs_equipment[$i]['vCircuitName'],
             );
         }
     }

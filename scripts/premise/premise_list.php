@@ -201,20 +201,20 @@ if($mode == "List"){
             }
             $vAddress = $rs_site[$i]['vAddress1'].' '.$rs_site[$i]['vStreet'];
             $entry[] = array(
-                "checkbox" => '<input type="checkbox" class="list" value="'.$rs_site[$i]['iPremiseId'].'"/>',
-                "iPremiseId" => gen_strip_slash($rs_site[$i]['iPremiseId']),
-                "vName" => gen_strip_slash($rs_site[$i]['vName']),
-                "vSiteType" => gen_strip_slash($rs_site[$i]['vTypeName']),
-                "vSiteSubType" => gen_strip_slash($rs_site[$i]['vSubTypeName']),
-                "vAddress" => $rs_site[$i]['vAddress'],
-                'vCity' => $rs_site[$i]['vCity'],
-                'vState' => $rs_site[$i]['vState'],
-                'vZoneName' => $rs_site[$i]['vZoneName'],
-                'vNetwork' => $rs_site[$i]['vNetwork'],
-                'vCounty' => $rs_site[$i]['vCounty'],
-                "vCircuitName" => $rs_site[$i]['vCircuitName'],
-                "iStatus" => $status,
-                "actions" => ($action!="")?$action:"---"
+                "checkbox"      => '<input type="checkbox" class="list" value="'.$rs_site[$i]['iPremiseId'].'"/>',
+                "iPremiseId"    => $rs_site[$i]['iPremiseId'],
+                "vName"         => $rs_site[$i]['vName'],
+                "vSiteType"     => $rs_site[$i]['vTypeName'],
+                "vSiteSubType"  => $rs_site[$i]['vSubTypeName'],
+                "vAddress"      => $rs_site[$i]['vAddress'],
+                'vCity'         => $rs_site[$i]['vCity'],
+                'vState'        => $rs_site[$i]['vState'],
+                'vZoneName'     => $rs_site[$i]['vZoneName'],
+                'vNetwork'      => $rs_site[$i]['vNetwork'],
+                'vCounty'       => $rs_site[$i]['vCounty'],
+                "vCircuitName"  => $rs_site[$i]['vCircuitName'],
+                "iStatus"       => $status,
+                "actions"       => ($action!="")?$action:"---"
        
             );
         }

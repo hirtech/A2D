@@ -73,8 +73,11 @@
                                                 {if $cnt_premise_circuit  > 0}
                                                 {section name="p" loop=$premise_circuit_arr}
                                                 <tr>
-                                                    <td class="text-center">{$premise_circuit_arr[p].iPremiseCircuitId}</td>
-                                                    <td class="text-center">{$premise_circuit_arr[p].iPremiseId}</td>
+                                                    <td class="text-center">
+                                                        {if $premise_circuit_arr[p].iPremiseCircuitId >0}<a href="{$site_url}premise_circuit/premise_circuit_edit&mode=Update&iPremiseCircuitId={$premise_circuit_arr[p].iPremiseCircuitId}" target="_blank" class="text-primary">{$premise_circuit_arr[p].iPremiseCircuitId}</a>{/if}</td>
+                                                    <td class="text-center">
+                                                        {if $premise_circuit_arr[p].iPremiseId >0}<a href="{$site_url}premise/edit&mode=Update&iPremiseId={$premise_circuit_arr[p].iPremiseId}" target="_blank" class="text-primary">{$premise_circuit_arr[p].iPremiseId}</a>{/if}
+                                                    </td>
                                                     <td>{$premise_circuit_arr[p].vAddress}</td>
                                                     <td class="text-center">{$premise_circuit_arr[p].vStatus}</td>
                                                 </tr>

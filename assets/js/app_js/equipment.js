@@ -21,6 +21,7 @@ var listPage = function(){
                     { "mData": "dPurchaseDate", "sortable":true, "className": "text-center"},
                     { "mData": "dWarrantyExpiration", "sortable":true, "className": "text-center"},
                     { "mData": "vPremise", "sortable":true},
+                    { "mData": "vPremiseCircuit", "sortable":true},
                     { "mData": "vOperationalStatus", "sortable":true, "className": "text-center"},
                     { "mData": "actions", "sortable":false, "className": "text-center"},
                 ],                
@@ -157,17 +158,74 @@ $('#AdvSearchSubmit').click(function () {
 });
 
 $('#AdvSearchReset').click(function () {
-    $('#iSEquipmentModelId').val("");
-    $('#iSMaterialId').val("");
-    $('#iSPowerId').val("");
-    $('#iSGrounded').val("");
     $('#iSPremiseId').val("");
     $('#PremiseFilterOpDD').val("Contains");
     $('#vPremiseName').val("");
-    $('#iSInstallTypeId').val("");
-    $('#iSLinkTypeId').val("");
-    $('#iSOperationalStatusId').val("");
+    $('#vSerialNumber').val("");
+    $('#vMACAddress').val("");
+    $('#vIPAddress').val("");
+    $('#vSize').val("");
+    $('#vWeight').val("");
     
     gridtable.ajax.reload();
     return false;
 });
+
+
+function getDropdown(vOptions) {
+    // alert(vOptions);
+    // return false;
+    $('#network_dd').show();
+    if(vOptions == "vNetwork"){
+        reset_all_fields();
+        $('.searching_dd').hide();
+        $('#network_dd').show();
+
+    }else if(vOptions == "vOStatus"){
+        reset_all_fields();
+        $('.searching_dd').hide();
+        $('#operational_status_dd').show();
+
+    }else if(vOptions == "vSModelName"){
+        reset_all_fields();
+        $('.searching_dd').hide();
+        $('#equipment_model_dd').show();
+
+    }else if(vOptions == "vMaterial"){
+        reset_all_fields();
+        $('.searching_dd').hide();
+        $('#material_dd').show();
+
+    }else if(vOptions == "vPType"){
+        reset_all_fields();
+        $('.searching_dd').hide();
+        $('#power_type_dd').show();
+
+    }else if(vOptions == "vGrounded"){
+        reset_all_fields();
+        $('.searching_dd').hide();
+        $('#grounded_dd').show();
+
+    }else if(vOptions == "vIType"){
+        reset_all_fields();
+        $('.searching_dd').hide();
+        $('#install_type_dd').show();
+
+    }else if(vOptions == "vLType"){
+        reset_all_fields();
+        $('.searching_dd').hide();
+        $('#link_type_dd').show();
+
+    }
+}
+
+function reset_all_fields(){
+  $('#networkId').val('');
+  $('#iOStatus').val('');
+  $('#iEModel').val('');
+  $('#iMaterialId').val('');
+  $('#iPowerId').val('');
+  $('#iGrounded').val('');
+  $('#iInstallTypeId').val('');
+  $('#iLinkTypeId').val('');
+}

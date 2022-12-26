@@ -21,13 +21,27 @@ $dir = (isset($_REQUEST["sSortDir_0"]) ? $_REQUEST["sSortDir_0"] : 'desc');
 
 $iPremiseId = $_REQUEST['iPremiseId'];
 if($mode == "List") {
-    //print_r($_REQUEST);exit();
     $arr_param = array();
     $vOptions = $_REQUEST['vOptions'];
-    $Keyword = addslashes(trim($_REQUEST['Keyword']));
-
-    if ($Keyword != "") {
-        $arr_param[$vOptions] = $Keyword;
+    if($vOptions == "vNetwork"){
+        $searchId = $_REQUEST['networkId'];
+    }else if($vOptions == "vOStatus"){
+        $searchId = $_REQUEST['iOStatus'];
+    }else if($vOptions == "vSModelName"){
+        $searchId = $_REQUEST['iEModel'];
+    }else if($vOptions == "vMaterial"){
+        $searchId = $_REQUEST['iMaterialId'];
+    }else if($vOptions == "vPType"){
+        $searchId = $_REQUEST['iPowerId'];
+    }else if($vOptions == "vGrounded"){
+        $searchId = $_REQUEST['iGrounded'];
+    }else if($vOptions == "vIType"){
+        $searchId = $_REQUEST['iInstallTypeId'];
+    }else if($vOptions == "vLType"){
+        $searchId = $_REQUEST['iLinkTypeId'];
+    }
+    if ($searchId != "") {
+        $arr_param[$vOptions] = $searchId;
     }
 
     $arr_param['page_length']   = $page_length;
@@ -37,17 +51,14 @@ if($mode == "List") {
     $arr_param['dir']           = $dir;
     $arr_param['iFieldmapPremiseId']    = $iPremiseId;
 
-    $arr_param['iSEquipmentModelId']        = $_REQUEST['iSEquipmentModelId'];
-    $arr_param['iSMaterialId']              = $_REQUEST['iSMaterialId'];
-    $arr_param['iSPowerId']                 = $_REQUEST['iSPowerId'];
-    $arr_param['iSGrounded']                = $_REQUEST['iSGrounded'];
     $arr_param['iSPremiseId']               = $_REQUEST['iSPremiseId'];
     $arr_param['PremiseFilterOpDD']         = $_REQUEST['PremiseFilterOpDD'];
     $arr_param['vPremiseName']              = $_REQUEST['vPremiseName'];
-    $arr_param['iSInstallTypeId']           = $_REQUEST['iSInstallTypeId'];
-    $arr_param['iSLinkTypeId']              = $_REQUEST['iSLinkTypeId'];
-    $arr_param['iSOperationalStatusId']     = $_REQUEST['iSOperationalStatusId'];
-    
+    $arr_param['vSerialNumber']             = $_REQUEST['vSerialNumber'];
+    $arr_param['vMACAddress']               = $_REQUEST['vMACAddress'];
+    $arr_param['vIPAddress']                = $_REQUEST['vIPAddress'];
+    $arr_param['vSize']                     = $_REQUEST['vSize'];
+    $arr_param['vWeight']                   = $_REQUEST['vWeight'];
 
     $arr_param['access_group_var_edit'] = $access_group_var_edit;
     $arr_param['access_group_var_delete'] = $access_group_var_delete;
@@ -55,7 +66,7 @@ if($mode == "List") {
     $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
 
     $API_URL = $site_api_url."equipment_list.json";
-    //echo $API_URL. " ".json_encode($arr_param);exit;
+    // echo $API_URL. " ".json_encode($arr_param);exit;
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $API_URL);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
@@ -91,7 +102,14 @@ if($mode == "List") {
                 $action .= ' <a class="btn btn-outline-danger" title="Delete" href="javascript:void(0);" onclick="delete_record('.$rs_equipment[$i]['iEquipmentId'].');"><i class="fa fa-trash"></i></a>';
             }
 
-            $vPremise = $rs_equipment[$i]['iPremiseId']." (".$rs_equipment[$i]['vPremiseName']."; ".$rs_equipment[$i]['vPremiseType'].")";
+            $premise_url = $site_url."premise/edit&mode=Update&iPremiseId=".$rs_equipment[$i]['iPremiseId'];
+            $vPremise = "<a href='".$premise_url."' target='_blank' class='text-primary'>".$rs_equipment[$i]['iPremiseId']." (".$rs_equipment[$i]['vPremiseName']."; ".$rs_equipment[$i]['vPremiseType'].")</a>";
+
+            $vPremiseCircuit = "---";
+            if($rs_equipment[$i]['iPremiseCircuitId'] > 0) {
+                $premise_circuit_url = $site_url."premise_circuit/premise_circuit_edit&mode=Update&iPremiseCircuitId=".$rs_equipment[$i]['iPremiseCircuitId'];
+                $vPremiseCircuit = "<a href='".$premise_circuit_url."' target='_blank' class='text-primary'>".$rs_equipment[$i]['iPremiseCircuitId']." (".$rs_equipment[$i]['vCircuitName'].")</a>";
+            }
 
             $entry[] = array(
                 "iEquipmentId"          => $rs_equipment[$i]['iEquipmentId'],
@@ -103,6 +121,7 @@ if($mode == "List") {
                 "dPurchaseDate"         => $rs_equipment[$i]['dPurchaseDate'],
                 "dWarrantyExpiration"   => $rs_equipment[$i]['dWarrantyExpiration'],
                 "vPremise"              => $vPremise,
+                "vPremiseCircuit"       => $vPremiseCircuit,
                 "dProvisionDate"        => $rs_equipment[$i]['dProvisionDate'],
                 "vOperationalStatus"    => $rs_equipment[$i]['vOperationalStatus'],
                 "actions"               => ($action!="")?$action:"---"
@@ -423,6 +442,32 @@ if($mode == "List") {
    echo json_encode($result_arr);
    exit;
 }
+## --------------------------------
+# Network Dropdown
+$network_arr_param = array();
+$network_arr_param = array(
+    "iStatus"        => 1,
+    "sessionId"     => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
+);
+$network_API_URL = $site_api_url."network_dropdown.json";
+//echo $network_API_URL." ".json_encode($network_arr_param);
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $network_API_URL);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_HEADER, FALSE);
+curl_setopt($ch, CURLOPT_POST, TRUE);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($network_arr_param));
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+   "Content-Type: application/json",
+));
+$response_network = curl_exec($ch);
+curl_close($ch); 
+$rs_network = json_decode($response_network, true); 
+$rs_ntwork = $rs_network['result'];
+$smarty->assign("rs_ntwork", $rs_ntwork);
+## --------------------------------
 
 /*************** Equipment Model Dropdown ***************/
 $model_param = array();

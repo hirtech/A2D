@@ -25,7 +25,7 @@ var listPage = function(){
             { "data": "vState"},
             { "data": "vZoneName"},
             { "data": "vNetwork"},
-            { "data": "vCircuitName", "sortable":false, "className": "text-center"},
+            { "data": "vCircuitName", "sortable":false},
             { "data": "iStatus", "sortable":false, "className": "text-center"},
             { "data": "actions", "sortable":false, "className": "text-center"},
             ],

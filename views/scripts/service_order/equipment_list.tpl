@@ -7,18 +7,74 @@
                     <form id="frmlist" name="frmlist" class="sorder_search_form">
                         <ul class="nav search-links float-right">
                             <li>
-                                <select id="vOptions" name="vOptions" class="form-control">
-                                    <option value="iEquipmentId">ID</option>
-                                    <option value="vModelName">Equipment Model</option>
-                                    <option value="vSerialNumber">Serial Number</option>
-                                    <option value="vMACAddress">MAC Address</option>
-                                    <option value="vIPAddress">IP Address</option>
-                                    <option value="vSize">Size</option>
-                                    <option value="vWeight">Weight</option>
+                                <select id="vOptions" name="vOptions" class="form-control" onchange="getDropdown(this.value);">
+                                    <option value="vNetwork">Network</option>
+                                    <option value="vOStatus">Operational Status</option>
+                                    <option value="vSModelName">Equipment Model</option>
+                                    <option value="vMaterial">Material</option>
+                                    <option value="vPType">Power Type</option>
+                                    <option value="vGrounded">Grounded</option>
+                                    <option value="vIType">Install Type</option>
+                                    <option value="vLType">Link Type</option>
                                 </select>
                             </li>
-                            <li>
-                                <input type="text" name="Keyword" id="Keyword" value="" autocomplete="off">
+                            <li id="network_dd" class="searching_dd">
+                                <select name="networkId" id="networkId" class="form-control col-md-12 search_filter_dd search_filter_dd">
+                                    <option value="">-- Select --</option> {section name="n" loop=$rs_ntwork} <option value="{$rs_ntwork[n].iNetworkId}">{$rs_ntwork[n].vName|gen_strip_slash}</option> {/section}
+                                </select>
+                            </li>
+                            <li id="operational_status_dd" style="display: none" class="searching_dd">
+                                <select name="iOStatus" id="iOStatus" class="form-control col-md-12 search_filter_dd">
+                                    <option value="">-- Select --</option>
+                                    {section name="o" loop=$rs_ostatus}
+                                        <option value="{$rs_ostatus[o].iOperationalStatusId}" {if $rs_ostatus[o].iOperationalStatusId eq $rs_equipment[0].iOperationalStatusId}selected{/if}>{$rs_ostatus[o].vOperationalStatus|gen_strip_slash}</option>
+                                    {/section}
+                                </select>
+                            </li>
+                            <li id="equipment_model_dd" style="display: none" class="searching_dd">
+                                <select name="iEModel" id="iEModel" class="form-control col-md-12 search_filter_dd">
+                                    <option value="">-- Select --</option>{section name="m" loop=$rs_model}
+                                    <option value="{$rs_model[m].iEquipmentModelId}">{$rs_model[m].vModelName|gen_strip_slash}</option>{/section}
+                                </select>
+                            </li>
+                            <li id="material_dd" style="display: none" class="searching_dd">
+                                <select name="iMaterialId" id="iMaterialId" class="form-control col-md-12 search_filter_dd">
+                                    <option value="">-- Select --</option>
+                                    {section name="m" loop=$rs_material}
+                                    <option value="{$rs_material[m].iMaterialId}">{$rs_material[m].vMaterial|gen_strip_slash}</option>
+                                    {/section}
+                                </select>
+                            </li>
+                            <li id="power_type_dd" style="display: none" class="searching_dd">
+                                <select name="iPowerId" id="iPowerId" class="form-control col-md-12 search_filter_dd">
+                                    <option value="">-- Select --</option>
+                                    {section name="p" loop=$rs_power}
+                                    <option value="{$rs_power[p].iPowerId}">{$rs_power[p].vPower|gen_strip_slash}</option>
+                                    {/section}
+                                </select>
+                            </li>
+                            <li id="grounded_dd" style="display: none" class="searching_dd">
+                                <select name="iGrounded" id="iGrounded" class="form-control col-md-12 search_filter_dd">
+                                    <option value="">-- Select --</option>
+                                    <option value="1">Yes</option>
+                                    <option value="0">No</option>
+                                </select>
+                            </li>
+                            <li id="install_type_dd" style="display: none" class="searching_dd">
+                                <select name="iInstallTypeId" id="iInstallTypeId" class="form-control col-md-12 search_filter_dd">
+                                    <option value="">-- Select --</option>
+                                    {section name="i" loop=$rs_itype}
+                                        <option value="{$rs_itype[i].iInstallTypeId}" {if $rs_itype[i].iInstallTypeId eq $rs_equipment[0].iInstallTypeId}selected{/if}>{$rs_itype[i].vInstallType|gen_strip_slash}</option>
+                                    {/section}
+                                </select>
+                            </li>
+                            <li id="link_type_dd" style="display: none" class="searching_dd">
+                                <select name="iLinkTypeId" id="iLinkTypeId" class="form-control col-md-12 search_filter_dd">
+                                    <option value="">-- Select --</option>
+                                    {section name="l" loop=$rs_ltype}
+                                        <option value="{$rs_ltype[l].iLinkTypeId}" {if $rs_ltype[l].iLinkTypeId eq $rs_equipment[0].iLinkTypeId}selected{/if}>{$rs_ltype[l].vLinkType|gen_strip_slash}</option>
+                                    {/section}
+                                </select>
                             </li>
                             <li>
                                 <button type="button" id="Search" class="btn  btn-outline-warning fas fa-search" title="Search">
@@ -42,8 +98,8 @@
 			    </div>
 			</div> 
             <div class="card-body ">
-                <div class="table-responsive">
-                    <table id="datatable-grid" class="display table dataTable table-striped table-bordered editable-table  dt-responsive nowrap" width="100%">
+                <div>
+                    <table id="datatable-grid" class="display table dataTable table-striped table-bordered editable-table  dt-responsive" width="100%">
                         <thead>
                             <tr>
                                 <th>ID</th>
@@ -53,6 +109,7 @@
                                 <th>Purchase Date</th>
                                 <th>Warranty Expiration</th>
                                 <th>Premise</th>
+                                <th>Premise Circuit</th>
                                 <th>Operation Status</th>
                                 <th>Action</th>
                             </tr>

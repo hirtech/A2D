@@ -151,3 +151,21 @@ function exportExcelSheet(){
     });
     return false;
 }
+
+function getDropdown(vOptions) {
+    $('#circuit_type_dd').show();
+    if(vOptions == "vCircuitType"){
+        reset_all_fields();
+        $('.searching_dd').hide();
+        $('#circuit_type_dd').show();
+    }else if(vOptions == "vNetwork"){
+        reset_all_fields();
+        $('.searching_dd').hide();
+        $('#network_dd').show();
+    }
+}
+
+function reset_all_fields(){
+  $('#networkId').val('');
+  $('#circuitTypeId').val('');
+}

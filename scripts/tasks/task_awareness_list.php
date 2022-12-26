@@ -77,9 +77,12 @@ if($mode == "List"){
 
             $hidden_fields = '<input type="hidden" id="iAId_'.$rs_awareness[$i]['iAId'].'" value="'.$rs_awareness[$i]['iAId'].'"><input type="hidden" id="vSiteName_'.$rs_awareness[$i]['iAId'].'" value="'.$rs_awareness[$i]['vName'].'"><input type="hidden" id="iPremiseId_'.$rs_awareness[$i]['iAId'].'" value="'.$rs_awareness[$i]['iPremiseId'].'"><input type="hidden" id="dDate_'.$rs_awareness[$i]['iAId'].'" value="'.$rs_awareness[$i]['dDate'].'"><input type="hidden" id="dStartDate_'.$rs_awareness[$i]['iAId'].'" value="'.$rs_awareness[$i]['dStartDate'].'"><input type="hidden" id="dStartTime_'.$rs_awareness[$i]['iAId'].'" value="'.$rs_awareness[$i]['dStartTime'].'"><input type="hidden" id="dEndDate_'.$rs_awareness[$i]['iAId'].'" value="'.$rs_awareness[$i]['dEndDate'].'"><input type="hidden" id="dEndTime_'.$rs_awareness[$i]['iAId'].'" value="'.$rs_awareness[$i]['dEndTime'].'"><input type="hidden" id="iEngagementId_'.$rs_awareness[$i]['iAId'].'" value="'.$rs_awareness[$i]['iEngagementId'].'"><input type="hidden" id="tNotes_'.$rs_awareness[$i]['iAId'].'" value="'.$rs_awareness[$i]['tNotes'].'"><input type="hidden" id="srdisplay_'.$rs_awareness[$i]['iAId'].'" value="'.$rs_awareness[$i]['vFiberInquiry'].'"><input type="hidden" id="iSRId_'.$rs_awareness[$i]['iAId'].'" value="'.$rs_awareness[$i]['iFiberInquiryId'].'"><input type="hidden" id="iTechnicianId_'.$rs_awareness[$i]['iAId'].'" value="'.$rs_awareness[$i]['iTechnicianId'].'">';
 
+            $premise_url = $site_url."premise/edit&mode=Update&iPremiseId=".$rs_awareness[$i]['iPremiseId'];
+            $vPremise = "<a href='".$premise_url."' target='_blank' class='text-primary'>".$rs_awareness[$i]['vName']."</a>";
+
             $entry[] = array(
                 "iAId"          => $rs_awareness[$i]['iAId'],
-                "vName"         => $rs_awareness[$i]['vName'].$hidden_fields,
+                "vName"         => $vPremise.$hidden_fields,
                 "vAddress"      => trim($rs_awareness[$i]['vAddress']),
                 "vFiberInquiry" => trim($rs_awareness[$i]['vFiberInquiry']),
                 "dDate"         => date_getDateTimeDDMMYYYY($rs_awareness[$i]['dDate']),

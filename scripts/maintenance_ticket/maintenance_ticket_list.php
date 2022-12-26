@@ -112,7 +112,8 @@ if($mode == "List"){
 
             $vServiceDetails = '';
             if($rs_maintenance_ticket[$i]['iServiceOrderId'] != ""){
-                $vServiceDetails .= "SO #".$rs_maintenance_ticket[$i]['iServiceOrderId'].": ".$rs_maintenance_ticket[$i]['vServiceOrder'];
+                $vSOURL = $site_url."service_order/edit&mode=Update&iServiceOrderId=".$rs_maintenance_ticket[$i]['iServiceOrderId'];
+                $vServiceDetails .= "<a href='".$vSOURL."' target='_blank' class='text-primary'>SO #".$rs_maintenance_ticket[$i]['iServiceOrderId'].": ".$rs_maintenance_ticket[$i]['vServiceOrder'].'</a>';
             }
 
             $entry[] = array(

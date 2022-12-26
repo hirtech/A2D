@@ -106,17 +106,8 @@ if($mode == "List") {
                 $vSalesRepName .= "<strong>Email:</strong> ".$rs_order[$i]['vSalesRepEmail']."<br/>";
             }
 
-            // $vServiceDetails = '';
-            // if($rs_order[$i]['vServiceType1'] != ""){
-            //     $vServiceDetails .= "<strong>Service 1:</strong> ".$rs_order[$i]['vServiceType1']."<br/>";
-            // }
-            // if($rs_order[$i]['vServiceType2'] != ""){
-            //     $vServiceDetails .= "<strong>Service 2:</strong> ".$rs_order[$i]['vServiceType2']."<br/>";
-            // }
-            // if($rs_order[$i]['vServiceType3'] != ""){
-            //     $vServiceDetails .= "<strong>Service 3:</strong> ".$rs_order[$i]['vServiceType3']."<br/>";
-            // }
-            $vPremise = $rs_order[$i]['iPremiseId']." (".$rs_order[$i]['vPremiseName']."; ".$rs_order[$i]['vPremiseType'].")";
+            $premise_url = $site_url."premise/edit&mode=Update&iPremiseId=".$rs_order[$i]['iPremiseId'];
+            $vPremise = "<a href='".$premise_url."' target='_blank' class='text-primary'>".$rs_order[$i]['iPremiseId']." (".$rs_order[$i]['vPremiseName']."; ".$rs_order[$i]['vPremiseType'].")</a>";
 
             $entry[] = array(
                 "iServiceOrderId"       => $rs_order[$i]['iServiceOrderId'],

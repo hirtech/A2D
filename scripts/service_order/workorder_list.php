@@ -96,11 +96,13 @@ if($mode == "List") {
                 $action .= ' <a class="btn btn-outline-danger" title="Delete" href="javascript:void(0);" onclick="delete_record('.$rs_order[$i]['iWOId'].');"><i class="fa fa-trash"></i></a>';
             }
             
-            $vPremise = $rs_order[$i]['iPremiseId']." (".$rs_order[$i]['vPremiseName']."; ".$rs_order[$i]['vPremiseType'].")";
+            $premise_url = $site_url."premise/edit&mode=Update&iPremiseId=".$rs_order[$i]['iPremiseId'];
+            $vPremise = "<a href='".$premise_url."' target='_blank' class='text-primary'>".$rs_order[$i]['iPremiseId']." (".$rs_order[$i]['vPremiseName']."; ".$rs_order[$i]['vPremiseType'].")</a>";
 
             $vServiceDetails = '';
+            $so_url = $site_url."service_order/edit&mode=Update&iServiceOrderId=".$rs_order[$i]['iServiceOrderId'];
             if($rs_order[$i]['iServiceOrderId'] != ""){
-                $vServiceDetails .= "SO #".$rs_order[$i]['iServiceOrderId'].": ".$rs_order[$i]['vServiceOrder'];
+                $vServiceDetails .= "<a href='".$so_url."' target='_blank' class='text-primary'>SO #".$rs_order[$i]['iServiceOrderId'].": ".$rs_order[$i]['vServiceOrder']."</a>";
             }
 
             $vStatus = '---';

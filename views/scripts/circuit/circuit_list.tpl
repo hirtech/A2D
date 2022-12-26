@@ -8,16 +8,21 @@
 					<form id="frmlist">
 						<ul class="nav search-links float-right">
 							<li>
-								<select id="vOptions" name="vOptions" class="form-control">
-                  					<option value="iCircuitId">ID</option>
+								<select id="vOptions" name="vOptions" class="form-control" onchange="getDropdown(this.value);">
 									<option value="vCircuitType">Circuit Type</option>
 									<option value="vNetwork">Network</option>
-									<option value="vCircuitName">Circuit Name</option>
 								</select>
 							</li>
-							<li>
-							   <input type="text" name="Keyword" id="Keyword" class="form-control" value="" autocomplete="off">
-							</li>
+							<li id="circuit_type_dd" class="searching_dd">
+                                <select name="circuitTypeId" id="circuitTypeId" class="form-control col-md-12 search_filter_dd">
+                                    <option value="">-- Select --</option> {section name="c" loop=$rs_ctype} <option value="{$rs_ctype[c].iCircuitTypeId}">{$rs_ctype[c].vCircuitType|gen_strip_slash}</option> {/section}
+                                </select>
+                            </li>
+                            <li id="network_dd" class="searching_dd" style="display: none;">
+                                <select name="networkId" id="networkId" class="form-control col-md-12 search_filter_dd">
+                                    <option value="">-- Select --</option> {section name="n" loop=$rs_ntwork} <option value="{$rs_ntwork[n].iNetworkId}">{$rs_ntwork[n].vName|gen_strip_slash}</option> {/section}
+                                </select>
+                            </li>
 							<li>
 								<button type="button" id="Search" class="btn  btn-outline-warning fas fa-search" title="Search"><span class=""></span></button>
 							</li>

@@ -226,33 +226,35 @@ if($request_type == "premise_list"){
 	$ni = count($rs_site);
 	if($ni > 0){
 		for($i=0;$i<$ni;$i++){
-            $sql = 'SELECT c."vCircuitName",c."iCircuitId" FROM workorder w JOIN premise_circuit pc ON w."iWOId"=pc."iWOId" LEFT JOIN circuit c ON pc."iCircuitId"=c."iCircuitId" WHERE w."iPremiseId"= '.$rs_site[$i]['iPremiseId'];
+            $sql = 'SELECT pc."iPremiseCircuitId", c."vCircuitName",c."iCircuitId" FROM workorder w JOIN premise_circuit pc ON w."iWOId"=pc."iWOId" LEFT JOIN circuit c ON pc."iCircuitId"=c."iCircuitId" WHERE w."iPremiseId"= '.$rs_site[$i]['iPremiseId'];
             $rs_db = $sqlObj->GetAll($sql);
 
             $vCircuitName = "";
             for($j=0;$j<count($rs_db);$j++){
+                $premise_circuit_url = $site_url."premise_circuit/premise_circuit_edit&mode=Update&iPremiseCircuitId=".$rs_db[$j]['iPremiseCircuitId'];
                 if(count($rs_db) > 1){
-                    $vCircuitName = $rs_db[$j]['vCircuitName']."<br>";
+                    $vCircuitName .= "<a href='".$premise_circuit_url."' target='_blank' class='text-primary'>Premise Circuit #".$rs_db[$j]['iPremiseCircuitId']." (".$rs_db[$j]['vCircuitName'].")</a><br>";
                 }else if(count($rs_db) == 1){
-                    $vCircuitName = $rs_db[$j]['vCircuitName'];
+                    $vCircuitName .= "<a href='".$premise_circuit_url."' target='_blank' class='text-primary'>Premise Circuit #".$rs_db[$j]['iPremiseCircuitId']." (".$rs_db[$j]['vCircuitName'].")</a>";
                 }else{
-                    $vCircuitName = "";
+                    $vCircuitName .= "";
                 }
             }
             $vAddress = $rs_site[$i]['vAddress1'].' '.$rs_site[$i]['vStreet'];
 			$data[] = array(
-                "iPremiseId" => gen_strip_slash($rs_site[$i]['iPremiseId']),
-				"vName" => gen_strip_slash($rs_site[$i]['vName']),
-				"vTypeName" => gen_strip_slash($rs_site[$i]['vTypeName']),
-				"vSubTypeName" => gen_strip_slash($rs_site[$i]['vSubTypeName']),
-				"vAddress" => $vAddress,
-				'vCity' => $rs_site[$i]['vCity'],
-				'vState' => $rs_site[$i]['vState'],
-				'vZoneName' => $rs_site[$i]['vZoneName'],
-				'vNetwork' => $rs_site[$i]['vNetwork'],
-				'vCounty' => $rs_site[$i]['vCounty'],
-                'vCircuitName' => $vCircuitName,
-                'iStatus' => $rs_site[$i]['iStatus'],
+                "iPremiseId"            => gen_strip_slash($rs_site[$i]['iPremiseId']),
+				"vName"                 => gen_strip_slash($rs_site[$i]['vName']),
+				"vTypeName"             => gen_strip_slash($rs_site[$i]['vTypeName']),
+				"vSubTypeName"          => gen_strip_slash($rs_site[$i]['vSubTypeName']),
+				"vAddress"              => $vAddress,
+				'vCity'                 => $rs_site[$i]['vCity'],
+				'vState'                => $rs_site[$i]['vState'],
+				'vZoneName'             => $rs_site[$i]['vZoneName'],
+				'vNetwork'              => $rs_site[$i]['vNetwork'],
+				'vCounty'               => $rs_site[$i]['vCounty'],
+                'iPremiseCircuitId'     => $rs_site[$i]['iPremiseCircuitId'],
+                'vCircuitName'          => $vCircuitName,
+                'iStatus'               => $rs_site[$i]['iStatus'],
                 'premice_circuit_count' => count($rs_db),
             );
 		}

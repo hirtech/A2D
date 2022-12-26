@@ -8,10 +8,8 @@ if($request_type == "circuit_list"){
 
     if(!empty($RES_PARA)){
 
-        $iCircuitId         = $RES_PARA['iCircuitId'];
         $vCircuitType       = $RES_PARA['vCircuitType'];
         $vNetwork           = $RES_PARA['vNetwork'];
-        $vCircuitName       = $RES_PARA['vCircuitName'];
 
         $page_length        = isset($RES_PARA['page_length']) ? trim($RES_PARA['page_length']) : "10";
         $start              = isset($RES_PARA['start']) ? trim($RES_PARA['start']) : "0";
@@ -21,22 +19,13 @@ if($request_type == "circuit_list"){
         $order_by           = $RES_PARA['order_by'];
     }
     
-    if ($iCircuitId != "") {
-        $where_arr[] = 'circuit."iCircuitId"='.$iCircuitId ;
-    }
-
     if ($vCircuitType != "") {
-        $where_arr[] = "ct.\"vCircuitType\" ILIKE '" . $vCircuitType . "%'";
+        $where_arr[] = "ct.\"iCircuitTypeId\"=" . $vCircuitType;
     }
 
     if ($vNetwork != "") {
-        $where_arr[] = "network.\"vName\" ILIKE '" . $vNetwork . "%'";
+        $where_arr[] = "network.\"iNetworkId\"=" . $vNetwork;
     }
-
-    if ($vCircuitName != "") {
-        $where_arr[] = "circuit.\"vCircuitName\" ILIKE '" . $vCircuitName . "%'";
-    }
-
     
     switch ($display_order) {
         case "0":
