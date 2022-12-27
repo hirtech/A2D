@@ -21,13 +21,26 @@ $dir = (isset($_REQUEST["sSortDir_0"]) ? $_REQUEST["sSortDir_0"] : 'desc');
 
 $iPremiseId = $_REQUEST['iPremiseId'];
 if($mode == "List") {
-    //print_r($_REQUEST);exit();
+    // print_r($_REQUEST);exit();
     $arr_param = array();
     $vOptions = $_REQUEST['vOptions'];
-    $Keyword = addslashes(trim($_REQUEST['Keyword']));
-
-    if ($Keyword != "") {
-        $arr_param[$vOptions] = $Keyword;
+    if($vOptions == "vNetwork"){
+        $searchId = $_REQUEST['iSNetworkId'];
+    }else if($vOptions == "vCarrier"){
+        $searchId = $_REQUEST['iSCarrierId'];
+    }else if($vOptions == "vConnectionType"){
+        $searchId = $_REQUEST['iConnectionTypeId'];
+    }else if($vOptions == "vServiceType"){
+        $searchId = $_REQUEST['iSServiceType'];
+    }else if($vOptions == "iSOStatus"){
+        $searchId = $_REQUEST['iSOStatus'];
+    }else if($vOptions == "iCStatus"){
+        $searchId = $_REQUEST['iCStatus'];
+    }else if($vOptions == "iSStatus"){
+        $searchId = $_REQUEST['iSStatus'];
+    }
+    if ($searchId != "") {
+        $arr_param[$vOptions] = $searchId;
     }
 
     $arr_param['page_length']   = $page_length;
@@ -48,13 +61,13 @@ if($mode == "List") {
     $arr_param['vSState']               = trim($_REQUEST['vSState']);
     $arr_param['vSZipCode']             = trim($_REQUEST['vSZipCode']);
     $arr_param['iSZoneId']              = trim($_REQUEST['iSZoneId']);
-    $arr_param['iSNetworkId']           = trim($_REQUEST['iSNetworkId']);
-    $arr_param['iSCarrierId']           = trim($_REQUEST['iSCarrierId']);
+    $arr_param['iServiceOrderId']       = trim($_REQUEST['iServiceOrderId']);
+    $arr_param['vMasterMSA']            = trim($_REQUEST['vMasterMSA']);
     $arr_param['vSSalesRepNameDD']      = trim($_REQUEST['vSSalesRepNameDD']);
     $arr_param['vSSalesRepName']        = trim($_REQUEST['vSSalesRepName']);
     $arr_param['vSSalesRepEmailDD']     = trim($_REQUEST['vSSalesRepEmailDD']);
     $arr_param['vSSalesRepEmail']       = trim($_REQUEST['vSSalesRepEmail']);
-    $arr_param['iSServiceType']         = trim($_REQUEST['iSServiceType']);
+    $arr_param['vServiceOrder']         = trim($_REQUEST['vServiceOrder']);
 
     $arr_param['access_group_var_edit'] = $access_group_var_edit;
     $arr_param['access_group_var_delete'] = $access_group_var_delete;
@@ -62,7 +75,7 @@ if($mode == "List") {
     $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
 
     $API_URL = $site_api_url."service_order_list.json";
-    //echo $API_URL. " ".json_encode($arr_param);exit;
+    // echo $API_URL. " ".json_encode($arr_param);exit;
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $API_URL);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
@@ -501,6 +514,30 @@ $res_stype = json_decode($response_stype, true);
 $rs_stype = $res_stype['result'];
 $smarty->assign("rs_stype", $rs_stype);
 //echo "<pre>";print_r($rs_stype);exit;
+
+//Connection Type Dropdown
+$cntype_param = array();
+$cntype_param['iStatus'] = '1';
+$cntype_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
+$cntypeAPI_URL = $site_api_url."connection_type_dropdown.json";
+//echo $cntypeAPI_URL." ".json_encode($cntype_param);exit;
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $cntypeAPI_URL);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_HEADER, FALSE);
+curl_setopt($ch, CURLOPT_POST, TRUE);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($cntype_param));
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+   "Content-Type: application/json",
+)); 
+$response_cntype = curl_exec($ch);
+curl_close($ch);  
+$res_cntype = json_decode($response_cntype, true);
+$rs_cntype = $res_cntype['result'];
+$smarty->assign("rs_cntype", $rs_cntype);
+//echo "<pre>";print_r($rs_cntype);exit;
 
 $module_name = "Service Order List";
 $module_title = "Service Order";

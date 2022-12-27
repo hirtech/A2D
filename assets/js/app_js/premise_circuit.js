@@ -54,7 +54,7 @@ var listPage = function(){
                         "dataType": 'json',
                         "type": "POST",
                         "url": sSource+'&'+$.param(aoData),
-                        "data": $("#frmlist").serializeArray(),
+                        "data": $(".pc_search_form").serializeArray(),
                         "success": fnCallback
                     });
                 },
@@ -155,3 +155,46 @@ function exportExcelSheet(){
     });
     return false;
 }
+
+function getDropdown(vOptions) {
+    if(vOptions == "iNetworkId"){
+        reset_all_fields();
+        $('#network_dd').show();
+        $('#connection_type_dd').hide();
+        $('#status_dd').hide();
+    }else if(vOptions == "iConnectionTypeId"){
+        reset_all_fields();
+        $('#connection_type_dd').show();
+        $('#network_dd').hide();
+        $('#status_dd').hide();
+    }else if(vOptions == "vStatus"){
+        reset_all_fields();
+        $('#status_dd').show();
+        $('#network_dd').hide();
+        $('#connection_type_dd').hide();
+    }
+}
+
+function reset_all_fields(){
+  $('#networkId').val('');
+  $('#ConnectionTypeId').val('');
+  $('#iStatus').val('');
+}
+
+$('#AdvSearchSubmit').click(function () {
+    gridtable.ajax.reload();
+    return false;
+});
+
+$('#AdvSearchReset').click(function () {
+    //alert('1111');
+    $('#premiseCircuitId').val("");
+    $('#premiseId').val("");
+    $('#SiteFilterOpDD').val("Contains");
+    $('#siteName').val("");
+    $('#workorderId').val("");
+    $('#workorderTypeId').val("");
+    $('#circuitId').val("");
+    gridtable.ajax.reload();
+    return false;
+});

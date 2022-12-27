@@ -5,32 +5,78 @@ $TaskAwarenessObj = new TaskAwareness();
 if($request_type == "task_awareness_list"){
     $where_arr = array();
     if(!empty($RES_PARA)){
-        $iAId               = $RES_PARA['iAId'];
-        $iPremiseId         = $RES_PARA['iPremiseId'];
-        $vName              = $RES_PARA['vName'];
-        $vEngagement        = $RES_PARA['vEngagement'];
-        $iFiberInquiryId    = $RES_PARA['iFiberInquiryId'];
+
+        $iNetworkId         = $RES_PARA['iNetworkId'];
+        $iEngagementId      = $RES_PARA['iEngagementId'];
+        $iTechnicianId      = $RES_PARA['iTechnicianId'];
+
         $page_length        = isset($RES_PARA['page_length']) ? trim($RES_PARA['page_length']) : "10";
         $start              = isset($RES_PARA['start']) ? trim($RES_PARA['start']) : "0";
         $sEcho              = $RES_PARA['sEcho'];
         $display_order      = $RES_PARA['display_order'];
         $dir                = $RES_PARA['dir'];
         $order_by           = $RES_PARA['order_by'];
+
+        $aId                = $RES_PARA['aId'];
+        $premiseId          = $RES_PARA['premiseId'];
+        $siteName           = $RES_PARA['siteName'];
+        $SiteFilterOpDD     = $RES_PARA['SiteFilterOpDD'];
+        $vAddress           = $RES_PARA['vAddress'];
+        $AddressFilterOpDD  = $RES_PARA['AddressFilterOpDD'];
+        $fiberInquiryId     = $RES_PARA['fiberInquiryId'];
     }
-    if ($iAId != "") {
-        $where_arr[] = 'awareness."iAId"='.$iAId ;
+
+    if ($iNetworkId != "") {
+        $where_arr[] = 'z."iNetworkId"='.$iNetworkId ;
     }
-    if ($iPremiseId != "") {
-        $where_arr[] = 'awareness."iPremiseId"='.$iPremiseId ;
+    if ($iEngagementId != "") {
+        $where_arr[] = 'awareness."iEngagementId"='.$iEngagementId ;
     }
-    if ($vName != "") {
-        $where_arr[] = "s.\"vName\" ILIKE '" . $vName . "%'";
+    if ($iTechnicianId != "") {
+        $where_arr[] = 'awareness."iTechnicianId"='.$iTechnicianId ;
     }
-    if ($vEngagement != "") {
-        $where_arr[] = "e.\"vEngagement\" ILIKE '".$vEngagement."%'";
+
+    if ($aId != "") {
+        $where_arr[] = 'awareness."iAId"='.$aId ;
     }
-    if ($iFiberInquiryId != "") {
-        $where_arr[] = 'awareness."iFiberInquiryId"='.$iFiberInquiryId ;
+    if ($premiseId != "") {
+        $where_arr[] = 'awareness."iPremiseId"='.$premiseId ;
+    }
+
+    if ($siteName != "") {
+        if ($SiteFilterOpDD != "") {
+            if ($SiteFilterOpDD == "Begins") {
+                $where_arr[] = 's."vName" ILIKE \''.trim($siteName).'%\'';
+            } else if ($SiteFilterOpDD == "Ends") {
+                $where_arr[] = 's."vName" ILIKE \'%'.trim($siteName).'\'';
+            } else if ($SiteFilterOpDD == "Contains") {
+                $where_arr[] = 's."vName" ILIKE \'%'.trim($siteName).'%\'';
+            } else if ($SiteFilterOpDD == "Exactly") {
+                $where_arr[] = 's."vName" ILIKE \''.trim($siteName).'\'';
+            }
+        } else {
+            $where_arr[] = 's."vName" ILIKE \''.trim($siteName).'%\'';
+        }
+    }
+
+    if ($vAddress != "") {
+        if ($AddressFilterOpDD != "") {
+            if ($AddressFilterOpDD == "Begins") {
+                $where_arr[] = "s.\"vAddress1\" ILIKE '".trim($vAddress)."%'";
+            } else if ($AddressFilterOpDD == "Ends") {
+                $where_arr[] = "s.\"vStreet\" ILIKE '%".trim($vAddress)."'";
+            } else if ($AddressFilterOpDD == "Contains") {
+                $where_arr[] = "concat(s.\"vAddress1\", ' ', s.\"vStreet\") ILIKE '%".trim($vAddress)."%'";
+            } else if ($AddressFilterOpDD == "Exactly") {
+                $where_arr[] = "concat(s.\"vAddress1\", ' ', s.\"vStreet\") ILIKE '".trim($vAddress)."'";
+            }
+        } else {
+            $where_arr[] = "concat(s.\"vAddress1\", ' ', s.\"vStreet\") ILIKE '".trim($vAddress)."%'";
+        }
+    }
+    
+    if ($fiberInquiryId != "") {
+        $where_arr[] = 'awareness."iFiberInquiryId"='.$fiberInquiryId ;
     }
 
     switch ($display_order) {
@@ -58,10 +104,12 @@ if($request_type == "task_awareness_list"){
     $join_fieds_arr[] = 'sm."vState"';
     $join_fieds_arr[] = 'cm."vCity"';
     $join_fieds_arr[] = 'e."vEngagement"';
+    $join_fieds_arr[] = 'z."iNetworkId"';
     $join_fieds_arr[] = "CONCAT(contact_mas.\"vFirstName\", ' ', contact_mas.\"vLastName\") AS \"vContactName\"";
     $join_arr = array();
     $join_arr[] = 'LEFT JOIN engagement_mas e on e."iEngagementId" = awareness."iEngagementId"';
     $join_arr[] = 'LEFT JOIN premise_mas s on s."iPremiseId" = awareness."iPremiseId"';
+    $join_arr[] = 'LEFT JOIN zone z on s."iZoneId" = z."iZoneId"';
     $join_arr[] = 'LEFT JOIN county_mas c on s."iCountyId" = c."iCountyId"';
     $join_arr[] = 'LEFT JOIN state_mas sm on s."iStateId" = sm."iStateId"';
     $join_arr[] = 'LEFT JOIN city_mas cm on s."iCityId" = cm."iCityId"';

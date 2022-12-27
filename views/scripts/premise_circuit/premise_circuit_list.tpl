@@ -5,25 +5,40 @@
 				<div class="user_list_header">
 					<h4 class="card-title float-left">{$module_name}</h4>
 
-					<form id="frmlist">
+					<form id="frmlist" class="pc_search_form">
 						<ul class="nav search-links float-right">
 							<li>
-								<select id="vOptions" name="vOptions" class="form-control">
-                  					<option value="iPremiseCircuitId">ID</option>
-									<option value="iPremiseId">Premise ID</option>
-									<option value="vPremise">Premise</option>
-									<option value="iWOId">WorkOrder ID</option>
-									<option value="vWorkOrderType">WorkOrder Type</option>
-									<option value="iCircuitId">Circuit ID</option>
-									<option value="vCircuitName">Circuit Name</option>
-									<option value="iConnectionTypeId">Connection Type ID</option>
-									<option value="vConnectionTypeName">Connection Type</option>
-									<option value="vStatus">Status</option>
+								<select id="vOptions" name="vOptions" class="form-control" onchange="getDropdown(this.value);">
+                  					<option value="iNetworkId">Network</option>
+                  					<option value="iConnectionTypeId">Connection Type</option>
+                  					<option value="vStatus">Status</option>
 								</select>
 							</li>
-							<li>
-							   <input type="text" name="Keyword" id="Keyword" class="form-control" value="" autocomplete="off">
+							<li id="network_dd">
+		                        <select name="networkId" id="networkId" class="form-control col-md-12 search_filter_dd">
+		                            <option value="">-- Select --</option> {section name="n" loop=$rs_ntwork} <option value="{$rs_ntwork[n].iNetworkId}">{$rs_ntwork[n].vName|gen_strip_slash}</option> {/section}
+		                        </select>
 							</li>
+							<li id="connection_type_dd" style="display: none">
+		                        <select name="ConnectionTypeId" id="ConnectionTypeId" class="form-control col-md-12 search_filter_dd">
+		                            <option value="">-- Select --</option> {section name="c" loop=$rs_cntype}<option value="{$rs_cntype[c].iConnectionTypeId}">{$rs_cntype[c].vConnectionTypeName|gen_strip_slash}</option>
+                                    {/section}
+		                        </select>
+							</li>
+							<li id="status_dd" style="display:none">
+								<select name="iStatus" id="iStatus" class="form-control col-md-12 search_filter_dd">
+									<option value="">-- Select --</option> 
+                                    <option value="1">Created</option>
+                                    <option value="2">In Progress</option>
+                                    <option value="3">Delayed</option>
+                                    <option value="4">Connected</option>
+                                    <option value="5">Active</option>
+                                    <option value="6">Suspended</option>
+                                    <option value="7">Trouble</option>
+                                    <option value="8">Disconnected</option>
+                                </select>
+							</li>
+
 							<li>
 								<button type="button" id="Search" class="btn  btn-outline-warning fas fa-search" title="Search"><span class=""></span></button>
 							</li>
@@ -34,6 +49,16 @@
 					</form>
 				</div>
 			</div>
+			<div class="drop-search">
+	          	<div class="drop-title">
+	              	<div class="center">
+	                  	<a data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample" id="anchor_adv_search" >Adv. Search<i class="fas fa-caret-down"></i></a>
+	                  	<div class="collapse" id="collapseExample">
+	                      	{include file="top/top_premise_circuit_advance_search.tpl"}
+	                  	</div>
+	              	</div>
+	          	</div>
+	      	</div>
 			<div class="card-body">
 				<div class="table-responsive">
 				<table id="datatable-grid" class="display table dataTable table-striped table-bordered editable-table" width="100%">

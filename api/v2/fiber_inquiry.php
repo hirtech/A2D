@@ -118,6 +118,11 @@ if($request_type == "fiber_inquiry_edit"){
 
     if(!empty($RES_PARA)){
         $iFiberInquiryId        = $RES_PARA['iFiberInquiryId'];
+
+        $vNetwork               = $RES_PARA['vNetwork'];
+        $vFiberZone             = $RES_PARA['vFiberZone'];
+        $vStatus                = $RES_PARA['vStatus'];
+
         $page_length            = isset($RES_PARA['page_length']) ? trim($RES_PARA['page_length']) : "10";
         $start                  = isset($RES_PARA['start']) ? trim($RES_PARA['start']) : "0";
         $sEcho                  = $RES_PARA['sEcho'];
@@ -139,7 +144,6 @@ if($request_type == "fiber_inquiry_edit"){
         $ZoneNameFilterOpDD     = $RES_PARA['ZoneNameFilterOpDD'];
         $networkName            = $RES_PARA['networkName'];
         $NetworkFilterOpDD      = $RES_PARA['NetworkFilterOpDD'];
-        $status                 = $RES_PARA['status'];
     }
 
     if ($iFiberInquiryId != "") {
@@ -148,6 +152,18 @@ if($request_type == "fiber_inquiry_edit"){
     
     if ($fiberInquiryId != ""){
         $where_arr[] = 'fiberinquiry_details."iFiberInquiryId"='.$fiberInquiryId;
+    }
+
+    if ($vNetwork != "") {
+        $where_arr[] = "n.\"iNetworkId\" = '".$vNetwork."'";
+    }
+
+    if ($vFiberZone != "") {
+        $where_arr[] = "z.\"iZoneId\" = '".$vFiberZone."'";
+    }
+
+    if ($vStatus != "") {
+        $where_arr[] = "fiberinquiry_details.\"iStatus\" = '".$vStatus."'";
     }
 
     if ($contactName != "") {
@@ -262,9 +278,6 @@ if($request_type == "fiber_inquiry_edit"){
         }
     }
 
-    if ($status != "") {
-        $where_arr[] = "fiberinquiry_details.\"iStatus\"='" . $status  . "'";
-    }
 
     switch ($display_order) {
         case "1":

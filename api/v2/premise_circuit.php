@@ -7,15 +7,8 @@ if($request_type == "premise_circuit_list"){
 	$where_arr = array();
 
     if(!empty($RES_PARA)){
-        $iPremiseCircuitId      = $RES_PARA['iPremiseCircuitId'];
-        $iPremiseId             = $RES_PARA['iPremiseId'];
-        $vPremise               = $RES_PARA['vPremise'];
-        $iWOId                  = $RES_PARA['iWOId'];
-        $vWorkOrderType         = $RES_PARA['vWorkOrderType'];
-        $iCircuitId             = $RES_PARA['iCircuitId'];
-        $vCircuitName           = $RES_PARA['vCircuitName'];
+        $iNetworkId             = $RES_PARA['iNetworkId'];
         $iConnectionTypeId      = $RES_PARA['iConnectionTypeId'];
-        $vConnectionTypeName    = $RES_PARA['vConnectionTypeName'];
         $vStatus                = $RES_PARA['vStatus'];
 
         $page_length            = isset($RES_PARA['page_length']) ? trim($RES_PARA['page_length']) : "10";
@@ -23,64 +16,64 @@ if($request_type == "premise_circuit_list"){
         $sEcho                  = $RES_PARA['sEcho'];
         $display_order          = $RES_PARA['display_order'];
         $dir                    = $RES_PARA['dir'];
-    }
-    
-    if ($iPremiseCircuitId != "") {
-        $where_arr[] = 'premise_circuit."iPremiseCircuitId"='.$iPremiseCircuitId ;
+
+        $premiseCircuitId       = $RES_PARA['premiseCircuitId'];
+        $premiseId              = $RES_PARA['premiseId'];
+        $siteName               = $RES_PARA['siteName'];
+        $SiteFilterOpDD         = $RES_PARA['SiteFilterOpDD'];
+        $workorderId            = $RES_PARA['workorderId'];
+        $workorderTypeId        = $RES_PARA['workorderTypeId'];
+        $circuitId              = $RES_PARA['circuitId'];
     }
 
-    if ($iPremiseId != "") {
-        $where_arr[] = 'so."iPremiseId"='.$iPremiseId ;
-    }
-
-    if ($vPremise != "") {
-        $where_arr[] = "s.\"vName\" ILIKE '" . $vPremise . "%'";
-    }
-
-    if ($iWOId != "") {
-        $where_arr[] = 'premise_circuit."iWOId"='.$iWOId ;
-    }
-
-    if ($vWorkOrderType != "") {
-        $where_arr[] = "wt.\"vType\" ILIKE '" . $vWorkOrderType . "%'";
-    }
-
-    if ($iCircuitId != "") {
-        $where_arr[] = 'premise_circuit."iCircuitId"='.$iCircuitId ;
-    }
-
-    if ($vCircuitName != "") {
-        $where_arr[] = "circuit.\"vCircuitName\" ILIKE '" . $vCircuitName . "%'";
+    if ($iNetworkId != "") {
+        $where_arr[] = 'z."iNetworkId"='.$iNetworkId ;
     }
 
     if ($iConnectionTypeId != "") {
         $where_arr[] = 'premise_circuit."iConnectionTypeId"='.$iConnectionTypeId ;
     }
 
-    if ($vConnectionTypeName != "") {
-        $where_arr[] = "connection_type_mas.\"vConnectionTypeName\" ILIKE '" . $vConnectionTypeName . "%'";
+    if ($vStatus != "") {
+        $where_arr[] = 'premise_circuit."iStatus"='.$vStatus ;
     }
 
-    if($vStatus != ''){
-        if(strtolower($vStatus) == 'created' || $vStatuss == 'Created'){
-            $where_arr[] = 'premise_circuit."iStatus"= 1'; 
-        }else if(strtolower($vStatus) == 'in progress' || $vStatuss == 'In Progress'){
-            $where_arr[] = 'premise_circuit."iStatus"= 2'; 
-        }else if(strtolower($vStatus) == 'delayed' || $vStatuss == 'Delayed'){
-            $where_arr[] = 'premise_circuit."iStatus"= 3'; 
-        }else if(strtolower($vStatus) == 'connected' || $vStatuss == 'Connected'){
-            $where_arr[] = 'premise_circuit."iStatus"= 4'; 
-        }else if(strtolower($vStatus) == 'active' || $vStatuss == 'Active'){
-            $where_arr[] = 'premise_circuit."iStatus"= 5'; 
-        }else if(strtolower($vStatus) == 'suspended' || $vStatuss == 'Suspended'){
-            $where_arr[] = 'premise_circuit."iStatus"= 6'; 
-        }else if(strtolower($vStatus) == 'trouble' || $vStatuss == 'Trouble'){
-            $where_arr[] = 'premise_circuit."iStatus"= 7'; 
-        }else if(strtolower($vStatus) == 'disconnected' || $vStatuss == 'Disconnected'){
-            $where_arr[] = 'premise_circuit."iStatus"= 8'; 
+    if ($premiseCircuitId != "") {
+        $where_arr[] = 'premise_circuit."iPremiseCircuitId"='.$premiseCircuitId ;
+    }
+
+    if ($premiseId != "") {
+        $where_arr[] = 'premise_circuit."iPremiseId"='.$premiseId ;
+    }
+
+    if ($siteName != "") {
+        if ($SiteFilterOpDD != "") {
+            if ($SiteFilterOpDD == "Begins") {
+                $where_arr[] = 's."vName" ILIKE \''.trim($siteName).'%\'';
+            } else if ($SiteFilterOpDD == "Ends") {
+                $where_arr[] = 's."vName" ILIKE \'%'.trim($siteName).'\'';
+            } else if ($SiteFilterOpDD == "Contains") {
+                $where_arr[] = 's."vName" ILIKE \'%'.trim($siteName).'%\'';
+            } else if ($SiteFilterOpDD == "Exactly") {
+                $where_arr[] = 's."vName" ILIKE \''.trim($siteName).'\'';
+            }
+        } else {
+            $where_arr[] = 's."vName" ILIKE \''.trim($siteName).'%\'';
         }
     }
 
+    if ($workorderId != "") {
+        $where_arr[] = 'premise_circuit."iWOId"='.$workorderId ;
+    }
+
+    if ($workorderTypeId != "") {
+        $where_arr[] = 'w."iWOTId"='.$workorderTypeId ;
+    }
+
+    if ($circuitId != "") {
+        $where_arr[] = 'premise_circuit."iCircuitId"='.$circuitId ;
+    }
+    
     switch ($display_order) {
         case "0":
             $sortname = "premise_circuit.\"iPremiseCircuitId\"";
@@ -115,11 +108,13 @@ if($request_type == "premise_circuit_list"){
     $join_fieds_arr[] = 'st."vTypeName" as "vPremiseType"';
     $join_fieds_arr[] = 'circuit."vCircuitName"';
     $join_fieds_arr[] = 'connection_type_mas."vConnectionTypeName"';
+    $join_fieds_arr[] = 'z."iNetworkId"';
     
     $join_arr[] = " LEFT JOIN workorder w ON premise_circuit.\"iWOId\" = w.\"iWOId\"";
     $join_arr[] = " LEFT JOIN workorder_type_mas wt ON w.\"iWOTId\" = wt.\"iWOTId\"";
     $join_arr[] = " LEFT JOIN service_order so ON w.\"iServiceOrderId\" = so.\"iServiceOrderId\"";
     $join_arr[] = " LEFT JOIN premise_mas s ON so.\"iPremiseId\" = s.\"iPremiseId\"";
+    $join_arr[] = " LEFT JOIN zone z ON s.\"iZoneId\" = z.\"iZoneId\"";
     $join_arr[] = " LEFT JOIN site_type_mas st ON s.\"iSTypeId\" = st.\"iSTypeId\"";
     $join_arr[] = " LEFT JOIN circuit ON premise_circuit.\"iCircuitId\" = circuit.\"iCircuitId\"";
     $join_arr[] = " LEFT JOIN connection_type_mas ON premise_circuit.\"iConnectionTypeId\" = connection_type_mas.\"iConnectionTypeId\"";

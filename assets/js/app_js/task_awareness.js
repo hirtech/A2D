@@ -54,7 +54,7 @@ var listPage = function(){
                         "dataType": 'json',
                         "type": "POST",
                         "url": sSource+'&'+$.param(aoData),
-                        "data": $("#frmlist").serializeArray(),
+                        "data": $(".awareness_search_form").serializeArray(),
                         "success": fnCallback
                     });
                 },
@@ -124,3 +124,47 @@ function delete_record(id)
         }
     );
 }
+
+function getDropdown(vOptions) {
+    if(vOptions == "iNetworkId"){
+        reset_all_fields();
+        $('#network_dd').show();
+        $('#engagement_dd').hide();
+        $('#technician_dd').hide();
+    }else if(vOptions == "iEngagementId"){
+        reset_all_fields();
+        $('#engagement_dd').show();
+        $('#network_dd').hide();
+        $('#technician_dd').hide();
+    }else if(vOptions == "iTechnicianId"){
+        reset_all_fields();
+        $('#technician_dd').show();
+        $('#network_dd').hide();
+        $('#engagement_dd').hide();
+    }
+}
+
+function reset_all_fields(){
+  $('#networkId').val('');
+  $('#engagementId').val('');
+  $('#technicianId').val('');
+}
+
+$('#AdvSearchSubmit').click(function () {
+    gridtable.ajax.reload();
+    return false;
+});
+
+$('#AdvSearchReset').click(function () {
+    //alert('1111');
+    $('#aId').val("");
+    $('#premiseId').val("");
+    $('#SiteFilterOpDD').val("Contains");
+    $('#siteName').val("");
+    $('#AddressFilterOpDD').val("Contains");
+    $('#vAddress').val("");
+    $('#fiberInquiryId').val("");
+   
+    gridtable.ajax.reload();
+    return false;
+});

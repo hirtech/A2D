@@ -5,19 +5,32 @@
 				<div class="user_list_header">
 					<h4 class="card-title float-left">{$module_name}</h4>
 
-					<form id="frmlist">
+					<form id="frmlist"  class="awareness_search_form">
 						<ul class="nav search-links float-right">
 							<li>
-								<select id="vOptions" name="vOptions" class="form-control">
-                  					<option value="iAId">ID</option>
-									<option value="iPremiseId">Premise Id</option>
-									<option value="vName">Premise Name</option>
-									<option value="vEngagement">Engagement</option>
-									<option value="iFiberInquiryId">FiberInquiry Id</option>
+								<select id="vOptions" name="vOptions" class="form-control" onchange="getDropdown(this.value);">
+									<option value="iNetworkId">Network</option>
+                  					<option value="iEngagementId">Engagement</option>
+                  					<option value="iTechnicianId">Technician</option>
 								</select>
 							</li>
-							<li>
-							   <input type="text" name="Keyword" id="Keyword" class="form-control" value="" autocomplete="off">
+							<li id="network_dd">
+		                        <select name="networkId" id="networkId" class="form-control col-md-12 search_filter_dd">
+		                            <option value="">-- Select --</option> {section name="n" loop=$rs_ntwork} <option value="{$rs_ntwork[n].iNetworkId}">{$rs_ntwork[n].vName|gen_strip_slash}</option> {/section}
+		                        </select>
+							</li>
+							<li id="technician_dd" style="display: none">
+		                        <select name="technicianId" id="technicianId" class="form-control col-md-12 search_filter_dd">
+		                            <option value="">-- Select --</option> {section name="s" loop=$technician_user_arr}
+	                                <option value="{$technician_user_arr[s].iUserId}">{$technician_user_arr[s].vName|gen_strip_slash}</option>
+	                                {/section}
+		                        </select>
+							</li>
+							<li id="engagement_dd" style="display: none">
+		                        <select name="engagementId" id="engagementId" class="form-control col-md-12 search_filter_dd">
+		                            <option value="">-- Select --</option> {section name="e" loop=$rs_engagement}<option value="{$rs_engagement[e].iEngagementId}">{$rs_engagement[e].vEngagement|gen_strip_slash}</option>
+                                    {/section}
+		                        </select>
 							</li>
 							<li>
 								<button type="button" id="Search" class="btn  btn-outline-warning fas fa-search" title="Search"><span class=""></span></button>
@@ -29,6 +42,16 @@
 					</form>
 				</div>
 			</div>
+			<div class="drop-search">
+	          	<div class="drop-title">
+	              	<div class="center">
+	                  	<a data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample" id="anchor_adv_search" >Adv. Search<i class="fas fa-caret-down"></i></a>
+	                  	<div class="collapse" id="collapseExample">
+	                      	{include file="top/top_task_awareness_advance_search.tpl"}
+	                  	</div>
+	              	</div>
+	          	</div>
+	      	</div>
 			<div class="card-body">
 				<div class="table-responsive">
 				<table id="datatable-grid" class="display table dataTable table-striped table-bordered editable-table" width="100%">

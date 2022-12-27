@@ -90,22 +90,18 @@
                 </div>
             </div>
             <div class="form-group col-md-2">
-                <label for="inputEmail4">Network</label>
+                <label for="inputEmail4">ID</label>
                 <div class="form-row">
                     <div class="form-group col-md-12">
-                        <select name="iSNetworkId" id="iSNetworkId" class="form-control col-md-12">
-                            <option value="">-- Select --</option> {section name="n" loop=$rs_ntwork} <option value="{$rs_ntwork[n].iNetworkId}">{$rs_ntwork[n].vName|gen_strip_slash}</option> {/section}
-                        </select>
+                        <input type="text" name="iServiceOrderId" id="iServiceOrderId" value="" class="form-control">
                     </div>
                 </div>
             </div>
             <div class="form-group col-md-2">
-                <label for="inputEmail4">Carrier</label>
+                <label for="inputEmail4">Master MSA#</label>
                 <div class="form-row">
                     <div class="form-group col-md-12">
-                        <select name="iSCarrierId" id="iSCarrierId" class="form-control">
-                            <option value="">-- Select --</option> {section name="c" loop=$rs_carrier} <option value="{$rs_carrier[c].iCompanyId}">{$rs_carrier[c].vCompanyName|gen_strip_slash}</option> {/section}
-                        </select>
+                        <input type="text" name="vMasterMSA" id="vMasterMSA" value="" class="form-control">
                     </div>
                 </div>
             </div>
@@ -146,12 +142,10 @@
                 </div>
             </div>  
             <div class="form-group col-md-4">
-                <label for="inputEmail4">Service Type</label>
+                <label for="inputEmail4">Service Order</label>
                 <div class="form-row">
                     <div class="form-group col-md-12">
-                        <select name="iSServiceType" id="iSServiceType" class="form-control col-md-12">
-                            <option value="">-- Select --</option> {section name="s" loop=$rs_stype} <option value="{$rs_stype[s].iServiceTypeId}">{$rs_stype[s].vServiceType|gen_strip_slash}</option> {/section}
-                        </select>
+                        <input type="text" name="vServiceOrder" id="vServiceOrder" value="" class="form-control">
                     </div>
                 </div>
             </div> 

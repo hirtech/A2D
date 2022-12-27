@@ -5,14 +5,14 @@ if($request_type == "service_order_list"){
     $ServiceOrderObj->clear_variable();
     $where_arr = array();
     if(!empty($RES_PARA)){
-        $iServiceOrderId        = $RES_PARA['iServiceOrderId'];
-        $vMasterMSA             = $RES_PARA['vMasterMSA'];
-        $vServiceOrder          = $RES_PARA['vServiceOrder'];
+
         $vNetwork               = $RES_PARA['vNetwork'];
         $vCarrier               = $RES_PARA['vCarrier'];
-        $vSalesRepName          = $RES_PARA['vSalesRepName'];
-        $vSalesRepEmail         = $RES_PARA['vSalesRepEmail'];
+        $vConnectionType        = $RES_PARA['vConnectionType'];
         $vServiceType           = $RES_PARA['vServiceType'];
+        $iSOStatus              = $RES_PARA['iSOStatus'];
+        $iCStatus               = $RES_PARA['iCStatus'];
+        $iSStatus               = $RES_PARA['iSStatus'];
 
         $page_length            = isset($RES_PARA['page_length']) ? trim($RES_PARA['page_length']) : "10";
         $start                  = isset($RES_PARA['start']) ? trim($RES_PARA['start']) : "0";
@@ -32,13 +32,13 @@ if($request_type == "service_order_list"){
         $vSState                = $RES_PARA['vSState'];
         $vSZipCode              = $RES_PARA['vSZipCode'];
         $iSZoneId               = $RES_PARA['iSZoneId'];
-        $iSNetworkId            = $RES_PARA['iSNetworkId'];
-        $iSCarrierId            = $RES_PARA['iSCarrierId'];
+        $iServiceOrderId        = $RES_PARA['iServiceOrderId'];
+        $vMasterMSA             = $RES_PARA['vMasterMSA'];
         $vSSalesRepNameDD       = $RES_PARA['vSSalesRepNameDD'];
         $vSSalesRepName         = $RES_PARA['vSSalesRepName'];
         $vSSalesRepEmailDD      = $RES_PARA['vSSalesRepEmailDD'];
         $vSSalesRepEmail        = $RES_PARA['vSSalesRepEmail'];
-        $iSServiceType          = $RES_PARA['iSServiceType'];   
+        $vServiceOrder          = $RES_PARA['vServiceOrder'];   
     }
 
     if ($iFieldmapPremiseId != "") {
@@ -58,24 +58,32 @@ if($request_type == "service_order_list"){
     }
 
     if ($vNetwork != "") {
-        $where_arr[] = "n.\"vName\" ILIKE '%".$vNetwork."%'";
+        $where_arr[] = "n.\"iNetworkId\" = '".$vNetwork."'";
     }
 
     if ($vCarrier != "") {
-        $where_arr[] = "cm.\"vCompanyName\" ILIKE '%".$vCarrier."%'";
-    }
-
-    if ($vSalesRepName != "") {
-        $where_arr[] = "service_order.\"vSalesRepName\" = '".$vSalesRepName."'";
-    }
-
-    if ($vSalesRepEmail != "") {
-        $where_arr[] = "service_order.\"vSalesRepEmail\" = '".$vSalesRepEmail."'";
+        $where_arr[] = "service_order.\"iCarrierID\" = '".$vCarrier."'";
     }
 
     if ($vServiceType != "") {
-        $where_arr[] = "(st1.\"vServiceType\" ILIKE '%".$vServiceType."%')";
+        $where_arr[] = "(service_order.\"iService1\" = '".$vServiceType."')";
     }
+
+    if ($vConnectionType != "") {
+            $where_arr[] = "(service_order.\"iConnectionTypeId\" = '".$vConnectionType."')";
+        }
+
+    if ($iSOStatus != "") {
+            $where_arr[] = "(service_order.\"iSOStatus\" = '".$iSOStatus."')";
+        }
+
+    if ($iCStatus != "") {
+            $where_arr[] = "(service_order.\"iCStatus\" = '".$iCStatus."')";
+        }
+
+    if ($iSStatus != "") {
+            $where_arr[] = "(service_order.\"iSStatus\" = '".$iSStatus."')";
+        }
 
     if ($vSContactName != "") {
         if ($vSContactNameDD != "") {
@@ -149,14 +157,6 @@ if($request_type == "service_order_list"){
         $where_arr[] = "z.\"iZoneId\" = '".$iSZoneId."'";
     }
 
-    if ($iSNetworkId != "") {
-        $where_arr[] = "n.\"iNetworkId\" = '".$iSNetworkId."'";
-    }
-
-    if ($iSCarrierId != "") {
-        $where_arr[] = "service_order.\"iCarrierID\" = '".$iSCarrierId."'";
-    }
-
     if ($vSSalesRepName != "") {
         if ($vSSalesRepNameDD != "") {
             if ($vSSalesRepNameDD == "Begins") {
@@ -187,10 +187,6 @@ if($request_type == "service_order_list"){
         } else {
             $where_arr[] = 'service_order."vSalesRepName" ILIKE \''.trim($vSSalesRepEmail).'%\'';
         }
-    }
-
-    if ($iSServiceType != "") {
-        $where_arr[] = "(service_order.\"iService1\" = '".$iSServiceType."')";
     }
 
     switch ($display_order) {

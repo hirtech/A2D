@@ -25,10 +25,17 @@ if($mode == "List"){
     $arr_param = array();
 
     $vOptions = $_REQUEST['vOptions'];
-    $Keyword = addslashes(trim($_REQUEST['Keyword']));
-    if ($Keyword != "") {
-        $arr_param[$vOptions] = $Keyword;
+    if($vOptions == "vNetwork"){
+        $searchId = $_REQUEST['iSNetworkId'];
+    }else if($vOptions == "vFiberZone"){
+        $searchId = $_REQUEST['iSZoneId'];
+    }else if($vOptions == "vStatus"){
+        $searchId = $_REQUEST['iStatus'];
     }
+    if ($searchId != "") {
+        $arr_param[$vOptions] = $searchId;
+    }
+
     //echo "<pre>";print_r($_REQUEST);
     if($_REQUEST['fiberInquiryId'] != ""){
         $arr_param['fiberInquiryId'] = $_REQUEST['fiberInquiryId'];
@@ -61,9 +68,6 @@ if($mode == "List"){
         $arr_param['networkName'] = $_REQUEST['networkName'];
         $arr_param['NetworkFilterOpDD'] = $_REQUEST['NetworkFilterOpDD'];  
     }
-    if($_REQUEST['status'] != ""){
-        $arr_param['status'] = $_REQUEST['status'];  
-    }
     
     $arr_param['page_length'] = $page_length;
     $arr_param['start'] = $start;
@@ -74,7 +78,7 @@ if($mode == "List"){
     $arr_param['access_group_var_delete'] = $access_group_var_delete;
     $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
     $API_URL = $site_api_url."fiber_inquiry_list.json";
-    //echo $API_URL." ".json_encode($arr_param);exit;
+    // echo $API_URL." ".json_encode($arr_param);exit;
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $API_URL);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
@@ -497,6 +501,56 @@ if($mode == "List"){
     hc_exit();
     # -----------------------------------   
 }
+# Network Dropdown
+$network_arr_param = array();
+$network_arr_param = array(
+    "iStatus"        => 1,
+    "sessionId"     => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
+);
+$network_API_URL = $site_api_url."network_dropdown.json";
+//echo $network_API_URL." ".json_encode($network_arr_param);
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $network_API_URL);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_HEADER, FALSE);
+curl_setopt($ch, CURLOPT_POST, TRUE);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($network_arr_param));
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+   "Content-Type: application/json",
+));
+$response_network = curl_exec($ch);
+curl_close($ch); 
+$rs_network = json_decode($response_network, true); 
+$rs_ntwork = $rs_network['result'];
+$smarty->assign("rs_ntwork", $rs_ntwork);
+## --------------------------------
+## --------------------------------
+# Zone Dropdown
+$zone_arr_param = array();
+$zone_arr_param = array(
+    "iStatus"        => 1,
+    "sessionId"     => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
+);
+$zone_API_URL = $site_api_url."zone_dropdown.json";
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $zone_API_URL);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_HEADER, FALSE);
+curl_setopt($ch, CURLOPT_POST, TRUE);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($zone_arr_param));
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+   "Content-Type: application/json",
+));
+$response_zone = curl_exec($ch);
+curl_close($ch); 
+$rs_zone1 = json_decode($response_zone, true); 
+$rs_zone = $rs_zone1['result'];
+$smarty->assign("rs_zone", $rs_zone);
+## --------------------------------
 
 $module_name = "Fiber Inquiry List";
 $module_title = "Fiber Inquiry";

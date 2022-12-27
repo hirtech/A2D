@@ -167,14 +167,57 @@ $('#AdvSearchReset').click(function () {
     $('#vSState').val("");
     $('#vSZipCode').val("");
     $('#iSZoneId').val("");
-    $('#iSNetworkId').val("");
-    $('#iSCarrierId').val("");
+    $('#iServiceOrderId').val("");
+    $('#vServiceOrder').val("");
     $('#vSSalesRepNameDD').val("Contains");
     $('#vSSalesRepName').val("");
     $('#vSSalesRepEmailDD').val("Contains");
     $('#vSSalesRepEmail').val("");
-    $('#iSServiceType').val("");
+    $('#vMasterMSA').val("");
     
     gridtable.ajax.reload();
     return false;
 });
+
+function getDropdown(vOptions) {
+    $('#network_dd').show();
+    if(vOptions == "vNetwork"){
+        reset_all_fields();
+        $('.searching_dd').hide();
+        $('#network_dd').show();
+    }else if(vOptions == "vCarrier"){
+        reset_all_fields();
+        $('.searching_dd').hide();
+        $('#carrier_dd').show();
+    }else if(vOptions == "vConnectionType"){
+        reset_all_fields();
+        $('.searching_dd').hide();
+        $('#connection_type_dd').show();
+    }else if(vOptions == "vServiceType"){
+        reset_all_fields();
+        $('.searching_dd').hide();
+        $('#service_type_dd').show();
+    }else if(vOptions == "iSOStatus"){
+        reset_all_fields();
+        $('.searching_dd').hide();
+        $('#service_order_status_dd').show();
+    }else if(vOptions == "iCStatus"){
+        reset_all_fields();
+        $('.searching_dd').hide();
+        $('#connection_status_dd').show();
+    }else if(vOptions == "iSStatus"){
+        reset_all_fields();
+        $('.searching_dd').hide();
+        $('#service_status_dd').show();
+    }
+}
+
+function reset_all_fields(){
+  $('#iSNetworkId').val('');
+  $('#iSCarrierId').val('');
+  $('#iConnectionTypeId').val('');
+  $('#iSServiceType').val('');
+  $('#iSOStatus').val('');
+  $('#iCStatus').val('');
+  $('#iSStatus').val('');
+}

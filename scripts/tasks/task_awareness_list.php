@@ -25,9 +25,37 @@ if($mode == "List"){
     $arr_param = array();
 
     $vOptions = $_REQUEST['vOptions'];
-    $Keyword = addslashes(trim($_REQUEST['Keyword']));
-    if ($Keyword != "") {
-        $arr_param[$vOptions] = $Keyword;
+    if($vOptions == "iNetworkId"){
+        $searchId = $_REQUEST['networkId'];
+    }else if($vOptions == "iEngagementId"){
+        $searchId = $_REQUEST['engagementId'];
+    }else if($vOptions == "iTechnicianId"){
+        $searchId = $_REQUEST['technicianId'];
+    }
+    if ($searchId != "") {
+        $arr_param[$vOptions] = $searchId;
+    }
+
+    if ($_REQUEST['aId'] != "") {
+        $arr_param['aId'] = $_REQUEST['aId'];
+    }
+
+    if ($_REQUEST['premiseId'] != "") {
+        $arr_param['premiseId'] = $_REQUEST['premiseId'];
+    }
+
+    if($_REQUEST['siteName'] != ""){
+        $arr_param['siteName'] = $_REQUEST['siteName'];
+        $arr_param['SiteFilterOpDD'] = $_REQUEST['SiteFilterOpDD'];
+    }
+
+    if($_REQUEST['vAddress'] != ""){
+        $arr_param['vAddress'] = $_REQUEST['vAddress'];
+        $arr_param['AddressFilterOpDD'] = $_REQUEST['AddressFilterOpDD'];
+    }
+
+    if ($_REQUEST['fiberInquiryId'] != "") {
+        $arr_param['fiberInquiryId'] = $_REQUEST['fiberInquiryId'];
     }
     
     $arr_param['page_length']   = $page_length;
@@ -367,6 +395,33 @@ $res = json_decode($response, true);
 $smarty->assign("technician_user_arr", $res['result']);
 //echo "<pre>";print_r($res['result']);exit;
 /*-------------------------- User -------------------------- */
+
+## --------------------------------
+# Network Dropdown
+$network_arr_param = array();
+$network_arr_param = array(
+    "iStatus"        => 1,
+    "sessionId"     => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
+);
+$network_API_URL = $site_api_url."network_dropdown.json";
+//echo $network_API_URL." ".json_encode($network_arr_param);
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $network_API_URL);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_HEADER, FALSE);
+curl_setopt($ch, CURLOPT_POST, TRUE);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($network_arr_param));
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+   "Content-Type: application/json",
+));
+$response_network = curl_exec($ch);
+curl_close($ch); 
+$rs_network = json_decode($response_network, true); 
+$rs_ntwork = $rs_network['result'];
+$smarty->assign("rs_ntwork", $rs_ntwork);
+## --------------------------------
 
 $module_name = "Awareness List";
 $module_title = "Task Awareness";

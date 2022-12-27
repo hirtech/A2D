@@ -72,21 +72,11 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group col-md-2">
+            <div class="form-group col-md-4">
                 <label for="inputEmail4">Zip Code</label>
                 <div class="form-row">
                     <div class="form-group col-md-12">
                         <input type="text" name="vSZipCode" id="vSZipCode" value="" class="form-control">
-                    </div>
-                </div>
-            </div>
-            <div class="form-group col-md-2">
-                <label for="inputEmail4">Zone</label>
-                <div class="form-row">
-                    <div class="form-group col-md-12">
-                        <select name="iSZoneId" id="iSZoneId" class="form-control col-md-12">
-                            <option value="">-- Select --</option> {section name="z" loop=$rs_zone} <option value="{$rs_zone[z].iZoneId}">{$rs_zone[z].vZoneName|gen_strip_slash}</option> {/section}
-                        </select>
                     </div>
                 </div>
             </div>
@@ -123,41 +113,26 @@
                 </div>
             </div> 
             <div class="form-group col-md-2">
-                <label for="inputEmail4">Requestor</label>
+                <label for="inputEmail4">Id</label>
                 <div class="form-row">
                     <div class="form-group col-md-12">
-                        <select name="iSRequestorId" id="iSRequestorId" class="form-control">
-                            <option value="">-- Select --</option> 
-                            {section name="u" loop=$rs_user} 
-                            <option value="{$rs_user[u].iUserId}">{$rs_user[u].vName|gen_strip_slash}</option> 
-                            {/section}
-                        </select>
+                        <input type="text" name="iWOTId" id="iWOTId" value="" class="form-control">
                     </div>
                 </div>
             </div>
             <div class="form-group col-md-2">
-                <label for="inputEmail4">Assigned To</label>
+                <label for="inputEmail4">Premise Id</label>
                 <div class="form-row">
                     <div class="form-group col-md-12">
-                        <select name="iSAssignedToId" id="iSAssignedToId" class="form-control">
-                            <option value="">-- Select --</option> 
-                            {section name="u" loop=$rs_user} 
-                            <option value="{$rs_user[u].iUserId}">{$rs_user[u].vName|gen_strip_slash}</option> 
-                            {/section}
-                        </select>
+                        <input type="text" name="iPremiseId" id="iPremiseId" value="" class="form-control">
                     </div>
                 </div>
             </div>
             <div class="form-group col-md-4">
-                <label for="inputEmail4">Status</label>
+                <label for="inputEmail4">Service Order Id</label>
                 <div class="form-row">
                     <div class="form-group col-md-12">
-                        <select name="iSWOSId" id="iSWOSId" class="form-control">
-                            <option value="">-- Select --</option> 
-                            {section name="s" loop=$rs_status} 
-                            <option value="{$rs_status[s].iWOSId}">{$rs_status[s].vStatus|gen_strip_slash}</option> 
-                            {/section}
-                        </select>
+                        <input type="text" name="iServiceOrderId" id="iServiceOrderId" value="" class="form-control">
                     </div>
                 </div>
             </div>

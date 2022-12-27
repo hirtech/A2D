@@ -7,19 +7,65 @@
                     <form id="frmlist" name="frmlist" class="sorder_search_form">
                         <ul class="nav search-links float-right">
                             <li>
-                                <select id="vOptions" name="vOptions" class="form-control">
-                                    <option value="iServiceOrderId">ID</option>
-                                    <option value="vMasterMSA">Master MSA #</option>
-                                    <option value="vServiceOrder">Service Order</option>
+                                <select id="vOptions" name="vOptions" class="form-control" onchange="getDropdown(this.value);">
                                     <option value="vNetwork">Network</option>
                                     <option value="vCarrier">Carrier</option>
-                                    <option value="vSalesRepName">SalesRep Name</option>
-                                    <option value="vSalesRepEmail">SalesRep Email</option>
+                                    <option value="vConnectionType">Connection Type</option>
                                     <option value="vServiceType">Service Type</option>
+                                    <option value="iSOStatus">Service Order Status</option>
+                                    <option value="iCStatus">Connection Status</option>
+                                    <option value="iSStatus">Service Status</option>
                                 </select>
                             </li>
-                            <li>
-                                <input type="text" name="Keyword" id="Keyword" value="" autocomplete="off">
+                            <li id="network_dd" class="searching_dd">
+                                <select name="iSNetworkId" id="iSNetworkId" class="form-control col-md-12 search_filter_dd">
+                                    <option value="">-- Select --</option> {section name="n" loop=$rs_ntwork} <option value="{$rs_ntwork[n].iNetworkId}">{$rs_ntwork[n].vName|gen_strip_slash}</option> {/section}
+                                </select>
+                            </li>
+                            <li id="carrier_dd" style="display: none" class="searching_dd">
+                                <select name="iSCarrierId" id="iSCarrierId" class="form-control col-md-12 search_filter_dd">
+                                    <option value="">-- Select --</option> {section name="c" loop=$rs_carrier} <option value="{$rs_carrier[c].iCompanyId}">{$rs_carrier[c].vCompanyName|gen_strip_slash}</option> {/section}
+                                </select>
+                            </li>
+                            <li id="connection_type_dd" style="display: none" class="searching_dd">
+                                <select name="iConnectionTypeId" id="iConnectionTypeId" class="form-control col-md-12 search_filter_dd">
+                                    <option value="">Select</option>
+                                    {section name="c" loop=$rs_cntype}
+                                        <option value="{$rs_cntype[c].iConnectionTypeId}" {if $rs_cntype[c].iConnectionTypeId eq $rs_sorder[0].iConnectionTypeId}selected{/if}>{$rs_cntype[c].vConnectionTypeName|gen_strip_slash}</option>
+                                    {/section}
+                                </select>
+                            </li>
+                            <li id="service_type_dd" style="display: none" class="searching_dd">
+                                <select name="iSServiceType" id="iSServiceType" class="form-control col-md-12 search_filter_dd">
+                                    <option value="">-- Select --</option> {section name="s" loop=$rs_stype} <option value="{$rs_stype[s].iServiceTypeId}">{$rs_stype[s].vServiceType|gen_strip_slash}</option> {/section}
+                                </select>
+                            </li>
+                            <li id="service_order_status_dd" style="display: none" class="searching_dd">
+                                <select name="iSOStatus" id="iSOStatus" class="form-control col-md-12 search_filter_dd">
+                                    <option value="">-- Select --</option>
+                                    <option value="1">Created</option>
+                                    <option value="2">In-Review</option>
+                                    <option value="3">Approved</option>
+                                </select>
+                            </li>
+                            <li id="connection_status_dd" style="display: none" class="searching_dd">
+                                <select name="iCStatus" id="iCStatus" class="form-control col-md-12 search_filter_dd">
+                                    <option value="">-- Select --</option>
+                                    <option value="1">Created</option>
+                                    <option value="2">In-Progress</option>
+                                    <option value="3">Completed</option>
+                                    <option value="4">On-Net</option>
+                                </select>
+                            </li>
+                            <li id="service_status_dd" style="display: none" class="searching_dd">
+                                <select name="iSStatus" id="iSStatus" class="form-control col-md-12 search_filter_dd">
+                                    <option value="">-- Select --</option>
+                                    <option value="0">Pending</option>
+                                    <option value="1">Active</option>
+                                    <option value="2">Suspended</option>
+                                    <option value="3">Trouble</option>
+                                    <option value="4">Disconnected</option>
+                                </select>
                             </li>
                             <li>
                                 <button type="button" id="Search" class="btn  btn-outline-warning fas fa-search" title="Search">
@@ -44,7 +90,7 @@
 			</div>
             <div class="card-body ">
                 <div class="table-responsive">
-                    <table id="datatable-grid" class="display table dataTable table-striped table-bordered editable-table  dt-responsive nowrap" width="100%">
+                    <table id="datatable-grid" class="display table dataTable table-striped table-bordered editable-table  dt-responsive" width="100%">
                         <thead>
                             <tr>
                                 <th>ID</th>

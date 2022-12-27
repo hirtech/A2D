@@ -202,13 +202,50 @@ $('#AdvSearchReset').click(function () {
     $('#vSStateFilterOpDD').val("Contains");
     $('#vSState').val("");
     $('#vSZipCode').val("");
-    $('#iSZoneId').val("");
     $('#iSServiceOrderId').val("");
     $('#vSWOProjectDD').val("Contains");
     $('#vSWOProject').val("");
-    $('#iSRequestorId').val("");
-    $('#iSAssignedToId').val("");
-    $('#iSWOSId').val("");
+    $('#iWOTId').val("");
+    $('#iPremiseId').val("");
+    $('#iServiceOrderId').val("");
     gridtable.ajax.reload();
     return false;
 });
+
+function getDropdown(vOptions) {
+    $('#network_dd').show();
+    if(vOptions == "vNetwork"){
+        reset_all_fields();
+        $('.searching_dd').hide();
+        $('#network_dd').show();
+    }else if(vOptions == "vFiberZone"){
+        reset_all_fields();
+        $('.searching_dd').hide();
+        $('#fiber_zone_dd').show();
+    }else if(vOptions == "vWOType"){
+        reset_all_fields();
+        $('.searching_dd').hide();
+        $('#work_order_type_dd').show();
+    }else if(vOptions == "vRequestor"){
+        reset_all_fields();
+        $('.searching_dd').hide();
+        $('#requestor_dd').show();
+    }else if(vOptions == "vAssignedTo"){
+        reset_all_fields();
+        $('.searching_dd').hide();
+        $('#assigned_to_dd').show();
+    }else if(vOptions == "vStatus"){
+        reset_all_fields();
+        $('.searching_dd').hide();
+        $('#status_dd').show();
+    }
+}
+
+function reset_all_fields(){
+  $('#iSNetworkId').val('');
+  $('#iSZoneId').val('');
+  $('#iSWOTId').val('');
+  $('#iSRequestorId').val('');
+  $('#iSAssignedToId').val('');
+  $('#iSWOSId').val('');
+}

@@ -7,16 +7,31 @@
 					<form id="frmlist" name="frmlist" class="site_search_form">
 						<ul class="nav search-links float-right">
 							<li>
-								<select id="vOptions" name="vOptions" class="form-control">
-									<option value="iFiberInquiryId">ID</option>
-									<!-- <option value="iPremiseId">Premise Id</option>
-									<option value="vName">Premise Name</option>
-									<option value="vTypeName">Premise Type</option> -->
+								<select id="vOptions" name="vOptions" class="form-control" onchange="getDropdown(this.value);">
+									<option value="vNetwork">Network</option>
+                                    <option value="vFiberZone">Fiber Zone</option>
+                                    <option value="vStatus">Status</option>
 								</select>
 							</li>
-							<li>
-							   <input type="text" name="Keyword" id="Keyword" class="form-control" value="" autocomplete="off">
-							</li>
+							<li id="network_dd" class="searching_dd">
+                                <select name="iSNetworkId" id="iSNetworkId" class="form-control col-md-12 search_filter_dd">
+                                    <option value="">-- Select --</option> {section name="n" loop=$rs_ntwork} <option value="{$rs_ntwork[n].iNetworkId}">{$rs_ntwork[n].vName|gen_strip_slash}</option> {/section}
+                                </select>
+                            </li>
+                            <li id="fiber_zone_dd" style="display: none" class="searching_dd">
+                                <select name="iSZoneId" id="iSZoneId" class="form-control col-md-12 search_filter_dd">
+                                    <option value="">-- Select --</option> {section name="z" loop=$rs_zone} <option value="{$rs_zone[z].iZoneId}">{$rs_zone[z].vZoneName|gen_strip_slash}</option> {/section}
+                                </select>
+                            </li>
+                            <li id="status_dd" style="display: none" class="searching_dd">
+                                <select name="iStatus" id="iStatus" class="form-control col-md-12 search_filter_dd">
+									<option value="">-- Select --</option>
+									<option value="1">Draft</option>
+									<option value="2">Assigned</option>
+									<option value="3">Review</option>
+									<option value="4">Complete</option>
+								</select>
+                            </li>
 							<li>
 								<button type="button" id="Search" class="btn  btn-outline-warning fas fa-search" title="Search"><span class=""></span></button>
 							</li>

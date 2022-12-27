@@ -141,7 +141,6 @@ $('#AdvSearchReset').click(function () {
     $('#AssignToFilterOpDD').val("Contains");
     $('#assignTo').val("");
     $('#reqType').val("");
-    $('#status').val("");
     gridtable.ajax.reload();
     return false;
 });
@@ -187,4 +186,27 @@ function delete_record(id)
             }
         }
     );
+}
+
+function getDropdown(vOptions) {
+    $('#network_dd').show();
+    if(vOptions == "vNetwork"){
+        reset_all_fields();
+        $('.searching_dd').hide();
+        $('#network_dd').show();
+    }else if(vOptions == "vFiberZone"){
+        reset_all_fields();
+        $('.searching_dd').hide();
+        $('#fiber_zone_dd').show();
+    }else if(vOptions == "vStatus"){
+        reset_all_fields();
+        $('.searching_dd').hide();
+        $('#status_dd').show();
+    }
+}
+
+function reset_all_fields(){
+  $('#iSNetworkId').val('');
+  $('#iSZoneId').val('');
+  $('#iStatus').val('');
 }

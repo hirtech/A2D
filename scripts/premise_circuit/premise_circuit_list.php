@@ -22,10 +22,41 @@ $dir = (isset($_REQUEST["sSortDir_0"]) ? $_REQUEST["sSortDir_0"] : 'desc');
 if($mode == "List"){
     $arr_param = array();
     $vOptions = $_REQUEST['vOptions'];
-    $Keyword = addslashes(trim($_REQUEST['Keyword']));
+    
+    if($vOptions == "iNetworkId"){
+        $searchId = $_REQUEST['networkId'];
+    }else if($vOptions == "iConnectionTypeId"){
+        $searchId = $_REQUEST['ConnectionTypeId'];
+    }else if($vOptions == "vStatus"){
+        $searchId = $_REQUEST['iStatus'];
+    }
+    if ($searchId != "") {
+        $arr_param[$vOptions] = $searchId;
+    }
 
-    if ($Keyword != "") {
-        $arr_param[$vOptions] = $Keyword;
+    if ($_REQUEST['premiseCircuitId'] != "") {
+        $arr_param['premiseCircuitId'] = $_REQUEST['premiseCircuitId'];
+    }
+
+    if ($_REQUEST['premiseId'] != "") {
+        $arr_param['premiseId'] = $_REQUEST['premiseId'];
+    }
+
+    if($_REQUEST['siteName'] != ""){
+        $arr_param['siteName'] = $_REQUEST['siteName'];
+        $arr_param['SiteFilterOpDD'] = $_REQUEST['SiteFilterOpDD'];
+    }
+
+    if ($_REQUEST['workorderId'] != "") {
+        $arr_param['workorderId'] = $_REQUEST['workorderId'];
+    }
+
+    if ($_REQUEST['workorderTypeId'] != "") {
+        $arr_param['workorderTypeId'] = $_REQUEST['workorderTypeId'];
+    }
+
+    if ($_REQUEST['circuitId'] != "") {
+        $arr_param['circuitId'] = $_REQUEST['circuitId'];
     }
 
     $arr_param['page_length'] = $page_length;
@@ -40,7 +71,7 @@ if($mode == "List"){
     $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
 
     $API_URL = $site_api_url."premise_circuit_list.json";
-    // echo $API_URL." ".json_encode($arr_param);exit;
+    //echo $API_URL." ".json_encode($arr_param);exit;
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $API_URL);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
@@ -386,6 +417,107 @@ if($mode == "List"){
     exit;
 }
 
+## --------------------------------
+# Network Dropdown
+$network_arr_param = array();
+$network_arr_param = array(
+    "iStatus"        => 1,
+    "sessionId"     => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
+);
+$network_API_URL = $site_api_url."network_dropdown.json";
+//echo $network_API_URL." ".json_encode($network_arr_param);
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $network_API_URL);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_HEADER, FALSE);
+curl_setopt($ch, CURLOPT_POST, TRUE);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($network_arr_param));
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+   "Content-Type: application/json",
+));
+$response_network = curl_exec($ch);
+curl_close($ch); 
+$rs_network = json_decode($response_network, true); 
+$rs_ntwork = $rs_network['result'];
+$smarty->assign("rs_ntwork", $rs_ntwork);
+## --------------------------------
+
+## --------------------------------
+//Connection Type Dropdown
+$cntype_param = array();
+$cntype_param['iStatus'] = '1';
+$cntype_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
+$cntypeAPI_URL = $site_api_url."connection_type_dropdown.json";
+//echo $cntypeAPI_URL." ".json_encode($cntype_param);exit;
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $cntypeAPI_URL);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_HEADER, FALSE);
+curl_setopt($ch, CURLOPT_POST, TRUE);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($cntype_param));
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+   "Content-Type: application/json",
+)); 
+$response_cntype = curl_exec($ch);
+curl_close($ch);  
+$res_cntype = json_decode($response_cntype, true);
+$rs_cntype = $res_cntype['result'];
+$smarty->assign("rs_cntype", $rs_cntype);
+//echo "<pre>";print_r($rs_cntype);exit;
+## --------------------------------
+
+/*-------------------------- WorkOrder Type -------------------------- */
+$wotype_param = array();
+$wotype_param['iStatus'] = '1';
+$wotype_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
+$wotypeAPI_URL = $site_api_url."workorder_type_dropdown.json";
+//echo $wotypeAPI_URL." ".json_encode($wotype_param);exit;
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $wotypeAPI_URL);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_HEADER, FALSE);
+curl_setopt($ch, CURLOPT_POST, TRUE);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($wotype_param));
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+   "Content-Type: application/json",
+)); 
+$response = curl_exec($ch);
+curl_close($ch);  
+$res = json_decode($response, true);
+$rs_wotype = $res['result'];
+$smarty->assign("rs_wotype", $rs_wotype);
+//echo "<pre>";print_r($rs_carrier);exit;
+/*-------------------------- WorkOrder Type -------------------------- */
+
+/*-------------------------- WorkOrder Type -------------------------- */
+$circuit_param = array();
+$circuit_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
+$circuitAPI_URL = $site_api_url."circuit_dropdown.json";
+//echo $circuitAPI_URL." ".json_encode($circuit_param);exit;
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $circuitAPI_URL);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_HEADER, FALSE);
+curl_setopt($ch, CURLOPT_POST, TRUE);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($circuit_param));
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+   "Content-Type: application/json",
+)); 
+$responsecircuit = curl_exec($ch);
+curl_close($ch);  
+$rescircuit = json_decode($responsecircuit, true);
+$rs_circuit = $rescircuit['result'];
+$smarty->assign("rs_circuit", $rs_circuit);
+//echo "<pre>";print_r($rs_circuit);exit;
+/*-------------------------- WorkOrder Type -------------------------- */
 $module_name = "Premise Circuit List";
 $module_title = "Premise Circuit";
 $smarty->assign("module_name", $module_name);

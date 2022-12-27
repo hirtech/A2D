@@ -124,20 +124,6 @@
 						<input type="text" name="networkName" id="networkName" value="" class="form-control"> </div>
 				</div>
 			</div>
-			<div class="form-group col-md-4">
-				<label for="inputEmail4">Status</label>
-				<div class="form-row">
-					<div class="form-group col-md-12">
-						<select name="status" id="status" class="form-control">
-							<option value="">-- Select --</option>
-							<option value="2">Assigned</option>
-							<option value="4">Complete</option>
-							<option value="1">Draft</option>
-							<option value="3">Review</option>
-						</select>
-					</div>
-				</div>
-			</div>
 		</div>
 		<button type="button" id="AdvSearchSubmit" name="AdvSearchSubmit" class="btn btn-outline-warning fas fa-search"></button>
 		<button type="button" class="btn btn-outline-danger fas fa-times" aria-label="Close" id="AdvSearchReset" name="AdvSearchReset"></button>

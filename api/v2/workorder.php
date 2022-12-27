@@ -5,9 +5,12 @@ if($request_type == "workorder_list"){
     $WorkOrderObj->clear_variable();
     $where_arr = array();
     if(!empty($RES_PARA)){
-        $iWOTId                 = $RES_PARA['iWOTId'];
-        $iPremiseId             = $RES_PARA['iPremiseId'];
-        $iServiceOrderId        = $RES_PARA['iServiceOrderId'];
+
+        $vNetwork               = $RES_PARA['vNetwork'];
+        $vFiberZone             = $RES_PARA['vFiberZone'];
+        $vWOType                = $RES_PARA['vWOType'];
+        $vRequestor             = $RES_PARA['vRequestor'];
+        $vAssignedTo            = $RES_PARA['vAssignedTo'];
         $vStatus                = $RES_PARA['vStatus'];
 
         $page_length            = isset($RES_PARA['page_length']) ? trim($RES_PARA['page_length']) : "10";
@@ -16,7 +19,6 @@ if($request_type == "workorder_list"){
         $display_order          = $RES_PARA['display_order'];
         $dir                    = $RES_PARA['dir'];
         $order_by               = $RES_PARA['order_by'];
-
 
         $vSPremiseNameDD        = $RES_PARA['vSPremiseNameDD'];
         $vSPremiseName          = $RES_PARA['vSPremiseName'];
@@ -27,13 +29,13 @@ if($request_type == "workorder_list"){
         $vSStateFilterOpDD      = $RES_PARA['vSStateFilterOpDD'];
         $vSState                = $RES_PARA['vSState'];
         $vSZipCode              = $RES_PARA['vSZipCode'];
-        $iSZoneId               = $RES_PARA['iSZoneId'];
         $iSServiceOrderId       = $RES_PARA['iSServiceOrderId'];
         $vSWOProjectDD          = $RES_PARA['vSWOProjectDD'];
         $vSWOProject            = $RES_PARA['vSWOProject'];
-        $iSRequestorId          = $RES_PARA['iSRequestorId'];
-        $iSAssignedToId         = $RES_PARA['iSAssignedToId'];
-        $iSWOSId                = $RES_PARA['iSWOSId'];
+
+        $iWOTId                 = $RES_PARA['iWOTId'];
+        $iPremiseId             = $RES_PARA['iPremiseId'];
+        $iServiceOrderId        = $RES_PARA['iServiceOrderId'];
         $iFieldmapPremiseId     = $RES_PARA['iFieldmapPremiseId'];
  
     }
@@ -49,9 +51,29 @@ if($request_type == "workorder_list"){
     if ($iServiceOrderId != "") {
         $where_arr[] = 'workorder."iServiceOrderId"='.$iServiceOrderId ;
     }
-    
+
+    if ($vNetwork != "") {
+        $where_arr[] = "n.\"iNetworkId\" = '".$vNetwork."'";
+    }
+
+    if ($vFiberZone != "") {
+        $where_arr[] = "z.\"iZoneId\" = '".$vFiberZone."'";
+    }
+
+    if ($vWOType != "") {
+        $where_arr[] = "workorder.\"iWOTId\" = '".$vWOType."'";
+    }
+
+    if ($vRequestor != "") {
+        $where_arr[] = "workorder.\"iRequestorId\" = '".$vRequestor."'";
+    }
+
+    if ($vAssignedTo != "") {
+        $where_arr[] = "workorder.\"iAssignedToId\" = '".$vAssignedTo."'";
+    }
+
     if ($vStatus != "") {
-        $where_arr[] = "ws.\"vStatus\" ILIKE '%".$vStatus."%'" ;
+        $where_arr[] = "ws.\"iWOSId\" = '".$vStatus."'";
     }
 
     if ($vSPremiseName != "") {
@@ -122,18 +144,6 @@ if($request_type == "workorder_list"){
         $where_arr[] = "zipcode_mas.\"vZipcode\" = '".$vSZipCode."'";
     }
 
-    if ($iSZoneId != "") {
-        $where_arr[] = "z.\"iZoneId\" = '".$iSZoneId."'";
-    }
-
-    if ($iSRequestorId != "") {
-        $where_arr[] = "workorder.\"iRequestorId\" = '".$iSRequestorId."'";
-    }
-
-    if ($iSAssignedToId != "") {
-        $where_arr[] = "workorder.\"iAssignedToId\" = '".$iSAssignedToId."'";
-    }
-
     if ($vSWOProject != "") {
         if ($vSWOProjectDD != "") {
             if ($vSWOProjectDD == "Begins") {
@@ -150,8 +160,8 @@ if($request_type == "workorder_list"){
         }
     }
 
-    if ($iSWOSId != "") {
-        $where_arr[] = "workorder.\"iWOSId\" = '".$iSWOSId."'";
+    if ($iSServiceOrderId != "") {
+        $where_arr[] = 'workorder."iServiceOrderId"='.$iSServiceOrderId ;
     }
 
     if ($iFieldmapPremiseId != "") {
@@ -196,6 +206,7 @@ if($request_type == "workorder_list"){
     $join_fieds_arr[] = 's."vAddress1"';
     $join_fieds_arr[] = 'st."vTypeName" as "vPremiseType"';
     $join_fieds_arr[] = 'z."vZoneName"';
+    $join_fieds_arr[] = 'n."vName" as "vNetwork"';
     $join_fieds_arr[] = 'so."vMasterMSA"';
     $join_fieds_arr[] = 'so."vServiceOrder"';
     $join_fieds_arr[] = 'ws."vStatus"';
@@ -206,6 +217,7 @@ if($request_type == "workorder_list"){
     $join_arr[] = 'LEFT JOIN site_type_mas st on s."iSTypeId" = st."iSTypeId"';
     $join_arr[] = 'LEFT JOIN zipcode_mas on s."iZipcode" = zipcode_mas."iZipcode"';
     $join_arr[] = 'LEFT JOIN zone z on s."iZoneId" = z."iZoneId"';
+    $join_arr[] = 'LEFT JOIN network n on z."iNetworkId" = n."iNetworkId"';
     $join_arr[] = 'LEFT JOIN city_mas c on s."iCityId" = c."iCityId"';
     $join_arr[] = 'LEFT JOIN state_mas sm on s."iStateId" = sm."iStateId"';
     $join_arr[] = 'LEFT JOIN service_order so on workorder."iServiceOrderId" = so."iServiceOrderId"';

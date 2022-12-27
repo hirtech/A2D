@@ -7,15 +7,56 @@
                     <form id="frmlist" name="frmlist" class="sorder_search_form">
                         <ul class="nav search-links float-right">
                             <li>
-                                <select id="vOptions" name="vOptions" class="form-control">
-                                    <option value="iWOTId">ID</option>
-                                    <option value="iPremiseId">Premise ID</option>
-                                    <option value="iServiceOrderId">Service Order ID</option>
+                                <select id="vOptions" name="vOptions" class="form-control" onchange="getDropdown(this.value);">
+                                    <option value="vNetwork">Network</option>
+                                    <option value="vFiberZone">Fiber Zone</option>
+                                    <option value="vWOType">Work Order Type</option>
+                                    <option value="vRequestor">Requestor</option>
+                                    <option value="vAssignedTo">Assigned To</option>
                                     <option value="vStatus">Status</option>
                                 </select>
                             </li>
-                            <li>
-                               <input type="text" name="Keyword" id="Keyword" class="form-control" value="" autocomplete="off">
+                            <li id="network_dd" class="searching_dd">
+                                <select name="iSNetworkId" id="iSNetworkId" class="form-control col-md-12 search_filter_dd">
+                                    <option value="">-- Select --</option> {section name="n" loop=$rs_ntwork} <option value="{$rs_ntwork[n].iNetworkId}">{$rs_ntwork[n].vName|gen_strip_slash}</option> {/section}
+                                </select>
+                            </li>
+                            <li id="fiber_zone_dd" style="display: none" class="searching_dd">
+                                <select name="iSZoneId" id="iSZoneId" class="form-control col-md-12 search_filter_dd">
+                                    <option value="">-- Select --</option> {section name="z" loop=$rs_zone} <option value="{$rs_zone[z].iZoneId}">{$rs_zone[z].vZoneName|gen_strip_slash}</option> {/section}
+                                </select>
+                            </li>
+                            <li id="work_order_type_dd" style="display: none" class="searching_dd">
+                                <select name="iSWOTId" id="iSWOTId" class="form-control col-md-12 search_filter_dd">
+                                    <option value="">Select</option>
+                                    {section name="t" loop=$rs_wotype}
+                                        <option value="{$rs_wotype[t].iWOTId}" {if $rs_wotype[t].iWOTId eq $rs_sorder[0].iWOTId}selected{/if}>{$rs_wotype[t].vType|gen_strip_slash}</option>
+                                    {/section}
+                                </select>
+                            </li>
+                            <li id="requestor_dd" style="display: none" class="searching_dd">
+                                <select name="iSRequestorId" id="iSRequestorId" class="form-control col-md-12 search_filter_dd">
+                                    <option value="">-- Select --</option> 
+                                    {section name="u" loop=$rs_user} 
+                                    <option value="{$rs_user[u].iUserId}">{$rs_user[u].vName|gen_strip_slash}</option> 
+                                    {/section}
+                                </select>
+                            </li>
+                            <li id="assigned_to_dd" style="display: none" class="searching_dd">
+                                <select name="iSAssignedToId" id="iSAssignedToId" class="form-control col-md-12 search_filter_dd">
+                                    <option value="">-- Select --</option> 
+                                    {section name="u" loop=$rs_user} 
+                                    <option value="{$rs_user[u].iUserId}">{$rs_user[u].vName|gen_strip_slash}</option> 
+                                    {/section}
+                                </select>
+                            </li>
+                            <li id="status_dd" style="display: none" class="searching_dd">
+                                <select name="iSWOSId" id="iSWOSId" class="form-control col-md-12 search_filter_dd">
+                                    <option value="">-- Select --</option> 
+                                    {section name="s" loop=$rs_status} 
+                                    <option value="{$rs_status[s].iWOSId}">{$rs_status[s].vStatus|gen_strip_slash}</option> 
+                                    {/section}
+                                </select>
                             </li>
                             <li>
                                 <button type="button" id="Search" class="btn  btn-outline-warning fas fa-search" title="Search"><span class=""></span></button>

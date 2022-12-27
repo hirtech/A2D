@@ -23,10 +23,22 @@ if($mode == "List") {
     //print_r($_REQUEST);exit();
     $arr_param = array();
     $vOptions = $_REQUEST['vOptions'];
-    $Keyword = addslashes(trim($_REQUEST['Keyword']));
-
-    if ($Keyword != "") {
-        $arr_param[$vOptions] = $Keyword;
+    $vOptions = $_REQUEST['vOptions'];
+    if($vOptions == "vNetwork"){
+        $searchId = $_REQUEST['iSNetworkId'];
+    }else if($vOptions == "vFiberZone"){
+        $searchId = $_REQUEST['iSZoneId'];
+    }else if($vOptions == "vWOType"){
+        $searchId = $_REQUEST['iSWOTId'];
+    }else if($vOptions == "vRequestor"){
+        $searchId = $_REQUEST['iSRequestorId'];
+    }else if($vOptions == "vAssignedTo"){
+        $searchId = $_REQUEST['iSAssignedToId'];
+    }else if($vOptions == "vStatus"){
+        $searchId = $_REQUEST['iSWOSId'];
+    }
+    if ($searchId != "") {
+        $arr_param[$vOptions] = $searchId;
     }
 
     $arr_param['page_length']   = $page_length;
@@ -46,13 +58,12 @@ if($mode == "List") {
     $arr_param['vSStateFilterOpDD']     = trim($_REQUEST['vSStateFilterOpDD']);
     $arr_param['vSState']               = trim($_REQUEST['vSState']);
     $arr_param['vSZipCode']             = trim($_REQUEST['vSZipCode']);
-    $arr_param['iSZoneId']              = trim($_REQUEST['iSZoneId']);
     $arr_param['iSServiceOrderId']      = trim($_REQUEST['iSServiceOrderId']);
     $arr_param['vSWOProjectDD']         = trim($_REQUEST['vSWOProjectDD']);
     $arr_param['vSWOProject']           = trim($_REQUEST['vSWOProject']);
-    $arr_param['iSRequestorId']         = trim($_REQUEST['iSRequestorId']);
-    $arr_param['iSAssignedToId']        = trim($_REQUEST['iSAssignedToId']);
-    $arr_param['iSWOSId']               = trim($_REQUEST['iSWOSId']);
+    $arr_param['iWOTId']                = trim($_REQUEST['iWOTId']);
+    $arr_param['iPremiseId']            = trim($_REQUEST['iPremiseId']);
+    $arr_param['iServiceOrderId']       = trim($_REQUEST['iServiceOrderId']);
 
     $arr_param['access_group_var_edit'] = $access_group_var_edit;
     $arr_param['access_group_var_delete'] = $access_group_var_delete;
@@ -60,7 +71,7 @@ if($mode == "List") {
     $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
 
     $API_URL = $site_api_url."workorder_list.json";
-    //echo $API_URL. " ".json_encode($arr_param);exit;
+    // echo $API_URL. " ".json_encode($arr_param);exit;
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $API_URL);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
@@ -457,6 +468,55 @@ $smarty->assign("rs_user", $res['result']);
 //echo "<pre>";print_r($res['result']);exit;
 ## --------------------------------
 ## --------------------------------
+# Network Dropdown
+$network_arr_param = array();
+$network_arr_param = array(
+    "iStatus"        => 1,
+    "sessionId"     => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
+);
+$network_API_URL = $site_api_url."network_dropdown.json";
+//echo $network_API_URL." ".json_encode($network_arr_param);
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $network_API_URL);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_HEADER, FALSE);
+curl_setopt($ch, CURLOPT_POST, TRUE);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($network_arr_param));
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+   "Content-Type: application/json",
+));
+$response_network = curl_exec($ch);
+curl_close($ch); 
+$rs_network = json_decode($response_network, true); 
+$rs_ntwork = $rs_network['result'];
+$smarty->assign("rs_ntwork", $rs_ntwork);
+## --------------------------------
+/*-------------------------- WorkOrder Type -------------------------- */
+$wotype_param = array();
+$wotype_param['iStatus'] = '1';
+$wotype_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
+$wotypeAPI_URL = $site_api_url."workorder_type_dropdown.json";
+//echo $wotypeAPI_URL." ".json_encode($wotype_param);exit;
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $wotypeAPI_URL);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_HEADER, FALSE);
+curl_setopt($ch, CURLOPT_POST, TRUE);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($wotype_param));
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+   "Content-Type: application/json",
+)); 
+$response = curl_exec($ch);
+curl_close($ch);  
+$res = json_decode($response, true);
+$rs_wotype = $res['result'];
+$smarty->assign("rs_wotype", $rs_wotype);
+//echo "<pre>";print_r($rs_carrier);exit;
+/*-------------------------- WorkOrder Type -------------------------- */
 # Status Dropdown
 $status_arr_param = array();
 $status_arr_param = array(
