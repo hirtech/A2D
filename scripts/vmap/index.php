@@ -28,7 +28,9 @@ $WorkOrderObj = new WorkOrder();
 /*Get Map Filter data*/
 $API_URL = $site_api_url."get_map_filter_data.json";
 $arr_param = array();
-$arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
+$arr_param['iLoginUserId']  = $_SESSION["sess_iUserId".$admin_panel_session_suffix];
+$arr_param['sessionId']     = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
+//echo $API_URL." ".json_encode($arr_param);exit;
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, $API_URL);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
@@ -43,13 +45,18 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 ));
 $response = curl_exec($ch);
 curl_close($ch);  
-
 $result = json_decode($response, true);
 $result_filter_data= $result['result'];
+//echo "<pre>";print_r($result_filter_data);exit;
 $sk_zones =  $result_filter_data['zone'];
-$sTypes = $result_filter_data['site_type'];
-$sAttrubutes = $result_filter_data['site_attribute'];
+$networkArr =  $result_filter_data['network'];
 $cityArr = $result_filter_data['city'];
+$zipcodeArr = $result_filter_data['zipcode'];
+$user_zones = $result_filter_data['user_zones'];
+$zone_kml = $result_filter_data['zone_kml'];
+$sTypes = $result_filter_data['premise_type'];
+$sAttrubutes = $result_filter_data['premise_attribute'];
+$connection_types = $result_filter_data['connection_types'];
 /*Get Map Filter data*/
 
 /*Get Map Cluster layer*/
@@ -481,61 +488,7 @@ else if($mode == "serach_iPremiseId"){
     $site_list_id = implode(',', $site_list);
     echo $site_list_id;
     hc_exit();
-}
-else if($mode == "AddInstaTreat"){
-   // echo "<pre>";print_r($_REQUEST);exit();
-    $result =array();
-   
-    $dDate = date('Y-m-d');
-    $dStartDate = date('Y-m-d H:i:s');
-    $dEndDate = date("Y-m-d H:i:s", strtotime(date('Y-m-d H:i:s')." +10 minutes"));
-
-    $arr_param = array(
-        "sessionId" => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
-        "iPremiseId"        => $_POST['premiseId'],
-        "dDate"          => $dDate,
-        "vType"          => 'Spot Treatment',
-        "dStartDate"     => $dStartDate,
-        "dEndDate"       => $dEndDate,
-        "iTPId"          => $INSTA_TREATMENT_PRODUCT_ID,
-        "vArea"          => $INSTA_TREATMENT_AREA,
-        "vAreaTreated"   => $INSTA_TREATMENT_AREA_TREATED,
-        "vAmountApplied" => $INSTA_TREATMENT_AMOUNT_APPLIED,
-        "iUId"           => $INSTA_TREATMENT_UNIT_ID,
-        "iUserId"        => $_SESSION["sess_iUserId".$admin_panel_session_suffix]
-    );
-   //echo "<pre>";print_r(json_encode($arr_param));exit();
-
-    $API_URL = $site_api_url."task_treatment_add.json";
-    //echo "<pre>";print_r($API_URL);exit();
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $API_URL);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch, CURLOPT_HEADER, FALSE);
-    curl_setopt($ch, CURLOPT_POST, TRUE);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($arr_param));
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-       "Content-Type: application/json",
-    ));
-
-    $res = curl_exec($ch);  
-    curl_close($ch);  
-    $result_arr = json_decode($res,true);
-
-    if($result_arr['result']['iTreatmentId']){
-        $result['msg'] = MSG_ADD;
-        $result['error']= 0 ;
-    }else{
-        $result['msg'] = MSG_ADD_ERROR;
-        $result['error']= 1 ;
-    }
-    
-    echo json_encode($result);
-    hc_exit(); 
-}
-else if($mode == "getCurrentLocation"){
+}else if($mode == "getCurrentLocation"){
     //echo "<pre>";print_r($_SERVER);exit();
     //echo $_SERVER['HTTP_X_FORWARDED_FOR']."=>".$_SERVER['HTTP_CLIENT_IP'];exit();
 
@@ -776,12 +729,16 @@ $res = json_decode($response, true);
 $smarty->assign("rs_engagement", $res['result']);
 /*-------------------------- Engagement -------------------------- */
 
-
 $smarty->assign("cityArr", $cityArr);
+$smarty->assign("skZones", $sk_zones);
+$smarty->assign("zone_kml", $zone_kml);
+$smarty->assign("networkArr", $networkArr);
+$smarty->assign("zipcodeArr", $zipcodeArr);
+$smarty->assign("user_zones", $user_zones);
+$smarty->assign("custLayers", $custLayers);
 $smarty->assign("sAttrubutes", $sAttrubutes);
 $smarty->assign("skSites", $sTypes);
-$smarty->assign("skZones", $sk_zones);
-$smarty->assign("custLayers", $custLayers);
+$smarty->assign("connection_types", $connection_types);
 
 $module_name = "Vmap List";
 $module_title = "Vmap";

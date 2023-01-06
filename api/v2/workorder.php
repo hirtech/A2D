@@ -347,17 +347,17 @@ if($request_type == "workorder_list"){
     $ext_where_arr =array();
     foreach($exp_keyword as $vl){
         if(trim($vl) != '')
-            $ext_where_arr[] = " (s.\"vName\" ILIKE '%".trim($vl)."%' OR concat(s.\"vAddress1\", ' ', s.\"vStreet\") ILIKE '%".trim($vl)."%' OR CAST(s.\"iPremiseId\" AS TEXT) LIKE '".intval($vl)."%' OR CAST(workorder.\"iWOId\" AS TEXT) LIKE '".intval($vl)."%' OR wt.\"vType\" ILIKE '%".trim($vl)."%')";
+            $ext_where_arr[] = " (s.\"vName\" ILIKE '%".trim($vl)."%' OR concat(s.\"vAddress1\", ' ', s.\"vStreet\") ILIKE '%".trim($vl)."%' OR CAST(s.\"iPremiseId\" AS TEXT) LIKE '".intval($vl)."%' OR CAST(workorder.\"iWOId\" AS TEXT) LIKE '".intval($vl)."%' OR wt.\"vType\" ILIKE '%".trim($vl)."%'  OR workorder.\"iPremiseId\" = '".intval($iPremiseId)."')";
     }
     if(count($ext_where_arr) > 0){
         $ext_where = implode(" AND ", $ext_where_arr);
         $where_arr[] = $ext_where;
     }else{
-        $where_arr[] = " (s.\"vName\" ILIKE '%".trim($vWorkOrder)."%' OR concat(s.\"vAddress1\", ' ', s.\"vStreet\") ILIKE '%".trim($vWorkOrder)."%'  OR CAST(s.\"iPremiseId\" AS TEXT) LIKE '".intval($vWorkOrder)."%' OR CAST(workorder.\"iWOId\" AS TEXT) LIKE '".intval($vWorkOrder)."%' OR wt.\"vType\" ILIKE '%".trim($vWorkOrder)."%')";
+        $where_arr[] = " (s.\"vName\" ILIKE '%".trim($vWorkOrder)."%' OR concat(s.\"vAddress1\", ' ', s.\"vStreet\") ILIKE '%".trim($vWorkOrder)."%'  OR CAST(s.\"iPremiseId\" AS TEXT) LIKE '".intval($vWorkOrder)."%' OR CAST(workorder.\"iWOId\" AS TEXT) LIKE '".intval($vWorkOrder)."%' OR wt.\"vType\" ILIKE '%".trim($vWorkOrder)."%' OR CAST(workorder.\"iWOId\" AS TEXT) LIKE '".intval($vWorkOrder)."%' OR workorder.\"iPremiseId\" = '".intval($iPremiseId)."')";
     } 
-    if ($iPremiseId != "") {
+    /*if ($iPremiseId != "") {
         $where_arr[] = 'workorder."iPremiseId"='.$iPremiseId ;
-    }    
+    } */   
     $join_fieds_arr[] = 's."vName" as "vPremiseName"';
     $join_fieds_arr[] = 'st."vTypeName"';
     $join_fieds_arr[] = 'wt."vType" as "vWorkorderType"';

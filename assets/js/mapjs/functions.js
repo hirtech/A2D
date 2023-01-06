@@ -1,146 +1,164 @@
 var markerCluster;
-function getMapData(siteTypes, sAttr, skCity, skZones, sr, custlayer, siteSubTypes) {
-
-	/*console.log("Site : " + siteTypes);
-	console.log("Premise Sub type : " + siteSubTypes);
-	console.log("Attr : " + sAttr);
-	console.log("city: " + skCity);
-	console.log("Zone : " + skZones);
-	console.log("SR : " + sr);
-	console.log("positive : " + positive);
-	console.log("siteFilter : " + siteFilter);
-	console.log("srFilter : " + srFilter);*/
-	//	console.log('1111');
-	//console.log('custome layer=>'+custlayer)
-	//alert(fieldtask);
-	//var latlngbounds = new google.maps.LatLngBounds();
-	
-	//siteMarker.length = 0;
+function getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLayer, custlayer, fiberInquiryLayer, serviceOrderLayer, workOrderLayer, pCircuitStatusLayer, pCircuitcTypeLayer, premiseStatusLayer, premiseAttribute, premiseTypeLayer, premisesubTypeLayer) {
 	clearMap();
-	if(siteTypes != "" || sAttr != "" || skCity != "" || skZones != "" || sr != "" ||  custlayer != ""|| siteSubTypes != ""){
-		if(typeof siteSubTypes == "undefined"){
-			siteSubTypes = [];
-		}
+	if(skNetwork != "" || skCity != "" || skZipcode != "" || skZones != "" || networkLayer != ""|| zoneLayer != "" || custlayer != "" || fiberInquiryLayer != "" || serviceOrderLayer != "" || workOrderLayer != "" || pCircuitStatusLayer != "" || pCircuitcTypeLayer != "" || premiseStatusLayer != "" || premiseAttribute != "" || premiseTypeLayer != "" || premisesubTypeLayer != ""){
+
 		$.ajax({
 			type: "POST",
 			url: 'vmap/api/',
 			data: {
 				action: "getJson",
-				siteType: siteTypes.join(","),
-				siteSubTypes: siteSubTypes.join(","),
-				sAttr: sAttr.join(","),
 				city: skCity.join(","),
+				network: skNetwork.join(","),
+				zipcode: skZipcode.join(","),
 				zone: skZones.join(","),
-				sr: sr.join(","),
+				networkLayer: networkLayer.join(","),
+				zoneLayer: zoneLayer.join(","),
 				custlayer: custlayer.join(","),
+				fiberInquiryLayer: fiberInquiryLayer.join(","),
+				serviceOrderLayer: serviceOrderLayer.join(","),
+				workOrderLayer: workOrderLayer.join(","),
+				pCircuitStatusLayer: pCircuitStatusLayer.join(","),
+				pCircuitcTypeLayer: pCircuitcTypeLayer.join(","),
+				premiseStatusLayer: premiseStatusLayer.join(","),
+				premiseAttribute: premiseAttribute.join(","),
+				premiseTypeLayer: premiseTypeLayer.join(","),
+				premisesubTypeLayer: premisesubTypeLayer.join(","),
 			},
 			cache: true,
 			beforeSend: function() {
 				$(".loading").show();
-				/*
-				if (localCache.exist(url)) {
+				/*if (localCache.exist(url)) {
 					doSomething(localCache.get(url));
 					return false;
 				}
-				return true;
-				*/
+				return true;*/
 			},
 			success: function(data) {
 				//console.log(data);
 				if (data) {
-					console.log('data found');
+					//console.log('data found');
 					var response = JSON.parse(data);
 					var siteData = response.sites;
 					var ressrdata = "";
-					//var srcount = 0;
+					//var fiberInquiryCount = 0;
 					if (response.polyZone !== undefined) {
 						$.each(response.polyZone, function(zoneid, item) {
 							showZonePolygonMap(item, map);
 						});
 					}
 					if (response.sites !== undefined) {
-						$.each(siteData, function(premiseid, item) {
-								//console.log(siteData[premiseid]);
-								if (siteData[premiseid].polygon !== undefined) {
-									//console.log(siteData[premiseid].polygon);
-							    	//console.log('-------------');
-									showPolygonMap(siteData[premiseid].polygon, map, siteData[premiseid].icon, premiseid);
-									if (siteData[premiseid].polyCenter !== undefined) {
-										/*var centerPoint = {
-											lat: siteData[premiseid].polyCenter['lat']+ (Math.random() / 10000),
-											lng: siteData[premiseid].polyCenter['lng']+ (Math.random() / 10000)
-										};*/
-										var centerPoint = {
-											lat: siteData[premiseid].polyCenter['lat']+ mathRandLat,
-											lng: siteData[premiseid].polyCenter['lng']+ mathRandLng
-										};
-										showPolyCenter(centerPoint, map, siteData[premiseid].icon, premiseid);
-									}
+						$.each(siteData, function(skey, item) {
+							var premiseid = siteData[skey].premiseid;
+							if (siteData[skey].point !== undefined) {
+								for (i = 0; i < siteData[skey].point.length; i++) {
+									var pointMatrix = {
+										lat: siteData[skey].point[i]['lat']+ mathRandLat,
+										lng: siteData[skey].point[i]['lng']+ mathRandLng
+									};
+									showPointMap(pointMatrix, map, siteData[skey].icon, premiseid);
+									var vName = siteData[skey].vName;
+									var vAddress = siteData[skey].vAddress;
+									var vRequestType = siteData[skey].vRequestType;
+									var vAssignTo = siteData[skey].vAssignTo;
+									var vStatus = siteData[skey].vStatus;
 								}
-								if (siteData[premiseid].poly_line !== undefined) {
-									
-									showPolyLineMap(siteData[premiseid].poly_line, map, siteData[premiseid].icon, premiseid);
-								}
-								if (siteData[premiseid].point !== undefined) {
-									
-									for (i = 0; i < siteData[premiseid].point.length; i++) {
-										
-										/*var pointMatrix = {
-											lat: siteData[premiseid].point[i]['lat']+ (Math.random() / 10000),
-											lng: siteData[premiseid].point[i]['lng']+ (Math.random() / 10000)
-										};*/
-										var pointMatrix = {
-											lat: siteData[premiseid].point[i]['lat']+ mathRandLat,
-											lng: siteData[premiseid].point[i]['lng']+ mathRandLng
-										};
-										
-										showPointMap(pointMatrix, map, siteData[premiseid].icon, premiseid);
-										var vName = siteData[premiseid].vName;
-										var vAddress = siteData[premiseid].vAddress;
-										var vRequestType = siteData[premiseid].vRequestType;
-										var vAssignTo = siteData[premiseid].vAssignTo;
-										var vStatus = siteData[premiseid].vStatus;
-									}
-								}
+							}
 						});
           			}
+         	
+         			// ******** Network layer ******** //
+					if (response.networkLayer !== undefined) {
+						$.each(response.networkLayer, function(id, item) {
+							var src = item['file_url'];
+							//var src =  "http://54.167.253.109/eCommunityfiber/storage/netowrk_kml/1665577412_eCommunity_Warner_Robins.kml";
+	                        var kml = new google.maps.KmlLayer({
+	                            url: src,
+	                            suppressInfoWindows: true,  
+	                            map:map,
+	                            zindex: 0
+	                        }); 
 
-          			if (response.sr !== undefined ) {
-			            ressrdata = response.sr;
-			            $.each(ressrdata, function(id, item) {
-			              	if (ressrdata[id].point !== undefined) {
-			                	for (i = 0; i < ressrdata[id].point.length; i++) {
-									/*var pointMatrix = {
-										lat: ressrdata[id].point[i]['lat']+ (Math.random() / 10000),
-										lng: ressrdata[id].point[i]['lng']+ (Math.random() / 10000)
-									};*/
-									var pointMatrix = {
-										lat: ressrdata[id].point[i]['lat']+ mathRandLat,
-										lng: ressrdata[id].point[i]['lng']+ mathRandLng
-									};
-									var vName = ressrdata[id].vName;
-									var vAddress = ressrdata[id].vAddress;
-									var vRequestType = ressrdata[id].vRequestType;
-									var vAssignTo = ressrdata[id].vAssignTo;
-									var vStatus = ressrdata[id].vStatus;
-									showPointMapForSr(pointMatrix, map, ressrdata[id].icon, id, vName, vAddress, vRequestType, vAssignTo, vStatus);
-									//srcount++;
+							kml.vName = item['vName'];
+                        	networkLayerArr.push(kml);
+						});
+		                var kmls = networkLayerArr.length;
+		                if (kmls > 0) {
+		                	//info window
+		                    for (i = 0; i < kmls; i++) {
+								var obj = {
+									'vname':networkLayerArr[i].vName,		
+								};
+								networkLayerArr[i].objInfo = obj;
+								if(networkLayerArr[i]) {
+									google.maps.event.addListener(networkLayerArr[i], 'click', function(evt) {
+										if(infowindow_networkLayer) {
+											infowindow_networkLayer.close();
+										}
+										infowindow_networkLayer = new google.maps.InfoWindow({
+												content: this.objInfo.vname,
+												zIndex: 100,
+												pixelOffset:evt.pixelOffset, 
+  												position:evt.latLng
+										});
+										infowindow_networkLayer.open(map,networkLayerArr[i]);
+									})
 								}
-			            	}
-			            });
-          			}
-         
-					//custom layer kml data
+		                    }
+		                }
+					}
+
+					// ******** Zone layer ******** //
+					if (response.zoneLayer !== undefined) {
+						$.each(response.zoneLayer, function(id, item) {
+							var src = item['file_url'];
+							//var src =  "http://54.167.253.109/eCommunityfiber/storage/zone/1664396393_Polygon_One.kml";
+	                        var kml = new google.maps.KmlLayer({
+	                            url: src,
+	                            suppressInfoWindows: true,  
+	                            map:map,
+	                            zindex: 0
+	                        }); 
+
+							kml.vZoneName = item['vZoneName'];
+                        	zoneLayerArr.push(kml);
+						});
+		                var kmls = zoneLayerArr.length;
+		                if (kmls > 0) {
+		                	//info window
+		                    for (i = 0; i < kmls; i++) {
+								var obj = {
+									'vzonename':zoneLayerArr[i].vZoneName,		
+								};
+								zoneLayerArr[i].objInfo = obj;
+								if(zoneLayerArr[i]) {
+									google.maps.event.addListener(zoneLayerArr[i], 'click', function(evt) {
+										if(infowindow_zoneLayer) {
+											infowindow_zoneLayer.close();
+										}
+										infowindow_zoneLayer = new google.maps.InfoWindow({
+												content: this.objInfo.vzonename,
+												zIndex: 100,
+												pixelOffset:evt.pixelOffset, 
+  												position:evt.latLng
+										});
+										infowindow_zoneLayer.open(map,zoneLayerArr[i]);
+									})
+								}
+		                    }
+		                }
+					}
+
+					// ******** custom layer ******** //
 					if (response.customlayer !== undefined) {
 						$.each(response.customlayer, function(id, item) {
-							//console.log(item['file_url']);
-							//var src =  "http://butte.vectorcontrolsystem.com/storage/kml/6/1606197216_1516332155_organic.kml";
 							var src = item['file_url'];
-	                        var kml = new google.maps.KmlLayer(src, {
-	                          suppressInfoWindows: true,
-	                          preserveViewport: false,
-	                          map: map
-	                        });
+	                        var kml = new google.maps.KmlLayer({
+	                            url: src,
+	                            suppressInfoWindows: true,  
+	                            map:map,
+	                            zindex: 0
+	                        }); 
 							kml.vName = item['vName'];
                         	customeLayerArr.push(kml);
 						});
@@ -148,9 +166,8 @@ function getMapData(siteTypes, sAttr, skCity, skZones, sr, custlayer, siteSubTyp
 		                if (kmls > 0) {
 		                	//info window
 		                    for (i = 0; i < kmls; i++) {
-		                        //customeLayerArr[i].setMap(map);
 								var obj = {
-									'vname':customeLayerArr[i].vName,							
+									'vname':customeLayerArr[i].vName,
 								};
 								customeLayerArr[i].objInfo = obj;
 								if(customeLayerArr[i]) {
@@ -171,15 +188,152 @@ function getMapData(siteTypes, sAttr, skCity, skZones, sr, custlayer, siteSubTyp
 		                }
 					}
 
+					// ******** Fiber Inquiry layer ******** //
+					if (response.fiberInquiry !== undefined ) {
+			            resfiberInquirydata = response.fiberInquiry;
+			            $.each(resfiberInquirydata, function(id, item) {
+			              	if (resfiberInquirydata[id].point !== undefined) {
+			                	for (i = 0; i < resfiberInquirydata[id].point.length; i++) {
+									var pointMatrix = {
+										lat: resfiberInquirydata[id].point[i]['lat']+ mathRandLat,
+										lng: resfiberInquirydata[id].point[i]['lng']+ mathRandLng
+									};
+									var vName = resfiberInquirydata[id].vName;
+									var vAddress = resfiberInquirydata[id].vAddress;
+                                    var vPremiseName = resfiberInquirydata[id].vPremiseName;
+                                    var vPremiseSubType	= resfiberInquirydata[id].vPremiseSubType;
+                                    var vEngagement = resfiberInquirydata[id].vEngagement;
+                                    var vZoneName = resfiberInquirydata[id].vZoneName;
+                                    var vNetwork = resfiberInquirydata[id].vNetwork;
+                                    var vStatus = resfiberInquirydata[id].vStatus;
+
+									showPointMapForFiberInquiry(pointMatrix, map, resfiberInquirydata[id].icon, id, vName, vAddress, vPremiseName, vPremiseSubType, vEngagement, vZoneName, vNetwork, vStatus);
+									//fiberInquiryCount++;
+								}
+			            	}
+			            });
+          			}
+
+          			// ******** Service Order layer ******** //
+          			if (response.serviceOrder !== undefined ) {
+					    resserviceOrderdata = response.serviceOrder;
+					    $.each(resserviceOrderdata, function(id, item) {
+					      	if (resserviceOrderdata[id].point !== undefined) {
+					        	for (i = 0; i < resserviceOrderdata[id].point.length; i++) {
+									var pointMatrix = {
+										lat: resserviceOrderdata[id].point[i]['lat']+ mathRandLat,
+										lng: resserviceOrderdata[id].point[i]['lng']+ mathRandLng
+									};
+
+					                var vMasterMSA = resserviceOrderdata[id]['vMasterMSA'];
+					                var vServiceOrder = resserviceOrderdata[id]['vServiceOrder'];
+					                var vSalesRepName = resserviceOrderdata[id]['vSalesRepName'];
+					                var vSalesRepEmail = resserviceOrderdata[id]['vSalesRepEmail'];
+					                var premiseid = resserviceOrderdata[id]['premiseid'];
+					                var vPremiseName = resserviceOrderdata[id]['vPremiseName'];
+					                var vAddress = resserviceOrderdata[id]['vAddress'];
+					                var cityid = resserviceOrderdata[id]['cityid'];
+					                var stateid = resserviceOrderdata[id]['stateid'];
+					                var countyid = resserviceOrderdata[id]['countyid'];
+					                var zipcode = resserviceOrderdata[id]['zipcode'];
+					                var zoneid = resserviceOrderdata[id]['zoneid'];
+					                var vZoneName = resserviceOrderdata[id]['vZoneName'];
+					                var networkid = resserviceOrderdata[id]['networkid'];
+					                var vNetwork = resserviceOrderdata[id]['vNetwork'];
+					                var vPremiseType = resserviceOrderdata[id]['vPremiseType'];
+					                var vCompanyName = resserviceOrderdata[id]['vCompanyName'];
+					                var vConnectionTypeName = resserviceOrderdata[id]['vConnectionTypeName'];
+					                var vServiceType1 = resserviceOrderdata[id]['vServiceType1'];
+					                var vStatus = resserviceOrderdata[id]['vStatus'];
+
+									showPointMapForserviceOrder(pointMatrix, map, resserviceOrderdata[id].icon, id, vMasterMSA, vServiceOrder, vSalesRepName, vSalesRepEmail, premiseid, vPremiseName, vAddress, cityid, stateid, countyid, countyid, zipcode, zoneid, vZoneName, networkid, vNetwork, vPremiseType, vCompanyName, vConnectionTypeName, vServiceType1, vStatus);
+								}
+					    	}
+					    });
+					}
+
+					// ******** Work Order layer ******** //
+          			if (response.workOrder !== undefined ) {
+					    resworkOrderdata = response.workOrder;
+					    $.each(resworkOrderdata, function(id, item) {
+					      	if (resworkOrderdata[id].point !== undefined) {
+					        	for (i = 0; i < resworkOrderdata[id].point.length; i++) {
+									var pointMatrix = {
+										lat: resworkOrderdata[id].point[i]['lat']+ mathRandLat,
+										lng: resworkOrderdata[id].point[i]['lng']+ mathRandLng
+									};
+
+					                var premiseid = resworkOrderdata[id]['premiseid'];
+					                var vPremiseName = resworkOrderdata[id]['vPremiseName'];
+					                var vAddress = resworkOrderdata[id]['vAddress'];
+					                var cityid = resworkOrderdata[id]['cityid'];
+					                var stateid = resworkOrderdata[id]['stateid'];
+					                var countyid = resworkOrderdata[id]['countyid'];
+					                var zipcode = resworkOrderdata[id]['zipcode'];
+					                var zoneid = resworkOrderdata[id]['zoneid'];
+					                var vZoneName = resworkOrderdata[id]['vZoneName'];
+					                var networkid = resworkOrderdata[id]['networkid'];
+					                var vNetwork = resworkOrderdata[id]['vNetwork'];
+					                var vPremiseType = resworkOrderdata[id]['vPremiseType'];
+					                var vServiceOrder = resworkOrderdata[id]['vServiceOrder'];
+					                var vWOProject = resworkOrderdata[id]['vWOProject'];
+					                var vType = resworkOrderdata[id]['vType'];
+					                var vRequestor = resworkOrderdata[id]['vRequestor'];
+					                var vAssignedTo = resworkOrderdata[id]['vAssignedTo'];
+					                var vStatus = resworkOrderdata[id]['vStatus'];
+
+									showPointMapForworkOrder(pointMatrix, map, resworkOrderdata[id].icon, id,premiseid, vPremiseName, vAddress, cityid, stateid, countyid, countyid, zipcode, zoneid, vZoneName, networkid, vNetwork, vPremiseType, vServiceOrder, vWOProject, vType, vRequestor, vAssignedTo, vStatus);
+								}
+					    	}
+					    });
+					}
+
+					// ******** Premise Circuit layer ******** //
+          			if (response.premiseCircuit !== undefined ) {
+					    respremiseCircuitdata = response.premiseCircuit;
+					    $.each(respremiseCircuitdata, function(id, item) {
+					      	if (respremiseCircuitdata[id].point !== undefined) {
+					        	for (i = 0; i < respremiseCircuitdata[id].point.length; i++) {
+									var pointMatrix = {
+										lat: respremiseCircuitdata[id].point[i]['lat']+ mathRandLat,
+										lng: respremiseCircuitdata[id].point[i]['lng']+ mathRandLng
+									};
+
+					                var premiseid = respremiseCircuitdata[id]['premiseid'];
+					                var vPremiseName = respremiseCircuitdata[id]['vPremiseName'];
+					                var vAddress = respremiseCircuitdata[id]['vAddress'];
+					                var cityid = respremiseCircuitdata[id]['cityid'];
+					                var stateid = respremiseCircuitdata[id]['stateid'];
+					                var countyid = respremiseCircuitdata[id]['countyid'];
+					                var zipcode = respremiseCircuitdata[id]['zipcode'];
+					                var zoneid = respremiseCircuitdata[id]['zoneid'];
+					                var vZoneName = respremiseCircuitdata[id]['vZoneName'];
+					                var networkid = respremiseCircuitdata[id]['networkid'];
+					                var vNetwork = respremiseCircuitdata[id]['vNetwork'];
+					                var vPremiseType = respremiseCircuitdata[id]['vPremiseType'];
+					                var vWorkOrder = respremiseCircuitdata[id]['vWorkOrder'];
+					                var circuitid = respremiseCircuitdata[id]['circuitid'];
+					                var vCircuitName = respremiseCircuitdata[id]['vCircuitName'];
+					                var connectiontypeid = respremiseCircuitdata[id]['connectiontypeid'];
+					                var vConnectionTypeName = respremiseCircuitdata[id]['vConnectionTypeName'];
+					                var vStatus = respremiseCircuitdata[id]['vStatus'];
+
+									showPointMapForpremiseCircuit(pointMatrix, map, respremiseCircuitdata[id].icon, id,premiseid, vPremiseName, vAddress, cityid, stateid, countyid, countyid, zipcode, zoneid, vZoneName, networkid, vNetwork, vPremiseType, vWorkOrder, circuitid, vCircuitName, connectiontypeid, vConnectionTypeName, vStatus);
+								}
+					    	}
+					    });
+					}
 					if(jQuery.isEmptyObject(response) == false){
 						if (response.length > 0){
 							markerCluster = new MarkerClusterer(map, siteMarker, {
-							// var markerCluster = new google.maps.Map(map, siteMarker, {
+								// var markerCluster = new google.maps.Map(map, siteMarker, {
 								imagePath: imagePath
 							});
 							//Center map and adjust Zoom based on the position of all markers.
 	                        map.setCenter(latlngbounds.getCenter());
 	                        map.fitBounds(latlngbounds);
+	                        map.setZoom(defaultZoom);
+                            console.log("defaultZoom bounds = "+defaultZoom)
 						}
 					}
 				} else {
@@ -221,7 +375,7 @@ const map_styles = {
 };
 function initMap() {
 	map = new google.maps.Map(document.getElementById('map'), {
-		zoom: 9,
+		zoom: defaultZoom,
 		center: {
 			lat: parseFloat(MAP_LAT),
 			lng: parseFloat(MAP_LONG)
@@ -241,6 +395,7 @@ function initMap() {
 	map.setCenter({lat: parseFloat(MAP_LAT), lng: parseFloat(MAP_LONG)}); 
 	/*hide features(label) on the map*/
     map.setOptions({ styles: map_styles["hide"] });
+    console.log("map init")
 
 	/*const locationButton = document.createElement("button");
   	locationButton.textContent = "Current Location";
@@ -331,142 +486,6 @@ function getCurrentlatlong($setposition = false){
     }
 }
 
-
-function showPolygonMapForfieldtask(sitePath, map, icon, premiseid,Fieldtask) {
-	polygonObj[pl] = new google.maps.Polygon({
-		path: sitePath,
-		strokeColor: '#FF0000',
-		strokeOpacity: 0.8,
-		strokeWeight: 2,
-		fillColor: '#FF0000',
-		fillOpacity: 0.35,
-		icon: icon,
-	});
-
-	$site_map = polygonObj[pl];
-	info_fieldtask_popup($site_map, premiseid,Fieldtask);
-	
-	infoPolygonArea($site_map, premiseid);
-        
-	polygonObj[pl].setMap(map);
-	pl++;
-}
-
-function showPointMapForfieldtask(sitePath, map, icon, premiseid,Fieldtask,count) {
-	/*map.setCenter({lat: 41.595526, lng: -72.687145}); */
-    color: 'white';
-	if(count >=0 && count <=10)
-	{
-		color = "green";
-	}
-	else if(count >=11 && count <=50)
-	{
-		color = "yellow";
-	}
-	else if(count >=51 && count <=200)
-	{
-		color = "blue";
-	}
-	else if(count >=201 && count <=500)
-	{
-		color = "orange";
-	}
-	else if(count >=501)
-	{
-		color = "red";
-	}else{
-		color = "white";
-	}
-	/*alert(color);
-	alert(count);*/
-	var mIcon = {
-		path: google.maps.SymbolPath.CIRCLE,
-		fillOpacity: 1,
-		fillColor: color,
-		strokeOpacity: 1,
-		strokeWeight: 1,
-		strokeColor: '#333',
-		scale: 15
-	};
-	siteMarker[pCount] = new google.maps.Marker({
-		map: map,
-		position: sitePath,
-		icon: mIcon,
-		label: {color: 'black', fontSize: '12px', fontWeight: '600',text: count}
-	});
-	$site_map = siteMarker[pCount];
-	info_fieldtask_popup($site_map, premiseid,Fieldtask);
-	siteMarker[pCount].setMap(map);
-
-    //Extend each marker's position in LatLngBounds object.
-    latlngbounds.extend(siteMarker[pCount].position);
-
-	pCount++;
-}
-
-function showPolyLineMapForfieldtask(sitePath, map, icon, premiseid,Fieldtask) {
-	polyLineObj[pline] = new google.maps.Polyline({
-		path: sitePath,
-		strokeColor: '#FF0000',
-		strokeOpacity: 0.8,
-		strokeWeight: 2,
-		fillColor: '#FF0000',
-		fillOpacity: 0.35,
-		icon: icon,
-	});
-
-	$site_map = polyLineObj[pline];
-	info_fieldtask_popup($site_map, premiseid,Fieldtask);
-	polyLineObj[pline].setMap(map);
-
-	//Extend each marker's position in LatLngBounds object.
-    //latlngbounds.extend(polyLineObj[pline].position);
-    polyLineObj[pline].getPath().forEach(function (path, index) {                                
-        latlngbounds.extend(path);
-    });
-
-	pline++;
-}
-
-function showPolyCenterForfieldtask(sitePath, map, icon, premiseid,Fieldtask) {
-	pCenterMarker[pCenter] = new google.maps.Marker({
-		position: sitePath,
-		map: map,
-		icon: icon,
-	});
-
-	$site_map = pCenterMarker[pCenter];
-	
-	info_fieldtask_popup($site_map, premiseid,Fieldtask);
-	pCenterMarker[pCenter].setMap(map);
-
-	//Extend each marker's position in LatLngBounds object.
-    latlngbounds.extend(pCenterMarker[pCenter].position);
-
-	pCenter++;
-}
-
-function showPolygonMap(sitePath, map, icon, premiseid) {
-
-	polygonObj[pl] = new google.maps.Polygon({
-		path: sitePath,
-		strokeColor: '#FF0000',
-		strokeOpacity: 0.8,
-		strokeWeight: 2,
-		fillColor: '#FF0000',
-		fillOpacity: 0.35,
-		icon: icon,
-	});
-
-	$site_map = polygonObj[pl];
-	info_popup($site_map, premiseid);
-
-	infoPolygonArea($site_map, premiseid);
-        
-	polygonObj[pl].setMap(map);
-	pl++;
-}
-
 function showZonePolygonMap(sitePath, map) {
 	//console.log(sitePath);
 	zonePolygonObj[zCount] = new google.maps.Polygon({
@@ -494,25 +513,77 @@ function showZonePolygonMap(sitePath, map) {
 	zCount++;
 }
 
-function showPointMapForSr(sitePath, map, icon, premiseid, vName, vAddress, vRequestType, vAssignTo, vStatus) {
+function showPointMapForFiberInquiry(sitePath, map, icon, premiseid, vName, vAddress, vPremiseName, vPremiseSubType, vEngagement, vZoneName, vNetwork, vStatus) {
 	/*map.setCenter({lat: 41.595526, lng: -72.687145}); */
 	//console.log('pCount=>'+pCount);
-	srlayerMarker[srCount] = new google.maps.Marker({
+	fiberInquirylayerMarker[fiberInquiryCount] = new google.maps.Marker({
 		map: map,
 		position: sitePath,
 		icon: icon
 	});
-	//if (srFilter.length != 0) {
-		newLocation(sitePath.lat,sitePath.lng);
-	//}
-	$sr_map = srlayerMarker[srCount];
+	newLocation(sitePath.lat,sitePath.lng);
+	$sr_map = fiberInquirylayerMarker[fiberInquiryCount];
 	gmarkers.push($sr_map);
-	srinfo_popup($sr_map, premiseid, vName, vAddress, vRequestType, vAssignTo, vStatus);
-	srlayerMarker[srCount].setMap(map);
+	fiberInquiryinfo_popup($sr_map, premiseid, vName, vAddress, vPremiseName, vPremiseSubType, vEngagement, vZoneName, vNetwork, vStatus);
+	fiberInquirylayerMarker[fiberInquiryCount].setMap(map);
 
 	//Extend each marker's position in LatLngBounds object.
-    latlngbounds.extend(srlayerMarker[srCount].position);
-	srCount++;
+    latlngbounds.extend(fiberInquirylayerMarker[fiberInquiryCount].position);
+	fiberInquiryCount++;
+}
+
+function showPointMapForserviceOrder(sitePath, map, icon, id, vMasterMSA, vServiceOrder, vSalesRepName, vSalesRepEmail, premiseid, vPremiseName, vAddress, cityid, stateid, countyid, countyid, zipcode, zoneid, vZoneName, networkid, vNetwork, vPremiseType, vCompanyName, vConnectionTypeName, vServiceType1, vStatus) {
+	
+	serviceOrderlayerMarker[serviceOrderCount] = new google.maps.Marker({
+		map: map,
+		position: sitePath,
+		icon: icon
+	});
+	newLocation(sitePath.lat,sitePath.lng);
+	$so_map = serviceOrderlayerMarker[serviceOrderCount];
+	gmarkers.push($so_map);
+	serviceOrderinfo_popup($so_map, id, vMasterMSA, vServiceOrder, vSalesRepName, vSalesRepEmail, premiseid, vPremiseName, vAddress, cityid, stateid, countyid, countyid, zipcode, zoneid, vZoneName, networkid, vNetwork, vPremiseType, vCompanyName, vConnectionTypeName, vServiceType1, vStatus);
+	serviceOrderlayerMarker[serviceOrderCount].setMap(map);
+
+	//Extend each marker's position in LatLngBounds object.
+    latlngbounds.extend(serviceOrderlayerMarker[serviceOrderCount].position);
+	serviceOrderCount++;
+}
+
+function showPointMapForworkOrder(sitePath, map, icon, id, premiseid, vPremiseName, vAddress, cityid, stateid, countyid, countyid, zipcode, zoneid, vZoneName, networkid, vNetwork, vPremiseType, vServiceOrder, vWOProject, vType, vRequestor, vAssignedTo, vStatus) {
+	
+	workOrderlayerMarker[workOrderCount] = new google.maps.Marker({
+		map: map,
+		position: sitePath,
+		icon: icon
+	});
+	newLocation(sitePath.lat,sitePath.lng);
+	$wo_map = workOrderlayerMarker[workOrderCount];
+	gmarkers.push($wo_map);
+	workOrderinfo_popup($wo_map, id, premiseid, vPremiseName, vAddress, cityid, stateid, countyid, countyid, zipcode, zoneid, vZoneName, networkid, vNetwork, vPremiseType, vServiceOrder, vWOProject, vType, vRequestor, vAssignedTo, vStatus);
+	workOrderlayerMarker[workOrderCount].setMap(map);
+
+	//Extend each marker's position in LatLngBounds object.
+    latlngbounds.extend(workOrderlayerMarker[workOrderCount].position);
+	workOrderCount++;
+}
+
+function showPointMapForpremiseCircuit(sitePath, map, icon, id, premiseid, vPremiseName, vAddress, cityid, stateid, countyid, countyid, zipcode, zoneid, vZoneName, networkid, vNetwork, vPremiseType, vWorkOrder, circuitid, vCircuitName, connectiontypeid, vConnectionTypeName, vStatus) {
+	
+	premiseCircuitlayerMarker[premiseCircuitCount] = new google.maps.Marker({
+		map: map,
+		position: sitePath,
+		icon: icon
+	});
+	newLocation(sitePath.lat,sitePath.lng);
+	$pc_map = premiseCircuitlayerMarker[premiseCircuitCount];
+	gmarkers.push($pc_map);
+	premiseCircuitinfo_popup($pc_map, id, premiseid, vPremiseName, vAddress, cityid, stateid, countyid, countyid, zipcode, zoneid, vZoneName, networkid, vNetwork, vPremiseType, vWorkOrder, circuitid, vCircuitName, connectiontypeid, vConnectionTypeName, vStatus);
+	premiseCircuitlayerMarker[premiseCircuitCount].setMap(map);
+
+	//Extend each marker's position in LatLngBounds object.
+    latlngbounds.extend(premiseCircuitlayerMarker[premiseCircuitCount].position);
+	premiseCircuitCount++;
 }
 
 function showPointMap(sitePath, map, icon, premiseid) {
@@ -523,9 +594,7 @@ function showPointMap(sitePath, map, icon, premiseid) {
 		position: sitePath,
 		icon: icon
 	});
-	//if (siteFilter.length != 0) {
-		newLocation(sitePath.lat,sitePath.lng);
-	//}
+	newLocation(sitePath.lat,sitePath.lng);
 	$site_map = siteMarker[pCount];
 	gmarkers.push($site_map);
 	info_popup($site_map, premiseid);
@@ -535,50 +604,6 @@ function showPointMap(sitePath, map, icon, premiseid) {
    	latlngbounds.extend(siteMarker[pCount].position);
 
 	pCount++;
-}
-
-function showPolyLineMap(sitePath, map, icon, premiseid) {
-	polyLineObj[pline] = new google.maps.Polyline({
-		path: sitePath,
-		strokeColor: '#FF0000',
-		strokeOpacity: 0.8,
-		strokeWeight: 2,
-		fillColor: '#FF0000',
-		fillOpacity: 0.35,
-		icon: icon,
-	});
-	//if (siteFilter.length != 0) {
-		newLocation(sitePath.lat,sitePath.lng);
-	//}
-	$site_map = polyLineObj[pline];
-	info_popup($site_map, premiseid);
-	polyLineObj[pline].setMap(map);
-
-	//Extend each marker's position in LatLngBounds object.
-   	//latlngbounds.extend(polyLineObj[pline].position);
-   	polyLineObj[pline].getPath().forEach(function (path, index) {                                
-        latlngbounds.extend(path);
-    });
-
-	pline++;
-}
-
-function showPolyCenter(sitePath, map, icon, premiseid) {
-	pCenterMarker[pCenter] = new google.maps.Marker({
-		position: sitePath,
-		map: map,
-		icon: icon,
-	});
-	//if (siteFilter.length != 0) {
-		newLocation(sitePath.lat,sitePath.lng);
-	//}
-	$site_map = pCenterMarker[pCenter];
-	info_popup($site_map, premiseid);
-	pCenterMarker[pCenter].setMap(map);
-
-	//Extend each marker's position in LatLngBounds object.
-    latlngbounds.extend(pCenterMarker[pCenter].position);
-	pCenter++;
 }
 
 // Handles click events on a map, and adds a new point to the Polyline.
@@ -719,13 +744,25 @@ function generateJson() {
 	});
 }
 
-function generateSRJson() {
-	//console.log(site_url + "vmap/api");
+function getnetworkLayerJson() {
 	$.ajax({
 		type: "POST",
 		url: site_url + "vmap/api",
 		data: {
-			action: "getSrData",
+			action: "getnetworkLayerData",
+		},
+		success: function(data) {
+			console.log(data);
+		}
+	});
+}
+
+function getZoneLayerJson() {
+	$.ajax({
+		type: "POST",
+		url: site_url + "vmap/api",
+		data: {
+			action: "getZoneLayerData",
 		},
 		success: function(data) {
 			console.log(data);
@@ -746,8 +783,60 @@ function getCustomLayerJson() {
 	});
 }
 
+function getFiberInquiryJson() {
+	$.ajax({
+		type: "POST",
+		url: site_url + "vmap/api",
+		data: {
+			action: "getFiberInquiryData",
+		},
+		success: function(data) {
+			console.log(data);
+		}
+	});
+}
+
+function getServiceOrderJson() {
+	$.ajax({
+		type: "POST",
+		url: site_url + "vmap/api",
+		data: {
+			action: "getServiceOrderData",
+		},
+		success: function(data) {
+			console.log(data);
+		}
+	});
+}
+
+function getWorkOrderJson() {
+	$.ajax({
+		type: "POST",
+		url: site_url + "vmap/api",
+		data: {
+			action: "getWorkOrderData",
+		},
+		success: function(data) {
+			console.log(data);
+		}
+	});
+}
+
+function getPremiseCircuitJson() {
+	$.ajax({
+		type: "POST",
+		url: site_url + "vmap/api",
+		data: {
+			action: "getPremiseCircuitData",
+		},
+		success: function(data) {
+			console.log(data);
+		}
+	});
+}
+
 function clearMap() {
-	console.log('11');
+	//console.log('11');
 	if (polygonObj.length > 0) {
         for (i = 0; i < polygonObj.length; i++) {
             polygonObj[i].setMap(null);
@@ -778,13 +867,11 @@ function clearMap() {
         }
     }
 
-    if (srlayerMarker.length > 0) {
-        for (i = 0; i < srlayerMarker.length; i++) {
-            srlayerMarker[i].setMap(null);
+    if (fiberInquirylayerMarker.length > 0) {
+        for (i = 0; i < fiberInquirylayerMarker.length; i++) {
+            fiberInquirylayerMarker[i].setMap(null);
         }
     }
-
-    
 
 	if (zonePolygonObj !== undefined) {
 		zonePolygonObj = [];
@@ -802,10 +889,6 @@ function clearMap() {
 		pCenterMarker = [];
 	}
 
-	if (srlayerMarker !== undefined) {
-		srlayerMarker = [];
-	}
-
 	var clayers = customeLayerArr.length;
     if (clayers > 0) {
         for (i = 0; i < clayers; i++) {
@@ -814,20 +897,53 @@ function clearMap() {
     }
     customeLayerArr.length = 0;
 
-	pCount =0;
-	pl =0;
+    var nlayers = networkLayerArr.length;
+    if (nlayers > 0) {
+        for (i = 0; i < nlayers; i++) {
+            networkLayerArr[i].setMap(null);
+        }
+    }
+    networkLayerArr.length = 0;
+
+    var zlayers = zoneLayerArr.length;
+    if (zlayers > 0) {
+        for (i = 0; i < zlayers; i++) {
+            zoneLayerArr[i].setMap(null);
+        }
+    }
+    zoneLayerArr.length = 0;
+
+    if (fiberInquirylayerMarker !== undefined) {
+		fiberInquirylayerMarker = [];
+	}
+
+    if (serviceOrderlayerMarker !== undefined) {
+		serviceOrderlayerMarker = [];
+	}
+	if (workOrderlayerMarker !== undefined) {
+		workOrderlayerMarker = [];
+	}
+
+	if (premiseCircuitlayerMarker !== undefined) {
+		premiseCircuitlayerMarker = [];
+	}
+
+	pCount = 0;
+	pl = 0;
 	pline = 0;
 	zCount = 0;
-	pCenter =0;
+	pCenter = 0;
 	pov = 0;
-	srCount=0;
+	fiberInquiryCount = 0;
+	serviceOrderCount = 0;
+	workOrderCount = 0;
+	premiseCircuitCount = 0;
 
 	if (markerCluster && markerCluster.setMap) {
         markerCluster.clearMarkers();
-        
     }
 
-    console.log('resetmap');
+    //console.log('resetmap');
     initMap();
 }
 
@@ -851,7 +967,7 @@ function info_popup(marker, premiseid) {
 							vName += data.site[0]['vName'];
 						}
 						if (typeof data.site[0]['vSubTypeName'] !== "undefined" && data.site[0]['vSubTypeName'] != null && data.site[0]['vSubTypeName'] != '') {
-							type_str += " " + data.site[0]['vSubTypeName'];
+							type_str += " - " + data.site[0]['vSubTypeName'];
 						}
 
 						var type_str = '';
@@ -859,7 +975,7 @@ function info_popup(marker, premiseid) {
 							type_str += data.site[0]['vTypeName'];
 						}
 						if (typeof data.site[0]['vSubTypeName'] !== "undefined" && data.site[0]['vSubTypeName'] != null && data.site[0]['vSubTypeName'] != '') {
-							type_str += " " + data.site[0]['vSubTypeName'];
+							type_str += " - " + data.site[0]['vSubTypeName'];
 						}
 
 						if (typeof data.site_attribute !== "undefined" && data.site_attribute != '') {
@@ -873,13 +989,13 @@ function info_popup(marker, premiseid) {
 							address_str += " " + data.site[0]['vStreet'];
 						}
 						if (typeof data.site[0]['vCity'] !== "undefined" && data.site[0]['vCity'] != null && data.site[0]['vCity'] != '') {
-							address_str += " ," + data.site[0]['vCity'];
+							address_str += ", " + data.site[0]['vCity'];
 						}
 						if (typeof data.site[0]['vState'] !== "undefined" && data.site[0]['vState'] != null && data.site[0]['vState'] != '') {
-							address_str += " ," + data.site[0]['vState'];
+							address_str += ", " + data.site[0]['vState'];
 						}
 						content += "<div CELLPADDING=5 CELLSPACING=5 class=info_box id=info_box>";
-						content += "<h5 class='border-bottom pb-2 mb-3'>Premise ID " + data.site[0]['iPremiseId'] + " " + vName + "</h5>";
+						content += "<h5 class='border-bottom pb-2 mb-3'>Premise #" + data.site[0]['iPremiseId'] + " - " + vName + "</h5>";
 						content += "<h6>" + type_str + "</h6>";
 						content += "<strong>" + address_str + "</strong>";
 						content += "<div class='button mt-3'>";
@@ -956,9 +1072,9 @@ function info_popup(marker, premiseid) {
 	})(marker, premiseid));
 }
 
-function srinfo_popup(marker, premiseid, vName, vAddress, vRequestType, vAssignTo, vStatus) {
+function fiberInquiryinfo_popup(marker, premiseid, vName, vAddress, vPremiseName, vPremiseSubType, vEngagement, vZoneName, vNetwork, vStatus) {
 	var full_name = vName;
-	google.maps.event.addListener(marker, 'click', (function(marker, premiseid, full_name, vAddress, vRequestType, vAssignTo, vStatus) {
+	google.maps.event.addListener(marker, 'click', (function(marker, premiseid, full_name, vAddress, vPremiseName, vPremiseSubType, vEngagement, vZoneName, vNetwork, vStatus) {
 		return function() {
 			var content = "";
 			__marker__ = marker;
@@ -968,16 +1084,37 @@ function srinfo_popup(marker, premiseid, vName, vAddress, vRequestType, vAssignT
 			} else {
 				vName = "(" + full_name + ")";
 			}
+
 			if (vAddress == null || vAddress == 'undefined' || vAddress == '') {
 				vAddress = '';
 			} else {
 				vAddress = vAddress;
 			}
-			if (vRequestType == null || vRequestType == 'undefined' || vRequestType == '') {
-				vRequestType = '';
+
+			if (vPremiseName == null || vPremiseName == 'undefined' || vPremiseName == '') {
+				vPremiseName = '';
 			} else {
-				vRequestType = vRequestType;
+				vPremiseName = vPremiseName;
 			}
+
+			if (vPremiseSubType == null || vPremiseSubType == 'undefined' || vPremiseSubType == '') {
+				vPremiseSubType = '';
+			} else {
+				vPremiseSubType = vPremiseSubType;
+			}
+
+			if (vNetwork == null || vNetwork == 'undefined' || vNetwork == '') {
+				vNetwork = '';
+			} else {
+				vNetwork = vNetwork;
+			}
+
+			if (vZoneName == null || vZoneName == 'undefined' || vZoneName == '') {
+				vZoneName = '';
+			} else {
+				vZoneName = vZoneName;
+			}
+			
 			if (vStatus == null || vStatus == 'undefined' || vStatus == '') {
 				vStatus = '';
 			} else {
@@ -985,10 +1122,14 @@ function srinfo_popup(marker, premiseid, vName, vAddress, vRequestType, vAssignT
 			}
 			
 			content += "<div CELLPADDING=5 CELLSPACING=5 class=info_box id=info_box>";
-			content += "<h5 class='border-bottom pb-2 mb-3'>Fiber Inquiry Id " + premiseid + " " + vName + "</h5>";
-			content += "<div class='d-flex'><h6>" + vRequestType + "</h6></div>";
-			content += "<div class='d-flex'><span>" + vAddress + "</span></div>";
-			content += "<div class='d-flex'><b>Status : </b>&nbsp;<span>" + vStatus + "</span></div>";
+			content += "<h5 class='border-bottom pb-2 mb-3'>Fiber Inquiry #" + premiseid + " " + vName + "</h5>";
+			content += "<div class='d-flex'><h6>" + vPremiseName + "</h6></div>";
+			content += "<div class='d-flex'><span class='font-weight-bold'>Sub Type :</span>&nbsp;" + vPremiseSubType + "</div>";
+			content += "<div class='d-flex'><span class='font-weight-bold'>Address :</span>&nbsp;" + vAddress + "</div>";
+			content += "<div class='d-flex'><span class='font-weight-bold'>Network :</span>&nbsp;" + vNetwork + "</span></div>";
+			content += "<div class='d-flex'><span class='font-weight-bold'>Zone Name :</span>&nbsp;" + vZoneName + "</span></div>";
+			content += "<div class='d-flex'><span class='font-weight-bold'>Engagement :</span>&nbsp;" + vEngagement + "</span></div>";
+			content += "<div class='d-flex'><span class='font-weight-bold'>Status :</span>&nbsp;" + vStatus + "</div>";
 			content += "<div class='button mt-3'><a class='btn btn-primary  mr-2 text-white' href='" + site_url + "fiber_inquiry/edit&mode=Update&iFiberInquiryId=" + premiseid + "' target='_blank'>Edit Fiber Inquiry</a></div>";
 			content += "</div>";
 			if (infowindow) {
@@ -1002,81 +1143,312 @@ function srinfo_popup(marker, premiseid, vName, vAddress, vRequestType, vAssignT
 			gmarkers.push(marker);
 			google.maps.event.clearListeners(marker, 'mouseout');
 		}
-	})(marker, premiseid, full_name, vAddress, vRequestType, vAssignTo, vStatus));
-}
-function info_fieldtask_popup(marker, premiseid, Fieldtask) {
-	// calculate single files task after add multi select //
-	google.maps.event.addListener(marker, 'click', (function(marker, premiseid, Fieldtask) {
-		return function() {
-			var content = "";
-			__marker__ = marker;
-			$.ajax({
-				type: "POST",
-				dataType: "json",
-				url: site_url + "vmap/index",
-				data: 'mode=site_map_'+Fieldtask[0]+'&iPremiseId=' + premiseid+"&fieldtask="+Fieldtask[0],
-				success: function(data){
-					if (infowindow) {
-						infowindow.close();
-					}
-					infowindow = new google.maps.InfoWindow({
-						content: content,
-						zIndex: 100
-					});
-					infowindow.open(map, marker, Fieldtask);
-				}
-			});
-			google.maps.event.clearListeners(marker, 'mouseout');
-		}
-	})(marker, premiseid, Fieldtask));
+	})(marker, premiseid, full_name, vAddress, vPremiseName, vPremiseSubType, vEngagement, vZoneName, vNetwork, vStatus));
 }
 
-function deleteMarkers() {
-	// for (i = 0; i < gmarkers.length; i++) {
-	// 	//gmarkers[i].setMap(null);
-	// 	//markerCluster.setMap(null);
-	// 	//markerCluster.removeMarkers(markerCluster.getMarkers());
-	// 	//markerCluster.clearMarkers();
-	// 	//markerCluster = ;
-	// }
+function serviceOrderinfo_popup(marker, id, vMasterMSA, vServiceOrder, vSalesRepName, vSalesRepEmail, premiseid, vPremiseName, vAddress, cityid, stateid, countyid, countyid, zipcode, zoneid, vZoneName, networkid, vNetwork, vPremiseType, vCompanyName, vConnectionTypeName, vServiceType1, vStatus) {
+    google.maps.event.addListener(marker, 'click', (function(marker, id, vMasterMSA, vServiceOrder, vSalesRepName, vSalesRepEmail, premiseid, vPremiseName, vAddress, cityid, stateid, countyid, countyid, zipcode, zoneid, vZoneName, networkid, vNetwork, vPremiseType, vCompanyName, vConnectionTypeName, vServiceType1, vStatus) {
+        return function() {
+            var content = "";
+            __marker__ = marker;
 
-	//initMap();
+            if (vMasterMSA == null || vMasterMSA == 'undefined' || vMasterMSA == '') {
+                vMasterMSA = '';
+            } 
 
-	//markerCluster.removeMarkers(markerCluster.getMarkers());
-	// gmarkers = [];
-	// siteMarker = [];
-	// markerCluster.redraw();
+            if (vServiceOrder == null || vServiceOrder == 'undefined' || vServiceOrder == '') {
+                vServiceOrder = '';
+            }
+
+            if (vSalesRepName == null || vSalesRepName == 'undefined' || vSalesRepName == '') {
+                vSalesRepName = '';
+            }
+
+            if (vSalesRepEmail == null || vSalesRepEmail == 'undefined' || vSalesRepEmail == '') {
+                vSalesRepEmail = '';
+            }
+
+            if (premiseid == null || premiseid == 'undefined' || premiseid == '') {
+                premiseid = '';
+            }
+
+            if (vPremiseName == null || vPremiseName == 'undefined' || vPremiseName == '') {
+			    vPremiseName = '';
+			}
+			if (vAddress == null || vAddress == 'undefined' || vAddress == '') {
+			    vAddress = '';
+			}
+			if (cityid == null || cityid == 'undefined' || cityid == '') {
+			    cityid = '';
+			}
+			if (stateid == null || stateid == 'undefined' || stateid == '') {
+			    stateid = '';
+			}
+			if (countyid == null || countyid == 'undefined' || countyid == '') {
+			    countyid = '';
+			}
+			if (zipcode == null || zipcode == 'undefined' || zipcode == '') {
+			    zipcode = '';
+			}
+			if (zoneid == null || zoneid == 'undefined' || zoneid == '') {
+			    zoneid = '';
+			}
+			if (vZoneName == null || vZoneName == 'undefined' || vZoneName == '') {
+			    vZoneName = '';
+			}
+			if (networkid == null || networkid == 'undefined' || networkid == '') {
+			    networkid = '';
+			}
+			if (vNetwork == null || vNetwork == 'undefined' || vNetwork == '') {
+			    vNetwork = '';
+			}
+			if (vPremiseType == null || vPremiseType == 'undefined' || vPremiseType == '') {
+			    vPremiseType = '';
+			}
+			if (vCompanyName == null || vCompanyName == 'undefined' || vCompanyName == '') {
+			    vCompanyName = '';
+			}
+			if (vConnectionTypeName == null || vConnectionTypeName == 'undefined' || vConnectionTypeName == '') {
+			    vConnectionTypeName = '';
+			}
+			if (vServiceType1 == null || vServiceType1 == 'undefined' || vServiceType1 == '') {
+			    vServiceType1 = '';
+			}
+			if (vStatus == null || vStatus == 'undefined' || vStatus == '') {
+			    vStatus = '';
+			}
+
+			var vPremiseData = 	premiseid+" ("+vPremiseName+"; "+vPremiseType+")";
+            content += "<div CELLPADDING=5 CELLSPACING=5 class=info_box id=info_box>";
+            content += "<h5 class='border-bottom pb-2 mb-3'>Service Order #" + id + " (" + vServiceOrder + ")</h5>";
+            content += "<div class='d-flex'><h6>" + vMasterMSA + "</h6></div>";
+            content += "<div class='d-flex'><span class='font-weight-bold'>Premise :</span>&nbsp;" + vPremiseData + "</div>";
+            content += "<div class='d-flex'><span class='font-weight-bold'>Zone :</span>&nbsp;" + vZoneName + "</span></div>";
+            content += "<div class='d-flex'><span class='font-weight-bold'>Network :</span>&nbsp;" + vNetwork + "</span></div>";
+            content += "<div class='d-flex'><span class='font-weight-bold'>SalesRep Name :</span>&nbsp;" + vSalesRepName + "</div>";
+            content += "<div class='d-flex'><span class='font-weight-bold'>SalesRep Email :</span>&nbsp;" + vSalesRepEmail + "</span></div>";
+            content += "<div class='d-flex'><span class='font-weight-bold'>Carrier :</span>&nbsp;" + vCompanyName + "</span></div>";
+            content += "<div class='d-flex'><span class='font-weight-bold'>Service Type :</span>&nbsp;" + vServiceType1 + "</span></div>";
+            content += "<div class='d-flex'><span class='font-weight-bold'>Status :</span>&nbsp;" + vStatus + "</div>";
+            content += "<div class='button mt-3'><a class='btn btn-primary  mr-2 text-white' href='" + site_url + "service_order/edit&mode=Update&iServiceOrderId=" + id + "' target='_blank'>Edit Service Order</a></div>";
+            content += "</div>";
+            if (infowindow) {
+                infowindow.close();
+            }
+            infowindow = new google.maps.InfoWindow({
+                content: content,
+                zIndex: 100
+            });
+            infowindow.open(map, marker);
+            gmarkers.push(marker);
+            google.maps.event.clearListeners(marker, 'mouseout');
+        }
+    })(marker, id, vMasterMSA, vServiceOrder, vSalesRepName, vSalesRepEmail, premiseid, vPremiseName, vAddress, cityid, stateid, countyid, countyid, zipcode, zoneid, vZoneName, networkid, vNetwork, vPremiseType, vCompanyName, vConnectionTypeName, vServiceType1, vStatus));
 }
-function newLocation(newLat,newLng)
-{
+
+function workOrderinfo_popup(marker, id, premiseid, vPremiseName, vAddress, cityid, stateid, countyid, countyid, zipcode, zoneid, vZoneName, networkid, vNetwork, vPremiseType, vServiceOrder, vWOProject, vType, vRequestor, vAssignedTo, vStatus) {
+    google.maps.event.addListener(marker, 'click', (function(marker, id, premiseid, vPremiseName, vAddress, cityid, stateid, countyid, countyid, zipcode, zoneid, vZoneName, networkid, vNetwork, vPremiseType, vServiceOrder, vWOProject, vType, vRequestor, vAssignedTo, vStatus) {
+        return function() {
+            var content = "";
+            __marker__ = marker;
+
+            if (premiseid == null || premiseid == 'undefined' || premiseid == '') {
+                premiseid = '';
+            }
+
+            if (vPremiseName == null || vPremiseName == 'undefined' || vPremiseName == '') {
+			    vPremiseName = '';
+			}
+			if (vAddress == null || vAddress == 'undefined' || vAddress == '') {
+			    vAddress = '';
+			}
+			if (cityid == null || cityid == 'undefined' || cityid == '') {
+			    cityid = '';
+			}
+			if (stateid == null || stateid == 'undefined' || stateid == '') {
+			    stateid = '';
+			}
+			if (countyid == null || countyid == 'undefined' || countyid == '') {
+			    countyid = '';
+			}
+			if (zipcode == null || zipcode == 'undefined' || zipcode == '') {
+			    zipcode = '';
+			}
+			if (zoneid == null || zoneid == 'undefined' || zoneid == '') {
+			    zoneid = '';
+			}
+			if (vZoneName == null || vZoneName == 'undefined' || vZoneName == '') {
+			    vZoneName = '';
+			}
+			if (networkid == null || networkid == 'undefined' || networkid == '') {
+			    networkid = '';
+			}
+			if (vNetwork == null || vNetwork == 'undefined' || vNetwork == '') {
+			    vNetwork = '';
+			}
+			if (vPremiseType == null || vPremiseType == 'undefined' || vPremiseType == '') {
+			    vPremiseType = '';
+			}
+
+			if (vServiceOrder == null || vServiceOrder == 'undefined' || vServiceOrder == '') {
+			    vServiceOrder = '';
+			}
+
+			if (vWOProject == null || vWOProject == 'undefined' || vWOProject == '') {
+			    vWOProject = '';
+			}
+
+			if (vType == null || vType == 'undefined' || vType == '') {
+			    vType = '';
+			}
+
+			if (vRequestor == null || vRequestor == 'undefined' || vRequestor == '') {
+			    vRequestor = '';
+			}
+
+			if (vAssignedTo == null || vAssignedTo == 'undefined' || vAssignedTo == '') {
+			    vAssignedTo = '';
+			}
+			
+			if (vStatus == null || vStatus == 'undefined' || vStatus == '') {
+			    vStatus = '';
+			}
+
+			var vPremiseData = 	premiseid+" ("+vPremiseName+"; "+vPremiseType+")";
+            content += "<div CELLPADDING=5 CELLSPACING=5 class=info_box id=info_box>";
+            content += "<h5 class='border-bottom pb-2 mb-3'>Work Order #" + id + " (" + vType + ")</h5>";
+            content += "<div class='d-flex'><h6>" + vWOProject + "</h6></div>";
+            content += "<div class='d-flex'><span class='font-weight-bold'>Premise :</span>&nbsp;" + vPremiseData + "</div>";
+            content += "<div class='d-flex'><span class='font-weight-bold'>Zone :</span>&nbsp;" + vZoneName + "</span></div>";
+            content += "<div class='d-flex'><span class='font-weight-bold'>Network :</span>&nbsp;" + vNetwork + "</span></div>";
+            content += "<div class='d-flex'><span class='font-weight-bold'>Service Order :</span>&nbsp;" + vServiceOrder + "</div>";
+            content += "<div class='d-flex'><span class='font-weight-bold'>Requestor :</span>&nbsp;" + vRequestor + "</span></div>";
+            content += "<div class='d-flex'><span class='font-weight-bold'>Assigned To :</span>&nbsp;" + vAssignedTo + "</span></div>";
+            content += "<div class='d-flex'><span class='font-weight-bold'>Status :</span>&nbsp;" + vStatus + "</div>";
+            content += "<div class='button mt-3'><a class='btn btn-primary  mr-2 text-white' href='" + site_url + "service_order/workorder_add&mode=Update&iWOId=" + id + "' target='_blank'>Edit Work Order</a></div>";
+            content += "</div>";
+            if (infowindow) {
+                infowindow.close();
+            }
+            infowindow = new google.maps.InfoWindow({
+                content: content,
+                zIndex: 100
+            });
+            infowindow.open(map, marker);
+            gmarkers.push(marker);
+            google.maps.event.clearListeners(marker, 'mouseout');
+        }
+    })(marker, id, premiseid, vPremiseName, vAddress, cityid, stateid, countyid, countyid, zipcode, zoneid, vZoneName, networkid, vNetwork, vPremiseType, vServiceOrder, vWOProject, vType, vRequestor, vAssignedTo, vStatus));
+}
+
+function premiseCircuitinfo_popup(marker, id, premiseid, vPremiseName, vAddress, cityid, stateid, countyid, countyid, zipcode, zoneid, vZoneName, networkid, vNetwork, vPremiseType, vWorkOrder, circuitid, vCircuitName, connectiontypeid, vConnectionTypeName, vStatus) {
+    google.maps.event.addListener(marker, 'click', (function(marker, id, premiseid, vPremiseName, vAddress, cityid, stateid, countyid, countyid, zipcode, zoneid, vZoneName, networkid, vNetwork, vPremiseType, vWorkOrder, circuitid, vCircuitName, connectiontypeid, vConnectionTypeName, vStatus) {
+        return function() {
+            var content = "";
+            __marker__ = marker;
+
+            if (premiseid == null || premiseid == 'undefined' || premiseid == '') {
+                premiseid = '';
+            }
+
+            if (vPremiseName == null || vPremiseName == 'undefined' || vPremiseName == '') {
+			    vPremiseName = '';
+			}
+			if (vAddress == null || vAddress == 'undefined' || vAddress == '') {
+			    vAddress = '';
+			}
+			if (cityid == null || cityid == 'undefined' || cityid == '') {
+			    cityid = '';
+			}
+			if (stateid == null || stateid == 'undefined' || stateid == '') {
+			    stateid = '';
+			}
+			if (countyid == null || countyid == 'undefined' || countyid == '') {
+			    countyid = '';
+			}
+			if (zipcode == null || zipcode == 'undefined' || zipcode == '') {
+			    zipcode = '';
+			}
+			if (zoneid == null || zoneid == 'undefined' || zoneid == '') {
+			    zoneid = '';
+			}
+			if (vZoneName == null || vZoneName == 'undefined' || vZoneName == '') {
+			    vZoneName = '';
+			}
+			if (networkid == null || networkid == 'undefined' || networkid == '') {
+			    networkid = '';
+			}
+			if (vNetwork == null || vNetwork == 'undefined' || vNetwork == '') {
+			    vNetwork = '';
+			}
+			if (vPremiseType == null || vPremiseType == 'undefined' || vPremiseType == '') {
+			    vPremiseType = '';
+			}
+
+			if (vWorkOrder == null || vWorkOrder == 'undefined' || vWorkOrder == '') {
+			    vWorkOrder = '';
+			}
+
+			if (circuitid == null || circuitid == 'undefined' || circuitid == '') {
+			    circuitid = '';
+			}
+
+			if (vCircuitName == null || vCircuitName == 'undefined' || vCircuitName == '') {
+			    vCircuitName = '';
+			}
+
+			if (connectiontypeid == null || connectiontypeid == 'undefined' || connectiontypeid == '') {
+			    connectiontypeid = '';
+			}
+
+			if (vConnectionTypeName == null || vConnectionTypeName == 'undefined' || vConnectionTypeName == '') {
+			    vConnectionTypeName = '';
+			}
+			
+			if (vStatus == null || vStatus == 'undefined' || vStatus == '') {
+			    vStatus = '';
+			}
+
+			var vPremiseData = 	premiseid+" ("+vPremiseName+"; "+vPremiseType+")";
+            content += "<div CELLPADDING=5 CELLSPACING=5 class=info_box id=info_box>";
+            content += "<h5 class='border-bottom pb-2 mb-3'>Premise #" + vPremiseData +"</h5>";
+            content += "<div class='d-flex'><h6>Workorder" + vWorkOrder + "</h6></div>";
+            content += "<div class='d-flex'><span class='font-weight-bold'>Zone :</span>&nbsp;" + vZoneName + "</span></div>";
+            content += "<div class='d-flex'><span class='font-weight-bold'>Network :</span>&nbsp;" + vNetwork + "</span></div>";
+            content += "<div class='d-flex'><span class='font-weight-bold'>Circuit Name :</span>&nbsp;" + vCircuitName + "</div>";
+            content += "<div class='d-flex'><span class='font-weight-bold'>Connection Type :</span>&nbsp;" + vConnectionTypeName + "</span></div>";
+            content += "<div class='d-flex'><span class='font-weight-bold'>Status :</span>&nbsp;" + vStatus + "</div>";
+            content += "<div class='button mt-3'><a class='btn btn-primary  mr-2 text-white' href='" + site_url + "premise_circuit/premise_circuit_edit&mode=Update&iPremiseCircuitId=" + id + "' target='_blank'>Edit Premise Circuit</a></div>";
+            content += "</div>";
+            if (infowindow) {
+                infowindow.close();
+            }
+            infowindow = new google.maps.InfoWindow({
+                content: content,
+                zIndex: 100
+            });
+            infowindow.open(map, marker);
+            gmarkers.push(marker);
+            google.maps.event.clearListeners(marker, 'mouseout');
+        }
+    })(marker, id,  premiseid, vPremiseName, vAddress, cityid, stateid, countyid, countyid, zipcode, zoneid, vZoneName, networkid, vNetwork, vPremiseType, vWorkOrder, circuitid, vCircuitName, connectiontypeid, vConnectionTypeName, vStatus));
+}
+
+function newLocation(newLat,newLng) {
 	//alert(newLat +" == "+newLng)
 	if (typeof(newLat) !== 'undefined' && newLat && typeof(newLng) !== 'undefined' && newLng) {
-
 		map.setCenter({
 			lat : newLat,
 			lng : newLng
 		});
 	}
-	map.setZoom(14);
-}
-
-function clearMapTest(variable) {
-	if(variable == "srlayer"){
-		//console.log('11');
-	    if (srlayerMarker.length > 0) {
-	        for (i = 0; i < srlayerMarker.length; i++) {
-	            srlayerMarker[i].setMap(null);
-	        }
-	    }
-		
-		if (srlayerMarker !== undefined) {
-			srlayerMarker = [];
-		}
-
-		srCount = 0;
-
-	}
-			
+	
+    //console.log("defaultZoom New Location = "+defaultZoom)
+    google.maps.event.addListener(map, 'zoom_changed', function() {
+	    defaultZoom = map.getZoom();
+	});
+	map.setZoom(defaultZoom);
+	//console.log("defaultZoom New Location1 = "+defaultZoom)
 }
 
 function getSiteSRFilterData(siteFilter,srFilter){
@@ -1253,8 +1625,11 @@ function getSiteSRFilterData(siteFilter,srFilter){
                                         };
                                         var vName = srData[premiseid].vName;
                                         var vAddress = srData[premiseid].vAddress;
-                                        var vRequestType = srData[premiseid].vRequestType;
-                                        var vAssignTo = srData[premiseid].vAssignTo;
+                                        var vPremiseName = srData[premiseid].vPremiseName;
+                                        var vPremiseSubType	= srData[premiseid].vPremiseSubType;
+                                        var vEngagement = srData[premiseid].vEngagement;
+                                        var vZoneName = srData[premiseid].vZoneName;
+                                        var vNetwork = srData[premiseid].vNetwork;
                                         var vStatus = srData[premiseid].vStatus;
                                         
                                         sitesrFilterMarker[ccount] = new google.maps.Marker({
@@ -1267,7 +1642,7 @@ function getSiteSRFilterData(siteFilter,srFilter){
                                        // }
                                         $sr_map = sitesrFilterMarker[ccount];
 
-                                        srinfo_popup($sr_map, premiseid, vName, vAddress, vRequestType, vAssignTo, vStatus);
+                                        fiberInquiryinfo_popup($sr_map, premiseid, vName, vAddress, vPremiseName, vPremiseSubType, vEngagement, vZoneName, vNetwork, vStatus);
                                         sitesrFilterMarker[ccount].setMap(map);
 
                                         //Extend each marker's position in LatLngBounds object.
@@ -1296,247 +1671,6 @@ function getSiteSRFilterData(siteFilter,srFilter){
 			}
 		});
     }
-}
-
-function addInstaTreatData(mode,premiseid){
-	infowindow.close();
-
-	$.ajax({
-        type: "POST",
-        url: site_url + "vmap/index",
-        data: {
-            mode: "AddInstaTreat",
-            premiseid: premiseid,
-        },
-        cache: true,
-        dataType:'json',
-        beforeSend: function() {
-           $(".loading").show();
-        },
-        success: function(data) {
-        	$(".loading").hide();
-        	if(data['error'] == "0"){
-                toastr.success(data['msg']);
-            }else{
-                toastr.error(data['msg']);
-            }
-        }
-    });
-}
-
-/*show all site-icons within 0.5 mile radius of the user current location*/
-$("#nearbysite").click(function(){
-	var latlngbounds = new google.maps.LatLngBounds();
-	//sitesearchMarker.setMap(null);
-    if (siteNearDataMarker.length > 0) {
-        for (i = 0; i < siteNearDataMarker.length; i++) {
-            siteNearDataMarker[i].setMap(null);
-        }
-
-        siteNearDataMarker.length = 0;
-    }
-
-    siteNearDataMarker = [];
-    siteNearDataMarker.length = 0;
-    sncount =0;
-    if (this.checked) {
-		getCurrentlatlong('');
-		setTimeout(function(){
-			//alert(currentlongitude+"=>"+currentlatitude);
-			/*get nearby 0.5mile site*/
-			$.ajax({
-				type: "POST",
-				url: 'vmap/api/',
-				data: {
-					action: "getNearBySite",
-					'lat' : currentlatitude,
-					'long' : currentlongitude,
-					/*'lat' :  40.743486,
-					'long' : -74.316397,*/
-					'meter' :stmeter
-				},
-				cache: true,
-				beforeSend: function() {
-					$(".loading").show();
-				},
-				success: function(data) {
-					//console.log(data);
-					//sncount =0;
-					var siteData = JSON.parse(data);
-	                    if(Object.keys(siteData).length > 0){
-	                        $.each(siteData, function(premiseid, item) {
-	                            if (siteData[premiseid].polygon !== undefined) {
-	                                //showPolygonMap(siteData[premiseid].polygon, map, siteData[premiseid].icon, premiseid,iTMPId,iTTId);
-
-	                                siteNearDataMarker[sncount] = new google.maps.Polygon({
-	                                    path: siteData[premiseid].polygon,
-	                                    strokeColor: '#FF0000',
-	                                    strokeOpacity: 0.8,
-	                                    strokeWeight: 2,
-	                                    fillColor: '#FF0000',
-	                                    fillOpacity: 0.35,
-	                                    icon: siteData[premiseid].icon,
-	                                });
-
-	                                $site_map = siteNearDataMarker[sncount];
-	                                info_popup($site_map, premiseid);
-	                                siteNearDataMarker[sncount].setMap(map);
-									//Extend each marker's position in LatLngBounds object.
-	                                /*latlngbounds.extend(siteNearDataMarker[sncount].position);*/
-	                                siteNearDataMarker[sncount].getPath().forEach(function (path, index) {                                
-								        latlngbounds.extend(path);
-								    });
-
-	                                sncount++;
-
-	                                if (siteData[premiseid].polyCenter !== undefined) {
-	                                   /* var centerPoint = {
-	                                        lat: siteData[premiseid].polyCenter['lat'] + (Math.random() / 10000),
-	                                        lng: siteData[premiseid].polyCenter['lng'] + (Math.random() / 10000)
-	                                    };*/
-	                                    var centerPoint = {
-	                                        lat: siteData[premiseid].polyCenter['lat'] + mathRandLat,
-	                                        lng: siteData[premiseid].polyCenter['lng'] + mathRandLng
-	                                    };
-	                                    //showPolyCenter(centerPoint, map, siteData[premiseid].icon, premiseid);
-
-	                                    siteNearDataMarker[sncount] = new google.maps.Marker({
-	                                        position: centerPoint,
-	                                        map: map,
-	                                        icon: siteData[premiseid].icon,
-	                                    });
-	                                    /*if (siteData[premiseid].length != 0) {
-	                                        newLocation(centerPoint.lat, centerPoint.lng);
-	                                    }*/
-	                                    newLocation(centerPoint.lat, centerPoint.lng);
-	                                    $site_map = siteNearDataMarker[sncount];
-	                                    info_popup($site_map, premiseid);
-	                                    siteNearDataMarker[sncount].setMap(map);
-
-	                                    //Extend each marker's position in LatLngBounds object.
-	                                    latlngbounds.extend(siteNearDataMarker[sncount].position);
-
-	                                    sncount++;
-
-	                                }
-	                            }
-	                            if (siteData[premiseid].poly_line !== undefined) {
-	                                //showPolyLineMap(siteData[premiseid].poly_line, map, siteData[premiseid].icon, premiseid);
-
-	                                siteNearDataMarker[sncount] = new google.maps.Polyline({
-	                                    path: siteData[premiseid].poly_line,
-	                                    strokeColor: '#FF0000',
-	                                    strokeOpacity: 0.8,
-	                                    strokeWeight: 2,
-	                                    fillColor: '#FF0000',
-	                                    fillOpacity: 0.35,
-	                                    icon: siteData[premiseid].icon,
-	                                });
-	                                /*if (siteData[premiseid].length != 0) {
-	                                    newLocation(siteData[premiseid].poly_line.lat, siteData[premiseid].poly_line.lng);
-	                                }*/
-	                                newLocation(siteData[premiseid].poly_line.lat, siteData[premiseid].poly_line.lng);
-	                                $site_map = siteNearDataMarker[sncount];
-	                                info_popup($site_map, premiseid);
-	                                siteNearDataMarker[sncount].setMap(map);
-
-	                                //Extend each marker's position in LatLngBounds object.
-	                                /*latlngbounds.extend(siteNearDataMarker[sncount].position);*/
-	                                siteNearDataMarker[sncount].getPath().forEach(function (path, index) {                                
-								        latlngbounds.extend(path);
-								    });
-
-	                                sncount++;
-	                            }
-	                            if (siteData[premiseid].point !== undefined) {
-	                                //console.log(premiseid);
-	                                for (i = 0; i < siteData[premiseid].point.length; i++) {
-	                                    /*var pointMatrix = {
-	                                        lat: siteData[premiseid].point[i]['lat'] + (Math.random() / 10000),
-	                                        lng: siteData[premiseid].point[i]['lng'] + (Math.random() / 10000)
-	                                    };*/
-	                                    var pointMatrix = {
-	                                        lat: siteData[premiseid].point[i]['lat'] + mathRandLat,
-	                                        lng: siteData[premiseid].point[i]['lng'] + mathRandLng
-	                                    };
-	                                    
-	                                    siteNearDataMarker[sncount] = new google.maps.Marker({
-	                                        map: map,
-	                                        position: pointMatrix,
-	                                        icon: siteData[premiseid].icon,
-	                                        draggable:true,
-	                                    });
-	                                    
-	                                    newLocation(pointMatrix.lat, pointMatrix.lng);
-	                                    $site_map = siteNearDataMarker[sncount];
-	                                    gmarkers.push($site_map);
-	                                    info_popup($site_map, premiseid);
-	                                    siteNearDataMarker[sncount].setMap(map);
-
-	                                    //Extend each marker's position in LatLngBounds object.
-	                                    latlngbounds.extend(siteNearDataMarker[sncount].position);
-
-	                                    sncount++;
-
-	                                    var vName = siteData[premiseid].vName;
-	                                    var vAddress = siteData[premiseid].vAddress;
-	                                    var vRequestType = siteData[premiseid].vRequestType;
-	                                    var vAssignTo = siteData[premiseid].vAssignTo;
-	                                    var vStatus = siteData[premiseid].vStatus;
-	                                }
-	                            }
-	                        });
-	                         
-	                        //Center map and adjust Zoom based on the position of all markers.
-	                        map.setCenter(latlngbounds.getCenter());
-	                        map.fitBounds(latlngbounds);
-
-	                    }
-
-
-					$(".loading").hide();
-					//alert(sncount);
-				}
-			});
-
-		},500);
-	}else{
-		//alert('unchecked');
-	}
-});
-
-
-function infoPolygonArea($site_map, premiseid)
-{
-	//show polygon area
-  google.maps.event.addListener($site_map, 'mouseover', ( function($site_map, premiseid) {
-      return function(arg) {
-          var polyArea = google.maps.geometry.spherical.computeArea($site_map.getPath()); //in sq. meter
-
-          var polyacres = (polyArea.toFixed(2)) * parseFloat(0.000247);
-          var content = "Area: "+polyacres.toFixed(2)+" acre";
-
-          __marker__ = $site_map;
-          if (infowindow) {
-              //close previous opened infowindow
-              infowindow.close();
-          }
-
-          infowindow = new google.maps.InfoWindow({
-              content: content,
-              zIndex: 100,
-              position: arg.latLng,
-          });
-                      
-          infowindow.open(map, $site_map);
-          google.maps.event.clearListeners($site_map, 'mouseout',function function_name(infowindow) {
-          	if (infowindow) {
-              //close previous opened infowindow
-              infowindow.close();
-          }
-          });
-      }
-  })($site_map, premiseid));
 }
 
 function mapRedirectServiceOrder(ServiceOrderLength, iPremiseId) {

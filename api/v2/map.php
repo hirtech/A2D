@@ -1,23 +1,41 @@
 <?php
 include_once($controller_path . "fieldmap.inc.php");
+include_once($controller_path . "user.inc.php");
 
 $mapObj = new Fieldmap();
+$userObj = new User();
 
 if($request_type == "get_map_filter_data"){
+    //echo "<pre>";print_r($RES_PARA);exit;
+    $iLoginUserId = $RES_PARA['iLoginUserId'];
+
+    $user_zones = $userObj->user_zoneFromId($iLoginUserId);
+    //echo"<pre>";print_r($user_zones);exit;
 	/*get zone active data*/
-   	$sk_zones = $mapObj->getZones();
+    $sk_zones = $mapObj->getZones();
 
-   	/*get Premise type and subtype active Recrods*/
-	$sTypes = $mapObj->getSiteType();
-
-	/*get Premise Attribute active Recrods*/
-	$sAttrubutes = $mapObj->getAttributes();
+    /*get network active data*/
+    $networkArr = $mapObj->getNetworks();
 
 	/*get city active Recrods*/
 	$cityArr = $mapObj->getCities();
 
-    $result = array('zone' =>$sk_zones, 'site_type' => $sTypes, 'site_attribute' => $sAttrubutes, 'city' => $cityArr);
+    /*get Zipcode Recrods*/
+    $zipcodeArr = $mapObj->getZipCodes();
 
+    /*get Zone KML Recrods*/
+    $zone_kml = $mapObj->getZoneKMLFile();
+
+    /*get Site type and subtype active Recrods*/
+    $premise_type = $mapObj->getPremiseType();
+
+    /*get Site attribute active Recrods*/
+    $premise_attribute = $mapObj->getAttributes();
+
+    /*get Connection Type active Recrods*/
+    $connection_types = $mapObj->getConnectionTypes();
+
+    $result = array('zone' =>$sk_zones, 'network' =>$networkArr, 'city' => $cityArr, 'zipcode' => $zipcodeArr, 'user_zones' => $user_zones, 'zone_kml' => $zone_kml, 'premise_type' => $premise_type, 'premise_attribute' => $premise_attribute, 'connection_types' => $connection_types);
 
     $rh = HTTPStatus(200);
     $code = 2000;

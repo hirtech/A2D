@@ -1,6 +1,5 @@
 <div class="loading">Loading&#8230;</div>
-<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"> -->
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> -->
 <style>
 /* Absolute Center Spinner */
 .container-fluid {
@@ -586,30 +585,26 @@ p.area-text2 {
     <div class="container-fluid">
         <div class="row  no-gutters w-100">
             <div class="card2">
-                <!-- <div class="card-heading">
-                  <p>Locations</p>
-              </div> -->
                 <div class="card-heading-inner">
                     <div id="map"></div>
                 </div>
             </div>
             <div class="card3">
                 <div class="main" id="main1">
-                    <span style="font-size:30px;cursor:pointer; color: #000;" onclick="openNav1()"><img src="{$site_url}images/filter.png" /> <p class="area-text">Filters</p></span>
+                    <span style="cursor:pointer;" onclick="openNav1()"><img src="{$site_url}images/filter.png" /><p class="area-text">&nbsp;Filters</p></span>
                 </div>
                 <div class="main" id="main2">
-                    <span style="font-size:30px;cursor:pointer; color: #000;" onclick="openNav2()"><img src="{$site_url}images/layers.png" /> <p class="area-text">Layers</p></span>
+                    <span style="cursor:pointer;" onclick="openNav2()"><img src="{$site_url}images/layers.png" /><p class="area-text">&nbsp;Layers</p></span>
                 </div>
                 <div class="main" id="main">
-                    <span style="font-size:30px;cursor:pointer; color: #000;" onclick="openNav()"><img src="{$site_url}images/tool.png" /> <p class="area-text">Tools</p></span>
+                    <span style="cursor:pointer;" onclick="openNav()"><img src="{$site_url}images/tool.png" /><p class="area-text">&nbsp;Tools</p></span>
                 </div>
                 <div class="main" id="main3">
-                    <span style="font-size:30px;cursor:pointer; color: #000;" onclick="openNav3()"><img src="{$site_url}images/search.png" /> <p class="area-text">Search</p></span>
+                    <span style="cursor:pointer;" onclick="openNav3()"><img src="{$site_url}images/search.png" /><p class="area-text">&nbsp;Search</p></span>
                 </div>
             </div>
             <div id="mySidenav" class="sidenav">
                 <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-
                 <div class="card-heading">
                     <p>Map Tools</p>
                 </div>
@@ -685,7 +680,7 @@ p.area-text2 {
                         <div class="card4">
                             <div class="card-header" >
                                 <h2 class="mb-0">
-                                    <button class="d-flex align-items-center justify-content-between  btn btn-link" id="btn_map_addsite">
+                                    <button class="d-flex align-items-center justify-content-between btn btn-link" id="btn_map_addsite">
                                         Add Premise
                                          <span class="fa-stack fa-sm">
                                             <i class="fa fa-plus fa-stack-1x fa-inverse"></i>
@@ -711,45 +706,34 @@ p.area-text2 {
 
                 </div>
             </div>
-
             <div id="mySidenav1" class="sidenav">
                 <a href="javascript:void(0)" class="closebtn" onclick="closeNav1()">&times;</a>
-
                 <div class="card-heading">
                     <p>Filters</p>
                 </div>
                 <div class="card-heading-inner">
                     <ul id="myUL">
-                        <li class="parent"><input class="form-check-input selectAllsType" type="checkbox" name="allSType" id="selectAllsType" value="no" /><span class="caret">Premise Types</span>
+                        <li class="parent">
+                            <input class="form-check-input selectAllNetwork" type="checkbox" name="sAllNetwork" id="selectAllNetwork" value="no" />
+                            <span class="caret">Networks</span>
                             <ul class="nested">
-
-                                {foreach from=$skSites item=site}
-                                <li><input class="form-check-input selectSiteData selectAllsType" type="checkbox" name="sType[]" id="sType_{$site['iSTypeId']}" value="{$site['iSTypeId']}" />
-                                    {if $site['site_sub_types']|count gt 0 }
-                                    <span class="caret"><label class="form-check-label" for="site{$site['iSTypeId']}">{$site['vTypeName']}</label></span>
-                                    <ul class="nested">
-                                        {foreach from=$site['site_sub_types'] item=sSType}
-                                        <li><input class="form-check-input selectSiteData" type="checkbox" id="sSType_{$sSType['iSSTypeId']}" name="sSType[]" value="{$site['iSTypeId']}|||{$sSType['iSSTypeId']}" />
-                                            <label class="form-check-label" for="site{$sSType['iSSTypeId']}">{$sSType['vSubTypeName']}</label>
-                                        </li>
-                                        {/foreach}
-                                    </ul>
-                                    {else}
-                                    <label class="form-check-label" for="site{$site['iSTypeId']}">{$site['vTypeName']}</label>
-                                    {/if}
+                                {section name="n" loop=$networkArr}
+                                <li><input class="form-check-input selectAllNetwork" type="checkbox" name="sNetwork[]" id="sNetwork_{$networkArr[n].iNetworkId}" value="{$networkArr[n].iNetworkId}" />{$networkArr[n].vName|gen_strip_slash}
                                 </li>
-                                {/foreach}
-
+                                {/section}
                             </ul>
                         </li>
                         <li class="parent">
-                            <input class="form-check-input selectAllsAttr" type="checkbox" name="sAllsAttr" id="selectAllsAttr" value="no" />
-                            <span class="caret">Premise Attribute</span>
+                            <input class="form-check-input selectAllZone" type="checkbox" name="sAllZone" id="selectAllZone" value="no" />
+                            <span class="caret">Fiber Zones</span>
                             <ul class="nested">
-
-                                {foreach from=$sAttrubutes item=sAttr}
-                                <li><input class="form-check-input selectSiteData selectAllsAttr" type="checkbox" name="sAttr[]" id="sAttr_{$sAttr['iSAttributeId']}" value="{$sAttr['iSAttributeId']}" /> <label class="form-check-label" for="sAttr_{$sAttr['iSAttributeId']}">
-                                        {$sAttr['vAttribute']}</label></li>
+                                {foreach from=$skZones item=zone}
+                                    {if $zone['iZoneId']|in_array:$user_zones}
+                                        {assign var=zoneSelected value=true}
+                                    {else}
+                                        {assign var=zoneSelected value=false}
+                                    {/if}
+                                <li><input class="form-check-input selectAllZone" type="checkbox" name="skZones[]" id="skZones_{$zone['iZoneId']}" value="{$zone['iZoneId']}" {if $zoneSelected} checked="checked" {/if} /><label class="form-check-label" for="skZones_{$zone['iZoneId']}">{$zone['vZoneName']}</label></li>
                                 {/foreach}
                             </ul>
                         </li>
@@ -757,25 +741,20 @@ p.area-text2 {
                             <input class="form-check-input selectAllCity" type="checkbox" name="sAllCity" id="selectAllCity" value="no" />
                             <span class="caret">Cities</span>
                             <ul class="nested">
-
                                 {foreach from=$cityArr item=city}
-                                <li><input class="form-check-input selectSiteData selectAllCity" type="checkbox" name="city[]" value="{$city['iCityId']}" id="city_{$city['iCityId']}" /> <label class="form-check-label" for="city_{$city['iCityId']}">
+                                <li><input class="form-check-input selectAllCity" type="checkbox" name="city[]" value="{$city['iCityId']}" id="city_{$city['iCityId']}" /> <label class="form-check-label" for="city_{$city['iCityId']}">
                                         {$city['vCity']}</label></li>
                                 {/foreach}
                             </ul>
                         </li>
                         <li class="parent">
-                            <input class="form-check-input selectAllZone" type="checkbox" name="sAllZone" id="selectAllZone" value="no" />
-                            <span class="caret">Zones</span>
+                            <input class="form-check-input selectAllZipcode" type="checkbox" name="sAllZipcode" id="selectAllZipcode" value="no" />
+                            <span class="caret">Zipcodes</span>
                             <ul class="nested">
-
-                                {foreach from=$skZones item=zone}
-                                <li><input class="form-check-input selectAllZone" type="checkbox" name="skZones[]" id="skZones_{$zone['iZoneId']}" value="{$zone['iZoneId']}" /><label class="form-check-label" for="skZones_{$zone['iZoneId']}">{$zone['vZoneName']}</label></li>
+                                {foreach from=$zipcodeArr item=zipcode}
+                                <li><input class="form-check-input selectAllZipcode" type="checkbox" name="zipcode[]" value="{$zipcode['iZipcode']}" id="zipcode_{$zipcode['iZipcode']}" /> <label class="form-check-label" for="zipcode_{$zipcode['iZipcode']}">{$zipcode['vZipcode']}</label></li>
                                 {/foreach}
                             </ul>
-                        </li>
-                        <li class="parrent ml-4">
-                            <input class="form-check-input selectAllsType" type="checkbox" name="nearbysite" id="nearbysite" value="no" /><span >Nearby Sites</span>
                         </li>
                     </ul>
                     <div class="distance">
@@ -789,10 +768,30 @@ p.area-text2 {
                 </div>
                 <div class="card-heading-inner">
                     <ul id="myUL">
-                        <li class="parent"><input style="margin-left: -0.25rem;" class="form-check-input selectAllsServices" type="checkbox" name="selectAllsServices" id="selectAllsServices" value="services" /><label class="caret1" for="selectAllsServices">&nbsp;&nbsp;&nbsp;&nbsp;Fiber Inquiry</label>
+                        {if $networkArr|@count gt 0}
+                        <li class="parent"><input class="form-check-input" type="checkbox" name="allNetworkLayer" id="selectAllNetworkLayer" value="no" /><span class="caret">Networks</span>
+                            <ul class="nested">
+                                {section name="n" loop=$networkArr}
+                                <li><input class="form-check-input selectAllNetworkLayer" type="checkbox" name="networkLayer[]" id="networkLayer_{$networkArr[n].iNetworkId}" value="{$networkArr[n].iNetworkId}" />
+                                    <label class="form-check-label" for="networkLayer_{$networkArr[n].iNetworkId}">{$networkArr[n].vName|gen_strip_slash}</label>
+                                </li>
+                                {/section}
+                            </ul>
                         </li>
+                        {/if}
+                        {if $zone_kml|@count gt 0}
+                        <li class="parent"><input class="form-check-input" type="checkbox" name="allZoneLayer" id="selectAllZoneLayer" value="no" /><span class="caret">Zones</span>
+                            <ul class="nested">
+                                {foreach from=$zone_kml item=zone}
+                                <li><input class="form-check-input selectAllZoneLayer" type="checkbox" name="zoneLayer[]" id="zoneLayer_{$zone['iZoneId']}" value="{$zone['iZoneId']}" />
+                                    <label class="form-check-label" for="zoneLayer_{$zone['iZoneId']}">{$zone['vZoneName']}</label>
+                                </li>
+                                {/foreach}
+                            </ul>
+                        </li>
+                        {/if}
                         {if $custLayers|@count gt 0}
-                        <li class="parent"><input style="margin-left: -0.25rem;" class="form-check-input" type="checkbox" name="allCustLayer" id="selectAllCustLayer" value="no" />&nbsp;&nbsp;&nbsp;&nbsp;<span style="margin-left: -0.25rem;" class="caret">Custom Layers</span>
+                        <li class="parent"><input class="form-check-input" type="checkbox" name="allCustLayer" id="selectAllCustLayer" value="no" /><span class="caret">Custom KML</span>
                             <ul class="nested">
                                 {foreach from=$custLayers item=custlayer}
                                 <li><input class="form-check-input selectAllCustLayer" type="checkbox" name="custlayer[]" id="custlayer_{$custlayer['iCLId']}" value="{$custlayer['iCLId']}" />
@@ -802,6 +801,79 @@ p.area-text2 {
                             </ul>
                         </li>
                         {/if}
+
+                        <li class="parent"><input class="form-check-input" type="checkbox" name="allPremiseLayer" id="selectAllPremiseLayer" value="no" /><span class="caret">Premises</span>
+                            <ul class="nested">
+                                <li><input class="form-check-input selectAllPremiseLayer" type="checkbox" name="allPremiseStatus" id="selectAllpremiseStatusLayer" value="no" /><span class="caret">Premise Status</span>
+                                    <ul class="nested">
+                                        <li><input class="form-check-input selectAllpremiseStatusLayer" type="checkbox" name="premiseStatusLayer[]" id="premiseStatusLayer_0" value="0" /><label class="form-check-label" for="premiseStatusLayer_0">Off-Net</label></li>
+                                        <li><input class="form-check-input selectAllpremiseStatusLayer" type="checkbox" name="premiseStatusLayer[]" id="premiseStatusLayer_1" value="1" /><label class="form-check-label" for="premiseStatusLayer_1">On-Net</label></li>
+                                        <li><input class="form-check-input selectAllpremiseStatusLayer" type="checkbox" name="premiseStatusLayer[]" id="premiseStatusLayer_2" value="2" /><label class="form-check-label" for="premiseStatusLayer_2">Near-Net</label></li>
+                                    </ul>    
+                                </li>
+                                <li><input class="form-check-input" type="checkbox" name="allSType" id="selectAllpremiseTypeLayer" value="no" /><span class="caret">Premise Types</span>
+                                    <ul class="nested">
+                                        {foreach from=$skSites item=site}
+                                        <li><input class="form-check-input selectAllpremiseTypeLayer" type="checkbox" name="premiseTypeLayer[]" id="premiseTypeLayer_{$site['iSTypeId']}" value="{$site['iSTypeId']}" />
+                                            {if $site['premise_sub_types']|count gt 0 }
+                                            <span class="caret"><label class="form-check-label" for="site{$site['iSTypeId']}">{$site['vTypeName']}</label></span>
+                                            <ul class="nested">
+                                                {foreach from=$site['premise_sub_types'] item=sSType}
+                                                <li><input class="form-check-input selectAllpremisesubTypeLayer" type="checkbox" id="premisesubTypeLayer_{$sSType['iSTypeId']}" name="premisesubTypeLayer[]" value="{$site['iSTypeId']}|||{$sSType['iSSTypeId']}" />
+                                                    <label class="form-check-label" for="site{$sSType['iSSTypeId']}">{$sSType['vSubTypeName']}</label>
+                                                </li>
+                                                {/foreach}
+                                            </ul>
+                                            {else}
+                                            <label class="form-check-label  selectAllpremiseTypeLayer" for="site{$site['iSTypeId']}">{$site['vTypeName']}</label>
+                                            {/if}
+                                        </li>
+                                        {/foreach}
+                                    </ul>
+                                </li>
+                                <li>
+                                    <input class="form-check-input" type="checkbox" name="sAllsAttr" id="selectAllpremiseAttributeLayer" value="no" />
+                                    <span class="caret">Premise Attributes</span>
+                                    <ul class="nested">
+                                        {foreach from=$sAttrubutes item=sAttr}
+                                        <li><input class="form-check-input selectAllpremiseAttributeLayer" type="checkbox" name="premiseAttribute[]" id="premiseAttribute_{$sAttr['iSAttributeId']}" value="{$sAttr['iSAttributeId']}" /> <label class="form-check-label" for="premiseAttribute_{$sAttr['iSAttributeId']}">{$sAttr['vAttribute']}</label>
+                                        </li>
+                                        {/foreach}
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="parent"><input class="form-check-input" type="checkbox" name="allPremiseCircuitLayer" id="selectAllPremiseCircuitLayer" value="no" /><span class="caret">Premise Circuits</span>
+                            <ul class="nested">
+                                <li><input class="form-check-input selectAllPremiseCircuitLayer" type="checkbox" name="allPCircuitStatus" id="selectAllPCircuitStatusLayer" value="no" /><span class="caret">Status</span>
+                                    <ul class="nested">
+                                        <li><input class="form-check-input selectAllPCircuitStatusLayer" type="checkbox" name="pCircuitStatusLayer[]" id="pCircuitStatusLayer_1" value="1" /><label class="form-check-label" for="pCircuitStatusLayer_1">Created</label></li>
+                                        <li><input class="form-check-input selectAllPCircuitStatusLayer" type="checkbox" name="pCircuitStatusLayer[]" id="pCircuitStatusLayer_2" value="2" /><label class="form-check-label" for="pCircuitStatusLayer_2">In Progress</label></li>
+                                        <li><input class="form-check-input selectAllPCircuitStatusLayer" type="checkbox" name="pCircuitStatusLayer[]" id="pCircuitStatusLayer_3" value="3" /><label class="form-check-label" for="pCircuitStatusLayer_3">Delayed</label></li>
+                                        <li><input class="form-check-input selectAllPCircuitStatusLayer" type="checkbox" name="pCircuitStatusLayer[]" id="pCircuitStatusLayer_4" value="4" /><label class="form-check-label" for="pCircuitStatusLayer_4">Connected</label></li>
+                                        <li><input class="form-check-input selectAllPCircuitStatusLayer" type="checkbox" name="pCircuitStatusLayer[]" id="pCircuitStatusLayer_5" value="5" /><label class="form-check-label" for="pCircuitStatusLayer_5">Active </label></li>
+                                        <li><input class="form-check-input selectAllPCircuitStatusLayer" type="checkbox" name="pCircuitStatusLayer[]" id="pCircuitStatusLayer_6" value="6" /><label class="form-check-label" for="pCircuitStatusLayer_6">Suspended </label></li>
+                                        <li><input class="form-check-input selectAllPCircuitStatusLayer" type="checkbox" name="pCircuitStatusLayer[]" id="pCircuitStatusLayer_7" value="7" /><label class="form-check-label" for="pCircuitStatusLayer_7">Trouble</label></li>
+                                        <li><input class="form-check-input selectAllPCircuitStatusLayer" type="checkbox" name="pCircuitStatusLayer[]" id="pCircuitStatusLayer_8" value="8" /><label class="form-check-label" for="ppCircuitStatusLayer_8">Disconnected </label></li>
+                                    </ul>    
+                                </li>
+                                <li><input class="form-check-input" type="checkbox" name="allPCircuitStatus" id="selectAllPCircuitCTLayer" value="no" /><span class="caret">Connection Type</span>
+                                    <ul class="nested">
+                                        {foreach from=$connection_types item=ctypes}
+                                        <li><input class="form-check-input selectAllPCircuitCTLayer" type="checkbox" name="pCircuitcTypeLayer[]" id="pCircuitcTypeLayer_{$ctypes['iConnectionTypeId']}" value="{$ctypes['iConnectionTypeId']}" /> <label class="form-check-label" for="sAttr_{$ctypes['iConnectionTypeId']}">
+                                             {$ctypes['vConnectionTypeName']}</label></li>
+                                        {/foreach}
+                                    </ul>    
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="parent"><input class="form-check-input" type="checkbox" name="selectAllFiberInquiries" id="selectAllFiberInquiries" value="FiberInquiries" /><span for="selectAllFiberInquiries">Fiber Inquiries</span>
+                        </li>
+                        <li class="parent"><input class="form-check-input" type="checkbox" name="selectAllServiceOrders" id="selectAllServiceOrders" value="ServiceOrders" /><span for="selectAllServiceOrders">Service Orders</span>
+                        </li>
+                        <li class="parent"><input class="form-check-input" type="checkbox" name="selectAllWorkOrders" id="selectAllWorkOrders" value="selectAllWorkOrders" /><span for="selectAllWorkOrders">Work Orders</span>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -865,11 +937,6 @@ p.area-text2 {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 
-{include file="scripts/tasks/task_larval_surveillance_add.tpl"}
-{include file="scripts/tasks/task_landing_rate_add.tpl"}
-{include file="scripts/tasks/task_trap_add.tpl"}
-{include file="scripts/tasks/task_other_add.tpl"}
-{include file="scripts/tasks/task_treatment_add.tpl"}
 {include file="scripts/premise/multiple_premise_add.tpl"}
 {include file="scripts/tasks/task_awareness_add.tpl"}
 <script type="text/javascript">
@@ -883,11 +950,7 @@ p.area-text2 {
 </script>
 <script src="assets/vendors/typeahead/handlebars-v4.5.3.js"></script>
 <script src="assets/vendors/typeahead/typeahead.bundle.js"></script>
-<script src="assets/js/app_js/task_larval_surveillance_add.js"></script>
-<script src="assets/js/app_js/task_landing_rate_add.js"></script>
-<script src="assets/js/app_js/task_trap_add.js"></script>
-<script src="assets/js/app_js/task_other_add.js"></script>
-<script src="assets/js/app_js/task_treatment_add.js"></script>
+
 <script src="assets/js/app_js/multiple_premise_add.js"></script>
 <script src="assets/js/app_js/task_awareness_add.js"></script>
 <script>
@@ -907,11 +970,11 @@ function openNav() {
     closeNav2();
     closeNav1();
     closeNav3();
-    if (document.getElementById("main").style.cssText == "margin-right: 250px;") {
+    if (document.getElementById("main").style.cssText == "margin-right: 350px;") {
         closeNav();
     } else {
-        document.getElementById("mySidenav").style.width = "250px";
-        document.getElementById("main").style.marginRight = "250px";
+        document.getElementById("mySidenav").style.width = "350px";
+        document.getElementById("main").style.marginRight = "350px";
     }
 }
 
@@ -925,11 +988,11 @@ function openNav1() {
     closeNav();
     closeNav2();
     closeNav3();
-    if (document.getElementById("main1").style.cssText == "margin-right: 250px;") {
+    if (document.getElementById("main1").style.cssText == "margin-right: 350px;") {
         closeNav1();
     } else {
-        document.getElementById("mySidenav1").style.width = "250px";
-        document.getElementById("main1").style.marginRight = "250px";
+        document.getElementById("mySidenav1").style.width = "350px";
+        document.getElementById("main1").style.marginRight = "350px";
     }
 }
 
@@ -942,11 +1005,11 @@ function openNav2() {
     closeNav();
     closeNav1();
     closeNav3();
-    if (document.getElementById("main2").style.cssText == "margin-right: 250px;") {
+    if (document.getElementById("main2").style.cssText == "margin-right: 350px;") {
         closeNav2();
     } else {
-        document.getElementById("mySidenav2").style.width = "250px";
-        document.getElementById("main2").style.marginRight = "250px";
+        document.getElementById("mySidenav2").style.width = "350px";
+        document.getElementById("main2").style.marginRight = "350px";
     }
 }
 
@@ -959,11 +1022,11 @@ function openNav3() {
     closeNav();
     closeNav1();
     closeNav2();
-    if (document.getElementById("main3").style.cssText == "margin-right: 250px;") {
+    if (document.getElementById("main3").style.cssText == "margin-right: 350px;") {
         closeNav3();
     } else {
-        document.getElementById("mySidenav3").style.width = "250px";
-        document.getElementById("main3").style.marginRight = "250px";
+        document.getElementById("mySidenav3").style.width = "350px";
+        document.getElementById("main3").style.marginRight = "350px";
     }
 }
 
@@ -973,6 +1036,7 @@ function closeNav3() {
 }
 </script>
 <script type="text/javascript">
+
 // For Navigation Accordion
 $("#accordion").on("hide.bs.collapse show.bs.collapse", e => {
     $(e.target)
@@ -1001,6 +1065,7 @@ $(document).ready(function(){
 let ENABLE_INSTA_TREATMENT = '{$ENABLE_INSTA_TREATMENT}';
 let MAP_LONG = '{$MAP_LONGITUDE}';
 let MAP_LAT = '{$MAP_LATITUDE}';
+var user_zones = {$user_zones|@json_encode};
 </script>
 <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key={$GOOGLE_GEOCODE_API_KEY}&libraries=geometry,drawing,places,visualization"></script>
@@ -1032,11 +1097,10 @@ var polygonMarker = [];
 var polygonCount  = 0;
 var polyLineObj = [];
 var pline = 0;
-var siteTypes = [];
-var siteSubTypes = [];
-var sAttr = [];
+var skNetwork = [];
 var skCity = [];
 var skZones = [];
+var skZipcode = [];
 var clusterArr = [];
 var siteInfoWindowTaskAwarenessArr = [];
 
@@ -1053,8 +1117,14 @@ var contentString
 var gmarkers = [];
 var positivesiteMarker = [];
 var pov = 0;
-var srlayerMarker = [];
-var srCount = 0;
+var fiberInquirylayerMarker = [];
+var fiberInquiryCount = 0;
+var serviceOrderlayerMarker = [];
+var serviceOrderCount = 0;
+var workOrderlayerMarker = [];
+var workOrderCount = 0;
+var premiseCircuitlayerMarker = [];
+var premiseCircuitCount = 0;
 var landingMarker = [];
 var landCount = 0;
 var larvMarker = [];
@@ -1065,6 +1135,12 @@ const imagePath = "https://developers.google.com/maps/documentation/javascript/e
 //Create LatLngBounds object.
 var latlngbounds = new google.maps.LatLngBounds();
 
+var networkLayerArr = [];
+var infowindow_networkLayer;
+
+var zoneLayerArr = [];
+var infowindow_zoneLayer;
+
 var customeLayerArr = [];
 var infowindow_customlayer;
 
@@ -1072,6 +1148,9 @@ var sitesrFilterMarker = [];
 
 var siteNearDataMarker = [];
 var sncount =0;
+
+var defaultZoom = 9;
+
 
 {/literal}
 </script>

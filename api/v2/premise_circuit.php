@@ -200,7 +200,8 @@ if($request_type == "premise_circuit_list"){
     }    
 }else if($request_type == "premise_circuit_add"){
 	//The network from the workorder/premise
-	$sql_wonetwork = "SELECT z.\"iNetworkId\", w.\"iPremiseId\" FROM workorder w JOIN service_order so ON w.\"iServiceOrderId\" = so.\"iServiceOrderId\" JOIN premise_mas s ON so.\"iPremiseId\" = s.\"iPremiseId\" JOIN zone z ON s.\"iZoneId\" = z.\"iZoneId\" WHERE w.\"iWOId\" = '".$RES_PARA['iWOId']."' ORDER BY z.\"iNetworkId\" DESC LIMIT 1 ";
+	//$sql_wonetwork = "SELECT z.\"iNetworkId\", w.\"iPremiseId\" FROM workorder w JOIN service_order so ON w.\"iServiceOrderId\" = so.\"iServiceOrderId\" JOIN premise_mas s ON so.\"iPremiseId\" = s.\"iPremiseId\" JOIN zone z ON s.\"iZoneId\" = z.\"iZoneId\" WHERE w.\"iWOId\" = '".$RES_PARA['iWOId']."' ORDER BY z.\"iNetworkId\" DESC LIMIT 1 ";
+    $sql_wonetwork = "SELECT z.\"iNetworkId\", w.\"iPremiseId\" FROM workorder w  JOIN premise_mas s ON w.\"iPremiseId\" = s.\"iPremiseId\" JOIN zone z ON s.\"iZoneId\" = z.\"iZoneId\" WHERE w.\"iWOId\" = '".$RES_PARA['iWOId']."' ORDER BY z.\"iNetworkId\" DESC LIMIT 1 ";
 	$rs_wonetwork = $sqlObj->GetAll($sql_wonetwork);
 	//echo $sql_wonetwork."<pre>";print_r($rs_wonetwork);
 	$iWONetworkId = 0;
@@ -234,7 +235,7 @@ if($request_type == "premise_circuit_list"){
 		$PremiseCircuitObj->setClause();
 		$iPremiseCircuitId = $PremiseCircuitObj->add_records();
 		if($iPremiseCircuitId){
-			$response_data = array("Code" => 200, "Message" => MSG_ADD, "iPremiseCircuitId" => $iPremiseCircuitId, "iPremiseId" => $iPremiseId, "matching_network" => $matching_network);
+			$response_data = array("Code" => 200, "Message" => MSG_ADD, "iPremiseCircuitId" => $iPremiseCircuitId, "iPremiseId" => $RES_PARA['iPremiseId'], "matching_network" => $matching_network);
 		}
 		else{
 			$response_data = array("Code" => 500 , "Message" => MSG_ADD_ERROR, "iPremiseId" => $RES_PARA['iPremiseId'], "matching_network" => $matching_network);
@@ -244,7 +245,8 @@ if($request_type == "premise_circuit_list"){
 	}
 }else if($request_type == "premise_circuit_edit"){
 	//The network from the workorder/premise
-    $sql_wonetwork = "SELECT z.\"iNetworkId\", w.\"iPremiseId\" FROM workorder w JOIN service_order so ON w.\"iServiceOrderId\" = so.\"iServiceOrderId\" JOIN premise_mas s ON so.\"iPremiseId\" = s.\"iPremiseId\" JOIN zone z ON s.\"iZoneId\" = z.\"iZoneId\" WHERE w.\"iWOId\" = '".$RES_PARA['iWOId']."' ORDER BY z.\"iNetworkId\" DESC LIMIT 1 ";
+    //$sql_wonetwork = "SELECT z.\"iNetworkId\", w.\"iPremiseId\" FROM workorder w JOIN service_order so ON w.\"iServiceOrderId\" = so.\"iServiceOrderId\" JOIN premise_mas s ON so.\"iPremiseId\" = s.\"iPremiseId\" JOIN zone z ON s.\"iZoneId\" = z.\"iZoneId\" WHERE w.\"iWOId\" = '".$RES_PARA['iWOId']."' ORDER BY z.\"iNetworkId\" DESC LIMIT 1 ";
+    $sql_wonetwork = "SELECT z.\"iNetworkId\", w.\"iPremiseId\" FROM workorder w  JOIN premise_mas s ON w.\"iPremiseId\" = s.\"iPremiseId\" JOIN zone z ON s.\"iZoneId\" = z.\"iZoneId\" WHERE w.\"iWOId\" = '".$RES_PARA['iWOId']."' ORDER BY z.\"iNetworkId\" DESC LIMIT 1 ";
     $rs_wonetwork = $sqlObj->GetAll($sql_wonetwork);
     //echo $sql_wonetwork."<pre>";print_r($rs_wonetwork);
     $iWONetworkId = 0;
@@ -275,13 +277,13 @@ if($request_type == "premise_circuit_list"){
             "iStatus"           => $RES_PARA['iStatus'],
             "iLoginUserId"      => $RES_PARA['iLoginUserId'],
 		);
-
+        
 		$PremiseCircuitObj->update_arr = $update_arr;
 		$PremiseCircuitObj->setClause();
 		$rs = $PremiseCircuitObj->update_records();
         
 		if($rs){
-			$response_data = array("Code" => 200, "Message" => MSG_UPDATE, "iPremiseCircuitId" => $RES_PARA['iPremiseCircuitId'], "iPremiseId" => $iPremiseId, "matching_network" => $matching_network);
+			$response_data = array("Code" => 200, "Message" => MSG_UPDATE, "iPremiseCircuitId" => $RES_PARA['iPremiseCircuitId'], "iPremiseId" => $RES_PARA['iPremiseId'], "matching_network" => $matching_network);
 		}
 		else{
 			$response_data = array("Code" => 500 , "Message" => MSG_ADD_ERROR, "iPremiseId" => $RES_PARA['iPremiseId'], "matching_network" => $matching_network);

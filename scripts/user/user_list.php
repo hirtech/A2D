@@ -147,7 +147,7 @@ if($mode == "List") {
     $arr_param = array(
         "iUserId"           => $_POST['iUserId'],
         "iAGroupId"         => $_POST['iAGroupId'],
-        "iDepartmentId"     => explode(',',$_POST['iDepartmentId']),
+        "iDepartmentId"     => $_POST['iDepartmentId'],
         "iZoneId"           => $_POST['iZoneId'],
         "vFirstName"        => addslashes($_POST['vFirstName']),
         "vLastName"         => addslashes($_POST['vLastName']),
@@ -178,7 +178,7 @@ if($mode == "List") {
         "vADPFileNumber"    => addslashes($_POST['vADPFileNumber']),
         "sSalt"             => addslashes($encryptedPassword['salt']),
         "vImage"            => $file_name,
-        "zoneId_arr"        => explode(',',$_POST['zoneId_arr']),
+        "zoneId_arr"        => $_POST['zoneId_arr'],
         "sessionId"         => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
     );
 
@@ -247,7 +247,7 @@ if($mode == "List") {
         //echo "<pre>";print_r($_POST);exit;
         $arr_param = array(
             "iAGroupId"         => $_POST['iAGroupId'],
-            "iDepartmentId"     => explode(',',$_POST['iDepartmentId']),
+            "iDepartmentId"     => $_POST['iDepartmentId'],
             "iZoneId"           => $_POST['iZoneId'],
             "vFirstName"        => addslashes($_POST['vFirstName']),
             "vLastName"         => addslashes($_POST['vLastName']),
@@ -278,7 +278,7 @@ if($mode == "List") {
             "vADPFileNumber"    => addslashes($_POST['vADPFileNumber']),
             "sSalt"             => addslashes($encryptedPassword['salt']),
             "vImage"            => $file_name,
-            "zoneId_arr"        => explode(',',$_POST['zoneId_arr']),
+            "zoneId_arr"        => $_POST['zoneId_arr'],
             "sessionId"         => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
         );
 
