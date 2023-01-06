@@ -1447,6 +1447,9 @@ function newLocation(newLat,newLng) {
     google.maps.event.addListener(map, 'zoom_changed', function() {
 	    defaultZoom = map.getZoom();
 	});
+	if(defaultZoom < 14) {
+		defaultZoom = 14;	
+	}
 	map.setZoom(defaultZoom);
 	//console.log("defaultZoom New Location1 = "+defaultZoom)
 }
