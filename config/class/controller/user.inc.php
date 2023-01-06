@@ -155,7 +155,7 @@ class User {
             $this->debug_query($sql_user);
             if ($userid != "") {
                 ###user department
-                $iDepartmentId_arr = $this->insert_arr['iDepartmentId']; 
+                $iDepartmentId_arr = explode(",",$this->insert_arr['iDepartmentId']); 
                 //$iDepartmentId_arr = $_POST['iDepartmentId']; 
                 $di = count($iDepartmentId_arr);
                 if($di > 0){
@@ -205,7 +205,7 @@ class User {
                     }
                 }
 
-                $iZoneId_arr = $this->insert_arr['zoneId_arr'];
+                $iZoneId_arr = explode(",",$this->insert_arr['zoneId_arr']);
                 $pi = count($iZoneId_arr);
                 if($pi > 0){
                     $sql_sp = 'INSERT INTO user_zone("iUserId", "iZoneId") VALUES ';
@@ -250,10 +250,8 @@ class User {
             }
 
             $sql_user = "UPDATE user_mas SET \"iAGroupId\"=" . gen_allow_null_int($this->update_arr['iAGroupId']) . ", \"iZoneId\"=" . gen_allow_null_int($this->update_arr['iZoneId']) . ", \"vUsername\"=" . gen_allow_null_char($this->update_arr['vUsername']) . "".$password_str.", \"vFirstName\"=" . gen_allow_null_char($this->update_arr['vFirstName']) . ", \"vLastName\"=" . gen_allow_null_char($this->update_arr['vLastName']) . ", \"vNickName\"=" . gen_allow_null_char($this->update_arr['vNickName']) . ", \"vEmail\"=" . gen_allow_null_char($this->update_arr['vEmail']) . ", \"iStatus\"=" . gen_allow_null_int($this->update_arr['iStatus']) . ", \"iType\"=" . gen_allow_null_int($this->update_arr['iType']) . ", \"vADPFileNumber\"=" . gen_allow_null_char($this->update_arr['vADPFileNumber']) . ", \"vLoginUserName\"=" . gen_allow_null_char($_SESSION["sess_vName" . $admin_panel_session_suffix]) . "".$salt_str.", \"vImage\" =". gen_allow_null_char($this->update_arr['vImage']).", \"dModifiedDate\" = ".gen_allow_null_char(date_getSystemDateTime())." WHERE \"iUserId\"=" . $this->update_arr['iUserId'];
-            $sqlObj->Execute($sql_user);
+            $rs_up = $sqlObj->Execute($sql_user);
             //$this->debug_query($sql_user);
-
-            $rs_up = $sqlObj->Affected_Rows();
             if ($rs_up) {
                 $sql_det = 'SELECT "iUDetailId" FROM user_details WHERE "iUserId" = '.$this->update_arr['iUserId'].' LIMIT 1';
                 $rs_det = $sqlObj->GetAll($sql_det);
@@ -274,7 +272,7 @@ class User {
 				$sql = 'DELETE FROM user_department WHERE "iUserId" = '.$this->update_arr['iUserId'];
 				$sqlObj->Execute($sql);
 				
-				$iDepartmentId_arr = $this->update_arr['iDepartmentId']; 
+				$iDepartmentId_arr = explode(",",$this->update_arr['iDepartmentId']); 
 				$di = count($iDepartmentId_arr);
 				if($di > 0){
 					$user_dept_arr = array();
@@ -289,7 +287,7 @@ class User {
                 $sql_del = 'DELETE FROM user_zone WHERE "iUserId" = '.gen_allow_null_int($this->update_arr['iUserId']);
                 $sqlObj->Execute($sql_del);
                 
-                $iZoneId_arr = $this->update_arr['zoneId_arr'];
+                $iZoneId_arr = explode(",",$this->update_arr['zoneId_arr']);
                 $pi = count($iZoneId_arr);
                 if($pi > 0){
                     $sql_sp = 'INSERT INTO user_zone ("iUserId", "iZoneId") VALUES ';
@@ -297,6 +295,7 @@ class User {
                         $sql_sp .= '('.gen_allow_null_int($this->update_arr['iUserId']).', '.gen_allow_null_int($iZoneId_arr[$p]).'), ';
                     }
                     $sqlObj->Execute(substr($sql_sp, 0, -2));
+                    
                 }
             }
 
@@ -345,6 +344,7 @@ class User {
             return $rs_up;
         }
     }
+
     function user_clear_variable() {
         $this->join_field = array();
         $this->join = array();
@@ -415,6 +415,21 @@ class User {
 
         return $rs_up;
     }
+
+    function user_zoneFromId($iUserId) {
+        global $sqlObj;
+
+        $sql = "SELECT \"iZoneId\" FROM user_zone WHERE \"iUserId\"='" . $iUserId . "' ORDER BY \"iZoneId\"";
+        $rs_db = $sqlObj->GetAll($sql);
+        $zone_arr = [];
+        $ni = count($rs_db);
+        if($ni > 0){
+            for($i=0; $i<$ni; $i++){
+                $zone_arr[] =  $rs_db[$i]['iZoneId'];
+            }
+        }
+        return $zone_arr;
+    } 
 
 }
 
