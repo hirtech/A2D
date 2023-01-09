@@ -183,6 +183,7 @@ class Fieldmap {
                 $response['sites'] = $siteFilter_data;
             }
         }
+
         if(isset($param['srFilter']) && $param['srFilter'] != ''){
             $srFilterArr = explode(",", $param['srFilter']);
             $srJsonUrl = $field_map_json_path."fiberInquiry-data.json";
@@ -197,8 +198,33 @@ class Fieldmap {
                 $response['sites'] = $srFilter_data;
             }
         }
+
+        if(isset($param['zone']) && $param['zone'] != ''){
+            //$finalArr = array();
+            $zones = $this->getZonesData($param['zone']);
+            $selectedZones = explode(",", $param['zone']);
+
+            if(empty($finalArr)){
+                $finalArr = $siteArr;
+            }
+
+            foreach($finalArr as $_key => $site){
+                //print_r($finalArr[$_key]); die;
+                if(!in_array($site['zoneid'], $selectedZones) ){
+                    unset($finalArr[$_key]);
+                }
+            }
+            //$response['sites'] = $finalArr;
+            if(!empty($response['sites'])){
+                $response['sites'] =array_intersect_key($response['sites'],$finalArr);
+            }/*else{
+                $response['sites'] = $finalArr;
+            }*/
+            $response['polyZone'] = $zones;
+        }
+
         if(isset($param['city']) && $param['city'] != ''){
-            $finalArr = array();
+            //$finalArr = array();
             $selectedCity = explode(",", $param['city']);
             //echo "<pre>";print_r($selectedCity);exit();
             if(empty($finalArr)){
@@ -219,7 +245,7 @@ class Fieldmap {
         }
 
         if(isset($param['network']) && $param['network'] != ''){
-            $finalArr = array();
+            //$finalArr = array();
             $selectedNetwork = explode(",", $param['network']);
             //echo "<pre>";print_r($selectedNetwork);exit();
             if(empty($finalArr)){
@@ -230,6 +256,7 @@ class Fieldmap {
                     unset($finalArr[$_key]);
                 }
             }
+            //echo "<pre>";print_r($response['sites']);exit();
             //$response['sites'] = $finalArr;
             if(!empty($response['sites'])){
                 //$response['sites'] = array_replace($response['sites'],$srFilter_data);
@@ -237,9 +264,10 @@ class Fieldmap {
             }else{
                 $response['sites'] = $finalArr;
             }
+            //echo "<pre>";print_r($response['sites']);exit();
         }
         if(isset($param['zipcode']) && $param['zipcode'] != ''){
-            $finalArr = array();
+            //$finalArr = array();
             $selectedZipcode = explode(",", $param['zipcode']);
             //echo "<pre>";print_r($selectedZipcode);exit();
             if(empty($finalArr)){
@@ -257,34 +285,6 @@ class Fieldmap {
             }else{
                 $response['sites'] = $finalArr;
             }
-        }
-
-        if(isset($param['zone']) && $param['zone'] != ''){
-            $finalArr = array();
-             
-            $zones = $this->getZonesData($param['zone']);
-            $selectedZones = explode(",", $param['zone']);
-
-            if(empty($finalArr)){
-                $finalArr = $siteArr;
-            }
-            
-            foreach($finalArr as $_key => $site){
-                //print_r($finalArr[$_key]); die;
-                if(!in_array($site['zoneid'], $selectedZones) ){
-                    unset($finalArr[$_key]);
-                }
-            }
-            //$response['sites'] = $finalArr;
-            if(!empty($response['sites'])){
-                //$response['sites'] = array_replace($response['sites'],$srFilter_data);
-                //$response['sites'] = $response['sites'] + $finalArr;
-                $response['sites'] =array_intersect_key($response['sites'],$finalArr);
-            }/*else{
-                $response['sites'] = $finalArr;
-            }*/
-            $response['polyZone'] = $zones;
-             //print_r($response); die;
         }
 
         if(isset($param['networkLayer']) && $param['networkLayer'] != ''){
@@ -897,7 +897,7 @@ class Fieldmap {
             $response['sites'] = $premiseTypeLayerArr;
         }else if(empty($premiseStatusArr) && empty($premiseAttributeArr) && empty($premiseTypeLayerArr) && !empty($premisesubTypeLayerArr)){
             $response['sites'] = $premisesubTypeLayerArr;
-        }else {
+        }else if(!empty($premiseStatusArr) || !empty($premiseAttributeArr) || !empty($premiseTypeLayerArr) || !empty($premisesubTypeLayerArr)){
             $newPremiseArr = array_merge($premiseStatusArr, $premiseAttributeArr, $premiseTypeLayerArr, $premisesubTypeLayerArr);
             $premiseArr = array_map("unserialize", array_unique(array_map("serialize", $newPremiseArr)));
             $response['sites'] = $premiseArr;
@@ -1026,32 +1026,29 @@ class Fieldmap {
            $where[] = ' "iPremiseId" IN ('.$premiseId.')'; 
         }
         
-        $where[] ='"iStatus" = 1';
-
         $whereQuery = implode(" AND ", $where);
-        $siteSql = 'SELECT "iPremiseId" as premiseid, "iSTypeId" as sTypeId, "iSSTypeId" as sSTypeId, "iCityId", "iZoneId", st_astext(ST_Centroid("vPolygonLatLong")) as polyCenter, st_astext("vPolygonLatLong") as polygon, st_astext("vPointLatLong") as point, st_astext("vPolyLineLatLong") as poly_line FROM premise_mas WHERE '.$whereQuery;
+        $siteSql = 'SELECT "iPremiseId" as premiseid, "iSTypeId" as sTypeId, "iSSTypeId" as sSTypeId, "iCityId", "iZoneId", st_astext("vPointLatLong") as point FROM premise_mas WHERE '.$whereQuery;
         //echo $siteSql;exit();
         $data['siteData'] = $sqlObj->GetAll($siteSql);
         // print_r($data);exit();
         return $data;
     }
 
-    public function getSerachSRData($param){
+    public function getSerachFiberInquiryData($param){
        global $sqlObj;
         $data = array();
 
         $where = array();
-        $srId= $param['srId'];
+        $fiberInquiryId= $param['fiberInquiryId'];
         
-        if($srId != ""){
-           $where[] = ' fiberinquiry_details."iFiberInquiryId" IN ('.$srId.')'; 
+        if($fiberInquiryId != ""){
+           $where[] = ' fiberinquiry_details."iFiberInquiryId" IN ('.$fiberInquiryId.')'; 
         }
-        $where[] = ' fiberinquiry_details."iStatus" != 4 ';
         $whereQuery = implode(" AND ", $where);
         
-        $SrData = 'SELECT fiberinquiry_details.*,contact_mas."vFirstName" FROM "public"."fiberinquiry_details" left join contact_mas on "contact_mas"."iCId" = "fiberinquiry_details"."iCId" LEFT JOIN state_mas  on "state_mas"."iStateId" = "fiberinquiry_details"."iStateId" LEFT JOIN "city_mas" on "city_mas"."iCityId" = "fiberinquiry_details"."iCityId" WHERE  '.$whereQuery.' ORDER BY fiberinquiry_details."iFiberInquiryId"';
-        $data['srData'] = $sqlObj->GetAll($SrData);
-      
+        $fInquiryData = 'SELECT fiberinquiry_details.*,contact_mas."vFirstName", contact_mas."vLastName", zone."vZoneName", zone."iNetworkId", network."vName" as "vNetwork", engagement_mas."vEngagement", sst."vSubTypeName" as "vPremiseSubType", s."vName" as "vPremiseName", city_mas."vCity", state_mas."vState" FROM "public"."fiberinquiry_details" left join contact_mas on "contact_mas"."iCId" = "fiberinquiry_details"."iCId" LEFT JOIN state_mas  on "state_mas"."iStateId" = "fiberinquiry_details"."iStateId" LEFT JOIN "city_mas" on "city_mas"."iCityId" = "fiberinquiry_details"."iCityId" LEFT JOIN "zone" on "zone"."iZoneId" = "fiberinquiry_details"."iZoneId" LEFT JOIN "network" on "network"."iNetworkId" = "zone"."iNetworkId" LEFT JOIN "engagement_mas" on "engagement_mas"."iEngagementId" = "fiberinquiry_details"."iEngagementId" LEFT JOIN "site_sub_type_mas" sst on sst."iSSTypeId" = "fiberinquiry_details"."iPremiseSubTypeId" LEFT JOIN "premise_mas" s on s."iPremiseId" = "fiberinquiry_details"."iMatchingPremiseId" WHERE  '.$whereQuery.' ORDER BY fiberinquiry_details."iFiberInquiryId"';
+        $data['fInquiryData'] = $sqlObj->GetAll($fInquiryData);
+        //print_r($data);exit;
         return $data;
   
     }
@@ -1080,80 +1077,31 @@ class Fieldmap {
     }
 
 
-    public function getSiteSRFilterData($param){
+    public function getPremiseFiberInquiryFilterData($param){
         global $sqlObj;
         $data = array();
         $premiseId= $param['premiseid'];
-        $srId= $param['srId'];
+        $fInquiryId= $param['fInquiryId'];
         if($premiseId != ""){
             $sitewhere = array();
-        
             $sitewhere[] = ' "iPremiseId" IN ('.$premiseId.')'; 
-            
-            $sitewhere[] ='"iStatus" = 1';
-
             $sitewhereQuery = implode(" AND ", $sitewhere);
-            $siteSql = 'SELECT "iPremiseId" as premiseid, "iSTypeId" as sTypeId, "iSSTypeId" as sSTypeId, "iCityId", "iZoneId", st_astext(ST_Centroid("vPolygonLatLong")) as polyCenter, st_astext("vPolygonLatLong") as polygon, st_astext("vPointLatLong") as point, st_astext("vPolyLineLatLong") as poly_line FROM "premise_mas" WHERE '.$sitewhereQuery;
+            $siteSql = 'SELECT "iPremiseId" as premiseid, "iSTypeId" as sTypeId, "iSSTypeId" as sSTypeId, "iCityId", "iZoneId", st_astext("vPointLatLong") as point FROM "premise_mas" WHERE '.$sitewhereQuery;
             //echo $siteSql;exit();
             $data['siteData'] = $sqlObj->GetAll($siteSql);
         }
 
         $srwhere = array();
         
-        if($srId != ""){
-        
-            $srwhere[] = ' fiberinquiry_details."iFiberInquiryId" IN ('.$srId.')'; 
-        
+        if($fInquiryId != ""){
+            $srwhere[] = ' fiberinquiry_details."iFiberInquiryId" IN ('.$fInquiryId.')'; 
             $srwhereQuery = implode(" AND ", $srwhere);
             
-            $SrData = 'SELECT fiberinquiry_details.*, contact_mas."vFirstName" FROM "public"."fiberinquiry_details" left join contact_mas on "contact_mas"."iCId" = "fiberinquiry_details"."iCId" LEFT JOIN state_mas  on "state_mas"."iStateId" = "fiberinquiry_details"."iStateId" LEFT JOIN "city_mas" on "city_mas"."iCityId" = "fiberinquiry_details"."iCityId" WHERE  '.$srwhereQuery.' ORDER BY fiberinquiry_details."iFiberInquiryId"';
-			//echo $SrData;exit;
-            $data['srData'] = $sqlObj->GetAll($SrData);
+            $fInquiryData = 'SELECT fiberinquiry_details.*,contact_mas."vFirstName", contact_mas."vLastName", zone."vZoneName", zone."iNetworkId", network."vName" as "vNetwork", engagement_mas."vEngagement", sst."vSubTypeName" as "vPremiseSubType", s."vName" as "vPremiseName", city_mas."vCity", state_mas."vState" FROM "public"."fiberinquiry_details" left join contact_mas on "contact_mas"."iCId" = "fiberinquiry_details"."iCId" LEFT JOIN state_mas  on "state_mas"."iStateId" = "fiberinquiry_details"."iStateId" LEFT JOIN "city_mas" on "city_mas"."iCityId" = "fiberinquiry_details"."iCityId" LEFT JOIN "zone" on "zone"."iZoneId" = "fiberinquiry_details"."iZoneId" LEFT JOIN "network" on "network"."iNetworkId" = "zone"."iNetworkId" LEFT JOIN "engagement_mas" on "engagement_mas"."iEngagementId" = "fiberinquiry_details"."iEngagementId" LEFT JOIN "site_sub_type_mas" sst on sst."iSSTypeId" = "fiberinquiry_details"."iPremiseSubTypeId" LEFT JOIN "premise_mas" s on s."iPremiseId" = "fiberinquiry_details"."iMatchingPremiseId" WHERE  '.$srwhereQuery.' ORDER BY fiberinquiry_details."iFiberInquiryId"';
+			//echo $fInquiryData;exit;
+            $data['fiberinquiryData'] = $sqlObj->GetAll($fInquiryData);
         }
       
-        return $data;
-    }
-
-
-    /** Function for get site data using last synchronize date (for app)**/
-    public function getSiteDataBySyncDate($param){
-        global $sqlObj;
-        $data = array();
-        $where_arr = array();
-        $last_sync_date = trim($param['last_sync_date']);
-        $current_date = trim($param['current_date']);
-
-        $attrSql = 'SELECT "iSTypeId" FROM site_type_mas'; 
-        $premiseIds = $sqlObj->GetAll($attrSql);
-        $sIdsArr = array();
-        foreach ($premiseIds as $key => $value) {
-           $sIdsArr[$key] = $value['iSTypeId'];
-        }
-        $sIds = implode(",", $sIdsArr);
-        
-        $where_arr[] = ' premise_mas."iSTypeId" IN('.$sIds.')';
-        $where_arr[] ='  premise_mas."iStatus" = 1';
-        if((isset($last_sync_date) && $last_sync_date != "")){
-            $where_arr[] = " (( DATE(premise_mas.\"dAddedDate\") >= '" . $last_sync_date . "' AND DATE(premise_mas.\"dAddedDate\") <= '" . $current_date. "')  OR (DATE(premise_mas.\"dModifiedDate\") >= '" . $last_sync_date . "' AND DATE(premise_mas.\"dModifiedDate\") <= '" . $current_date. "' ))";
-        }
-
-        $whereQuery = (!empty($where_arr))?' WHERE '.implode(" AND ", $where_arr):'';
-
-        $sql_attr = 'SELECT sa."iPremiseId", sa."iSAttributeId" FROM "site_attribute" sa INNER JOIN premise_mas  ON sa."iPremiseId" = premise_mas."iPremiseId"  '.$whereQuery.' ORDER BY sa."iPremiseId"';
-        $rs_sql_attr = $sqlObj->GetAll($sql_attr);
-        $ai = count($rs_sql_attr);
-        $attr_arr = [];
-        for($a=0; $a<$ai; $a++) {
-            $attr_arr[$rs_sql_attr[$a]['iPremiseId']][] = $rs_sql_attr[$a]['iSAttributeId'];
-        }
-
-
-        $filterSql = 'SELECT premise_mas."iPremiseId", premise_mas."vName",premise_mas."iSTypeId",premise_mas."iSSTypeId", premise_mas."vAddress1", premise_mas."vAddress2", premise_mas."vStreet", premise_mas."vCrossStreet", premise_mas."iZipcode", premise_mas."iStateId", premise_mas."iCountyId", premise_mas."iCityId", premise_mas."iGeometryType", premise_mas."iZoneId", premise_mas."dAddedDate",  premise_mas."dModifiedDate",  premise_mas."iStatus",  ST_AsGeoJSON(premise_mas."vPointLatLong") as vPointLatLong,  ST_AsGeoJSON(premise_mas."vPolygonLatLong") as vPolygonLatLong,  ST_AsGeoJSON(premise_mas."vPolyLineLatLong") as vPolyLineLatLong, site_type_mas."icon" FROM "premise_mas" Left Join site_type_mas on premise_mas."iSTypeId" = site_type_mas."iSTypeId" '.$whereQuery.' ORDER BY premise_mas."iPremiseId" ';
-        $site_data = $sqlObj->GetAll($filterSql);
-
-        $data['sites'] = $site_data;
-        $data['site_atrribute'] = $attr_arr;
-
         return $data;
     }
 

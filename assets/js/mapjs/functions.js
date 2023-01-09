@@ -200,14 +200,16 @@ function getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLay
 									};
 									var vName = resfiberInquirydata[id].vName;
 									var vAddress = resfiberInquirydata[id].vAddress;
+                                    var premiseid = resfiberInquirydata[id].premiseid;
                                     var vPremiseName = resfiberInquirydata[id].vPremiseName;
                                     var vPremiseSubType	= resfiberInquirydata[id].vPremiseSubType;
                                     var vEngagement = resfiberInquirydata[id].vEngagement;
                                     var vZoneName = resfiberInquirydata[id].vZoneName;
                                     var vNetwork = resfiberInquirydata[id].vNetwork;
                                     var vStatus = resfiberInquirydata[id].vStatus;
+                                    var iFiberInquiryId = resfiberInquirydata[id].iFiberInquiryId;
 
-									showPointMapForFiberInquiry(pointMatrix, map, resfiberInquirydata[id].icon, id, vName, vAddress, vPremiseName, vPremiseSubType, vEngagement, vZoneName, vNetwork, vStatus);
+									showPointMapForFiberInquiry(pointMatrix, map, resfiberInquirydata[id].icon, id, vName, vAddress, premiseid, vPremiseName, vPremiseSubType, vEngagement, vZoneName, vNetwork, vStatus, iFiberInquiryId);
 									//fiberInquiryCount++;
 								}
 			            	}
@@ -395,7 +397,7 @@ function initMap() {
 	map.setCenter({lat: parseFloat(MAP_LAT), lng: parseFloat(MAP_LONG)}); 
 	/*hide features(label) on the map*/
     map.setOptions({ styles: map_styles["hide"] });
-    console.log("map init")
+    //console.log("map init")
 
 	/*const locationButton = document.createElement("button");
   	locationButton.textContent = "Current Location";
@@ -513,7 +515,7 @@ function showZonePolygonMap(sitePath, map) {
 	zCount++;
 }
 
-function showPointMapForFiberInquiry(sitePath, map, icon, premiseid, vName, vAddress, vPremiseName, vPremiseSubType, vEngagement, vZoneName, vNetwork, vStatus) {
+function showPointMapForFiberInquiry(sitePath, map, icon, id, vName, vAddress, premiseid, vPremiseName, vPremiseSubType, vEngagement, vZoneName, vNetwork, vStatus,iFiberInquiryId) {
 	/*map.setCenter({lat: 41.595526, lng: -72.687145}); */
 	//console.log('pCount=>'+pCount);
 	fiberInquirylayerMarker[fiberInquiryCount] = new google.maps.Marker({
@@ -524,7 +526,8 @@ function showPointMapForFiberInquiry(sitePath, map, icon, premiseid, vName, vAdd
 	newLocation(sitePath.lat,sitePath.lng);
 	$sr_map = fiberInquirylayerMarker[fiberInquiryCount];
 	gmarkers.push($sr_map);
-	fiberInquiryinfo_popup($sr_map, premiseid, vName, vAddress, vPremiseName, vPremiseSubType, vEngagement, vZoneName, vNetwork, vStatus);
+	//alert("id" +id)
+	fiberInquiryinfo_popup($sr_map, id, vName, vAddress, premiseid, vPremiseName, vPremiseSubType, vEngagement, vZoneName, vNetwork, vStatus,iFiberInquiryId);
 	fiberInquirylayerMarker[fiberInquiryCount].setMap(map);
 
 	//Extend each marker's position in LatLngBounds object.
@@ -1072,13 +1075,15 @@ function info_popup(marker, premiseid) {
 	})(marker, premiseid));
 }
 
-function fiberInquiryinfo_popup(marker, premiseid, vName, vAddress, vPremiseName, vPremiseSubType, vEngagement, vZoneName, vNetwork, vStatus) {
+function fiberInquiryinfo_popup(marker, id, vName, vAddress, premiseid,vPremiseName, vPremiseSubType, vEngagement, vZoneName, vNetwork, vStatus,iFiberInquiryId) {
 	var full_name = vName;
-	google.maps.event.addListener(marker, 'click', (function(marker, premiseid, full_name, vAddress, vPremiseName, vPremiseSubType, vEngagement, vZoneName, vNetwork, vStatus) {
+	//alert("fiberInquiryId + "+fiberInquiryId)
+	google.maps.event.addListener(marker, 'click', (function(marker, id, full_name, vAddress, premiseid, vPremiseName, vPremiseSubType, vEngagement, vZoneName, vNetwork, vStatus,iFiberInquiryId) {
 		return function() {
 			var content = "";
 			__marker__ = marker;
 			var vName = full_name;
+			//alert(id)
 			if (vName == null || vName == 'undefined' || vName == '') {
 				vName = '';
 			} else {
@@ -1087,50 +1092,49 @@ function fiberInquiryinfo_popup(marker, premiseid, vName, vAddress, vPremiseName
 
 			if (vAddress == null || vAddress == 'undefined' || vAddress == '') {
 				vAddress = '';
-			} else {
-				vAddress = vAddress;
-			}
+			} 
 
+			if (premiseid == null || premiseid == 'undefined' || premiseid == '') {
+				premiseid = '';
+			}
 			if (vPremiseName == null || vPremiseName == 'undefined' || vPremiseName == '') {
 				vPremiseName = '';
-			} else {
-				vPremiseName = vPremiseName;
 			}
 
 			if (vPremiseSubType == null || vPremiseSubType == 'undefined' || vPremiseSubType == '') {
 				vPremiseSubType = '';
-			} else {
-				vPremiseSubType = vPremiseSubType;
-			}
+			} 
 
 			if (vNetwork == null || vNetwork == 'undefined' || vNetwork == '') {
 				vNetwork = '';
-			} else {
-				vNetwork = vNetwork;
 			}
 
 			if (vZoneName == null || vZoneName == 'undefined' || vZoneName == '') {
 				vZoneName = '';
-			} else {
-				vZoneName = vZoneName;
-			}
+			} 
 			
+			if (vEngagement == null || vEngagement == 'undefined' || vEngagement == '') {
+				vEngagement = '';
+			} 
 			if (vStatus == null || vStatus == 'undefined' || vStatus == '') {
 				vStatus = '';
-			} else {
-				vStatus = vStatus;
 			}
+			if (iFiberInquiryId == null || iFiberInquiryId == 'undefined' || iFiberInquiryId == '') {
+				iFiberInquiryId = '';
+			} 
+
+			var premise_data = 'Premise #'+premiseid+" ("+vPremiseName+")";
 			
 			content += "<div CELLPADDING=5 CELLSPACING=5 class=info_box id=info_box>";
-			content += "<h5 class='border-bottom pb-2 mb-3'>Fiber Inquiry #" + premiseid + " " + vName + "</h5>";
-			content += "<div class='d-flex'><h6>" + vPremiseName + "</h6></div>";
+			content += "<h5 class='border-bottom pb-2 mb-3'>Fiber Inquiry #" + id + " " + vName + "</h5>";
+			content += "<div class='d-flex'><h6>" + premise_data + "</h6></div>";
 			content += "<div class='d-flex'><span class='font-weight-bold'>Sub Type :</span>&nbsp;" + vPremiseSubType + "</div>";
 			content += "<div class='d-flex'><span class='font-weight-bold'>Address :</span>&nbsp;" + vAddress + "</div>";
 			content += "<div class='d-flex'><span class='font-weight-bold'>Network :</span>&nbsp;" + vNetwork + "</span></div>";
 			content += "<div class='d-flex'><span class='font-weight-bold'>Zone Name :</span>&nbsp;" + vZoneName + "</span></div>";
 			content += "<div class='d-flex'><span class='font-weight-bold'>Engagement :</span>&nbsp;" + vEngagement + "</span></div>";
 			content += "<div class='d-flex'><span class='font-weight-bold'>Status :</span>&nbsp;" + vStatus + "</div>";
-			content += "<div class='button mt-3'><a class='btn btn-primary  mr-2 text-white' href='" + site_url + "fiber_inquiry/edit&mode=Update&iFiberInquiryId=" + premiseid + "' target='_blank'>Edit Fiber Inquiry</a></div>";
+			content += "<div class='button mt-3'><a class='btn btn-primary  mr-2 text-white' href='" + site_url + "fiber_inquiry/edit&mode=Update&iFiberInquiryId=" + id + "' target='_blank'>Edit Fiber Inquiry</a></div>";
 			content += "</div>";
 			if (infowindow) {
 				infowindow.close();
@@ -1143,7 +1147,7 @@ function fiberInquiryinfo_popup(marker, premiseid, vName, vAddress, vPremiseName
 			gmarkers.push(marker);
 			google.maps.event.clearListeners(marker, 'mouseout');
 		}
-	})(marker, premiseid, full_name, vAddress, vPremiseName, vPremiseSubType, vEngagement, vZoneName, vNetwork, vStatus));
+	})(marker, id, full_name, vAddress, premiseid, vPremiseName, vPremiseSubType, vEngagement, vZoneName, vNetwork, vStatus, iFiberInquiryId));
 }
 
 function serviceOrderinfo_popup(marker, id, vMasterMSA, vServiceOrder, vSalesRepName, vSalesRepEmail, premiseid, vPremiseName, vAddress, cityid, stateid, countyid, countyid, zipcode, zoneid, vZoneName, networkid, vNetwork, vPremiseType, vCompanyName, vConnectionTypeName, vServiceType1, vStatus) {
@@ -1454,8 +1458,8 @@ function newLocation(newLat,newLng) {
 	//console.log("defaultZoom New Location1 = "+defaultZoom)
 }
 
-function getSiteSRFilterData(siteFilter,srFilter){
-	console.log('filter_map_site_sr');
+function getPremiseFiberInquiryFilterData(siteFilter,srFilter){
+	//console.log('filter_map_site_sr');
 	var latlngbounds = new google.maps.LatLngBounds();
     if (sitesrFilterMarker.length > 0) {
         for (i = 0; i < sitesrFilterMarker.length; i++) {
@@ -1474,9 +1478,9 @@ function getSiteSRFilterData(siteFilter,srFilter){
 			type: "POST",
 			url: 'vmap/api/',
 			data: {
-				action: "getSiteSRFilterData",
+				action: "getPremiseFiberInquiryFilterData",
 				premiseid: siteFilter.join(","),
-				srId: srFilter.join(","),
+				fInquiryId: srFilter.join(","),
 			},
 			cache: true,
 			beforeSend: function() {
@@ -1488,7 +1492,7 @@ function getSiteSRFilterData(siteFilter,srFilter){
 					console.log('data found-filter');
 					var response = JSON.parse(data);
 					var siteData = response.site;
-					var srData = response.sr;
+					var fInquiryData = response.fInquiry;
 					//console.log(response);
 					var ccount = 0;
 					if(siteData !== undefined && jQuery.isEmptyObject(siteData) == false){
@@ -1614,38 +1618,35 @@ function getSiteSRFilterData(siteFilter,srFilter){
 							
 						});
 					}
-					if(srData !== undefined && jQuery.isEmptyObject(srData) == false){
-						$.each(srData, function(premiseid, item) {
-							if (srData[premiseid].point !== undefined) {
-                                    for (i = 0; i < srData[premiseid].point.length; i++) {
-                                        /*var pointMatrix = {
-                                            lat: srData[premiseid].point[i]['lat']+ (Math.random() / 10000),
-                                            lng: srData[premiseid].point[i]['lng']+ (Math.random() / 10000)
-                                        };*/
+					if(fInquiryData !== undefined && jQuery.isEmptyObject(fInquiryData) == false){
+						$.each(fInquiryData, function(id, item) {
+							if (fInquiryData[id].point !== undefined) {
+                                    for (i = 0; i < fInquiryData[id].point.length; i++) {
+
                                         var pointMatrix = {
-                                            lat: srData[premiseid].point[i]['lat']+ mathRandLat,
-                                            lng: srData[premiseid].point[i]['lng']+ mathRandLng
+                                            lat: fInquiryData[id].point[i]['lat']+ mathRandLat,
+                                            lng: fInquiryData[id].point[i]['lng']+ mathRandLng
                                         };
-                                        var vName = srData[premiseid].vName;
-                                        var vAddress = srData[premiseid].vAddress;
-                                        var vPremiseName = srData[premiseid].vPremiseName;
-                                        var vPremiseSubType	= srData[premiseid].vPremiseSubType;
-                                        var vEngagement = srData[premiseid].vEngagement;
-                                        var vZoneName = srData[premiseid].vZoneName;
-                                        var vNetwork = srData[premiseid].vNetwork;
-                                        var vStatus = srData[premiseid].vStatus;
-                                        
+                                        var vName = fInquiryData[id].vName;
+                                        var vAddress = fInquiryData[id].vAddress;
+                                        var premiseid = fInquiryData[id].premiseid;
+                                        var vPremiseName = fInquiryData[id].vPremiseName;
+                                        var vPremiseSubType	= fInquiryData[id].vPremiseSubType;
+                                        var vEngagement = fInquiryData[id].vEngagement;
+                                        var vZoneName = fInquiryData[id].vZoneName;
+                                        var vNetwork = fInquiryData[id].vNetwork;
+                                        var vStatus = fInquiryData[id].vStatus;
+                                        var fiberInquiryId = fInquiryData[id].fiberInquiryId;
+
                                         sitesrFilterMarker[ccount] = new google.maps.Marker({
                                             map: map,
                                             position: pointMatrix,
-                                            icon: srData[premiseid].icon
+                                            icon: fInquiryData[id].icon
                                         });
-                                        //if (srData[premiseid].length != 0) {
-                                            newLocation(pointMatrix.lat,pointMatrix.lng);
-                                       // }
+                                        newLocation(pointMatrix.lat,pointMatrix.lng);
                                         $sr_map = sitesrFilterMarker[ccount];
 
-                                        fiberInquiryinfo_popup($sr_map, premiseid, vName, vAddress, vPremiseName, vPremiseSubType, vEngagement, vZoneName, vNetwork, vStatus);
+                                        fiberInquiryinfo_popup($sr_map, id, vName, vAddress, premiseid, vPremiseName, vPremiseSubType, vEngagement, vZoneName, vNetwork, vStatus, fiberInquiryId);
                                         sitesrFilterMarker[ccount].setMap(map);
 
                                         //Extend each marker's position in LatLngBounds object.

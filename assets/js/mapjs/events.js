@@ -12,6 +12,7 @@ zoneLayer = [];
 fiberInquiryLayer = [];
 serviceOrderLayer = [];
 workOrderLayer = [];
+zoneArrOnload = [];
 let listenerLatLngCircle;
 let listenerLatLngPoly;
 let listenerLatLngPolyline;
@@ -32,13 +33,12 @@ $(document).ready(function() {
     if (mode == 'filter_sites') {
         var iPremiseId = $.urlParam('iPremiseId');
         siteFilter.push(iPremiseId);
-        getSiteSRFilterData(siteFilter, srFilter);
-       
+        getPremiseFiberInquiryFilterData(siteFilter, srFilter);
     } else if (mode == 'filter_fiberInquiry') {
         var iFiberInquiryId = $.urlParam('iFiberInquiryId');
         srFilter.push(iFiberInquiryId);
-        getSiteSRFilterData(siteFilter, srFilter);
-    }else {
+        getPremiseFiberInquiryFilterData(siteFilter, srFilter);
+    } else {
         setTimeout(function(){
             if(typeof user_zones !== 'undefined' && user_zones.length > 0){
                 skNetwork = [];
@@ -163,11 +163,7 @@ $(document).ready(function() {
     });
 
     $(document).on("click", ".map-tool-checkbox", function() {
-        $(".selectSiteData").each(function() {
-            if ($(this).prop("checked")) {
-                $(this).prop("checked", false);
-            }
-        });
+        
         if ($("#selectAllNetwork").prop("checked") && $("#selectAllNetwork").val() != 'Yes') {
             $("#selectAllNetwork").prop("checked", false);
         }
@@ -185,50 +181,15 @@ $(document).ready(function() {
     // ************* START - Filter Submenu ************* //
     // ************* Select all Zone - Filter Submenu ************* //
     $(document).on("click", ".selectAllZone", function() {
-        /*console.log('check zone')*/
-        //initMap();
         clearMap();
+        skZones = [];
         var checksone = checkZoneSelected();
         if(checksone == true){
-            if ($("#selectAllNetwork").prop("checked") && $("#selectAllNetwork").val() != 'Yes') {
-                $("#selectAllNetwork").prop("checked", false);
-            }
-            if ($("#selectAllCity").prop("checked") && $("#selectAllCity").val() != 'Yes') {
-                $("#selectAllCity").prop("checked", false);
-            }
             if ($("#selectAllZone").prop("checked") && $("#selectAllZone").val() != 'Yes') {
                 $("#selectAllZone").prop("checked", false);
             }
-            if ($("#selectAllZipcode").prop("checked") && $("#selectAllZone").val() != 'Yes') {
-                $("#selectAllZipcode").prop("checked", false);
-            }
-            if ($("#showDistance").prop("checked")) {
-                $("#showDistance").prop("checked", false);
-            }
-            if ($("#showCircle").prop("checked")) {
-                $("#showCircle").prop("checked", false);
-            }
-            if ($("#showArea").prop("checked")) {
-                $("#showArea").prop("checked", false);
-            }
-            clearMapTool();
-            skNetwork = [];
-            skCity = [];
-            skZones = [];
-            skZipcode = [];
-            //alert("Selected Sit types: " + sAttr.join(", "));
-            $.each($("input[name='sNetwork[]']:checked"), function() {
-                skNetwork.push($(this).val());
-            });
-            $.each($("input[name='city[]']:checked"), function() {
-                skCity.push($(this).val());
-            });
             $.each($("input[name='skZones[]']:checked"), function() {
-               
                 skZones.push($(this).val());
-            });
-            $.each($("input[name='zipcode[]']:checked"), function() {
-                skZipcode.push($(this).val());
             });
         }else{
             skNetwork = [];
@@ -271,7 +232,7 @@ $(document).ready(function() {
         getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLayer, custLayer, fiberInquiryLayer, serviceOrderLayer, workOrderLayer, pCircuitStatusLayer, pCircuitcTypeLayer, premiseStatusLayer, premiseAttribute, premiseTypeLayer, premisesubTypeLayer);  
     });
 
-    // ************* Select Network - Filter Submenu ************* //
+    // ************* Select All Network - Filter Submenu ************* //
     $(document).on("click", "#selectAllNetwork", function() {
         clearMap();
         var checksone = checkZoneSelected();
@@ -304,7 +265,31 @@ $(document).ready(function() {
         getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLayer, custLayer, fiberInquiryLayer, serviceOrderLayer, workOrderLayer, pCircuitStatusLayer, pCircuitcTypeLayer, premiseStatusLayer, premiseAttribute, premiseTypeLayer, premisesubTypeLayer);
     });
 
-    // ************* Select City - Filter Submenu ************* //
+    // ************* Select Network - Filter Submenu ************* //
+    $(document).on("click",".selectAllNetwork",function(){
+        clearMap();
+        var checksone = checkZoneSelected();
+        skNetwork = [];
+        if(checksone == true){
+            if ($("#selectAllNetwork").prop("checked") && $("#selectAllNetwork").val() != 'Yes') {
+                $("#selectAllNetwork").prop("checked", false);
+            }
+            $.each($("input[name='sNetwork[]']:checked"), function() {
+                skNetwork.push($(this).val());
+            });
+        }else{
+            skNetwork = [];
+            skCity = [];
+            skZipcode = [];
+            skZones = [];
+            alert('Please select zone');
+        }
+        resetButton();
+        clearLayerData();
+        getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLayer, custLayer, fiberInquiryLayer, serviceOrderLayer, workOrderLayer, pCircuitStatusLayer, pCircuitcTypeLayer, premiseStatusLayer, premiseAttribute, premiseTypeLayer, premisesubTypeLayer);       
+    });
+
+    // ************* Select All City - Filter Submenu ************* //
     $(document).on("click", "#selectAllCity", function() {
         clearMap();
         var checksone = checkZoneSelected();
@@ -313,7 +298,6 @@ $(document).ready(function() {
             if ($("#selectAllCity").prop("checked")) {
                 $(".selectAllCity").prop("checked", true);
                 $("#selectAllCity").val("Yes");
-                //$(".selectAllCity").trigger('click');
                 $.each($("input[name='city[]']:checked"), function() {
                     skCity.push($(this).val());
                 });
@@ -335,10 +319,35 @@ $(document).ready(function() {
         }
         resetButton();
         clearLayerData();
+        //console.log(skCity);
         getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLayer, custLayer, fiberInquiryLayer, serviceOrderLayer, workOrderLayer, pCircuitStatusLayer, pCircuitcTypeLayer, premiseStatusLayer, premiseAttribute, premiseTypeLayer, premisesubTypeLayer);
     });
 
-    // ************* Select Zipcode - Filter Submenu ************* //
+    // ************* Select City - Filter Submenu ************* //
+    $(document).on("click",".selectAllCity",function(){
+        clearMap();
+        var checksone = checkZoneSelected();
+        skCity = [];
+        if(checksone == true){
+            if ($(".selectAllCity").prop("checked") && $(".selectAllCity").val() != 'Yes') {
+                $("#selectAllCity").prop("checked", false);
+            }
+            $.each($("input[name='city[]']:checked"), function() {
+                  skCity.push($(this).val());
+            });
+        }else{
+            skNetwork = [];
+            skCity = [];
+            skZipcode = [];
+            skZones = [];
+            alert('Please select zone');
+        }
+        resetButton();
+        clearLayerData();
+        getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLayer, custLayer, fiberInquiryLayer, serviceOrderLayer, workOrderLayer, pCircuitStatusLayer, pCircuitcTypeLayer, premiseStatusLayer, premiseAttribute, premiseTypeLayer, premisesubTypeLayer);       
+    });
+
+    // ************* Select All Zipcode - Filter Submenu ************* //
     $(document).on("click", "#selectAllZipcode", function() {
         clearMap();
         var checksone = checkZoneSelected();
@@ -369,6 +378,31 @@ $(document).ready(function() {
         clearLayerData();
         getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLayer, custLayer, fiberInquiryLayer, serviceOrderLayer, workOrderLayer, pCircuitStatusLayer, pCircuitcTypeLayer, premiseStatusLayer, premiseAttribute, premiseTypeLayer, premisesubTypeLayer);
     });
+
+    // ************* Select Zipcode - Filter Submenu ************* //
+    $(document).on("click",".selectAllZipcode",function(){
+        clearMap();
+        var checksone = checkZoneSelected();
+        skZipcode = [];
+        if(checksone == true){
+            if ($(".selectAllZipcode").prop("checked") && $(".selectAllZipcode").val() != 'Yes') {
+                $("#selectAllZipcode").prop("checked", false);
+            }
+            $.each($("input[name='zipcode[]']:checked"), function() {
+                  skZipcode.push($(this).val());
+            });
+        }else{
+            skNetwork = [];
+            skCity = [];
+            skZipcode = [];
+            skZones = [];
+            alert('Please select zone');
+        }
+        resetButton();
+        clearLayerData();
+        getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLayer, custLayer, fiberInquiryLayer, serviceOrderLayer, workOrderLayer, pCircuitStatusLayer, pCircuitcTypeLayer, premiseStatusLayer, premiseAttribute, premiseTypeLayer, premisesubTypeLayer);       
+    });
+
     // ************* END - Filter Submenu ************* //
 
     // ************* START - Layer Submenu ************* //
@@ -1483,7 +1517,7 @@ $("#search_site_map").click(function() {
     var s = 0;
     var one_filled;
     var siteData = [];
-    var srData = [];
+    var fInquiryData = [];
     var action;
 
     if (sitesearchMarker.length > 0) {
@@ -1520,9 +1554,9 @@ $("#search_site_map").click(function() {
             siteData.push(serach_iPremiseId);
         }
 
-        var iSRId = $("#iSRId").val();
-        if (iSRId != '') {
-            srData.push(iSRId);
+        var iFiberInquiryId = $("#iFiberInquiryId").val();
+        if (iFiberInquiryId != '') {
+            fInquiryData.push(iFiberInquiryId);
         }
 
         var vLatitude = $("#vLatitude").val();
@@ -1544,14 +1578,14 @@ $("#search_site_map").click(function() {
         }
         if (siteData && siteData.length > 0) {
             action = "getSerachSiteData";
-        } else if (srData && srData.length > 0) {
-            action = "getSerachSRData";
+        } else if (fInquiryData && fInquiryData.length > 0) {
+            action = "getSerachFiberInquiryData";
         }
         clearFilterData();
         clearLayerData();
         clearMap();
         setTimeout(function () {
-            if((jQuery.isEmptyObject(srData) == false && srData.length > 0) || (jQuery.isEmptyObject(siteData) == false && siteData.length > 0)){
+            if((jQuery.isEmptyObject(fInquiryData) == false && fInquiryData.length > 0) || (jQuery.isEmptyObject(siteData) == false && siteData.length > 0)){
                
                 $.ajax({
                     type: "POST",
@@ -1559,7 +1593,7 @@ $("#search_site_map").click(function() {
                     data: {
                         action: action,
                         premiseId: siteData.join(),
-                        srId: srData.join()
+                        fiberInquiryId: fInquiryData.join()
                     },
                     cache: true,
                     beforeSend: function() {
@@ -1568,35 +1602,41 @@ $("#search_site_map").click(function() {
                     success: function(data) {
                         if (data) {
                             console.log('data found');
-                   
                             var siteData = JSON.parse(data);
                             if(Object.keys(siteData).length > 0){
                                 $.each(siteData, function(premiseid, item) {
-                                    if (action == 'getSerachSRData' ) {
-                                    //console.log('data found-1');
-                                        if (siteData[premiseid].point !== undefined) {
-                                            for (i = 0; i < siteData[premiseid].point.length; i++) {
+                                    if (action == 'getSerachFiberInquiryData' ) {
+                                        var id = premiseid;
+                                        //console.log('data found-1');
+                                        if (siteData[id].point !== undefined) {
+                                            for (i = 0; i < siteData[id].point.length; i++) {
                                                 
                                                 var pointMatrix = {
-                                                    lat: siteData[premiseid].point[i]['lat']+ mathRandLat,
-                                                    lng: siteData[premiseid].point[i]['lng']+ mathRandLng
+                                                    lat: siteData[id].point[i]['lat']+ mathRandLat,
+                                                    lng: siteData[id].point[i]['lng']+ mathRandLng
                                                 };
-                                                var vName = siteData[premiseid].vName;
-                                                var vAddress = siteData[premiseid].vAddress;
-                                                var vRequestType = siteData[premiseid].vRequestType;
-                                                var vAssignTo = siteData[premiseid].vAssignTo;
-                                                var vStatus = siteData[premiseid].vStatus;
+                                                
+                                                var vName = siteData[id].vName;
+                                                var vAddress = siteData[id].vAddress;
+                                                var premiseid1 = siteData[id].premiseid;
+                                                var vPremiseName = siteData[id].vPremiseName;
+                                                var vPremiseSubType = siteData[id].vPremiseSubType;
+                                                var vEngagement = siteData[id].vEngagement;
+                                                var vZoneName = siteData[id].vZoneName;
+                                                var vNetwork = siteData[id].vNetwork;
+                                                var vStatus = siteData[id].vStatus;
+                                                var fiberInquiryId = siteData[id].fiberInquiryId;
 
                                                 sitesearchMarker[s] = new google.maps.Marker({
                                                     map: map,
                                                     position: pointMatrix,
-                                                    icon: siteData[premiseid].icon,
+                                                    icon: siteData[id].icon,
                                                 });
                                                 
                                                 newLocation(pointMatrix.lat,pointMatrix.lng);
                                                 $sr_map = sitesearchMarker[s];
 
-                                                fiberInquiryinfo_popup($sr_map, premiseid, vName, vAddress, vRequestType, vAssignTo, vStatus);
+                                                fiberInquiryinfo_popup($sr_map, id, vName, vAddress, premiseid1, vPremiseName, vPremiseSubType, vEngagement, vZoneName, vNetwork, vStatus, fiberInquiryId);
                                                 sitesearchMarker[s].setMap(map);
                                                 
                                                 //Extend each marker's position in LatLngBounds object.
@@ -1605,6 +1645,7 @@ $("#search_site_map").click(function() {
                                             }
                                         }
                                     }else{
+                                        //console.log('premiseid + ' + premiseid);
                                         if (siteData[premiseid].point !== undefined) {
                                             for (i = 0; i < siteData[premiseid].point.length; i++) {
                                                 

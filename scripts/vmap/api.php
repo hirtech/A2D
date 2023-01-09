@@ -6,7 +6,7 @@ include_once($controller_path . "fieldmap.inc.php");
 $field_map_json_path = $field_map_json_url;
 
 $mapObj = new Fieldmap();
-if(isset($_POST) &&  !in_array($_POST['action'],array("getSerachSiteData","getSerachSRData","getSiteSRFilterData")) ){
+if(isset($_POST) &&  !in_array($_POST['action'],array("getSerachSiteData","getSerachFiberInquiryData","getPremiseFiberInquiryFilterData")) ){
 
     $action = $_POST['action'];
 
@@ -468,256 +468,104 @@ if(isset($_POST) &&  !in_array($_POST['action'],array("getSerachSiteData","getSe
            
     $i = 0;
     foreach($siteData_arr as $site){
-        if(isset($site['polygon']) && $site['polygon'] != ''){
-
-            $polygon = str_replace("POLYGON((", '', $site['polygon']);
-            $polygon = str_replace("))", '', $polygon);
-
-            $polyArr = explode(",", $polygon);
-
-            foreach($polyArr as $latlng){
-                $latLngArr = explode(" ", $latlng);
-
-                $siteData[$site['premiseid']]['polygon'][] = array(
-                    'lat' => (float) $latLngArr[1],
-                    'lng' => (float) $latLngArr[0]
-                    );
-                $i++;
-            }
-            if(isset($site['polycenter']) && $site['polycenter'] != ''){
-                $center = str_replace("POINT(", '', $site['polycenter']);
-                $polyCenter = str_replace(")", '', $center);
-                $polyCenterArr = explode(" ", $polyCenter);
-
-                $siteData[$site['premiseid']]['polyCenter'] = array(
-                    'lat' => (float) $polyCenterArr[1],
-                    'lng' => (float) $polyCenterArr[0]
-                    );
-            }
-            $siteData[$site['premiseid']]['icon'] = $mapObj->getSiteTypeIcon($site['stypeid']);
-            $siteData[$site['premiseid']]['cityid'] = $site['iCityId'];
-            $siteData[$site['premiseid']]['zoneid'] = $site['iZoneId'];
-            $siteData[$site['premiseid']]['stypeid'] = $site['stypeid'];
-        } else if(isset($site['point']) && $site['point'] != ''){
-
+        if(isset($site['point']) && $site['point'] != ''){
             $point = str_replace("POINT(", '', $site['point']);
             $point = str_replace(")", '', $point);
-
             $pointArr = explode(" ", $point);
-
-                //print_r($latLngArr);
-
+            //print_r($latLngArr);
             $siteData[$site['premiseid']]['point'][] =  array(
                 'lat' => (float) $pointArr[1],
                 'lng' => (float) $pointArr[0]
                 );
             $i++;
-            $siteData[$site['premiseid']]['icon'] = $mapObj->getSiteTypeIcon($site['stypeid']);
-            $siteData[$site['premiseid']]['cityid'] = $site['iCityId'];
-            $siteData[$site['premiseid']]['zoneid'] = $site['iZoneId'];
-            $siteData[$site['premiseid']]['stypeid'] = $site['stypeid'];
-        } else if(isset($site['poly_line']) && $site['poly_line'] != ''){
-            $polyLine = str_replace("LINESTRING(", '', $site['poly_line']);
-            $polyLine = str_replace(")", '', $polyLine);
 
-                //print_r($polygon);
-
-            $polyLineArr = explode(",", $polyLine);
-
-                //print_r($polyArr);
-
-            foreach($polyLineArr as $latlng){
-                $polyLineLatLngArr = explode(" ", $latlng);
-
-                    //print_r($latLngArr);
-                $siteData[$site['premiseid']]['poly_line'][] = array(
-                    'lat' => (float) $polyLineLatLngArr[1],
-                    'lng' => (float) $polyLineLatLngArr[0]
-                    );
-                $i++;
+            $siteData[$site['premiseid']]['premiseid'] = $site['premiseid'];
+            $vStatus = "";
+            if($site['iStatus'] == 1) { 
+                $vStatus = "On-Net";
+                if($site['stypeid'] == 1) { //Residential
+                    $siteData[$site['premiseid']]['icon'] = $site_url."images/home-green.png";
+                }else if($site['stypeid'] == 2) { //Business
+                    $siteData[$site['premiseid']]['icon'] = $site_url."images/business-green.png";
+                }else if($site['stypeid'] == 3) { //Government
+                    $siteData[$site['premiseid']]['icon'] = $site_url."images/government-green.png";
+                }else if($site['stypeid'] == 4) { //Other
+                    $siteData[$site['premiseid']]['icon'] = $site_url."images/other-green.png";
+                }else if($site['stypeid'] == 5) { //Utility
+                    $siteData[$site['premiseid']]['icon'] = $site_url."images/utility-green.png";
+                }else if($site['stypeid'] == 6) { //Cell Site   
+                    $siteData[$site['premiseid']]['icon'] = $site_url."images/tower-green.png";
+                }else {
+                    $siteData[$site['premiseid']]['icon'] = $site_url."images/green_icon.png";
+                }
             }
-
-            $siteData[$site['premiseid']]['icon'] = $mapObj->getSiteTypeIcon($site['stypeid']);
+            else if($site['iStatus'] == 2) {
+                $vStatus = "Near-Net";
+                if($site['stypeid'] == 1) { //Residential
+                    $siteData[$site['premiseid']]['icon'] = $site_url."images/home-orange.png";
+                }else if($site['stypeid'] == 2) { //Business
+                    $siteData[$site['premiseid']]['icon'] = $site_url."images/business-orange.png";
+                }else if($site['stypeid'] == 3) { //Government
+                    $siteData[$site['premiseid']]['icon'] = $site_url."images/government-orange.png";
+                }else if($site['stypeid'] == 4) { //Other
+                    $siteData[$site['premiseid']]['icon'] = $site_url."images/other-orange.png";
+                }else if($site['stypeid'] == 5) { //Utility
+                    $siteData[$site['premiseid']]['icon'] = $site_url."images/utility-orange.png";
+                }else if($site['stypeid'] == 6) { //Cell Site   
+                    $siteData[$site['premiseid']]['icon'] = $site_url."images/tower-orange.png";
+                }else {
+                    $siteData[$site['premiseid']]['icon'] = $site_url."images/orange_icon.png";
+                }
+            }else { 
+                $vStatus = "Off-Net";
+                if($site['stypeid'] == 1) { //Residential
+                    $siteData[$site['premiseid']]['icon'] = $site_url."images/home-red.png";
+                }else if($site['stypeid'] == 2) { //Business
+                    $siteData[$site['premiseid']]['icon'] = $site_url."images/business-red.png";
+                }else if($site['stypeid'] == 3) { //Government
+                    $siteData[$site['premiseid']]['icon'] = $site_url."images/government-red.png";
+                }else if($site['stypeid'] == 4) { //Other
+                    $siteData[$site['premiseid']]['icon'] = $site_url."images/other-red.png";
+                }else if($site['stypeid'] == 5) { //Utility
+                    $siteData[$site['premiseid']]['icon'] = $site_url."images/utility-red.png";
+                }else if($site['stypeid'] == 6) { //Cell Site   
+                    $siteData[$site['premiseid']]['icon'] = $site_url."images/tower-red.png";
+                }else {
+                    $siteData[$site['premiseid']]['icon'] = $site_url."images/red_icon.png";
+                }
+            }
+            $siteData[$site['premiseid']]['iStatus'] = $site['iStatus'];
+            $siteData[$site['premiseid']]['vStatus'] = $vStatus;
             $siteData[$site['premiseid']]['cityid'] = $site['iCityId'];
             $siteData[$site['premiseid']]['zoneid'] = $site['iZoneId'];
+            $siteData[$site['premiseid']]['zipcode'] = $site['iZipcode'];
+            $siteData[$site['premiseid']]['networkid'] = $site['iNetworkId'];
             $siteData[$site['premiseid']]['stypeid'] = $site['stypeid'];
-        } 
+            $siteData[$site['premiseid']]['sstypeid'] = $site['sstypeid'];
+            $siteData[$site['premiseid']]['sattributeid'] = explode(",", $site['sattributeid']) ;
+        }
     }
-   // print_r($siteData);exit();
+    // print_r($siteData);exit();
     echo json_encode($siteData);
     die;
 
-}else if(isset($_POST) && $_POST['action'] == "getSerachSRData") {
+}else if(isset($_POST) && $_POST['action'] == "getSerachFiberInquiryData") {
     $action = $_POST['action'];
 
     $data = $mapObj->$action($_POST); 
     
-    $srData = array();
-    $srData_arr = $data['srData'];
-
-        foreach($srData_arr as $site){
-           
-            if(isset($site['vLatitude']) && $site['vLongitude'] != ''){
-                $vLatitude = $site['vLatitude'];
-                $vLongitude = $site['vLongitude'];
-                $srData[$site['iSRId']]['point'][] =  array(
-                    'lat' => (float) $vLatitude,
-                    'lng' => (float) $vLongitude
-                    );
-
-                $srData[$site['iSRId']]['icon'] = $site_url."images/black_icon.png";
-
-                $vFirstName = ($site['vFirstName'] ? $site['vFirstName'] : '');
-                $vLastName = ($site['vLastName'] ? $site['vLastName'] : '');
-                $vAddress1 = ($site['vAddress1'] ? $site['vAddress1'] : '');
-                $vStreet = ($site['vStreet'] ? $site['vStreet'] : '');
-                $vCity = ($site['vCity'] ? $site['vCity'] : '');
-                $vState = ($site['vState'] ? $site['vState'] : '');
-
-                $vRequestType = '';
-                if($site['bMosquitoService'] == 't' && $site['bCarcassService'] != 't') {
-                    $vRequestType = 'Mosquito Inspection/Treatment';
-                }else if($site['bMosquitoService'] != 't' && $site['bCarcassService'] == 't') {
-                    $vRequestType = 'Carcass Removal';
-                }else if($site['bMosquitoService'] == 't' && $site['bCarcassService'] == 't') {
-                    $vRequestType = 'Mosquito Inspection/Treatment | Carcass Removal';
-                }
-
-                $vStatus = '';
-                if($site['iStatus'] == 1){
-                    $vStatus = 'Draft';
-                    $srData[$site['iSRId']]['icon'] = $site_url."images/sr_red.png";
-                }else if($site['iStatus'] == 2){
-                    $vStatus = 'Assigned';
-                    $srData[$site['iSRId']]['icon'] = $site_url."images/sr_yellow.png";
-                }else if($site['iStatus'] == 3){
-                    $vStatus = 'Review';
-                    $srData[$site['iSRId']]['icon'] = $site_url."images/sr_green.png";
-                }else if($site['iStatus'] == 4){
-                    $vStatus = 'Complete';
-                    $srData[$site['iSRId']]['icon'] = $site_url."images/sr_black.png";
-                }
-                
-
-                $vAssignTo = ($site['vAssignTo'] ? $site['vAssignTo'] :'');
-                $srData[$site['iSRId']]['vName'] = $vFirstName. ' '.$vLastName;
-                $srData[$site['iSRId']]['vAddress'] = $vAddress1.' '.$vStreet.' '.$vCity.' '.$vState ;
-                $srData[$site['iSRId']]['vRequestType'] = $vRequestType;
-                $srData[$site['iSRId']]['vStatus'] = $vStatus;
-                $srData[$site['iSRId']]['vAssignTo'] = $vAssignTo;
-
-            }
-        }
-
-        echo json_encode($srData);
-        die;
-
-}else if(isset($_POST) && $_POST['action'] == "getSiteSRFilterData"){
-    $action = $_POST['action'];
-
-    $data = $mapObj->$action($_POST); 
-
-    $siteData = array();
-    $srData = array();
-    $res =array();
-
-    $siteData_arr = $data['siteData'];
-    //print_r($data); 
-
-    $srData_arr = $data['srData'];
-           
-    $i = 0;
-    foreach($siteData_arr as $site){
-        if(isset($site['polygon']) && $site['polygon'] != ''){
-
-            $polygon = str_replace("POLYGON((", '', $site['polygon']);
-            $polygon = str_replace("))", '', $polygon);
-
-            $polyArr = explode(",", $polygon);
-
-            foreach($polyArr as $latlng){
-                $latLngArr = explode(" ", $latlng);
-
-                $siteData[$site['premiseid']]['polygon'][] = array(
-                    'lat' => (float) $latLngArr[1],
-                    'lng' => (float) $latLngArr[0]
-                    );
-                $i++;
-            }
-            if(isset($site['polycenter']) && $site['polycenter'] != ''){
-                $center = str_replace("POINT(", '', $site['polycenter']);
-                $polyCenter = str_replace(")", '', $center);
-                $polyCenterArr = explode(" ", $polyCenter);
-
-                $siteData[$site['premiseid']]['polyCenter'] = array(
-                    'lat' => (float) $polyCenterArr[1],
-                    'lng' => (float) $polyCenterArr[0]
-                    );
-            }
-            $siteData[$site['premiseid']]['icon'] = $mapObj->getSiteTypeIcon($site['stypeid']);
-            $siteData[$site['premiseid']]['cityid'] = $site['iCityId'];
-            $siteData[$site['premiseid']]['zoneid'] = $site['iZoneId'];
-            $siteData[$site['premiseid']]['stypeid'] = $site['stypeid'];
-        } else if(isset($site['point']) && $site['point'] != ''){
-
-            $point = str_replace("POINT(", '', $site['point']);
-            $point = str_replace(")", '', $point);
-
-            $pointArr = explode(" ", $point);
-
-                //print_r($latLngArr);
-
-            $siteData[$site['premiseid']]['point'][] =  array(
-                'lat' => (float) $pointArr[1],
-                'lng' => (float) $pointArr[0]
-                );
-            $i++;
-            $siteData[$site['premiseid']]['icon'] = $mapObj->getSiteTypeIcon($site['stypeid']);
-            $siteData[$site['premiseid']]['cityid'] = $site['iCityId'];
-            $siteData[$site['premiseid']]['zoneid'] = $site['iZoneId'];
-            $siteData[$site['premiseid']]['stypeid'] = $site['stypeid'];
-        } else if(isset($site['poly_line']) && $site['poly_line'] != ''){
-            $polyLine = str_replace("LINESTRING(", '', $site['poly_line']);
-            $polyLine = str_replace(")", '', $polyLine);
-
-                //print_r($polygon);
-
-            $polyLineArr = explode(",", $polyLine);
-
-                //print_r($polyArr);
-
-            foreach($polyLineArr as $latlng){
-                $polyLineLatLngArr = explode(" ", $latlng);
-
-                    //print_r($latLngArr);
-                $siteData[$site['premiseid']]['poly_line'][] = array(
-                    'lat' => (float) $polyLineLatLngArr[1],
-                    'lng' => (float) $polyLineLatLngArr[0]
-                    );
-                $i++;
-            }
-
-            $siteData[$site['premiseid']]['icon'] = $mapObj->getSiteTypeIcon($site['stypeid']);
-            $siteData[$site['premiseid']]['cityid'] = $site['iCityId'];
-            $siteData[$site['premiseid']]['zoneid'] = $site['iZoneId'];
-            $siteData[$site['premiseid']]['stypeid'] = $site['stypeid'];
-        } 
-    }
-
-    $res['site'] = $siteData;
-
-    /***************************/
-    foreach($srData_arr as $site){
-       
+    $fInquiryData = array();
+    $fInquiryData_arr = $data['fInquiryData'];
+    foreach($fInquiryData_arr as $site){
         if(isset($site['vLatitude']) && $site['vLongitude'] != ''){
             $vLatitude = $site['vLatitude'];
             $vLongitude = $site['vLongitude'];
-            $srData[$site['iFiberInquiryId']]['point'][] =  array(
+            $fInquiryData[$site['iFiberInquiryId']]['point'][] =  array(
                 'lat' => (float) $vLatitude,
                 'lng' => (float) $vLongitude
                 );
 
-            $srData[$site['iFiberInquiryId']]['icon'] = $site_url."images/black_icon.png";
+            $fInquiryData[$site['iFiberInquiryId']]['icon'] = $site_url."images/black_icon.png";
 
             $vFirstName = ($site['vFirstName'] ? $site['vFirstName'] : '');
             $vLastName = ($site['vLastName'] ? $site['vLastName'] : '');
@@ -729,26 +577,192 @@ if(isset($_POST) &&  !in_array($_POST['action'],array("getSerachSiteData","getSe
             $vStatus = '';
             if($site['iStatus'] == 1){
                 $vStatus = 'Draft';
-                $srData[$site['iFiberInquiryId']]['icon'] = $site_url."images/sr_red.png";
+                $fInquiryData[$site['iFiberInquiryId']]['icon'] = $site_url."images/sr_red.png";
             }else if($site['iStatus'] == 2){
                 $vStatus = 'Assigned';
-                $srData[$site['iFiberInquiryId']]['icon'] = $site_url."images/sr_yellow.png";
+                $fInquiryData[$site['iFiberInquiryId']]['icon'] = $site_url."images/sr_black.png";
             }else if($site['iStatus'] == 3){
                 $vStatus = 'Review';
-                $srData[$site['iFiberInquiryId']]['icon'] = $site_url."images/sr_green.png";
+                $fInquiryData[$site['iFiberInquiryId']]['icon'] = $site_url."images/sr_yellow.png";
             }else if($site['iStatus'] == 4){
                 $vStatus = 'Complete';
-                $srData[$site['iFiberInquiryId']]['icon'] = $site_url."images/sr_black.png";
+                $fInquiryData[$site['iFiberInquiryId']]['icon'] = $site_url."images/sr_green.png";
             }
-
-            $srData[$site['iFiberInquiryId']]['vName'] = $vFirstName. ' '.$vLastName;
-            $srData[$site['iFiberInquiryId']]['vAddress'] = $vAddress1.' '.$vStreet.' '.$vCity.' '.$vState ;
-            $srData[$site['iFiberInquiryId']]['vRequestType'] = $vRequestType;
-            $srData[$site['iFiberInquiryId']]['vStatus'] = $vStatus;
+            
+            $fInquiryData[$site['iFiberInquiryId']]['vName'] = $vFirstName. ' '.$vLastName;
+            $fInquiryData[$site['iFiberInquiryId']]['vAddress'] = $vAddress1.' '.$vStreet.' '.$vCity.' '.$vState ;
+            $fInquiryData[$site['iFiberInquiryId']]['fiberInquiryId'] = $site['iFiberInquiryId'] ;
+            $fInquiryData[$site['iFiberInquiryId']]['cityid'] = $site['iCityId'] ;
+            $fInquiryData[$site['iFiberInquiryId']]['stateid'] = $site['iStateId'] ;
+            $fInquiryData[$site['iFiberInquiryId']]['countyid'] = $site['iCountyId'] ;
+            $fInquiryData[$site['iFiberInquiryId']]['countyid'] = $site['iCountyId'] ;
+            $fInquiryData[$site['iFiberInquiryId']]['zipcode'] = $site['iZipcode'] ;
+            $fInquiryData[$site['iFiberInquiryId']]['zoneid'] = $site['iZoneId'] ;
+            $fInquiryData[$site['iFiberInquiryId']]['vZoneName'] = $site['vZoneName'] ;
+            $fInquiryData[$site['iFiberInquiryId']]['networkid'] = $site['iNetworkId'] ;
+            $fInquiryData[$site['iFiberInquiryId']]['vNetwork'] = $site['vNetwork'] ;
+            $fInquiryData[$site['iFiberInquiryId']]['vEngagement'] = $site['vEngagement'] ;
+            $fInquiryData[$site['iFiberInquiryId']]['premiseid'] = $site['iMatchingPremiseId'] ;
+            $fInquiryData[$site['iFiberInquiryId']]['vPremiseSubType'] = $site['vPremiseSubType'] ;
+            $fInquiryData[$site['iFiberInquiryId']]['vPremiseName'] = $site['vPremiseName'] ;
+            $fInquiryData[$site['iFiberInquiryId']]['vStatus'] = $vStatus;
         }
     }
 
-    $res['sr'] = $srData;
+    echo json_encode($fInquiryData);
+    die;
+
+}else if(isset($_POST) && $_POST['action'] == "getPremiseFiberInquiryFilterData"){
+    $action = $_POST['action'];
+
+    $data = $mapObj->$action($_POST); 
+
+    $siteData = array();
+    $fInquiryData = array();
+    $res =array();
+
+    $siteData_arr = $data['siteData'];
+    //print_r($data); 
+
+    $fiberinquiryData_arr = $data['fiberinquiryData'];
+           
+    $i = 0;
+    foreach($siteData_arr as $site){
+        if(isset($site['point']) && $site['point'] != ''){
+            $point = str_replace("POINT(", '', $site['point']);
+            $point = str_replace(")", '', $point);
+            $pointArr = explode(" ", $point);
+            //print_r($latLngArr);
+            $siteData[$site['premiseid']]['point'][] =  array(
+                'lat' => (float) $pointArr[1],
+                'lng' => (float) $pointArr[0]
+                );
+            $i++;
+
+            $siteData[$site['premiseid']]['premiseid'] = $site['premiseid'];
+            $vStatus = "";
+            if($site['iStatus'] == 1) { 
+                $vStatus = "On-Net";
+                if($site['stypeid'] == 1) { //Residential
+                    $siteData[$site['premiseid']]['icon'] = $site_url."images/home-green.png";
+                }else if($site['stypeid'] == 2) { //Business
+                    $siteData[$site['premiseid']]['icon'] = $site_url."images/business-green.png";
+                }else if($site['stypeid'] == 3) { //Government
+                    $siteData[$site['premiseid']]['icon'] = $site_url."images/government-green.png";
+                }else if($site['stypeid'] == 4) { //Other
+                    $siteData[$site['premiseid']]['icon'] = $site_url."images/other-green.png";
+                }else if($site['stypeid'] == 5) { //Utility
+                    $siteData[$site['premiseid']]['icon'] = $site_url."images/utility-green.png";
+                }else if($site['stypeid'] == 6) { //Cell Site   
+                    $siteData[$site['premiseid']]['icon'] = $site_url."images/tower-green.png";
+                }else {
+                    $siteData[$site['premiseid']]['icon'] = $site_url."images/green_icon.png";
+                }
+            }
+            else if($site['iStatus'] == 2) {
+                $vStatus = "Near-Net";
+                if($site['stypeid'] == 1) { //Residential
+                    $siteData[$site['premiseid']]['icon'] = $site_url."images/home-orange.png";
+                }else if($site['stypeid'] == 2) { //Business
+                    $siteData[$site['premiseid']]['icon'] = $site_url."images/business-orange.png";
+                }else if($site['stypeid'] == 3) { //Government
+                    $siteData[$site['premiseid']]['icon'] = $site_url."images/government-orange.png";
+                }else if($site['stypeid'] == 4) { //Other
+                    $siteData[$site['premiseid']]['icon'] = $site_url."images/other-orange.png";
+                }else if($site['stypeid'] == 5) { //Utility
+                    $siteData[$site['premiseid']]['icon'] = $site_url."images/utility-orange.png";
+                }else if($site['stypeid'] == 6) { //Cell Site   
+                    $siteData[$site['premiseid']]['icon'] = $site_url."images/tower-orange.png";
+                }else {
+                    $siteData[$site['premiseid']]['icon'] = $site_url."images/orange_icon.png";
+                }
+            }else { 
+                $vStatus = "Off-Net";
+                if($site['stypeid'] == 1) { //Residential
+                    $siteData[$site['premiseid']]['icon'] = $site_url."images/home-red.png";
+                }else if($site['stypeid'] == 2) { //Business
+                    $siteData[$site['premiseid']]['icon'] = $site_url."images/business-red.png";
+                }else if($site['stypeid'] == 3) { //Government
+                    $siteData[$site['premiseid']]['icon'] = $site_url."images/government-red.png";
+                }else if($site['stypeid'] == 4) { //Other
+                    $siteData[$site['premiseid']]['icon'] = $site_url."images/other-red.png";
+                }else if($site['stypeid'] == 5) { //Utility
+                    $siteData[$site['premiseid']]['icon'] = $site_url."images/utility-red.png";
+                }else if($site['stypeid'] == 6) { //Cell Site   
+                    $siteData[$site['premiseid']]['icon'] = $site_url."images/tower-red.png";
+                }else {
+                    $siteData[$site['premiseid']]['icon'] = $site_url."images/red_icon.png";
+                }
+            }
+            $siteData[$site['premiseid']]['iStatus'] = $site['iStatus'];
+            $siteData[$site['premiseid']]['vStatus'] = $vStatus;
+            $siteData[$site['premiseid']]['cityid'] = $site['iCityId'];
+            $siteData[$site['premiseid']]['zoneid'] = $site['iZoneId'];
+            $siteData[$site['premiseid']]['zipcode'] = $site['iZipcode'];
+            $siteData[$site['premiseid']]['networkid'] = $site['iNetworkId'];
+            $siteData[$site['premiseid']]['stypeid'] = $site['stypeid'];
+            $siteData[$site['premiseid']]['sstypeid'] = $site['sstypeid'];
+            $siteData[$site['premiseid']]['sattributeid'] = explode(",", $site['sattributeid']) ;
+        }
+    }
+
+    $res['site'] = $siteData;
+
+    /***************************/
+    foreach($fiberinquiryData_arr as $site){
+        if(isset($site['vLatitude']) && $site['vLongitude'] != ''){
+            $vLatitude = $site['vLatitude'];
+            $vLongitude = $site['vLongitude'];
+            $fInquiryData[$site['iFiberInquiryId']]['point'][] =  array(
+                'lat' => (float) $vLatitude,
+                'lng' => (float) $vLongitude
+                );
+
+            $fInquiryData[$site['iFiberInquiryId']]['icon'] = $site_url."images/black_icon.png";
+
+            $vFirstName = ($site['vFirstName'] ? $site['vFirstName'] : '');
+            $vLastName = ($site['vLastName'] ? $site['vLastName'] : '');
+            $vAddress1 = ($site['vAddress1'] ? $site['vAddress1'] : '');
+            $vStreet = ($site['vStreet'] ? $site['vStreet'] : '');
+            $vCity = ($site['vCity'] ? $site['vCity'] : '');
+            $vState = ($site['vState'] ? $site['vState'] : '');
+
+            $vStatus = '';
+            if($site['iStatus'] == 1){
+                $vStatus = 'Draft';
+                $fInquiryData[$site['iFiberInquiryId']]['icon'] = $site_url."images/sr_red.png";
+            }else if($site['iStatus'] == 2){
+                $vStatus = 'Assigned';
+                $fInquiryData[$site['iFiberInquiryId']]['icon'] = $site_url."images/sr_black.png";
+            }else if($site['iStatus'] == 3){
+                $vStatus = 'Review';
+                $fInquiryData[$site['iFiberInquiryId']]['icon'] = $site_url."images/sr_yellow.png";
+            }else if($site['iStatus'] == 4){
+                $vStatus = 'Complete';
+                $fInquiryData[$site['iFiberInquiryId']]['icon'] = $site_url."images/sr_green.png";
+            }
+            
+            $fInquiryData[$site['iFiberInquiryId']]['vName'] = $vFirstName. ' '.$vLastName;
+            $fInquiryData[$site['iFiberInquiryId']]['vAddress'] = $vAddress1.' '.$vStreet.' '.$vCity.' '.$vState ;
+            $fInquiryData[$site['iFiberInquiryId']]['fiberInquiryId'] = $site['iFiberInquiryId'] ;
+            $fInquiryData[$site['iFiberInquiryId']]['cityid'] = $site['iCityId'] ;
+            $fInquiryData[$site['iFiberInquiryId']]['stateid'] = $site['iStateId'] ;
+            $fInquiryData[$site['iFiberInquiryId']]['countyid'] = $site['iCountyId'] ;
+            $fInquiryData[$site['iFiberInquiryId']]['countyid'] = $site['iCountyId'] ;
+            $fInquiryData[$site['iFiberInquiryId']]['zipcode'] = $site['iZipcode'] ;
+            $fInquiryData[$site['iFiberInquiryId']]['zoneid'] = $site['iZoneId'] ;
+            $fInquiryData[$site['iFiberInquiryId']]['vZoneName'] = $site['vZoneName'] ;
+            $fInquiryData[$site['iFiberInquiryId']]['networkid'] = $site['iNetworkId'] ;
+            $fInquiryData[$site['iFiberInquiryId']]['vNetwork'] = $site['vNetwork'] ;
+            $fInquiryData[$site['iFiberInquiryId']]['vEngagement'] = $site['vEngagement'] ;
+            $fInquiryData[$site['iFiberInquiryId']]['premiseid'] = $site['iMatchingPremiseId'] ;
+            $fInquiryData[$site['iFiberInquiryId']]['vPremiseSubType'] = $site['vPremiseSubType'] ;
+            $fInquiryData[$site['iFiberInquiryId']]['vPremiseName'] = $site['vPremiseName'] ;
+            $fInquiryData[$site['iFiberInquiryId']]['vStatus'] = $vStatus;
+        }
+    }
+
+    $res['fInquiry'] = $fInquiryData;
 
     echo json_encode($res);die;
 }
