@@ -1498,92 +1498,9 @@ function getPremiseFiberInquiryFilterData(siteFilter,srFilter){
 					if(siteData !== undefined && jQuery.isEmptyObject(siteData) == false){
 						
 						$.each(siteData, function(premiseid, item) {
-								if (siteData[premiseid].polygon !== undefined) {
-								
-									sitesrFilterMarker[ccount] = new google.maps.Polygon({
-                                        path: siteData[premiseid].polygon,
-                                        strokeColor: '#FF0000',
-                                        strokeOpacity: 0.8,
-                                        strokeWeight: 2,
-                                        fillColor: '#FF0000',
-                                        fillOpacity: 0.35,
-                                        icon: siteData[premiseid].icon,
-                                    });
-
-                                    $site_map = sitesrFilterMarker[ccount];
-                                    info_popup($site_map, premiseid);
-                                    sitesrFilterMarker[ccount].setMap(map);
-                                    //Extend each marker's position in LatLngBounds object.
-                                    /*latlngbounds.extend(sitesrFilterMarker[ccount].position);*/
-                                    sitesrFilterMarker[ccount].getPath().forEach(function (path, index) {                                
-								        latlngbounds.extend(path);
-								    });
-
-                                    ccount++;
-
-                                    if (siteData[premiseid].polyCenter !== undefined) {
-                                       /* var centerPoint = {
-                                            lat: siteData[premiseid].polyCenter['lat'] + (Math.random() / 10000),
-                                            lng: siteData[premiseid].polyCenter['lng'] + (Math.random() / 10000)
-                                        };*/
-                                        var centerPoint = {
-                                            lat: siteData[premiseid].polyCenter['lat'] + mathRandLat,
-                                            lng: siteData[premiseid].polyCenter['lng'] + mathRandLng
-                                        };
-                                        
-                                        sitesrFilterMarker[ccount] = new google.maps.Marker({
-                                            position: centerPoint,
-                                            map: map,
-                                            icon: siteData[premiseid].icon,
-                                        });
-                                        //if (siteFilter.length != 0) {
-                                            newLocation(centerPoint.lat, centerPoint.lng);
-                                        //}
-                                        $site_map = sitesrFilterMarker[ccount];
-                                        info_popup($site_map, premiseid);
-                                        sitesrFilterMarker[ccount].setMap(map);
-
-                                        //Extend each marker's position in LatLngBounds object.
-                                        latlngbounds.extend(sitesrFilterMarker[ccount].position);
-
-                                        ccount++;
-
-                                    }
-									ccount++;
-								}
-								if (siteData[premiseid].poly_line !== undefined) {
-									
-									sitesrFilterMarker[ccount] = new google.maps.Polyline({
-                                        path: siteData[premiseid].poly_line,
-                                        strokeColor: '#FF0000',
-                                        strokeOpacity: 0.8,
-                                        strokeWeight: 2,
-                                        fillColor: '#FF0000',
-                                        fillOpacity: 0.35,
-                                        icon: siteData[premiseid].icon,
-                                    });
-                                    //if (siteData[premiseid].length != 0) {
-                                        newLocation(siteData[premiseid].poly_line.lat, siteData[premiseid].poly_line.lng);
-                                    //}
-                                    $site_map = sitesrFilterMarker[ccount];
-                                    info_popup($site_map, premiseid);
-                                    sitesrFilterMarker[ccount].setMap(map);
-
-                                    //Extend each marker's position in LatLngBounds object.
-                                    /*latlngbounds.extend(sitesrFilterMarker[ccount].position);*/
-                                    sitesrFilterMarker[ccount].getPath().forEach(function (path, index) {                                
-								        latlngbounds.extend(path);
-								    });
-
-                                    ccount++;
-								}
 								if (siteData[premiseid].point !== undefined) {
-									
 									for (i = 0; i < siteData[premiseid].point.length; i++) {
-                                        /*var pointMatrix = {
-                                            lat: siteData[premiseid].point[i]['lat'] + (Math.random() / 10000),
-                                            lng: siteData[premiseid].point[i]['lng'] + (Math.random() / 10000)
-                                        };*/
+                                        
                                         var pointMatrix = {
                                             lat: siteData[premiseid].point[i]['lat'] + mathRandLat,
                                             lng: siteData[premiseid].point[i]['lng'] + mathRandLng
