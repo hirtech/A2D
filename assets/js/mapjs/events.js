@@ -1722,7 +1722,7 @@ function clear_site_address() {
 function resetButton() {
     $("#iPremiseId").val('');
     $("#serach_iPremiseId").val('');
-    $("#iSRId").val('');
+    $("#iFiberInquiryId").val('');
     $("#vLatitude").val('');
     $("#vLongitude").val('');
     $("#vName").val('');
