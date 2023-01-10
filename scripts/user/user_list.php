@@ -178,7 +178,7 @@ if($mode == "List") {
         "vADPFileNumber"    => addslashes($_POST['vADPFileNumber']),
         "sSalt"             => addslashes($encryptedPassword['salt']),
         "vImage"            => $file_name,
-        "zoneId_arr"        => $_POST['zoneId_arr'],
+        "networkId_arr"     => $_POST['networkId_arr'],
         "sessionId"         => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
     );
 
@@ -278,7 +278,7 @@ if($mode == "List") {
             "vADPFileNumber"    => addslashes($_POST['vADPFileNumber']),
             "sSalt"             => addslashes($encryptedPassword['salt']),
             "vImage"            => $file_name,
-            "zoneId_arr"        => $_POST['zoneId_arr'],
+            "networkId_arr"     => $_POST['networkId_arr'],
             "sessionId"         => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
         );
 

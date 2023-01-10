@@ -136,6 +136,9 @@ class User {
 		$sql = "DELETE FROM user_zone WHERE \"iUserId\" IN (" . $_POST['iUserId'] . ")";
         $sqlObj->Execute($sql);
 
+        $sql = "DELETE FROM user_network WHERE \"iUserId\" IN (" . $_POST['iUserId'] . ")";
+        $sqlObj->Execute($sql);
+
         $sql = "DELETE FROM user_department WHERE \"iUserId\" = ".$iUserId;
         $sqlObj->Execute($sql);
         return $rs_del;
@@ -205,12 +208,12 @@ class User {
                     }
                 }
 
-                $iZoneId_arr = explode(",",$this->insert_arr['zoneId_arr']);
-                $pi = count($iZoneId_arr);
+                $iNetworkId_arr = explode(",",$this->insert_arr['networkId_arr']);
+                $pi = count($iNetworkId_arr);
                 if($pi > 0){
-                    $sql_sp = 'INSERT INTO user_zone("iUserId", "iZoneId") VALUES ';
+                    $sql_sp = 'INSERT INTO user_network ("iUserId", "iNetworkId", "dAddedDate") VALUES ';
                     for($p=0;$p<$pi;$p++){
-                        $sql_sp .= '('.gen_allow_null_int($userid).', '.gen_allow_null_int($iZoneId_arr[$p]).'), ';
+                        $sql_sp .= '('.gen_allow_null_int($this->update_arr['iUserId']).', '.gen_allow_null_int($iNetworkId_arr[$p]).', '.gen_allow_null_char(date_getSystemDateTime()).'), ';
                     }
                     $sqlObj->Execute(substr($sql_sp, 0, -2));
                 }
@@ -284,15 +287,15 @@ class User {
 						$sqlObj->Execute($sql);
 					}
 				}
-                $sql_del = 'DELETE FROM user_zone WHERE "iUserId" = '.gen_allow_null_int($this->update_arr['iUserId']);
+                $sql_del = 'DELETE FROM user_network WHERE "iUserId" = '.gen_allow_null_int($this->update_arr['iUserId']);
                 $sqlObj->Execute($sql_del);
                 
-                $iZoneId_arr = explode(",",$this->update_arr['zoneId_arr']);
-                $pi = count($iZoneId_arr);
+                $iNetworkId_arr = explode(",",$this->update_arr['networkId_arr']);
+                $pi = count($iNetworkId_arr);
                 if($pi > 0){
-                    $sql_sp = 'INSERT INTO user_zone ("iUserId", "iZoneId") VALUES ';
+                    $sql_sp = 'INSERT INTO user_network ("iUserId", "iNetworkId", "dAddedDate") VALUES ';
                     for($p=0;$p<$pi;$p++){
-                        $sql_sp .= '('.gen_allow_null_int($this->update_arr['iUserId']).', '.gen_allow_null_int($iZoneId_arr[$p]).'), ';
+                        $sql_sp .= '('.gen_allow_null_int($this->update_arr['iUserId']).', '.gen_allow_null_int($iNetworkId_arr[$p]).', '.gen_allow_null_char(date_getSystemDateTime()).'), ';
                     }
                     $sqlObj->Execute(substr($sql_sp, 0, -2));
                     
@@ -383,6 +386,13 @@ class User {
     function user_zone_list(){
         global $sqlObj;
         $sql = "SELECT user_zone.* " . $this->join_field_str . " FROM \"user_zone\" " . $this->join_clause . $this->where_clause . $this->group_by_clause . $this->order_by_clause . $this->limit_clause;
+        $rs_db = $sqlObj->GetAll($sql);
+        return $rs_db;
+    }
+
+    function user_network_list(){
+        global $sqlObj;
+        $sql = "SELECT user_network.* " . $this->join_field_str . " FROM \"user_network\" " . $this->join_clause . $this->where_clause . $this->group_by_clause . $this->order_by_clause . $this->limit_clause;
         $rs_db = $sqlObj->GetAll($sql);
         return $rs_db;
     }

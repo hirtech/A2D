@@ -21,7 +21,7 @@ include_once($controller_path . "user.inc.php");
 $UserObj = new User();
 $rs_user = array();
 $iDepartmentId_arr = array();
-$iZoneId_arr = array();
+$iNetworkId_arr = array();
 //echo $mode;exit();
 if ($mode == "Update") {
 	//echo "<pre>";print_R($_REQUEST);exit;
@@ -76,22 +76,23 @@ if ($mode == "Update") {
 	    $where_arr = array();
 	    $join_arr = array();
 	    $join_fieds_arr = array();
-	    $where_arr[] = "user_zone.\"iUserId\"='".gen_add_slash($_REQUEST['iUserId'])."'";
+	    $where_arr[] = "user_network.\"iUserId\"='".gen_add_slash($_REQUEST['iUserId'])."'";
 	    $UserObj->join_field = $join_fieds_arr;
 	    $UserObj->join = $join_arr;
 	    $UserObj->where = $where_arr;
 	    $UserObj->param['limit'] = 0;
 	    $UserObj->setClause();
-	    $rs_user_zone = $UserObj->user_zone_list();
-	    $pi = count($rs_user_zone);
+	    $rs_user_ntwork = $UserObj->user_network_list();
+	    $pi = count($rs_user_ntwork);
 	    if($pi > 0){
 	        for($p=0;$p<$pi;$p++){
-	            $iZoneId_arr[] = $rs_user_zone[$p]['iZoneId'];
+	            $iNetworkId_arr[] = $rs_user_ntwork[$p]['iNetworkId'];
 	        }
 	    }
     }
-	//echo "<pre>";print_r($rs_user);exit;
+	//echo "<pre>";print_r($iNetworkId_arr);exit;
 }
+
 // access group dropdown
 $access_group_arr_param = array();
 $access_group_arr_param = array(
@@ -142,30 +143,31 @@ $rs_department1 = json_decode($response_department, true);
 $rs_department = $rs_department1['result'];
 //echo "<pre>";print_r($rs_department);exit;
 
-// zone dropdown
-$zone_arr_param = array();
-$zone_arr_param = array(
-    "iState"    => 1,
-    "sessionId" => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
+# Network Dropdown
+$network_arr_param = array();
+$network_arr_param = array(
+    "iStatus"        => 1,
+    "sessionId"     => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
 );
-$zone_API_URL = $site_api_url."zone_dropdown.json";
-//echo $zone_API_URL." ".json_encode($zone_arr_param);exit;
+$network_API_URL = $site_api_url."network_dropdown.json";
+//echo $network_API_URL." ".json_encode($network_arr_param);
 $ch = curl_init();
-curl_setopt($ch, CURLOPT_URL, $zone_API_URL);
+curl_setopt($ch, CURLOPT_URL, $network_API_URL);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 curl_setopt($ch, CURLOPT_HEADER, FALSE);
 curl_setopt($ch, CURLOPT_POST, TRUE);
-curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($zone_arr_param));
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($network_arr_param));
 curl_setopt($ch, CURLOPT_HTTPHEADER, array(
    "Content-Type: application/json",
 ));
-$response_zone = curl_exec($ch);
+$response_network = curl_exec($ch);
 curl_close($ch); 
-$rs_zone1 = json_decode($response_zone, true); 
-$rs_zone = $rs_zone1['result'];
-//echo "<pre>";print_r($rs_zone);exit;
+$rs_network = json_decode($response_network, true); 
+$rs_ntwork = $rs_network['result'];
+$smarty->assign("rs_ntwork", $rs_ntwork);
+## --------------------------------
 // General Variables
 $module_name = "User";
 
@@ -176,6 +178,6 @@ $smarty->assign("mode", $mode);
 $smarty->assign("module_name", $module_name);
 $smarty->assign("iDepartmentId_arr", $iDepartmentId_arr);
 $smarty->assign("rs_zone", $rs_zone);
-$smarty->assign("iZoneId_arr", $iZoneId_arr);
+$smarty->assign("iNetworkId_arr", $iNetworkId_arr);
 
 ?>

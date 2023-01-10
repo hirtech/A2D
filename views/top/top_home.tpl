@@ -8,7 +8,7 @@
     <nav class="navbar navbar-expand-lg  p-0">
         <div class="navbar-header h5 mb-0 align-self-center d-flex">  
             <a href="{$site_url}" class="horizontal-logo align-self-center d-flex d-lg-none">
-                <img src="assets/images/logo.png" alt="logo" width="23" class="img-fluid"/> <span class="h5 align-self-center mb-0 ">{$sess_vCompanyName}</span>              
+                <img src="{$site_url}assets/images/logo.png" alt="logo" class="img-fluid"/> <span class="h5 align-self-center mb-0 ">{$sess_vCompanyName}</span>              
             </a>
             <a href="javascript:void(0)" class="sidebarCollapse ml-2" id="collapse"><i class="icon-menu body-color"></i></a>
         </div>
@@ -93,9 +93,9 @@
 
                             </div>
                             {if $sess_vImage neq '' }
-                            <img src="{$sess_vImage_url}" alt="" class="d-flex img-fluid rounded-circle" width="45">
+                            <img src="{$sess_vImage_url}" alt="user" class="d-flex img-fluid rounded-circle" width="45" height="45">
                             {else}
-                            <img src="images/user.png" alt="" class="d-flex img-fluid rounded-circle" width="45">
+                            <img src="images/user.png" alt="user" class="d-flex img-fluid rounded-circle" width="45" height="45">
                             {/if}
 
                         </div>

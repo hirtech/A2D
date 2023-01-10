@@ -265,7 +265,7 @@ if($request_type == "user_list"){
 	$vNickName 			= $RES_PARA['vNickName'];
 	$vFax 				= $RES_PARA['vFax'];
 	$sSalt 				= $RES_PARA['sSalt'];
-	$zoneId_arr 		= $RES_PARA['zoneId_arr'];
+	$networkId_arr 		= $RES_PARA['networkId_arr'];
 	$vImage 		= $RES_PARA['vImage'];
 
    	$insert_array = array(
@@ -301,7 +301,7 @@ if($request_type == "user_list"){
         "vADPFileNumber" 	=> addslashes($vADPFileNumber),
         "sSalt" 			=> $sSalt,
         "vImage" 			=> $vImage,
-        "zoneId_arr" 		=> $zoneId_arr
+        "networkId_arr"     => $networkId_arr
     );
    	//print_r($insert_array);exit;
     $UserObj->user_clear_variable();
@@ -347,7 +347,7 @@ if($request_type == "user_list"){
 	$vCell 				= $RES_PARA['vCell'];
 	$vNickName 			= $RES_PARA['vNickName'];
 	$vFax 				= $RES_PARA['vFax'];
-	$zoneId_arr 		= $RES_PARA['zoneId_arr'];
+	$networkId_arr 		= $RES_PARA['networkId_arr'];
 	$vImage 			= $RES_PARA['vImage'];
 	$update_arr = array(
         "iUserId" 			=> $iUserId,
@@ -381,7 +381,7 @@ if($request_type == "user_list"){
         "vImage" 			=> $vImage,
         "vFax" 				=> addslashes($vFax),
         "vADPFileNumber" 	=> addslashes($vADPFileNumber),
-        "zoneId_arr" 		=> $zoneId_arr
+        "networkId_arr" 	=> $networkId_arr
     );
 
     if($vPassword != ""){

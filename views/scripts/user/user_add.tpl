@@ -185,11 +185,10 @@
                                             </table> 
                                         </div>
                                          <div class="col-12 mb-3"> 
-                                            <label for="zoneId_arr">Zone</label>
-                                            <select name="zoneId_arr[]" id="zoneId_arr" class="form-control" multiple >
-                                               {section name="z" loop=$rs_zone}
-                                                    <option value="{$rs_zone[z].iZoneId}" {if $rs_zone[z].iZoneId|in_array:$iZoneId_arr}selected{/if}>{$rs_zone[z].vZoneName|gen_strip_slash} {if $rs_zone[z].vDistrict neq ''}[ {$rs_zone[z].vDistrict|gen_strip_slash} ]{/if}</option>
-                                                {/section}
+                                            <label for="networkId_arr">Network</label>
+                                            <select name="networkId_arr[]" id="networkId_arr" class="form-control" multiple >
+                                                {section name="n" loop=$rs_ntwork} 
+                                                <option value="{$rs_ntwork[n].iNetworkId}" {if $rs_ntwork[n].iNetworkId|in_array:$iNetworkId_arr}selected{/if}>{$rs_ntwork[n].vName|gen_strip_slash}</option> {/section}
                                             </select>
                                         </div>
                                         <div class="col-12 mb-3">

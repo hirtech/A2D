@@ -9,16 +9,16 @@
             </div>
             <div class="card3">
                 <div class="main" id="main1">
-                    <span style="cursor:pointer;" onclick="openNav1()"><img src="{$site_url}images/filter.png" /><p class="area-text">&nbsp;Filters</p></span>
+                    <span style="cursor:pointer;" onclick="openNav1()"><img src="{$site_url}images/filter.png" alt="Filters" /><p class="area-text">&nbsp;Filters</p></span>
                 </div>
                 <div class="main" id="main2">
-                    <span style="cursor:pointer;" onclick="openNav2()"><img src="{$site_url}images/layers.png" /><p class="area-text">&nbsp;Layers</p></span>
+                    <span style="cursor:pointer;" onclick="openNav2()"><img src="{$site_url}images/layers.png" alt="Layers"/><p class="area-text">&nbsp;Layers</p></span>
                 </div>
                 <div class="main" id="main">
-                    <span style="cursor:pointer;" onclick="openNav()"><img src="{$site_url}images/tool.png" /><p class="area-text">&nbsp;Tools</p></span>
+                    <span style="cursor:pointer;" onclick="openNav()"><img src="{$site_url}images/tool.png" alt="Tools"/><p class="area-text">&nbsp;Tools</p></span>
                 </div>
                 <div class="main" id="main3">
-                    <span style="cursor:pointer;" onclick="openNav3()"><img src="{$site_url}images/search.png" /><p class="area-text">&nbsp;Search</p></span>
+                    <span style="cursor:pointer;" onclick="openNav3()"><img src="{$site_url}images/search.png" alt="Search"/><p class="area-text">&nbsp;Search</p></span>
                 </div>
             </div>
             <div id="mySidenav" class="sidenav">
@@ -305,7 +305,6 @@
                         <div class="col-12">
                             <form id="form">
                                 <input type="hidden" name="vLatitude" id="vLatitude" value="">
-                                <!-- <input type="hidden" name="vLongitude" id="vLongitude" value="-81.819111"> -->
                                 <input type="hidden" name="vLongitude" id="vLongitude" value="">
                                 <div class="form-group row">
                                     <label for="iPremiseId" class="col-sm-4 col-form-label">Premise Id</label>
@@ -351,26 +350,26 @@
     </div>
 </div>
 <link rel="stylesheet" href="{$site_url}assets/css/custom_map.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="{$site_url}assets/js/mapjs/jquery_3_5_1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key={$GOOGLE_GEOCODE_API_KEY}&libraries=geometry,drawing,places,visualization"></script>
+<script src="{$site_url}assets/js/mapjs/markerclusterer.js"></script>
+<script src="{$site_url}assets/vendors/typeahead/handlebars-v4.5.3.js"></script>
+<script src="{$site_url}assets/vendors/typeahead/typeahead.bundle.js"></script>
+
+<script src="{$site_url}assets/js/app_js/multiple_premise_add.js"></script>
+<script src="{$site_url}assets/js/app_js/task_awareness_add.js"></script>
 
 {include file="scripts/premise/multiple_premise_add.tpl"}
 {include file="scripts/tasks/task_awareness_add.tpl"}
 <script type="text/javascript">
     var ajax_url = 'vmap/index?mode=List';
-    var access_group_var_add = '{$access_group_var_add}';
-    var access_group_var_CSV = '{$access_group_var_CSV}';
     var dDate = '{$dDate}';
     var dStartTime = '{$dStartTime}';
     var dEndTime = '{$dEndTime}';
-    var tmpmode = '{$tmpmode}';
 </script>
-<script src="assets/vendors/typeahead/handlebars-v4.5.3.js"></script>
-<script src="assets/vendors/typeahead/typeahead.bundle.js"></script>
 
-<script src="assets/js/app_js/multiple_premise_add.js"></script>
-<script src="assets/js/app_js/task_awareness_add.js"></script>
 <script>
     var toggler = document.getElementsByClassName("caret");
     var i;
@@ -480,13 +479,11 @@ $(document).ready(function(){
     }
      mode = $.urlParam('mode');
 });
-let ENABLE_INSTA_TREATMENT = '{$ENABLE_INSTA_TREATMENT}';
 let MAP_LONG = '{$MAP_LONGITUDE}';
 let MAP_LAT = '{$MAP_LATITUDE}';
 var user_zones = {$user_zones|@json_encode};
 </script>
-<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key={$GOOGLE_GEOCODE_API_KEY}&libraries=geometry,drawing,places,visualization"></script>
+
 <script>
 {literal}
 // This example creates a 2-pixel-wide red polyline showing the path of
@@ -566,13 +563,9 @@ var sitesrFilterMarker = [];
 
 var siteNearDataMarker = [];
 var sncount =0;
-
 var defaultZoom = 9;
-
-
 {/literal}
 </script>
-
-<script src="assets/js/mapjs/events.js?ver=1.2"></script>
-<script src="assets/js/mapjs/functions.js?ver=1.2"></script>
-<script src="assets/js/app_js/premise_google_autocomplete.js"></script>
+<script src="{$site_url}assets/js/mapjs/events.js?ver=1.2"></script>
+<script src="{$site_url}assets/js/mapjs/functions.js?ver=1.2"></script>
+<script src="{$site_url}assets/js/app_js/premise_google_autocomplete.js"></script>

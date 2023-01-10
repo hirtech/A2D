@@ -335,11 +335,11 @@ function getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLay
 	                        map.setCenter(latlngbounds.getCenter());
 	                        map.fitBounds(latlngbounds);
 	                        map.setZoom(defaultZoom);
-                            console.log("defaultZoom bounds = "+defaultZoom)
+                            //console.log("defaultZoom bounds = "+defaultZoom)
 						}
 					}
 				} else {
-					console.log('no data found');
+					//console.log('no data found');
 					clearMap();
 				}
 				$(".loading").hide();
@@ -652,9 +652,9 @@ function addLatLngPoly(event) {
 	//console.log(polyArea);
 
 	var sqMile = polyArea.toFixed(2) * parseFloat('0.00000039');
-	console.log('mile: ' + sqMile);
+	//console.log('mile: ' + sqMile);
 	var sqFeet = sqMile.toFixed(2) * parseInt('27878400');
-	console.log('Feet: ' + sqFeet);
+	//console.log('Feet: ' + sqFeet);
 	$("#areainmiles").val(sqMile.toFixed(2));
 	$("#areainft").val(sqFeet.toFixed(2));
 	
@@ -742,7 +742,7 @@ function generateJson() {
 			action: "getData",
 		},
 		success: function(data) {
-			console.log(data);
+			//console.log(data);
 		}
 	});
 }
@@ -755,7 +755,7 @@ function getnetworkLayerJson() {
 			action: "getnetworkLayerData",
 		},
 		success: function(data) {
-			console.log(data);
+			//console.log(data);
 		}
 	});
 }
@@ -768,7 +768,7 @@ function getZoneLayerJson() {
 			action: "getZoneLayerData",
 		},
 		success: function(data) {
-			console.log(data);
+			//console.log(data);
 		}
 	});
 }
@@ -781,7 +781,7 @@ function getCustomLayerJson() {
 			action: "getCustomLayerData",
 		},
 		success: function(data) {
-			console.log(data);
+			//console.log(data);
 		}
 	});
 }
@@ -794,7 +794,7 @@ function getFiberInquiryJson() {
 			action: "getFiberInquiryData",
 		},
 		success: function(data) {
-			console.log(data);
+			//console.log(data);
 		}
 	});
 }
@@ -807,7 +807,7 @@ function getServiceOrderJson() {
 			action: "getServiceOrderData",
 		},
 		success: function(data) {
-			console.log(data);
+			//console.log(data);
 		}
 	});
 }
@@ -820,7 +820,7 @@ function getWorkOrderJson() {
 			action: "getWorkOrderData",
 		},
 		success: function(data) {
-			console.log(data);
+			//console.log(data);
 		}
 	});
 }
@@ -833,7 +833,7 @@ function getPremiseCircuitJson() {
 			action: "getPremiseCircuitData",
 		},
 		success: function(data) {
-			console.log(data);
+			//console.log(data);
 		}
 	});
 }
@@ -1489,7 +1489,7 @@ function getPremiseFiberInquiryFilterData(siteFilter,srFilter){
 			success: function(data) {
 				//console.log(data);
 				if (data) {
-					console.log('data found-filter');
+					//console.log('data found-filter');
 					var response = JSON.parse(data);
 					var siteData = response.site;
 					var fInquiryData = response.fInquiry;
@@ -1582,7 +1582,7 @@ function getPremiseFiberInquiryFilterData(siteFilter,srFilter){
 					}
 
 				} else {
-					console.log('no data found');
+					//console.log('no data found');
 					//alert("No sites found");
 					//clearMap();
 				

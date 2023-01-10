@@ -12,7 +12,6 @@ zoneLayer = [];
 fiberInquiryLayer = [];
 serviceOrderLayer = [];
 workOrderLayer = [];
-zoneArrOnload = [];
 let listenerLatLngCircle;
 let listenerLatLngPoly;
 let listenerLatLngPolyline;
@@ -29,7 +28,14 @@ $(document).ready(function() {
     //console.log("Api ready!");
     // alert(mode);
     initMap();
-    
+    generateJson();
+    getnetworkLayerJson();
+    getZoneLayerJson();
+    getCustomLayerJson();
+    getFiberInquiryJson();
+    getServiceOrderJson();
+    getWorkOrderJson();
+    getPremiseCircuitJson();
     if (mode == 'filter_sites') {
         var iPremiseId = $.urlParam('iPremiseId');
         siteFilter.push(iPremiseId);
@@ -55,18 +61,7 @@ $(document).ready(function() {
         },2000);
     }  
 
-	generateJson();
-	getnetworkLayerJson();
-    getZoneLayerJson();
-    getCustomLayerJson();
-    getFiberInquiryJson();
-    getServiceOrderJson();
-    getWorkOrderJson();
-    getPremiseCircuitJson();
-       
     $(document).on("click", "#showDistance", function() {
-        //console.log("Distance Ready!!");
-      
         if ($("#showArea").prop("checked")) {
             $("#showArea").prop("checked", false);
         }
@@ -74,7 +69,6 @@ $(document).ready(function() {
             $("#showCircle").prop("checked", false);
         }
         clearMapTool();
-
         clearMap();
         resetButton();
         clearLayerData();
@@ -100,20 +94,17 @@ $(document).ready(function() {
     });
     $(document).on("click", "#showArea", function() {
         //console.log("Polygon Ready!!");
-   
         if ($("#showDistance").prop("checked")) {
             $("#showDistance").prop("checked", false);
         }
         if ($("#showCircle").prop("checked")) {
             $("#showCircle").prop("checked", false);
         }
-
         clearMapTool();
         clearMap();
         resetButton();
         clearLayerData();
         clearFilterData();
-
         if ($("#showArea").prop("checked")) {
             poly = new google.maps.Polygon({
                 strokeColor: '#FF0000',
@@ -152,7 +143,6 @@ $(document).ready(function() {
       
         if ($("#showCircle").prop("checked")) {
             listenerLatLngCircle= map.addListener('click', addLatLngCircle);
-
             //Add a listener event for zone draw polyline
             if(zCount > 0){
                 for (k = 0 ;k <zCount; k++ ){
@@ -163,7 +153,6 @@ $(document).ready(function() {
     });
 
     $(document).on("click", ".map-tool-checkbox", function() {
-        
         if ($("#selectAllNetwork").prop("checked") && $("#selectAllNetwork").val() != 'Yes') {
             $("#selectAllNetwork").prop("checked", false);
         }
@@ -314,7 +303,6 @@ $(document).ready(function() {
             skCity = [];
             skZipcode = [];
             skZones = [];
-
             alert('Please select zone');
         }
         resetButton();
@@ -1586,7 +1574,6 @@ $("#search_site_map").click(function() {
         clearMap();
         setTimeout(function () {
             if((jQuery.isEmptyObject(fInquiryData) == false && fInquiryData.length > 0) || (jQuery.isEmptyObject(siteData) == false && siteData.length > 0)){
-               
                 $.ajax({
                     type: "POST",
                     url: 'vmap/api/',
