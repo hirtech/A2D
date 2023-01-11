@@ -46,15 +46,18 @@ $(document).ready(function() {
         getPremiseFiberInquiryFilterData(siteFilter, srFilter);
     } else {
         setTimeout(function(){
-            if(typeof user_zones !== 'undefined' && user_zones.length > 0){
-                skNetwork = [];
-                skCity = [];
-                skZones = [];
-                skZipcode = [];
-                $.each($("input[name='skZones[]']:checked"), function() {
-                    skZones.push($(this).val());
+            if(typeof user_networks !== 'undefined' && user_networks.length > 0){
+                skNetwork = skCity = skZones = skZipcode = [];
+                networkLayer = zoneLayer = custLayer = [];
+                fiberInquiryLayer = serviceOrderLayer = workOrderLayer = [];
+                pCircuitStatusLayer = pCircuitcTypeLayer = [];
+                premiseStatusLayer = premiseAttribute = premiseTypeLayer = premisesubTypeLayer = [];
+
+                $.each($("input[name='sNetwork[]']:checked"), function() {
+                    skNetwork.push($(this).val());
                 });
                 resetButton();
+                clearFilterData();
                 clearLayerData();
                 getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLayer, custLayer, fiberInquiryLayer, serviceOrderLayer, workOrderLayer, pCircuitStatusLayer, pCircuitcTypeLayer, premiseStatusLayer, premiseAttribute, premiseTypeLayer, premisesubTypeLayer);
             }
@@ -168,63 +171,10 @@ $(document).ready(function() {
     });
 
     // ************* START - Filter Submenu ************* //
-    // ************* Select all Zone - Filter Submenu ************* //
-    $(document).on("click", ".selectAllZone", function() {
-        clearMap();
-        skZones = [];
-        var checksone = checkZoneSelected();
-        if(checksone == true){
-            if ($("#selectAllZone").prop("checked") && $("#selectAllZone").val() != 'Yes') {
-                $("#selectAllZone").prop("checked", false);
-            }
-            $.each($("input[name='skZones[]']:checked"), function() {
-                skZones.push($(this).val());
-            });
-        }else{
-            skNetwork = [];
-            skCity = [];
-            skZones = [];
-            skZipcode = [];
-        }
-        resetButton();
-        clearLayerData();
-        getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLayer, custLayer, fiberInquiryLayer, serviceOrderLayer, workOrderLayer, pCircuitStatusLayer, pCircuitcTypeLayer, premiseStatusLayer, premiseAttribute, premiseTypeLayer, premisesubTypeLayer);
-    });
-
-    // ************* Select Zone - Filter Submenu ************* //
-    $(document).on("click", "#selectAllZone", function() {
-        clearMap();
-        skZones  = [];
-        if ($("#selectAllZone").prop("checked")) {
-            $(".selectAllZone").prop("checked", true);
-            $("#selectAllZone").val("Yes");
-            //$(".selectAllZone").trigger('click');
-            $.each($("input[name='skZones[]']:checked"), function() {
-                skZones.push($(this).val());
-            });
-        } else {
-            $(".selectAllZone").prop("checked", false);
-            $("#selectAllZone").val("No");
-            skZones = [];
-            $.each($("input[name='skZones[]']:checked"), function() {
-                skZones.push($(this).val());
-            });
-            var checkzone = checkZoneSelected();
-            if(checkzone == false){
-                skNetwork = [];
-                skCity = [];
-                skZipcode = [];
-            }
-        }
-        resetButton();
-        clearLayerData();
-        getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLayer, custLayer, fiberInquiryLayer, serviceOrderLayer, workOrderLayer, pCircuitStatusLayer, pCircuitcTypeLayer, premiseStatusLayer, premiseAttribute, premiseTypeLayer, premisesubTypeLayer);  
-    });
-
     // ************* Select All Network - Filter Submenu ************* //
     $(document).on("click", "#selectAllNetwork", function() {
         clearMap();
-        var checksone = checkZoneSelected();
+        var checksone = checkNetworkSelected();
         skNetwork = [];
         if(checksone == true){
             if ($("#selectAllNetwork").prop("checked")) {
@@ -233,7 +183,7 @@ $(document).ready(function() {
                 $.each($("input[name='sNetwork[]']:checked"), function() {
                     skNetwork.push($(this).val());
                 });
-               } else {
+            } else {
                 $(".selectAllNetwork").prop("checked", false);
                 $("#selectAllNetwork").val("No");
                 skNetwork = [];
@@ -246,8 +196,8 @@ $(document).ready(function() {
             skCity = [];
             skZipcode = [];
             skZones = [];
-
-            alert('Please select zone');
+            //alert('Please select atleast one network from "Filter" Submenu.');
+            toastr.error('Please select atleast one network from "Filter" Submenu.');
         }
         resetButton();
         clearLayerData();
@@ -257,7 +207,7 @@ $(document).ready(function() {
     // ************* Select Network - Filter Submenu ************* //
     $(document).on("click",".selectAllNetwork",function(){
         clearMap();
-        var checksone = checkZoneSelected();
+        var checksone = checkNetworkSelected();
         skNetwork = [];
         if(checksone == true){
             if ($("#selectAllNetwork").prop("checked") && $("#selectAllNetwork").val() != 'Yes') {
@@ -271,17 +221,75 @@ $(document).ready(function() {
             skCity = [];
             skZipcode = [];
             skZones = [];
-            alert('Please select zone');
+            //alert('Please select atleast one network from "Filter" Submenu.');
+            toastr.error('Please select atleast one network from "Filter" Submenu.');
         }
         resetButton();
         clearLayerData();
         getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLayer, custLayer, fiberInquiryLayer, serviceOrderLayer, workOrderLayer, pCircuitStatusLayer, pCircuitcTypeLayer, premiseStatusLayer, premiseAttribute, premiseTypeLayer, premisesubTypeLayer);       
     });
 
+    // ************* Select all Zone - Filter Submenu ************* //
+    $(document).on("click", ".selectAllZone", function() {
+        clearMap();
+        skZones = [];
+        var checksone = checkNetworkSelected();
+        if(checksone == true){
+            if ($("#selectAllZone").prop("checked") && $("#selectAllZone").val() != 'Yes') {
+                $("#selectAllZone").prop("checked", false);
+            }
+            $.each($("input[name='skZones[]']:checked"), function() {
+                skZones.push($(this).val());
+            });
+        }else{
+            skCity = [];
+            skZipcode = [];
+            skZones = [];
+            //alert('Please select atleast one network from "Filter" Submenu.');
+            toastr.error('Please select atleast one network from "Filter" Submenu.');
+        }
+        resetButton();
+        clearLayerData();
+        getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLayer, custLayer, fiberInquiryLayer, serviceOrderLayer, workOrderLayer, pCircuitStatusLayer, pCircuitcTypeLayer, premiseStatusLayer, premiseAttribute, premiseTypeLayer, premisesubTypeLayer);
+    });
+
+    // ************* Select Zone - Filter Submenu ************* //
+    $(document).on("click", "#selectAllZone", function() {
+        clearMap();
+        skZones  = [];
+        var checksone = checkNetworkSelected();
+        if(checksone == true){
+            if ($("#selectAllZone").prop("checked")) {
+                $(".selectAllZone").prop("checked", true);
+                $("#selectAllZone").val("Yes");
+                //$(".selectAllZone").trigger('click');
+                $.each($("input[name='skZones[]']:checked"), function() {
+                    skZones.push($(this).val());
+                });
+            } else {
+                $(".selectAllZone").prop("checked", false);
+                $("#selectAllZone").val("No");
+                skZones = [];
+                $.each($("input[name='skZones[]']:checked"), function() {
+                    skZones.push($(this).val());
+                });
+            }
+        }else{
+            skCity = [];
+            skZipcode = [];
+            skZones = [];
+            //alert('Please select atleast one network from "Filter" Submenu.');
+            toastr.error('Please select atleast one network from "Filter" Submenu.');
+        }
+        resetButton();
+        clearLayerData();
+        getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLayer, custLayer, fiberInquiryLayer, serviceOrderLayer, workOrderLayer, pCircuitStatusLayer, pCircuitcTypeLayer, premiseStatusLayer, premiseAttribute, premiseTypeLayer, premisesubTypeLayer);  
+    });
+
     // ************* Select All City - Filter Submenu ************* //
     $(document).on("click", "#selectAllCity", function() {
         clearMap();
-        var checksone = checkZoneSelected();
+        var checksone = checkNetworkSelected();
         skCity = [];
         if(checksone == true){
             if ($("#selectAllCity").prop("checked")) {
@@ -299,11 +307,11 @@ $(document).ready(function() {
                 });
             }
         }else{
-            skNetwork = [];
             skCity = [];
             skZipcode = [];
             skZones = [];
-            alert('Please select zone');
+            //alert('Please select atleast one network from "Filter" Submenu.');
+            toastr.error('Please select atleast one network from "Filter" Submenu.');
         }
         resetButton();
         clearLayerData();
@@ -314,7 +322,7 @@ $(document).ready(function() {
     // ************* Select City - Filter Submenu ************* //
     $(document).on("click",".selectAllCity",function(){
         clearMap();
-        var checksone = checkZoneSelected();
+        var checksone = checkNetworkSelected();
         skCity = [];
         if(checksone == true){
             if ($(".selectAllCity").prop("checked") && $(".selectAllCity").val() != 'Yes') {
@@ -324,11 +332,11 @@ $(document).ready(function() {
                   skCity.push($(this).val());
             });
         }else{
-            skNetwork = [];
             skCity = [];
             skZipcode = [];
             skZones = [];
-            alert('Please select zone');
+            //alert('Please select atleast one network from "Filter" Submenu.');
+            toastr.error('Please select atleast one network from "Filter" Submenu.');
         }
         resetButton();
         clearLayerData();
@@ -338,7 +346,7 @@ $(document).ready(function() {
     // ************* Select All Zipcode - Filter Submenu ************* //
     $(document).on("click", "#selectAllZipcode", function() {
         clearMap();
-        var checksone = checkZoneSelected();
+        var checksone = checkNetworkSelected();
         skZipcode = [];
         if(checksone == true){
             if ($("#selectAllZipcode").prop("checked")) {
@@ -356,11 +364,11 @@ $(document).ready(function() {
                 });
             }
         }else{
-            skNetwork = [];
             skZones = [];
             skCity = [];
             skZipcode = [];
-            alert('Please select zone');
+            //alert('Please select atleast one network from "Filter" Submenu.');
+            toastr.error('Please select atleast one network from "Filter" Submenu.');
         }
         resetButton();
         clearLayerData();
@@ -370,7 +378,7 @@ $(document).ready(function() {
     // ************* Select Zipcode - Filter Submenu ************* //
     $(document).on("click",".selectAllZipcode",function(){
         clearMap();
-        var checksone = checkZoneSelected();
+        var checksone = checkNetworkSelected();
         skZipcode = [];
         if(checksone == true){
             if ($(".selectAllZipcode").prop("checked") && $(".selectAllZipcode").val() != 'Yes') {
@@ -380,11 +388,11 @@ $(document).ready(function() {
                   skZipcode.push($(this).val());
             });
         }else{
-            skNetwork = [];
             skCity = [];
             skZipcode = [];
             skZones = [];
-            alert('Please select zone');
+            //alert('Please select atleast one network from "Filter" Submenu.');
+            toastr.error('Please select atleast one network from "Filter" Submenu.');
         }
         resetButton();
         clearLayerData();
@@ -610,23 +618,29 @@ $(document).ready(function() {
         //console.log("Select Custom Layer");
         clearMap();
         zoneLayer = [];
-        if ($("#selectAllZoneLayer").prop("checked")) {
-            $(".selectAllZoneLayer").prop("checked", true);
-            $("#selectAllZoneLayer").val("Yes");
+        var checksone = checkNetworkSelected();
+        if(checksone == true){
+            if ($("#selectAllZoneLayer").prop("checked")) {
+                $(".selectAllZoneLayer").prop("checked", true);
+                $("#selectAllZoneLayer").val("Yes");
 
-            $.each($("input[name='custlayer[]']:checked"), function() {
-                zoneLayer.push($(this).val());
-            });
-            //console.log(zoneLayer);
-        } else {
-            $(".selectAllZoneLayer").prop("checked", false);
-            $("#selectAllZoneLayer").val("No");
-            $.each($("input[name='custlayer[]']:checked"), function() {
-                zoneLayer.push($(this).val());
-            });
+                $.each($("input[name='custlayer[]']:checked"), function() {
+                    zoneLayer.push($(this).val());
+                });
+                //console.log(zoneLayer);
+            } else {
+                $(".selectAllZoneLayer").prop("checked", false);
+                $("#selectAllZoneLayer").val("No");
+                $.each($("input[name='custlayer[]']:checked"), function() {
+                    zoneLayer.push($(this).val());
+                });
+            }
+        }else{
+            //alert('Please select atleast one network from "Filter" Submenu.');
+            toastr.error('Please select atleast one network from "Filter" Submenu.');
         }
         resetButton();
-        networkLayer = [];
+        //networkLayer = [];
         custLayer = [];
         pCircuitStatusLayer = [];
         pCircuitcTypeLayer = [];
@@ -638,8 +652,8 @@ $(document).ready(function() {
         premiseAttribute = [];
         premiseTypeLayer = [];
         premisesubTypeLayer = [];
-        $("#selectAllNetworkLayer").prop("checked", false);
-        $(".selectAllNetworkLayer").prop("checked", false);
+        //$("#selectAllNetworkLayer").prop("checked", false);
+        //$(".selectAllNetworkLayer").prop("checked", false);
         $("#selectAllCustLayer").prop("checked", false);
         $(".selectAllCustLayer").prop("checked", false);
         $("#selectAllFiberInquiries").prop("checked", false);
@@ -666,15 +680,22 @@ $(document).ready(function() {
     // ************* Select Fiber Zone KML - Layer Submenu ************* //
     $(document).on("click",".selectAllZoneLayer",function(){
         clearMap();
-        if ($("#selectAllZoneLayer").prop("checked") && $("#selectAllZoneLayer").val() != 'Yes') {
-            $("#selectAllZoneLayer").prop("checked", false);
-        }
         zoneLayer = [];
-        $.each($("input[name='zoneLayer[]']:checked"), function() {
-              zoneLayer.push($(this).val());
-        });
+        var checksone = checkNetworkSelected();
+        if(checksone == true){
+            if ($("#selectAllZoneLayer").prop("checked") && $("#selectAllZoneLayer").val() != 'Yes') {
+                $("#selectAllZoneLayer").prop("checked", false);
+            }
+            
+            $.each($("input[name='zoneLayer[]']:checked"), function() {
+                  zoneLayer.push($(this).val());
+            });
+        }else{
+            //alert('Please select atleast one network from "Filter" Submenu.');
+            toastr.error('Please select atleast one network from "Filter" Submenu.');
+        }
         resetButton();
-        networkLayer = [];
+        //networkLayer = [];
         zoneLayer = [];
         custLayer = [];
         pCircuitStatusLayer = [];
@@ -687,8 +708,8 @@ $(document).ready(function() {
         premiseTypeLayer = [];
         premisesubTypeLayer = [];
 
-        $("#selectAllNetworkLayer").prop("checked", false);
-        $(".selectAllNetworkLayer").prop("checked", false);
+        //$("#selectAllNetworkLayer").prop("checked", false);
+        //$(".selectAllNetworkLayer").prop("checked", false);
         $("#selectAllCustLayer").prop("checked", false);
         $(".selectAllCustLayer").prop("checked", false);
         $("#selectAllFiberInquiries").prop("checked", false);
@@ -715,12 +736,18 @@ $(document).ready(function() {
     // ************* Select Fiber Inquiry - Layer Submenu ************* //
     $(document).on("click", "#selectAllFiberInquiries", function() {
         clearMap();
-        if ($("#selectAllFiberInquiries").prop("checked")) {
-            $.each($("input[name='selectAllFiberInquiries']:checked"), function() {
-                fiberInquiryLayer.push($(this).val());
-            });
+        fiberInquiryLayer = [];
+        var checksone = checkNetworkSelected();
+        if(checksone == true){
+            if ($("#selectAllFiberInquiries").prop("checked")) {
+                $.each($("input[name='selectAllFiberInquiries']:checked"), function() {
+                    fiberInquiryLayer.push($(this).val());
+                });
+            } 
         } else {
             fiberInquiryLayer = [];
+            //alert('Please select atleast one network from "Filter" Submenu.');
+            toastr.error('Please select atleast one network from "Filter" Submenu.');
         }
         resetButton();
         networkLayer = [];
@@ -762,12 +789,18 @@ $(document).ready(function() {
     // ************* Select Service Order - Layer Submenu ************* //
     $(document).on("click", "#selectAllServiceOrders", function() {
         clearMap();
-        if ($("#selectAllServiceOrders").prop("checked")) {
-            $.each($("input[name='selectAllServiceOrders']:checked"), function() {
-                serviceOrderLayer.push($(this).val());
-            });
+        serviceOrderLayer = [];
+        var checksone = checkNetworkSelected();
+        if(checksone == true){
+            if ($("#selectAllServiceOrders").prop("checked")) {
+                $.each($("input[name='selectAllServiceOrders']:checked"), function() {
+                    serviceOrderLayer.push($(this).val());
+                });
+            } 
         } else {
             serviceOrderLayer = [];
+            //alert('Please select atleast one network from "Filter" Submenu.');
+            toastr.error('Please select atleast one network from "Filter" Submenu.');
         }
         resetButton();
         networkLayer = [];
@@ -810,12 +843,18 @@ $(document).ready(function() {
     // ************* Select Work Order - Layer Submenu ************* //
     $(document).on("click", "#selectAllWorkOrders", function() {
         clearMap();
-        if ($("#selectAllWorkOrders").prop("checked")) {
-            $.each($("input[name='selectAllWorkOrders']:checked"), function() {
-                workOrderLayer.push($(this).val());
-            });
+        workOrderLayer = [];
+        var checksone = checkNetworkSelected();
+        if(checksone == true){
+            if ($("#selectAllWorkOrders").prop("checked")) {
+                $.each($("input[name='selectAllWorkOrders']:checked"), function() {
+                    workOrderLayer.push($(this).val());
+                });
+            } 
         } else {
             workOrderLayer = [];
+            //alert('Please select atleast one network from "Filter" Submenu.');
+            toastr.error('Please select atleast one network from "Filter" Submenu.');
         }
         resetButton();
         networkLayer = [];
@@ -859,21 +898,27 @@ $(document).ready(function() {
     $(document).on("click", "#selectAllPremiseCircuitLayer", function() {
         clearMap();
         pCircuitStatusLayer = [];
-        if ($("#selectAllPremiseCircuitLayer").prop("checked")) {
-            $(".selectAllPremiseCircuitLayer").prop("checked", true);
-            $(".selectAllPCircuitStatusLayer").prop("checked", true);
-            $("#selectAllPremiseCircuitLayer").val("Yes");
+        var checksone = checkNetworkSelected();
+        if(checksone == true){
+            if ($("#selectAllPremiseCircuitLayer").prop("checked")) {
+                $(".selectAllPremiseCircuitLayer").prop("checked", true);
+                $(".selectAllPCircuitStatusLayer").prop("checked", true);
+                $("#selectAllPremiseCircuitLayer").val("Yes");
 
-            $.each($("input[name='pCircuitStatusLayer[]']:checked"), function() {
-                pCircuitStatusLayer.push($(this).val());
-            });
-        } else {
-            $(".selectAllPremiseCircuitLayer").prop("checked", false);
-            $(".selectAllPCircuitStatusLayer").prop("checked", false);
-            $("#selectAllPremiseCircuitLayer").val("No");
-            $.each($("input[name='pCircuitStatusLayer[]']:checked"), function() {
-                pCircuitStatusLayer.push($(this).val());
-            });
+                $.each($("input[name='pCircuitStatusLayer[]']:checked"), function() {
+                    pCircuitStatusLayer.push($(this).val());
+                });
+            } else {
+                $(".selectAllPremiseCircuitLayer").prop("checked", false);
+                $(".selectAllPCircuitStatusLayer").prop("checked", false);
+                $("#selectAllPremiseCircuitLayer").val("No");
+                $.each($("input[name='pCircuitStatusLayer[]']:checked"), function() {
+                    pCircuitStatusLayer.push($(this).val());
+                });
+            }
+        }else {
+            //alert('Please select atleast one network from "Filter" Submenu.');
+            toastr.error('Please select atleast one network from "Filter" Submenu.');
         }
         resetButton();
         networkLayer = [];
@@ -912,20 +957,26 @@ $(document).ready(function() {
     $(document).on("click", ".selectAllPremiseCircuitLayer", function() {
         clearMap();
         pCircuitStatusLayer = [];
-        if ($(".selectAllPremiseCircuitLayer").prop("checked")) {
-            $(".selectAllPCircuitStatusLayer").prop("checked", true);
-            $(".selectAllPremiseCircuitLayer").val("Yes");
+        var checksone = checkNetworkSelected();
+        if(checksone == true){
+            if ($(".selectAllPremiseCircuitLayer").prop("checked")) {
+                $(".selectAllPCircuitStatusLayer").prop("checked", true);
+                $(".selectAllPremiseCircuitLayer").val("Yes");
 
-            $.each($("input[name='pCircuitStatusLayer[]']:checked"), function() {
-                pCircuitStatusLayer.push($(this).val());
-            });
-        } else {
-            $(".selectAllPremiseCircuitLayer").prop("checked", false);
-            $(".selectAllPCircuitStatusLayer").prop("checked", false);
-            $(".selectAllPremiseCircuitLayer").val("No");
-            $.each($("input[name='pCircuitStatusLayer[]']:checked"), function() {
-                pCircuitStatusLayer.push($(this).val());
-            });
+                $.each($("input[name='pCircuitStatusLayer[]']:checked"), function() {
+                    pCircuitStatusLayer.push($(this).val());
+                });
+            } else {
+                $(".selectAllPremiseCircuitLayer").prop("checked", false);
+                $(".selectAllPCircuitStatusLayer").prop("checked", false);
+                $(".selectAllPremiseCircuitLayer").val("No");
+                $.each($("input[name='pCircuitStatusLayer[]']:checked"), function() {
+                    pCircuitStatusLayer.push($(this).val());
+                });
+            }
+        }else {
+            //alert('Please select atleast one network from "Filter" Submenu.');
+            toastr.error('Please select atleast one network from "Filter" Submenu.');
         }
         resetButton();
         networkLayer = [];
@@ -962,13 +1013,19 @@ $(document).ready(function() {
     // ************* Select Premise Circuit Status  - Layer Submenu ************* //
     $(document).on("click",".selectAllPCircuitStatusLayer",function(){
         clearMap();
-        if ($("#selectAllPCircuitStatusLayer").prop("checked") && $("#selectAllPCircuitStatusLayer").val() != 'Yes') {
-            $("#selectAllPCircuitStatusLayer").prop("checked", false);
+        var checksone = checkNetworkSelected();
+        if(checksone == true){
+            if ($("#selectAllPCircuitStatusLayer").prop("checked") && $("#selectAllPCircuitStatusLayer").val() != 'Yes') {
+                $("#selectAllPCircuitStatusLayer").prop("checked", false);
+            }
+            pCircuitStatusLayer = [];
+            $.each($("input[name='pCircuitStatusLayer[]']:checked"), function() {
+                  pCircuitStatusLayer.push($(this).val());
+            });
+        }else {
+            //alert('Please select atleast one network from "Filter" Submenu.');
+            toastr.error('Please select atleast one network from "Filter" Submenu.');
         }
-        pCircuitStatusLayer = [];
-        $.each($("input[name='pCircuitStatusLayer[]']:checked"), function() {
-              pCircuitStatusLayer.push($(this).val());
-        });
         resetButton();
         networkLayer = [];
         zoneLayer = [];
@@ -1005,19 +1062,25 @@ $(document).ready(function() {
     $(document).on("click", "#selectAllPCircuitCTLayer", function() {
         clearMap();
         pCircuitcTypeLayer = [];
-        if ($("#selectAllPCircuitCTLayer").prop("checked")) {
-            $(".selectAllPCircuitCTLayer").prop("checked", true);
-            $("#selectAllPCircuitCTLayer").val("Yes");
+        var checksone = checkNetworkSelected();
+        if(checksone == true){
+            if ($("#selectAllPCircuitCTLayer").prop("checked")) {
+                $(".selectAllPCircuitCTLayer").prop("checked", true);
+                $("#selectAllPCircuitCTLayer").val("Yes");
 
-            $.each($("input[name='pCircuitcTypeLayer[]']:checked"), function() {
-                pCircuitcTypeLayer.push($(this).val());
-            });
-        } else {
-            $(".selectAllPCircuitCTLayer").prop("checked", false);
-            $("#selectAllPCircuitCTLayer").val("No");
-            $.each($("input[name='pCircuitcTypeLayer[]']:checked"), function() {
-                pCircuitcTypeLayer.push($(this).val());
-            });
+                $.each($("input[name='pCircuitcTypeLayer[]']:checked"), function() {
+                    pCircuitcTypeLayer.push($(this).val());
+                });
+            } else {
+                $(".selectAllPCircuitCTLayer").prop("checked", false);
+                $("#selectAllPCircuitCTLayer").val("No");
+                $.each($("input[name='pCircuitcTypeLayer[]']:checked"), function() {
+                    pCircuitcTypeLayer.push($(this).val());
+                });
+            }
+        }else {
+            //alert('Please select atleast one network from "Filter" Submenu.');
+            toastr.error('Please select atleast one network from "Filter" Submenu.');
         }
         resetButton();
         networkLayer = [];
@@ -1054,13 +1117,19 @@ $(document).ready(function() {
     // ********** Select PremiseCircuit ConnectionType - Layer Submenu ********** //
     $(document).on("click",".selectAllPCircuitCTLayer",function(){
         clearMap();
-        if ($("#selectAllPCircuitCTLayer").prop("checked") && $("#selectAllPCircuitCTLayer").val() != 'Yes') {
-            $("#selectAllPCircuitCTLayer").prop("checked", false);
-        }
         pCircuitcTypeLayer = [];
-        $.each($("input[name='pCircuitcTypeLayer[]']:checked"), function() {
-            pCircuitcTypeLayer.push($(this).val());
-        });
+        var checksone = checkNetworkSelected();
+        if(checksone == true){
+            if ($("#selectAllPCircuitCTLayer").prop("checked") && $("#selectAllPCircuitCTLayer").val() != 'Yes') {
+                $("#selectAllPCircuitCTLayer").prop("checked", false);
+            }
+            $.each($("input[name='pCircuitcTypeLayer[]']:checked"), function() {
+                pCircuitcTypeLayer.push($(this).val());
+            });
+        }else {
+            //alert('Please select atleast one network from "Filter" Submenu.');
+            toastr.error('Please select atleast one network from "Filter" Submenu.');
+        }
         resetButton();
         networkLayer = [];
         zoneLayer = [];
@@ -1097,22 +1166,28 @@ $(document).ready(function() {
     $(document).on("click", "#selectAllPremiseLayer", function() {
         clearMap();
         premiseStatusLayer = [];
-        if ($("#selectAllPremiseLayer").prop("checked")) {
-            $(".selectAllPremiseLayer").prop("checked", true);
-            $(".selectAllpremiseStatusLayer").prop("checked", true);
-            $("#selectAllPremiseLayer").val("Yes");
+        var checksone = checkNetworkSelected();
+        if(checksone == true){
+            if ($("#selectAllPremiseLayer").prop("checked")) {
+                $(".selectAllPremiseLayer").prop("checked", true);
+                $(".selectAllpremiseStatusLayer").prop("checked", true);
+                $("#selectAllPremiseLayer").val("Yes");
 
-            $.each($("input[name='premiseStatusLayer[]']:checked"), function() {
-                premiseStatusLayer.push($(this).val());
-            });
-        } else {
-            $(".selectAllPremiseLayer").prop("checked", false);
-            $(".selectAllPremiseLayer").prop("checked", false);
-            $(".selectAllpremiseStatusLayer").prop("checked", false);
-            $("#selectAllPremiseLayer").val("No");
-            $.each($("input[name='premiseStatusLayer[]']:checked"), function() {
-                premiseStatusLayer.push($(this).val());
-            });
+                $.each($("input[name='premiseStatusLayer[]']:checked"), function() {
+                    premiseStatusLayer.push($(this).val());
+                });
+            } else {
+                $(".selectAllPremiseLayer").prop("checked", false);
+                $(".selectAllPremiseLayer").prop("checked", false);
+                $(".selectAllpremiseStatusLayer").prop("checked", false);
+                $("#selectAllPremiseLayer").val("No");
+                $.each($("input[name='premiseStatusLayer[]']:checked"), function() {
+                    premiseStatusLayer.push($(this).val());
+                });
+            }
+        }else {
+            //alert('Please select atleast one network from "Filter" Submenu.');
+            toastr.error('Please select atleast one network from "Filter" Submenu.');
         }
         resetButton();
         networkLayer = [];
@@ -1145,20 +1220,26 @@ $(document).ready(function() {
     $(document).on("click", ".selectAllPremiseLayer", function() {
         clearMap();
         premiseStatusLayer = [];
-        if ($(".selectAllPremiseLayer").prop("checked")) {
-            $(".selectAllpremiseStatusLayer").prop("checked", true);
-            $(".selectAllPremiseLayer").val("Yes");
+        var checksone = checkNetworkSelected();
+        if(checksone == true){
+            if ($(".selectAllPremiseLayer").prop("checked")) {
+                $(".selectAllpremiseStatusLayer").prop("checked", true);
+                $(".selectAllPremiseLayer").val("Yes");
 
-            $.each($("input[name='premiseStatusLayer[]']:checked"), function() {
-                premiseStatusLayer.push($(this).val());
-            });
-        } else {
-            $(".selectAllPremiseLayer").prop("checked", false);
-            $(".selectAllpremiseStatusLayer").prop("checked", false);
-            $(".selectAllPremiseLayer").val("No");
-            $.each($("input[name='premiseStatusLayer[]']:checked"), function() {
-                premiseStatusLayer.push($(this).val());
-            });
+                $.each($("input[name='premiseStatusLayer[]']:checked"), function() {
+                    premiseStatusLayer.push($(this).val());
+                });
+            } else {
+                $(".selectAllPremiseLayer").prop("checked", false);
+                $(".selectAllpremiseStatusLayer").prop("checked", false);
+                $(".selectAllPremiseLayer").val("No");
+                $.each($("input[name='premiseStatusLayer[]']:checked"), function() {
+                    premiseStatusLayer.push($(this).val());
+                });
+            }
+        }else {
+            //alert('Please select atleast one network from "Filter" Submenu.');
+            toastr.error('Please select atleast one network from "Filter" Submenu.');
         }
         resetButton();
         networkLayer = [];
@@ -1190,13 +1271,19 @@ $(document).ready(function() {
     // ************* Select Premise Status  - Layer Submenu ************* //
     $(document).on("click",".selectAllpremiseStatusLayer",function(){
         clearMap();
-        if ($("#selectAllpremiseStatusLayer").prop("checked") && $("#selectAllpremiseStatusLayer").val() != 'Yes') {
-            $("#selectAllpremiseStatusLayer").prop("checked", false);
-        }
         premiseStatusLayer = [];
-        $.each($("input[name='premiseStatusLayer[]']:checked"), function() {
-              premiseStatusLayer.push($(this).val());
-        });
+        var checksone = checkNetworkSelected();
+        if(checksone == true){
+            if ($("#selectAllpremiseStatusLayer").prop("checked") && $("#selectAllpremiseStatusLayer").val() != 'Yes') {
+                $("#selectAllpremiseStatusLayer").prop("checked", false);
+            }
+            $.each($("input[name='premiseStatusLayer[]']:checked"), function() {
+                  premiseStatusLayer.push($(this).val());
+            });
+        }else {
+            //alert('Please select atleast one network from "Filter" Submenu.');
+            toastr.error('Please select atleast one network from "Filter" Submenu.');
+        }
         resetButton();
         networkLayer = [];
         zoneLayer = [];
@@ -1228,19 +1315,25 @@ $(document).ready(function() {
     $(document).on("click", "#selectAllpremiseAttributeLayer", function() {
         clearMap();
         premiseAttribute = [];
-        if ($("#selectAllpremiseAttributeLayer").prop("checked")) {
-            $(".selectAllpremiseAttributeLayer").prop("checked", true);
-            $("#selectAllpremiseAttributeLayer").val("Yes");
+        var checksone = checkNetworkSelected();
+        if(checksone == true){
+            if ($("#selectAllpremiseAttributeLayer").prop("checked")) {
+                $(".selectAllpremiseAttributeLayer").prop("checked", true);
+                $("#selectAllpremiseAttributeLayer").val("Yes");
 
-            $.each($("input[name='premiseAttribute[]']:checked"), function() {
-                premiseAttribute.push($(this).val());
-            });
-        } else {
-            $(".selectAllpremiseAttributeLayer").prop("checked", false);
-            $("#selectAllpremiseAttributeLayer").val("No");
-            $.each($("input[name='premiseAttribute[]']:checked"), function() {
-                premiseAttribute.push($(this).val());
-            });
+                $.each($("input[name='premiseAttribute[]']:checked"), function() {
+                    premiseAttribute.push($(this).val());
+                });
+            } else {
+                $(".selectAllpremiseAttributeLayer").prop("checked", false);
+                $("#selectAllpremiseAttributeLayer").val("No");
+                $.each($("input[name='premiseAttribute[]']:checked"), function() {
+                    premiseAttribute.push($(this).val());
+                });
+            }
+        }else {
+            //alert('Please select atleast one network from "Filter" Submenu.');
+            toastr.error('Please select atleast one network from "Filter" Submenu.');
         }
         resetButton();
         networkLayer = [];
@@ -1272,13 +1365,19 @@ $(document).ready(function() {
     // ********** Select Premise Attribute - Layer Submenu ********** //
     $(document).on("click",".selectAllpremiseAttributeLayer",function(){
         clearMap();
-        if ($("#selectAllpremiseAttributeLayer").prop("checked") && $("#selectAllpremiseAttributeLayer").val() != 'Yes') {
-            $("#selectAllpremiseAttributeLayer").prop("checked", false);
-        }
         premiseAttribute = [];
-        $.each($("input[name='premiseAttribute[]']:checked"), function() {
-            premiseAttribute.push($(this).val());
-        });
+        var checksone = checkNetworkSelected();
+        if(checksone == true){
+            if ($("#selectAllpremiseAttributeLayer").prop("checked") && $("#selectAllpremiseAttributeLayer").val() != 'Yes') {
+                $("#selectAllpremiseAttributeLayer").prop("checked", false);
+            }
+            $.each($("input[name='premiseAttribute[]']:checked"), function() {
+                premiseAttribute.push($(this).val());
+            });
+        }else {
+            //alert('Please select atleast one network from "Filter" Submenu.');
+            toastr.error('Please select atleast one network from "Filter" Submenu.');
+        }
         resetButton();
         networkLayer = [];
         zoneLayer = [];
@@ -1310,21 +1409,26 @@ $(document).ready(function() {
     $(document).on("click", "#selectAllpremiseTypeLayer", function() {
         clearMap();
         premiseTypeLayer = [];
-        if ($("#selectAllpremiseTypeLayer").prop("checked")) {
-            $(".selectAllpremiseTypeLayer").prop("checked", true);
-            $(".selectAllpremisesubTypeLayer").prop("checked", true);
-            $("#selectAllpremiseTypeLayer").val("Yes");
-
-            $.each($("input[name='premiseTypeLayer[]']:checked"), function() {
-                premiseTypeLayer.push($(this).val());
-            });
-        } else {
-            $(".selectAllpremiseTypeLayer").prop("checked", false);
-            $(".selectAllpremisesubTypeLayer").prop("checked", false);
-            $("#selectAllpremiseTypeLayer").val("No");
-            $.each($("input[name='premiseTypeLayer[]']:checked"), function() {
-                premiseTypeLayer.push($(this).val());
-            });
+        var checksone = checkNetworkSelected();
+        if(checksone == true){
+            if ($("#selectAllpremiseTypeLayer").prop("checked")) {
+                $(".selectAllpremiseTypeLayer").prop("checked", true);
+                $(".selectAllpremisesubTypeLayer").prop("checked", true);
+                $("#selectAllpremiseTypeLayer").val("Yes");
+                $.each($("input[name='premiseTypeLayer[]']:checked"), function() {
+                    premiseTypeLayer.push($(this).val());
+                });
+            } else {
+                $(".selectAllpremiseTypeLayer").prop("checked", false);
+                $(".selectAllpremisesubTypeLayer").prop("checked", false);
+                $("#selectAllpremiseTypeLayer").val("No");
+                $.each($("input[name='premiseTypeLayer[]']:checked"), function() {
+                    premiseTypeLayer.push($(this).val());
+                });
+            }
+        }else {
+            //alert('Please select atleast one network from "Filter" Submenu.');
+            toastr.error('Please select atleast one network from "Filter" Submenu.');
         }
         resetButton();
         networkLayer = [];
@@ -1356,14 +1460,20 @@ $(document).ready(function() {
     // ********** Select Premise Type - Layer Submenu ********** //
     $(document).on("click",".selectAllpremiseTypeLayer",function(){
         clearMap();
-        if ($("#selectAllpremiseTypeLayer").prop("checked") && $("#selectAllpremiseTypeLayer").val() != 'Yes') {
-            $("#selectAllpremiseTypeLayer").prop("checked", false);
-        }
         premiseTypeLayer = [];
-        $.each($("input[name='premiseTypeLayer[]']:checked"), function() {
-            premiseTypeLayer.push($(this).val());
-            $("#premisesubTypeLayer_"+$(this).val()).prop("checked", false);
-        });
+        var checksone = checkNetworkSelected();
+        if(checksone == true){
+            if ($("#selectAllpremiseTypeLayer").prop("checked") && $("#selectAllpremiseTypeLayer").val() != 'Yes') {
+                $("#selectAllpremiseTypeLayer").prop("checked", false);
+            }
+            $.each($("input[name='premiseTypeLayer[]']:checked"), function() {
+                premiseTypeLayer.push($(this).val());
+                $("#premisesubTypeLayer_"+$(this).val()).prop("checked", false);
+            });
+        }else {
+            //alert('Please select atleast one network from "Filter" Submenu.');
+            toastr.error('Please select atleast one network from "Filter" Submenu.');
+        }
         resetButton();
         networkLayer = [];
         zoneLayer = [];
@@ -1393,13 +1503,18 @@ $(document).ready(function() {
 
     // ********** Select Premise sub Type - Layer Submenu ********** //
     $(document).on("click",".selectAllpremisesubTypeLayer",function(){
-        console.log("selectAllpremisesubTypeLayer")
+        //console.log("selectAllpremisesubTypeLayer")
         clearMap();
-        
         premisesubTypeLayer = [];
-        $.each($("input[name='premisesubTypeLayer[]']:checked"), function() {
-            premisesubTypeLayer.push($(this).val());
-        });
+        var checksone = checkNetworkSelected();
+        if(checksone == true){
+            $.each($("input[name='premisesubTypeLayer[]']:checked"), function() {
+                premisesubTypeLayer.push($(this).val());
+            });
+        }else {
+            //alert('Please select atleast one network from "Filter" Submenu.');
+            toastr.error('Please select atleast one network from "Filter" Submenu.');
+        }    
         resetButton();
         networkLayer = [];
         zoneLayer = [];
@@ -1429,19 +1544,40 @@ $(document).ready(function() {
 
 });
 
-/*Check Zone's */
-function checkZoneSelected(){
-    var zone_cnt = 0;
-    //console.log('skZones.length=>'+skZones.length);
-    $.each($("input[name='skZones[]']:checked"), function() {
-        zone_cnt++;
+/** if Network Layer is not selected, don't allow other filter options **/
+function checkNetworkSelected(){
+    var network_cnt = 0;
+    $.each($("input[name='sNetwork[]']:checked"), function() {
+        network_cnt++;
     });
-    if(zone_cnt == 0){
-        $("#selectAllNetwork").prop("checked", false);
+    if(network_cnt == 0){
+        //****** "Filter" Submenu Options ******/
+        //$("#selectAllNetwork").prop("checked", false);
+        //$("input[name='sNetwork[]']").prop("checked", false);
+        $("#selectAllZone").prop("checked", false);
+        $("input[name='skZones[]']").prop("checked", false);
         $("#selectAllCity").prop("checked", false);
-        $("input[name='sNetwork[]']").prop("checked", false);
-        $("input[name='sAttr[]").prop("checked", false);
         $("input[name='city[]").prop("checked", false);
+        $("#sAllZipcode").prop("checked", false);
+        $("input[name='zipcode[]").prop("checked", false);
+
+        //****** "Layer" Submenu Options ******/
+        $("#selectAllPremiseLayer").prop("checked", false);
+        $("#selectAllpremiseStatusLayer").prop("checked", false);
+        $("input[name='premiseStatusLayer[]").prop("checked", false);
+        $("#selectAllpremiseTypeLayer").prop("checked", false);
+        $("input[name='premiseTypeLayer[]").prop("checked", false);
+        $("#selectAllpremiseAttributeLayer").prop("checked", false);
+        $("input[name='premiseAttribute[]").prop("checked", false);
+        $("#selectAllPremiseCircuitLayer").prop("checked", false);
+        $("#selectAllPCircuitStatusLayer").prop("checked", false);
+        $("input[name='pCircuitStatusLayer[]").prop("checked", false);
+        $("#selectAllPCircuitCTLayer").prop("checked", false);
+        $("input[name='pCircuitcTypeLayer[]").prop("checked", false);
+        $("#selectAllFiberInquiries").prop("checked", false);
+        $("#selectAllServiceOrders").prop("checked", false);
+        $("#selectAllWorkOrders").prop("checked", false);
+
         return false;
     }else{
         return true;
@@ -2011,11 +2147,11 @@ function cancleAddBatchSite(){
 /**************** Add Batch-create Premises ****************/
 
 function clearFilterData(){
-    skNetwork = [];
+    //skNetwork = [];
     skCity = [];
     skZones = [];
     skZipcode = [];
-    $(".selectAllNetwork").prop("checked", false);
+    //$(".selectAllNetwork").prop("checked", false);
     $(".selectAllZone").prop("checked", false);
     $(".selectAllCity").prop("checked", false);
     $(".selectAllZipcode").prop("checked", false);

@@ -136,7 +136,12 @@
                             <span class="caret">Networks</span>
                             <ul class="nested">
                                 {section name="n" loop=$networkArr}
-                                <li><input class="form-check-input selectAllNetwork" type="checkbox" name="sNetwork[]" id="sNetwork_{$networkArr[n].iNetworkId}" value="{$networkArr[n].iNetworkId}" />{$networkArr[n].vName|gen_strip_slash}
+                                {if $networkArr[n].iNetworkId|in_array:$user_networks}
+                                    {assign var=networkSelected value=true}
+                                {else}
+                                    {assign var=networkSelected value=false}
+                                {/if}
+                                <li><input class="form-check-input selectAllNetwork" type="checkbox" name="sNetwork[]" id="sNetwork_{$networkArr[n].iNetworkId}" value="{$networkArr[n].iNetworkId}" {if $networkSelected} checked="checked" {/if} />{$networkArr[n].vName|gen_strip_slash}
                                 </li>
                                 {/section}
                             </ul>
@@ -146,12 +151,7 @@
                             <span class="caret">Fiber Zones</span>
                             <ul class="nested">
                                 {foreach from=$skZones item=zone}
-                                    {if $zone['iZoneId']|in_array:$user_zones}
-                                        {assign var=zoneSelected value=true}
-                                    {else}
-                                        {assign var=zoneSelected value=false}
-                                    {/if}
-                                <li><input class="form-check-input selectAllZone" type="checkbox" name="skZones[]" id="skZones_{$zone['iZoneId']}" value="{$zone['iZoneId']}" {if $zoneSelected} checked="checked" {/if} /><label class="form-check-label" for="skZones_{$zone['iZoneId']}">{$zone['vZoneName']}</label></li>
+                                <li><input class="form-check-input selectAllZone" type="checkbox" name="skZones[]" id="skZones_{$zone['iZoneId']}" value="{$zone['iZoneId']}" /><label class="form-check-label" for="skZones_{$zone['iZoneId']}">{$zone['vZoneName']}</label></li>
                                 {/foreach}
                             </ul>
                         </li>
@@ -481,7 +481,7 @@ $(document).ready(function(){
 });
 let MAP_LONG = '{$MAP_LONGITUDE}';
 let MAP_LAT = '{$MAP_LATITUDE}';
-var user_zones = {$user_zones|@json_encode};
+var user_networks = {$user_networks|@json_encode};
 </script>
 
 <script>

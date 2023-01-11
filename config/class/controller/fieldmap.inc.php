@@ -7,20 +7,6 @@ class Fieldmap {
         $this->SALObj = new Security_audit_log();
     }
 
-    public function getSiteTypeIcon($premiseId){
-        global $sqlObj, $premise_type_icon_url, $premise_type_icon_path, $site_url;
-        $siteTypeSql = 'SELECT "icon" FROM "site_type_mas" WHERE "iSTypeId" = '.$premiseId.' AND "iStatus" = 1 ORDER BY "vTypeName" asc';
-        $sType = $sqlObj->GetAll($siteTypeSql);
-        //print_r($sType); die;
-        $vIcon = $site_url."images/black_icon.png";
-        if(!empty($sType)) {
-            if($sType[0]['icon'] != '' && file_exists($premise_type_icon_path.$sType[0]['icon'])) {
-                $vIcon = $premise_type_icon_url.$sType[0]['icon'];
-            }
-        }
-        return $vIcon;
-    }
-
     public function getZones(){
         global $sqlObj;
 
@@ -92,12 +78,11 @@ class Fieldmap {
                 //print_r($polyArr);
                 foreach($polyArr as $latlng){
                     $latLngArr = explode(" ", $latlng);
-
                     //print_r($latLngArr);
                     $geoArr[$zone['iZoneId']][] = array(
-                                        'lat' => (float) $latLngArr[1],
-                                        'lng' => (float) $latLngArr[0]
-                                    );
+                        'lat' => (float) $latLngArr[1],
+                        'lng' => (float) $latLngArr[0]
+                    );
                     $i++;
                 }
             }
@@ -117,19 +102,13 @@ class Fieldmap {
         $premiseIds = $sqlObj->GetAll($attrSql);
         $sIdsArr = array();
         foreach ($premiseIds as $key => $value) {
-           $sIdsArr[$key] = $value['iSTypeId'];
+            $sIdsArr[$key] = $value['iSTypeId'];
         }
         $sIds = implode(",", $sIdsArr);
         $where[] = 's."iSTypeId" IN('.$sIds.')';
 
-        //$where[] ='s."iStatus" = 1';
-
         $whereQuery = implode(" AND ", $where);
-
         $where1[] = 's."iSTypeId" IN('.$sIds.')';
-
-        //$where1[] ='s."iStatus" = 1';
-
         $whereQuery1 = implode(" AND ", $where1);
 
         $sql_attr = 'SELECT sa."iPremiseId", sa."iSAttributeId" FROM "site_attribute" sa INNER JOIN premise_mas s ON sa."iPremiseId" = s."iPremiseId" WHERE '.$whereQuery1.' ORDER BY sa."iPremiseId"';
@@ -199,55 +178,8 @@ class Fieldmap {
             }
         }
 
-        if(isset($param['zone']) && $param['zone'] != ''){
-            //$finalArr = array();
-            $zones = $this->getZonesData($param['zone']);
-            $selectedZones = explode(",", $param['zone']);
-
-            if(empty($finalArr)){
-                $finalArr = $siteArr;
-            }
-
-            foreach($finalArr as $_key => $site){
-                //print_r($finalArr[$_key]); die;
-                if(!in_array($site['zoneid'], $selectedZones) ){
-                    unset($finalArr[$_key]);
-                }
-            }
-            //$response['sites'] = $finalArr;
-            if(!empty($response['sites'])){
-                $response['sites'] =array_intersect_key($response['sites'],$finalArr);
-            }/*else{
-                $response['sites'] = $finalArr;
-            }*/
-            $response['polyZone'] = $zones;
-        }
-
-        if(isset($param['city']) && $param['city'] != ''){
-            //$finalArr = array();
-            $selectedCity = explode(",", $param['city']);
-            //echo "<pre>";print_r($selectedCity);exit();
-            if(empty($finalArr)){
-                $finalArr = $siteArr;
-            }
-            foreach($finalArr as $_key => $site){
-                if(!in_array($site['cityid'], $selectedCity) ){
-                    unset($finalArr[$_key]);
-                }
-            }
-            //$response['sites'] = $finalArr;
-            if(!empty($response['sites'])){
-                //$response['sites'] = array_replace($response['sites'],$srFilter_data);
-                $response['sites'] = $response['sites'] + $finalArr;
-            }else{
-                $response['sites'] = $finalArr;
-            }
-        }
-
         if(isset($param['network']) && $param['network'] != ''){
-            //$finalArr = array();
             $selectedNetwork = explode(",", $param['network']);
-            //echo "<pre>";print_r($selectedNetwork);exit();
             if(empty($finalArr)){
                 $finalArr = $siteArr;
             }
@@ -256,20 +188,54 @@ class Fieldmap {
                     unset($finalArr[$_key]);
                 }
             }
-            //echo "<pre>";print_r($response['sites']);exit();
-            //$response['sites'] = $finalArr;
-            if(!empty($response['sites'])){
-                //$response['sites'] = array_replace($response['sites'],$srFilter_data);
+            /*if(!empty($response['sites'])){
                 $response['sites'] = $response['sites'] + $finalArr;
-            }else{
+            }else{*/
                 $response['sites'] = $finalArr;
-            }
-            //echo "<pre>";print_r($response['sites']);exit();
+            //}
         }
+
+        if(isset($param['zone']) && $param['zone'] != ''){
+            $zones = $this->getZonesData($param['zone']);
+            $selectedZones = explode(",", $param['zone']);
+            if(empty($finalArr)){
+                $finalArr = $siteArr;
+            }
+            foreach($finalArr as $_key => $site){
+                //print_r($finalArr[$_key]); die;
+                if(!in_array($site['zoneid'], $selectedZones) ){
+                    unset($finalArr[$_key]);
+                }
+            }
+            /*if(!empty($response['sites'])){
+                $response['sites'] =array_intersect_key($response['sites'],$finalArr);
+            }else{*/
+                $response['sites'] = $finalArr;
+            //}
+            $response['polyZone'] = $zones;
+        }
+
+        if(isset($param['city']) && $param['city'] != ''){
+            $selectedCity = explode(",", $param['city']);
+            //echo "<pre>";print_r($finalArr);exit;
+            if(empty($finalArr)){
+                $finalArr = $siteArr;
+            }
+            foreach($finalArr as $_key => $site){
+                if(!in_array($site['cityid'], $selectedCity) ){
+                    unset($finalArr[$_key]);
+                }
+            }
+            //echo "<pre>";print_r($response['sites']);exit;
+            /*if(!empty($response['sites'])){
+                $response['sites'] = $response['sites'] + $finalArr;
+            }else{*/
+                $response['sites'] = $finalArr;
+            //}
+        }
+
         if(isset($param['zipcode']) && $param['zipcode'] != ''){
-            //$finalArr = array();
             $selectedZipcode = explode(",", $param['zipcode']);
-            //echo "<pre>";print_r($selectedZipcode);exit();
             if(empty($finalArr)){
                 $finalArr = $siteArr;
             }
@@ -278,22 +244,11 @@ class Fieldmap {
                     unset($finalArr[$_key]);
                 }
             }
-            //$response['sites'] = $finalArr;
-            if(!empty($response['sites'])){
-                //$response['sites'] = array_replace($response['sites'],$srFilter_data);
+            /*if(!empty($response['sites'])){
                 $response['sites'] = $response['sites'] + $finalArr;
-            }else{
+            }else{*/
                 $response['sites'] = $finalArr;
-            }
-        }
-
-        if(isset($param['networkLayer']) && $param['networkLayer'] != ''){
-            $networkLayerArr = explode(",", $param['networkLayer']);
-            $networkLayerJsonUrl = $field_map_json_path."networkLayer.json";
-            $ntworklayerData = json_decode(file_get_contents($networkLayerJsonUrl), true);
-            $nlayerArr = $ntworklayerData['networklayer'];
-            $ntworklayerFilter_data = $this->multi_array_search($nlayerArr,$networkLayerArr);
-            $response['networkLayer'] = $ntworklayerFilter_data;
+            //}
         }
 
         if(isset($param['zoneLayer']) && $param['zoneLayer'] != ''){
@@ -303,6 +258,24 @@ class Fieldmap {
             $zlayerArr = $layerData['zoneLayer'];
             $zlayerFilter_data = $this->multi_array_search($zlayerArr,$zolyrArr);
             $response['zoneLayer'] = $zlayerFilter_data;
+        }
+
+        if(isset($param['networkLayer']) && $param['networkLayer'] != ''){
+            $networkLayerArr = explode(",", $param['networkLayer']);
+            $networkLayerJsonUrl = $field_map_json_path."networkLayer.json";
+            $ntworklayerData = json_decode(file_get_contents($networkLayerJsonUrl), true);
+            $nlayerArr = $ntworklayerData['networklayer'];
+            $ntworklayerFilter_data = $this->multi_array_search($nlayerArr,$networkLayerArr);
+            $response['networkLayer'] = $ntworklayerFilter_data;
+
+            if(empty($finalArr)){
+                $finalArr = $siteArr;
+            }
+            foreach($finalArr as $_key => $site){
+                if(!in_array($site['networkid'], $selectedZones) ){
+                    unset($finalArr[$_key]);
+                }
+            }
         }
 
         if(isset($param['custlayer']) && $param['custlayer'] != ''){
@@ -318,6 +291,15 @@ class Fieldmap {
             $fiberInquiryJsonUrl = $field_map_json_path."fiberInquiry-data.json";
             $fiberInquiryData = json_decode(file_get_contents($fiberInquiryJsonUrl), true);
             $fiberInquiryArr = $fiberInquiryData['sites'];
+
+            if(isset($param['networkLayer']) && $param['networkLayer'] != ''){
+                $selectedNetworkLayer = explode(",", $param['networkLayer']);
+                foreach($fiberInquiryArr as $_key => $sites){
+                    if(!in_array($sites['networkid'], $selectedNetworkLayer) ){
+                        unset($fiberInquiryArr[$_key]);
+                    }
+                }
+            }
 
             if(isset($param['network']) && $param['network'] != ''){
                 $selectedNetwork = explode(",", $param['network']);
@@ -362,6 +344,15 @@ class Fieldmap {
             $serviceOrderData = json_decode(file_get_contents($serviceOrderJsonUrl), true);
             $serviceOrderArr = $serviceOrderData['sites'];
 
+            if(isset($param['networkLayer']) && $param['networkLayer'] != ''){
+                $selectedNetworkLayer = explode(",", $param['networkLayer']);
+                foreach($serviceOrderArr as $_key => $sites){
+                    if(!in_array($sites['networkid'], $selectedNetworkLayer) ){
+                        unset($serviceOrderArr[$_key]);
+                    }
+                }
+            }
+
             if(isset($param['network']) && $param['network'] != ''){
                 $selectedNetwork = explode(",", $param['network']);
                 foreach($serviceOrderArr as $_key => $sites){
@@ -404,6 +395,15 @@ class Fieldmap {
             $workOrderJsonUrl = $field_map_json_path."workorder-data.json";
             $workOrderData = json_decode(file_get_contents($workOrderJsonUrl), true);
             $workOrderArr = $workOrderData['sites'];
+
+            if(isset($param['networkLayer']) && $param['networkLayer'] != ''){
+                $selectedNetworkLayer = explode(",", $param['networkLayer']);
+                foreach($workOrderArr as $_key => $sites){
+                    if(!in_array($sites['networkid'], $selectedNetworkLayer) ){
+                        unset($workOrderArr[$_key]);
+                    }
+                }
+            }
 
             if(isset($param['network']) && $param['network'] != ''){
                 $selectedNetwork = explode(",", $param['network']);
@@ -458,6 +458,15 @@ class Fieldmap {
                 }
             }
 
+            if(isset($param['networkLayer']) && $param['networkLayer'] != ''){
+                $selectedNetworkLayer = explode(",", $param['networkLayer']);
+                foreach($pCircuitStatusArr as $_key => $sites){
+                    if(!in_array($sites['networkid'], $selectedNetworkLayer) ){
+                        unset($pCircuitStatusArr[$_key]);
+                    }
+                }
+            }
+
             if(isset($param['network']) && $param['network'] != ''){
                 $selectedNetwork = explode(",", $param['network']);
                 foreach($pCircuitStatusArr as $_key => $sites){
@@ -506,6 +515,15 @@ class Fieldmap {
                 foreach ($pCircuitcTypeArr as $key => $lblVal) {
                     if(!in_array($lblVal['connectiontypeid'], $pclyrArr) ){
                         unset($pCircuitcTypeArr[$key]);
+                    }
+                }
+            }
+
+            if(isset($param['networkLayer']) && $param['networkLayer'] != ''){
+                $selectedNetworkLayer = explode(",", $param['networkLayer']);
+                foreach($pCircuitcTypeArr as $_key => $sites){
+                    if(!in_array($sites['networkid'], $selectedNetworkLayer) ){
+                        unset($pCircuitcTypeArr[$_key]);
                     }
                 }
             }
@@ -602,6 +620,15 @@ class Fieldmap {
                 }
             }
 
+            if(isset($param['networkLayer']) && $param['networkLayer'] != ''){
+                $selectedNetworkLayer = explode(",", $param['networkLayer']);
+                foreach($premiseStatusArr as $_key => $sites){
+                    if(!in_array($sites['networkid'], $selectedNetworkLayer) ){
+                        unset($premiseStatusArr[$_key]);
+                    }
+                }
+            }
+
             if(isset($param['network']) && $param['network'] != ''){
                 $selectedNetwork = explode(",", $param['network']);
                 foreach($premiseStatusArr as $_key => $sites){
@@ -686,6 +713,15 @@ class Fieldmap {
                 }
             }
 
+            if(isset($param['networkLayer']) && $param['networkLayer'] != ''){
+                $selectedNetworkLayer = explode(",", $param['networkLayer']);
+                foreach($premiseAttributeArr as $_key => $sites){
+                    if(!in_array($sites['networkid'], $selectedNetworkLayer) ){
+                        unset($premiseAttributeArr[$_key]);
+                    }
+                }
+            }
+
             if(isset($param['network']) && $param['network'] != ''){
                 $selectedNetwork = explode(",", $param['network']);
                 foreach($premiseAttributeArr as $_key => $sites){
@@ -763,6 +799,15 @@ class Fieldmap {
                     $sT1 = $sTArr1[1];
                     $site = $this->searchFor($sT1, $premiseTypeLayerArr, 'sstypeid');
                     $premiseTypeLayerArr = $premiseTypeLayerArr + $site;
+                }
+            }
+
+            if(isset($param['networkLayer']) && $param['networkLayer'] != ''){
+                $selectedNetworkLayer = explode(",", $param['networkLayer']);
+                foreach($premiseTypeLayerArr as $_key => $sites){
+                    if(!in_array($sites['networkid'], $selectedNetworkLayer) ){
+                        unset($premiseTypeLayerArr[$_key]);
+                    }
                 }
             }
 
@@ -845,6 +890,15 @@ class Fieldmap {
                 foreach ($premisesTypeLayerArr as $key => $lblVal) {
                     if(!in_array($lblVal['stypeid'], $ptlyrArr) ){
                         unset($premisesTypeLayerArr[$key]);
+                    }
+                }
+            }
+
+            if(isset($param['networkLayer']) && $param['networkLayer'] != ''){
+                $selectedNetworkLayer = explode(",", $param['networkLayer']);
+                foreach($premisesTypeLayerArr as $_key => $sites){
+                    if(!in_array($sites['networkid'], $selectedNetworkLayer) ){
+                        unset($premisesTypeLayerArr[$_key]);
                     }
                 }
             }

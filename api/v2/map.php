@@ -9,8 +9,8 @@ if($request_type == "get_map_filter_data"){
     //echo "<pre>";print_r($RES_PARA);exit;
     $iLoginUserId = $RES_PARA['iLoginUserId'];
 
-    $user_zones = $userObj->user_zoneFromId($iLoginUserId);
-    //echo"<pre>";print_r($user_zones);exit;
+    $user_networks = $userObj->user_networkFromId($iLoginUserId);
+    //echo"<pre>";print_r($user_networks);exit;
 	/*get zone active data*/
     $sk_zones = $mapObj->getZones();
 
@@ -35,7 +35,7 @@ if($request_type == "get_map_filter_data"){
     /*get Connection Type active Recrods*/
     $connection_types = $mapObj->getConnectionTypes();
 
-    $result = array('zone' =>$sk_zones, 'network' =>$networkArr, 'city' => $cityArr, 'zipcode' => $zipcodeArr, 'user_zones' => $user_zones, 'zone_kml' => $zone_kml, 'premise_type' => $premise_type, 'premise_attribute' => $premise_attribute, 'connection_types' => $connection_types);
+    $result = array('zone' =>$sk_zones, 'network' =>$networkArr, 'city' => $cityArr, 'zipcode' => $zipcodeArr, 'user_networks' => $user_networks, 'zone_kml' => $zone_kml, 'premise_type' => $premise_type, 'premise_attribute' => $premise_attribute, 'connection_types' => $connection_types);
 
     $rh = HTTPStatus(200);
     $code = 2000;

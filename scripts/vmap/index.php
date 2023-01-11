@@ -41,11 +41,21 @@ $sk_zones =  $result_filter_data['zone'];
 $networkArr =  $result_filter_data['network'];
 $cityArr = $result_filter_data['city'];
 $zipcodeArr = $result_filter_data['zipcode'];
-$user_zones = $result_filter_data['user_zones'];
+$user_networks = $result_filter_data['user_networks'];
 $zone_kml = $result_filter_data['zone_kml'];
 $sTypes = $result_filter_data['premise_type'];
 $sAttrubutes = $result_filter_data['premise_attribute'];
 $connection_types = $result_filter_data['connection_types'];
+
+$smarty->assign("cityArr", $cityArr);
+$smarty->assign("skZones", $sk_zones);
+$smarty->assign("zone_kml", $zone_kml);
+$smarty->assign("networkArr", $networkArr);
+$smarty->assign("zipcodeArr", $zipcodeArr);
+$smarty->assign("user_networks", $user_networks);
+$smarty->assign("sAttrubutes", $sAttrubutes);
+$smarty->assign("skSites", $sTypes);
+$smarty->assign("connection_types", $connection_types);
 /*Get Map Filter data*/
 
 /*Get Map Cluster layer*/
@@ -70,6 +80,7 @@ curl_close($ch);
 $result = json_decode($response, true);
 $result_layer_data= $result['result'];
 $custLayers = $result_layer_data['custLayers'];
+$smarty->assign("custLayers", $custLayers);
 /*Get Map Filter data*/
 
 $mode = isset($_REQUEST['mode']) ? $_REQUEST['mode'] : 'list';
@@ -414,16 +425,6 @@ $res = json_decode($response, true);
 $smarty->assign("rs_engagement", $res['result']);
 /*-------------------------- Engagement -------------------------- */
 
-$smarty->assign("cityArr", $cityArr);
-$smarty->assign("skZones", $sk_zones);
-$smarty->assign("zone_kml", $zone_kml);
-$smarty->assign("networkArr", $networkArr);
-$smarty->assign("zipcodeArr", $zipcodeArr);
-$smarty->assign("user_zones", $user_zones);
-$smarty->assign("custLayers", $custLayers);
-$smarty->assign("sAttrubutes", $sAttrubutes);
-$smarty->assign("skSites", $sTypes);
-$smarty->assign("connection_types", $connection_types);
 
 $module_name = "Vmap List";
 $module_title = "Vmap";

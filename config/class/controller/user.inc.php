@@ -439,6 +439,22 @@ class User {
             }
         }
         return $zone_arr;
+    }
+
+
+    function user_networkFromId($iUserId) {
+        global $sqlObj;
+
+        $sql = "SELECT \"iNetworkId\" FROM user_network WHERE \"iUserId\"='" . $iUserId . "' ORDER BY \"iNetworkId\"";
+        $rs_db = $sqlObj->GetAll($sql);
+        $zone_arr = [];
+        $ni = count($rs_db);
+        if($ni > 0){
+            for($i=0; $i<$ni; $i++){
+                $zone_arr[] =  $rs_db[$i]['iNetworkId'];
+            }
+        }
+        return $zone_arr;
     } 
 
 }
