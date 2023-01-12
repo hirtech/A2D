@@ -354,6 +354,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key={$GOOGLE_GEOCODE_API_KEY}&libraries=geometry,drawing,places,visualization"></script>
+<script src="{$site_url}assets/js/mapjs/oms.min.js"></script>
 <script src="{$site_url}assets/js/mapjs/markerclusterer.js"></script>
 <script src="{$site_url}assets/vendors/typeahead/handlebars-v4.5.3.js"></script>
 <script src="{$site_url}assets/vendors/typeahead/typeahead.bundle.js"></script>
@@ -482,6 +483,8 @@ $(document).ready(function(){
 let MAP_LONG = '{$MAP_LONGITUDE}';
 let MAP_LAT = '{$MAP_LATITUDE}';
 var user_networks = {$user_networks|@json_encode};
+
+var markerSpiderfier = null;
 </script>
 
 <script>

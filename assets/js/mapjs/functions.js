@@ -399,6 +399,15 @@ function initMap() {
     map.setOptions({ styles: map_styles["hide"] });
     //console.log("map init")
 
+    /*---------- Marker Spider --------------*/
+    var markerSpiderfier = new OverlappingMarkerSpiderfier(map, {
+    	keepSpiderfied: true,
+	  	markersWontMove: true,
+	  	markersWontHide: true,
+	  	basicFormatEvents: true
+	});
+    /*---------- Marker Spider --------------*/
+
 	/*const locationButton = document.createElement("button");
   	locationButton.textContent = "Current Location";
   	locationButton.classList.add("btn");
@@ -602,11 +611,17 @@ function showPointMap(sitePath, map, icon, premiseid) {
 	gmarkers.push($site_map);
 	info_popup($site_map, premiseid);
 	siteMarker[pCount].setMap(map);
+	console.log("here");
+
 
 	//Extend each marker's position in LatLngBounds object.
    	latlngbounds.extend(siteMarker[pCount].position);
 
 	pCount++;
+	if (markerSpiderfier) {
+		console.log("here11");
+        markerSpiderfier.addMarker(siteMarker);
+    }
 }
 
 // Handles click events on a map, and adds a new point to the Polyline.
@@ -1522,6 +1537,12 @@ function getPremiseFiberInquiryFilterData(siteFilter,srFilter){
 
                                         //Extend each marker's position in LatLngBounds object.
                                         latlngbounds.extend(sitesrFilterMarker[ccount].position);
+
+                                        if (markerSpiderfier) {
+			                                markerSpiderfier.addMarker(sitesrFilterMarker);
+			                            }
+
+			                            //markerCluster = new MarkerClusterer(map, sitesrFilterMarker);
 
                                         ccount++;
 

@@ -1140,7 +1140,7 @@ class Fieldmap {
             $sitewhere = array();
             $sitewhere[] = ' "iPremiseId" IN ('.$premiseId.')'; 
             $sitewhereQuery = implode(" AND ", $sitewhere);
-            $siteSql = 'SELECT "iPremiseId" as premiseid, "iSTypeId" as sTypeId, "iSSTypeId" as sSTypeId, "iCityId", "iZoneId", st_astext("vPointLatLong") as point FROM "premise_mas" WHERE '.$sitewhereQuery;
+            $siteSql = 'SELECT s."iPremiseId" as premiseid, s."iSTypeId" as sTypeId, s."iSSTypeId" as sSTypeId, s."iCityId", s."iZoneId", z."iNetworkId", s."iZipcode", s."iStatus", st_astext(s."vPointLatLong") as point FROM premise_mas s LEFT JOIN zone z ON s."iZoneId" = z."iZoneId"  WHERE '.$sitewhereQuery.' ORDER BY premiseid';
             //echo $siteSql;exit();
             $data['siteData'] = $sqlObj->GetAll($siteSql);
         }
