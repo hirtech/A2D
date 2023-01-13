@@ -332,11 +332,7 @@ function setSiteHistory($data) {
                             "iTechnicianId" => $operation_type_data['iTechnicianId'],
                         );;
                 }
-                else if($val['Type'] == "SR") {
-                    $hidden_fields = null;
-                    $hidden_arr = null;
-                }
-               $site_history_data[] = array(
+                $site_history_data[] = array(
                      'Date' => $val['Date'],
                      'Name' => $val['Name'],
                      'Description' => $val['Description'],
@@ -344,7 +340,7 @@ function setSiteHistory($data) {
                      'id' => $val['id'],                     
                      'hidden_fields' => $hidden_fields,
                      'hidden_arr' => $hidden_arr,
-               );
+                );
             }
         }
     }

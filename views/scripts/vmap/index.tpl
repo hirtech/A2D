@@ -354,8 +354,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key={$GOOGLE_GEOCODE_API_KEY}&libraries=geometry,drawing,places,visualization"></script>
+<script src="{$site_url}assets/js/mapjs/markerclustererplus/src/markerclusterer.js"></script>
 <script src="{$site_url}assets/js/mapjs/oms.min.js"></script>
-<script src="{$site_url}assets/js/mapjs/markerclusterer.js"></script>
 <script src="{$site_url}assets/vendors/typeahead/handlebars-v4.5.3.js"></script>
 <script src="{$site_url}assets/vendors/typeahead/typeahead.bundle.js"></script>
 
@@ -372,18 +372,15 @@
 </script>
 
 <script>
-    var toggler = document.getElementsByClassName("caret");
-    var i;
+var toggler = document.getElementsByClassName("caret");
+var i;
 
-    for (i = 0; i < toggler.length; i++) {
-        toggler[i].addEventListener("click", function() {
-            this.parentElement.querySelector(".nested").classList.toggle("active");
-            this.classList.toggle("caret-down");
-        });
-    }
-</script>
-
-<script>
+for (i = 0; i < toggler.length; i++) {
+    toggler[i].addEventListener("click", function() {
+        this.parentElement.querySelector(".nested").classList.toggle("active");
+        this.classList.toggle("caret-down");
+    });
+}
 function openNav() {
     closeNav2();
     closeNav1();
@@ -452,8 +449,6 @@ function closeNav3() {
     document.getElementById("mySidenav3").style.width = "0";
     document.getElementById("main3").style.marginRight = "0";
 }
-</script>
-<script type="text/javascript">
 
 // For Navigation Accordion
 $("#accordion").on("hide.bs.collapse show.bs.collapse", e => {
@@ -483,8 +478,6 @@ $(document).ready(function(){
 let MAP_LONG = '{$MAP_LONGITUDE}';
 let MAP_LAT = '{$MAP_LATITUDE}';
 var user_networks = {$user_networks|@json_encode};
-
-var markerSpiderfier = null;
 </script>
 
 <script>
@@ -567,6 +560,7 @@ var sitesrFilterMarker = [];
 var siteNearDataMarker = [];
 var sncount =0;
 var defaultZoom = 9;
+var markerSpiderfier = null;
 {/literal}
 </script>
 <script src="{$site_url}assets/js/mapjs/events.js?ver=1.2"></script>

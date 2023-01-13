@@ -375,6 +375,7 @@ const map_styles = {
 	    },
     ],
 };
+
 function initMap() {
 	map = new google.maps.Map(document.getElementById('map'), {
 		zoom: defaultZoom,
@@ -399,13 +400,13 @@ function initMap() {
     map.setOptions({ styles: map_styles["hide"] });
     //console.log("map init")
 
-    /*---------- Marker Spider --------------*/
-    var markerSpiderfier = new OverlappingMarkerSpiderfier(map, {
-    	keepSpiderfied: true,
-	  	markersWontMove: true,
-	  	markersWontHide: true,
-	  	basicFormatEvents: true
-	});
+	/*---------- Marker Spider --------------*/
+    var spiderConfig = {
+        keepSpiderfied: true/*,
+         event: 'mouseover'*/
+    };
+
+    markerSpiderfier = new OverlappingMarkerSpiderfier(map, spiderConfig);
     /*---------- Marker Spider --------------*/
 
 	/*const locationButton = document.createElement("button");
@@ -430,6 +431,7 @@ function initMap() {
 		getCurrentlatlong(true);
   	});
 }
+
 function showLocation(position) {
     var latitude = position.coords.latitude;
     var longitude = position.coords.longitude;
@@ -538,7 +540,9 @@ function showPointMapForFiberInquiry(sitePath, map, icon, id, vName, vAddress, p
 	//alert("id" +id)
 	fiberInquiryinfo_popup($sr_map, id, vName, vAddress, premiseid, vPremiseName, vPremiseSubType, vEngagement, vZoneName, vNetwork, vStatus,iFiberInquiryId);
 	fiberInquirylayerMarker[fiberInquiryCount].setMap(map);
-
+	if (markerSpiderfier) {
+        markerSpiderfier.addMarker(fiberInquirylayerMarker[fiberInquiryCount]);
+    }
 	//Extend each marker's position in LatLngBounds object.
     latlngbounds.extend(fiberInquirylayerMarker[fiberInquiryCount].position);
 	fiberInquiryCount++;
@@ -556,6 +560,9 @@ function showPointMapForserviceOrder(sitePath, map, icon, id, vMasterMSA, vServi
 	gmarkers.push($so_map);
 	serviceOrderinfo_popup($so_map, id, vMasterMSA, vServiceOrder, vSalesRepName, vSalesRepEmail, premiseid, vPremiseName, vAddress, cityid, stateid, countyid, countyid, zipcode, zoneid, vZoneName, networkid, vNetwork, vPremiseType, vCompanyName, vConnectionTypeName, vServiceType1, vStatus);
 	serviceOrderlayerMarker[serviceOrderCount].setMap(map);
+	if (markerSpiderfier) {
+        markerSpiderfier.addMarker(serviceOrderlayerMarker[serviceOrderCount]);
+    }
 
 	//Extend each marker's position in LatLngBounds object.
     latlngbounds.extend(serviceOrderlayerMarker[serviceOrderCount].position);
@@ -574,7 +581,9 @@ function showPointMapForworkOrder(sitePath, map, icon, id, premiseid, vPremiseNa
 	gmarkers.push($wo_map);
 	workOrderinfo_popup($wo_map, id, premiseid, vPremiseName, vAddress, cityid, stateid, countyid, countyid, zipcode, zoneid, vZoneName, networkid, vNetwork, vPremiseType, vServiceOrder, vWOProject, vType, vRequestor, vAssignedTo, vStatus);
 	workOrderlayerMarker[workOrderCount].setMap(map);
-
+	if (markerSpiderfier) {
+        markerSpiderfier.addMarker(workOrderlayerMarker[workOrderCount]);
+    }
 	//Extend each marker's position in LatLngBounds object.
     latlngbounds.extend(workOrderlayerMarker[workOrderCount].position);
 	workOrderCount++;
@@ -592,6 +601,9 @@ function showPointMapForpremiseCircuit(sitePath, map, icon, id, premiseid, vPrem
 	gmarkers.push($pc_map);
 	premiseCircuitinfo_popup($pc_map, id, premiseid, vPremiseName, vAddress, cityid, stateid, countyid, countyid, zipcode, zoneid, vZoneName, networkid, vNetwork, vPremiseType, vWorkOrder, circuitid, vCircuitName, connectiontypeid, vConnectionTypeName, vStatus);
 	premiseCircuitlayerMarker[premiseCircuitCount].setMap(map);
+	if (markerSpiderfier) {
+        markerSpiderfier.addMarker(premiseCircuitlayerMarker[premiseCircuitCount]);
+    }
 
 	//Extend each marker's position in LatLngBounds object.
     latlngbounds.extend(premiseCircuitlayerMarker[premiseCircuitCount].position);
@@ -611,17 +623,17 @@ function showPointMap(sitePath, map, icon, premiseid) {
 	gmarkers.push($site_map);
 	info_popup($site_map, premiseid);
 	siteMarker[pCount].setMap(map);
-	console.log("here");
-
+	//console.log("here");
+	if (markerSpiderfier) {
+		//console.log("here11");
+        markerSpiderfier.addMarker(siteMarker[pCount]);
+    }
 
 	//Extend each marker's position in LatLngBounds object.
    	latlngbounds.extend(siteMarker[pCount].position);
 
 	pCount++;
-	if (markerSpiderfier) {
-		console.log("here11");
-        markerSpiderfier.addMarker(siteMarker);
-    }
+	
 }
 
 // Handles click events on a map, and adds a new point to the Polyline.
@@ -969,6 +981,7 @@ function info_popup(marker, premiseid) {
 	//console.log(premiseid);
 	google.maps.event.addListener(marker, 'click', ( function(marker, premiseid) {
 		return function(arg) {
+
 			var content = "";
 			__marker__ = marker;
 			$.ajax({
@@ -1086,6 +1099,7 @@ function info_popup(marker, premiseid) {
 				}
 			});
 			google.maps.event.clearListeners(marker, 'mouseout');
+
 		}
 	})(marker, premiseid));
 }
@@ -1534,15 +1548,12 @@ function getPremiseFiberInquiryFilterData(siteFilter,srFilter){
                                         gmarkers.push($site_map);
                                         info_popup($site_map, premiseid);
                                         sitesrFilterMarker[ccount].setMap(map);
+                                        if (markerSpiderfier) {
+							                markerSpiderfier.addMarker(sitesrFilterMarker[ccount]);
+							            }
 
                                         //Extend each marker's position in LatLngBounds object.
                                         latlngbounds.extend(sitesrFilterMarker[ccount].position);
-
-                                        if (markerSpiderfier) {
-			                                markerSpiderfier.addMarker(sitesrFilterMarker);
-			                            }
-
-			                            //markerCluster = new MarkerClusterer(map, sitesrFilterMarker);
 
                                         ccount++;
 
@@ -1586,6 +1597,10 @@ function getPremiseFiberInquiryFilterData(siteFilter,srFilter){
 
                                         fiberInquiryinfo_popup($sr_map, id, vName, vAddress, premiseid, vPremiseName, vPremiseSubType, vEngagement, vZoneName, vNetwork, vStatus, fiberInquiryId);
                                         sitesrFilterMarker[ccount].setMap(map);
+
+                                        if (markerSpiderfier) {
+							                markerSpiderfier.addMarker(sitesrFilterMarker[ccount]);
+							            }
 
                                         //Extend each marker's position in LatLngBounds object.
                                         latlngbounds.extend(sitesrFilterMarker[ccount].position);
