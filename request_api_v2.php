@@ -1063,33 +1063,6 @@ switch($path) {
 			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
 		}
 		break;
-	case "get_task_trap_list." . $req_ext:
-		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
-			$request_type = "task_trap_list";
-			$api_file_name = "task_trap.php";
-			include_once($site_api_path . "api_authentication.php");
-		}else {
-			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
-		}
-		break;
-	case "get_task_other_list." . $req_ext:
-		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
-			$request_type = "task_other_list";
-			$api_file_name = "task_other.php";
-			include_once($site_api_path . "api_authentication.php");
-		}else {
-			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
-		}
-		break;
-	case "get_task_landing_rate_list." . $req_ext:
-		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
-			$request_type = "task_landing_rate_list";
-			$api_file_name = "landing_rate.php";
-			include_once($site_api_path . "api_authentication.php");
-		}else {
-			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
-		}
-		break;
 	case "get_task_larval_surveillance_list." . $req_ext:
 		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
 			$request_type = "task_larval_surveillance_list";
@@ -1153,15 +1126,6 @@ switch($path) {
 			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
 		}
 		break;
-	case "get_task_landing_rate_species." . $req_ext:
-		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
-			$request_type = "get_task_landing_rate_species";
-			$api_file_name = "landing_rate.php";
-			include_once($site_api_path."api_authentication.php");
-		}else {
-			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
-		}
-		break;
 	case "task_larval_surveillance_add." . $req_ext:
 		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
 			$request_type = "task_larval_surveillance_add";
@@ -1184,60 +1148,6 @@ switch($path) {
 		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
 			$request_type = "task_larval_surveillance_delete";
 			$api_file_name = "larval_surveillance.php";
-			include_once($site_api_path."api_authentication.php");
-		}else {
-			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
-		}
-		break;
-	case "task_landing_rate_add." . $req_ext:
-		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
-			$request_type = "task_landing_rate_add";
-			$api_file_name = "landing_rate.php";
-			include_once($site_api_path."api_authentication.php");
-		}else {
-			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
-		}
-		break;
-	case "task_landing_rate_edit." . $req_ext:
-		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
-			$request_type = "task_landing_rate_edit";
-			$api_file_name = "landing_rate.php";
-			include_once($site_api_path."api_authentication.php");
-		}else {
-			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
-		}
-		break;
-	case "task_landing_rate_delete." . $req_ext:
-		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
-			$request_type = "task_landing_rate_delete";
-			$api_file_name = "landing_rate.php";
-			include_once($site_api_path."api_authentication.php");
-		}else {
-			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
-		}
-		break;		
-	case "task_trap_add." . $req_ext:
-		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
-			$request_type = "task_trap_add";
-			$api_file_name = "task_trap.php";
-			include_once($site_api_path."api_authentication.php");
-		}else {
-			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
-		}
-		break;
-	case "task_trap_edit." . $req_ext:
-		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
-			$request_type = "task_trap_edit";
-			$api_file_name = "task_trap.php";
-			include_once($site_api_path."api_authentication.php");
-		}else {
-			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
-		}
-		break;
-	case "task_trap_delete." . $req_ext:
-		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
-			$request_type = "task_trap_delete";
-			$api_file_name = "task_trap.php";
 			include_once($site_api_path."api_authentication.php");
 		}else {
 			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
@@ -1553,42 +1463,6 @@ switch($path) {
 		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
 			$request_type = "event_type_dropdown";
 			$api_file_name = "general.php";
-			include_once($site_api_path."api_authentication.php");
-		}else {
-			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
-		}
-		break;
-	case "trap_type_dropdown." . $req_ext:
-		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
-			$request_type = "trap_type_dropdown";
-			$api_file_name = "task_trap.php";
-			include_once($site_api_path."api_authentication.php");
-		}else {
-			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
-		}
-		break;
-	case "task_other_add." . $req_ext:
-		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
-			$request_type = "task_other_add";
-			$api_file_name = "task_other.php";
-			include_once($site_api_path."api_authentication.php");
-		}else {
-			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
-		}
-		break;
-	case "task_other_edit." . $req_ext:
-		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
-			$request_type = "task_other_edit";
-			$api_file_name = "task_other.php";
-			include_once($site_api_path."api_authentication.php");
-		}else {
-			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
-		}
-		break;
-	case "task_other_delete." . $req_ext:
-		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
-			$request_type = "task_other_delete";
-			$api_file_name = "task_other.php";
 			include_once($site_api_path."api_authentication.php");
 		}else {
 			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
@@ -2098,15 +1972,6 @@ switch($path) {
 		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
 			$request_type = "dashboard_amchart";
 			$api_file_name = "dashboard.php";
-			include_once($site_api_path . "api_authentication.php");
-		}else {
-			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
-		}
-		break;
-	case "task_trap_setLabWorkCount." . $req_ext:
-		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
-			$request_type = "task_trap_setLabWorkCount";
-			$api_file_name = "task_trap.php";
 			include_once($site_api_path . "api_authentication.php");
 		}else {
 			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);

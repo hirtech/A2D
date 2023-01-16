@@ -1,11 +1,7 @@
 <?php
 include_once($controller_path . "premise.inc.php");
 include_once($controller_path . "fiber_inquiry.inc.php");
-include_once($controller_path . "task_larval_surveillance.inc.php");
-include_once($controller_path . "task_treatment.inc.php");
-include_once($controller_path . "task_landing_rate.inc.php");
-include_once($controller_path . "task_trap.inc.php");
-include_once($controller_path . "task_other.inc.php");
+include_once($controller_path . "task_awareness.inc.php");
 if($request_type == "fiber_inquiry_edit"){
     //$vLatitude = number_format($RES_PARA['vLatitude'], 6, '.', '');
     //$vLongitude = number_format($RES_PARA['vLongitude'], 6, '.', '');
@@ -400,7 +396,7 @@ if($request_type == "fiber_inquiry_edit"){
     for ($i = 0; $i < count($rs_sr); $i++) {
         $rs_arr[] = array(
          'display' => $rs_sr[$i]['iFiberInquiryId']." (".$rs_sr[$i]['vContactName'].")",
-         "iSRId" => $rs_sr[$i]['iFiberInquiryId'],
+         "iFiberInquiryId" => $rs_sr[$i]['iFiberInquiryId'],
         );
     }
 
@@ -469,45 +465,45 @@ if($request_type == "fiber_inquiry_edit"){
         $end_date = date("Y-m-d");
         $start_date = date("Y-m-d", strtotime( date( 'Y-m-d' )." -3 months"));
         if(count($iPremiseId_list) > 0 || count($iFiberInquiryId_list) > 0) {
-            //-------------------------- start task laravel ---------------------------//
+            //---------------------- start task awareness ------------------------//
+            $TaskAwarenessObj = new TaskAwareness();
+            $TaskAwarenessObj->clear_variable();
             $where_arr = array();
             $join_fieds_arr = array();
             $join_arr = array();
-            $TaskLarvalSurveillance = new TaskLarvalSurveillance();
-            $TaskLarvalSurveillance->clear_variable();
-            $where_arr[] = "(task_larval_surveillance.\"iSRId\" IN ($iFiberInquiryId_ids) OR task_larval_surveillance.\"iPremiseId\" IN ($iPremiseId_ids))";
-            $where_arr[] = "task_larval_surveillance.\"dDate\" between '".$start_date."' and '".$end_date."'";
+            $where_arr[] = "(awareness.\"iFiberInquiryId\" IN ($iFiberInquiryId_ids) OR awareness.\"iPremiseId\" IN ($iPremiseId_ids))";
+            $where_arr[] = "awareness.\"dDate\" between '".$start_date."' and '".$end_date."'";
             $join_fieds_arr[] = " s.\"vName\" as  \"vSiteName\" ";
             $join_fieds_arr[] = " site_type_mas.\"vTypeName\"";
             $join_fieds_arr[] = " site_sub_type_mas.\"vSubTypeName\"";
             $join_fieds_arr[] = " fiberinquiry_details.\"iFiberInquiryId\"";
             $join_fieds_arr[] = " fiberinquiry_details.\"iCId\"";
             $join_fieds_arr[] = "concat(\"vFirstName\",' ', \"vLastName\") as \"vContactName\" ";
-            $join_arr[] = 'LEFT JOIN premise_mas s on s."iPremiseId" = task_larval_surveillance."iPremiseId"';
+            $join_arr[] = 'LEFT JOIN premise_mas s on s."iPremiseId" = awareness."iPremiseId"';
             $join_arr[] = 'LEFT JOIN site_type_mas on site_type_mas."iSTypeId" = s."iSTypeId"';
             $join_arr[] = 'LEFT JOIN site_sub_type_mas on site_sub_type_mas."iSSTypeId" = s."iSSTypeId"';
-            $join_arr[] = 'LEFT JOIN fiberinquiry_details on fiberinquiry_details."iFiberInquiryId" = task_larval_surveillance."iSRId"';
+            $join_arr[] = 'LEFT JOIN fiberinquiry_details on fiberinquiry_details."iFiberInquiryId" = awareness."iFiberInquiryId"';
             $join_arr[] = 'LEFT JOIN contact_mas on contact_mas."iCId" = fiberinquiry_details."iCId"';
-            $TaskLarvalSurveillance = new TaskLarvalSurveillance();
-            $TaskLarvalSurveillance->join_field = $join_fieds_arr;
-            $TaskLarvalSurveillance->join = $join_arr;
-            $TaskLarvalSurveillance->where = $where_arr;
-            $TaskLarvalSurveillance->param['order_by'] = "task_larval_surveillance.\"dDate\" DESC";
-            $TaskLarvalSurveillance->setClause();
-            $TaskLarvalSurveillance->debug_query = false;
-            $larval_surveillance_arr = $TaskLarvalSurveillance->recordset_list();
-            //echo "<pre>";print_r($larval_surveillance_arr);exit();
-            if(!empty($larval_surveillance_arr)) {
-                $ti =count($larval_surveillance_arr);
-                for($t =0; $t<$ti; $t++) {
-                    $site_details = '';
 
+            $TaskAwarenessObj->join_field = $join_fieds_arr;
+            $TaskAwarenessObj->join = $join_arr;
+            $TaskAwarenessObj->where = $where_arr;
+            $TaskAwarenessObj->param['order_by'] = "awareness.\"dDate\" DESC";
+            $TaskAwarenessObj->setClause();
+            $TaskAwarenessObj->debug_query = false;
+            $awareness_arr = $TaskAwarenessObj->recordset_list();
+            //echo "<pre>";print_r($awareness_arr);exit;
+            if(!empty($awareness_arr)) {
+                $ti =count($awareness_arr);
+                for($t =0; $t<$ti; $t++) {
+
+                    $site_details = '';
                     $SiteObj->clear_variable();
                     $where_arr = array();
                     $join_fieds_arr = array();
                     $join_arr  = array();
                     $join_fieds_arr[] = " site_attribute_mas.\"vAttribute\"";
-                    $where_arr[] = "site_attribute.\"iPremiseId\"='".$larval_surveillance_arr[$t]['iPremiseId']."'";
+                    $where_arr[] = "site_attribute.\"iPremiseId\"='".$awareness_arr[$t]['iPremiseId']."'";
                     $join_arr[] = 'LEFT JOIN site_attribute_mas on site_attribute_mas."iSAttributeId" = site_attribute."iSAttributeId"';
                     $SiteObj->join_field = $join_fieds_arr;
                     $SiteObj->join = $join_arr;
@@ -525,427 +521,19 @@ if($request_type == "fiber_inquiry_edit"){
                         }
                     }
 
-                    //$arr[$ind]['vAttribute'][] = $larval_surveillance_arr[$t]['vAttribute'];
-                    $site_details .=  'Premise '.$larval_surveillance_arr[$t]['iPremiseId'].($larval_surveillance_arr[$t]['vSiteName'] ? ' ('.$larval_surveillance_arr[$t]['vSiteName'].') ' : ' ').($larval_surveillance_arr[$t]['vTypeName'] ? $larval_surveillance_arr[$t]['vTypeName'] : ' ').($larval_surveillance_arr[$t]['vSubTypeName'] ? ' ('.$larval_surveillance_arr[$t]['vSubTypeName'].')': ' ').(!empty($vAttributeArr) ? ' ('.implode(' | ',$vAttributeArr).')' : '');
+                    //$arr[$ind]['vAttribute'][] = $awareness_arr[$t]['vAttribute'];
+                    $site_details .=  'Premise '.$awareness_arr[$t]['iPremiseId'].($awareness_arr[$t]['vSiteName'] ? ' ('.$awareness_arr[$t]['vSiteName'].') ' :'').($awareness_arr[$t]['vSubTypeName'] ? ' ('.$awareness_arr[$t]['vSubTypeName'].')': '').(!empty($vAttributeArr) ? ' ('.implode(' | ',$vAttributeArr).')' : '');
 
-                    if($larval_surveillance_arr[$t]['iFiberInquiryId'] > 0){
-                        $site_details .= "<br/>Fiber Inquiry ".$larval_surveillance_arr[$t]['iFiberInquiryId'].($larval_surveillance_arr[$t]['vContactName'] ? " (".$larval_surveillance_arr[$t]['vContactName'].")" : '');
-                        $fiber_inquiry_arr[] = $larval_surveillance_arr[$t]['iFiberInquiryId'];
-                    }
-
-                    $arr[$ind]['dDate'] = ($larval_surveillance_arr[$t]['dDate'] ? $larval_surveillance_arr[$t]['dDate'] : '');
-                    $arr[$ind]['site_details'] =$site_details;
-
-                    $iGenus_data=($larval_surveillance_arr[$t]['iGenus'] ? $larval_surveillance_arr[$t]['iGenus'] : '');
-
-                    switch ($iGenus_data) {
-                        case 1:
-                        $iGenus = 'Ae.';
-                        break;
-                        case '2':
-                        $iGenus = 'An.';
-                        break;
-                        case '3':
-                        $iGenus = 'Cs.';
-                        break;
-                        case '4':
-                        $iGenus = 'Cx.';
-                        break;
-                        default:
-                        $iGenus = 'N/A';
-                    }
-
-                    $bEggs = ($larval_surveillance_arr[$t]['bEggs'] == 't') ? ', E' :'';
-                    $bInstar1 = ($larval_surveillance_arr[$t]['bInstar1'] == 't') ? ', I1' :'';
-                    $bInstar2 = ($larval_surveillance_arr[$t]['bInstar2'] == 't') ? ', I2' :'';
-                    $bInstar3 = ($larval_surveillance_arr[$t]['bInstar3'] == 't') ? ', I3' :'';
-                    $bInstar4 = ($larval_surveillance_arr[$t]['bInstar4'] == 't') ? ', I4' :'';
-                    $bPupae = ($larval_surveillance_arr[$t]['bPupae'] == 't') ? ', P' :'';
-                    $bAdult = ($larval_surveillance_arr[$t]['bAdult'] == 't') ? ', A' :'';
-
-                    $iGenus_data2=($larval_surveillance_arr[$t]['iGenus2'] ? $larval_surveillance_arr[$t]['iGenus2'] : '');
-
-                    switch ($iGenus_data2) {
-                        case 1:
-                        $iGenus2 = 'Ae.';
-                        break;
-                        case '2':
-                        $iGenus2 = 'An.';
-                        break;
-                        case '3':
-                        $iGenus2 = 'Cs.';
-                        break;
-                        case '4':
-                        $iGenus2 = 'Cx.';
-                        break;
-                        default:
-                        $iGenus = 'N/A';
-                    }
-                    $bEggs2 = ($larval_surveillance_arr[$t]['bEggs2'] == 't') ? ', E' :'';
-                    $bInstar12 = ($larval_surveillance_arr[$t]['bInstar12'] == 't') ? ', I1' :'';
-                    $bInstar22 = ($larval_surveillance_arr[$t]['bInstar22'] == 't') ? ', I2,' :'';
-                    $bInstar32 = ($larval_surveillance_arr[$t]['bInstar32'] == 't') ? ', I3' :'';
-                    $bInstar42 = ($larval_surveillance_arr[$t]['bInstar42'] == 't') ? ', I4' :'';
-                    $bPupae2 = ($larval_surveillance_arr[$t]['bPupae2'] == 't') ? ', P' :'';
-                    $bAdult2 = ($larval_surveillance_arr[$t]['bAdult2'] == 't') ? ', A' :'';
-
-                    $vSummary ='';
-                    $vSummary = 'Larval'.($larval_surveillance_arr[$t]['iDips'] ?  ' Dips'.' '.$larval_surveillance_arr[$t]['iDips'] : '').($larval_surveillance_arr[$t]['rAvgLarvel'] ? ' , Avg Larvae : '.$larval_surveillance_arr[$t]['rAvgLarvel'] : '').' <font color=red>|</font> Species 1 : '.$iGenus.' '.$larval_surveillance_arr[$t]['iCount'].$bEggs.''.$bInstar1.''.$bInstar2.''.$bInstar3.''.$bInstar4.''.$bPupae.''.$bAdult.'<font color=red> | </font>Species 2 : '.$iGenus2.' '.$larval_surveillance_arr[$t]['iCount2'].$bEggs2.''.$bInstar12.''.$bInstar22.''.$bInstar32.''.$bInstar42.''.$bPupae2.''.$bAdult2;
-                    
-                    $arr[$ind]['vSummary'] = $vSummary;
-
-                    $ind++;
-                }
-            }
-
-            //---------------------------- start end laravel ----------------------------//
-
-            //-------------------------- start task treatment ---------------------------//
-
-            $TaskTreatmentObj = new TaskTreatment();
-            $TaskTreatmentObj->clear_variable();
-            $where_arr = array();
-            $join_fieds_arr = array();
-            $join_arr = array();
-            $where_arr[] = "(task_treatment.\"iSRId\" IN ($iFiberInquiryId_ids) OR task_treatment.\"iPremiseId\" IN ($iPremiseId_ids))";
-            $where_arr[] = "task_treatment.\"dDate\" between '".$start_date."' and '".$end_date."'";
-
-            $join_fieds_arr[] = " s.\"vName\" as  \"vSiteName\" ";
-            $join_fieds_arr[] = " site_type_mas.\"vTypeName\"";
-            $join_fieds_arr[] = " site_sub_type_mas.\"vSubTypeName\"";
-            $join_fieds_arr[] = " fiberinquiry_details.\"iFiberInquiryId\"";
-            $join_fieds_arr[] = " fiberinquiry_details.\"iCId\"";
-            $join_fieds_arr[] = "concat(\"vFirstName\",' ', \"vLastName\") as \"vContactName\" ";
-            //$join_fieds_arr[] = " site_attribute_mas.\"vAttribute\"";
-            $join_fieds_arr[] = " unit_mas.\"vUnit\"";
-            $join_fieds_arr[] = " treatment_product.\"vName\"";
-            $join_arr[] = 'LEFT JOIN premise_mas s on s."iPremiseId" = task_treatment."iPremiseId"';
-            $join_arr[] = 'LEFT JOIN site_type_mas on site_type_mas."iSTypeId" = s."iSTypeId"';
-            //$join_arr[] = 'LEFT JOIN site_attribute on site_attribute."iPremiseId" = s."iPremiseId"';
-            //$join_arr[] = 'LEFT JOIN site_attribute_mas on site_attribute_mas."iSAttributeId" = site_attribute."iSAttributeId"';
-
-            $join_arr[] = 'LEFT JOIN site_sub_type_mas on site_sub_type_mas."iSSTypeId" = s."iSSTypeId"';
-
-            $join_arr[] = 'LEFT JOIN fiberinquiry_details on fiberinquiry_details."iFiberInquiryId" = task_treatment."iSRID"';
-            $join_arr[] = 'LEFT JOIN contact_mas on contact_mas."iCId" = fiberinquiry_details."iCId"';
-            $join_arr[] = 'LEFT JOIN unit_mas on unit_mas."iUId" = task_treatment."iUId"';
-            $join_arr[] = 'LEFT JOIN treatment_product on treatment_product."iTPId" = task_treatment."iTPId"';
-
-            $TaskTreatmentObj->join_field = $join_fieds_arr;
-            $TaskTreatmentObj->join = $join_arr;
-            $TaskTreatmentObj->where = $where_arr;
-            $TaskTreatmentObj->param['order_by'] = "task_treatment.\"dDate\" DESC";
-            $TaskTreatmentObj->setClause();
-            $TaskTreatmentObj->debug_query = false;
-            $treatment_arr = $TaskTreatmentObj->recordset_list();
-            if(!empty($treatment_arr)) {
-                $ti =count($treatment_arr);
-                for($t =0; $t<$ti; $t++) {
-                    $site_details = '';
-
-                    $SiteObj->clear_variable();
-                    $where_arr = array();
-                    $join_fieds_arr = array();
-                    $join_arr  = array();
-                    $join_fieds_arr[] = " site_attribute_mas.\"vAttribute\"";
-                    $where_arr[] = "site_attribute.\"iPremiseId\"='".$treatment_arr[$t]['iPremiseId']."'";
-                    $join_arr[] = 'LEFT JOIN site_attribute_mas on site_attribute_mas."iSAttributeId" = site_attribute."iSAttributeId"';
-                    $SiteObj->join_field = $join_fieds_arr;
-                    $SiteObj->join = $join_arr;
-                    $SiteObj->where = $where_arr;
-                    $SiteObj->param['order_by'] = "site_attribute.\"iSAId\"";
-                    $SiteObj->setClause();
-                    $rs_site_attr = $SiteObj->site_attribute_list();
-                    //echo "<pre>";print_r($rs_site_attr);exit();
-
-                    $vAttributeArr = array();
-                    if(!empty($rs_site_attr)) {
-                        $sai = count($rs_site_attr);
-                        for($sa=0; $sa<$sai; $sa++){
-                            $vAttributeArr[$sa] = $rs_site_attr[$sa]['vAttribute'];
-                        }
-                    }
-
-                    //$arr[$ind]['vAttribute'][] = $treatment_arr[$t]['vAttribute'];
-                    $site_details .=  'Premise '.$treatment_arr[$t]['iPremiseId'].($treatment_arr[$t]['vSiteName'] ? ' ('.$treatment_arr[$t]['vSiteName'].') ' :'').($treatment_arr[$t]['vTypeName'] ? $treatment_arr[$t]['vTypeName'] :'').($treatment_arr[$t]['vSubTypeName'] ? ' ('.$treatment_arr[$t]['vSubTypeName'].')': '').(!empty($vAttributeArr) ? ' ('.implode(' | ',$vAttributeArr).')' :'');
-
-                    if($treatment_arr[$t]['iFiberInquiryId'] > 0){
-                        $site_details .= "<br/>SR ".$treatment_arr[$t]['iFiberInquiryId'].($treatment_arr[$t]['vContactName'] ? " (".$treatment_arr[$t]['vContactName'].")" : '');
-                        $fiber_inquiry_arr[] = $treatment_arr[$t]['iFiberInquiryId'];
-                    }
-
-                    $arr[$ind]['dDate'] = ($treatment_arr[$t]['dDate'] ? $treatment_arr[$t]['dDate'] :'');
-                    $arr[$ind]['site_details'] =$site_details;
-                    $vSummary ='';
-                    $vSummary = 'Treated'.' '.($treatment_arr[$t]['vArea'] ? $treatment_arr[$t]['vArea'] :'').' '.($treatment_arr[$t]['vAreaTreated'] ? $treatment_arr[$t]['vAreaTreated'] : '').' With '.($treatment_arr[$t]['vArea'] ? $treatment_arr[$t]['vArea'] : '').' '.($treatment_arr[$t]['vUnit'] ? $treatment_arr[$t]['vUnit'] : '').' '.($treatment_arr[$t]['vName'] ? $treatment_arr[$t]['vName'] : '');
-
-                    $arr[$ind]['vSummary'] = $vSummary;
-
-                    $ind++;
-                }
-            }
-            //-------------------------- end task treatment---------------------------//
-
-            //---------------------- start task landing rate------------------------//
-
-            $TaskLandingRate = new TaskLandingRate();
-            $TaskLandingRate->clear_variable();
-            $where_arr = array();
-            $join_fieds_arr = array();
-            $join_arr = array();
-            $where_arr[] = "(task_landing_rate.\"iSRId\" IN ($iFiberInquiryId_ids) OR task_landing_rate.\"iPremiseId\" IN ($iPremiseId_ids))";
-            $where_arr[] = "task_landing_rate.\"dDate\" between '".$start_date."' and '".$end_date."'";
-
-            $join_fieds_arr[] = " s.\"vName\"";
-            $join_fieds_arr[] = " site_type_mas.\"vTypeName\"";
-            $join_fieds_arr[] = " site_sub_type_mas.\"vSubTypeName\"";
-            $join_fieds_arr[] = " fiberinquiry_details.\"iFiberInquiryId\"";
-            $join_fieds_arr[] = " fiberinquiry_details.\"iCId\"";
-            $join_fieds_arr[] = "concat(\"vFirstName\",' ', \"vLastName\") as \"vContactName\" ";
-            //$join_fieds_arr[] = " site_attribute_mas.\"vAttribute\"";
-            //$join_fieds_arr[] = " mosquito_species_mas.\"tDescription\"";
-            $join_arr[] = 'LEFT JOIN premise_mas s on s."iPremiseId" = task_landing_rate."iPremiseId"';
-            $join_arr[] = 'LEFT JOIN site_type_mas on site_type_mas."iSTypeId" = s."iSTypeId"';
-            $join_arr[] = 'LEFT JOIN site_sub_type_mas on site_sub_type_mas."iSSTypeId" = s."iSSTypeId"';
-            $join_arr[] = 'LEFT JOIN fiberinquiry_details on fiberinquiry_details."iFiberInquiryId" = task_landing_rate."iSRId"';
-            $join_arr[] = 'LEFT JOIN contact_mas on contact_mas."iCId" = fiberinquiry_details."iCId"';
-            //$join_arr[] = 'LEFT JOIN site_attribute on site_attribute."iPremiseId" = s."iPremiseId"';
-            //$join_arr[] = 'LEFT JOIN site_attribute_mas on site_attribute_mas."iSAttributeId" = site_attribute."iSAttributeId"';
-
-            $TaskLandingRate->join_field = $join_fieds_arr;
-            $TaskLandingRate->join = $join_arr;
-            $TaskLandingRate->where = $where_arr;
-            $TaskLandingRate->param['order_by'] = "task_landing_rate.\"dDate\" DESC";
-            $TaskLandingRate->setClause();
-            $TaskLandingRate->debug_query = false;
-            $landingrate_arr = $TaskLandingRate->recordset_list();
-            if(!empty($landingrate_arr)) {
-                $ti =count($landingrate_arr);
-                for($t =0; $t<$ti; $t++) {
-                    $where_arr = array();
-                    $join_fieds_arr = array();
-                    $join_arr = array();
-                    $TaskLandingRate->clear_variable();
-                    $where_arr[] = 'task_landing_rate_species."iTLRId"='.$landingrate_arr[$t]['iTLRId'];
-                    $join_fieds_arr[] = " mosquito_species_mas.\"tDescription\"";
-                    $join_arr[] = 'LEFT JOIN mosquito_species_mas on mosquito_species_mas."iMSpeciesId" = task_landing_rate_species."iMSpeciesId"';
-
-                    $TaskLandingRate->join_field = $join_fieds_arr;
-                    $TaskLandingRate->join = $join_arr;
-                    $TaskLandingRate->where = $where_arr;
-                    $TaskLandingRate->setClause();
-                    $TaskLandingRate->debug_query = false;
-                    $landingrate_species_arr = $TaskLandingRate->task_landing_rate_species_list();
-                    $species_arr = [];
-                    if(count($landingrate_species_arr) > 0) {
-                        for($s =0; $s<count($landingrate_species_arr); $s++) {
-                            $species_arr[] =$landingrate_species_arr[$s]['tDescription'];
-                        }
-                    }
-
-                    $site_details = '';
-
-                    $SiteObj->clear_variable();
-                    $where_arr = array();
-                    $join_fieds_arr = array();
-                    $join_arr  = array();
-                    $join_fieds_arr[] = " site_attribute_mas.\"vAttribute\"";
-                    $where_arr[] = "site_attribute.\"iPremiseId\"='".$landingrate_arr[$t]['iPremiseId']."'";
-                    $join_arr[] = 'LEFT JOIN site_attribute_mas on site_attribute_mas."iSAttributeId" = site_attribute."iSAttributeId"';
-                    $SiteObj->join_field = $join_fieds_arr;
-                    $SiteObj->join = $join_arr;
-                    $SiteObj->where = $where_arr;
-                    $SiteObj->param['order_by'] = "site_attribute.\"iSAId\"";
-                    $SiteObj->setClause();
-                    $rs_site_attr = $SiteObj->site_attribute_list();
-                    //echo "<pre>";print_r($rs_site_attr);exit();
-
-                    $vAttributeArr = array();
-                    if(!empty($rs_site_attr)) {
-                        $sai = count($rs_site_attr);
-                        for($sa=0; $sa<$sai; $sa++){
-                            $vAttributeArr[$sa] = $rs_site_attr[$sa]['vAttribute'];
-                        }
-                    }
-
-                    //$arr[$ind]['vAttribute'][] = $landingrate_arr[$t]['vAttribute'];
-                    $site_details .=  'Premise '.$landingrate_arr[$t]['iPremiseId'].($landingrate_arr[$t]['vName'] ? ' ('.$landingrate_arr[$t]['vName'].') ': '').($landingrate_arr[$t]['vTypeName'] ? $landingrate_arr[$t]['vTypeName'] : ' '). ($landingrate_arr[$t]['vSubTypeName'] ? ' ('.$landingrate_arr[$t]['vSubTypeName'].')' : '').(!empty($vAttributeArr) ? '('.implode(' | ',$vAttributeArr).')':'');
-
-                    if($landingrate_arr[$t]['iFiberInquiryId'] > 0){
-                        $site_details .= "<br/>SR ".$landingrate_arr[$t]['iFiberInquiryId'].($landingrate_arr[$t]['vContactName'] ? " (".$landingrate_arr[$t]['vContactName'].")" : '');
-                        $fiber_inquiry_arr[] = $landingrate_arr[$t]['iFiberInquiryId'];
-
-                    }
-
-                    $arr[$ind]['dDate'] = $landingrate_arr[$t]['dDate'];
-                    $arr[$ind]['site_details'] =$site_details;
-                    $arr[$ind]['vMaxLandingRate'] =$landingrate_arr[$t]['vMaxLandingRate'];
-                    $vSummary = '';
-                    $vSummary = 'Landing Rate '.$arr[$ind]['vMaxLandingRate'].' '.implode(' | ',$species_arr);
-                    $arr[$ind]['vSummary'] = $vSummary;
-
-                    $ind++;
-                }
-
-            }
-
-            //---------------------- end task landing rate------------------------//
-
-            //------------------------ start task trap---------------------------//
-
-
-            $TaskTrap = new TaskTrap();
-            $TaskTrap->clear_variable();
-            $where_arr = array();
-            $join_fieds_arr = array();
-            $join_arr = array();
-            $where_arr[] = "(task_trap.\"iSRId\" IN ($iFiberInquiryId_ids) OR task_trap.\"iPremiseId\" IN ($iPremiseId_ids))";
-            $where_arr[] = "task_trap.\"dTrapPlaced\" between '".$start_date."' and '".$end_date."'";
-            $join_fieds_arr[] = " s.\"vName\"";
-            $join_fieds_arr[] = " site_type_mas.\"vTypeName\"";
-            $join_fieds_arr[] = " site_sub_type_mas.\"vSubTypeName\"";
-            $join_fieds_arr[] = " fiberinquiry_details.\"iFiberInquiryId\"";
-            $join_fieds_arr[] = " fiberinquiry_details.\"iCId\"";
-            $join_fieds_arr[] = "concat(\"vFirstName\",' ', \"vLastName\") as \"vContactName\" ";
-            //$join_fieds_arr[] = " site_attribute_mas.\"vAttribute\"";
-            $join_arr[] = 'LEFT JOIN premise_mas s on s."iPremiseId" = task_trap."iPremiseId"';
-            $join_arr[] = 'LEFT JOIN site_type_mas on site_type_mas."iSTypeId" = s."iSTypeId"';
-            $join_arr[] = 'LEFT JOIN site_sub_type_mas on site_sub_type_mas."iSSTypeId" = s."iSSTypeId"';
-            $join_arr[] = 'LEFT JOIN fiberinquiry_details on fiberinquiry_details."iFiberInquiryId" = task_trap."iSRId"';
-            //$join_arr[] = 'LEFT JOIN site_attribute on site_attribute."iPremiseId" = s."iPremiseId"';
-            //$join_arr[] = 'LEFT JOIN site_attribute_mas on site_attribute_mas."iSAttributeId" = site_attribute."iSAttributeId"';
-            $join_arr[] = 'LEFT JOIN contact_mas on contact_mas."iCId" = fiberinquiry_details."iCId"';
-            $join_fieds_arr[] = " trap_type_mas.\"vTrapName\",task_trap.\"dTrapPlaced\" as dDate";
-            $join_arr[] = 'LEFT JOIN trap_type_mas on trap_type_mas."iTrapTypeId" = task_trap."iTrapTypeId"';
-
-            $TaskTrap->join_field = $join_fieds_arr;
-            $TaskTrap->join = $join_arr;
-            $TaskTrap->where = $where_arr;
-            $TaskTrap->param['order_by'] = "task_trap.\"dTrapPlaced\" DESC";
-            $TaskTrap->setClause();
-            $TaskTrap->debug_query = false;
-            $tasktrap_arr = $TaskTrap->recordset_list();
-            if(!empty($tasktrap_arr)) {
-                $ti =count($tasktrap_arr);
-                for($t =0; $t<$ti; $t++) {
-                    $site_details = '';
-                    $SiteObj->clear_variable();
-                    $where_arr = array();
-                    $join_fieds_arr = array();
-                    $join_arr  = array();
-                    $join_fieds_arr[] = " site_attribute_mas.\"vAttribute\"";
-                    $where_arr[] = "site_attribute.\"iPremiseId\"='".$tasktrap_arr[$t]['iPremiseId']."'";
-                    $join_arr[] = 'LEFT JOIN site_attribute_mas on site_attribute_mas."iSAttributeId" = site_attribute."iSAttributeId"';
-                    $SiteObj->join_field = $join_fieds_arr;
-                    $SiteObj->join = $join_arr;
-                    $SiteObj->where = $where_arr;
-                    $SiteObj->param['order_by'] = "site_attribute.\"iSAId\"";
-                    $SiteObj->setClause();
-                    $rs_site_attr = $SiteObj->site_attribute_list();
-                    //echo "<pre>";print_r($rs_site_attr);exit();
-
-                    $vAttributeArr = array();
-                    if(!empty($rs_site_attr)) {
-                        $sai = count($rs_site_attr);
-                        for($sa=0; $sa<$sai; $sa++){
-                            $vAttributeArr[$sa] = $rs_site_attr[$sa]['vAttribute'];
-                        }
-                    }
-
-                    //$arr[$ind]['vAttribute'][] = $tasktrap_arr[$t]['vAttribute'];   
-                    $site_details .=  'Premise '.$tasktrap_arr[$t]['iPremiseId'].($tasktrap_arr[$t]['vName'] ? ' ('.$tasktrap_arr[$t]['vName'].') ':' ').($tasktrap_arr[$t]['vTypeName'] ? $tasktrap_arr[$t]['vTypeName'] : ' ').($tasktrap_arr[$t]['vSubTypeName'] ?  ' ('.$tasktrap_arr[$t]['vSubTypeName'].')' : ' ').(!empty($vAttributeArr) ? ' ('.implode(' | ',$vAttributeArr).')' : ' ');
-
-                    if($tasktrap_arr[$t]['iFiberInquiryId'] > 0){
-                        $site_details .= "<br/>SR ".$tasktrap_arr[$t]['iFiberInquiryId'].($tasktrap_arr[$t]['vContactName'] ? " (".$tasktrap_arr[$t]['vContactName'].")" :'');
-                        $fiber_inquiry_arr[] = $tasktrap_arr[$t]['iFiberInquiryId'];
-                    }
-                    $arr[$ind]['site_details'] =$site_details;       
-                    $arr[$ind]['dDate'] = ($tasktrap_arr[$t]['dTrapPlaced'] ? $tasktrap_arr[$t]['dTrapPlaced'] : '');
-                    $arr[$ind]['vSummary'] =($tasktrap_arr[$t]['vTrapName'] ? $tasktrap_arr[$t]['vTrapName'].' Placed' : '');
-
-                    $ind++;
-                }
-            }
-
-            //---------------------- end task trap------------------------//
-
-            //---------------------- start task other------------------------//
-
-            $TaskOther = new TaskOther();
-            $TaskOther->clear_variable();
-            $where_arr = array();
-            $join_fieds_arr = array();
-            $join_arr = array();
-            $where_arr[] = "(task_other.\"iSRId\" IN ($iFiberInquiryId_ids) OR task_other.\"iPremiseId\" IN ($iPremiseId_ids))";
-            $where_arr[] = "task_other.\"dDate\" between '".$start_date."' and '".$end_date."'";
-
-            $join_fieds_arr[] = " s.\"vName\" as  \"vSiteName\" ";
-            $join_fieds_arr[] = " site_type_mas.\"vTypeName\"";
-            $join_fieds_arr[] = " site_sub_type_mas.\"vSubTypeName\"";
-            $join_fieds_arr[] = " fiberinquiry_details.\"iFiberInquiryId\"";
-            $join_fieds_arr[] = " fiberinquiry_details.\"iCId\"";
-            $join_fieds_arr[] = "concat(\"vFirstName\",' ', \"vLastName\") as \"vContactName\" ";
-            //$join_fieds_arr[] = " site_attribute_mas.\"vAttribute\"";
-            $join_arr[] = 'LEFT JOIN premise_mas s on s."iPremiseId" = task_other."iPremiseId"';
-            $join_fieds_arr[] = " task_type_mas.\"vTypeName\" as \"task_name\" ";
-            $join_arr[] = 'LEFT JOIN site_type_mas on site_type_mas."iSTypeId" = s."iSTypeId"';
-            $join_arr[] = 'LEFT JOIN site_sub_type_mas on site_sub_type_mas."iSSTypeId" = s."iSSTypeId"';
-
-            //$join_arr[] = 'LEFT JOIN site_attribute on site_attribute."iPremiseId" = s."iPremiseId"';
-            //$join_arr[] = 'LEFT JOIN site_attribute_mas on site_attribute_mas."iSAttributeId" = site_attribute."iSAttributeId"';
-            $join_arr[] = 'LEFT JOIN task_type_mas on task_type_mas."iTaskTypeId" = task_other."iTaskTypeId"';
-            $join_arr[] = 'LEFT JOIN fiberinquiry_details on fiberinquiry_details."iFiberInquiryId" = task_other."iSRId"';
-            $join_arr[] = 'LEFT JOIN contact_mas on contact_mas."iCId" = fiberinquiry_details."iCId"';
-
-            $TaskOther->join_field = $join_fieds_arr;
-            $TaskOther->join = $join_arr;
-            $TaskOther->where = $where_arr;
-            $TaskOther->param['order_by'] = "task_other.\"dDate\" DESC";
-            $TaskOther->setClause();
-            $TaskOther->debug_query = false;
-            $task_other_arr = $TaskOther->recordset_list();
-            //echo "<pre>";print_r($task_other_arr);exit;
-            if(!empty($task_other_arr)) {
-                $ti =count($task_other_arr);
-                for($t =0; $t<$ti; $t++) {
-
-                    $site_details = '';
-                    $SiteObj->clear_variable();
-                    $where_arr = array();
-                    $join_fieds_arr = array();
-                    $join_arr  = array();
-                    $join_fieds_arr[] = " site_attribute_mas.\"vAttribute\"";
-                    $where_arr[] = "site_attribute.\"iPremiseId\"='".$task_other_arr[$t]['iPremiseId']."'";
-                    $join_arr[] = 'LEFT JOIN site_attribute_mas on site_attribute_mas."iSAttributeId" = site_attribute."iSAttributeId"';
-                    $SiteObj->join_field = $join_fieds_arr;
-                    $SiteObj->join = $join_arr;
-                    $SiteObj->where = $where_arr;
-                    $SiteObj->param['order_by'] = "site_attribute.\"iSAId\"";
-                    $SiteObj->setClause();
-                    $rs_site_attr = $SiteObj->site_attribute_list();
-                    //echo "<pre>";print_r($rs_site_attr);exit();
-
-                    $vAttributeArr = array();
-                    if(!empty($rs_site_attr)) {
-                        $sai = count($rs_site_attr);
-                        for($sa=0; $sa<$sai; $sa++){
-                            $vAttributeArr[$sa] = $rs_site_attr[$sa]['vAttribute'];
-                        }
-                    }
-
-                    //$arr[$ind]['vAttribute'][] = $task_other_arr[$t]['vAttribute'];
-                    $site_details .=  'Premise '.$task_other_arr[$t]['iPremiseId'].($task_other_arr[$t]['vSiteName'] ? ' ('.$task_other_arr[$t]['vSiteName'].') ' :'').($task_other_arr[$t]['vTypeName'] ? $task_other_arr[$t]['vTypeName'] : '').($task_other_arr[$t]['vSubTypeName'] ? ' ('.$task_other_arr[$t]['vSubTypeName'].')': '').(!empty($vAttributeArr) ? ' ('.implode(' | ',$vAttributeArr).')' : '');
-
-                    if($task_other_arr[$t]['iFiberInquiryId'] > 0)
+                    if($awareness_arr[$t]['iFiberInquiryId'] > 0)
                     {
-                        $site_details .= "<br/>Fiber Inquiry ".$task_other_arr[$t]['iFiberInquiryId']." (".$task_other_arr[$t]['vContactName'].")";
-                        $fiber_inquiry_arr[] = $task_other_arr[$t]['iFiberInquiryId'];
+                        $site_details .= "<br/>Fiber Inquiry ".$awareness_arr[$t]['iFiberInquiryId']." (".$awareness_arr[$t]['vContactName'].")";
+                        $fiber_inquiry_arr[] = $awareness_arr[$t]['iFiberInquiryId'];
                     }
 
-                    $arr[$ind]['dDate'] = $task_other_arr[$t]['dDate'];
+                    $arr[$ind]['dDate'] = $awareness_arr[$t]['dDate'];
                     $arr[$ind]['site_details'] =$site_details;
 
-                    $vSummary =$task_other_arr[$t]['task_name'];;
+                    $vSummary =$awareness_arr[$t]['task_name'];;
                     $arr[$ind]['vSummary'] = $vSummary;
 
                     $ind++;

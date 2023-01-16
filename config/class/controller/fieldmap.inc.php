@@ -63,7 +63,6 @@ class Fieldmap {
         return $zipcodes;
     }
 
-    
     public function getZonesData($zones){
         global $sqlObj;
         $geoArr = array();
@@ -960,6 +959,7 @@ class Fieldmap {
         //echo "<pre>";print_r($response);exit();
         return $response;
     }
+
     // Function to iteratively search for a given value 
     public function searchFor($search_value, $array, $withKey) { 
         //print_r($search_value); die("inf");
@@ -1070,6 +1070,7 @@ class Fieldmap {
         $data['sites'] = $sqlObj->GetAll($pCircuitData);
         return $data;
     }
+    
     public function getSerachSiteData($param){
         global $sqlObj;
         $data = array();

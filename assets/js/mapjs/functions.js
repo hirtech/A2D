@@ -1,4 +1,8 @@
 var markerCluster;
+/*var fiberInquiryMarkerCluster;
+var serviceOrderMarkerCluster;
+var workOrderMarkerCluster;
+var premiseCircuitMarkerCluster;*/
 function getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLayer, custlayer, fiberInquiryLayer, serviceOrderLayer, workOrderLayer, pCircuitStatusLayer, pCircuitcTypeLayer, premiseStatusLayer, premiseAttribute, premiseTypeLayer, premisesubTypeLayer) {
 	clearMap();
 	if(skNetwork != "" || skCity != "" || skZipcode != "" || skZones != "" || networkLayer != ""|| zoneLayer != "" || custlayer != "" || fiberInquiryLayer != "" || serviceOrderLayer != "" || workOrderLayer != "" || pCircuitStatusLayer != "" || pCircuitcTypeLayer != "" || premiseStatusLayer != "" || premiseAttribute != "" || premiseTypeLayer != "" || premisesubTypeLayer != ""){
@@ -540,9 +544,15 @@ function showPointMapForFiberInquiry(sitePath, map, icon, id, vName, vAddress, p
 	//alert("id" +id)
 	fiberInquiryinfo_popup($sr_map, id, vName, vAddress, premiseid, vPremiseName, vPremiseSubType, vEngagement, vZoneName, vNetwork, vStatus,iFiberInquiryId);
 	fiberInquirylayerMarker[fiberInquiryCount].setMap(map);
+
 	if (markerSpiderfier) {
         markerSpiderfier.addMarker(fiberInquirylayerMarker[fiberInquiryCount]);
     }
+
+    /*fiberInquiryMarkerCluster = new MarkerClusterer(map, fiberInquirylayerMarker, {
+		imagePath: imagePath
+	});*/
+
 	//Extend each marker's position in LatLngBounds object.
     latlngbounds.extend(fiberInquirylayerMarker[fiberInquiryCount].position);
 	fiberInquiryCount++;
@@ -560,9 +570,14 @@ function showPointMapForserviceOrder(sitePath, map, icon, id, vMasterMSA, vServi
 	gmarkers.push($so_map);
 	serviceOrderinfo_popup($so_map, id, vMasterMSA, vServiceOrder, vSalesRepName, vSalesRepEmail, premiseid, vPremiseName, vAddress, cityid, stateid, countyid, countyid, zipcode, zoneid, vZoneName, networkid, vNetwork, vPremiseType, vCompanyName, vConnectionTypeName, vServiceType1, vStatus);
 	serviceOrderlayerMarker[serviceOrderCount].setMap(map);
+
 	if (markerSpiderfier) {
         markerSpiderfier.addMarker(serviceOrderlayerMarker[serviceOrderCount]);
     }
+
+    /*serviceOrderMarkerCluster = new MarkerClusterer(map, serviceOrderlayerMarker, {
+		imagePath: imagePath
+	});*/
 
 	//Extend each marker's position in LatLngBounds object.
     latlngbounds.extend(serviceOrderlayerMarker[serviceOrderCount].position);
@@ -581,9 +596,15 @@ function showPointMapForworkOrder(sitePath, map, icon, id, premiseid, vPremiseNa
 	gmarkers.push($wo_map);
 	workOrderinfo_popup($wo_map, id, premiseid, vPremiseName, vAddress, cityid, stateid, countyid, countyid, zipcode, zoneid, vZoneName, networkid, vNetwork, vPremiseType, vServiceOrder, vWOProject, vType, vRequestor, vAssignedTo, vStatus);
 	workOrderlayerMarker[workOrderCount].setMap(map);
+
 	if (markerSpiderfier) {
         markerSpiderfier.addMarker(workOrderlayerMarker[workOrderCount]);
     }
+
+    /*workOrderMarkerCluster = new MarkerClusterer(map, workOrderlayerMarker, {
+		imagePath: imagePath
+	});*/
+
 	//Extend each marker's position in LatLngBounds object.
     latlngbounds.extend(workOrderlayerMarker[workOrderCount].position);
 	workOrderCount++;
@@ -607,6 +628,11 @@ function showPointMapForpremiseCircuit(sitePath, map, icon, id, premiseid, vPrem
 
 	//Extend each marker's position in LatLngBounds object.
     latlngbounds.extend(premiseCircuitlayerMarker[premiseCircuitCount].position);
+
+    /*premiseCircuitMarkerCluster = new MarkerClusterer(map, siteMarker, {
+		imagePath: imagePath
+	});*/
+
 	premiseCircuitCount++;
 }
 
@@ -623,17 +649,20 @@ function showPointMap(sitePath, map, icon, premiseid) {
 	gmarkers.push($site_map);
 	info_popup($site_map, premiseid);
 	siteMarker[pCount].setMap(map);
-	//console.log("here");
+
+
 	if (markerSpiderfier) {
-		//console.log("here11");
         markerSpiderfier.addMarker(siteMarker[pCount]);
     }
 
-	//Extend each marker's position in LatLngBounds object.
-   	latlngbounds.extend(siteMarker[pCount].position);
+    //Extend each marker's position in LatLngBounds object.
+    latlngbounds.extend(siteMarker[pCount].position);
+
+    /*markerCluster = new MarkerClusterer(map, siteMarker, {
+		imagePath: imagePath
+	});*/
 
 	pCount++;
-	
 }
 
 // Handles click events on a map, and adds a new point to the Polyline.
