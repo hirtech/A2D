@@ -34,18 +34,10 @@ if($mode == "get_top_notification"){
          $class_type = str_replace(' ', '', strtolower($v['type']));
 
          $icon = isset($notification_class_arr["'".$class_type."'"]['icon'])?$notification_class_arr["'".$class_type."'"]['icon']:$notification_class_arr["sr"]['icon'];
-         $color = isset($notification_class_arr[$class_type]['color'])?$notification_class_arr[$class_type]['color']:$notification_class_arr["sr"]['color'];
+         $color = isset($notification_class_arr[$class_type]['color'])?$notification_class_arr[$class_type]['color']:$notification_class_arr["FiberInquiry"]['color'];
          $link = "javascript:void(0)";
-         if($class_type == 'sr'){
-            $link = $site_url."sr/edit&mode=Update&iSRId=".$v['iSRId'];
-         }else if($class_type == 'treatment'){
-            $link = $site_url."tasks/task_treatment_list&iTreatmentId=".$rs_treatment[$t]['iTreatmentId'];
-         }else if($class_type == 'trap'){
-            $link = $site_url."tasks/task_trap_list&iTTId=".$rs_trap[$t]['iTTId'];
-         }else if($class_type == 'mosquitocount'){
-            $link = $site_url."lab_task/task_mosquito_count&mode=list&iTTId=".$rs_pool[$t]['iTTId'];
-         }else if($class_type == 'pool'){
-            $link = $site_url."lab_task/manage_mosquito_pool_result&mode=list&iTTId=".$rs_pool[$t]['iTTId']."&iTMPId=".$rs_pool[$t]['iTMPId'];
+         if($class_type == 'FiberInquiry'){
+            $link = $site_url."fiber_inquiry/edit&mode=Update&iFiberInquiryId=".$v['iFiberInquiryId'];
          }
 
 

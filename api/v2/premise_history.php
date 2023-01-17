@@ -75,11 +75,11 @@ if ($request_type == "premise_history") {
                         $vSiteName = $awareness_arr[$a]['iPremiseId'] . " (" . $awareness_arr[$a]['vPremiseName'] . "; " . $awareness_arr[$a]['vTypeName'] . ")";
 
                         $site_details = '';
-                        $site_details .= 'Premise ' . $awareness_arr[$a]['iPremiseId'] . ($awareness_arr[$a]['vPremiseName'] ? ' (' . $awareness_arr[$a]['vPremiseName'] . ') ' : '') . ($awareness_arr[$a]['vTypeName'] ? $awareness_arr[$a]['vTypeName'] : '');
+                        $site_details .= 'Premise #' . $vSiteName;
 
                         $arr[$ind]['site_details'] = $site_details;
                         $vSummary = '';
-                        $vSummary .= 'Awareness #'.$awareness_arr[$a]['iAId'].":".$awareness_arr[$t]['iAId']." ".$awareness_arr[$a]['vEngagement'];
+                        $vSummary .= 'Awareness #'.$awareness_arr[$a]['iAId'].":".$awareness_arr[$a]['vEngagement'];
                         $arr[$ind]['dDate'] = ($awareness_arr[$a]['dDate'] ? date("m/d/Y", strtotime($awareness_arr[$a]['dDate'])) : '');
                         $arr[$ind]['vSummary'] = $vSummary;
                         $arr[$ind]['Type'] = $val['Type'];

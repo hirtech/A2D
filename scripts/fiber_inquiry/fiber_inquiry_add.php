@@ -66,7 +66,7 @@ else if($_REQUEST['mode'] == "nearby_sr")
     $arr_param['long']      = $long; 
     $arr_param['meter']     = $meter; 
     $API_URL = $site_api_url."nearby_fiber_inquiry.json";
-    //echo $API_URL." ".json_encode($arr_param);exit;
+	//echo $API_URL." ".json_encode($arr_param);exit;
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $API_URL);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);

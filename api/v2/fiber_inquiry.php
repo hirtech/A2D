@@ -473,12 +473,14 @@ if($request_type == "fiber_inquiry_edit"){
             $join_arr = array();
             $where_arr[] = "(awareness.\"iFiberInquiryId\" IN ($iFiberInquiryId_ids) OR awareness.\"iPremiseId\" IN ($iPremiseId_ids))";
             $where_arr[] = "awareness.\"dDate\" between '".$start_date."' and '".$end_date."'";
-            $join_fieds_arr[] = " s.\"vName\" as  \"vSiteName\" ";
+            $join_fieds_arr[] = " e.\"vEngagement\"";
+            $join_fieds_arr[] = " s.\"vName\" as  \"vPremiseName\" ";
             $join_fieds_arr[] = " site_type_mas.\"vTypeName\"";
             $join_fieds_arr[] = " site_sub_type_mas.\"vSubTypeName\"";
             $join_fieds_arr[] = " fiberinquiry_details.\"iFiberInquiryId\"";
             $join_fieds_arr[] = " fiberinquiry_details.\"iCId\"";
             $join_fieds_arr[] = "concat(\"vFirstName\",' ', \"vLastName\") as \"vContactName\" ";
+            $join_arr[] = 'LEFT JOIN engagement_mas e on e."iEngagementId" = awareness."iEngagementId"';
             $join_arr[] = 'LEFT JOIN premise_mas s on s."iPremiseId" = awareness."iPremiseId"';
             $join_arr[] = 'LEFT JOIN site_type_mas on site_type_mas."iSTypeId" = s."iSTypeId"';
             $join_arr[] = 'LEFT JOIN site_sub_type_mas on site_sub_type_mas."iSSTypeId" = s."iSSTypeId"';
@@ -496,44 +498,20 @@ if($request_type == "fiber_inquiry_edit"){
             if(!empty($awareness_arr)) {
                 $ti =count($awareness_arr);
                 for($t =0; $t<$ti; $t++) {
-
                     $site_details = '';
-                    $SiteObj->clear_variable();
-                    $where_arr = array();
-                    $join_fieds_arr = array();
-                    $join_arr  = array();
-                    $join_fieds_arr[] = " site_attribute_mas.\"vAttribute\"";
-                    $where_arr[] = "site_attribute.\"iPremiseId\"='".$awareness_arr[$t]['iPremiseId']."'";
-                    $join_arr[] = 'LEFT JOIN site_attribute_mas on site_attribute_mas."iSAttributeId" = site_attribute."iSAttributeId"';
-                    $SiteObj->join_field = $join_fieds_arr;
-                    $SiteObj->join = $join_arr;
-                    $SiteObj->where = $where_arr;
-                    $SiteObj->param['order_by'] = "site_attribute.\"iSAId\"";
-                    $SiteObj->setClause();
-                    $rs_site_attr = $SiteObj->site_attribute_list();
-                    //echo "<pre>";print_r($rs_site_attr);exit();
+                    $vSummary = '';
 
-                    $vAttributeArr = array();
-                    if(!empty($rs_site_attr)) {
-                        $sai = count($rs_site_attr);
-                        for($sa=0; $sa<$sai; $sa++){
-                            $vAttributeArr[$sa] = $rs_site_attr[$sa]['vAttribute'];
-                        }
+                    $vPremiseName = $awareness_arr[$t]['iPremiseId'] . " (" . $awareness_arr[$t]['vPremiseName'] . "; " . $awareness_arr[$t]['vTypeName'] . ")";
+
+                    $site_details .= 'Premise #' . $vPremiseName;
+
+                    if($awareness_arr[$t]['iFiberInquiryId'] > 0){
+                        $site_details .= "<br/>Fiber Inquiry #".$awareness_arr[$t]['iFiberInquiryId']." (".$awareness_arr[$t]['vContactName'].")";
                     }
-
-                    //$arr[$ind]['vAttribute'][] = $awareness_arr[$t]['vAttribute'];
-                    $site_details .=  'Premise '.$awareness_arr[$t]['iPremiseId'].($awareness_arr[$t]['vSiteName'] ? ' ('.$awareness_arr[$t]['vSiteName'].') ' :'').($awareness_arr[$t]['vSubTypeName'] ? ' ('.$awareness_arr[$t]['vSubTypeName'].')': '').(!empty($vAttributeArr) ? ' ('.implode(' | ',$vAttributeArr).')' : '');
-
-                    if($awareness_arr[$t]['iFiberInquiryId'] > 0)
-                    {
-                        $site_details .= "<br/>Fiber Inquiry ".$awareness_arr[$t]['iFiberInquiryId']." (".$awareness_arr[$t]['vContactName'].")";
-                        $fiber_inquiry_arr[] = $awareness_arr[$t]['iFiberInquiryId'];
-                    }
-
+                    $vSummary .= 'Awareness #'.$awareness_arr[$t]['iAId'].":".$awareness_arr[$t]['vEngagement'];
+                    
                     $arr[$ind]['dDate'] = $awareness_arr[$t]['dDate'];
                     $arr[$ind]['site_details'] =$site_details;
-
-                    $vSummary =$awareness_arr[$t]['task_name'];;
                     $arr[$ind]['vSummary'] = $vSummary;
 
                     $ind++;
