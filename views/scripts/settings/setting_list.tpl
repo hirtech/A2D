@@ -37,8 +37,20 @@
                                                     <input type="checkbox" name="{$db_res[i].vName}" id="{$db_res[i].vName}" value="Y" {if $db_res[i].vValue eq 'Y'}checked{/if} class="custom-control-input" />
                                                     <label class="custom-control-label" for="{$db_res[i].vName}"></label>
                                                 </div>
-                                                {if $db_res[i].vDisplayType eq 'selectbox'}
+                                                {elseif $db_res[i].vDisplayType eq 'selectbox'}
                                                     {if $db_res[i].vSource eq 'List'}
+                                                        {*
+                                                        {if $db_res[i].vSelectType eq 'Single'}
+                                                            <Select class="form-control" name="{$db_res[i].vName}">
+                                                        {else}
+                                                            <Select class="form-control" multiple name="{$db_res[i].vName}[]">
+                                                        {/if}
+                                                            <option value="-9"><< Select {$db_res[i].vDesc} >></option>
+                                                            {section name="j" loop=$nSource_List}
+                                                            <option{if $db_res[i].vSelectType eq 'Single'}{if $list_arr[j][0] eq $db_res[i].vValue} selected{/if}{else if $db_res[i].vSelectType eq 'Multiple'}{if in_array($list_arr[j][0], $vValue_arr)} selected{/if}{/if} value="{$list_arr[j][0]}">{$list_arr[j][1]}</option>
+                                                            {/section}
+                                                            </select>
+                                                        *}
                                                         {if $db_res[i].vSelectType eq 'Single'}                 
                                                             <Select class="form-control" name="{$db_res[i].vName}">
                                                             <option value="-9"><< Select {$db_res[i].vDesc} >></option>
@@ -97,7 +109,15 @@
 <link rel="stylesheet" href="assets/vendors/select2/css/select2-bootstrap.min.css"/>
 <script src="assets/vendors/select2/js/select2.full.min.js"></script>
 <script>
+
 {literal}
+$('#save_data').click(function(e){
+    $('#mode').val('Update_Settings');
+    var isError = 0;
+    e.preventDefault();
+    $('#frmadd').submit();
+});
+
 $(document).ready(function() {
 
     $('select').each(function () {
