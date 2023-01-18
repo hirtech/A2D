@@ -14,7 +14,6 @@ include_once($controller_path . "trap_type.inc.php");
 include_once($controller_path . "county.inc.php");
 include_once($controller_path . "zipcode.inc.php");
 include_once($controller_path . "agent_mosquito.inc.php");
-include_once($controller_path . "test_method_mosquito.inc.php");
 include_once($controller_path . "result.inc.php");
 include_once($controller_path . "department.inc.php");
 include_once($controller_path . "engagement.inc.php");
@@ -65,48 +64,6 @@ if($request_type == "department_dropdown") {
 
     $total_record = count($rs_species);
     $result = array('total_record' => $total_record, 'data' => $rs_species );
-    $rh = HTTPStatus(200);
-    $code = 2000;
-    $message = api_getMessage($req_ext, constant($code));
-    $response_data = array("Code" => $code, "Message" => $message, "result" => $result);
-}else if($request_type == "get_insta_treat_data"){
-    $sql = 'SELECT * FROM  setting_mas WHERE  "vName" IN (\'ENABLE_INSTA_TREATMENT\', \'INSTA_TREATMENT_PRODUCT_ID\', \'INSTA_TREATMENT_AREA\', \'INSTA_TREATMENT_AREA_TREATED\', \'INSTA_TREATMENT_AMOUNT_APPLIED\', \'INSTA_TREATMENT_UNIT_ID\') ';
-    //echo $sql;
-    $rs_db = $sqlObj->GetAll($sql);
-    $data = array();
-    //echo "<pre>";print_r($rs_db);exit;
-    $ENABLE_INSTA_TREATMENT = $iTPId = $vArea = $vAreaTreated =$vAmountApplied =$iUId = "";
-    if(!empty($rs_db)){
-        foreach($rs_db as $k => $val){
-            if($val['vName']=='ENABLE_INSTA_TREATMENT'){
-                $ENABLE_INSTA_TREATMENT = ($val['vValue'] == 'Y')?"Yes":"No";
-            }
-            if($val['vName']=='INSTA_TREATMENT_PRODUCT_ID'){
-                $iTPId = $val['vValue'];
-            }
-            if($val['vName']=='INSTA_TREATMENT_AREA'){
-               $vArea = $val['vValue'];
-            }
-            if($val['vName']=='INSTA_TREATMENT_AREA_TREATED'){
-                $vAreaTreated = $val['vValue'];
-            }
-            if($val['vName']=='INSTA_TREATMENT_AMOUNT_APPLIED'){
-                $vAmountApplied = $val['vValue'];
-            }
-            if($val['vName']=='INSTA_TREATMENT_UNIT_ID'){
-                $iUId = $val['vValue'];
-            }
-        }
-    }
-    $data = array(
-            'insta_treatment_enable' => $ENABLE_INSTA_TREATMENT,
-            'iTPId' => $iTPId,
-            "vArea" =>  $vArea,
-            "vAreaTreated" =>  $vAreaTreated,
-            "vAmountApplied" => $vAmountApplied,
-            "iUId" => $iUId
-        );
-    $result = array('data' => $data );
     $rh = HTTPStatus(200);
     $code = 2000;
     $message = api_getMessage($req_ext, constant($code));
@@ -300,32 +257,6 @@ if($request_type == "department_dropdown") {
     if($n > 0){
         for ($i=0; $i <$n ; $i++) { 
             $res_arr[] = array("iAMId" => $rs_data[$i]['iAMId'], "vTitle" => $rs_data[$i]['vTitle']);
-        }
-    }
-
-    $rh = HTTPStatus(200);
-    $code = 2000;
-    $message = api_getMessage($req_ext, constant($code));
-    $response_data = array("Code" => $code, "Message" => $message, "result" => $res_arr);
-}else if($request_type == "test_method_mosquito_dropdown"){
-    
-    $TestMetodMosquitoObj = new TestMetodMosquito();
-    $res_arr = array();
-    $where_arr = array();
-    $join_fieds_arr = array();
-    $join_arr  = array();
-    $where_arr[] = '"iStatus" =  1';
-    $TestMetodMosquitoObj->join_field = $join_fieds_arr;
-    $TestMetodMosquitoObj->join = $join_arr;
-    $TestMetodMosquitoObj->where = $where_arr;
-    $TestMetodMosquitoObj->setClause();
-    $rs_data = $TestMetodMosquitoObj->recordset_list();
-    $n = count($rs_data);
-
-    $res_arr[] = array("iTMMId" => "", "vMethodTitle" => "");
-    if($n > 0){
-        for ($i=0; $i <$n ; $i++) { 
-            $res_arr[] = array("iTMMId" => $rs_data[$i]['iTMMId'], "vMethodTitle" => $rs_data[$i]['vMethodTitle']);
         }
     }
 

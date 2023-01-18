@@ -25,11 +25,7 @@ $keyword = $_REQUEST['keyword'];
 $option = $_REQUEST['option'];
 $Type = $_REQUEST['Type'];
 
-
-$instaTreatment_Arr = array('INSTA_TREATMENT_PRODUCT_ID','INSTA_TREATMENT_AREA','INSTA_TREATMENT_AREA_TREATED','INSTA_TREATMENT_AMOUNT_APPLIED','INSTA_TREATMENT_UNIT_ID');
-
-$enable_insta_treatment = 'N';
-$setting_checkbox_field = array('SESSION_STORED_IN_DB','ENABLE_INSTA_TREATMENT');
+$setting_checkbox_field = array('SESSION_STORED_IN_DB');
 if($mode == "Update_Settings")
 {
     //echo "<pre>";print_r($_POST);exit();
@@ -79,16 +75,7 @@ if($mode == "Update_Settings")
                 $vValue = $vDefValue;
             }
 
-            if($field_name == 'CALSURV_GATEWAY_LAB_DATA') {
-                $vValue = 'D';
-            }
-
-            if($field_name == 'ENABLE_INSTA_TREATMENT') {
-                $enable_insta_treatment = $vValue;
-            }
             
-            $vValue = (in_array($field_name,$instaTreatment_Arr) && $enable_insta_treatment== 'N')?'':$vValue;
-
             $sql = "Update setting_mas  set \"vValue\" = '$vValue' where \"vName\" = '$field_name'";
             //echo $sql."<br>";exit();
             $db_update = $sqlObj->Execute($sql); 
@@ -115,43 +102,6 @@ if($mode == "Update_Settings")
         exit;
     }
 }
-else if($mode=="UpdateInsta_Treat_Setting"){
-
-    //echo "<pre>";print_r($_POST);exit();
-    $result = array();
-
-    $instatreatmnet_pid = $_POST['serach_iTPId_treatment'];
-    $instatreatmnet_area = $_POST['vArea_treatment'];
-    $instatreatmnet_area_treated = $_POST['vAreaTreated_treatment'];
-    $instatreatmnet_amount_applied = $_POST['vAmountApplied_treatment'];
-    $instatreatmnet_unit_id = $_POST['iUId_treatment'];
-
-    $sql = "Update setting_mas  set \"vValue\" = '".$instatreatmnet_pid."' where \"vName\" = 'INSTA_TREATMENT_PRODUCT_ID'";
-    $db_update = $sqlObj->Execute($sql);
-
-    $sql = "Update setting_mas  set \"vValue\" = '".$instatreatmnet_area."' where \"vName\" = 'INSTA_TREATMENT_AREA'";
-    $db_update = $sqlObj->Execute($sql);
-
-    $sql = "Update setting_mas  set \"vValue\" = '".$instatreatmnet_area_treated."' where \"vName\" = 'INSTA_TREATMENT_AREA_TREATED'";
-    $db_update = $sqlObj->Execute($sql);
-
-    $sql = "Update setting_mas  set \"vValue\" = '".$instatreatmnet_amount_applied."' where \"vName\" = 'INSTA_TREATMENT_AMOUNT_APPLIED'";
-    $db_update = $sqlObj->Execute($sql);
-
-    $sql = "Update setting_mas  set \"vValue\" = '".$instatreatmnet_unit_id."' where \"vName\" = 'INSTA_TREATMENT_UNIT_ID'";
-    $db_update = $sqlObj->Execute($sql);
-
-    if($db_update){
-        $result['error']= 0 ;
-        $result['data']= $_POST ;
-    }else{
-        $result['error']= 1 ;
-    }
-
-    echo json_encode($result);
-    hc_exit();
-}
-
 
 $ssql = " where \"bStatus\"='1'";
 if(!isset($_REQUEST['Type']) || $_REQUEST['Type']== '') $_REQUEST['Type'] = 'Appearance';
@@ -170,7 +120,6 @@ $db_query = "select * from setting_mas  ".$ssql.$sort;
 $setting_data = $sqlObj->Getall($db_query);
 
 $db_res = array();
-$tmpinsta_db_res = array();
 
 $module_name='Site Settings List';
 if($mode == '')
@@ -206,78 +155,8 @@ for($i=0 ; $i<$num_totrec ; $i++)
 
 	$db_res[] = $setting_data[$i];
 
-	if($setting_data[$i]['vName'] == 'ENABLE_INSTA_TREATMENT') {
-			$enable_insta_treatment = $setting_data[$i]['vValue'];
-		}
-	if(in_array($setting_data[$i]['vName'], $instaTreatment_Arr)){
-		$tmpinsta_db_res[$setting_data[$i]['vName']] = $setting_data[$i]['vValue'];
-	}
-
 }
 
-if(isset($tmpinsta_db_res['INSTA_TREATMENT_PRODUCT_ID']) && $tmpinsta_db_res['INSTA_TREATMENT_PRODUCT_ID'] != ""){
-            $TProdObj->clear_variable();
-
-            $where_arr = array();
-            $join_fieds_arr = array();
-            $join_arr = array();
-            $join_fieds_arr[] = 'unit_mas."vUnit"';
-            $where_arr[] = 'treatment_product."iTPId" = '.$tmpinsta_db_res['INSTA_TREATMENT_PRODUCT_ID'].'';
-            $join_arr[] = 'LEFT JOIN unit_mas  on unit_mas."iUId" = treatment_product."iUId"';
-            $TProdObj->join_field = $join_fieds_arr;
-            $TProdObj->join = $join_arr;
-            $TProdObj->where = $where_arr;
-            $TProdObj->param['limit'] = "LIMIT 1";
-            $TProdObj->param['order_by'] = 'treatment_product."iTPId" DESC';
-            $TProdObj->setClause();
-            $rs_trtproduct = $TProdObj->recordset_list();
-
-            $appRate = (isset($rs_trtproduct[0]['vAppRate']))?$rs_trtproduct[0]['vAppRate']:"";
-            $minRate = (isset($rs_trtproduct[0]['vMinAppRate']))?"min ".$rs_trtproduct[0]['vMinAppRate']:"";
-            $maxRate = (isset($rs_trtproduct[0]['vMaxAppRate']))?"- max ".$rs_trtproduct[0]['vMaxAppRate']:"";
-            $tragetappRate = (isset($rs_trtproduct[0]['vTragetAppRate']))?$rs_trtproduct[0]['vTragetAppRate']:"";
-            $unitName = (isset($rs_trtproduct[0]['vUnit']))?$rs_trtproduct[0]['vUnit']:"";
-
-            $appRate = $appRate . "(".$minRate.$maxRate.")".$unitName."/".$tragetappRate;
-
-
-            $treatment_product = $rs_trtproduct[0]['vName'];
-
-            $tmpinsta_db_res['treatment_product'] = $treatment_product;
-            $tmpinsta_db_res['appRate'] = $appRate;
-
-            $smarty->assign('insta_treatment_productname',$treatment_product);
-            $smarty->assign('insta_appRate',$appRate);
-}
-if(isset($tmpinsta_db_res['INSTA_TREATMENT_UNIT_ID']) && $tmpinsta_db_res['INSTA_TREATMENT_UNIT_ID'] != ""){
-    $sql_unit = "SELECT \"vUnit\",\"iParentId\"  FROM unit_mas WHERE \"iUId\" = '".$tmpinsta_db_res['INSTA_TREATMENT_UNIT_ID']."' LIMIT 1";
-    $rs_unit = $sqlObj->Getall($sql_unit);
-
-    $unit_parentid = $rs_unit[0]['iParentId'];
-
-    $tmpinsta_db_res['unit_parentid'] = $unit_parentid;
-    $tmpinsta_db_res['unit_name'] = $rs_unit[0]['vUnit'];
-
-    $smarty->assign('insta_unit_parentid',$unit_parentid);
-}
-
-if($enable_insta_treatment == 'Y'){
-    $insta_table = "<table width='100%' class='table'>
-                                    <tr>
-                                        <td>Insta Treatment product</td>
-                                        <td>".$tmpinsta_db_res['treatment_product']."</td>
-                                    </tr>
-                                     <tr>
-                                        <td>Insta Treatment Area Treated</td>
-                                        <td>".$tmpinsta_db_res['INSTA_TREATMENT_AREA']." ".$tmpinsta_db_res['INSTA_TREATMENT_AREA_TREATED']."</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Insta Treatment Amount Applied</td>
-                                        <td>".$tmpinsta_db_res['INSTA_TREATMENT_AMOUNT_APPLIED']." ".$tmpinsta_db_res['unit_name']."</td>
-                                    </tr>
-                            </table>";
-    $smarty->assign('insta_data_table',$insta_table);
-}
 //echo "<pre>";print_r($db_res);exit();
 
 $smarty->assign("module_name", $module_name);
@@ -293,7 +172,6 @@ $smarty->assign("nSource_List", $nSource_List);
 $smarty->assign("db_selectSource_rs", $db_selectSource_rs);
 $smarty->assign("vValue_arr", $vValue_arr);
 $smarty->assign("msg", $msg);
-$smarty->assign("tmpinsta_db_res", $tmpinsta_db_res);
 ?>
 
 

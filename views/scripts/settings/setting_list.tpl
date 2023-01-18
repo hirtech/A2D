@@ -34,29 +34,11 @@
                                                     <textarea rows="5" cols="10" class="form-control" name="{$db_res[i].vName}">{$db_res[i].vValue|gen_strip_slash}</textarea>
                                                 {elseif $db_res[i].vDisplayType eq 'checkbox'}
                                                 <div class="custom-control custom-checkbox custom-control-inline">
-                                                    <input type="checkbox" name="{$db_res[i].vName}" id="{$db_res[i].vName}" value="Y" {if $db_res[i].vValue eq 'Y'}checked{/if} class="custom-control-input" {if $db_res[i].vName eq 'ENABLE_INSTA_TREATMENT' } onclick=addEditDataInstaTreatment('add'); {/if}/>
+                                                    <input type="checkbox" name="{$db_res[i].vName}" id="{$db_res[i].vName}" value="Y" {if $db_res[i].vValue eq 'Y'}checked{/if} class="custom-control-input" />
                                                     <label class="custom-control-label" for="{$db_res[i].vName}"></label>
-                                                    {if $db_res[i].vName eq 'ENABLE_INSTA_TREATMENT'}
-                                                    <a class="btn btn-outline-secondary {if $db_res[i].vValue eq 'N'} d-none {/if}" title="Insta Treat" onclick="addEditDataInstaTreatment('edit')" id="instatreatedit" ><i class="fa fa-edit"></i></a>
-                                                    {/if}
                                                 </div>
-                                                {if $db_res[i].vName eq 'ENABLE_INSTA_TREATMENT'}
-                                                <div id="show_insta_data">{$insta_data_table}</div>
-                                                {/if}
-                                                {elseif $db_res[i].vDisplayType eq 'selectbox'}
+                                                {if $db_res[i].vDisplayType eq 'selectbox'}
                                                     {if $db_res[i].vSource eq 'List'}
-                                                        {*
-                                                        {if $db_res[i].vSelectType eq 'Single'}
-                                                            <Select class="form-control" name="{$db_res[i].vName}">
-                                                        {else}
-                                                            <Select class="form-control" multiple name="{$db_res[i].vName}[]">
-                                                        {/if}
-                                                            <option value="-9"><< Select {$db_res[i].vDesc} >></option>
-                                                            {section name="j" loop=$nSource_List}
-                                                            <option{if $db_res[i].vSelectType eq 'Single'}{if $list_arr[j][0] eq $db_res[i].vValue} selected{/if}{else if $db_res[i].vSelectType eq 'Multiple'}{if in_array($list_arr[j][0], $vValue_arr)} selected{/if}{/if} value="{$list_arr[j][0]}">{$list_arr[j][1]}</option>
-                                                            {/section}
-                                                            </select>
-                                                        *}
                                                         {if $db_res[i].vSelectType eq 'Single'}                 
                                                             <Select class="form-control" name="{$db_res[i].vName}">
                                                             <option value="-9"><< Select {$db_res[i].vDesc} >></option>
@@ -115,41 +97,7 @@
 <link rel="stylesheet" href="assets/vendors/select2/css/select2-bootstrap.min.css"/>
 <script src="assets/vendors/select2/js/select2.full.min.js"></script>
 <script>
-    var insta_treatment_productname = '{$insta_treatment_productname}';
-    var insta_unit_parentid = '{$insta_unit_parentid}';
-    var insta_appRate = '{$insta_appRate}';
 {literal}
-$('#save_data').click(function(e){
-    $('#mode').val('Update_Settings');
-    var isError = 0;
-    e.preventDefault();
-    if($("#ENABLE_INSTA_TREATMENT").is(":checked") == true){
-        if($("#INSTA_TREATMENT_PRODUCT_ID").val() == ""){
-            isError = 1;
-        }
-        if($("#INSTA_TREATMENT_AREA").val() == ""){
-            isError = 1;
-        }
-        if($("#INSTA_TREATMENT_AREA_TREATED").val() == ""){
-            isError = 1;
-        }
-        if($("#INSTA_TREATMENT_AMOUNT_APPLIED").val() == ""){
-            isError = 1;
-        }
-        if($("#INSTA_TREATMENT_UNIT_ID").val() == ""){
-            isError = 1;
-        }
-    }
-
-    if(isError == 1){
-        toastr.error('Please enter insta treat data.');
-        return false;
-    }else{
-        $('#frmadd').submit();
-    }
-    
-});
-
 $(document).ready(function() {
 
     $('select').each(function () {
@@ -165,4 +113,3 @@ $(document).ready(function() {
 {/literal}
 </script>
 
-{include file="scripts/settings/insta_treat_setting_popup.tpl"}
