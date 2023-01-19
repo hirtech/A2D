@@ -1,10 +1,8 @@
 <?php 
 
 include_once($controller_path . "user.inc.php");
-include_once($controller_path . "treatment_product.inc.php");
 
 $UserObj = new User();
-$TProdObj = new TreatmentProduct();
 
 if($request_type == "notification"){
 	$notification_arr = array();

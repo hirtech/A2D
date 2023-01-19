@@ -15,16 +15,9 @@ include_once($controller_path . "premise.inc.php");
 
 include_once($controller_path . "premise_sub_type.inc.php");
 include_once($controller_path . "premise_type.inc.php");
-include_once($controller_path . "mosquito_species.inc.php");
-include_once($controller_path . "trap_type.inc.php");
-include_once($controller_path . "task_type.inc.php");
 include_once($controller_path . "user.inc.php");
 
 include_once($function_path."image.inc.php");
-
-$MosquitoSpeciesObj = new MosquitoSpecies();
-$TrapTypeObj = new TrapType();
-$TaskTypeObj = new TaskType();
 
 $page = $_REQUEST['page'];
 # ------------------------------------------------------------

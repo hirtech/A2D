@@ -8,7 +8,6 @@ include_once($controller_path . "zone.inc.php");
 include_once($controller_path . "city.inc.php");
 include_once($controller_path . "state.inc.php");
 include_once($controller_path . "mosquito_species.inc.php");
-include_once($controller_path . "treatment_product.inc.php");
 include_once($controller_path . "task_type.inc.php");
 include_once($controller_path . "trap_type.inc.php");
 include_once($controller_path . "county.inc.php");
@@ -143,62 +142,6 @@ if($request_type == "department_dropdown") {
     }else{
         $response_data = array("Code" => 500);
     }
-}else if($request_type == "treatment_product_dropdown"){
-    $where_arr = array();
-    $join_fieds_arr = array();
-    $join_arr  = array();
-    $TProdObj = new TreatmentProduct();
-    $TProdObj->join_field = $join_fieds_arr;
-    $TProdObj->join = $join_arr;
-    $TProdObj->where = $where_arr;
-    $rs_db = $TProdObj->recordset_list();
-
-    if($rs_db){
-      $response_data = array("Code" => 200, "result" => $rs_db, "total_record" => count($rs_db));
-    }else{
-      $response_data = array("Code" => 500);
-    }
-}else if($request_type == "search_treatment_product"){
-    //treatment prodcut with unit data
-    
-    $rs_arr  = array();
-
-    $vTreatmentProduct = $RES_PARA['trProduct'];
-    $TProdObj = new TreatmentProduct();  
-    $TProdObj->clear_variable();
-    $where_arr = array();
-    $join_fieds_arr = array();
-    $join_arr = array();
-    $join_fieds_arr[] = 'unit_mas."vUnit"';
-    $join_fieds_arr[] = 'unit_mas."iParentId"';
-    $where_arr[] = 'treatment_product."vName" ILIKE \''.$vTreatmentProduct.'%\' ';
-    
-    $join_arr[] = 'LEFT JOIN unit_mas  on unit_mas."iUId" = treatment_product."iUId"';
-    $TProdObj->join_field = $join_fieds_arr;
-    $TProdObj->join = $join_arr;
-    $TProdObj->where = $where_arr;
-    $TProdObj->param['limit'] = "0";
-    $TProdObj->param['order_by'] = 'treatment_product."iTPId" DESC';
-    
-    $TProdObj->setClause();
-    $rs_data = $TProdObj->recordset_list();
-   // echo "<pre>";print_r($rs_data);exit();
-    $n = count($rs_data);
-    for ($i = 0; $i < $n; $i++) {
-        $rs_arr[] =array(
-            'display' => $rs_data[$i]['vName'],
-            'iTPId' => $rs_data[$i]['iTPId'],
-            'unitName' => $rs_data[$i]['vUnit'],
-            'vAppRate' => $rs_data[$i]['vAppRate'],
-            'vTragetAppRate' => $rs_data[$i]['vTragetAppRate'],
-            'vMinAppRate' => $rs_data[$i]['vMinAppRate'],
-            'vMaxAppRate' => $rs_data[$i]['vMaxAppRate'],
-            'iUId' => $rs_data[$i]['iUId'],
-            'iParentId' => $rs_data[$i]['iParentId']
-        );
-    }
-
-    $response_data = array("Code" => 200, "result" => $rs_arr);
 }else if($request_type == "unit_multi_dropdown"){
     //unit dropdown  (parent unit name as key and sub child unit data in value)
     $temp_unit_arr = array();

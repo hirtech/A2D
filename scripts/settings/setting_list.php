@@ -17,8 +17,6 @@ $access_group_var_status = per_hasModuleAccess("System Settings", 'Status', 'N')
 $access_group_var_add = per_hasModuleAccess("System Settings", 'Add', 'N');
 $access_group_var_edit = per_hasModuleAccess("System Settings", 'Edit', 'N');
 # ----------- Access Rule Condition -----------
-include_once($controller_path . "treatment_product.inc.php");
-$TProdObj = new TreatmentProduct();
 
 $msg = $_REQUEST['msg'];
 $keyword = $_REQUEST['keyword'];
