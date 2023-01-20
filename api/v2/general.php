@@ -12,8 +12,6 @@ include_once($controller_path . "task_type.inc.php");
 include_once($controller_path . "trap_type.inc.php");
 include_once($controller_path . "county.inc.php");
 include_once($controller_path . "zipcode.inc.php");
-include_once($controller_path . "agent_mosquito.inc.php");
-include_once($controller_path . "result.inc.php");
 include_once($controller_path . "department.inc.php");
 include_once($controller_path . "engagement.inc.php");
 include_once($controller_path . "company.inc.php");
@@ -67,60 +65,6 @@ if($request_type == "department_dropdown") {
     $code = 2000;
     $message = api_getMessage($req_ext, constant($code));
     $response_data = array("Code" => $code, "Message" => $message, "result" => $result);
-}else if($request_type == "get_sync_unit_data"){
-    
-    $where_arr = array();
-    $join_fieds_arr = array();
-    $join_arr = array();
-    $iUId = trim($RES_PARA['iUId']);
-    $iParentId = trim($RES_PARA['iParentId']);
-    $vUnit = trim($RES_PARA['vUnit']);
-    $vDescription = trim($RES_PARA['vDescription']);
-    $rStdUnitFactor = trim($RES_PARA['rStdUnitFactor']);
-    $last_sync_date = isset($RES_PARA['last_sync_date'])?trim($RES_PARA['last_sync_date']):"";
-    $current_date = Date('Y-m-d');
-
-    if($iUId != ""){
-        $where_arr[] = ' "iUId" = '.$iUId.' '; 
-    }
-
-    if($iParentId != ""){
-        $where_arr[] = ' "iParentId" = \''.$iParentId.'\' '; 
-    }
-
-    if($vUnit != ""){
-        $where_arr[] = ' "vUnit" ILIKE \'%'.$vUnit.'%\' '; 
-    }
-
-    if($vDescription != ""){
-        $where_arr[] = ' "vDescription" ILIKE \'%'.$vDescription.'%\' '; 
-    }
-
-    if($rStdUnitFactor != ""){
-        $where_arr[] = ' "rStdUnitFactor" = '.$rStdUnitFactor.' '; 
-    }
-    if($last_sync_date != ""){
-      $where_arr[] = " (( DATE(\"dAddedDate\") >= '" . $last_sync_date . "' AND DATE(\"dAddedDate\") <= '" . $current_date. "')  OR (DATE(\"dModifiedDate\") >= '" . $last_sync_date . "' AND DATE(\"dModifiedDate\") <= '" . $current_date. "' ))";
-    }
-
-    $TProdObj = new TreatmentProduct();
-    $TProdObj->join_field = $join_fieds_arr;
-    $TProdObj->join = $join_arr;
-    $TProdObj->where = $where_arr;
-    $TProdObj->setClause();
-    $TProdObj->debug_query = false;
-    $rs_unit = $TProdObj->unit_data();
-
-    $data=array();
-    if(!empty($rs_unit)){
-        $data = $rs_unit;
-    }
-    $total_record = count($data);
-    $result = array('total_record' => $total_record, 'data' => $data );
-    $rh = HTTPStatus(200);
-    $code = 2000;
-    $message = api_getMessage($req_ext, constant($code));
-    $response_data = array("Code" => $code, "Message" => $message, "result" => $result);
 }else if($request_type == "task_type_dropdown"){
     
     $where_arr = array();
@@ -142,97 +86,6 @@ if($request_type == "department_dropdown") {
     }else{
         $response_data = array("Code" => 500);
     }
-}else if($request_type == "unit_multi_dropdown"){
-    //unit dropdown  (parent unit name as key and sub child unit data in value)
-    $temp_unit_arr = array();
-    $temp_unit_par_arr = array();
-    $unit_arr = array();
-
-    /* unit array*/
-    $where_arr = array();
-    $join_fieds_arr = array();
-    $join_arr = array();
-    $TProdObj = new TreatmentProduct();
-    $TProdObj->join_field = $join_fieds_arr;
-    $TProdObj->join = $join_arr;
-    $TProdObj->where = $where_arr;
-    $TProdObj->param['order_by'] = "";
-    $TProdObj->param['limit'] = "";
-    $TProdObj->setClause();
-    $TProdObj->debug_query = false;
-    $rs_unit = $TProdObj->unit_data();
-    $ui = count($rs_unit);
-
-    if($ui > 0){
-        for($u=0;$u<$ui;$u++){
-            if($rs_unit[$u]['iParentId'] != 0){
-                $temp_unit_arr[$rs_unit[$u]['iParentId']][] = $rs_unit[$u];
-            }else{
-                $temp_unit_par_arr[$rs_unit[$u]['iUId']] = $rs_unit[$u]['vUnit'];
-            }
-        }
-        if(count($temp_unit_arr) > 0){
-            foreach($temp_unit_arr as $key=>$val){
-                $unit_arr[$temp_unit_par_arr[$key]] = $val;
-            }
-        }
-    }
-    $rh = HTTPStatus(200);
-    $code = 2000;
-    $message = api_getMessage($req_ext, constant($code));
-    $response_data = array("Code" => $code, "Message" => $message, "result" => $unit_arr);
-}else if($request_type == "agent_mosquito_dropdown"){
-
-    $AgentMosquitoObj = new AgentMosquito();
-    $res_arr = array();
-    $where_arr = array();
-    $join_fieds_arr = array();
-    $join_arr  = array();
-    $where_arr[] = '"iStatus" =  1';
-    $AgentMosquitoObj->join_field = $join_fieds_arr;
-    $AgentMosquitoObj->join = $join_arr;
-    $AgentMosquitoObj->where = $where_arr;
-    $AgentMosquitoObj->setClause();
-    $rs_data = $AgentMosquitoObj->recordset_list();
-    $n = count($rs_data);
-
-    $res_arr[] = array("iAMId" => "", "vTitle" => "");
-    if($n > 0){
-        for ($i=0; $i <$n ; $i++) { 
-            $res_arr[] = array("iAMId" => $rs_data[$i]['iAMId'], "vTitle" => $rs_data[$i]['vTitle']);
-        }
-    }
-
-    $rh = HTTPStatus(200);
-    $code = 2000;
-    $message = api_getMessage($req_ext, constant($code));
-    $response_data = array("Code" => $code, "Message" => $message, "result" => $res_arr);
-}else if($request_type == "result_dropdown"){
-
-    $ResultObj = new Result();
-    $res_arr = array();
-    $where_arr = array();
-    $join_fieds_arr = array();
-    $join_arr  = array();
-    $where_arr[] = '"iStatus" =  1';
-    $ResultObj->join_field = $join_fieds_arr;
-    $ResultObj->join = $join_arr;
-    $ResultObj->where = $where_arr;
-    $ResultObj->setClause();
-    $rs_data = $ResultObj->recordset_list();
-    $n = count($rs_data);
-
-    $res_arr[] = array("iResultId" => "", "vResult" => "");
-    if($n > 0){
-        for ($i=0; $i <$n ; $i++) { 
-            $res_arr[] = array("iResultId" => $rs_data[$i]['iResultId'], "vResult" => $rs_data[$i]['vResult']);
-        }
-    }
-
-    $rh = HTTPStatus(200);
-    $code = 2000;
-    $message = api_getMessage($req_ext, constant($code));
-    $response_data = array("Code" => $code, "Message" => $message, "result" => $res_arr);
 }else if($request_type == "autoGoogleZoneFromLatlong"){
     $lat = $RES_PARA['lat'];
     $long = $RES_PARA['long'];

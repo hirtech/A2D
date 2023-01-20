@@ -459,42 +459,6 @@ switch($path) {
 			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
 		}
 		break;
-	case "treatment_product_list." . $req_ext:
-		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
-			$request_type = "treatment_product_list";
-			$api_file_name = "masters.php";
-			include_once($site_api_path."api_authentication.php");
-		}else {
-			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
-		}
-		break;
-	case "treatment_product_add." . $req_ext:
-		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
-			$request_type = "treatment_product_add";
-			$api_file_name = "masters.php";
-			include_once($site_api_path."api_authentication.php");
-		}else {
-			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
-		}
-		break;
-	case "treatment_product_edit." . $req_ext:
-		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
-			$request_type = "treatment_product_edit";
-			$api_file_name = "masters.php";
-			include_once($site_api_path."api_authentication.php");
-		}else {
-			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
-		}
-		break;
-	case "treatment_product_delete." . $req_ext:
-		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
-			$request_type = "treatment_product_delete";
-			$api_file_name = "masters.php";
-			include_once($site_api_path."api_authentication.php");
-		}else {
-			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
-		}
-		break;
 	case "engagement_list." . $req_ext:
 		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
 			$request_type = "engagement_list";
@@ -1054,15 +1018,6 @@ switch($path) {
 			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
 		}
 		break;
-	case "get_sync_unit_data." . $req_ext:
-		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
-			$request_type = "get_sync_unit_data";
-			$api_file_name = "general.php";
-			include_once($site_api_path . "api_authentication.php");
-		}else {
-			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
-		}
-		break;
 	case "fiber_inquiry_list." . $req_ext:
 		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
 			$request_type = "fiber_inquiry_list";
@@ -1504,69 +1459,6 @@ switch($path) {
 			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
 		}
 		break;
-	case "inventory_count_list." . $req_ext:
-		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
-			$request_type = "inventory_count_list";
-			$api_file_name = "inventory.php";
-			include_once($site_api_path . "api_authentication.php");
-		}else {
-			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
-		}
-		break;
-	case "inventory_count_add." . $req_ext:
-		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
-			$request_type = "inventory_count_add";
-			$api_file_name = "inventory.php";
-			include_once($site_api_path . "api_authentication.php");
-		}else {
-			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
-		}
-		break;
-	case "inventory_count_edit." . $req_ext:
-		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
-			$request_type = "inventory_count_edit";
-			$api_file_name = "inventory.php";
-			include_once($site_api_path . "api_authentication.php");
-		}else {
-			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
-		}
-		break;
-	case "inventory_purchase_add." . $req_ext:
-		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
-			$request_type = "inventory_purchase_add";
-			$api_file_name = "inventory.php";
-			include_once($site_api_path . "api_authentication.php");
-		}else {
-			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
-		}
-		break;
-	case "inventory_purchase_edit." . $req_ext:
-		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
-			$request_type = "inventory_purchase_edit";
-			$api_file_name = "inventory.php";
-			include_once($site_api_path . "api_authentication.php");
-		}else {
-			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
-		}
-		break;
-	case "inventory_purchase_list." . $req_ext:
-		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
-			$request_type = "inventory_purchase_list";
-			$api_file_name = "inventory.php";
-			include_once($site_api_path . "api_authentication.php");
-		}else {
-			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
-		}
-		break;
-	case "treatment_product_dropdown." . $req_ext:
-		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
-			$request_type = "treatment_product_dropdown";
-			$api_file_name = "general.php";
-			include_once($site_api_path . "api_authentication.php");
-		}else {
-			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
-		}
-		break;
 	case "search_premise." . $req_ext:
 		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
 			$request_type = "search_premise";
@@ -1599,47 +1491,6 @@ switch($path) {
 			$request_type = "search_fiber_inquiry";
 			$api_file_name = "fiber_inquiry.php";
 			include_once($site_api_path."api_authentication.php");
-		}else {
-			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
-		}
-		break;
-	case "search_treatment_product." . $req_ext:
-		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
-			$request_type = "search_treatment_product";
-			$api_file_name = "general.php";
-			include_once($site_api_path."api_authentication.php");
-		}else {
-			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
-		}
-		break;
-	case "unit_multi_dropdown." . $req_ext:
-		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
-			$request_type = "unit_multi_dropdown";
-			$api_file_name = "general.php";
-			if($RES_PARA['Server_LoginType']  == "country_user"){
-				//Admin panel checking
-				include_once($site_api_path.$api_file_name);
-			}else{
-				include_once($site_api_path."api_authentication.php");
-			}
-		}else {
-			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
-		}
-		break;	
-	case "agent_mosquito_dropdown." . $req_ext:
-		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
-			$request_type = "agent_mosquito_dropdown";
-			$api_file_name = "general.php";
-			include_once($site_api_path . "api_authentication.php");
-		}else {
-			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
-		}
-		break;
-	case "result_dropdown." . $req_ext:
-		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
-			$request_type = "result_dropdown";
-			$api_file_name = "general.php";
-			include_once($site_api_path . "api_authentication.php");
 		}else {
 			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
 		}
@@ -1770,15 +1621,6 @@ switch($path) {
 				$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
 			}
 			break;	
-	case "dashboard_timelinechart." . $req_ext:
-		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
-			$request_type = "dashboard_timelinechart";
-			$api_file_name = "dashboard.php";
-			include_once($site_api_path . "api_authentication.php");
-		}else {
-			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
-		}
-		break;
 	case "dashboard_amchart." . $req_ext:
 		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
 			$request_type = "dashboard_amchart";
