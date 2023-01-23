@@ -21,6 +21,8 @@ if($request_type == "trouble_ticket_list"){
         $vSPremiseName      = trim($RES_PARA['vSPremiseName']);
         $vSAddressDD        = $RES_PARA['vSAddressDD'];
         $vSAddress          = trim($RES_PARA['vSAddress']);
+        $iSNetworkId        = $RES_PARA['iSNetworkId'];
+        $iSCarrierId        = $RES_PARA['iSCarrierId'];
 
         $page_length        = isset($RES_PARA['page_length']) ? trim($RES_PARA['page_length']) : "10";
         $start              = isset($RES_PARA['start']) ? trim($RES_PARA['start']) : "0";
@@ -47,6 +49,10 @@ if($request_type == "trouble_ticket_list"){
 
     if ($iSServiceOrderId != "") {
         $where_arr[] = 'trouble_ticket."iServiceOrderId"='.$iSServiceOrderId ;
+    }
+
+    if ($iSCarrierId != "") {
+        $where_arr[] = 'so."iCarrierID"='.$iSCarrierId ;
     }
 
     if ($iSSeverity != "") {
@@ -80,10 +86,10 @@ if($request_type == "trouble_ticket_list"){
     $iTroubleTicketIdArr = array();
     // trouble_ticket_premise Filters
     $premise_where_arr = [];
-    if ($iSPremiseId != "") {
+    if($iSPremiseId != "") {
         $premise_where_arr[] = "trouble_ticket_premise.\"iPremiseId\"='".$iSPremiseId."'";
     }
-    if ($vSPremiseName != "") {
+    if($vSPremiseName != "") {
         if ($vSPremiseNameDD != "") {
             if ($vSPremiseNameDD == "Begins") {
                 $premise_where_arr[] = 's."vName" ILIKE \''.$vSPremiseName.'%\'';
@@ -98,7 +104,7 @@ if($request_type == "trouble_ticket_list"){
             $premise_where_arr[] = 's."vName" ILIKE \''.$vSPremiseName.'%\'';
         }
     }
-    if ($vSAddress != "") {
+    if($vSAddress != "") {
         if ($vSAddressDD != "") {
             if ($vSAddressDD == "Begins") {
                 $premise_where_arr[] = '(s."vAddress1" ILIKE \''.$vSAddress.'%\' OR s."vStreet" ILIKE \''.$vSAddress.'%\')';
@@ -113,13 +119,19 @@ if($request_type == "trouble_ticket_list"){
             $premise_where_arr[] = '(s."vAddress1" ILIKE \''.$vSAddress.'%\' OR s."vStreet" ILIKE \''.$vSAddress.'%\')';
         }
     }
+    if($iSNetworkId > 0) {
+        $premise_where_arr[] = "z.\"iNetworkId\"='".$iSNetworkId."'";
+    }
+
     if(!empty($premise_where_arr)) {
         $premise_join_fieds_arr = array();
         $premise_join_fieds_arr[] = 's."vName"';
         $premise_join_fieds_arr[] = 's."vAddress1"';
         $premise_join_fieds_arr[] = 's."vStreet"';
+        $premise_join_fieds_arr[] = 'z."iNetworkId"';
         $premise_join_arr = array();
         $premise_join_arr[] = 'LEFT JOIN premise_mas s on trouble_ticket_premise."iPremiseId" = s."iPremiseId"';
+        $premise_join_arr[] = 'LEFT JOIN zone z on s."iZoneId" = z."iZoneId"';
         $TroubleTicketObj->join_field = $premise_join_fieds_arr;
         $TroubleTicketObj->join = $premise_join_arr;
         $TroubleTicketObj->where = $premise_where_arr;
@@ -142,25 +154,25 @@ if($request_type == "trouble_ticket_list"){
     //echo "<pre>"; print_r($where_arr);exit;
 
     switch ($display_order) {
-        case "0":
+        case "1":
             $sortname = "trouble_ticket.\"iTroubleTicketId\"";
             break;
-        case "1":
+        case "2":
             $sortname = "\"vAssignedTo\"";
             break;
-        case "2":
+        case "3":
             $sortname = "s.\"iServiceOrderId\"";
             break;
-        case "3":
+        case "4":
             $sortname = "trouble_ticket.\"iSeverity\"";
             break;
-        case "4":
+        case "5":
             $sortname = "trouble_ticket.\"iStatus\"";
             break;
-        case "5":
+        case "6":
             $sortname = "trouble_ticket.\"dCompletionDate\"";
             break;
-        case "6":
+        case "7":
             $sortname = "trouble_ticket.\"tDescription\"";
             break;
         default:
@@ -177,6 +189,7 @@ if($request_type == "trouble_ticket_list"){
     $join_arr = array();
     $join_arr[] = 'LEFT JOIN user_mas u on u."iUserId" = trouble_ticket."iAssignedToId"';
     $join_arr[] = 'LEFT JOIN service_order so on so."iServiceOrderId" = trouble_ticket."iServiceOrderId"';
+    $join_arr[] = 'LEFT JOIN company_mas cm on cm."iCompanyId" = so."iCarrierID"';
     $TroubleTicketObj->join_field = $join_fieds_arr;
     $TroubleTicketObj->join = $join_arr;
     $TroubleTicketObj->where = $where_arr;
@@ -351,6 +364,16 @@ if($request_type == "trouble_ticket_list"){
     }
     else {
         $response_data = array("Code" => 500 , "Message" => MSG_DELETE_ERROR);
+    }
+}else if($request_type == "trouble_ticket_change_status"){
+    $status = $RES_PARA['status'];
+    $iTroubleTicketIds = $RES_PARA['iTroubleTicketIds'];
+    $rs_db = $TroubleTicketObj->change_status($iTroubleTicketIds, $status);
+    if($rs_db) {
+        $response_data = array("Code" => 200, "Message" => "Status Changed Successfully.", "error" => 0, "iTroubleTicketId" => $iTroubleTicketIds);
+    }
+    else {
+        $response_data = array("Code" => 500 , "Message" => "ERROR - in update status.", "error" => 1);
     }
 }
 else {

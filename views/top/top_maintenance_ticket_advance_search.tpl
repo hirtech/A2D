@@ -129,6 +129,22 @@
                 </div>
             </div>
         </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="inputEmail4">Network</label>
+                <select name="iSNetworkId" id="iSNetworkId" class="form-control col-md-12">
+                    <option value="">-- Select --</option> {section name="n" loop=$rs_ntwork} <option value="{$rs_ntwork[n].iNetworkId}">{$rs_ntwork[n].vName|gen_strip_slash}</option> {/section}
+                </select>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="inputEmail4">Carrier</label>
+                <select name="iSCarrierId" id="iSCarrierId" class="form-control col-md-12">
+                    <option value="">-- Select --</option> {section name="c" loop=$rs_carrier}
+                    <option value="{$rs_carrier[c].iCompanyId}">{$rs_carrier[c].vCompanyName|gen_strip_slash}</option>
+                {/section}
+                </select>
+            </div>
+        </div>
         <button type="button" id="AdvSearchSubmit" name="AdvSearchSubmit" class="btn btn-outline-warning fas fa-search"></button>
         <button type="button" class="btn btn-outline-danger fas fa-times" aria-label="Close" id="AdvSearchReset" name="AdvSearchReset"></button>
     </form>

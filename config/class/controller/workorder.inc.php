@@ -130,6 +130,15 @@ class WorkOrder {
 		}
 	}
 
+	function change_status($ids, $status){
+		global $sqlObj;
+		
+		$sql = "UPDATE workorder set \"iWOSId\" = '".$status."' WHERE workorder.\"iWOId\" IN (".$ids.")";
+		//echo  $sql;exit();
+		$rs = $sqlObj->Execute($sql);
+		return $rs;
+	}
+
 	function clear_variable(){
 		$this->join_field = array();
 		$this->join = array();

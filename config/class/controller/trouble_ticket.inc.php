@@ -177,6 +177,14 @@ class TroubleTicket {
 		}
 	}
 
+	function change_status($ids, $status){
+		global $sqlObj;
+		
+		$sql = "UPDATE trouble_ticket set \"iStatus\" = '".$status."' WHERE trouble_ticket.\"iTroubleTicketId\" IN (".$ids.")";
+		$rs = $sqlObj->Execute($sql);
+		return $rs;
+	}
+
 	function trouble_ticket_premise_recordset_list()
 	{
 		global $sqlObj;

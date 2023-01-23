@@ -12,9 +12,10 @@ var listPage = function(){
                 "serverSide": true,
                 "orderMulti" : false,
                 "ajaxSource": site_url+ajax_url,
-                "aaSorting": [[0,'desc']],
+                "aaSorting": [[1,'desc']],
                 'bAutoWidth': true,
                 "columns": [
+                    { "data": "checkbox", "sortable":false, "className": "text-center"},
                     { "data": "iWOId", "sortable":true, "className": "text-center"},
                     { "data": "vPremise", "sortable":true},
                     { "data": "vServiceDetails", "sortable":true},
@@ -46,6 +47,38 @@ var listPage = function(){
                 },
                 "buttons": [
                     'copy',  'print',
+                    {
+                        extend: 'collection',
+                        className: 'btn btn-dark',
+                        text: '<i class="far fa-edit"></i> Change Status',
+                        buttons: [
+                            { 
+                                text: 'Open',    
+                                action: function ( e, dt, node, config ) {
+                                    changeStatus(1);
+                                } 
+                            },
+                            { 
+                                text: 'Closed',    
+                                action: function ( e, dt, node, config ) {
+                                    changeStatus(2);
+                                } 
+                            },
+                            { 
+                                text: 'Suspended',    
+                                action: function ( e, dt, node, config ) {
+                                    changeStatus(3);
+                                } 
+                            },
+                            { 
+                                text: 'Planning',    
+                                action: function ( e, dt, node, config ) {
+                                    changeStatus(3);
+                                } 
+                            },
+                        ],
+                        fade: true
+                    }
                 ],
                 fnServerData: function(sSource, aoData, fnCallback,oSettings) {
                     oSettings.jqXHR = $.ajax({
@@ -127,6 +160,59 @@ $("#save_data").click(function(){
         $("#save_data").prop('disabled', false);
     }
 });
+
+
+function changeStatus(status){
+    if ($('#datatable-grid input:checked').length > 0){
+        var ids = [];
+        $.each($("input[class='list']:checked"), function(e)
+        {
+            ids.push($(this).val());            
+        });
+        swal({
+            title: "Are you sure you want to change the status for selected record(s) ?",
+            text: "",
+            type: "warning",
+            showCancelButton: true,
+            //confirmButtonColor: "#DD6B55",
+            confirmButtonClass: 'confirm btn btn-lg btn-danger',
+            cancelButtonClass : 'cancel btn btn-lg btn-default',
+            confirmButtonText: 'Yes!',
+            cancelButtonText: "No, cancel plx!",
+            closeOnConfirm: false,
+            closeOnCancel: true,
+            },
+            function(isConfirm) {
+                if (isConfirm) {
+                    $.ajax({
+                        type: "POST",
+                        url: site_url+"service_order/workorder_list",
+                        data: {
+                            "mode" : "change_status",
+                            "status" : status,
+                            "iWOIds" : ids.join(",")
+                        },
+                        success: function(data){
+                            swal.close();
+                            response =JSON.parse(data);
+                            if(response['error'] == "0"){
+                                toastr.success(response['msg']);
+                            }else{
+                                toastr.error(response['msg']);
+                            }
+                            gridtable.ajax.reload();
+                        }
+                    });
+                } else {
+                    swal.close();
+                }
+            }
+        );
+    }
+    else{
+        alert("Please select at list one record");
+    }
+}
 
 function delete_record(id){
     swal({

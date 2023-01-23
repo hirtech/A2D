@@ -169,28 +169,28 @@ if($request_type == "workorder_list"){
     }
 
     switch ($display_order) {
-        case "0":
+        case "1":
             $sortname = "workorder.\"iWOId\"";
             break;
-        case "1":
+        case "2":
             $sortname = "s.\"iPremiseId\"";
             break;
-        case "2":
+        case "3":
             $sortname = "workorder.\"iServiceOrderId\"";
             break;
-        case "3":
+        case "4":
             $sortname = "concat(u.\"vFirstName\", ' ', u.\"vLastName\")";
             break;
-        case "4":
+        case "5":
             $sortname = "workorder.\"vWOProject\"";
             break;
-        case "5":
+        case "6":
             $sortname = "wt.\"vType\"";
             break;
-        case "6":
+        case "7":
             $sortname = "concat(u1.\"vFirstName\", ' ', u1.\"vLastName\")";
             break;
-        case "7":
+        case "8":
             $sortname = "ws.\"vStatus\"";
             break;
         default:
@@ -329,6 +329,16 @@ if($request_type == "workorder_list"){
     }
     else{
         $response_data = array("Code" => 500 , "Message" => MSG_ADD_ERROR);
+    }
+}else if($request_type == "workorder_change_status"){
+    $status = $RES_PARA['status'];
+    $iWOIds = $RES_PARA['iWOIds'];
+    $rs_db = $WorkOrderObj->change_status($iWOIds, $status);
+    if($rs_db) {
+        $response_data = array("Code" => 200, "Message" => "Status Changed Successfully.", "error" => 0, "iTroubleTicketId" => $iWOIds);
+    }
+    else {
+        $response_data = array("Code" => 500 , "Message" => "ERROR - in update status.", "error" => 1);
     }
 }else if($request_type == "search_workorder"){
     $rs_arr  = array();

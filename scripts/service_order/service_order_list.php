@@ -123,6 +123,7 @@ if($mode == "List") {
             $vPremise = "<a href='".$premise_url."' target='_blank' class='text-primary'>".$rs_order[$i]['iPremiseId']." (".$rs_order[$i]['vPremiseName']."; ".$rs_order[$i]['vPremiseType'].")</a>";
 
             $entry[] = array(
+                "checkbox"              => '<input type="checkbox" class="list" value="'.$rs_order[$i]['iServiceOrderId'].'"/>',
                 "iServiceOrderId"       => $rs_order[$i]['iServiceOrderId'],
                 "vMasterMSA"            => $rs_order[$i]['vMasterMSA'],
                 "vServiceOrder"         => $rs_order[$i]['vServiceOrder'],
@@ -273,7 +274,48 @@ if($mode == "List") {
     echo json_encode($result);
     hc_exit();
     # -----------------------------------   
-}else if($mode== "Excel"){
+}else if($mode == "change_status"){
+    $result = array();
+    $arr_param = array();
+    $status_field = $_POST['status_field'];
+    $status = $_POST['status'];
+    $iServiceOrderIds = $_POST['iServiceOrderIds'];
+    
+    $arr_param['status_field']      = $status_field; 
+    $arr_param['status']      = $status; 
+    $arr_param['iServiceOrderIds']      = $iServiceOrderIds; 
+    $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
+    $API_URL = $site_api_url."service_order_change_status.json";
+    //echo $API_URL." ".json_encode($arr_param);exit();
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $API_URL);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_HEADER, FALSE);
+    curl_setopt($ch, CURLOPT_POST, TRUE);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($arr_param));
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+       "Content-Type: application/json",
+    ));
+
+    $rs = curl_exec($ch);
+    $res = json_decode($rs, true);
+    curl_close($ch);   
+    if($res['error'] == 0){
+        $result['msg'] = $res['Message'];
+        $result['error']= $res['error'] ;
+    }else{
+        $result['msg'] = $res['Message'];
+        $result['error']= $res['error'];
+    }
+    # -----------------------------------
+    # Return jSON data.
+    # -----------------------------------
+    echo json_encode($result);
+    hc_exit();
+    # -----------------------------------   
+} else if($mode== "Excel"){
     $arr_param = array();
     $vOptions = $_REQUEST['vOptions'];
     $Keyword = addslashes(trim($_REQUEST['Keyword']));

@@ -42,7 +42,8 @@ if($mode == "List"){
     $arr_param['vSPremiseName']     = trim($_POST['vSPremiseName']);
     $arr_param['vSAddressDD']       = $_POST['vSAddressDD'];
     $arr_param['vSAddress']         = trim($_POST['vSAddress']);
-   
+    $arr_param['iSNetworkId']       = $_POST['iSNetworkId'];
+    $arr_param['iSCarrierId']       = $_POST['iSCarrierId'];
 
     $arr_param['page_length']       = $page_length;
     $arr_param['start']             = $start;
@@ -117,6 +118,7 @@ if($mode == "List"){
             }
 
             $entry[] = array(
+                "checkbox"              => '<input type="checkbox" class="list" value="'.$rs_maintenance_ticket[$i]['iMaintenanceTicketId'].'"/>',
                 "iMaintenanceTicketId"  => $rs_maintenance_ticket[$i]['iMaintenanceTicketId'],
                 "vAssignedTo"           => $rs_maintenance_ticket[$i]['vAssignedTo'],
                 "vServiceOrder"         => $vServiceDetails,
@@ -276,6 +278,45 @@ if($mode == "List"){
     echo json_encode($result);
     hc_exit();
     # -----------------------------------   
+} else if($mode == "change_status"){
+    $result = array();
+    $arr_param = array();
+    $status = $_POST['status'];
+    $iMaintenanceTicketIds = $_POST['iMaintenanceTicketIds'];
+    
+    $arr_param['status']      = $status; 
+    $arr_param['iMaintenanceTicketIds']      = $iMaintenanceTicketIds; 
+    $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
+    $API_URL = $site_api_url."maintenance_ticket_change_status.json";
+    //echo $API_URL." ".json_encode($arr_param);exit();
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $API_URL);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_HEADER, FALSE);
+    curl_setopt($ch, CURLOPT_POST, TRUE);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($arr_param));
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+       "Content-Type: application/json",
+    ));
+
+    $rs = curl_exec($ch);
+    $res = json_decode($rs, true);
+    curl_close($ch);   
+    if($res['error'] == 0){
+        $result['msg'] = $res['Message'];
+        $result['error']= $res['error'] ;
+    }else{
+        $result['msg'] = $res['Message'];
+        $result['error']= $res['error'];
+    }
+    # -----------------------------------
+    # Return jSON data.
+    # -----------------------------------
+    echo json_encode($result);
+    hc_exit();
+    # -----------------------------------   
 }
 
 /*-------------------------- User -------------------------- */
@@ -319,11 +360,62 @@ curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($sorder_arr_param));
 curl_setopt($ch, CURLOPT_HTTPHEADER, array(
    "Content-Type: application/json",
 ));
-$response_network = curl_exec($ch);
+$response_so = curl_exec($ch);
 curl_close($ch); 
-$rs_so1 = json_decode($response_network, true); 
+$rs_so1 = json_decode($response_so, true); 
 $rs_so = $rs_so1['result'];
 $smarty->assign("rs_so", $rs_so);
+## --------------------------------
+
+## --------------------------------
+# Network Dropdown
+$network_arr_param = array();
+$network_arr_param = array(
+    "iStatus"        => 1,
+    "sessionId"     => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
+);
+$network_API_URL = $site_api_url."network_dropdown.json";
+//echo $network_API_URL." ".json_encode($network_arr_param);
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $network_API_URL);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_HEADER, FALSE);
+curl_setopt($ch, CURLOPT_POST, TRUE);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($network_arr_param));
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+   "Content-Type: application/json",
+));
+$response_network = curl_exec($ch);
+curl_close($ch); 
+$rs_network = json_decode($response_network, true); 
+$rs_ntwork = $rs_network['result'];
+$smarty->assign("rs_ntwork", $rs_ntwork);
+## --------------------------------
+## --------------------------------
+//Carrier (Company) Dropdown
+$carrier_param = array();
+$carrier_param['iStatus'] = '1';
+$carrier_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
+$carrierAPI_URL = $site_api_url."company_dropdown.json";
+//echo $carrierAPI_URL." ".json_encode($carrier_param);exit;
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $carrierAPI_URL);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_HEADER, FALSE);
+curl_setopt($ch, CURLOPT_POST, TRUE);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($carrier_param));
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+   "Content-Type: application/json",
+)); 
+$response = curl_exec($ch);
+curl_close($ch);  
+$res = json_decode($response, true);
+$rs_carrier = $res['result'];
+$smarty->assign("rs_carrier", $rs_carrier);
 ## --------------------------------
 
 $module_name = "Maintenance Ticket List";

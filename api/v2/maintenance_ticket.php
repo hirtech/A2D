@@ -21,6 +21,8 @@ if($request_type == "maintenance_ticket_list"){
         $vSPremiseName          = trim($RES_PARA['vSPremiseName']);
         $vSAddressDD            = $RES_PARA['vSAddressDD'];
         $vSAddress              = trim($RES_PARA['vSAddress']);
+        $iSNetworkId            = $RES_PARA['iSNetworkId'];
+        $iSCarrierId            = $RES_PARA['iSCarrierId'];
 
         $page_length            = isset($RES_PARA['page_length']) ? trim($RES_PARA['page_length']) : "10";
         $start                  = isset($RES_PARA['start']) ? trim($RES_PARA['start']) : "0";
@@ -47,6 +49,10 @@ if($request_type == "maintenance_ticket_list"){
 
     if ($iSServiceOrderId != "") {
         $where_arr[] = 'maintenance_ticket."iServiceOrderId"='.$iSServiceOrderId ;
+    }
+
+    if ($iSCarrierId != "") {
+        $where_arr[] = 'so."iCarrierID"='.$iSCarrierId ;
     }
 
     if ($iSSeverity != "") {
@@ -113,13 +119,19 @@ if($request_type == "maintenance_ticket_list"){
             $premise_where_arr[] = '(s."vAddress1" ILIKE \''.$vSAddress.'%\' OR s."vStreet" ILIKE \''.$vSAddress.'%\')';
         }
     }
+    if($iSNetworkId > 0) {
+        $premise_where_arr[] = "z.\"iNetworkId\"='".$iSNetworkId."'";
+    }
+
     if(!empty($premise_where_arr)) {
         $premise_join_fieds_arr = array();
         $premise_join_fieds_arr[] = 's."vName"';
         $premise_join_fieds_arr[] = 's."vAddress1"';
         $premise_join_fieds_arr[] = 's."vStreet"';
+        $premise_join_fieds_arr[] = 'z."iNetworkId"';
         $premise_join_arr = array();
         $premise_join_arr[] = 'LEFT JOIN premise_mas s on maintenance_ticket_premise."iPremiseId" = s."iPremiseId"';
+        $premise_join_arr[] = 'LEFT JOIN zone z on s."iZoneId" = z."iZoneId"';
         $MaintenanceTicketObj->join_field = $premise_join_fieds_arr;
         $MaintenanceTicketObj->join = $premise_join_arr;
         $MaintenanceTicketObj->where = $premise_where_arr;
@@ -142,25 +154,25 @@ if($request_type == "maintenance_ticket_list"){
     //echo "<pre>"; print_r($where_arr);exit;
 
     switch ($display_order) {
-        case "0":
+        case "1":
             $sortname = "maintenance_ticket.\"iMaintenanceTicketId\"";
             break;
-        case "1":
+        case "2":
             $sortname = "\"vAssignedTo\"";
             break;
-        case "2":
+        case "3":
             $sortname = "s.\"iServiceOrderId\"";
             break;
-        case "3":
+        case "4":
             $sortname = "maintenance_ticket.\"iSeverity\"";
             break;
-        case "4":
+        case "5":
             $sortname = "maintenance_ticket.\"iStatus\"";
             break;
-        case "5":
+        case "6":
             $sortname = "maintenance_ticket.\"dCompletionDate\"";
             break;
-        case "6":
+        case "7":
             $sortname = "maintenance_ticket.\"tDescription\"";
             break;
         default:
@@ -177,6 +189,7 @@ if($request_type == "maintenance_ticket_list"){
     $join_arr = array();
     $join_arr[] = 'LEFT JOIN user_mas u on u."iUserId" = maintenance_ticket."iAssignedToId"';
     $join_arr[] = 'LEFT JOIN service_order so on so."iServiceOrderId" = maintenance_ticket."iServiceOrderId"';
+    $join_arr[] = 'LEFT JOIN company_mas cm on cm."iCompanyId" = so."iCarrierID"';
     $MaintenanceTicketObj->join_field = $join_fieds_arr;
     $MaintenanceTicketObj->join = $join_arr;
     $MaintenanceTicketObj->where = $where_arr;
@@ -350,6 +363,16 @@ if($request_type == "maintenance_ticket_list"){
     }
     else {
         $response_data = array("Code" => 500 , "Message" => MSG_DELETE_ERROR);
+    }
+}else if($request_type == "maintenance_ticket_change_status"){
+    $status = $RES_PARA['status'];
+    $iMaintenanceTicketIds = $RES_PARA['iMaintenanceTicketIds'];
+    $rs_db = $MaintenanceTicketObj->change_status($iMaintenanceTicketIds, $status);
+    if($rs_db) {
+        $response_data = array("Code" => 200, "Message" => "Status Changed Successfully.", "error" => 0, "iMaintenanceTicketId" => $iMaintenanceTicketIds);
+    }
+    else {
+        $response_data = array("Code" => 500 , "Message" => "ERROR - in update status.", "error" => 1);
     }
 }
 else {

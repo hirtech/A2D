@@ -123,6 +123,7 @@ if($mode == "List") {
             
 
             $entry[] = array(
+                "checkbox"              => '<input type="checkbox" class="list" value="'.$rs_order[$i]['iWOId'].'"/>',
                 "iWOId"                 => $rs_order[$i]['iWOId'],
                 "vPremise"              => $vPremise,
                 "vServiceDetails"       => $vServiceDetails,
@@ -262,7 +263,47 @@ if($mode == "List") {
     echo json_encode($result);
     hc_exit();
     # -----------------------------------   
-}else if($mode== "Excel"){
+} else if($mode == "change_status"){
+    $result = array();
+    $arr_param = array();
+    $status = $_POST['status'];
+    $iWOIds = $_POST['iWOIds'];
+    
+    $arr_param['status']      = $status; 
+    $arr_param['iWOIds']      = $iWOIds; 
+    $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
+    $API_URL = $site_api_url."workorder_change_status.json";
+    //echo $API_URL." ".json_encode($arr_param);exit();
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $API_URL);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_HEADER, FALSE);
+    curl_setopt($ch, CURLOPT_POST, TRUE);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($arr_param));
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+       "Content-Type: application/json",
+    ));
+
+    $rs = curl_exec($ch);
+    $res = json_decode($rs, true);
+    curl_close($ch);   
+    if($res['error'] == 0){
+        $result['msg'] = $res['Message'];
+        $result['error']= $res['error'] ;
+    }else{
+        $result['msg'] = $res['Message'];
+        $result['error']= $res['error'];
+    }
+    # -----------------------------------
+    # Return jSON data.
+    # -----------------------------------
+    echo json_encode($result);
+    hc_exit();
+    # -----------------------------------   
+}
+else if($mode== "Excel"){
     $arr_param = array();
     $vOptions = $_REQUEST['vOptions'];
     $Keyword = addslashes(trim($_REQUEST['Keyword']));

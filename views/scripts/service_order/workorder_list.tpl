@@ -82,6 +82,7 @@
                 <table id="datatable-grid" class="display table dataTable table-striped table-bordered editable-table " width="100%">
                     <thead>
                         <tr>
+                            <th><input type="checkbox" id="chkall" onclick="checkall(this)"/></th>
                             <th>ID</th>
                             <th>Premise</th>
                             <th>Service Order</th>

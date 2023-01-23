@@ -149,6 +149,15 @@ class ServiceOrder {
 		return $rs_db;
 	}
 
+	function change_status($ids, $status, $status_field){
+		global $sqlObj;
+			
+		$sql = "UPDATE service_order set \"$status_field\" = '".$status."' WHERE service_order.\"iServiceOrderId\" IN (".$ids.")";
+		//echo $sql ;exit;
+		$rs = $sqlObj->Execute($sql);
+		return $rs;
+	}
+
 	function clear_variable(){
 		$this->join_field = array();
 		$this->join = array();

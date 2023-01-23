@@ -190,25 +190,25 @@ if($request_type == "service_order_list"){
     }
 
     switch ($display_order) {
-        case "0":
+        case "1":
             $sortname = "service_order.\"iServiceOrderId\"";
             break;
-        case "1":
+        case "2":
             $sortname = "service_order.\"vMasterMSA\"";
             break;
-        case "2":
+        case "3":
             $sortname = "service_order.\"vServiceOrder\"";
             break;
-        case "3":
+        case "4":
             $sortname = "cm.\"vCompanyName\"";
             break;
-        case "4":
+        case "5":
             $sortname = "service_order.\"vSalesRepName\"";
             break;
-        case "5":
+        case "6":
             $sortname = "s.\"vName\"";
             break;
-        case "6":
+        case "7":
             $sortname = "ct.\"vConnectionTypeName\"";
             break;
         default:
@@ -415,6 +415,17 @@ if($request_type == "service_order_list"){
     $code = 2000;
     $message = api_getMessage($req_ext, constant($code));
     $response_data = array("Code" => 200, "Message" => $message, "result" => $result);
+}else if($request_type == "service_order_change_status"){
+    $status_field = $RES_PARA['status_field'];
+    $status = $RES_PARA['status'];
+    $iServiceOrderIds = $RES_PARA['iServiceOrderIds'];
+    $rs_db = $ServiceOrderObj->change_status($iServiceOrderIds, $status, $status_field);
+    if($rs_db) {
+        $response_data = array("Code" => 200, "Message" => "Status Changed Successfully.", "error" => 0, "iServiceOrderId" => $iServiceOrderIds);
+    }
+    else {
+        $response_data = array("Code" => 500 , "Message" => "ERROR - in update status.", "error" => 1);
+    }
 }
 else {
 	$r = HTTPStatus(400);
