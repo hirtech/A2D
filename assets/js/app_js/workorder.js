@@ -73,7 +73,7 @@ var listPage = function(){
                             { 
                                 text: 'Planning',    
                                 action: function ( e, dt, node, config ) {
-                                    changeStatus(3);
+                                    changeStatus(4);
                                 } 
                             },
                         ],
