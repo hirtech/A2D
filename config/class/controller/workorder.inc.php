@@ -133,7 +133,7 @@ class WorkOrder {
 	function change_status($ids, $status){
 		global $sqlObj;
 		
-		$sql = "UPDATE workorder set \"iWOSId\" = '".$status."' WHERE workorder.\"iWOId\" IN (".$ids.")";
+		$sql = "UPDATE workorder set \"iWOSId\" = '".$status."', \"dModifiedDate\" = '".date_getSystemDateTime()."' WHERE workorder.\"iWOId\" IN (".$ids.")";
 		//echo  $sql;exit();
 		$rs = $sqlObj->Execute($sql);
 		return $rs;

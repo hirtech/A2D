@@ -152,7 +152,7 @@ class ServiceOrder {
 	function change_status($ids, $status, $status_field){
 		global $sqlObj;
 			
-		$sql = "UPDATE service_order set \"$status_field\" = '".$status."' WHERE service_order.\"iServiceOrderId\" IN (".$ids.")";
+		$sql = "UPDATE service_order set \"$status_field\" = '".$status."', \"dModifiedDate\" = '".date_getSystemDateTime()."' WHERE service_order.\"iServiceOrderId\" IN (".$ids.")";
 		//echo $sql ;exit;
 		$rs = $sqlObj->Execute($sql);
 		return $rs;

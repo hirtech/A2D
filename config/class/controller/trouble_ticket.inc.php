@@ -180,7 +180,7 @@ class TroubleTicket {
 	function change_status($ids, $status){
 		global $sqlObj;
 		
-		$sql = "UPDATE trouble_ticket set \"iStatus\" = '".$status."' WHERE trouble_ticket.\"iTroubleTicketId\" IN (".$ids.")";
+		$sql = "UPDATE trouble_ticket set \"iStatus\" = '".$status."', \"dModifiedDate\" = '".date_getSystemDateTime()."' WHERE trouble_ticket.\"iTroubleTicketId\" IN (".$ids.")";
 		$rs = $sqlObj->Execute($sql);
 		return $rs;
 	}

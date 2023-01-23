@@ -180,9 +180,9 @@ class MaintenanceTicket {
 	function change_status($ids, $status){
 		global $sqlObj;
 		
-		$sql_del = "UPDATE maintenance_ticket set \"iStatus\" = '".$status."' WHERE maintenance_ticket.\"iMaintenanceTicketId\" IN (".$ids.")";
-		$rs_del = $sqlObj->Execute($sql_del);
-		return $rs_del;
+		$sql = "UPDATE maintenance_ticket set \"iStatus\" = '".$status."', \"dModifiedDate\" = '".date_getSystemDateTime()."' WHERE maintenance_ticket.\"iMaintenanceTicketId\" IN (".$ids.")";
+		$rs = $sqlObj->Execute($sql);
+		return $rs;
 	}
 	
 	function maintenance_ticket_premise_recordset_list()
