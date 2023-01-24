@@ -111,14 +111,6 @@ $status_color = array(
 	'No' =>'danger',
 );
 
-$notification_class_arr = array(
-	"sr" => array('icon' => 'icon-grid' , "color" => 'text-success'),
-	"trap" => array('icon' => 'icon-grid' , "color" => 'text-warning'),
-	"treatment" => array('icon' => 'icon-grid' , "color" => 'text-primary' ),
-	"pool"  => array('icon' => 'icon-grid' , "color" => 'text-info' ),
-	"mosquitocount"  => array('icon' => 'icon-grid' , "color" => 'text-secondary' ),
-);
-
 $panel_default_customizer = array(
 	"template_color" => "#3e8ef7",
 	"template_layout" => "vertical",
@@ -158,4 +150,16 @@ $EVENT_CAMPAIGN_BY_ARR = array("1" => "Premise", "2" => "Fiber Zone", "3" => "Zi
 
 $site_logo = $site_url."assets/images/logo.png";
 $pdf_file_path = $class_path."tcpdf/";
+
+$SALES_ACCESS_GROUP_ID = 3;
+$TECHNICIAN_ACCESS_GROUP_ID = 4;
+$CARRIER_ACCESS_GROUP_ID = 5;
+
+$notification_class_arr = array(
+	"FiberInquiry" => array('icon' => 'fa fa-question-circle' , "color" => 'text-success'),
+	"Serviceorder" => array('icon' => 'fa fa-truck' , "color" => 'text-info'),
+	"Workorder" => array('icon' => 'fas fa-truck-loading' , "color" => 'text-danger'),
+	"TroubleTicket" => array('icon' => 'fa fa-list-alt' , "color" => 'text-primary'),
+	"MaintenanceTicket" => array('icon' => 'fas fa-clipboard-list' , "color" => 'text-secondary'),
+);
 ?>
