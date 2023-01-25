@@ -74,10 +74,21 @@ if($mode == "List"){
                $checkbox = '<input type="checkbox" class="list" value="'.$rs_data[$i]['iAGroupId'].'"/><input type="hidden" name="" value="'.$rs_data[$i]['iAGroupId'].'">';
            
             }
+
+            $vAccessType = '';
+            if($rs_data[$i]['iAccessType'] == 1){
+                $vAccessType = "Sales";
+            }else if($rs_data[$i]['iAccessType'] == 2){
+                $vAccessType = "Technician";
+            }else if($rs_data[$i]['iAccessType'] == 3){
+                $vAccessType = "Carrier";
+            }
+
             $entry[] = array(
                // "checkbox" => $checkbox,
                 "checkbox" =>$rs_data[$i]['iAGroupId'].'<input type="hidden" id="ag_id_'.$rs_data[$i]['iAGroupId'].'" value="'.$rs_data[$i]['iAGroupId'].'">',
                 "vAccessGroup" =>gen_strip_slash($rs_data[$i]['vAccessGroup']).'<input type="hidden" id="ag_name_'.$rs_data[$i]['iAGroupId'].'" value="'.$rs_data[$i]['vAccessGroup'].'">',
+                "iAccessType" =>gen_strip_slash($vAccessType).'<input type="hidden" id="ag_iAccessType_'.$rs_data[$i]['iAGroupId'].'" value="'.$rs_data[$i]['iAccessType'].'">',
                 "tDescription" =>gen_strip_slash($rs_data[$i]['tDescription']).'<input type="hidden" id="ag_tdesc_'.$rs_data[$i]['iAGroupId'].'" value="'.$rs_data[$i]['tDescription'].'">',
                 'vManage'=>'<a class="btn btn-outline-primary link-view" href="'.$site_url.'access_group/access_group_add&mode=Manage&iAGroupId='.$rs_data[$i]['iAGroupId'].'">Manage</a>',
                 'iStatus'=>'<span data-toggle="tooltip" data-placement="top" title="'.gen_status($rs_data[$i]['iStatus']).'" class="badge badge-pill badge-'.$status_color[ gen_status($rs_data[$i]['iStatus'])].'">&nbsp;</span><input type="hidden" id="ag_status_'.$rs_data[$i]['iAGroupId'].'" value="'.$rs_data[$i]['iStatus'].'">',
@@ -133,6 +144,7 @@ if($mode == "List"){
     if (isset($_POST) && count($_POST) > 0) {
         $arr_param = array(
             "vAccessGroup"  => trim($_POST['vAccessGroup']),
+            "iAccessType"   => trim($_POST['iAccessType']),
             "tDescription"  => trim($_POST['tDescription']),
             "iDefault"      => 0,            
             "iStatus"       => isset($_POST['iStatus'])?$_POST['iStatus']:"0",            
@@ -176,8 +188,9 @@ if($mode == "List"){
     $arr_param = array();
     if (isset($_POST) && count($_POST) > 0) {
         $arr_param = array(
-            "iAGroupId"  => trim($_POST['iAGroupId']),
+            "iAGroupId"     => trim($_POST['iAGroupId']),
             "vAccessGroup"  => trim($_POST['vAccessGroup']),
+            "iAccessType"   => trim($_POST['iAccessType']),
             "tDescription"  => trim($_POST['tDescription']),            
             "iDefault"      => 0,            
             "iStatus"       => isset($_POST['iStatus'])?$_POST['iStatus']:"0",            

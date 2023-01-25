@@ -38,6 +38,9 @@ if($request_type == "access_group_list"){
         case "1":
             $sortname = "access_group_mas.\"vAccessGroup\"";
             break;
+        case "2":
+            $sortname = "access_group_mas.\"iAccessType\"";
+            break;
         case "4":
             $sortname = "access_group_mas.\"iStatus\"";
             break;
@@ -67,6 +70,7 @@ if($request_type == "access_group_list"){
 			$data[] = array(
                 "iAGroupId" 		=> $rs_data[$i]['iAGroupId'],
                 "vAccessGroup" 		=> $rs_data[$i]['vAccessGroup'],
+                "iAccessType"       => $rs_data[$i]['iAccessType'],
                 "iStatus" 			=> $rs_data[$i]['iStatus'],
                 "iDefault" 			=> $rs_data[$i]['iDefault'],
                 "tDescription"      => $rs_data[$i]['tDescription'],
@@ -82,11 +86,13 @@ if($request_type == "access_group_list"){
 }else if($request_type == "access_group_add"){
 	$result = array();
 	$vAccessGroup 			= $RES_PARA['vAccessGroup'];
+    $iAccessType            = $RES_PARA['iAccessType'];
 	$tDescription 			= $RES_PARA['tDescription'];
     $iDefault               = $RES_PARA['iDefault'];
     $iStatus                = $RES_PARA['iStatus'];
    	$insert_array = array(
         "vAccessGroup" 		=> $vAccessGroup,
+        "iAccessType"       => $iAccessType,
         "tDescription" 	    => $tDescription,
         "iStatus" 			=> $iStatus
     );
@@ -107,12 +113,14 @@ if($request_type == "access_group_list"){
    	$result = array();
     $iAGroupId              = $RES_PARA['iAGroupId'];
     $vAccessGroup           = $RES_PARA['vAccessGroup'];
+    $iAccessType            = $RES_PARA['iAccessType'];
     $tDescription           = $RES_PARA['tDescription'];
     $iDefault               = $RES_PARA['iDefault'];
     $iStatus                = $RES_PARA['iStatus'];
     $update_arr = array(
         "iAGroupId"         => $iAGroupId,
         "vAccessGroup"      => $vAccessGroup,
+        "iAccessType"      => $iAccessType,
         "tDescription"      => $tDescription,
         "iStatus"           => $iStatus
     );

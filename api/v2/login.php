@@ -54,6 +54,7 @@ if ($request_type == "user_login")
         $where_arr[] = "user_mas.\"vUsername\"='" . $vUsername . "'";
 
         $join_fieds_arr[] = "access_group_mas.\"vAccessGroup\"";
+        $join_fieds_arr[] = "access_group_mas.\"iAccessType\"";
         $join_fieds_arr[] = "user_details.\"vCompanyName\"";
         $join_arr[] = "LEFT JOIN user_details ON user_mas.\"iUserId\" = user_details.\"iUserId\"";
         $join_arr[] = "LEFT JOIN access_group_mas ON user_mas.\"iAGroupId\" = access_group_mas.\"iAGroupId\"";
@@ -75,6 +76,7 @@ if ($request_type == "user_login")
                 $vCompanyName = $result[0]["vCompanyName"];
                 $vImage = $result[0]["vImage"];
                 $iAGroupId = $result[0]["iAGroupId"];
+                $iAccessType = $result[0]["iAccessType"];
                 $vAccessGroup = gen_strip_slash($result[0]["vAccessGroup"]);
                 $vName = gen_strip_slash($first_name) . " " . gen_strip_slash($last_name);
                 $vUsername = $result[0]["vUsername"];
@@ -159,6 +161,7 @@ if ($request_type == "user_login")
                     "iUserId" => $user_id,
                     "iAGroupId" => $iAGroupId,
                     "vAccessGroup" => $vAccessGroup,
+                    "iAccessType" => $iAccessType,
                     "vCompanyName" => $vCompanyName,
                     "vName" => $vName,
                     "vUsername" => $vUsername,

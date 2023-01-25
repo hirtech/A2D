@@ -32,13 +32,14 @@
             <div class="card-content h-100">
                 <div class="card-body h-100 p-0">
                     <div class="info-card h-100">
-                        <div class="holder-image text-center">
+                        <div id="dashboard_map" class="w-100 " style="height:490px"></div>
+                        <!-- <div class="holder-image text-center">
                             <img src="{$site_url}assets/images/modern-equipment-image.jpeg" alt="" class="img-fluid">
                         </div>
                         <div class="title px-4 text-black mb-3 ">
                             <h5 class="card-title mb-3 mt-2">The choice is all yours.</h5>
                             <p class="card-text">Connect with the world with the provider of your choice for all services or have different providers deliver à la carte.</p>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
@@ -223,57 +224,14 @@
 <script type="text/javascript" src="https://www.amcharts.com/lib/3/amcharts.js"></script>
 <script type="text/javascript" src="https://www.amcharts.com/lib/3/serial.js"></script>
 <script type="text/javascript" src="https://www.amcharts.com/lib/3/themes/dark.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key={$GOOGLE_GEOCODE_API_KEY}&libraries=geometry,drawing,places,visualization"></script>
+<script src="{$site_url}assets/js/mapjs/oms.min.js"></script>
+<script src="{$site_url}assets/js/app_js/dashboard.js"></script>
 <script type="text/javascript">
 var dashboard_amchart_arr = {$dashboard_amchart|json_encode};
-console.log(dashboard_amchart_arr);
-{literal}
-if(dashboard_amchart_arr.length > 0) {
-	$(".chartdiv_row").show();
-	AmCharts.makeChart("chartdiv", {
-		"type": "serial",
-		"categoryField": "vServiceType",
-		"startDuration": 1,
-		"theme": "dark",
-		"categoryAxis": {
-			"classNameField": "",
-			"gridPosition": "start",
-			"title": "Service Type"
-		},
-		"chartCursor": {
-			"enabled": true
-		},
-		"chartScrollbar": {
-			"enabled": true
-		},
-		"trendLines": [],
-		"graphs": [{
-				"fillAlphas": 1,
-				"id": "AmGraph-1",
-				"title": "graph 1",
-				"type": "column",
-				"valueField": "count"
-			},
-			{
-				"id": "AmGraph-2",
-				"title": "graph 2"
-			}
-		],
-		"guides": [],
-		"valueAxes": [{
-			"id": "ValueAxis-1",
-			"title": "Total Count"
-		}],
-		"allLabels": [],
-		"balloon": {},
-		"titles": [{
-			"id": "Title-1",
-			"size": 15,
-			"text": "Services Installed YTD"
-		}],
-		"dataProvider": dashboard_amchart_arr
-	});
-}else {
-	$(".chartdiv_row").hide();
-}
+let MAP_LONG = '{$MAP_LONGITUDE}';
+let MAP_LAT = '{$MAP_LATITUDE}';
+var markerSpiderfier;
+var infowindow;
+var serviceorder_arr = [];
 </script>
-{/literal}

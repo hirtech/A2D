@@ -227,8 +227,6 @@ if($request_type == "service_order_list"){
     $join_fieds_arr[] = 'n."vName" as "vNetwork"';
     $join_fieds_arr[] = 'ct."vConnectionTypeName"';
     $join_fieds_arr[] = 'st1."vServiceType" as "vServiceType1"';
-    $join_fieds_arr[] = 'st2."vServiceType" as "vServiceType2"';
-    $join_fieds_arr[] = 'st3."vServiceType" as "vServiceType3"';
     
     $join_arr = array();
     $join_arr[] = 'LEFT JOIN premise_mas s on service_order."iPremiseId" = s."iPremiseId"';
@@ -245,8 +243,6 @@ if($request_type == "service_order_list"){
     $join_arr[] = 'LEFT JOIN company_mas cm on service_order."iCarrierID" = cm."iCompanyId"';
     $join_arr[] = 'LEFT JOIN connection_type_mas ct on service_order."iConnectionTypeId" = ct."iConnectionTypeId"';
     $join_arr[] = 'LEFT JOIN service_type_mas st1 on service_order."iService1" = st1."iServiceTypeId"';
-    $join_arr[] = 'LEFT JOIN service_type_mas st2 on service_order."iService2" = st2."iServiceTypeId"';
-    $join_arr[] = 'LEFT JOIN service_type_mas st3 on service_order."iService3" = st3."iServiceTypeId"';
     $ServiceOrderObj->join_field = $join_fieds_arr;
     $ServiceOrderObj->join = $join_arr;
     $ServiceOrderObj->where = $where_arr;
@@ -286,8 +282,6 @@ if($request_type == "service_order_list"){
                 "iService2"             => $rs_sorder[$i]['iService2'],
                 "iService3"             => $rs_sorder[$i]['iService3'],
                 "vServiceType1"         => $rs_sorder[$i]['vServiceType1'],
-                "vServiceType2"         => $rs_sorder[$i]['vServiceType2'],
-                "vServiceType3"         => $rs_sorder[$i]['vServiceType3'],
                 "tComments"             => $rs_sorder[$i]['tComments'],
             );
         }

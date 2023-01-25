@@ -19,6 +19,7 @@ if ($_SESSION['sess_iUserId' . $admin_panel_session_suffix] != '') {
         $msg = rawurlencode(LOGOUT_SUCCESSFULLY);
         $_SESSION["sess_iUserId" . $admin_panel_session_suffix] = "";
         $_SESSION["sess_iAGroupId" . $admin_panel_session_suffix] = "";
+        $_SESSION["sess_iAccessType" . $admin_panel_session_suffix] = "";
         $_SESSION["sess_vAccessGroup" . $admin_panel_session_suffix] = "";
         $_SESSION["sess_vCompanyName" . $admin_panel_session_suffix] = "";
         $_SESSION["sess_vName" . $admin_panel_session_suffix] = "";

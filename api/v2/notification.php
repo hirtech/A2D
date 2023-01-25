@@ -1,27 +1,30 @@
 <?php 
 
-include_once($controller_path . "user.inc.php");
 include_once($controller_path . "fiber_inquiry.inc.php");
 include_once($controller_path . "workorder.inc.php");
 include_once($controller_path . "trouble_ticket.inc.php");
 include_once($controller_path . "maintenance_ticket.inc.php");
+include_once($controller_path . "service_order.inc.php");
 
 $FiberInquiryObj = new FiberInquiry();
 $WorkOrderObj = new WorkOrder();
 $TroubleTicketObj = new TroubleTicket();
 $MaintenanceTicketObj = new MaintenanceTicket();
+$ServiceOrderObj = new ServiceOrder();
 
 if($request_type == "notification"){
 	$notification_arr = array();
 	
 	$userid = $RES_PARA['userId'];
 	$iAGroupId = $RES_PARA['iAGroupId'];
+	$iAccessType = $RES_PARA['iAccessType'];
 
 	$today = date("Y-m-d");
 	$LAST_15_DAYS =  date('Y-m-d', strtotime('-15 days', strtotime($today)));
 	//echo $LAST_15_DAYS;exit;
-
-	if($SALES_ACCESS_GROUP_ID == $iAGroupId) {
+	//echo $SALES_ACCESS_TYPE_ID." = ".$iAccessType;exit;
+	if($SALES_ACCESS_TYPE_ID == $iAccessType) {
+		// ************ Fiber Inquiry ************ //
 	    $FiberInquiryObj->clear_variable();
 	    $where_arr = array();
         $join_fieds_arr = array();
@@ -33,6 +36,7 @@ if($request_type == "notification"){
 
         $where_arr[] = "fiberinquiry_details.\"dAddedDate\" >= '".$LAST_15_DAYS."'"; 
         $where_arr[] = "fiberinquiry_details.\"iLoginUserId\" = '".$userid."'"; 
+        $where_arr[] = "fiberinquiry_details.\"iStatus\" != 4"; //Completed
         $FiberInquiryObj->join_field = $join_fieds_arr;
         $FiberInquiryObj->join = $join_arr;
         $FiberInquiryObj->where = $where_arr;
@@ -57,8 +61,43 @@ if($request_type == "notification"){
 				$notification_arr[] = array('type' => 'FiberInquiry' ,'iFiberInquiryId' => $rs_fInquiry[$i]['iFiberInquiryId'], 'dDate' => $rs_fInquiry[$i]['dAddedDate'], 'title' => "Fiber Inquiry #".$rs_fInquiry[$i]['iFiberInquiryId'].": ".date_display_report_date($rs_fInquiry[$i]['dAddedDate'])." | ".$rs_fInquiry[$i]['vContactName']." | ". $vFStatus);
 			}
 		}
-	} else if($TECHNICIAN_ACCESS_GROUP_ID == $iAGroupId) {
+		// ************ Fiber Inquiry ************ //
 
+		// ************ Service Order ************ //
+		$ServiceOrderObj->clear_variable();
+	    $where_arr = array();
+        $join_fieds_arr = array();
+        $join_arr = array();
+
+        $join_fieds_arr = array();
+	    $join_fieds_arr[] = 'cm."vCompanyName"';
+	    $join_fieds_arr[] = 'ct."vConnectionTypeName"';
+	    $join_fieds_arr[] = 'st."vServiceType" as "vServiceType"';
+	    
+	    $join_arr[] = 'LEFT JOIN company_mas cm on service_order."iCarrierID" = cm."iCompanyId"';
+	    $join_arr[] = 'LEFT JOIN connection_type_mas ct on service_order."iConnectionTypeId" = ct."iConnectionTypeId"';
+	    $join_arr[] = 'LEFT JOIN service_type_mas st on service_order."iService1" = st."iServiceTypeId"';
+	   	
+        $where_arr[] = "service_order.\"iUserCreatedBy\" = '".$userid."'"; 
+        $where_arr[] = "service_order.\"iSOStatus\" = '1'"; 
+
+	    $ServiceOrderObj->join_field = $join_fieds_arr;
+	    $ServiceOrderObj->join = $join_arr;
+	    $ServiceOrderObj->where = $where_arr;
+	    $ServiceOrderObj->param['order_by'] = "service_order.\"iServiceOrderId\"";
+	    $ServiceOrderObj->setClause();
+	    $ServiceOrderObj->debug_query = false;
+	    $rs_sorder = $ServiceOrderObj->recordset_list();
+		//echo "<pre>";print_r($rs_sorder);exit;
+		$si = count($rs_sorder);
+		if($si >0){
+			for($i=0; $i<$si; $i++){
+				$notification_arr[] = array('type' => 'Serviceorder' ,'iServiceOrderId' => $rs_sorder[$i]['iServiceOrderId'], 'dDate' => $rs_sorder[$i]['dAddedDate'], 'title' => "SO #".$rs_sorder[$i]['iServiceOrderId'].": ".date_display_report_date($rs_sorder[$i]['dAddedDate'])." | ".$rs_sorder[$i]['vServiceOrder']." | ".$rs_sorder[$i]['vCompanyName']." | ".$rs_sorder[$i]['vConnectionTypeName']." | ".$rs_sorder[$i]['vServiceType']);
+			}
+		}
+		// ************ Service Order ************ //
+
+	} else if($TECHNICIAN_ACCESS_TYPE_ID == $iAccessType) {
 		// ************ Workorder ************ //
 		$WorkOrderObj->clear_variable();
     	$where_arr = array();
@@ -203,6 +242,40 @@ if($request_type == "notification"){
 	    	}
 	    }
 	    // ************ Maintenance Ticket ************ //
+	} else if($CARRIER_ACCESS_TYPE_ID == $iAccessType) {
+		// ************ Service Order ************ //
+		$ServiceOrderObj->clear_variable();
+	    $where_arr = array();
+        $join_fieds_arr = array();
+        $join_arr = array();
+
+        $join_fieds_arr = array();
+	    $join_fieds_arr[] = 'cm."vCompanyName"';
+	    $join_fieds_arr[] = 'ct."vConnectionTypeName"';
+	    $join_fieds_arr[] = 'st."vServiceType" as "vServiceType"';
+	    
+	    $join_arr[] = 'LEFT JOIN company_mas cm on service_order."iCarrierID" = cm."iCompanyId"';
+	    $join_arr[] = 'LEFT JOIN connection_type_mas ct on service_order."iConnectionTypeId" = ct."iConnectionTypeId"';
+	    $join_arr[] = 'LEFT JOIN service_type_mas st on service_order."iService1" = st."iServiceTypeId"';
+	   	
+        $where_arr[] = "service_order.\"iUserCreatedBy\" = '".$userid."'"; 
+        $where_arr[] = "service_order.\"iSOStatus\" = '1'"; 
+
+	    $ServiceOrderObj->join_field = $join_fieds_arr;
+	    $ServiceOrderObj->join = $join_arr;
+	    $ServiceOrderObj->where = $where_arr;
+	    $ServiceOrderObj->param['order_by'] = "service_order.\"iServiceOrderId\"";
+	    $ServiceOrderObj->setClause();
+	    $ServiceOrderObj->debug_query = false;
+	    $rs_sorder = $ServiceOrderObj->recordset_list();
+		//echo "<pre>";print_r($rs_sorder);exit;
+		$si = count($rs_sorder);
+		if($si >0){
+			for($i=0; $i<$si; $i++){
+				$notification_arr[] = array('type' => 'Serviceorder' ,'iServiceOrderId' => $rs_sorder[$i]['iServiceOrderId'], 'dDate' => $rs_sorder[$i]['dAddedDate'], 'title' => "SO #".$rs_sorder[$i]['iServiceOrderId'].": ".date_display_report_date($rs_sorder[$i]['dAddedDate'])." | ".$rs_sorder[$i]['vServiceOrder']." | ".$rs_sorder[$i]['vCompanyName']." | ".$rs_sorder[$i]['vConnectionTypeName']." | ".$rs_sorder[$i]['vServiceType']);
+			}
+		}
+		// ************ Service Order ************ //
 	}
 
 	foreach ($notification_arr as $key => $part) {

@@ -15,8 +15,9 @@ var listPage = function(){
                 "aaSorting": [[0,'desc']],
                 'bAutoWidth': true,
                 "columns": [
-                    { "data": "checkbox", "sortable":true, "className": "text-center", "width" : "200px"},
-                    { "data": "vAccessGroup"},
+                    { "data": "checkbox", "sortable":true, "className": "text-center"},
+                    { "data": "vAccessGroup", "sortable":true},
+                    { "data": "iAccessType", "sortable":true},
                     { "data": "tDescription", "sortable":false},
                     { "data": "vManage", "sortable":false, "className": "text-center"},
                     { "data": "iStatus", "className": "text-center"},
@@ -86,6 +87,7 @@ function addEditData(id,mode){
         $("#modal_mode").val('Update');
         $("#iAGroupId").val($("#ag_id_"+id).val());
         $("#vAccessGroup").val($("#ag_name_"+id).val());
+        $("#iAccessType").val($("#ag_iAccessType_"+id).val());
         $("#tDescription").val($("#ag_tdesc_"+id).val());
         var status = $("#ag_status_"+id).val()
         if(status == 1){
@@ -101,6 +103,7 @@ function addEditData(id,mode){
         $("#modal_mode").val('Add');
         $("#iAGroupId").val('');
         $("#vAccessGroup").val('');
+        $("#iAccessType").val('');
         $("#tDescription").val('');
         $("#iStatus").prop('checked',true).change();
 

@@ -32,12 +32,13 @@
 				<table id="datatable-grid" class="display table dataTable table-striped table-bordered editable-table" width="100%">
 					<thead>
 						<tr>
-							<th width="10%">ID</th>
-							<th width="20%">Access Group</th>
-							<th width="20%">Description</th>
-							<th width="20%">Access Right</th>
-							<th width="20%">Status</th>
-							<th width="10%">Action</th> 
+							<th>ID</th>
+							<th>Access Group</th>
+							<th>Access Type</th>
+							<th>Description</th>
+							<th>Access Right</th>
+							<th>Status</th>
+							<th>Action</th> 
 						</tr>
 					</thead>
 					<tbody>                            
@@ -63,6 +64,18 @@
                             			<div class="col-sm-8">
 	                            			<input type="text" name="vAccessGroup" id="vAccessGroup" placeholder="Access Group Name" class="form-control" value=""  required>
 	                            			<div class="invalid-feedback">Please enter acess group.</div>
+	                            		</div>
+                            		</div> 
+                            		<div class="form-group row">
+                            			<label class="col-sm-4 col-form-label" for="vAccessGroup">Access Type<span class="text-danger"> *</span></label>
+                            			<div class="col-sm-8">
+	                            			<select name="iAccessType" id="iAccessType" class="form-control" required>
+	                                            <option value="">Select</option>
+	                                            <option value="1">Sales</option>
+	                                            <option value="2">Technician</option>
+	                                            <option value="3">Carrier</option>
+	                                        </select>
+	                            			<div class="invalid-feedback">Please enter acess type.</div>
 	                            		</div>
                             		</div> 
                             		<div class="form-group row">

@@ -114,7 +114,7 @@ class AccessGroup {
 	function add_records(){
 		global $sqlObj;
 		if($this->insert_arr){
-			$sql = "INSERT INTO access_group_mas(\"vAccessGroup\", \"iStatus\", \"tDescription\", \"iDefault\")VALUES (".gen_allow_null_char($this->insert_arr['vAccessGroup']).", ".gen_allow_null_int($this->insert_arr['iStatus']).", ".gen_allow_null_char($this->insert_arr['tDescription']).", ".gen_allow_null_int($this->insert_arr['iDefault']).")";
+			$sql = "INSERT INTO access_group_mas(\"vAccessGroup\", \"iAccessType\", \"iStatus\", \"tDescription\", \"iDefault\")VALUES (".gen_allow_null_char($this->insert_arr['vAccessGroup']).", ".gen_allow_null_char($this->insert_arr['iAccessType']).", ".gen_allow_null_int($this->insert_arr['iStatus']).", ".gen_allow_null_char($this->insert_arr['tDescription']).", ".gen_allow_null_int($this->insert_arr['iDefault']).")";
 			$sqlObj->Execute($sql);		
 			$rs_db = $sqlObj-> Insert_ID();
 			/*-------------- Log Entry -------------*/
@@ -129,7 +129,7 @@ class AccessGroup {
 	function update_records(){
 		global $sqlObj;
 		if($this->update_arr){
-			$rs_db = "UPDATE access_group_mas SET \"vAccessGroup\"=".gen_allow_null_char($this->update_arr['vAccessGroup']).", \"tDescription\"=".gen_allow_null_char($this->update_arr['tDescription']).",\"iStatus\"=".gen_allow_null_int($this->update_arr['iStatus'])."  WHERE \"iAGroupId\" = ".$this->update_arr['iAGroupId'];
+			$rs_db = "UPDATE access_group_mas SET \"vAccessGroup\"=".gen_allow_null_char($this->update_arr['vAccessGroup']).", \"iAccessType\"=".gen_allow_null_int($this->update_arr['iAccessType']).",\"tDescription\"=".gen_allow_null_char($this->update_arr['tDescription']).",\"iStatus\"=".gen_allow_null_int($this->update_arr['iStatus'])."  WHERE \"iAGroupId\" = ".$this->update_arr['iAGroupId'];
 			$sqlObj->Execute($rs_db);
 			$rs_up = $sqlObj->Affected_Rows();
 			/*-------------- Log Entry -------------*/
