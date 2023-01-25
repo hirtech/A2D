@@ -1648,6 +1648,15 @@ switch($path) {
 			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
 		}
 		break;
+	case "dashboard_accesgroup_map." . $req_ext:
+		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
+			$request_type = "dashboard_accesgroup_map";
+			$api_file_name = "dashboard.php";
+			include_once($site_api_path . "api_authentication.php");
+		}else {
+			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
+		}
+		break;
 	case "get_cluster_chart_default_Xaxes." . $req_ext:
 		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
 			$request_type = "get_cluster_chart_default_Xaxes";

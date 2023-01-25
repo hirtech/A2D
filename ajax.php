@@ -5,12 +5,14 @@ include_once("server.php");
 $mode = $_REQUEST['mode'];
 $userid =  $_SESSION["sess_iUserId".$admin_panel_session_suffix];
 $iAGroupId =  $_SESSION["sess_iAGroupId".$admin_panel_session_suffix];
+$iAccessType =  $_SESSION["sess_iAccessType".$admin_panel_session_suffix];
 
 if($mode == "get_top_notification"){
     //get notification
     $arr_param = array();
     $arr_param['userId'] = $userid;
     $arr_param['iAGroupId'] = $iAGroupId;
+    $arr_param['iAccessType'] = $iAccessType;
     $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
     $API_URL = $site_api_url."notification.json";
     //echo $API_URL." ".json_encode($arr_param);exit;
@@ -48,6 +50,11 @@ if($mode == "get_top_notification"){
                 $color = isset($notification_class_arr[$class_type]['color'])?$notification_class_arr[$class_type]['color']:$notification_class_arr["Workorder"]['color'];
 
                 $link = $site_url."service_order/workorder_add&mode=Update&iWOId=".$v['iWOId'];
+            }else if($class_type == 'serviceorder'){
+                $icon = isset($notification_class_arr["'".$class_type."'"]['icon'])?$notification_class_arr["'".$class_type."'"]['icon']:$notification_class_arr["Serviceorder"]['icon'];
+                $color = isset($notification_class_arr[$class_type]['color'])?$notification_class_arr[$class_type]['color']:$notification_class_arr["Serviceorder"]['color'];
+
+                $link = $site_url."service_order/edit&mode=Update&iServiceOrderId=".$v['iServiceOrderId'];
             }else if($class_type == 'troubleticket'){
                 $icon = isset($notification_class_arr["'".$class_type."'"]['icon'])?$notification_class_arr["'".$class_type."'"]['icon']:$notification_class_arr["TroubleTicket"]['icon'];
                 $color = isset($notification_class_arr[$class_type]['color'])?$notification_class_arr[$class_type]['color']:$notification_class_arr["TroubleTicket"]['color'];
@@ -62,7 +69,7 @@ if($mode == "get_top_notification"){
 
             $rs_notification[] = "<a class='dropdown-item px-2 py-2 border border-top-0 border-left-0 border-right-0' href='".$link."'>
                     <div class='media'>
-                    <i class='d-flex mr-3 ".$icon." ".$color."'></i>
+                    <i class='mt-1 d-flex mr-3 ".$icon." ".$color."'></i>
                         <div class='media-body'>
                             <h6 class='mb-0 ".$color."'>".$v['title']."</h6>
                         </div>
