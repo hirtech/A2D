@@ -40,8 +40,7 @@ RewriteRule ^home/login index.php?module=$0&page=m-login
 RewriteRule ^home/logout index.php?module=$0&page=m-logout
 
 #Dashbord
-RewriteRule ^dashboard/dashboard1 index.php?module=$0&page=m-dashboard1
-RewriteRule ^dashboard/dashboard? index.php?module=$0&page=m-dashboard&%{QUERY_STRING}
+RewriteRule ^dashboard/dashboard&(.*)$ index.php?module=$0&page=m-dashboard&%{QUERY_STRING}
 RewriteRule ^dashboard/dashboard index.php?module=$0&page=m-dashboard
 
 #Edit Profile

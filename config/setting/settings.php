@@ -151,9 +151,9 @@ $EVENT_CAMPAIGN_BY_ARR = array("1" => "Premise", "2" => "Fiber Zone", "3" => "Zi
 $site_logo = $site_url."assets/images/logo.png";
 $pdf_file_path = $class_path."tcpdf/";
 
-$SALES_ACCESS_GROUP_ID = 3;
-$TECHNICIAN_ACCESS_GROUP_ID = 4;
-$CARRIER_ACCESS_GROUP_ID = 5;
+$SALES_ACCESS_TYPE_ID = 1;
+$TECHNICIAN_ACCESS_TYPE_ID = 2;
+$CARRIER_ACCESS_TYPE_ID = 3;
 
 $notification_class_arr = array(
 	"FiberInquiry" => array('icon' => 'fa fa-question-circle' , "color" => 'text-success'),
