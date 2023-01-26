@@ -32,7 +32,7 @@
             <div class="card-content h-100">
                 <div class="card-body h-100 p-0">
                     <div class="info-card h-100">
-                        <div id="dashboard_map" class="w-100 " style="height:490px"></div>
+                        <div id="dashboard_map" class="w-100 " style="height:534px"></div>
                         <!-- <div class="holder-image text-center">
                             <img src="{$site_url}assets/images/modern-equipment-image.jpeg" alt="" class="img-fluid">
                         </div>
@@ -234,4 +234,8 @@ let MAP_LAT = '{$MAP_LATITUDE}';
 var markerSpiderfier;
 var infowindow;
 var serviceorder_arr = [];
+var fiberInquiry_arr = [];
+var workorder_arr = [];
+var trouble_ticket_arr = [];
+var maintenance_ticket_arr = [];
 </script>

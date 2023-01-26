@@ -442,9 +442,25 @@ if ($request_type == "dashboard_glance") {
         $join_fieds_arr = array();
         $join_arr = array();
 
-        $join_fieds_arr[] = "CONCAT(contact_mas.\"vFirstName\", ' ', contact_mas.\"vLastName\") AS \"vContactName\"";;
+        $join_fieds_arr[] = "CONCAT(contact_mas.\"vFirstName\", ' ', contact_mas.\"vLastName\") AS \"vContactName\"";
+        $join_fieds_arr[] = 'c."vCounty"';
+        $join_fieds_arr[] = 'sm."vState"';
+        $join_fieds_arr[] = 'cm."vCity"';
+        $join_fieds_arr[] = 'z."vZoneName"';
+        $join_fieds_arr[] = 'n."vName" as "vNetwork"';
+        $join_fieds_arr[] = 'engagement_mas."vEngagement"';
+        $join_fieds_arr[] = 'sst."vSubTypeName" as "vPremiseSubType"';
+        $join_fieds_arr[] = 's."vName" as "vPremiseName"';
 
         $join_arr[] = 'LEFT JOIN contact_mas on fiberinquiry_details."iCId" = contact_mas."iCId"';
+        $join_arr[] = 'LEFT JOIN county_mas c on fiberinquiry_details."iCountyId" = c."iCountyId"';
+        $join_arr[] = 'LEFT JOIN state_mas sm on fiberinquiry_details."iStateId" = sm."iStateId"';
+        $join_arr[] = 'LEFT JOIN city_mas cm on fiberinquiry_details."iCityId" = cm."iCityId"';
+        $join_arr[] = 'LEFT JOIN zone z on fiberinquiry_details."iZoneId" = z."iZoneId"';
+        $join_arr[] = 'LEFT JOIN network n on z."iNetworkId" = n."iNetworkId"';
+        $join_arr[] = 'LEFT JOIN engagement_mas on engagement_mas."iEngagementId" = fiberinquiry_details."iEngagementId"';
+        $join_arr[] = 'LEFT JOIN site_sub_type_mas sst on sst."iSSTypeId" = "fiberinquiry_details"."iPremiseSubTypeId"';
+        $join_arr[] = 'LEFT JOIN premise_mas s on s."iPremiseId" = "fiberinquiry_details"."iMatchingPremiseId"';
 
         $where_arr[] = "fiberinquiry_details.\"dAddedDate\" >= '".$LAST_15_DAYS."'"; 
         $where_arr[] = "fiberinquiry_details.\"iLoginUserId\" = '".$userid."'"; 
@@ -470,8 +486,12 @@ if ($request_type == "dashboard_glance") {
                 }else if($rs_fInquiry[$i]['iStatus'] == 4){
                     $vFStatus = 'Complete';
                 }
-                $notification_arr[] = array('type' => 'FiberInquiry' ,'iFiberInquiryId' => $rs_fInquiry[$i]['iFiberInquiryId'], 'dDate' => $rs_fInquiry[$i]['dAddedDate'], 'title' => "Fiber Inquiry #".$rs_fInquiry[$i]['iFiberInquiryId'].": ".date_display_report_date($rs_fInquiry[$i]['dAddedDate'])." | ".$rs_fInquiry[$i]['vContactName']." | ". $vFStatus);
+                $vIcon = $site_url."images/sr_green.png";
+                $rs_fInquiry[$i]['vAddress'] = $rs_fInquiry[$i]['vAddress1'].' '.$rs_fInquiry[$i]['vStreet'].' '.$rs_fInquiry[$i]['vCity'].' '.$rs_fInquiry[$i]['vState'];
+                $rs_fInquiry[$i]['vFStatus'] = $vFStatus;
+                $rs_fInquiry[$i]['vIcon'] = $vIcon;
             }
+            $site_arr['FiberInquiry'][] = $rs_fInquiry;
         }
         // ************ Fiber Inquiry ************ //
 
@@ -481,14 +501,31 @@ if ($request_type == "dashboard_glance") {
         $join_fieds_arr = array();
         $join_arr = array();
 
-        $join_fieds_arr = array();
+        $join_fieds_arr[] = 's."vName" as "vPremiseName"';
+        $join_fieds_arr[] = 's."vAddress1"';
+        $join_fieds_arr[] = 's."vLatitude"';
+        $join_fieds_arr[] = 's."vLongitude"';
+        $join_fieds_arr[] = 'st."vTypeName" as "vPremiseType"';
         $join_fieds_arr[] = 'cm."vCompanyName"';
+        $join_fieds_arr[] = 'z."vZoneName"';
+        $join_fieds_arr[] = 'n."vName" as "vNetwork"';
         $join_fieds_arr[] = 'ct."vConnectionTypeName"';
-        $join_fieds_arr[] = 'st."vServiceType" as "vServiceType"';
+        $join_fieds_arr[] = 'st1."vServiceType" as "vServiceType1"';
+        $join_fieds_arr[] = 'c."vCounty"';
+        $join_fieds_arr[] = 'sm."vState"';
+        $join_fieds_arr[] = 'cm1."vCity"';
         
+        $join_arr[] = 'LEFT JOIN premise_mas s on service_order."iPremiseId" = s."iPremiseId"';
+        $join_arr[] = 'LEFT JOIN county_mas c on s."iCountyId" = c."iCountyId"';
+        $join_arr[] = 'LEFT JOIN state_mas sm on s."iStateId" = sm."iStateId"';
+        $join_arr[] = 'LEFT JOIN city_mas cm1 on s."iCityId" = cm1."iCityId"';
+        $join_arr[] = 'LEFT JOIN zipcode_mas on s."iZipcode" = zipcode_mas."iZipcode"';
+        $join_arr[] = 'LEFT JOIN zone z on s."iZoneId" = z."iZoneId"';
+        $join_arr[] = 'LEFT JOIN network n on z."iNetworkId" = n."iNetworkId"';
+        $join_arr[] = 'LEFT JOIN site_type_mas st on s."iSTypeId" = st."iSTypeId"';
         $join_arr[] = 'LEFT JOIN company_mas cm on service_order."iCarrierID" = cm."iCompanyId"';
         $join_arr[] = 'LEFT JOIN connection_type_mas ct on service_order."iConnectionTypeId" = ct."iConnectionTypeId"';
-        $join_arr[] = 'LEFT JOIN service_type_mas st on service_order."iService1" = st."iServiceTypeId"';
+        $join_arr[] = 'LEFT JOIN service_type_mas st1 on service_order."iService1" = st1."iServiceTypeId"';
         
         $where_arr[] = "service_order.\"iUserCreatedBy\" = '".$userid."'"; 
         $where_arr[] = "service_order.\"iSOStatus\" = '1'"; 
@@ -500,15 +537,17 @@ if ($request_type == "dashboard_glance") {
         $ServiceOrderObj->setClause();
         $ServiceOrderObj->debug_query = false;
         $rs_sorder = $ServiceOrderObj->recordset_list();
-        //echo "<pre>";print_r($rs_sorder);exit;
         $si = count($rs_sorder);
         if($si >0){
             for($i=0; $i<$si; $i++){
-                $notification_arr[] = array('type' => 'Serviceorder' ,'iServiceOrderId' => $rs_sorder[$i]['iServiceOrderId'], 'dDate' => $rs_sorder[$i]['dAddedDate'], 'title' => "SO #".$rs_sorder[$i]['iServiceOrderId'].": ".date_display_report_date($rs_sorder[$i]['dAddedDate'])." | ".$rs_sorder[$i]['vServiceOrder']." | ".$rs_sorder[$i]['vCompanyName']." | ".$rs_sorder[$i]['vConnectionTypeName']." | ".$rs_sorder[$i]['vServiceType']);
+                $vIcon = $site_url."images/wrench-orange.png";
+                $rs_sorder[$i]['vAddress'] = $rs_sorder[$i]['vAddress1'].' '.$rs_sorder[$i]['vStreet'].' '.$rs_sorder[$i]['vCity'].' '.$rs_sorder[$i]['vState'];
+                $rs_sorder[$i]['vSOStatus'] = "Created";
+                $rs_sorder[$i]['vIcon'] = $vIcon;
             }
+            $site_arr['Serviceorder'][] = $rs_sorder;
         }
         // ************ Service Order ************ //
-
     } else if($TECHNICIAN_ACCESS_TYPE_ID == $iAccessType) {
         // ************ Workorder ************ //
         $WorkOrderObj->clear_variable();
@@ -516,9 +555,32 @@ if ($request_type == "dashboard_glance") {
         $join_fieds_arr = array();
         $join_arr = array();
 
+        $join_fieds_arr[] = 's."vName" as "vPremiseName"';
+        $join_fieds_arr[] = 's."vAddress1"';
+        $join_fieds_arr[] = 's."vStreet"';
+        $join_fieds_arr[] = 's."vLatitude"';
+        $join_fieds_arr[] = 's."vLongitude"';
+        $join_fieds_arr[] = 'st."vTypeName" as "vPremiseType"';
+        $join_fieds_arr[] = 'z."vZoneName"';
+        $join_fieds_arr[] = 'n."vName" as "vNetwork"';
+        $join_fieds_arr[] = 'so."vMasterMSA"';
+        $join_fieds_arr[] = 'so."vServiceOrder"';
         $join_fieds_arr[] = 'ws."vStatus"';
         $join_fieds_arr[] = 'wt."vType"';
-        
+        $join_fieds_arr[] = 'c."vCity"';
+        $join_fieds_arr[] = 'sm."vState"';
+        $join_fieds_arr[] = "concat(u.\"vFirstName\", ' ', u.\"vLastName\") as \"vRequestor\"";
+        $join_fieds_arr[] = "concat(u1.\"vFirstName\", ' ', u1.\"vLastName\") as \"vAssignedTo\"";
+        $join_arr[] = 'LEFT JOIN premise_mas s on workorder."iPremiseId" = s."iPremiseId"';
+        $join_arr[] = 'LEFT JOIN site_type_mas st on s."iSTypeId" = st."iSTypeId"';
+        $join_arr[] = 'LEFT JOIN zipcode_mas on s."iZipcode" = zipcode_mas."iZipcode"';
+        $join_arr[] = 'LEFT JOIN zone z on s."iZoneId" = z."iZoneId"';
+        $join_arr[] = 'LEFT JOIN network n on z."iNetworkId" = n."iNetworkId"';
+        $join_arr[] = 'LEFT JOIN city_mas c on s."iCityId" = c."iCityId"';
+        $join_arr[] = 'LEFT JOIN state_mas sm on s."iStateId" = sm."iStateId"';
+        $join_arr[] = 'LEFT JOIN service_order so on workorder."iServiceOrderId" = so."iServiceOrderId"';
+        $join_arr[] = 'LEFT JOIN user_mas u on workorder."iRequestorId" = u."iUserId"';
+        $join_arr[] = 'LEFT JOIN user_mas u1 on workorder."iAssignedToId" = u1."iUserId"';
         $join_arr[] = 'LEFT JOIN workorder_status_mas ws on workorder."iWOSId" = ws."iWOSId"';
         $join_arr[] = 'LEFT JOIN workorder_type_mas wt on workorder."iWOTId" = wt."iWOTId"';
 
@@ -536,8 +598,11 @@ if ($request_type == "dashboard_glance") {
         $wi = count($rs_worder);
         if($wi > 0){
             for($i=0; $i<$wi; $i++){
-                $notification_arr[] = array('type' => 'Workorder' ,'iWOId' => $rs_worder[$i]['iWOId'], 'dDate' => $rs_worder[$i]['dAddedDate'], 'title' => "Workorder #".$rs_worder[$i]['iWOId'].": ".date_display_report_date($rs_worder[$i]['dAddedDate'])." | ".$rs_worder[$i]['vWOProject']." | ".$rs_worder[$i]['vStatus']);
+                $vIcon = $site_url."images/user-wrench-red.png";
+                $rs_worder[$i]['vAddress'] = $rs_worder[$i]['vAddress1'].' '.$rs_worder[$i]['vStreet'].' '.$rs_worder[$i]['vCity'].' '.$rs_worder[$i]['vState'];
+                $rs_worder[$i]['vIcon'] = $vIcon;
             }
+            $site_arr['Workorder'][] = $rs_worder;
         }
         // ************ Workorder ************ //
 
@@ -565,8 +630,11 @@ if ($request_type == "dashboard_glance") {
         $TroubleTicketObj->debug_query = false;
         $rs_trouble_ticket = $TroubleTicketObj->recordset_list();
         $ti = count($rs_trouble_ticket);
+        //echo "<pre>";print_r($rs_trouble_ticket);exit;
+        $trouble_ticket_arr = [];
         if($ti > 0) {
             for($i=0; $i<$ti; $i++){
+                $iTroubleTicketId = $rs_trouble_ticket[$i]['iTroubleTicketId'];
                 $iSeverity = '---';
                 if($rs_trouble_ticket[$i]['iSeverity'] == 1){
                    $iSeverity = "Low"; 
@@ -589,12 +657,66 @@ if ($request_type == "dashboard_glance") {
 
                 $vServiceDetails = '';
                 if($rs_trouble_ticket[$i]['iServiceOrderId'] != ""){
-                    
                     $vServiceDetails .= $rs_trouble_ticket[$i]['vMasterMSA']." | ".$rs_trouble_ticket[$i]['vServiceOrder'];
                 }
 
-                $notification_arr[] = array('type' => 'TroubleTicket' ,'iTroubleTicketId' => $rs_trouble_ticket[$i]['iTroubleTicketId'], 'dDate' => $rs_trouble_ticket[$i]['dAddedDate'], 'title' => "Trouble Ticket #".$rs_trouble_ticket[$i]['iTroubleTicketId'].": ".date_display_report_date($rs_trouble_ticket[$i]['dAddedDate'])." | ".$vServiceDetails." | ".$iSeverity." | ".$iStatus);
+                $TroubleTicketObj->clear_variable();
+                $where_arr = array();
+                $join_fieds_arr = array();
+                $join_arr = array();
+
+                $join_fieds_arr[] = 's."vName" as "vPremiseName"';
+                $join_fieds_arr[] = 's."vAddress1"';
+                $join_fieds_arr[] = 's."vStreet"';
+                $join_fieds_arr[] = 's."vLatitude"';
+                $join_fieds_arr[] = 's."vLongitude"';
+                $join_fieds_arr[] = 'st."vTypeName" as "vPremiseType"';
+                $join_fieds_arr[] = 'z."vZoneName"';
+                $join_fieds_arr[] = 'n."vName" as "vNetwork"';
+                $join_fieds_arr[] = 'c."vCity"';
+                $join_fieds_arr[] = 'sm."vState"';
+           
+
+                $join_arr[] = 'LEFT JOIN premise_mas s on trouble_ticket_premise."iPremiseId" = s."iPremiseId"';
+                $join_arr[] = 'LEFT JOIN site_type_mas st on s."iSTypeId" = st."iSTypeId"';
+                $join_arr[] = 'LEFT JOIN zipcode_mas on s."iZipcode" = zipcode_mas."iZipcode"';
+                $join_arr[] = 'LEFT JOIN zone z on s."iZoneId" = z."iZoneId"';
+                $join_arr[] = 'LEFT JOIN network n on z."iNetworkId" = n."iNetworkId"';
+                $join_arr[] = 'LEFT JOIN city_mas c on s."iCityId" = c."iCityId"';
+                $join_arr[] = 'LEFT JOIN state_mas sm on s."iStateId" = sm."iStateId"';
+
+                $where_arr[] = "trouble_ticket_premise.\"iTroubleTicketId\" = '".$iTroubleTicketId."'"; 
+
+                $TroubleTicketObj->join_field = $join_fieds_arr;
+                $TroubleTicketObj->join = $join_arr;
+                $TroubleTicketObj->where = $where_arr;
+                $TroubleTicketObj->param['order_by'] = "trouble_ticket_premise.\"iPremiseId\" DESC";
+                $TroubleTicketObj->param['limit'] = $limit;
+                $TroubleTicketObj->setClause();
+                $TroubleTicketObj->debug_query = false;
+                $rs_tt_premise = $TroubleTicketObj->trouble_ticket_premise_recordset_list();
+                //echo "<pre>";print_r($rs_tt_premise);exit;
+                $tti = count($rs_tt_premise);
+                if($tti > 0){
+                    for($t=0; $t<$tti; $t++){
+                        $vIcon = $site_url."images/blue_icon.png";
+                        $trouble_ticket_arr[$t]['iTroubleTicketId'] = $iTroubleTicketId;
+                        $trouble_ticket_arr[$t]['iSeverity'] = $iSeverity;
+                        $trouble_ticket_arr[$t]['iStatus'] = $iStatus;
+                        $trouble_ticket_arr[$t]['vServiceOrder'] = $vServiceDetails;
+                        $trouble_ticket_arr[$t]['iPremiseId'] = $rs_tt_premise[$t]['iPremiseId'];
+                        $trouble_ticket_arr[$t]['vPremiseName'] = $rs_tt_premise[$t]['vPremiseName'];
+                        $trouble_ticket_arr[$t]['vPremiseType'] = $rs_tt_premise[$t]['vPremiseType'];
+                        $trouble_ticket_arr[$t]['vLatitude'] = $rs_tt_premise[$t]['vLatitude'];
+                        $trouble_ticket_arr[$t]['vLongitude'] = $rs_tt_premise[$t]['vLongitude'];
+                        $trouble_ticket_arr[$t]['dTroubleStartDate'] = date_display_report_date($rs_tt_premise[$t]['dTroubleStartDate']);
+
+                        $trouble_ticket_arr[$t]['vAddress'] = $rs_tt_premise[$t]['vAddress1'].' '.$rs_tt_premise[$t]['vStreet'].' '.$rs_tt_premise[$t]['vCity'].' '.$rs_tt_premise[$t]['vState'];
+                        $trouble_ticket_arr[$t]['vIcon'] = $vIcon;
+                    }
+                }
             }
+            $site_arr['TroubleTicket'][] = $trouble_ticket_arr;
         }
         // ************ Trouble Ticket ************ //
 
@@ -622,8 +744,11 @@ if ($request_type == "dashboard_glance") {
         $MaintenanceTicketObj->debug_query = false;
         $rs_maintenance_ticket = $MaintenanceTicketObj->recordset_list();
         $ti = count($rs_maintenance_ticket);
+        //echo "<pre>";print_r($rs_maintenance_ticket);exit;
+        $maintenance_ticket_arr = [];
         if($ti > 0) {
             for($i=0; $i<$ti; $i++){
+                $iMaintenanceTicketId = $rs_maintenance_ticket[$i]['iMaintenanceTicketId'];
                 $iSeverity = '---';
                 if($rs_maintenance_ticket[$i]['iSeverity'] == 1){
                    $iSeverity = "Low"; 
@@ -646,12 +771,66 @@ if ($request_type == "dashboard_glance") {
 
                 $vServiceDetails = '';
                 if($rs_maintenance_ticket[$i]['iServiceOrderId'] != ""){
-                    
                     $vServiceDetails .= $rs_maintenance_ticket[$i]['vMasterMSA']." | ".$rs_maintenance_ticket[$i]['vServiceOrder'];
                 }
 
-                $notification_arr[] = array('type' => 'MaintenanceTicket' ,'iMaintenanceTicketId' => $rs_maintenance_ticket[$i]['iMaintenanceTicketId'], 'dDate' => $rs_maintenance_ticket[$i]['dAddedDate'], 'title' => "Maintenance Ticket #".$rs_maintenance_ticket[$i]['iMaintenanceTicketId'].": ".date_display_report_date($rs_maintenance_ticket[$i]['dAddedDate'])." | ".$vServiceDetails." | ".$iSeverity." | ".$iStatus);
+                $MaintenanceTicketObj->clear_variable();
+                $where_arr = array();
+                $join_fieds_arr = array();
+                $join_arr = array();
+
+                $join_fieds_arr[] = 's."vName" as "vPremiseName"';
+                $join_fieds_arr[] = 's."vAddress1"';
+                $join_fieds_arr[] = 's."vStreet"';
+                $join_fieds_arr[] = 's."vLatitude"';
+                $join_fieds_arr[] = 's."vLongitude"';
+                $join_fieds_arr[] = 'st."vTypeName" as "vPremiseType"';
+                $join_fieds_arr[] = 'z."vZoneName"';
+                $join_fieds_arr[] = 'n."vName" as "vNetwork"';
+                $join_fieds_arr[] = 'c."vCity"';
+                $join_fieds_arr[] = 'sm."vState"';
+           
+
+                $join_arr[] = 'LEFT JOIN premise_mas s on maintenance_ticket_premise."iPremiseId" = s."iPremiseId"';
+                $join_arr[] = 'LEFT JOIN site_type_mas st on s."iSTypeId" = st."iSTypeId"';
+                $join_arr[] = 'LEFT JOIN zipcode_mas on s."iZipcode" = zipcode_mas."iZipcode"';
+                $join_arr[] = 'LEFT JOIN zone z on s."iZoneId" = z."iZoneId"';
+                $join_arr[] = 'LEFT JOIN network n on z."iNetworkId" = n."iNetworkId"';
+                $join_arr[] = 'LEFT JOIN city_mas c on s."iCityId" = c."iCityId"';
+                $join_arr[] = 'LEFT JOIN state_mas sm on s."iStateId" = sm."iStateId"';
+
+                $where_arr[] = "maintenance_ticket_premise.\"iMaintenanceTicketId\" = '".$iMaintenanceTicketId."'"; 
+
+                $MaintenanceTicketObj->join_field = $join_fieds_arr;
+                $MaintenanceTicketObj->join = $join_arr;
+                $MaintenanceTicketObj->where = $where_arr;
+                $MaintenanceTicketObj->param['order_by'] = "maintenance_ticket_premise.\"iPremiseId\" DESC";
+                $MaintenanceTicketObj->param['limit'] = $limit;
+                $MaintenanceTicketObj->setClause();
+                $MaintenanceTicketObj->debug_query = false;
+                $rs_tt_premise = $MaintenanceTicketObj->maintenance_ticket_premise_recordset_list();
+                //echo "<pre>";print_r($rs_tt_premise);exit;
+                $tti = count($rs_tt_premise);
+                if($tti > 0){
+                    for($t=0; $t<$tti; $t++){
+                        $vIcon = $site_url."images/gray_icon.png";
+                        $maintenance_ticket_arr[$t]['iMaintenanceTicketId'] = $iMaintenanceTicketId;
+                        $maintenance_ticket_arr[$t]['iSeverity'] = $iSeverity;
+                        $maintenance_ticket_arr[$t]['iStatus'] = $iStatus;
+                        $maintenance_ticket_arr[$t]['vServiceOrder'] = $vServiceDetails;
+                        $maintenance_ticket_arr[$t]['iPremiseId'] = $rs_tt_premise[$t]['iPremiseId'];
+                        $maintenance_ticket_arr[$t]['vPremiseName'] = $rs_tt_premise[$t]['vPremiseName'];
+                        $maintenance_ticket_arr[$t]['vPremiseType'] = $rs_tt_premise[$t]['vPremiseType'];
+                        $maintenance_ticket_arr[$t]['vLatitude'] = $rs_tt_premise[$t]['vLatitude'];
+                        $maintenance_ticket_arr[$t]['vLongitude'] = $rs_tt_premise[$t]['vLongitude'];
+                        $maintenance_ticket_arr[$t]['dMaintenanceStartDate'] = date_display_report_date($rs_tt_premise[$t]['dMaintenanceStartDate']);
+
+                        $maintenance_ticket_arr[$t]['vAddress'] = $rs_tt_premise[$t]['vAddress1'].' '.$rs_tt_premise[$t]['vStreet'].' '.$rs_tt_premise[$t]['vCity'].' '.$rs_tt_premise[$t]['vState'];
+                        $maintenance_ticket_arr[$t]['vIcon'] = $vIcon;
+                    }
+                }
             }
+            $site_arr['MaintenanceTicket'][] = $maintenance_ticket_arr;
         }
         // ************ Maintenance Ticket ************ //
     } else if($CARRIER_ACCESS_TYPE_ID == $iAccessType) {
@@ -661,7 +840,6 @@ if ($request_type == "dashboard_glance") {
         $join_fieds_arr = array();
         $join_arr = array();
 
-        $join_fieds_arr = array();
         $join_fieds_arr[] = 's."vName" as "vPremiseName"';
         $join_fieds_arr[] = 's."vAddress1"';
         $join_fieds_arr[] = 's."vLatitude"';
@@ -672,9 +850,14 @@ if ($request_type == "dashboard_glance") {
         $join_fieds_arr[] = 'n."vName" as "vNetwork"';
         $join_fieds_arr[] = 'ct."vConnectionTypeName"';
         $join_fieds_arr[] = 'st1."vServiceType" as "vServiceType1"';
+        $join_fieds_arr[] = 'c."vCounty"';
+        $join_fieds_arr[] = 'sm."vState"';
+        $join_fieds_arr[] = 'cm1."vCity"';
         
-        $join_arr = array();
         $join_arr[] = 'LEFT JOIN premise_mas s on service_order."iPremiseId" = s."iPremiseId"';
+        $join_arr[] = 'LEFT JOIN county_mas c on s."iCountyId" = c."iCountyId"';
+        $join_arr[] = 'LEFT JOIN state_mas sm on s."iStateId" = sm."iStateId"';
+        $join_arr[] = 'LEFT JOIN city_mas cm1 on s."iCityId" = cm1."iCityId"';
         $join_arr[] = 'LEFT JOIN zipcode_mas on s."iZipcode" = zipcode_mas."iZipcode"';
         $join_arr[] = 'LEFT JOIN zone z on s."iZoneId" = z."iZoneId"';
         $join_arr[] = 'LEFT JOIN network n on z."iNetworkId" = n."iNetworkId"';
@@ -693,22 +876,18 @@ if ($request_type == "dashboard_glance") {
         $ServiceOrderObj->setClause();
         $ServiceOrderObj->debug_query = false;
         $rs_sorder = $ServiceOrderObj->recordset_list();
-        //echo "<pre>";print_r($rs_sorder);exit;
         $si = count($rs_sorder);
         if($si >0){
             for($i=0; $i<$si; $i++){
-                $vIcon = $site_url."images/wrench-green.png";
+                $vIcon = $site_url."images/wrench-orange.png";
+                $rs_sorder[$i]['vAddress'] = $rs_sorder[$i]['vAddress1'].' '.$rs_sorder[$i]['vStreet'].' '.$rs_sorder[$i]['vCity'].' '.$rs_sorder[$i]['vState'];
                 $rs_sorder[$i]['vSOStatus'] = "Created";
                 $rs_sorder[$i]['vIcon'] = $vIcon;
             }
             $site_arr['Serviceorder'][] = $rs_sorder;
         }
-       
         // ************ Service Order ************ //
     }
-
-    
-
     $rh = HTTPStatus(200);
     $code = 2000;
     $message = api_getMessage($req_ext, constant($code));

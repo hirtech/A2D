@@ -56,7 +56,7 @@ function initMap() {
     var maplng = parseFloat(MAP_LONGITUDE);
 
     map = new google.maps.Map(document.getElementById('dashboard_map'), {
-        zoom: 5,
+        zoom: 10,
         center: {
             lat: maplat,
             lng: maplng
@@ -158,6 +158,214 @@ function onMapLoad(){
                             var selected_serviceorder = serviceorder_arr.length;
                             for (i = 0; i < selected_serviceorder; i++) {
                                 serviceorder_arr[i].setMap(map);
+                            }
+                        });
+                    }else if(key == "FiberInquiry"){
+                        $.each(datas, function(k, item) {
+                            for (i = 0; i < item.length; i++) {
+                                if (item[i]['vLatitude'] !== undefined && item[i]['vLongitude'] !== undefined) {
+                                    var id = item[i]['iFiberInquiryId'];
+                                    var vName = item[i]['vContactName'];
+                                    var vAddress = item[i]['vAddress'];
+                                    var premiseid = item[i]['iMatchingPremiseId'];
+                                    var vPremiseName = item[i]['vPremiseName'];
+                                    var vPremiseSubType = item[i]['vPremiseSubType'];
+                                    var vEngagement = item[i]['vEngagement'];
+                                    var vZoneName = item[i]['vZoneName'];
+                                    var vNetwork = item[i]['vNetwork'];
+                                    var vStatus = item[i]['vFStatus'];
+                                    var vIcon = item[i]['vIcon'];
+                                    var content = "";
+                                    var premise_data = 'Premise #'+premiseid+" ("+vPremiseName+")";
+            
+                                    content += "<div CELLPADDING=5 CELLSPACING=5 class=info_box id=info_box>";
+                                    content += "<h5 class='border-bottom pb-2 mb-3'>Fiber Inquiry #" + id + " " + vName + "</h5>";
+                                    content += "<div class='d-flex'><h6>" + premise_data + "</h6></div>";
+                                    content += "<div class='d-flex'><span class='font-weight-bold'>Sub Type :</span>&nbsp;" + vPremiseSubType + "</div>";
+                                    content += "<div class='d-flex'><span class='font-weight-bold'>Address :</span>&nbsp;" + vAddress + "</div>";
+                                    content += "<div class='d-flex'><span class='font-weight-bold'>Network :</span>&nbsp;" + vNetwork + "</span></div>";
+                                    content += "<div class='d-flex'><span class='font-weight-bold'>Zone Name :</span>&nbsp;" + vZoneName + "</span></div>";
+                                    content += "<div class='d-flex'><span class='font-weight-bold'>Engagement :</span>&nbsp;" + vEngagement + "</span></div>";
+                                    content += "<div class='d-flex'><span class='font-weight-bold'>Status :</span>&nbsp;" + vStatus + "</div>";
+                                    content += "<div class='button mt-3'><a class='btn btn-primary  mr-2 text-white' href='" + site_url + "fiber_inquiry/edit&mode=Update&iFiberInquiryId=" + id + "' target='_blank'>Edit Fiber Inquiry</a></div>";
+                                    content += "</div>";
+
+
+                                    var lat_long = new google.maps.LatLng(item[i]['vLatitude'], item[i]['vLongitude']);
+                                    var marker = new google.maps.Marker({
+                                        icon: vIcon,
+                                        position: lat_long
+                                    });
+                                    if (marker) {
+                                        CreatePopup(content, marker, i, lat_long);
+
+                                        fiberInquiry_arr.push(marker);
+
+                                        if (markerSpiderfier) {
+                                            markerSpiderfier.addMarker(marker);
+                                        }
+                                    }
+
+                                }
+                            }
+                            var selected_fiberInquiry = fiberInquiry_arr.length;
+                            for (i = 0; i < selected_fiberInquiry; i++) {
+                                fiberInquiry_arr[i].setMap(map);
+                            }
+                        });
+                    }else if(key == "Workorder"){
+                        $.each(datas, function(k, item) {
+                            for (i = 0; i < item.length; i++) {
+                                if (item[i]['vLatitude'] !== undefined && item[i]['vLongitude'] !== undefined) {
+                                    var id = item[i]['iWOId'];
+                                    var vName = item[i]['vContactName'];
+                                    var vAddress = item[i]['vAddress'];
+                                    var premiseid = item[i]['iPremiseId'];
+                                    var vPremiseName = item[i]['vPremiseName'];
+                                    var vZoneName = item[i]['vZoneName'];
+                                    var vNetwork = item[i]['vNetwork'];
+                                    var vStatus = item[i]['vStatus'];
+                                    var vPremiseType = item[i]['vPremiseType'];
+                                    var vServiceOrder = item[i]['vServiceOrder'];
+                                    var vWOProject = item[i]['vWOProject'];
+                                    var vType = item[i]['vType'];
+                                    var vRequestor = item[i]['vRequestor'];
+                                    var vAssignedTo = item[i]['vAssignedTo'];
+                                    var vStatus = item[i]['vStatus'];
+                                    var vIcon = item[i]['vIcon'];
+                                    
+                                    var content = "";
+                                    var vPremiseData =  premiseid+" ("+vPremiseName+"; "+vPremiseType+")";
+                                    content += "<div CELLPADDING=5 CELLSPACING=5 class=info_box id=info_box>";
+                                    content += "<h5 class='border-bottom pb-2 mb-3'>Work Order #" + id + " (" + vType + ")</h5>";
+                                    content += "<div class='d-flex'><h6>" + vWOProject + "</h6></div>";
+                                    content += "<div class='d-flex'><span class='font-weight-bold'>Premise :</span>&nbsp;" + vPremiseData + "</div>";
+                                    content += "<div class='d-flex'><span class='font-weight-bold'>Zone :</span>&nbsp;" + vZoneName + "</span></div>";
+                                    content += "<div class='d-flex'><span class='font-weight-bold'>Network :</span>&nbsp;" + vNetwork + "</span></div>";
+                                    content += "<div class='d-flex'><span class='font-weight-bold'>Service Order :</span>&nbsp;" + vServiceOrder + "</div>";
+                                    content += "<div class='d-flex'><span class='font-weight-bold'>Requestor :</span>&nbsp;" + vRequestor + "</span></div>";
+                                    content += "<div class='d-flex'><span class='font-weight-bold'>Assigned To :</span>&nbsp;" + vAssignedTo + "</span></div>";
+                                    content += "<div class='d-flex'><span class='font-weight-bold'>Status :</span>&nbsp;" + vStatus + "</div>";
+                                    content += "<div class='button mt-3'><a class='btn btn-primary  mr-2 text-white' href='" + site_url + "service_order/workorder_add&mode=Update&iWOId=" + id + "' target='_blank'>Edit Work Order</a></div>";
+                                    content += "</div>";
+
+
+                                    var lat_long = new google.maps.LatLng(item[i]['vLatitude'], item[i]['vLongitude']);
+                                    var marker = new google.maps.Marker({
+                                        icon: vIcon,
+                                        position: lat_long
+                                    });
+                                    if (marker) {
+                                        CreatePopup(content, marker, i, lat_long);
+
+                                        workorder_arr.push(marker);
+
+                                        if (markerSpiderfier) {
+                                            markerSpiderfier.addMarker(marker);
+                                        }
+                                    }
+
+                                }
+                            }
+                            var selected_workorder = workorder_arr.length;
+                            for (i = 0; i < selected_workorder; i++) {
+                                workorder_arr[i].setMap(map);
+                            }
+                        });
+                    }else if(key == "TroubleTicket"){
+                        $.each(datas, function(k, item) {
+                            for (i = 0; i < item.length; i++) {
+                                if (item[i]['vLatitude'] !== undefined && item[i]['vLongitude'] !== undefined) {
+                                    var id = item[i]['iTroubleTicketId'];
+                                    var iSeverity = item[i]['iSeverity'];
+                                    var vAddress = item[i]['vAddress'];
+                                    var premiseid = item[i]['iPremiseId'];
+                                    var vPremiseName = item[i]['vPremiseName'];
+                                    var vPremiseType = item[i]['vPremiseType'];
+                                    var vServiceOrder = item[i]['vServiceOrder'];
+                                    var dTroubleStartDate = item[i]['dTroubleStartDate'];
+                                    var vStatus = item[i]['iStatus'];
+                                    var vIcon = item[i]['vIcon'];
+                                    var content = "";
+                                    var vPremiseData =  premiseid+" ("+vPremiseName+"; "+vPremiseType+")";
+                                    content += "<div CELLPADDING=5 CELLSPACING=5 class=info_box id=info_box>";
+                                    content += "<h5 class='border-bottom pb-2 mb-3'>Trouble Ticket #" + id +"</h5>";
+                                    content += "<div class='d-flex'><h6>" + iSeverity + "</h6></div>";
+                                    content += "<div class='d-flex'><span class='font-weight-bold'>Premise :</span>&nbsp;" + vPremiseData + "</div>";
+                                    content += "<div class='d-flex'><span class='font-weight-bold'>Address :</span>&nbsp;" + vAddress + "</div>";
+                                    content += "<div class='d-flex'><span class='font-weight-bold'>Service Order :</span>&nbsp;" + vServiceOrder + "</div>";
+                                    content += "<div class='d-flex'><span class='font-weight-bold'>Trouble Start Date :</span>&nbsp;" + dTroubleStartDate + "</span></div>";
+                                    content += "<div class='d-flex'><span class='font-weight-bold'>Status :</span>&nbsp;" + vStatus + "</div>";
+                                    content += "<div class='button mt-3'><a class='btn btn-primary  mr-2 text-white' href='" + site_url + "trouble_ticket/trouble_ticket_edit&mode=Update&iTroubleTicketId=" + id + "' target='_blank'>Edit Trouble Ticket</a></div>";
+                                    content += "</div>";
+
+
+                                    var lat_long = new google.maps.LatLng(item[i]['vLatitude'], item[i]['vLongitude']);
+                                    var marker = new google.maps.Marker({
+                                        icon: vIcon,
+                                        position: lat_long
+                                    });
+                                    if (marker) {
+                                        CreatePopup(content, marker, i, lat_long);
+                                        trouble_ticket_arr.push(marker);
+                                        if (markerSpiderfier) {
+                                            markerSpiderfier.addMarker(marker);
+                                        }
+                                    }
+
+                                }
+                            }
+                            var selected_trouble_ticket = trouble_ticket_arr.length;
+                            for (i = 0; i < selected_trouble_ticket; i++) {
+                                trouble_ticket_arr[i].setMap(map);
+                            }
+                        });
+                    }else if(key == "MaintenanceTicket"){
+                        $.each(datas, function(k, item) {
+                            for (i = 0; i < item.length; i++) {
+                                if (item[i]['vLatitude'] !== undefined && item[i]['vLongitude'] !== undefined) {
+                                    var id = item[i]['iMaintenanceTicketId'];
+                                    var iSeverity = item[i]['iSeverity'];
+                                    var vAddress = item[i]['vAddress'];
+                                    var premiseid = item[i]['iPremiseId'];
+                                    var vPremiseName = item[i]['vPremiseName'];
+                                    var vPremiseType = item[i]['vPremiseType'];
+                                    var vServiceOrder = item[i]['vServiceOrder'];
+                                    var dMaintenanceStartDate = item[i]['dMaintenanceStartDate'];
+                                    var vStatus = item[i]['iStatus'];
+                                    var vIcon = item[i]['vIcon'];
+                                    var content = "";
+                                    var vPremiseData =  premiseid+" ("+vPremiseName+"; "+vPremiseType+")";
+                                    content += "<div CELLPADDING=5 CELLSPACING=5 class=info_box id=info_box>";
+                                    content += "<h5 class='border-bottom pb-2 mb-3'>Maintenance Ticket #" + id +"</h5>";
+                                    content += "<div class='d-flex'><h6>" + iSeverity + "</h6></div>";
+                                    content += "<div class='d-flex'><span class='font-weight-bold'>Premise :</span>&nbsp;" + vPremiseData + "</div>";
+                                    content += "<div class='d-flex'><span class='font-weight-bold'>Address :</span>&nbsp;" + vAddress + "</div>";
+                                    content += "<div class='d-flex'><span class='font-weight-bold'>Service Order :</span>&nbsp;" + vServiceOrder + "</div>";
+                                    content += "<div class='d-flex'><span class='font-weight-bold'>Maintenance Start Date :</span>&nbsp;" + dMaintenanceStartDate + "</span></div>";
+                                    content += "<div class='d-flex'><span class='font-weight-bold'>Status :</span>&nbsp;" + vStatus + "</div>";
+                                    content += "<div class='button mt-3'><a class='btn btn-primary  mr-2 text-white' href='" + site_url + "maintenance_ticket/maintenance_ticket_edit&mode=Update&iMaintenanceTicketId=" + id + "' target='_blank'>Edit Maintenance Ticket</a></div>";
+                                    content += "</div>";
+
+
+                                    var lat_long = new google.maps.LatLng(item[i]['vLatitude'], item[i]['vLongitude']);
+                                    var marker = new google.maps.Marker({
+                                        icon: vIcon,
+                                        position: lat_long
+                                    });
+                                    if (marker) {
+                                        CreatePopup(content, marker, i, lat_long);
+                                        maintenance_ticket_arr.push(marker);
+                                        if (markerSpiderfier) {
+                                            markerSpiderfier.addMarker(marker);
+                                        }
+                                    }
+
+                                }
+                            }
+                            var selected_maintenance_ticket = maintenance_ticket_arr.length;
+                            for (i = 0; i < selected_maintenance_ticket; i++) {
+                                maintenance_ticket_arr[i].setMap(map);
                             }
                         });
                     }
