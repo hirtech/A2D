@@ -443,7 +443,6 @@ if ($request_type == "dashboard_glance") {
         $join_arr = array();
 
         $join_fieds_arr[] = "CONCAT(contact_mas.\"vFirstName\", ' ', contact_mas.\"vLastName\") AS \"vContactName\"";
-        $join_fieds_arr[] = 'c."vCounty"';
         $join_fieds_arr[] = 'sm."vState"';
         $join_fieds_arr[] = 'cm."vCity"';
         $join_fieds_arr[] = 'z."vZoneName"';
@@ -453,7 +452,6 @@ if ($request_type == "dashboard_glance") {
         $join_fieds_arr[] = 's."vName" as "vPremiseName"';
 
         $join_arr[] = 'LEFT JOIN contact_mas on fiberinquiry_details."iCId" = contact_mas."iCId"';
-        $join_arr[] = 'LEFT JOIN county_mas c on fiberinquiry_details."iCountyId" = c."iCountyId"';
         $join_arr[] = 'LEFT JOIN state_mas sm on fiberinquiry_details."iStateId" = sm."iStateId"';
         $join_arr[] = 'LEFT JOIN city_mas cm on fiberinquiry_details."iCityId" = cm."iCityId"';
         $join_arr[] = 'LEFT JOIN zone z on fiberinquiry_details."iZoneId" = z."iZoneId"';
@@ -511,12 +509,10 @@ if ($request_type == "dashboard_glance") {
         $join_fieds_arr[] = 'n."vName" as "vNetwork"';
         $join_fieds_arr[] = 'ct."vConnectionTypeName"';
         $join_fieds_arr[] = 'st1."vServiceType" as "vServiceType1"';
-        $join_fieds_arr[] = 'c."vCounty"';
         $join_fieds_arr[] = 'sm."vState"';
         $join_fieds_arr[] = 'cm1."vCity"';
         
         $join_arr[] = 'LEFT JOIN premise_mas s on service_order."iPremiseId" = s."iPremiseId"';
-        $join_arr[] = 'LEFT JOIN county_mas c on s."iCountyId" = c."iCountyId"';
         $join_arr[] = 'LEFT JOIN state_mas sm on s."iStateId" = sm."iStateId"';
         $join_arr[] = 'LEFT JOIN city_mas cm1 on s."iCityId" = cm1."iCityId"';
         $join_arr[] = 'LEFT JOIN zipcode_mas on s."iZipcode" = zipcode_mas."iZipcode"';
@@ -614,13 +610,9 @@ if ($request_type == "dashboard_glance") {
 
         $join_fieds_arr[] = 'so."vMasterMSA"';
         $join_fieds_arr[] = 'so."vServiceOrder"';
-        
         $join_arr[] = 'LEFT JOIN service_order so on so."iServiceOrderId" = trouble_ticket."iServiceOrderId"';
-        $join_arr[] = 'LEFT JOIN company_mas cm on cm."iCompanyId" = so."iCarrierID"';
-
         $where_arr[] = "trouble_ticket.\"iAssignedToId\" = '".$userid."'"; 
         $where_arr[] = "trouble_ticket.\"iStatus\" != 3"; // Completed 
-
         $TroubleTicketObj->join_field = $join_fieds_arr;
         $TroubleTicketObj->join = $join_arr;
         $TroubleTicketObj->where = $where_arr;
@@ -730,7 +722,6 @@ if ($request_type == "dashboard_glance") {
         $join_fieds_arr[] = 'so."vServiceOrder"';
         
         $join_arr[] = 'LEFT JOIN service_order so on so."iServiceOrderId" = maintenance_ticket."iServiceOrderId"';
-        $join_arr[] = 'LEFT JOIN company_mas cm on cm."iCompanyId" = so."iCarrierID"';
 
         $where_arr[] = "maintenance_ticket.\"iAssignedToId\" = '".$userid."'"; 
         $where_arr[] = "maintenance_ticket.\"iStatus\" != 3"; // Completed 
@@ -813,7 +804,7 @@ if ($request_type == "dashboard_glance") {
                 $tti = count($rs_tt_premise);
                 if($tti > 0){
                     for($t=0; $t<$tti; $t++){
-                        $vIcon = $site_url."images/gray_icon.png";
+                        $vIcon = $site_url."images/grey_icon.png";
                         $maintenance_ticket_arr[$t]['iMaintenanceTicketId'] = $iMaintenanceTicketId;
                         $maintenance_ticket_arr[$t]['iSeverity'] = $iSeverity;
                         $maintenance_ticket_arr[$t]['iStatus'] = $iStatus;
@@ -850,12 +841,10 @@ if ($request_type == "dashboard_glance") {
         $join_fieds_arr[] = 'n."vName" as "vNetwork"';
         $join_fieds_arr[] = 'ct."vConnectionTypeName"';
         $join_fieds_arr[] = 'st1."vServiceType" as "vServiceType1"';
-        $join_fieds_arr[] = 'c."vCounty"';
         $join_fieds_arr[] = 'sm."vState"';
         $join_fieds_arr[] = 'cm1."vCity"';
         
         $join_arr[] = 'LEFT JOIN premise_mas s on service_order."iPremiseId" = s."iPremiseId"';
-        $join_arr[] = 'LEFT JOIN county_mas c on s."iCountyId" = c."iCountyId"';
         $join_arr[] = 'LEFT JOIN state_mas sm on s."iStateId" = sm."iStateId"';
         $join_arr[] = 'LEFT JOIN city_mas cm1 on s."iCityId" = cm1."iCityId"';
         $join_arr[] = 'LEFT JOIN zipcode_mas on s."iZipcode" = zipcode_mas."iZipcode"';

@@ -28,12 +28,7 @@ RewriteBase /eCommunityfiber/
 
 RewriteRule ^api/v2/(.*) request_api_v2.php?version=v2
 
-
 RewriteRule ^ajax.php? ajax.php
-
-#Admin Login Module Rules
-RewriteRule ^admin/login index.php?module=$0&page=m-admin_login
-RewriteRule ^admin/logout index.php?module=$0&page=m-admin_logout
 
 #Login Module Rules
 RewriteRule ^home/login index.php?module=$0&page=m-login
@@ -52,16 +47,15 @@ RewriteRule ^user/unauthorised? index.php?module=$0&page=m-unauthorised&%{QUERY_
 RewriteRule ^user/unauthorised index.php?module=$0&page=m-unauthorised
 
 #---------------------
-
 # User Modules Rules
 RewriteRule ^user/list? index.php?module=$0&page=m-user_list&%{QUERY_STRING}
 RewriteRule ^user/list index.php?module=$0&page=m-user_list
-##RewriteRule ^user/edit/(.*)$ index.php?module=$0&page=m-user_add&%{QUERY_STRING}
 RewriteRule ^user/edit&(.*)$ index.php?module=$0&page=m-user_add&%{QUERY_STRING} [L]
 RewriteRule ^user/edit index.php?module=$0&page=m-user_add
 RewriteRule ^user/add? index.php?module=$0&page=m-user_add&%{QUERY_STRING}
 RewriteRule ^user/add index.php?module=$0&page=m-user_add
 #---------------------
+
 #Login History
 RewriteRule ^login_history/list&(.*)$ index.php?module=$0&page=m-login_history&%{QUERY_STRING}
 RewriteRule ^login_history/list index.php?module=$0&page=m-login_history

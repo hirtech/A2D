@@ -139,8 +139,6 @@ if($request_type == "notification"){
 	    $join_fieds_arr[] = 'so."vServiceOrder"';
 	    
 	    $join_arr[] = 'LEFT JOIN service_order so on so."iServiceOrderId" = trouble_ticket."iServiceOrderId"';
-	    $join_arr[] = 'LEFT JOIN company_mas cm on cm."iCompanyId" = so."iCarrierID"';
-
 	    $where_arr[] = "trouble_ticket.\"iAssignedToId\" = '".$userid."'"; 
         $where_arr[] = "trouble_ticket.\"iStatus\" != 3"; // Completed 
 
@@ -196,7 +194,6 @@ if($request_type == "notification"){
 	    $join_fieds_arr[] = 'so."vServiceOrder"';
 	    
 	    $join_arr[] = 'LEFT JOIN service_order so on so."iServiceOrderId" = maintenance_ticket."iServiceOrderId"';
-	    $join_arr[] = 'LEFT JOIN company_mas cm on cm."iCompanyId" = so."iCarrierID"';
 
 	    $where_arr[] = "maintenance_ticket.\"iAssignedToId\" = '".$userid."'"; 
         $where_arr[] = "maintenance_ticket.\"iStatus\" != 3"; // Completed 

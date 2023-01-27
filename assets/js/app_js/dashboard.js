@@ -71,7 +71,7 @@ function initMap() {
             position: google.maps.ControlPosition.LEFT_TOP
         },
         fullscreenControl: true,
-        mapTypeId: 'terrain'
+        mapTypeId: 'satellite'
     });
     map.loaded = false;
     g_LoadedListener = google.maps.event.addListener(map, "tilesloaded", function(){
@@ -152,7 +152,6 @@ function onMapLoad(){
                                             markerSpiderfier.addMarker(marker);
                                         }
                                     }
-
                                 }
                             }
                             var selected_serviceorder = serviceorder_arr.length;

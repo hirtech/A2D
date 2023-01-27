@@ -7,7 +7,6 @@ include_once($controller_path . "premise.inc.php");
 include_once($controller_path . "zone.inc.php");
 include_once($controller_path . "city.inc.php");
 include_once($controller_path . "state.inc.php");
-include_once($controller_path . "mosquito_species.inc.php");
 include_once($controller_path . "task_type.inc.php");
 include_once($controller_path . "trap_type.inc.php");
 include_once($controller_path . "county.inc.php");
@@ -46,25 +45,6 @@ if($request_type == "department_dropdown") {
     }else{
         $response_data = array("Code" => 500);
     }
-}else if($request_type == "get_mosquito_species_data"){    
-    $where_arr = array();
-    $join_fieds_arr = array();
-    $join_arr  = array();
-    $where_arr[] = '"iStatus" =  1';
-
-    $MosquitoSpeciesObj = new MosquitoSpecies();
-    $MosquitoSpeciesObj->join_field = $join_fieds_arr;
-    $MosquitoSpeciesObj->join = $join_arr;
-    $MosquitoSpeciesObj->where = $where_arr;
-    $MosquitoSpeciesObj->setClause();
-    $rs_species = $MosquitoSpeciesObj->recordset_list();
-
-    $total_record = count($rs_species);
-    $result = array('total_record' => $total_record, 'data' => $rs_species );
-    $rh = HTTPStatus(200);
-    $code = 2000;
-    $message = api_getMessage($req_ext, constant($code));
-    $response_data = array("Code" => $code, "Message" => $message, "result" => $result);
 }else if($request_type == "task_type_dropdown"){
     
     $where_arr = array();
