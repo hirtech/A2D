@@ -484,7 +484,7 @@ if ($request_type == "dashboard_glance") {
                 }else if($rs_fInquiry[$i]['iStatus'] == 4){
                     $vFStatus = 'Complete';
                 }
-                $vIcon = $site_url."images/sr_green.png";
+                $vIcon = $site_url."images/question_green.png";
                 $rs_fInquiry[$i]['vAddress'] = $rs_fInquiry[$i]['vAddress1'].' '.$rs_fInquiry[$i]['vStreet'].' '.$rs_fInquiry[$i]['vCity'].' '.$rs_fInquiry[$i]['vState'];
                 $rs_fInquiry[$i]['vFStatus'] = $vFStatus;
                 $rs_fInquiry[$i]['vIcon'] = $vIcon;
@@ -536,7 +536,7 @@ if ($request_type == "dashboard_glance") {
         $si = count($rs_sorder);
         if($si >0){
             for($i=0; $i<$si; $i++){
-                $vIcon = $site_url."images/wrench-orange.png";
+                $vIcon = $site_url."images/shopping_cart_orange.png";
                 $rs_sorder[$i]['vAddress'] = $rs_sorder[$i]['vAddress1'].' '.$rs_sorder[$i]['vStreet'].' '.$rs_sorder[$i]['vCity'].' '.$rs_sorder[$i]['vState'];
                 $rs_sorder[$i]['vSOStatus'] = "Created";
                 $rs_sorder[$i]['vIcon'] = $vIcon;
@@ -594,7 +594,7 @@ if ($request_type == "dashboard_glance") {
         $wi = count($rs_worder);
         if($wi > 0){
             for($i=0; $i<$wi; $i++){
-                $vIcon = $site_url."images/user-wrench-red.png";
+                $vIcon = $site_url."images/user_helmet_red.png";
                 $rs_worder[$i]['vAddress'] = $rs_worder[$i]['vAddress1'].' '.$rs_worder[$i]['vStreet'].' '.$rs_worder[$i]['vCity'].' '.$rs_worder[$i]['vState'];
                 $rs_worder[$i]['vIcon'] = $vIcon;
             }
@@ -691,7 +691,7 @@ if ($request_type == "dashboard_glance") {
                 $tti = count($rs_tt_premise);
                 if($tti > 0){
                     for($t=0; $t<$tti; $t++){
-                        $vIcon = $site_url."images/blue_icon.png";
+                        $vIcon = $site_url."images/diamond_exclamation.png";
                         $trouble_ticket_arr[$t]['iTroubleTicketId'] = $iTroubleTicketId;
                         $trouble_ticket_arr[$t]['iSeverity'] = $iSeverity;
                         $trouble_ticket_arr[$t]['iStatus'] = $iStatus;
@@ -804,7 +804,7 @@ if ($request_type == "dashboard_glance") {
                 $tti = count($rs_tt_premise);
                 if($tti > 0){
                     for($t=0; $t<$tti; $t++){
-                        $vIcon = $site_url."images/grey_icon.png";
+                        $vIcon = $site_url."images/screwdriver_wrench.png";
                         $maintenance_ticket_arr[$t]['iMaintenanceTicketId'] = $iMaintenanceTicketId;
                         $maintenance_ticket_arr[$t]['iSeverity'] = $iSeverity;
                         $maintenance_ticket_arr[$t]['iStatus'] = $iStatus;
@@ -868,7 +868,7 @@ if ($request_type == "dashboard_glance") {
         $si = count($rs_sorder);
         if($si >0){
             for($i=0; $i<$si; $i++){
-                $vIcon = $site_url."images/wrench-orange.png";
+                $vIcon = $site_url."images/shopping_cart_orange.png";
                 $rs_sorder[$i]['vAddress'] = $rs_sorder[$i]['vAddress1'].' '.$rs_sorder[$i]['vStreet'].' '.$rs_sorder[$i]['vCity'].' '.$rs_sorder[$i]['vState'];
                 $rs_sorder[$i]['vSOStatus'] = "Created";
                 $rs_sorder[$i]['vIcon'] = $vIcon;

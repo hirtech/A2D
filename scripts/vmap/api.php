@@ -214,16 +214,16 @@ if(isset($_POST) &&  !in_array($_POST['action'],array("getSerachSiteData","getSe
                     $vStatus = '';
                     if($site['iStatus'] == 1){
                         $vStatus = 'Draft';
-                        $geoArr['sites'][$site['iFiberInquiryId']]['icon'] = $site_url."images/sr_red.png";
+                        $geoArr['sites'][$site['iFiberInquiryId']]['icon'] = $site_url."images/question_red.png";
                     }else if($site['iStatus'] == 2){
                         $vStatus = 'Assigned';
-                        $geoArr['sites'][$site['iFiberInquiryId']]['icon'] = $site_url."images/sr_black.png";
+                        $geoArr['sites'][$site['iFiberInquiryId']]['icon'] = $site_url."images/question_black.png";
                     }else if($site['iStatus'] == 3){
                         $vStatus = 'Review';
-                        $geoArr['sites'][$site['iFiberInquiryId']]['icon'] = $site_url."images/sr_yellow.png";
+                        $geoArr['sites'][$site['iFiberInquiryId']]['icon'] = $site_url."images/question_yellow.png";
                     }else if($site['iStatus'] == 4){
                         $vStatus = 'Complete';
-                        $geoArr['sites'][$site['iFiberInquiryId']]['icon'] = $site_url."images/sr_green.png";
+                        $geoArr['sites'][$site['iFiberInquiryId']]['icon'] = $site_url."images/question_green.png";
                     }
                     
 
@@ -273,19 +273,19 @@ if(isset($_POST) &&  !in_array($_POST['action'],array("getSerachSiteData","getSe
                     $vStatus = '';
                     if($site['iSStatus'] == 1){
                         $vStatus = 'Active';
-                        $geoArr['sites'][$site['iServiceOrderId']]['icon'] = $site_url."images/wrench-green.png";
+                        $geoArr['sites'][$site['iServiceOrderId']]['icon'] = $site_url."images/shopping_cart_green.png";
                     }else if($site['iSStatus'] == 2){
                         $vStatus = 'Suspended';
-                        $geoArr['sites'][$site['iServiceOrderId']]['icon'] = $site_url."images/wrench-red.png";
+                        $geoArr['sites'][$site['iServiceOrderId']]['icon'] = $site_url."images/shopping_cart_red.png";
                     }else if($site['iSStatus'] == 3){
                         $vStatus = 'Trouble';
-                        $geoArr['sites'][$site['iServiceOrderId']]['icon'] = $site_url."images/wrench-orange.png";
+                        $geoArr['sites'][$site['iServiceOrderId']]['icon'] = $site_url."images/shopping_cart_orange.png";
                     }else if($site['iSStatus'] == 4){
                         $vStatus = 'Disconnected';
-                        $geoArr['sites'][$site['iServiceOrderId']]['icon'] = $site_url."images/wrench-black.png";
+                        $geoArr['sites'][$site['iServiceOrderId']]['icon'] = $site_url."images/shopping_cart_black.png";
                     }else {
                         $vStatus = 'Pending';
-                        $geoArr['sites'][$site['iServiceOrderId']]['icon'] = $site_url."images/wrench-yellow.png";
+                        $geoArr['sites'][$site['iServiceOrderId']]['icon'] = $site_url."images/shopping_cart_yellow.png";
                     }
                     
                     $geoArr['sites'][$site['iServiceOrderId']]['vMasterMSA'] = $site['vMasterMSA'];
@@ -336,13 +336,13 @@ if(isset($_POST) &&  !in_array($_POST['action'],array("getSerachSiteData","getSe
                     $vState = ($site['vState'] ? $site['vState'] : '');
 
                     if($site['iWOSId'] == 1){
-                        $geoArr['sites'][$site['iWOId']]['icon'] = $site_url."images/user-wrench-orange.png";
+                        $geoArr['sites'][$site['iWOId']]['icon'] = $site_url."images/user_helmet_orange.png";
                     }else if($site['iWOSId'] == 2){
-                        $geoArr['sites'][$site['iWOId']]['icon'] = $site_url."images/user-wrench-green.png";
+                        $geoArr['sites'][$site['iWOId']]['icon'] = $site_url."images/user_helmet_green.png";
                     }else if($site['iWOSId'] == 3){
-                        $geoArr['sites'][$site['iWOId']]['icon'] = $site_url."images/user-wrench-red.png";
+                        $geoArr['sites'][$site['iWOId']]['icon'] = $site_url."images/user_helmet_red.png";
                     }else if($site['iWOSId'] == 4){
-                        $geoArr['sites'][$site['iWOId']]['icon'] = $site_url."images/user-wrench-yellow.png";
+                        $geoArr['sites'][$site['iWOId']]['icon'] = $site_url."images/user_helmet_yellow.png";
                     }
                         
                     $vServiceOrder = 'ID#'.$site['iServiceOrderId'].' | '.$site['vMasterMSA'].' | '.$site['vServiceOrder'];
@@ -397,28 +397,28 @@ if(isset($_POST) &&  !in_array($_POST['action'],array("getSerachSiteData","getSe
                     $vStatus = '';
                     if($site['iStatus'] == 1){
                         $vStatus = 'Created';
-                        $geoArr['sites'][$site['iPremiseCircuitId']]['icon'] = $site_url."images/circuit-yellow.png";
+                        $geoArr['sites'][$site['iPremiseCircuitId']]['icon'] = $site_url."images/computer_classic_yellow.png";
                     }else if($site['iStatus'] == 2){
                         $vStatus = 'In Progress';
-                        $geoArr['sites'][$site['iPremiseCircuitId']]['icon'] = $site_url."images/circuit-yellow.png";
+                        $geoArr['sites'][$site['iPremiseCircuitId']]['icon'] = $site_url."images/computer_classic_yellow.png";
                     }else if($site['iStatus'] == 3){
                         $vStatus = 'Delayed';
-                        $geoArr['sites'][$site['iPremiseCircuitId']]['icon'] = $site_url."images/circuit-yellow.png";
+                        $geoArr['sites'][$site['iPremiseCircuitId']]['icon'] = $site_url."images/computer_classic_yellow.png";
                     }else if($site['iStatus'] == 4){
                         $vStatus = 'Connected';
-                        $geoArr['sites'][$site['iPremiseCircuitId']]['icon'] = $site_url."images/circuit-green.png";
+                        $geoArr['sites'][$site['iPremiseCircuitId']]['icon'] = $site_url."images/computer_classic_green.png";
                     }else if($site['iStatus'] == 5){
                         $vStatus = 'Active';
-                        $geoArr['sites'][$site['iPremiseCircuitId']]['icon'] = $site_url."images/circuit-green.png";
+                        $geoArr['sites'][$site['iPremiseCircuitId']]['icon'] = $site_url."images/computer_classic_green.png";
                     }else if($site['iStatus'] == 6){
                         $vStatus = 'Suspended';
-                        $geoArr['sites'][$site['iPremiseCircuitId']]['icon'] = $site_url."images/circuit-red.png";
+                        $geoArr['sites'][$site['iPremiseCircuitId']]['icon'] = $site_url."images/computer_classic_red.png";
                     }else if($site['iStatus'] == 7){
                         $vStatus = 'Trouble';
-                        $geoArr['sites'][$site['iPremiseCircuitId']]['icon'] = $site_url."images/circuit-orange.png";
+                        $geoArr['sites'][$site['iPremiseCircuitId']]['icon'] = $site_url."images/computer_classic_orange.png";
                     }else if($site['iStatus'] == 8){
                         $vStatus = 'Disconnected';
-                        $geoArr['sites'][$site['iPremiseCircuitId']]['icon'] = $site_url."images/circuit-black.png";
+                        $geoArr['sites'][$site['iPremiseCircuitId']]['icon'] = $site_url."images/computer_classic_black.png";
                     }
                         
                     $vWorkOrder = 'ID#'.$site['iWOId'].' ('.$site['vWorkOrderType'].')';
