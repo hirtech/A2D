@@ -539,6 +539,59 @@ if($request_type == "fiber_inquiry_edit"){
        
         $response_data = array("Code" => 500 , "Message" => "LatLong are missing.");
     }
+}else if($request_type == "search_fiber_inquiry_address"){
+    $rs_arr  = array();
+    $where_arr = array();
+    $join_fieds_arr = array();
+    $join_arr = array();
+
+    $serach_vFiberInquiry = $RES_PARA['serach_vFiberInquiry'];
+     
+    $FiberInquiryObj = new FiberInquiry();
+    $FiberInquiryObj->clear_variable();
+
+    $letters = str_replace("'","",$serach_vFiberInquiry);
+    $exp_keyword = explode("\\",$letters);
+  
+    $ext_where_arr =array();
+    foreach($exp_keyword as $vl){
+        if(trim($vl) != '')
+            $ext_where_arr[] = " (concat(fiberinquiry_details.\"vAddress1\", ' ', fiberinquiry_details.\"vStreet\") ILIKE '%".trim($vl)."%' OR CAST(fiberinquiry_details.\"iFiberInquiryId\" AS TEXT) LIKE '".intval($vl)."%')";
+    }
+    if(count($ext_where_arr) > 0){
+        $ext_where = implode(" AND ", $ext_where_arr);
+        $where_arr[] = $ext_where;
+    }else{
+        $where_arr[] = " (concat(fiberinquiry_details.\"vAddress1\", ' ', fiberinquiry_details.\"vStreet\") ILIKE '%".trim($serach_vFiberInquiry)."%'  OR CAST(fiberinquiry_details.\"iFiberInquiryId\" AS TEXT) LIKE '".intval($serach_vFiberInquiry)."%')";
+    }     
+    $join_fieds_arr[] = 'c."vCity"';
+    $join_fieds_arr[] = 'sm."vState"';
+    $join_fieds_arr[] = 'cm."vCounty"';
+    $join_arr[] = 'LEFT JOIN city_mas c on fiberinquiry_details."iCityId" = c."iCityId"';
+    $join_arr[] = 'LEFT JOIN state_mas sm on fiberinquiry_details."iStateId" = sm."iStateId"';
+    $join_arr[] = 'LEFT JOIN county_mas cm on fiberinquiry_details."iCountyId" = cm."iCountyId"';
+    $FiberInquiryObj->join_field = $join_fieds_arr;
+    $FiberInquiryObj->join = $join_arr;
+    $FiberInquiryObj->where = $where_arr;
+    $FiberInquiryObj->param['limit'] = "0";
+    $FiberInquiryObj->param['order_by'] = 'fiberinquiry_details."iFiberInquiryId" DESC';
+    
+    $FiberInquiryObj->setClause();
+    $rs_fInquiry = $FiberInquiryObj->recordset_list();
+    for ($i = 0; $i < count($rs_fInquiry); $i++) {
+        $rs_arr[] = array(
+            'display' => $rs_fInquiry[$i]['iFiberInquiryId']." (".$rs_fInquiry[$i]['vAddress1']." ".$rs_fInquiry[$i]['vStreet']." ".$rs_fInquiry[$i]['vCity'].", ".$rs_fInquiry[$i]['vState'].", ".$rs_fInquiry[$i]['vCounty'].")",
+            "iFiberInquiryId" => $rs_fInquiry[$i]['iFiberInquiryId'],
+            "vAddress" => $rs_fInquiry[$i]['vAddress1']. " ".$rs_fInquiry[$i]['vStreet']
+        );
+    }
+
+    $result = array('data' => $rs_arr);
+
+    $rh = HTTPStatus(200);
+    $code = 2000;
+    $message = api_getMessage($req_ext, constant($code));
+    $response_data = array("Code" => 200, "Message" => $message, "result" => $result);
 }
 else {
 	$r = HTTPStatus(400);

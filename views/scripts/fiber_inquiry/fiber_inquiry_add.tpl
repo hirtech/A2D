@@ -101,7 +101,7 @@
 										</div>
 										<div class="form-row mb-2">
 											<div class="col-9 address-details border-top border-bottom">
-												<label class="mt-3 address_data">{$rs_sr[0].vAddress1}, {$rs_sr[0].vStreet}, {$rs_sr[0].vCounty}, {$rs_sr[0].iZipcode}</label><br/>
+												<label class="mt-3 address_data">{$rs_sr[0].vAddress1}, {$rs_sr[0].vStreet}, {$rs_sr[0].vCity}, {$rs_sr[0].vCounty}, {$rs_sr[0].vZipcode}</label><br/>
 												{if $rs_sr[0].vNetwork != '' }
 												<label><strong>Network:</strong></label>
 												<label class="vNetwork">{$rs_sr[0].vNetwork}</label><br/>

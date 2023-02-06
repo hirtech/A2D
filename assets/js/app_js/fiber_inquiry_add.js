@@ -1,8 +1,7 @@
 $(document).ready(function() {
 	// start contry history popup and nearbysr history  for update time
 	var iCId='';
-	var vFirstName='';
-	var vLastName='';
+	var contact_name='';
 	var iCId=$("#iCId").val();
 	var vLatitude_nearbysr ='';
 	var vLongitude_nearbysr ='';
@@ -12,9 +11,8 @@ $(document).ready(function() {
 		//alert(iCId);
 	if(iCId!=''){
 		var iCId=iCId;
-		var vFirstName=$(".vFirstName").text();
-		var vLastName=$(".vLastName").text();
-		var html="<input type='button' onclick='showContactHistory("+iCId+',"'+vFirstName+'"'+',"'+vLastName+'"'+")' class='btn btn-primary' value='Contact History'>";
+		var contact_name=$(".contact_name").text();
+		var html="<input type='button' onclick='showContactHistory("+iCId+',"'+contact_name+'"'+")' class='btn btn-primary' value='Contact History'>";
 		$("#showContactHistory").html(html);
 	}
 

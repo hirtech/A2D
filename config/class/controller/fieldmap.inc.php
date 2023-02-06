@@ -1108,6 +1108,70 @@ class Fieldmap {
   
     }
 
+    public function getSerachServiceOrderData($param){
+        global $sqlObj;
+        //echo "<pre>";print_r($param);exit;
+        $data = array();
+
+        $where = array();
+        $iServiceOrderId= $param['serviceOrderId'];
+        
+        if($iServiceOrderId != ""){
+           $where[] = ' service_order."iServiceOrderId" IN ('.$iServiceOrderId.')'; 
+        }
+        $whereQuery = implode(" AND ", $where);
+        
+        $sOrderData = 'SELECT service_order.* , s."vName" as "vPremiseName", s."vAddress1",
+            s."iCityId", s."iCountyId", s."iStateId", s."iZoneId", s."iZipcode", s."vLatitude", s."vLongitude", st."vTypeName" as "vPremiseType", cm."vCompanyName", z."vZoneName", z."iNetworkId", n."vName" as "vNetwork", ct."vConnectionTypeName", st1."vServiceType" as "vServiceType1", c."vCity", sm."vState"  
+            FROM service_order 
+            LEFT JOIN premise_mas s on service_order."iPremiseId" = s."iPremiseId" 
+            LEFT JOIN zone z on s."iZoneId" = z."iZoneId" 
+            LEFT JOIN city_mas c on s."iCityId" = c."iCityId" 
+            LEFT JOIN state_mas sm on s."iStateId" = sm."iStateId" 
+            LEFT JOIN network n on z."iNetworkId" = n."iNetworkId" 
+            LEFT JOIN site_type_mas st on s."iSTypeId" = st."iSTypeId" 
+            LEFT JOIN company_mas cm on service_order."iCarrierID" = cm."iCompanyId" 
+            LEFT JOIN connection_type_mas ct on service_order."iConnectionTypeId" = ct."iConnectionTypeId" 
+            LEFT JOIN service_type_mas st1 on service_order."iService1" = st1."iServiceTypeId" 
+            WHERE  '.$whereQuery.' ORDER BY service_order."iServiceOrderId" desc';
+        $data['serviceOrderData'] = $sqlObj->GetAll($sOrderData);
+        //print_r($data);exit;
+        return $data;
+    }
+
+    public function getSerachWorkOrderData($param){
+        global $sqlObj;
+        //echo "<pre>";print_r($param);exit;
+        $data = array();
+
+        $where = array();
+        $iWorkOrderIdId= $param['workOrderId'];
+        
+        if($iWorkOrderIdId != ""){
+           $where[] = ' workorder."iWOId" IN ('.$iWorkOrderIdId.')'; 
+        }
+        $whereQuery = implode(" AND ", $where);
+
+        $wOrderData = 'SELECT workorder.* , s."vName" as "vPremiseName", s."vAddress1", s."iCityId", s."iCountyId", s."iStateId", s."iZoneId", s."iZipcode", s."vLatitude", s."vLongitude",  st."vTypeName" as "vPremiseType", z."vZoneName", z."iNetworkId", n."vName" as "vNetwork", so."vMasterMSA", so."vServiceOrder", ws."vStatus", wt."vType", concat(u."vFirstName",\' \', u."vLastName") as "vRequestor", concat(u1."vFirstName", \' \', u1."vLastName") as "vAssignedTo", c."vCity", sm."vState" 
+            FROM workorder 
+            LEFT JOIN premise_mas s on workorder."iPremiseId" = s."iPremiseId" 
+            LEFT JOIN site_type_mas st on s."iSTypeId" = st."iSTypeId" 
+            LEFT JOIN zipcode_mas on s."iZipcode" = zipcode_mas."iZipcode" 
+            LEFT JOIN zone z on s."iZoneId" = z."iZoneId" 
+            LEFT JOIN network n on z."iNetworkId" = n."iNetworkId" 
+            LEFT JOIN city_mas c on s."iCityId" = c."iCityId" 
+            LEFT JOIN state_mas sm on s."iStateId" = sm."iStateId" 
+            LEFT JOIN service_order so on workorder."iServiceOrderId" = so."iServiceOrderId" 
+            LEFT JOIN user_mas u on workorder."iRequestorId" = u."iUserId" 
+            LEFT JOIN user_mas u1 on workorder."iAssignedToId" = u1."iUserId"
+            LEFT JOIN workorder_status_mas ws on workorder."iWOSId" = ws."iWOSId" 
+            LEFT JOIN workorder_type_mas wt on workorder."iWOTId" = wt."iWOTId" 
+            WHERE '.$whereQuery.' ORDER BY workorder."iWOId" desc ';
+        $data['workOrderData'] = $sqlObj->GetAll($wOrderData);
+        //print_r($data);exit;
+        return $data;
+    }
+
     public function getCustomLayers(){
         global $sqlObj;
         $sql = 'SELECT "iCLId", "vName" FROM "custom_layer" Where "iStatus" = \'1\' ORDER BY "vName" asc ';

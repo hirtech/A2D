@@ -1,8 +1,6 @@
-function showContactHistory(id,fname,lname){
+function showContactHistory(id,contact_name){
     var id=id;
-    var fname=fname;
-    var lname=lname;
-    var titlename=fname+" "+lname+"#"+id;
+    var titlename=contact_name+"#"+id;
 
     $('#contacthistorymodaltitle').val(titlename);
     $('#contacthistorymodal').modal('show');
@@ -41,11 +39,11 @@ function showContactHistory(id,fname,lname){
             if (site_list.length > 0) {
                 for (var l=0;l<site_list.length;++l)
                 {
-                    if(site_list[l].tRequestorNotes==null)
+                    if(site_list[l].vAddressDetails==null)
                     {
-                        site_list[l].tRequestorNotes='';
+                        site_list[l].vAddressDetails='';
                     }
-                    html2+='<tr><td class="text-center">'+site_list[l].iSRId+'</td><td>'+site_list[l].tRequestorNotes+'</td></tr>';
+                    html2+='<tr><td class="text-center">'+site_list[l].iFiberInquiryId+'</td><td>'+site_list[l].vAddressDetails+'</td></tr>';
                 }
             }
             else

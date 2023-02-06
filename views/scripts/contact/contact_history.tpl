@@ -9,7 +9,7 @@
                 </button>
             </div>
             <div class="row">
-            	<div class="col-md-6">
+            	<div class="col-md-4">
                     <div class="card">
                         <div class="card-header justify-content-between align-items-center">
                             <h4 class="card-title">Premise Details</h4>
@@ -30,18 +30,18 @@
                         </div>
                     </div> 
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-8">
                     <div class="card">
                         <div class="card-header justify-content-between align-items-center">
-                            <h4 class="card-title">SR Details</h4>
+                            <h4 class="card-title">Fiber Inquiry Details</h4>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table layout-primary bordered">
                                     <thead>
                                         <tr>
-                                            <th scope="col" class="text-center">SR ID</th>
-                                            <th scope="col">SR Notes</th>
+                                            <th scope="col" class="text-center">Fiber Inquiry ID</th>
+                                            <th scope="col">Address</th>
                                         </tr>
                                     </thead>
                                     <tbody id="contacthistory_tbody2">

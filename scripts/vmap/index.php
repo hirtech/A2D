@@ -203,6 +203,7 @@ if($mode == "site_map")
     $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
     $arr_param['siteName'] = $vName;
     $API_URL = $site_api_url."search_premise.json";
+    //echo $API_URL." ".json_encode($arr_param);exit;
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $API_URL);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
@@ -250,7 +251,7 @@ if($mode == "site_map")
     $site_list_id = implode(',', $site_list);
     echo $site_list_id;
     hc_exit();
-}else if($mode == "getCurrentLocation"){
+} else if($mode == "getCurrentLocation"){
     //echo "<pre>";print_r($_SERVER);exit();
     //echo $_SERVER['HTTP_X_FORWARDED_FOR']."=>".$_SERVER['HTTP_CLIENT_IP'];exit();
 
@@ -280,6 +281,39 @@ if($mode == "site_map")
 
     echo $returnData;
     hc_exit(); 
+} else if($mode == "search_fiber_inquiry"){
+    $arr_param = array();
+    $serach_vFiberInquiry = trim($_REQUEST['serach_vFiberInquiry']);
+    
+    $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
+    $arr_param['serach_vFiberInquiry'] = $serach_vFiberInquiry;
+    
+    $API_URL = $site_api_url."search_fiber_inquiry_address.json";
+    //echo $API_URL. " ".json_encode($arr_param);exit;
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $API_URL);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_HEADER, FALSE);
+    curl_setopt($ch, CURLOPT_POST, TRUE);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($arr_param));
+
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+       "Content-Type: application/json",
+    ));
+
+    $response = curl_exec($ch);
+    curl_close($ch);  
+    
+    $result_arr = json_decode($response, true);
+    
+    # -----------------------------------
+    # Return data.
+    # -----------------------------------
+    echo  json_encode($result_arr['result']['data']);
+    hc_exit();
+    # -----------------------------------
 }
 
 /*--------------------------------------------------------*/

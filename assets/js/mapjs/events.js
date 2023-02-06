@@ -1584,7 +1584,6 @@ function checkNetworkSelected(){
     }
 }
 // search Premise Name 
-var selectedsr = null;
 (function($) {
     var cluster = new Bloodhound({
         datumTokenizer: function(d) {
@@ -1628,6 +1627,41 @@ var selectedsr = null;
     .blur(function() {
         $(".tt-dropdown-menu").hide();
     });
+
+    /********************Search sr******************************/
+    var clusterFiberInquiry1 = new Bloodhound({
+      datumTokenizer: function(d) { return d.tokens; },
+      queryTokenizer: Bloodhound.tokenizers.whitespace,
+      remote: {
+        url: site_url+'vmap/index?mode=search_fiber_inquiry',
+        replace: function(url, uriEncodedQuery) {
+            var newUrl = url + '&serach_vFiberInquiry=' + uriEncodedQuery;
+                return newUrl;
+            },
+        filter: function(list) {
+            if(list==null)
+                return {};
+            else
+                return $.map(list, function(rawdata) { 
+                    return { display: rawdata.display, iFiberInquiryId:rawdata.iFiberInquiryId }; 
+                });
+        } 
+      }      
+    });
+    
+    clusterFiberInquiry1.initialize();
+    
+    select = false;
+    $('#serach_fiber_inquiry').typeahead({hint: false, highlight: true,minLength: 2 }, 
+    {
+        displayKey: 'display',
+        source: clusterFiberInquiry1.ttAdapter(),
+    })
+    .on('typeahead:selected', onFiberInquiryClusterSelected1)
+    .off('blur')
+    .blur(function() {
+        $(".tt-dropdown-menu").hide();
+    });
 })(jQuery);
 
 function onSiteClusteSelected(e, datum) {
@@ -1636,12 +1670,21 @@ function onSiteClusteSelected(e, datum) {
     $("#clear_site_address_id").show();
 }
 
+
+function onFiberInquiryClusterSelected1(e, datum) {
+    $("#serach_fiber_inquiry_id").val(datum['iFiberInquiryId']);
+    $("#serach_fiber_inquiry").val(datum['display']);
+    $(".clear_fiberInquiry").show();
+}
+
 $("#search_site_map").click(function() {
     var empty = 0;
     var s = 0;
     var one_filled;
     var siteData = [];
     var fInquiryData = [];
+    var serviceOrderData = [];
+    var workOrderData = [];
     var action;
 
     if (sitesearchMarker.length > 0) {
@@ -1668,19 +1711,25 @@ $("#search_site_map").click(function() {
         alert("Only one textbox used at a time");
     } else {
         var data = "";
-        var iPremiseId = $("#iPremiseId").val();
-        if (iPremiseId != '') {
-            siteData.push(iPremiseId);
-        }
 
         var serach_iPremiseId = $("#serach_iPremiseId").val();
         if (serach_iPremiseId != '') {
             siteData.push(serach_iPremiseId);
         }
 
-        var iFiberInquiryId = $("#iFiberInquiryId").val();
+        var iFiberInquiryId = $("#serach_fiber_inquiry_id").val();
         if (iFiberInquiryId != '') {
             fInquiryData.push(iFiberInquiryId);
+        }
+
+        var iServiceOrderId = $("#search_iServiceOrderId").val();
+        if (iServiceOrderId != '') {
+            serviceOrderData.push(iServiceOrderId);
+        }
+
+        var iWorkOrderId = $("#search_iWorkOrderId").val();
+        if (iWorkOrderId != '') {
+            workOrderData.push(iWorkOrderId);
         }
 
         var vLatitude = $("#vLatitude").val();
@@ -1704,19 +1753,25 @@ $("#search_site_map").click(function() {
             action = "getSerachSiteData";
         } else if (fInquiryData && fInquiryData.length > 0) {
             action = "getSerachFiberInquiryData";
+        }else if (serviceOrderData && serviceOrderData.length > 0) {
+            action = "getSerachServiceOrderData";
+        }else if (workOrderData && workOrderData.length > 0) {
+            action = "getSerachWorkOrderData";
         }
         clearFilterData();
         clearLayerData();
         clearMap();
         setTimeout(function () {
-            if((jQuery.isEmptyObject(fInquiryData) == false && fInquiryData.length > 0) || (jQuery.isEmptyObject(siteData) == false && siteData.length > 0)){
+            if((jQuery.isEmptyObject(fInquiryData) == false && fInquiryData.length > 0) || (jQuery.isEmptyObject(siteData) == false && siteData.length > 0) || (jQuery.isEmptyObject(serviceOrderData) == false && serviceOrderData.length > 0) || (jQuery.isEmptyObject(workOrderData) == false && workOrderData.length > 0)){
                 $.ajax({
                     type: "POST",
                     url: 'vmap/api/',
                     data: {
                         action: action,
                         premiseId: siteData.join(),
-                        fiberInquiryId: fInquiryData.join()
+                        fiberInquiryId: fInquiryData.join(),
+                        serviceOrderId: serviceOrderData.join(),
+                        workOrderId: workOrderData.join(),
                     },
                     cache: true,
                     beforeSend: function() {
@@ -1760,6 +1815,103 @@ $("#search_site_map").click(function() {
                                                 $sr_map = sitesearchMarker[s];
 
                                                 fiberInquiryinfo_popup($sr_map, id, vName, vAddress, premiseid1, vPremiseName, vPremiseSubType, vEngagement, vZoneName, vNetwork, vStatus, fiberInquiryId);
+                                                sitesearchMarker[s].setMap(map);
+                                                
+                                                //Extend each marker's position in LatLngBounds object.
+                                                bounds.extend(sitesearchMarker[s].position);
+                                                s++;
+                                            }
+                                        }
+                                    }else if (action == 'getSerachServiceOrderData' ) {
+                                        var id = premiseid;
+                                        //console.log('data found-1');
+                                        if (siteData[id].point !== undefined) {
+                                            for (i = 0; i < siteData[id].point.length; i++) {
+                                                var pointMatrix = {
+                                                    lat: siteData[id].point[i]['lat']+ mathRandLat,
+                                                    lng: siteData[id].point[i]['lng']+ mathRandLng
+                                                };
+
+                                                var vMasterMSA = siteData[id]['vMasterMSA'];
+                                                var vServiceOrder = siteData[id]['vServiceOrder'];
+                                                var vSalesRepName = siteData[id]['vSalesRepName'];
+                                                var vSalesRepEmail = siteData[id]['vSalesRepEmail'];
+                                                var premiseid = siteData[id]['premiseid'];
+                                                var vPremiseName = siteData[id]['vPremiseName'];
+                                                var vAddress = siteData[id]['vAddress'];
+                                                var cityid = siteData[id]['cityid'];
+                                                var stateid = siteData[id]['stateid'];
+                                                var countyid = siteData[id]['countyid'];
+                                                var zipcode = siteData[id]['zipcode'];
+                                                var zoneid = siteData[id]['zoneid'];
+                                                var vZoneName = siteData[id]['vZoneName'];
+                                                var networkid = siteData[id]['networkid'];
+                                                var vNetwork = siteData[id]['vNetwork'];
+                                                var vPremiseType = siteData[id]['vPremiseType'];
+                                                var vCompanyName = siteData[id]['vCompanyName'];
+                                                var vConnectionTypeName = siteData[id]['vConnectionTypeName'];
+                                                var vServiceType1 = siteData[id]['vServiceType1'];
+                                                var vStatus = siteData[id]['vStatus'];
+
+                                                sitesearchMarker[s] = new google.maps.Marker({
+                                                    map: map,
+                                                    position: pointMatrix,
+                                                    icon: siteData[id].icon,
+                                                });
+                                                
+                                                newLocation(pointMatrix.lat,pointMatrix.lng);
+                                                $sO_map = sitesearchMarker[s];
+
+                                                serviceOrderinfo_popup($sO_map, id, vMasterMSA, vServiceOrder, vSalesRepName, vSalesRepEmail, premiseid, vPremiseName, vAddress, cityid, stateid, countyid, countyid, zipcode, zoneid, vZoneName, networkid, vNetwork, vPremiseType, vCompanyName, vConnectionTypeName, vServiceType1, vStatus)
+
+                                                sitesearchMarker[s].setMap(map);
+                                                
+                                                //Extend each marker's position in LatLngBounds object.
+                                                bounds.extend(sitesearchMarker[s].position);
+                                                s++;
+                                            }
+                                        }
+                                    }else if (action == 'getSerachWorkOrderData' ) {
+                                        var id = premiseid;
+                                        //console.log('data found-1');
+                                        if (siteData[id].point !== undefined) {
+                                            for (i = 0; i < siteData[id].point.length; i++) {
+
+                                                var pointMatrix = {
+                                                    lat: siteData[id].point[i]['lat']+ mathRandLat,
+                                                    lng: siteData[id].point[i]['lng']+ mathRandLng
+                                                };
+
+                                                var premiseid = siteData[id]['premiseid'];
+                                                var vPremiseName = siteData[id]['vPremiseName'];
+                                                var vAddress = siteData[id]['vAddress'];
+                                                var cityid = siteData[id]['cityid'];
+                                                var stateid = siteData[id]['stateid'];
+                                                var countyid = siteData[id]['countyid'];
+                                                var zipcode = siteData[id]['zipcode'];
+                                                var zoneid = siteData[id]['zoneid'];
+                                                var vZoneName = siteData[id]['vZoneName'];
+                                                var networkid = siteData[id]['networkid'];
+                                                var vNetwork = siteData[id]['vNetwork'];
+                                                var vPremiseType = siteData[id]['vPremiseType'];
+                                                var vServiceOrder = siteData[id]['vServiceOrder'];
+                                                var vWOProject = siteData[id]['vWOProject'];
+                                                var vType = siteData[id]['vType'];
+                                                var vRequestor = siteData[id]['vRequestor'];
+                                                var vAssignedTo = siteData[id]['vAssignedTo'];
+                                                var vStatus = siteData[id]['vStatus'];
+
+                                                sitesearchMarker[s] = new google.maps.Marker({
+                                                    map: map,
+                                                    position: pointMatrix,
+                                                    icon: siteData[id].icon,
+                                                });
+                                                
+                                                newLocation(pointMatrix.lat,pointMatrix.lng);
+                                                $WO_map = sitesearchMarker[s];
+
+                                                workOrderinfo_popup($WO_map, id, premiseid, vPremiseName, vAddress, cityid, stateid, countyid, countyid, zipcode, zoneid, vZoneName, networkid, vNetwork, vPremiseType, vServiceOrder, vWOProject, vType, vRequestor, vAssignedTo, vStatus)
+
                                                 sitesearchMarker[s].setMap(map);
                                                 
                                                 //Extend each marker's position in LatLngBounds object.
@@ -1842,17 +1994,27 @@ function clear_site_address() {
     $("#clear_site_address_id").hide();
 }
 
+function clear_fiberInquiry() {
+    $('#serach_fiber_inquiry').val('');
+    $('#serach_fiber_inquiry_id').val('');
+    $(".clear_fiberInquiry").hide();
+}
+
 function resetButton() {
-    $("#iPremiseId").val('');
     $("#serach_iPremiseId").val('');
-    $("#iFiberInquiryId").val('');
     $("#vLatitude").val('');
     $("#vLongitude").val('');
     $("#vName").val('');
     $("#autofilladdress").val('');
     $("#clear_site_address_id").trigger('click');
     $("#clear_address_id").hide();
-    $("#serach_iPremiseId").val('');
+
+    $("#serach_fiber_inquiry").val('');
+    $("#serach_fiber_inquiry_id").val('');
+    $(".clear_fiberInquiry").trigger('click');
+
+    $("#search_iServiceOrderId").val('');
+    $("#search_iWorkOrderId").val('');
 
     //sitesearchMarker.setMap(null);
     if (sitesearchMarker.length > 0) {

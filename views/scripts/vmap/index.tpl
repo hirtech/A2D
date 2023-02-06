@@ -306,31 +306,40 @@
                             <form id="form">
                                 <input type="hidden" name="vLatitude" id="vLatitude" value="">
                                 <input type="hidden" name="vLongitude" id="vLongitude" value="">
+                                
                                 <div class="form-group row">
-                                    <label for="iPremiseId" class="col-sm-4 col-form-label">Premise Id</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" name="iPremiseId" class="form-control" id="iPremiseId" placeholder="Premise Id">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="vName" class="col-sm-4 col-form-label">Premise Name</label>
-                                    <div class="col-sm-8">
+                                    <label for="vName" class="col-sm-5 col-form-label">Premise ID</label>
+                                    <div class="col-sm-7">
                                         <input type="text" name="vName" class="form-control" id="vName" placeholder="Premise Name">
                                         <input type="hidden" id="serach_iPremiseId" name="serach_iPremiseId" value="">
                                         <img class="clear_site_address remove_site_name" id="clear_site_address_id" src="assets/images/icon-delete.png" onclick="return clear_site_address()" />
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="autofilladdress" class="col-sm-4 col-form-label">Address</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" name="autofilladdress" class="form-control" id="autofilladdress" placeholder="Address">
-                                        <img class="clear_address" id="clear_address_id" src="assets/images/icon-delete.png" style="cursor:pointer;display:none" onclick="return clear_address()" />
+                                    <label for="autofilladdress" class="col-sm-5 col-form-label">Premise Address</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" name="autofilladdress" class="form-control" id="autofilladdress" placeholder="Premise Address">
+                                        <img class="clear_address" id="clear_address_id" src="assets/images/icon-delete.png" style="cursor:pointer;display:none;" onclick="return clear_address();" />
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="iFiberInquiryId" class="col-sm-4 col-form-label">Fiber Inquiry Id</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" name="iFiberInquiryId" class="form-control" id="iFiberInquiryId" placeholder="Fiber Inquiry Id">
+                                    <label for="serach_fiber_inquiry" class="col-sm-5 col-form-label">Fiber Inquiry</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" name="serach_fiber_inquiry" class="form-control" id="serach_fiber_inquiry" placeholder="Fiber Inquiry Id OR address">
+                                        <input type="hidden" id="serach_fiber_inquiry_id" name="serach_fiber_inquiry_id" value="">
+                                        <img class="clear_fiberInquiry" id="clear_fiberInquiry_id" src="assets/images/icon-delete.png" onclick="return clear_fiberInquiry()" style="cursor:pointer;display:none;"/>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="search_iServiceOrderId" class="col-sm-5 col-form-label">Serviceorder Id</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" name="search_iServiceOrderId" class="form-control" id="search_iServiceOrderId" placeholder="Serviceorder Id">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="search_iServiceOrderId" class="col-sm-5 col-form-label">Workorder Id</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" name="search_iWorkOrderId" class="form-control" id="search_iWorkOrderId" placeholder="Workorder Id">
                                     </div>
                                 </div>
                                 <div class="form-group row">

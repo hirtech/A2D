@@ -142,7 +142,7 @@ function addEditDataAwareness(id,mode,iPremiseId_list){
       remote: {
         url: site_url+'tasks/task_awareness_list&mode=search_fiber_inquiry',
         replace: function(url, uriEncodedQuery) {
-            var newUrl = url + '&vSR_awareness=' + uriEncodedQuery;
+            var newUrl = url + '&serach_vFiberInquiry=' + uriEncodedQuery;
             return newUrl;
             },
         filter: function(list) {
@@ -157,7 +157,7 @@ function addEditDataAwareness(id,mode,iPremiseId_list){
     clusterSR.initialize();
     
     select = false;
-    $('#vSR_awareness').typeahead({hint: false, highlight: true,minLength: 1 }, 
+    $('#serach_vFiberInquiry').typeahead({hint: false, highlight: true,minLength: 1 }, 
     {
         displayKey: 'display',
         source: clusterSR.ttAdapter(),

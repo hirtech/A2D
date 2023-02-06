@@ -115,8 +115,10 @@ if($mode == "List"){
             if ($access_group_var_delete == 1) {
                 $actions .= ' <a class="btn btn-outline-danger" title="Delete" href="javascript:;" onclick="delete_record('.$rs_contact[$i]['iCId'].');"><i class="fa fa-trash"></i></a>';
             }
-
-            $actions .= ' <a class="btn btn-outline-warning" title="History" href="javascript:void(0);" onclick="showContactHistory('.$rs_contact[$i]['iCId'].",'".$rs_contact[$i]['vFirstName']."'".",'".$rs_contact[$i]['vLastName']."'".')"><i class="fas fa-history "></i></a>';
+	
+			
+			$vContactName = $rs_contact[$i]['vFirstName']." ".$rs_contact[$i]['vLastName'];
+            $actions .= ' <a class="btn btn-outline-warning" title="History" href="javascript:void(0);" onclick="showContactHistory('.$rs_contact[$i]['iCId'].",'".$vContactName.')"><i class="fas fa-history "></i></a>';
 
             $hidden_fields = '<input type="hidden" id="cnt_id_'.$rs_contact[$i]['iCId'].'" value="'.$rs_contact[$i]['iCId'].'"><input type="hidden" id="cnt_salution_'.$rs_contact[$i]['iCId'].'" value="'.$rs_contact[$i]['vSalutation'].'"><input type="hidden" id="cnt_fname_'.$rs_contact[$i]['iCId'].'" value="'.$rs_contact[$i]['vFirstName'].'"><input type="hidden" id="cnt_lname_'.$rs_contact[$i]['iCId'].'" value="'.$rs_contact[$i]['vLastName'].'"><input type="hidden" id="cnt_company_'.$rs_contact[$i]['iCId'].'" value="'.$rs_contact[$i]['vCompany'].'"><input type="hidden" id="cnt_position_'.$rs_contact[$i]['iCId'].'" value="'.$rs_contact[$i]['vPosition'].'"><input type="hidden" id="cnt_phone_'.$rs_contact[$i]['iCId'].'" value="'.$rs_contact[$i]['vPhone'].'"><input type="hidden" id="cnt_email_'.$rs_contact[$i]['iCId'].'" value="'.$rs_contact[$i]['vEmail'].'"><input type="hidden" id="cnt_notes_'.$rs_contact[$i]['iCId'].'"  value="'.$rs_contact[$i]['tNotes'].'"><input type="hidden" id="cnt_status_'.$rs_contact[$i]['iCId'].'" value="'.$rs_contact[$i]['status'].'">';
 
