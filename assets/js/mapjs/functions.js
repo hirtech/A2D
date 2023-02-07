@@ -1006,6 +1006,28 @@ function clearMap() {
     initMap();
 }
 
+function CreatePopup(html, marker, id, lat_long) {
+    google.maps.event.addListener(marker, 'click', (function (marker, ind) {
+        return function () {
+            __marker__ = marker;
+
+            if (infowindow) {
+                infowindow.close();
+            }
+
+            infowindow = new google.maps.InfoWindow({
+                content: html,
+                zIndex: 100
+            });
+
+            infowindow.open(map, marker);
+
+            //google.maps.event.clearListeners(marker, 'mouseover');
+            google.maps.event.clearListeners(marker, 'mouseout');
+        }
+    })(marker, id));
+}
+
 function info_popup(marker, premiseid) {
 	//console.log(premiseid);
 	google.maps.event.addListener(marker, 'click', ( function(marker, premiseid) {

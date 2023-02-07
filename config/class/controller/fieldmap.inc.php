@@ -1145,10 +1145,10 @@ class Fieldmap {
         $data = array();
 
         $where = array();
-        $iWorkOrderIdId= $param['workOrderId'];
+        $iWorkOrderId= $param['workOrderId'];
         
-        if($iWorkOrderIdId != ""){
-           $where[] = ' workorder."iWOId" IN ('.$iWorkOrderIdId.')'; 
+        if($iWorkOrderId != ""){
+           $where[] = ' workorder."iWOId" IN ('.$iWorkOrderId.')'; 
         }
         $whereQuery = implode(" AND ", $where);
 
@@ -1169,6 +1169,160 @@ class Fieldmap {
             WHERE '.$whereQuery.' ORDER BY workorder."iWOId" desc ';
         $data['workOrderData'] = $sqlObj->GetAll($wOrderData);
         //print_r($data);exit;
+        return $data;
+    }
+
+    public function getSerachTroubleTicketData($param){
+        global $sqlObj;
+        //echo "<pre>";print_r($param);exit;
+        $trouble_ticket_arr = array();
+        $data = array();
+
+        $where = array();
+        $iTroubleTicketId= $param['troubleTicketId'];
+        
+        if($iTroubleTicketId != ""){
+           $where[] = ' trouble_ticket."iTroubleTicketId" IN ('.$iTroubleTicketId.')'; 
+        }
+        $whereQuery = implode(" AND ", $where);
+
+        $tTicketSql = 'SELECT trouble_ticket.* , so."vMasterMSA", so."vServiceOrder" FROM trouble_ticket LEFT JOIN service_order so on so."iServiceOrderId" = trouble_ticket."iServiceOrderId" WHERE '.$whereQuery.' ORDER BY trouble_ticket."iTroubleTicketId" DESC ';
+        $tTicketData = $sqlObj->GetAll($tTicketSql);
+        //echo $tTicketSql;
+        //echo "<pre>";print_r($tTicketData);exit;
+        $ni = count($tTicketData);
+        //print_r($data);exit;
+        if($ni > 0){
+            for($i=0; $i<$ni; $i++) {
+                $iSeverity = '---';
+                if($tTicketData[$i]['iSeverity'] == 1){
+                   $iSeverity = "Low"; 
+                }else if($tTicketData[$i]['iSeverity'] == 2){
+                   $iSeverity = "Medium"; 
+                }else if($tTicketData[$i]['iSeverity'] == 3){
+                   $iSeverity = "High"; 
+                }else if($tTicketData[$i]['iSeverity'] == 4){
+                   $iSeverity = "Critical"; 
+                }
+
+                $iStatus = '---';
+                if($tTicketData[$i]['iStatus'] == 1){
+                   $iStatus = "Not Started"; 
+                }else if($tTicketData[$i]['iStatus'] == 2){
+                   $iStatus = "In Progress"; 
+                }else if($tTicketData[$i]['iStatus'] == 3){
+                   $iStatus = "Completed"; 
+                }
+
+                $vServiceDetails = '';
+                if($tTicketData[$i]['iServiceOrderId'] != ""){
+                    $vServiceDetails .= $tTicketData[$i]['vMasterMSA']." | ".$tTicketData[$i]['vServiceOrder'];
+                }
+
+                $sql = 'SELECT trouble_ticket_premise.* , s."vName" as "vPremiseName", s."vAddress1", s."vStreet", s."vLatitude", s."vLongitude", st."vTypeName" as "vPremiseType", z."vZoneName", n."vName" as "vNetwork", c."vCity", sm."vState" FROM trouble_ticket_premise LEFT JOIN premise_mas s on trouble_ticket_premise."iPremiseId" = s."iPremiseId" LEFT JOIN site_type_mas st on s."iSTypeId" = st."iSTypeId" LEFT JOIN zipcode_mas on s."iZipcode" = zipcode_mas."iZipcode" LEFT JOIN zone z on s."iZoneId" = z."iZoneId" LEFT JOIN network n on z."iNetworkId" = n."iNetworkId" LEFT JOIN city_mas c on s."iCityId" = c."iCityId" LEFT JOIN state_mas sm on s."iStateId" = sm."iStateId" WHERE trouble_ticket_premise."iTroubleTicketId" = '.$tTicketData[$i]['iTroubleTicketId'].' ORDER BY trouble_ticket_premise."iPremiseId" DESC';
+                //echo $sql;exit;
+                $rs_tt_premise = $sqlObj->GetAll($sql);
+                //echo "<pre>";print_r($rs_tt_premise);exit;
+                $tti = count($rs_tt_premise);
+                if($tti > 0){            
+                    for($t=0; $t<$tti; $t++){
+                        $vIcon = $site_url."images/diamond_exclamation.png";
+                        $trouble_ticket_arr[$t]['iTroubleTicketId'] = $rs_tt_premise[$t]['iTroubleTicketId'];
+                        $trouble_ticket_arr[$t]['iSeverity'] = $iSeverity;
+                        $trouble_ticket_arr[$t]['iStatus'] = $iStatus;
+                        $trouble_ticket_arr[$t]['vServiceOrder'] = $vServiceDetails;
+                        $trouble_ticket_arr[$t]['iPremiseId'] = $rs_tt_premise[$t]['iPremiseId'];
+                        $trouble_ticket_arr[$t]['vPremiseName'] = $rs_tt_premise[$t]['vPremiseName'];
+                        $trouble_ticket_arr[$t]['vPremiseType'] = $rs_tt_premise[$t]['vPremiseType'];
+                        $trouble_ticket_arr[$t]['vLatitude'] = $rs_tt_premise[$t]['vLatitude'];
+                        $trouble_ticket_arr[$t]['vLongitude'] = $rs_tt_premise[$t]['vLongitude'];
+                        $trouble_ticket_arr[$t]['dTroubleStartDate'] = date_display_report_date($rs_tt_premise[$t]['dTroubleStartDate']);
+
+                        $trouble_ticket_arr[$t]['vAddress'] = $rs_tt_premise[$t]['vAddress1'].' '.$rs_tt_premise[$t]['vStreet'].' '.$rs_tt_premise[$t]['vCity'].' '.$rs_tt_premise[$t]['vState'];
+                        $trouble_ticket_arr[$t]['vIcon'] = $vIcon;
+                    }
+                }
+            }
+        }
+
+        $data['troubleTicketData'] = $trouble_ticket_arr;
+        return $data;
+    }
+
+    public function getSerachMaintenanceTicketData($param){
+        global $sqlObj;
+        //echo "<pre>";print_r($param);exit;
+        $maintenance_ticket_arr = array();
+        $data = array();
+
+        $where = array();
+        $iMaintenanceTicketId= $param['maintenanceTicketId'];
+        
+        if($iMaintenanceTicketId != ""){
+           $where[] = ' maintenance_ticket."iMaintenanceTicketId" IN ('.$iMaintenanceTicketId.')'; 
+        }
+        $whereQuery = implode(" AND ", $where);
+
+        $tTicketSql = 'SELECT maintenance_ticket.* , so."vMasterMSA", so."vServiceOrder" FROM maintenance_ticket LEFT JOIN service_order so on so."iServiceOrderId" = maintenance_ticket."iServiceOrderId" WHERE '.$whereQuery.' ORDER BY maintenance_ticket."iMaintenanceTicketId" DESC ';
+        $tTicketData = $sqlObj->GetAll($tTicketSql);
+        //echo $tTicketSql;
+        //echo "<pre>";print_r($tTicketData);exit;
+        $ni = count($tTicketData);
+        //print_r($data);exit;
+        if($ni > 0){
+            for($i=0; $i<$ni; $i++) {
+                $iSeverity = '---';
+                if($tTicketData[$i]['iSeverity'] == 1){
+                   $iSeverity = "Low"; 
+                }else if($tTicketData[$i]['iSeverity'] == 2){
+                   $iSeverity = "Medium"; 
+                }else if($tTicketData[$i]['iSeverity'] == 3){
+                   $iSeverity = "High"; 
+                }else if($tTicketData[$i]['iSeverity'] == 4){
+                   $iSeverity = "Critical"; 
+                }
+
+                $iStatus = '---';
+                if($tTicketData[$i]['iStatus'] == 1){
+                   $iStatus = "Not Started"; 
+                }else if($tTicketData[$i]['iStatus'] == 2){
+                   $iStatus = "In Progress"; 
+                }else if($tTicketData[$i]['iStatus'] == 3){
+                   $iStatus = "Completed"; 
+                }
+
+                $vServiceDetails = '';
+                if($tTicketData[$i]['iServiceOrderId'] != ""){
+                    $vServiceDetails .= $tTicketData[$i]['vMasterMSA']." | ".$tTicketData[$i]['vServiceOrder'];
+                }
+
+                $sql = 'SELECT maintenance_ticket_premise.* , s."vName" as "vPremiseName", s."vAddress1", s."vStreet", s."vLatitude", s."vLongitude", st."vTypeName" as "vPremiseType", z."vZoneName", n."vName" as "vNetwork", c."vCity", sm."vState" FROM maintenance_ticket_premise LEFT JOIN premise_mas s on maintenance_ticket_premise."iPremiseId" = s."iPremiseId" LEFT JOIN site_type_mas st on s."iSTypeId" = st."iSTypeId" LEFT JOIN zipcode_mas on s."iZipcode" = zipcode_mas."iZipcode" LEFT JOIN zone z on s."iZoneId" = z."iZoneId" LEFT JOIN network n on z."iNetworkId" = n."iNetworkId" LEFT JOIN city_mas c on s."iCityId" = c."iCityId" LEFT JOIN state_mas sm on s."iStateId" = sm."iStateId" WHERE maintenance_ticket_premise."iMaintenanceTicketId" = '.$tTicketData[$i]['iMaintenanceTicketId'].' ORDER BY maintenance_ticket_premise."iPremiseId" DESC';
+                //echo $sql;exit;
+                $rs_mt_premise = $sqlObj->GetAll($sql);
+                //echo "<pre>";print_r($rs_mt_premise);exit;
+                $tti = count($rs_mt_premise);
+                if($tti > 0){            
+                    for($t=0; $t<$tti; $t++){
+                        $vIcon = $site_url."images/screwdriver_wrench.png";
+                        $maintenance_ticket_arr[$t]['iMaintenanceTicketId'] = $rs_mt_premise[$t]['iMaintenanceTicketId'];
+                        $maintenance_ticket_arr[$t]['iSeverity'] = $iSeverity;
+                        $maintenance_ticket_arr[$t]['iStatus'] = $iStatus;
+                        $maintenance_ticket_arr[$t]['vServiceOrder'] = $vServiceDetails;
+                        $maintenance_ticket_arr[$t]['iPremiseId'] = $rs_mt_premise[$t]['iPremiseId'];
+                        $maintenance_ticket_arr[$t]['vPremiseName'] = $rs_mt_premise[$t]['vPremiseName'];
+                        $maintenance_ticket_arr[$t]['vPremiseType'] = $rs_mt_premise[$t]['vPremiseType'];
+                        $maintenance_ticket_arr[$t]['vLatitude'] = $rs_mt_premise[$t]['vLatitude'];
+                        $maintenance_ticket_arr[$t]['vLongitude'] = $rs_mt_premise[$t]['vLongitude'];
+                        $maintenance_ticket_arr[$t]['dMaintenanceStartDate'] = date_display_report_date($rs_mt_premise[$t]['dMaintenanceStartDate']);
+
+                        $maintenance_ticket_arr[$t]['vAddress'] = $rs_mt_premise[$t]['vAddress1'].' '.$rs_mt_premise[$t]['vStreet'].' '.$rs_mt_premise[$t]['vCity'].' '.$rs_mt_premise[$t]['vState'];
+                        $maintenance_ticket_arr[$t]['vIcon'] = $vIcon;
+                    }
+                }
+            }
+        }
+
+        $data['maintenanceTicketData'] = $maintenance_ticket_arr;
         return $data;
     }
 

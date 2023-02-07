@@ -6,7 +6,7 @@ include_once($controller_path . "fieldmap.inc.php");
 $field_map_json_path = $field_map_json_url;
 
 $mapObj = new Fieldmap();
-if(isset($_POST) &&  !in_array($_POST['action'],array("getSerachSiteData", "getSerachFiberInquiryData", "getSerachServiceOrderData", "getSerachWorkOrderData", "getPremiseFiberInquiryFilterData")) ){
+if(isset($_POST) &&  !in_array($_POST['action'],array("getSerachSiteData", "getSerachFiberInquiryData", "getSerachServiceOrderData", "getSerachWorkOrderData", "getSerachTroubleTicketData", "getSerachMaintenanceTicketData", "getPremiseFiberInquiryFilterData")) ){
 
     $action = $_POST['action'];
 
@@ -726,6 +726,64 @@ if(isset($_POST) &&  !in_array($_POST['action'],array("getSerachSiteData", "getS
     }
     echo json_encode($workOrderData);
     die; 
+}else if(isset($_POST) && $_POST['action'] == "getSerachTroubleTicketData"){
+    $action = $_POST['action'];
+    $data = $mapObj->$action($_POST); 
+    
+    $troubleTicketData = array();
+    $troubleTicketData_arr = $data['troubleTicketData'];
+    foreach($troubleTicketData_arr as $site){
+        if(isset($site['vLatitude']) && $site['vLongitude'] != ''){
+            $vLatitude = $site['vLatitude'];
+            $vLongitude = $site['vLongitude'];
+            $troubleTicketData[$site['iPremiseId']]['point'][] =  array(
+                'lat' => (float) $vLatitude,
+                'lng' => (float) $vLongitude
+            );
+            
+            $troubleTicketData[$site['iPremiseId']]['iTroubleTicketId'] = $site['iTroubleTicketId'];
+            $troubleTicketData[$site['iPremiseId']]['iSeverity'] = $site['iSeverity'];
+            $troubleTicketData[$site['iPremiseId']]['iStatus'] = $site['iStatus'];
+            $troubleTicketData[$site['iPremiseId']]['vServiceOrder'] = $site['vServiceOrder'];
+            $troubleTicketData[$site['iPremiseId']]['iPremiseId'] = $site['iPremiseId'];
+            $troubleTicketData[$site['iPremiseId']]['vPremiseName'] = $site['vPremiseName'];
+            $troubleTicketData[$site['iPremiseId']]['vPremiseType'] = $site['vPremiseType'];
+            $troubleTicketData[$site['iPremiseId']]['dTroubleStartDate'] = $site['dTroubleStartDate'];
+            $troubleTicketData[$site['iPremiseId']]['vAddress'] = $site['vAddress'];
+            $troubleTicketData[$site['iPremiseId']]['icon'] = $site['vIcon'];
+        }
+    }
+    echo json_encode($troubleTicketData);
+    die;
+}else if(isset($_POST) && $_POST['action'] == "getSerachMaintenanceTicketData"){
+    $action = $_POST['action'];
+    $data = $mapObj->$action($_POST); 
+    
+    $maintenanceTicketData = array();
+    $maintenanceTicketData_arr = $data['maintenanceTicketData'];
+    foreach($maintenanceTicketData_arr as $site){
+        if(isset($site['vLatitude']) && $site['vLongitude'] != ''){
+            $vLatitude = $site['vLatitude'];
+            $vLongitude = $site['vLongitude'];
+            $maintenanceTicketData[$site['iPremiseId']]['point'][] =  array(
+                'lat' => (float) $vLatitude,
+                'lng' => (float) $vLongitude
+            );
+            
+            $maintenanceTicketData[$site['iPremiseId']]['iMaintenanceTicketId'] = $site['iMaintenanceTicketId'];
+            $maintenanceTicketData[$site['iPremiseId']]['iSeverity'] = $site['iSeverity'];
+            $maintenanceTicketData[$site['iPremiseId']]['iStatus'] = $site['iStatus'];
+            $maintenanceTicketData[$site['iPremiseId']]['vServiceOrder'] = $site['vServiceOrder'];
+            $maintenanceTicketData[$site['iPremiseId']]['iPremiseId'] = $site['iPremiseId'];
+            $maintenanceTicketData[$site['iPremiseId']]['vPremiseName'] = $site['vPremiseName'];
+            $maintenanceTicketData[$site['iPremiseId']]['vPremiseType'] = $site['vPremiseType'];
+            $maintenanceTicketData[$site['iPremiseId']]['dMaintenanceStartDate'] = $site['dMaintenanceStartDate'];
+            $maintenanceTicketData[$site['iPremiseId']]['vAddress'] = $site['vAddress'];
+            $maintenanceTicketData[$site['iPremiseId']]['icon'] = $site['vIcon'];
+        }
+    }
+    echo json_encode($maintenanceTicketData);
+    die;
 }else if(isset($_POST) && $_POST['action'] == "getPremiseFiberInquiryFilterData"){
     $action = $_POST['action'];
 

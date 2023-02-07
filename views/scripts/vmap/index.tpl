@@ -343,6 +343,18 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
+                                    <label for="search_iServiceOrderId" class="col-sm-5 col-form-label">Trouble Ticket Id</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" name="search_iTroubleTicketId" class="form-control" id="search_iTroubleTicketId" placeholder="Trouble Ticket Id">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="search_iServiceOrderId" class="col-sm-5 col-form-label">Maintenance Ticket Id</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" name="search_iMaintenanceTicketId" class="form-control" id="search_iMaintenanceTicketId" placeholder="Maintenance Ticket Id">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
                                     <div class="col-sm-3">
                                         <input type="button" name="search" class="btn btn-primary" id="search_site_map" value="Search" />
                                     </div>

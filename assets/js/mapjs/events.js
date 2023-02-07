@@ -1685,6 +1685,8 @@ $("#search_site_map").click(function() {
     var fInquiryData = [];
     var serviceOrderData = [];
     var workOrderData = [];
+    var troubleTicketData = [];
+    var maintenanceTicketData = [];
     var action;
 
     if (sitesearchMarker.length > 0) {
@@ -1732,6 +1734,16 @@ $("#search_site_map").click(function() {
             workOrderData.push(iWorkOrderId);
         }
 
+        var iTroubleTicketId = $("#search_iTroubleTicketId").val();
+        if (iTroubleTicketId != '') {
+            troubleTicketData.push(iTroubleTicketId);
+        }
+
+        var iMaintenanceTicketId = $("#search_iMaintenanceTicketId").val();
+        if (iMaintenanceTicketId != '') {
+            maintenanceTicketData.push(iMaintenanceTicketId);
+        }
+
         var vLatitude = $("#vLatitude").val();
         var vLongitude = $("#vLongitude").val();
         var address_premiseid;
@@ -1757,12 +1769,17 @@ $("#search_site_map").click(function() {
             action = "getSerachServiceOrderData";
         }else if (workOrderData && workOrderData.length > 0) {
             action = "getSerachWorkOrderData";
+        }else if (troubleTicketData && troubleTicketData.length > 0) {
+            action = "getSerachTroubleTicketData";
+        }else if (maintenanceTicketData && maintenanceTicketData.length > 0) {
+            action = "getSerachMaintenanceTicketData";
         }
+
         clearFilterData();
         clearLayerData();
         clearMap();
         setTimeout(function () {
-            if((jQuery.isEmptyObject(fInquiryData) == false && fInquiryData.length > 0) || (jQuery.isEmptyObject(siteData) == false && siteData.length > 0) || (jQuery.isEmptyObject(serviceOrderData) == false && serviceOrderData.length > 0) || (jQuery.isEmptyObject(workOrderData) == false && workOrderData.length > 0)){
+            if((jQuery.isEmptyObject(fInquiryData) == false && fInquiryData.length > 0) || (jQuery.isEmptyObject(siteData) == false && siteData.length > 0) || (jQuery.isEmptyObject(serviceOrderData) == false && serviceOrderData.length > 0) || (jQuery.isEmptyObject(workOrderData) == false && workOrderData.length > 0) || (jQuery.isEmptyObject(troubleTicketData) == false && troubleTicketData.length > 0) || (jQuery.isEmptyObject(maintenanceTicketData) == false && maintenanceTicketData.length > 0)){
                 $.ajax({
                     type: "POST",
                     url: 'vmap/api/',
@@ -1772,6 +1789,8 @@ $("#search_site_map").click(function() {
                         fiberInquiryId: fInquiryData.join(),
                         serviceOrderId: serviceOrderData.join(),
                         workOrderId: workOrderData.join(),
+                        troubleTicketId: troubleTicketData.join(),
+                        maintenanceTicketId: maintenanceTicketData.join(),
                     },
                     cache: true,
                     beforeSend: function() {
@@ -1783,7 +1802,7 @@ $("#search_site_map").click(function() {
                             var siteData = JSON.parse(data);
                             if(Object.keys(siteData).length > 0){
                                 $.each(siteData, function(premiseid, item) {
-                                    if (action == 'getSerachFiberInquiryData' ) {
+                                    if (action == 'getSerachFiberInquiryData') {
                                         var id = premiseid;
                                         //console.log('data found-1');
                                         if (siteData[id].point !== undefined) {
@@ -1822,7 +1841,7 @@ $("#search_site_map").click(function() {
                                                 s++;
                                             }
                                         }
-                                    }else if (action == 'getSerachServiceOrderData' ) {
+                                    }else if (action == 'getSerachServiceOrderData') {
                                         var id = premiseid;
                                         //console.log('data found-1');
                                         if (siteData[id].point !== undefined) {
@@ -1871,7 +1890,7 @@ $("#search_site_map").click(function() {
                                                 s++;
                                             }
                                         }
-                                    }else if (action == 'getSerachWorkOrderData' ) {
+                                    }else if (action == 'getSerachWorkOrderData') {
                                         var id = premiseid;
                                         //console.log('data found-1');
                                         if (siteData[id].point !== undefined) {
@@ -1914,6 +1933,112 @@ $("#search_site_map").click(function() {
 
                                                 sitesearchMarker[s].setMap(map);
                                                 
+                                                //Extend each marker's position in LatLngBounds object.
+                                                bounds.extend(sitesearchMarker[s].position);
+                                                s++;
+                                            }
+                                        }
+                                    }else if (action == 'getSerachTroubleTicketData') {
+                                        //console.log('data found-1');
+                                        if (siteData[premiseid].point !== undefined) {
+                                            for (i = 0; i < siteData[premiseid].point.length; i++) {
+
+                                                var pointMatrix = {
+                                                    lat: siteData[premiseid].point[i]['lat']+ mathRandLat,
+                                                    lng: siteData[premiseid].point[i]['lng']+ mathRandLng
+                                                };
+
+                                                var id = siteData[premiseid]['iTroubleTicketId'];
+                                                var iSeverity = siteData[premiseid]['iSeverity'];
+                                                var iStatus = siteData[premiseid]['iStatus'];
+                                                var vServiceOrder = siteData[premiseid]['vServiceOrder'];
+                                                var iTroubleTicketId = siteData[premiseid]['iTroubleTicketId'];
+                                                var vPremiseName = siteData[premiseid]['vPremiseName'];
+                                                var vPremiseType = siteData[premiseid]['vPremiseType'];
+                                                var dTroubleStartDate = siteData[premiseid]['dTroubleStartDate'];
+                                                var vAddress = siteData[premiseid]['vAddress'];
+
+                                                var lat_long = new google.maps.LatLng(siteData[premiseid], siteData[premiseid]['vLongitude']);
+                                                sitesearchMarker[s] = new google.maps.Marker({
+                                                    map: map,
+                                                    position: pointMatrix,
+                                                    icon: siteData[premiseid].icon,
+                                                });
+                                                
+                                                newLocation(pointMatrix.lat,pointMatrix.lng);
+
+                                                var vPremiseData =  premiseid+" ("+vPremiseName+"; "+vPremiseType+")";
+                                                var content = '';
+                                                content += "<div CELLPADDING=5 CELLSPACING=5 class=info_box id=info_box>";
+                                                content += "<h5 class='border-bottom pb-2 mb-3'>Trouble Ticket #" + id +"</h5>";
+                                                content += "<div class='d-flex'><h6>" + iSeverity + "</h6></div>";
+                                                content += "<div class='d-flex'><span class='font-weight-bold'>Premise :</span>&nbsp;" + vPremiseData + "</div>";
+                                                content += "<div class='d-flex'><span class='font-weight-bold'>Address :</span>&nbsp;" + vAddress + "</div>";
+                                                content += "<div class='d-flex'><span class='font-weight-bold'>Service Order :</span>&nbsp;" + vServiceOrder + "</div>";
+                                                content += "<div class='d-flex'><span class='font-weight-bold'>Trouble Start Date :</span>&nbsp;" + dTroubleStartDate + "</span></div>";
+                                                content += "<div class='d-flex'><span class='font-weight-bold'>Status :</span>&nbsp;" + iStatus + "</div>";
+                                                content += "<div class='button mt-3'><a class='btn btn-primary  mr-2 text-white' href='" + site_url + "trouble_ticket/trouble_ticket_edit&mode=Update&iTroubleTicketId=" + id + "' target='_blank'>Edit Trouble Ticket</a></div>";
+                                                content += "</div>";
+
+                                                CreatePopup(content, sitesearchMarker[s], id, lat_long);
+                                                sitesearchMarker[s].setMap(map);
+                                                
+                                                if (markerSpiderfier) {
+                                                    markerSpiderfier.addMarker(sitesearchMarker[s]);
+                                                }
+                                                //Extend each marker's position in LatLngBounds object.
+                                                bounds.extend(sitesearchMarker[s].position);
+                                                s++;
+                                            }
+                                        }
+                                    }else if (action == 'getSerachMaintenanceTicketData') {
+                                        //console.log('data found-1');
+                                        if (siteData[premiseid].point !== undefined) {
+                                            for (i = 0; i < siteData[premiseid].point.length; i++) {
+
+                                                var pointMatrix = {
+                                                    lat: siteData[premiseid].point[i]['lat']+ mathRandLat,
+                                                    lng: siteData[premiseid].point[i]['lng']+ mathRandLng
+                                                };
+
+                                                var id = siteData[premiseid]['iMaintenanceTicketId'];
+                                                var iSeverity = siteData[premiseid]['iSeverity'];
+                                                var iStatus = siteData[premiseid]['iStatus'];
+                                                var vServiceOrder = siteData[premiseid]['vServiceOrder'];
+                                                var iMaintenanceTicketId = siteData[premiseid]['iMaintenanceTicketId'];
+                                                var vPremiseName = siteData[premiseid]['vPremiseName'];
+                                                var vPremiseType = siteData[premiseid]['vPremiseType'];
+                                                var dMaintenanceStartDate = siteData[premiseid]['dMaintenanceStartDate'];
+                                                var vAddress = siteData[premiseid]['vAddress'];
+
+                                                var lat_long = new google.maps.LatLng(siteData[premiseid], siteData[premiseid]['vLongitude']);
+                                                sitesearchMarker[s] = new google.maps.Marker({
+                                                    map: map,
+                                                    position: pointMatrix,
+                                                    icon: siteData[premiseid].icon,
+                                                });
+                                                
+                                                newLocation(pointMatrix.lat,pointMatrix.lng);
+
+                                                var vPremiseData =  premiseid+" ("+vPremiseName+"; "+vPremiseType+")";
+                                                var content = '';
+                                                content += "<div CELLPADDING=5 CELLSPACING=5 class=info_box id=info_box>";
+                                                content += "<h5 class='border-bottom pb-2 mb-3'>Maintenance Ticket #" + id +"</h5>";
+                                                content += "<div class='d-flex'><h6>" + iSeverity + "</h6></div>";
+                                                content += "<div class='d-flex'><span class='font-weight-bold'>Premise :</span>&nbsp;" + vPremiseData + "</div>";
+                                                content += "<div class='d-flex'><span class='font-weight-bold'>Address :</span>&nbsp;" + vAddress + "</div>";
+                                                content += "<div class='d-flex'><span class='font-weight-bold'>Service Order :</span>&nbsp;" + vServiceOrder + "</div>";
+                                                content += "<div class='d-flex'><span class='font-weight-bold'>Maintenance Start Date :</span>&nbsp;" + dMaintenanceStartDate + "</span></div>";
+                                                content += "<div class='d-flex'><span class='font-weight-bold'>Status :</span>&nbsp;" + iStatus + "</div>";
+                                                content += "<div class='button mt-3'><a class='btn btn-primary  mr-2 text-white' href='" + site_url + "maintenance_ticket/maintenance_ticket_edit&mode=Update&iMaintenanceTicketId=" + id + "' target='_blank'>Edit Maintenance Ticket</a></div>";
+                                                content += "</div>";
+
+                                                CreatePopup(content, sitesearchMarker[s], id, lat_long);
+                                                sitesearchMarker[s].setMap(map);
+                                                
+                                                if (markerSpiderfier) {
+                                                    markerSpiderfier.addMarker(sitesearchMarker[s]);
+                                                }
                                                 //Extend each marker's position in LatLngBounds object.
                                                 bounds.extend(sitesearchMarker[s].position);
                                                 s++;
@@ -2015,6 +2140,8 @@ function resetButton() {
 
     $("#search_iServiceOrderId").val('');
     $("#search_iWorkOrderId").val('');
+    $("#search_iTroubleTicketId").val('');
+    $("#search_iMaintenanceTicketId").val('');
 
     //sitesearchMarker.setMap(null);
     if (sitesearchMarker.length > 0) {
