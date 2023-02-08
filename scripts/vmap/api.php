@@ -1,12 +1,11 @@
 <?php
-//error_reporting(1);
 include_once($function_path."image.inc.php");
 include_once($controller_path . "fieldmap.inc.php");
 
 $field_map_json_path = $field_map_json_url;
 
 $mapObj = new Fieldmap();
-if(isset($_POST) &&  !in_array($_POST['action'],array("getSerachSiteData", "getSerachFiberInquiryData", "getSerachServiceOrderData", "getSerachWorkOrderData", "getSerachTroubleTicketData", "getSerachMaintenanceTicketData", "getPremiseFiberInquiryFilterData")) ){
+if(isset($_POST) &&  !in_array($_POST['action'],array("getSerachSiteData", "getSerachFiberInquiryData", "getSerachServiceOrderData", "getSerachWorkOrderData", "getSerachTroubleTicketData", "getSerachMaintenanceTicketData", "getSerachAwarenessTaskData", "getSerachEquipmentData", "getSerachPremiseCircuitData", "getPremiseFiberInquiryFilterData")) ){
 
     $action = $_POST['action'];
 
@@ -783,6 +782,161 @@ if(isset($_POST) &&  !in_array($_POST['action'],array("getSerachSiteData", "getS
         }
     }
     echo json_encode($maintenanceTicketData);
+    die;
+}else if(isset($_POST) && $_POST['action'] == "getSerachAwarenessTaskData"){
+    $action = $_POST['action'];
+    $data = $mapObj->$action($_POST); 
+    
+    $awarenessTaskData = array();
+    $awarenessTaskData_arr = $data['awarenessTaskData'];
+    foreach($awarenessTaskData_arr as $site){
+        if(isset($site['vLatitude']) && $site['vLongitude'] != ''){
+            $vLatitude = $site['vLatitude'];
+            $vLongitude = $site['vLongitude'];
+            $awarenessTaskData[$site['iAId']]['point'][] =  array(
+                'lat' => (float) $vLatitude,
+                'lng' => (float) $vLongitude
+            );
+            
+            $vAddress1 = ($site['vAddress1'] ? $site['vAddress1'] : '');
+            $vStreet = ($site['vStreet'] ? $site['vStreet'] : '');
+            $vCity = ($site['vCity'] ? $site['vCity'] : '');
+            $vState = ($site['vState'] ? $site['vState'] : '');
+
+            $awarenessTaskData[$site['iAId']]['icon'] = $site_url."images/awareness_task.png";
+
+            $vFiberInquiry = '';
+            if($site['iFiberInquiryId'] != ''){
+                $vFiberInquiry = "#".$site['iFiberInquiryId']." (".$site['vContactName'].")";
+            }
+
+            if($site['dStartDate'] != ''){
+                $site['dStartTime'] = date("H:i", strtotime($site['dStartDate']));
+            }
+            else{
+                $site['dStartTime'] = date("H:i", time());
+            }
+
+            if($site['dEndDate'] != ''){
+                $site['dEndTime'] = date("H:i", strtotime($site['dEndDate']));
+            }
+            else{
+                $site['dEndTime'] = date("H:i", strtotime(date('Y-m-d H:i:s') . " +10 minutes"));
+            }
+            $hidden_arr = array(
+                "iAId"          => $site['iAId'],
+                "vSiteName"     => $site['iPremiseId']." (".$site['vPremiseName']."; ".$site['vPremiseType'].")",
+                "iPremiseId"    => $site['iPremiseId'],
+                "dDate"         => $site['dDate'],
+                "dStartDate"    => $site['dStartDate'],
+                "dStartTime"    => $site['dStartTime'],
+                "dEndDate"      => $site['dEndDate'],
+                "dEndTime"      => $site['dEndTime'],
+                "iEngagementId" => $site['iEngagementId'],
+                "tNotes"        => $site['tNotes'],
+                "srdisplay"     => $vFiberInquiry,
+                "iSRId"         => $site['iFiberInquiryId'],
+                "iTechnicianId" => $site['iTechnicianId'],
+            );
+            $awarenessTaskData[$site['iAId']]['iPremiseId'] = $site['iPremiseId'];
+            $awarenessTaskData[$site['iAId']]['vPremiseName'] = $site['vPremiseName'];
+            $awarenessTaskData[$site['iAId']]['vAddress'] = $vAddress1.' '.$vStreet.' '.$vCity.' '.$vState;
+            $awarenessTaskData[$site['iAId']]['cityid'] = $site['iCityId'];
+            $awarenessTaskData[$site['iAId']]['stateid'] = $site['iStateId'];
+            $awarenessTaskData[$site['iAId']]['countyid'] = $site['iCountyId'];
+            $awarenessTaskData[$site['iAId']]['zipcode'] = $site['iZipcode'];
+            $awarenessTaskData[$site['iAId']]['zoneid'] = $site['iZoneId'];
+            $awarenessTaskData[$site['iAId']]['vZoneName'] = $site['vZoneName'];
+            $awarenessTaskData[$site['iAId']]['networkid'] = $site['iNetworkId'];
+            $awarenessTaskData[$site['iAId']]['vNetwork'] = $site['vNetwork'];
+            $awarenessTaskData[$site['iAId']]['vPremiseType'] = $site['vPremiseType'];
+            $awarenessTaskData[$site['iAId']]['vFiberInquiry'] = $vFiberInquiry;
+            $awarenessTaskData[$site['iAId']]['vEngagement'] = $site['vEngagement'];
+            $awarenessTaskData[$site['iAId']]['tNotes'] = $site['tNotes'];
+            $awarenessTaskData[$site['iAId']]['dStartTime'] = ($site['dStartDate']);
+            $awarenessTaskData[$site['iAId']]['dEndTime'] = ($site['dEndDate']);
+            $awarenessTaskData[$site['iAId']]['dDate'] = date_getDateTimeDDMMYYYY($site['dDate']);
+            $awarenessTaskData[$site['iAId']]['vTechnicianName'] = $site['vTechnicianName'];
+            $awarenessTaskData[$site['iAId']]['hidden_arr'] = $hidden_arr;
+            
+        }
+    }
+    echo json_encode($awarenessTaskData);
+    die;
+}else if(isset($_POST) && $_POST['action'] == "getSerachPremiseCircuitData"){
+    $action = $_POST['action'];
+    $data = $mapObj->$action($_POST); 
+    
+    $premiseCircuitData = array();
+    $premiseCircuitData_arr = $data['premiseCircuitData'];
+    foreach($premiseCircuitData_arr as $site){
+        if(isset($site['vLatitude']) && $site['vLongitude'] != ''){
+            $vLatitude = $site['vLatitude'];
+            $vLongitude = $site['vLongitude'];
+            $premiseCircuitData[$site['iPremiseCircuitId']]['point'][] =  array(
+                'lat' => (float) $vLatitude,
+                'lng' => (float) $vLongitude
+            );
+            
+            $vAddress1 = ($site['vAddress1'] ? $site['vAddress1'] : '');
+            $vStreet = ($site['vStreet'] ? $site['vStreet'] : '');
+            $vCity = ($site['vCity'] ? $site['vCity'] : '');
+            $vState = ($site['vState'] ? $site['vState'] : '');
+
+            //1:Created | 2:In Progress | 3:Delayed | 4:Connected | 5:Active | 6:Suspended | 7:Trouble | 8:Disconnected
+            $vStatus = '';
+            if($site['iStatus'] == 1){
+                $vStatus = 'Created';
+                $premiseCircuitData[$site['iPremiseCircuitId']]['icon'] = $site_url."images/computer_classic_yellow.png";
+            }else if($site['iStatus'] == 2){
+                $vStatus = 'In Progress';
+                $premiseCircuitData[$site['iPremiseCircuitId']]['icon'] = $site_url."images/computer_classic_yellow.png";
+            }else if($site['iStatus'] == 3){
+                $vStatus = 'Delayed';
+                $premiseCircuitData[$site['iPremiseCircuitId']]['icon'] = $site_url."images/computer_classic_yellow.png";
+            }else if($site['iStatus'] == 4){
+                $vStatus = 'Connected';
+                $premiseCircuitData[$site['iPremiseCircuitId']]['icon'] = $site_url."images/computer_classic_green.png";
+            }else if($site['iStatus'] == 5){
+                $vStatus = 'Active';
+                $premiseCircuitData[$site['iPremiseCircuitId']]['icon'] = $site_url."images/computer_classic_green.png";
+            }else if($site['iStatus'] == 6){
+                $vStatus = 'Suspended';
+                $premiseCircuitData[$site['iPremiseCircuitId']]['icon'] = $site_url."images/computer_classic_red.png";
+            }else if($site['iStatus'] == 7){
+                $vStatus = 'Trouble';
+                $premiseCircuitData[$site['iPremiseCircuitId']]['icon'] = $site_url."images/computer_classic_orange.png";
+            }else if($site['iStatus'] == 8){
+                $vStatus = 'Disconnected';
+                $premiseCircuitData[$site['iPremiseCircuitId']]['icon'] = $site_url."images/computer_classic_black.png";
+            }
+                
+            $vWorkOrder = 'ID#'.$site['iWOId'].' ('.$site['vWorkOrderType'].')';
+
+            $premiseCircuitData[$site['iPremiseCircuitId']]['premisecircuitid'] = $site['iPremiseCircuitId'];
+            $premiseCircuitData[$site['iPremiseCircuitId']]['premiseid'] = $site['iPremiseId'];
+            $premiseCircuitData[$site['iPremiseCircuitId']]['vPremiseName'] = $site['vPremiseName'];
+            $premiseCircuitData[$site['iPremiseCircuitId']]['vAddress'] = $vAddress1.' '.$vStreet.' '.$vCity.' '.$vState;
+            $premiseCircuitData[$site['iPremiseCircuitId']]['cityid'] = $site['iCityId'];
+            $premiseCircuitData[$site['iPremiseCircuitId']]['stateid'] = $site['iStateId'];
+            $premiseCircuitData[$site['iPremiseCircuitId']]['countyid'] = $site['iCountyId'];
+            $premiseCircuitData[$site['iPremiseCircuitId']]['zipcode'] = $site['iZipcode'];
+            $premiseCircuitData[$site['iPremiseCircuitId']]['zoneid'] = $site['iZoneId'];
+            $premiseCircuitData[$site['iPremiseCircuitId']]['vZoneName'] = $site['vZoneName'];
+            $premiseCircuitData[$site['iPremiseCircuitId']]['networkid'] = $site['iNetworkId'];
+            $premiseCircuitData[$site['iPremiseCircuitId']]['vNetwork'] = $site['vNetwork'];
+            $premiseCircuitData[$site['iPremiseCircuitId']]['vPremiseType'] = $site['vPremiseType'];
+            $premiseCircuitData[$site['iPremiseCircuitId']]['vWorkOrder'] = $vWorkOrder;
+            $premiseCircuitData[$site['iPremiseCircuitId']]['circuitid'] = $site['iCircuitId'];
+            $premiseCircuitData[$site['iPremiseCircuitId']]['vCircuitName'] = $site['vCircuitName'];
+            $premiseCircuitData[$site['iPremiseCircuitId']]['connectiontypeid'] = $site['iConnectionTypeId'];
+            $premiseCircuitData[$site['iPremiseCircuitId']]['vConnectionTypeName'] = $site['vConnectionTypeName'];
+            $premiseCircuitData[$site['iPremiseCircuitId']]['iStatus'] = $site['iStatus'];
+            $premiseCircuitData[$site['iPremiseCircuitId']]['vStatus'] = $vStatus;
+            
+        }
+    }
+    echo json_encode($premiseCircuitData);
     die;
 }else if(isset($_POST) && $_POST['action'] == "getPremiseFiberInquiryFilterData"){
     $action = $_POST['action'];

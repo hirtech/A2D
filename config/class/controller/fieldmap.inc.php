@@ -1152,7 +1152,7 @@ class Fieldmap {
         }
         $whereQuery = implode(" AND ", $where);
 
-        $wOrderData = 'SELECT workorder.* , s."vName" as "vPremiseName", s."vAddress1", s."iCityId", s."iCountyId", s."iStateId", s."iZoneId", s."iZipcode", s."vLatitude", s."vLongitude",  st."vTypeName" as "vPremiseType", z."vZoneName", z."iNetworkId", n."vName" as "vNetwork", so."vMasterMSA", so."vServiceOrder", ws."vStatus", wt."vType", concat(u."vFirstName",\' \', u."vLastName") as "vRequestor", concat(u1."vFirstName", \' \', u1."vLastName") as "vAssignedTo", c."vCity", sm."vState" 
+        $wOrderData = 'SELECT workorder.* , s."vName" as "vPremiseName", s."vAddress1", s."vStreet", s."iCityId", s."iCountyId", s."iStateId", s."iZoneId", s."iZipcode", s."vLatitude", s."vLongitude",  st."vTypeName" as "vPremiseType", z."vZoneName", z."iNetworkId", n."vName" as "vNetwork", so."vMasterMSA", so."vServiceOrder", ws."vStatus", wt."vType", concat(u."vFirstName",\' \', u."vLastName") as "vRequestor", concat(u1."vFirstName", \' \', u1."vLastName") as "vAssignedTo", c."vCity", sm."vState" 
             FROM workorder 
             LEFT JOIN premise_mas s on workorder."iPremiseId" = s."iPremiseId" 
             LEFT JOIN site_type_mas st on s."iSTypeId" = st."iSTypeId" 
@@ -1323,6 +1323,65 @@ class Fieldmap {
         }
 
         $data['maintenanceTicketData'] = $maintenance_ticket_arr;
+        return $data;
+    }
+
+    public function getSerachAwarenessTaskData($param) {
+        global $sqlObj;
+        //echo "<pre>";print_r($param);exit;
+        $data = array();
+
+        $where = array();
+        $iAId= $param['iAwarenessTaskId'];
+        
+        if($iAId != ""){
+           $where[] = ' awareness."iAId" IN ('.$iAId.')'; 
+        }
+        $whereQuery = implode(" AND ", $where);
+        $awarenessData = 'SELECT awareness.*, s."vName" as "vPremiseName", s."vAddress1", s."vStreet", s."iCityId", s."iCountyId", s."iStateId", s."iZoneId", s."iZipcode", s."vLatitude", s."vLongitude", st."vTypeName" as "vPremiseType", sm."vState", cm."vCity", e."vEngagement", z."iNetworkId", CONCAT(contact_mas."vFirstName", \' \', contact_mas."vLastName") AS "vContactName", CONCAT(u."vFirstName", \' \', u."vLastName") AS "vTechnicianName" FROM awareness 
+        LEFT JOIN engagement_mas e on e."iEngagementId" = awareness."iEngagementId" 
+        LEFT JOIN premise_mas s on s."iPremiseId" = awareness."iPremiseId" 
+        LEFT JOIN site_type_mas st on s."iSTypeId" = st."iSTypeId" 
+        LEFT JOIN zone z on s."iZoneId" = z."iZoneId" 
+        LEFT JOIN state_mas sm on s."iStateId" = sm."iStateId" 
+        LEFT JOIN city_mas cm on s."iCityId" = cm."iCityId"
+        LEFT JOIN fiberinquiry_details sd on sd."iFiberInquiryId" = awareness."iFiberInquiryId" 
+        LEFT JOIN user_mas u on u."iUserId" = awareness."iTechnicianId" 
+        LEFT JOIN contact_mas on contact_mas."iCId"= sd."iCId" WHERE '.$whereQuery.' ORDER BY awareness."iAId" Desc';
+        $data['awarenessTaskData'] = $sqlObj->GetAll($awarenessData);
+        //print_r($data);exit;
+        return $data;
+    }
+
+    public function getSerachPremiseCircuitData($param){
+        global $sqlObj;
+        //echo "<pre>";print_r($param);exit;
+        $data = array();
+
+        $where = array();
+        $premiseCircuitId= $param['premiseCircuitId'];
+        
+        if($premiseCircuitId != ""){
+           $where[] = ' premise_circuit."iPremiseCircuitId" IN ('.$premiseCircuitId.')'; 
+        }
+        $whereQuery = implode(" AND ", $where);
+
+        $pCircuitData = 'SELECT premise_circuit.* , wt."vType" as "vWorkOrderType", s."vName" as "vPremiseName", s."vAddress1", s."iCityId", s."iCountyId", s."iStateId", s."iZoneId", s."iZipcode", s."vLatitude", s."vLongitude",  st."vTypeName" as "vPremiseType", z."vZoneName", z."iNetworkId", n."vName" as "vNetwork", circuit."vCircuitName", connection_type_mas."vConnectionTypeName", z."iNetworkId", c."vCity", sm."vState" 
+            FROM premise_circuit 
+            LEFT JOIN workorder w ON premise_circuit."iWOId" = w."iWOId" 
+            LEFT JOIN workorder_type_mas wt ON w."iWOTId" = wt."iWOTId" 
+            LEFT JOIN service_order so ON w."iServiceOrderId" = so."iServiceOrderId" 
+            LEFT JOIN premise_mas s ON premise_circuit."iPremiseId" = s."iPremiseId" 
+            LEFT JOIN zone z ON s."iZoneId" = z."iZoneId"
+            LEFT JOIN network n on z."iNetworkId" = n."iNetworkId" 
+            LEFT JOIN city_mas c on s."iCityId" = c."iCityId" 
+            LEFT JOIN state_mas sm on s."iStateId" = sm."iStateId" 
+            LEFT JOIN site_type_mas st ON s."iSTypeId" = st."iSTypeId" 
+            LEFT JOIN circuit ON premise_circuit."iCircuitId" = circuit."iCircuitId"
+            LEFT JOIN connection_type_mas ON premise_circuit."iConnectionTypeId" = connection_type_mas."iConnectionTypeId" WHERE '.$whereQuery.'
+            ORDER BY premise_circuit."iPremiseCircuitId" Desc ';
+        $data['premiseCircuitData'] = $sqlObj->GetAll($pCircuitData);
+        //print_r($data);exit;
         return $data;
     }
 
