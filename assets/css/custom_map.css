@@ -426,6 +426,10 @@ p.area-text2 {
     height:20px;
 }
 
+.search_menu .form-group {
+    margin-bottom: 7px;
+}
+
 /*div.sitedivmsg{
     color: rgb(255,255,255);
 }*/

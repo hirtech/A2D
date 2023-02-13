@@ -302,7 +302,7 @@
                 </div>
                 <div class="card-heading-inner">
                     <div class="row">
-                        <div class="col-12">
+                        <div class="col-12 search_menu">
                             <form id="form">
                                 <input type="hidden" name="vLatitude" id="vLatitude" value="">
                                 <input type="hidden" name="vLongitude" id="vLongitude" value="">
