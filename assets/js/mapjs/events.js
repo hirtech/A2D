@@ -422,7 +422,6 @@ $(document).ready(function() {
             });
         }
         resetButton();
-        zoneLayer = [];
         custLayer = [];
         pCircuitStatusLayer = [];
         pCircuitcTypeLayer = [];
@@ -572,8 +571,8 @@ $(document).ready(function() {
             $("#selectAllCustLayer").prop("checked", false);
         }
         custLayer = [];
-        $.each($("input[name='custLayer[]']:checked"), function() {
-              custLayer.push($(this).val());
+        $.each($("input[name='custlayer[]']:checked"), function() {
+            custLayer.push($(this).val());
         });
         resetButton();
         networkLayer = [];
@@ -624,14 +623,14 @@ $(document).ready(function() {
                 $(".selectAllZoneLayer").prop("checked", true);
                 $("#selectAllZoneLayer").val("Yes");
 
-                $.each($("input[name='custlayer[]']:checked"), function() {
+                $.each($("input[name='zoneLayer[]']:checked"), function() {
                     zoneLayer.push($(this).val());
                 });
                 //console.log(zoneLayer);
             } else {
                 $(".selectAllZoneLayer").prop("checked", false);
                 $("#selectAllZoneLayer").val("No");
-                $.each($("input[name='custlayer[]']:checked"), function() {
+                $.each($("input[name='zoneLayer[]']:checked"), function() {
                     zoneLayer.push($(this).val());
                 });
             }
@@ -644,7 +643,6 @@ $(document).ready(function() {
         custLayer = [];
         pCircuitStatusLayer = [];
         pCircuitcTypeLayer = [];
-        zoneLayer = [];
         fiberInquiryLayer = [];
         serviceOrderLayer = [];
         workOrderLayer = [];
@@ -688,7 +686,7 @@ $(document).ready(function() {
             }
             
             $.each($("input[name='zoneLayer[]']:checked"), function() {
-                  zoneLayer.push($(this).val());
+                zoneLayer.push($(this).val());
             });
         }else{
             //alert('Please select atleast one network from "Filter" Submenu.');
@@ -696,7 +694,6 @@ $(document).ready(function() {
         }
         resetButton();
         //networkLayer = [];
-        zoneLayer = [];
         custLayer = [];
         pCircuitStatusLayer = [];
         pCircuitcTypeLayer = [];
@@ -1827,6 +1824,7 @@ $("#search_site_map").click(function() {
                         if (data) {
                             console.log('data found');
                             var siteData = JSON.parse(data);
+                            console.log(siteData);
                             if(Object.keys(siteData).length > 0){
                                 $.each(siteData, function(premiseid, item) {
                                     if (action == 'getSerachFiberInquiryData') {
@@ -2138,6 +2136,98 @@ $("#search_site_map").click(function() {
                                                 content += "<div class='d-flex'><span class='font-weight-bold'>Technician :</span>&nbsp;" + vTechnicianName + "</div>";
                                                 content += "<div class='d-flex'><span class='font-weight-bold'>Notes :</span>&nbsp;" + tNotes + "</div>";
                                                 content += "<a class='btn btn-primary  mr-2 text-white' title='Edit Awareness' onclick=addEditDataAwareness('"+id+"','edit','0')>Edit Awareness</a>";
+                                                content += "</div>";
+
+                                                CreatePopup(content, sitesearchMarker[s], id, lat_long);
+                                                
+                                                sitesearchMarker[s].setMap(map);
+                                                if (markerSpiderfier) {
+                                                    markerSpiderfier.addMarker(sitesearchMarker[s]);
+                                                }
+                                                
+                                                //Extend each marker's position in LatLngBounds object.
+                                                bounds.extend(sitesearchMarker[s].position);
+                                                s++;
+                                            }
+                                        }
+                                    }else if (action == 'getSerachEquipmentData') {
+                                        var id = premiseid;
+                                        if (siteData[id].point !== undefined) {
+                                            for (i = 0; i < siteData[id].point.length; i++) {
+
+                                                var pointMatrix = {
+                                                    lat: siteData[id].point[i]['lat']+ mathRandLat,
+                                                    lng: siteData[id].point[i]['lng']+ mathRandLng
+                                                };
+
+                                                var iPremiseId = siteData[id]['iPremiseId'];
+                                                var vPremiseName = siteData[id]['vPremiseName'];
+                                                var vAddress = siteData[id]['vAddress'];
+                                                var cityid = siteData[id]['cityid'];
+                                                var stateid = siteData[id]['stateid'];
+                                                var countyid = siteData[id]['countyid'];
+                                                var zipcode = siteData[id]['zipcode'];
+                                                var zoneid = siteData[id]['zoneid'];
+                                                var vZoneName = siteData[id]['vZoneName'];
+                                                var networkid = siteData[id]['networkid'];
+                                                var vNetwork = siteData[id]['vNetwork'];
+                                                var vPremiseType = siteData[id]['vPremiseType'];
+                                                var vModelName = siteData[id]['vModelName'];
+                                                var vSerialNumber = siteData[id]['vSerialNumber'];
+                                                var vMACAddress = siteData[id]['vMACAddress'];
+                                                var vSize = siteData[id]['vSize'];
+                                                var vWeight = siteData[id]['vWeight'];
+                                                var vMaterial = siteData[id]['vMaterial'];
+                                                var vPower = siteData[id]['vPower'];
+                                                var dInstallByDate = siteData[id]['dInstallByDate'];
+                                                var dInstalledDate = siteData[id]['dInstalledDate'];
+                                                var vPurchaseCost = siteData[id]['vPurchaseCost'];
+                                                var dPurchaseDate = siteData[id]['dPurchaseDate'];
+                                                var dWarrantyExpiration = siteData[id]['dWarrantyExpiration'];
+                                                var vWarrantyCost = siteData[id]['vWarrantyCost'];
+                                                var vInstallType = siteData[id]['vInstallType'];
+                                                var vLinkType = siteData[id]['vLinkType'];
+                                                var dProvisionDate = siteData[id]['dProvisionDate'];
+                                                var vPremiseCircuitData = siteData[id]['vPremiseCircuitData'];
+                                                var vOperationalStatus = siteData[id]['vOperationalStatus'];
+                                               
+
+                                                var lat_long = new google.maps.LatLng(siteData[id], siteData[id]['vLongitude']);
+
+                                                sitesearchMarker[s] = new google.maps.Marker({
+                                                    map: map,
+                                                    position: pointMatrix,
+                                                    icon: siteData[id].icon,
+                                                });
+                                                
+                                                newLocation(pointMatrix.lat,pointMatrix.lng);
+
+                                                var vPremiseData =  iPremiseId+" ("+vPremiseName+"; "+vPremiseType+")";
+
+                                                var content = '';
+                                                content += "<div CELLPADDING=5 CELLSPACING=5 class=info_box id=info_box>";
+                                                content += "<h5 class='border-bottom pb-2 mb-3'>Equipment #" + id +"</h5>";
+                                                content += "<div class='d-flex'><h6>" + vModelName + "</h6></div>";
+                                                content += "<div class='d-flex'><span class='font-weight-bold'>Serial Number :</span>&nbsp;" + vSerialNumber + "</div>";
+                                                content += "<div class='d-flex'><span class='font-weight-bold'>MAC Address :</span>&nbsp;" + vMACAddress + "</div>";
+                                                content += "<div class='d-flex'><span class='font-weight-bold'>Size :</span>&nbsp;" + vSize + "</div>";
+                                                content += "<div class='d-flex'><span class='font-weight-bold'>Weight :</span>&nbsp;" + vWeight + "</div>";
+                                                content += "<div class='d-flex'><span class='font-weight-bold'>Material :</span>&nbsp;" + vMaterial + "</div>";
+                                                content += "<div class='d-flex'><span class='font-weight-bold'>Power :</span>&nbsp;" + vPower + "</div>";
+                                                content += "<div class='d-flex'><span class='font-weight-bold'>Install By Date :</span>&nbsp;" + dInstallByDate + "</div>";
+                                                content += "<div class='d-flex'><span class='font-weight-bold'>Install Date :</span>&nbsp;" + dInstalledDate + "</div>";
+                                                content += "<div class='d-flex'><span class='font-weight-bold'>Purchase Cost :</span>&nbsp;" + vPurchaseCost + "</div>";
+                                                content += "<div class='d-flex'><span class='font-weight-bold'>Purchase Date :</span>&nbsp;" + dPurchaseDate + "</div>";
+                                                content += "<div class='d-flex'><span class='font-weight-bold'>Warranty Expiration :</span>&nbsp;" + dWarrantyExpiration + "</div>";
+                                                content += "<div class='d-flex'><span class='font-weight-bold'>Warranty Cost :</span>&nbsp;" + vWarrantyCost + "</div>";
+                                                content += "<div class='d-flex'><span class='font-weight-bold'>Install Type :</span>&nbsp;" + vInstallType + "</div>";
+                                                content += "<div class='d-flex'><span class='font-weight-bold'>Link Type :</span>&nbsp;" + vLinkType + "</div>";
+                                                content += "<div class='d-flex'><span class='font-weight-bold'>Premise :</span>&nbsp;" + vPremiseData + "</div>";
+                                                content += "<div class='d-flex'><span class='font-weight-bold'>Address :</span>&nbsp;" + vAddress + "</div>";
+                                                content += "<div class='d-flex'><span class='font-weight-bold'>Provision Date:</span>&nbsp;" + dProvisionDate + "</div>";
+                                                content += "<div class='d-flex'><span class='font-weight-bold'>Premise Circuit:</span>&nbsp;" + vPremiseCircuitData + "</span></div>";
+                                                content += "<div class='d-flex'><span class='font-weight-bold'>Operational Status :</span>&nbsp;" + vOperationalStatus + "</div>";
+                                                content += "<a class='btn btn-primary  mr-2 text-white' title='Edit Equipment' href='" + site_url + "service_order/equipment_add&mode=Update&iEquipmentId=" + id + "' target='_blank'>Edit Equipment</a>";
                                                 content += "</div>";
 
                                                 CreatePopup(content, sitesearchMarker[s], id, lat_long);

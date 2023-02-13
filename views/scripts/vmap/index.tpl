@@ -337,21 +337,39 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="search_iServiceOrderId" class="col-sm-5 col-form-label">Workorder Id</label>
+                                    <label for="search_iWorkOrderId" class="col-sm-5 col-form-label">Workorder Id</label>
                                     <div class="col-sm-7">
                                         <input type="text" name="search_iWorkOrderId" class="form-control" id="search_iWorkOrderId" placeholder="Workorder Id">
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="search_iServiceOrderId" class="col-sm-5 col-form-label">Trouble Ticket Id</label>
+                                    <label for="search_iTroubleTicketId" class="col-sm-5 col-form-label">Trouble Ticket Id</label>
                                     <div class="col-sm-7">
                                         <input type="text" name="search_iTroubleTicketId" class="form-control" id="search_iTroubleTicketId" placeholder="Trouble Ticket Id">
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="search_iServiceOrderId" class="col-sm-5 col-form-label">Maintenance Ticket Id</label>
+                                    <label for="search_iMaintenanceTicketId" class="col-sm-5 col-form-label">Maintenance Ticket Id</label>
                                     <div class="col-sm-7">
                                         <input type="text" name="search_iMaintenanceTicketId" class="form-control" id="search_iMaintenanceTicketId" placeholder="Maintenance Ticket Id">
+                                    </div>
+                                </div>                            
+                                <div class="form-group row">
+                                    <label for="search_iAwarenessId" class="col-sm-5 col-form-label">Awareness Task Id</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" name="search_iAwarenessId" class="form-control" id="search_iAwarenessId" placeholder="Awareness Task Id">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="search_iEquipmentId" class="col-sm-5 col-form-label">Equipment Id</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" name="search_iEquipmentId" class="form-control" id="search_iEquipmentId" placeholder="Equipment Id">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="search_iPremiseCircuitId" class="col-sm-5 col-form-label">Premise Circuit Id</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" name="search_iPremiseCircuitId" class="form-control" id="search_iPremiseCircuitId" placeholder="Premise Circuit Id">
                                     </div>
                                 </div>
                                 <div class="form-group row">

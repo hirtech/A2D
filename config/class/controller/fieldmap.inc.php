@@ -254,7 +254,7 @@ class Fieldmap {
             $zolyrArr = explode(",", $param['zoneLayer']);
             $zoneLayerJsonUrl = $field_map_json_path."zoneLayer.json";
             $layerData = json_decode(file_get_contents($zoneLayerJsonUrl), true);
-            $zlayerArr = $layerData['zoneLayer'];
+            $zlayerArr = $layerData['zonelayer'];
             $zlayerFilter_data = $this->multi_array_search($zlayerArr,$zolyrArr);
             $response['zoneLayer'] = $zlayerFilter_data;
         }
@@ -1012,8 +1012,7 @@ class Fieldmap {
     public function getServiceOrderData($param){
         global $sqlObj;
         $data = array();
-        $sOrderData = 'SELECT service_order.* , s."vName" as "vPremiseName", s."vAddress1",
-            s."iCityId", s."iCountyId", s."iStateId", s."iZoneId", s."iZipcode", s."vLatitude", s."vLongitude", st."vTypeName" as "vPremiseType", cm."vCompanyName", z."vZoneName", z."iNetworkId", n."vName" as "vNetwork", ct."vConnectionTypeName", st1."vServiceType" as "vServiceType1", c."vCity", sm."vState"  
+        $sOrderData = 'SELECT service_order.* , s."vName" as "vPremiseName", s."vAddress1", s."vStreet", s."iCityId", s."iCountyId", s."iStateId", s."iZoneId", s."iZipcode", s."vLatitude", s."vLongitude", st."vTypeName" as "vPremiseType", cm."vCompanyName", z."vZoneName", z."iNetworkId", n."vName" as "vNetwork", ct."vConnectionTypeName", st1."vServiceType" as "vServiceType1", c."vCity", sm."vState"  
             FROM service_order 
             LEFT JOIN premise_mas s on service_order."iPremiseId" = s."iPremiseId" 
             LEFT JOIN zone z on s."iZoneId" = z."iZoneId" 
@@ -1032,7 +1031,7 @@ class Fieldmap {
     public function getWorkOrderData($param){
         global $sqlObj;
         $data = array();
-        $wOrderData = 'SELECT workorder.* , s."vName" as "vPremiseName", s."vAddress1", s."iCityId", s."iCountyId", s."iStateId", s."iZoneId", s."iZipcode", s."vLatitude", s."vLongitude",  st."vTypeName" as "vPremiseType", z."vZoneName", z."iNetworkId", n."vName" as "vNetwork", so."vMasterMSA", so."vServiceOrder", ws."vStatus", wt."vType", concat(u."vFirstName",\' \', u."vLastName") as "vRequestor", concat(u1."vFirstName", \' \', u1."vLastName") as "vAssignedTo", c."vCity", sm."vState" 
+        $wOrderData = 'SELECT workorder.* , s."vName" as "vPremiseName", s."vAddress1", s."vStreet", s."iCityId", s."iCountyId", s."iStateId", s."iZoneId", s."iZipcode", s."vLatitude", s."vLongitude",  st."vTypeName" as "vPremiseType", z."vZoneName", z."iNetworkId", n."vName" as "vNetwork", so."vMasterMSA", so."vServiceOrder", ws."vStatus", wt."vType", concat(u."vFirstName",\' \', u."vLastName") as "vRequestor", concat(u1."vFirstName", \' \', u1."vLastName") as "vAssignedTo", c."vCity", sm."vState" 
             FROM workorder 
             LEFT JOIN premise_mas s on workorder."iPremiseId" = s."iPremiseId" 
             LEFT JOIN site_type_mas st on s."iSTypeId" = st."iSTypeId" 
@@ -1053,7 +1052,7 @@ class Fieldmap {
     public function getPremiseCircuitData($param){
         global $sqlObj;
         $data = array();
-        $pCircuitData = 'SELECT premise_circuit.* , wt."vType" as "vWorkOrderType", s."vName" as "vPremiseName", s."vAddress1", s."iCityId", s."iCountyId", s."iStateId", s."iZoneId", s."iZipcode", s."vLatitude", s."vLongitude",  st."vTypeName" as "vPremiseType", z."vZoneName", z."iNetworkId", n."vName" as "vNetwork", circuit."vCircuitName", connection_type_mas."vConnectionTypeName", z."iNetworkId", c."vCity", sm."vState" 
+        $pCircuitData = 'SELECT premise_circuit.* , wt."vType" as "vWorkOrderType", s."vName" as "vPremiseName", s."vAddress1", s."vStreet", s."iCityId", s."iCountyId", s."iStateId", s."iZoneId", s."iZipcode", s."vLatitude", s."vLongitude",  st."vTypeName" as "vPremiseType", z."vZoneName", z."iNetworkId", n."vName" as "vNetwork", circuit."vCircuitName", connection_type_mas."vConnectionTypeName", z."iNetworkId", c."vCity", sm."vState" 
             FROM premise_circuit 
             LEFT JOIN workorder w ON premise_circuit."iWOId" = w."iWOId" 
             LEFT JOIN workorder_type_mas wt ON w."iWOTId" = wt."iWOTId" 
@@ -1121,8 +1120,7 @@ class Fieldmap {
         }
         $whereQuery = implode(" AND ", $where);
         
-        $sOrderData = 'SELECT service_order.* , s."vName" as "vPremiseName", s."vAddress1",
-            s."iCityId", s."iCountyId", s."iStateId", s."iZoneId", s."iZipcode", s."vLatitude", s."vLongitude", st."vTypeName" as "vPremiseType", cm."vCompanyName", z."vZoneName", z."iNetworkId", n."vName" as "vNetwork", ct."vConnectionTypeName", st1."vServiceType" as "vServiceType1", c."vCity", sm."vState"  
+        $sOrderData = 'SELECT service_order.* , s."vName" as "vPremiseName", s."vAddress1", s."vStreet", s."iCityId", s."iCountyId", s."iStateId", s."iZoneId", s."iZipcode", s."vLatitude", s."vLongitude", st."vTypeName" as "vPremiseType", cm."vCompanyName", z."vZoneName", z."iNetworkId", n."vName" as "vNetwork", ct."vConnectionTypeName", st1."vServiceType" as "vServiceType1", c."vCity", sm."vState"  
             FROM service_order 
             LEFT JOIN premise_mas s on service_order."iPremiseId" = s."iPremiseId" 
             LEFT JOIN zone z on s."iZoneId" = z."iZoneId" 
@@ -1353,6 +1351,40 @@ class Fieldmap {
         return $data;
     }
 
+    public function getSerachEquipmentData($param) {
+        global $sqlObj;
+        //echo "<pre>";print_r($param);exit;
+        $data = array();
+
+        $where = array();
+        $iEquipmentId= $param['iEquipmentId'];
+        
+        if($iEquipmentId != ""){
+           $where[] = ' equipment."iEquipmentId" IN ('.$iEquipmentId.')'; 
+        }
+        $whereQuery = implode(" AND ", $where);
+        $equipmentData = 'SELECT equipment.* , em."vModelName", m."vMaterial", p."vPower", s."vName" as "vPremiseName", s."vAddress1", s."vStreet", s."iCityId", s."iCountyId", s."iStateId", s."iZoneId", s."iZipcode", s."vLatitude", s."vLongitude", st."vTypeName" as "vPremiseType", it."vInstallType", lt."vLinkType", os."vOperationalStatus", zone."iNetworkId", circuit."vCircuitName", n."vName" as "vNetwork", c."vCity", sm."vState" 
+        FROM equipment 
+        LEFT JOIN equipment_model em on equipment."iEquipmentModelId" = em."iEquipmentModelId" 
+        LEFT JOIN material_mas m on equipment."iMaterialId" = m."iMaterialId" 
+        LEFT JOIN power_mas p on equipment."iPowerId" = p."iPowerId" 
+        LEFT JOIN premise_mas s on equipment."iPremiseId" = s."iPremiseId" 
+        LEFT JOIN zone on s."iZoneId" = zone."iZoneId" 
+        LEFT JOIN network n on zone."iNetworkId" = n."iNetworkId" 
+        LEFT JOIN city_mas c on s."iCityId" = c."iCityId" 
+        LEFT JOIN state_mas sm on s."iStateId" = sm."iStateId" 
+        LEFT JOIN site_type_mas st on s."iSTypeId" = st."iSTypeId" 
+        LEFT JOIN install_type_mas it on equipment."iInstallTypeId" = it."iInstallTypeId" 
+        LEFT JOIN link_type_mas lt on equipment."iLinkTypeId" = lt."iLinkTypeId" 
+        LEFT JOIN operational_status_mas os on equipment."iOperationalStatusId" = os."iOperationalStatusId" 
+        LEFT JOIN premise_circuit on equipment."iPremiseCircuitId" = premise_circuit."iPremiseCircuitId" 
+        LEFT JOIN circuit on premise_circuit."iCircuitId" = circuit."iCircuitId" WHERE '.$whereQuery.' ORDER BY equipment."iEquipmentId" desc';
+        //echo $equipmentData;exit;
+        $data['equipmentData'] = $sqlObj->GetAll($equipmentData);
+        //print_r($data);exit;
+        return $data;
+    }
+
     public function getSerachPremiseCircuitData($param){
         global $sqlObj;
         //echo "<pre>";print_r($param);exit;
@@ -1366,7 +1398,7 @@ class Fieldmap {
         }
         $whereQuery = implode(" AND ", $where);
 
-        $pCircuitData = 'SELECT premise_circuit.* , wt."vType" as "vWorkOrderType", s."vName" as "vPremiseName", s."vAddress1", s."iCityId", s."iCountyId", s."iStateId", s."iZoneId", s."iZipcode", s."vLatitude", s."vLongitude",  st."vTypeName" as "vPremiseType", z."vZoneName", z."iNetworkId", n."vName" as "vNetwork", circuit."vCircuitName", connection_type_mas."vConnectionTypeName", z."iNetworkId", c."vCity", sm."vState" 
+        $pCircuitData = 'SELECT premise_circuit.* , wt."vType" as "vWorkOrderType", s."vName" as "vPremiseName", s."vAddress1", s."vStreet", s."iCityId", s."iCountyId", s."iStateId", s."iZoneId", s."iZipcode", s."vLatitude", s."vLongitude",  st."vTypeName" as "vPremiseType", z."vZoneName", z."iNetworkId", n."vName" as "vNetwork", circuit."vCircuitName", connection_type_mas."vConnectionTypeName", z."iNetworkId", c."vCity", sm."vState" 
             FROM premise_circuit 
             LEFT JOIN workorder w ON premise_circuit."iWOId" = w."iWOId" 
             LEFT JOIN workorder_type_mas wt ON w."iWOTId" = wt."iWOTId" 

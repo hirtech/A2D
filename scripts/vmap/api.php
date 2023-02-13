@@ -863,6 +863,65 @@ if(isset($_POST) &&  !in_array($_POST['action'],array("getSerachSiteData", "getS
     }
     echo json_encode($awarenessTaskData);
     die;
+}else if(isset($_POST) && $_POST['action'] == "getSerachEquipmentData") {
+    $action = $_POST['action'];
+    $data = $mapObj->$action($_POST); 
+    
+    $equipmentData = array();
+    $equipmentData_arr = $data['equipmentData'];
+    foreach($equipmentData_arr as $site){
+        if(isset($site['vLatitude']) && $site['vLongitude'] != ''){
+            $vLatitude = $site['vLatitude'];
+            $vLongitude = $site['vLongitude'];
+            $equipmentData[$site['iEquipmentId']]['point'][] =  array(
+                'lat' => (float) $vLatitude,
+                'lng' => (float) $vLongitude
+            );
+
+            $vAddress1 = ($site['vAddress1'] ? $site['vAddress1'] : '');
+            $vStreet = ($site['vStreet'] ? $site['vStreet'] : '');
+            $vCity = ($site['vCity'] ? $site['vCity'] : '');
+            $vState = ($site['vState'] ? $site['vState'] : '');
+
+            $vPremiseCircuitData = '';
+            if($site['iPremiseCircuitId'] > 0)
+                $vPremiseCircuitData = "Premise Circuit ID #".$site['iPremiseCircuitId']." (".$site['vCircuitName'].")";
+            $equipmentData[$site['iEquipmentId']]['iPremiseId'] = $site['iPremiseId'];
+            $equipmentData[$site['iEquipmentId']]['vPremiseName'] = $site['vPremiseName'];
+            $equipmentData[$site['iEquipmentId']]['vAddress'] = $vAddress1.' '.$vStreet.' '.$vCity.' '.$vState;
+            $equipmentData[$site['iEquipmentId']]['cityid'] = $site['iCityId'];
+            $equipmentData[$site['iEquipmentId']]['stateid'] = $site['iStateId'];
+            $equipmentData[$site['iEquipmentId']]['countyid'] = $site['iCountyId'];
+            $equipmentData[$site['iEquipmentId']]['zipcode'] = $site['iZipcode'];
+            $equipmentData[$site['iEquipmentId']]['zoneid'] = $site['iZoneId'];
+            $equipmentData[$site['iEquipmentId']]['vZoneName'] = $site['vZoneName'];
+            $equipmentData[$site['iEquipmentId']]['networkid'] = $site['iNetworkId'];
+            $equipmentData[$site['iEquipmentId']]['vNetwork'] = $site['vNetwork'];
+            $equipmentData[$site['iEquipmentId']]['vPremiseType'] = $site['vPremiseType'];
+            $equipmentData[$site['iEquipmentId']]['vModelName'] = $site['vModelName'];
+            $equipmentData[$site['iEquipmentId']]['vSerialNumber'] = $site['vSerialNumber'];
+            $equipmentData[$site['iEquipmentId']]['vMACAddress'] = $site['vMACAddress'];
+            $equipmentData[$site['iEquipmentId']]['vSize'] = $site['vSize'];
+            $equipmentData[$site['iEquipmentId']]['vWeight'] = $site['vWeight'];
+            $equipmentData[$site['iEquipmentId']]['vMaterial'] = $site['vMaterial'];
+            $equipmentData[$site['iEquipmentId']]['vPower'] = $site['vPower'];
+            $equipmentData[$site['iEquipmentId']]['dInstallByDate'] = date_display_report_date($site['dInstallByDate']);
+            $equipmentData[$site['iEquipmentId']]['dInstalledDate'] = date_display_report_date($site['dInstalledDate']);
+            $equipmentData[$site['iEquipmentId']]['vPurchaseCost'] = $site['vPurchaseCost'];
+            $equipmentData[$site['iEquipmentId']]['dPurchaseDate'] = date_display_report_date($site['dPurchaseDate']);
+            $equipmentData[$site['iEquipmentId']]['dWarrantyExpiration'] = $site['dWarrantyExpiration'];
+            $equipmentData[$site['iEquipmentId']]['vWarrantyCost'] = $site['vWarrantyCost'];
+            $equipmentData[$site['iEquipmentId']]['vInstallType'] = $site['vInstallType'];
+            $equipmentData[$site['iEquipmentId']]['vLinkType'] = $site['vLinkType'];
+            $equipmentData[$site['iEquipmentId']]['dProvisionDate'] = date_display_report_date($site['dProvisionDate']);
+            $equipmentData[$site['iEquipmentId']]['vOperationalStatus'] = $site['vOperationalStatus'];
+            $equipmentData[$site['iEquipmentId']]['vPremiseCircuitData'] = $vPremiseCircuitData;
+            $equipmentData[$site['iEquipmentId']]['icon'] = $site_url."images/equipment.png";
+
+        }
+    }
+    echo json_encode($equipmentData);
+    die;
 }else if(isset($_POST) && $_POST['action'] == "getSerachPremiseCircuitData"){
     $action = $_POST['action'];
     $data = $mapObj->$action($_POST); 

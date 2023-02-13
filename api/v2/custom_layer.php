@@ -119,8 +119,7 @@ if($request_type == "custom_layer_list"){
 }
 else if($request_type == "custom_layer_add"){
     if($FILES_PARA["vFile"]['name'] != ""){
-        $filepath = create_image_folder($sess_iCountySaasId,$custom_layer_path);
-        $file_arr = img_fileUpload("vFile", $filepath, '', $valid_ext = array('kml','kmz'));
+        $file_arr = img_fileUpload("vFile", $custom_layer_path, '', $valid_ext = array('kml','kmz'));
         $file_name = $file_arr[0];
         $file_msg =  $file_arr[1];
    }

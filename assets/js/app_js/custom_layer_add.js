@@ -100,13 +100,19 @@ function onMapLoad(){
                             
                     if(len > 0){  
                         //var src = 'http://butte.vectorcontrolsystem.com/storage/kml/6/1606197216_1516332155_organic.kml';
-                        var src = json_kml[0]['vFilePath'];
+                        /*var src = json_kml[0]['vFilePath'];
                         var kmlOptions = {
                             suppressInfoWindows: true,
                             preserveViewport: true,
                             map: map
                         };
-                        var kmlLayer = new google.maps.KmlLayer(src, kmlOptions);
+                        var kmlLayer = new google.maps.KmlLayer(src, kmlOptions);*/
+
+						var kmlLayer = new google.maps.KmlLayer({
+							url: json_kml[0]['vFilePath'],
+							suppressInfoWindows: true,
+							map: map,
+						});
                     }
                 }  
             }

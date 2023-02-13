@@ -122,8 +122,8 @@ $panel_default_customizer = array(
 $premise_type_icon_path = $site_storage_images_path."premise_type_icon/";
 $premise_type_icon_url = $site_storage_images_url."premise_type_icon/";
 
-$field_map_json_url = $site_storage_images_path."field_map_json_data/";
-$field_map_json_path = $site_storage_images_url."field_map_json_data/";
+$field_map_json_path = $site_storage_images_path."field_map_json_data/";
+$field_map_json_url = $site_storage_images_url."field_map_json_data/";
 
 #Custom layer kml file
 $custom_layer_path = $site_storage_images_path."kml/";
