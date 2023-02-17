@@ -1,4 +1,9 @@
- $(document).ready(function(){
+var primarycolor = getComputedStyle(document.body).getPropertyValue('--primarycolor');
+var bordercolor = getComputedStyle(document.body).getPropertyValue('--bordercolor');
+var bodycolor = getComputedStyle(document.body).getPropertyValue('--bodycolor');
+
+$(document).ready(function(){
+
     if(dashboard_amchart_arr.length > 0) {
         $(".chartdiv_row").show();
         AmCharts.makeChart("chartdiv", {
@@ -49,6 +54,11 @@
     }
 
     initMap();
+    loadProfileData();
+
+    google.charts.load('current', {'packages':['bar']});
+    google.charts.setOnLoadCallback(drawChart);
+
 });
 
 function initMap() {
@@ -394,4 +404,100 @@ function CreatePopup(html, marker, ind, lat_long) {
             google.maps.event.clearListeners(marker, 'mouseout');
         }
     })(marker, ind));
+}
+
+function drawChart() {
+    
+    var data = google.visualization.arrayToDataTable(dashboard_SObarchart);
+    var options = {
+        title: 'Service Order Status',
+        titleTextStyle: {
+            color: primarycolor,  
+            fontSize: 18,              
+            bold: true,                
+        },
+        bars: 'vertical', // Required for Material Bar Charts.
+        //width: 600,
+        height: 300,
+    };
+    var chart = new google.charts.Bar(document.getElementById('serviceorder_chart'));
+    chart.draw(data, google.charts.Bar.convertOptions(options));
+
+
+    var wodata = google.visualization.arrayToDataTable(dashboard_WObarchart);
+    var WOoptions = {
+        title: 'Work Order Status',
+        titleTextStyle: {
+            color: primarycolor,        
+            fontSize: 18,              
+            bold: true,      
+        },
+        bars: 'vertical', // Required for Material Bar Charts.
+        //width: 600,
+        height: 300,
+    };
+    var wochart = new google.charts.Bar(document.getElementById('workorder_chart'));
+    wochart.draw(wodata, google.charts.Bar.convertOptions(WOoptions));
+}
+
+function loadProfileData() {
+    var so_str = '';
+    if(dashboard_serviceorder && dashboard_serviceorder.length > 0){
+        for (var i = 0; i < dashboard_serviceorder.length; i++) {
+            var color_class = dashboard_serviceorder[i].color_class;
+            so_str += '<tr>';
+                so_str += '<td class="text-center">'+dashboard_serviceorder[i].id+'</td>';
+                so_str += '<td>'+dashboard_serviceorder[i].vPremise+'</td>';
+                so_str += '<td>'+dashboard_serviceorder[i].vCarrier+'</td>';
+                so_str += '<td class="text-center font-weight-bold '+color_class+'">'+dashboard_serviceorder[i].vStatus+'</td>';
+            so_str += '</tr>';
+        }
+    }else {
+        so_str += '<tr>';
+            so_str += '<td colspan="4" class="text-center font-weight-bold">No Records found!</td>';
+        so_str += '</tr>';   
+    }
+    if(so_str != ''){
+        $(".service_order_data").html(so_str);
+    }
+
+    var wo_str = '';
+    if(dashboard_workorder && dashboard_workorder.length > 0){
+        for (var i = 0; i < dashboard_workorder.length; i++) {
+            var color_class = dashboard_workorder[i].color_class;
+            wo_str += '<tr>';
+                wo_str += '<td class="text-center">'+dashboard_workorder[i].id+'</td>';
+                wo_str += '<td>'+dashboard_workorder[i].vPremise+'</td>';
+                wo_str += '<td>'+dashboard_workorder[i].vServiceOrder+'</td>';
+                wo_str += '<td class="text-center font-weight-bold '+color_class+'">'+dashboard_workorder[i].vStatus+'</td>';
+            wo_str += '</tr>';
+        }
+    }else {
+        wo_str += '<tr>';
+            wo_str += '<td colspan="4" class="text-center font-weight-bold">No Records found!</td>';
+        wo_str += '</tr>';   
+    }
+    if(wo_str != ''){
+        $(".work_order_data").html(wo_str);
+    }
+
+    var fi_str = '';
+    if(dashboard_fiberinquiry && dashboard_fiberinquiry.length > 0){
+        for (var i = 0; i < dashboard_fiberinquiry.length; i++) {
+            var color_class = dashboard_fiberinquiry[i].color_class;
+            fi_str += '<tr>';
+                fi_str += '<td class="text-center">'+dashboard_fiberinquiry[i].id+'</td>';
+                fi_str += '<td>'+dashboard_fiberinquiry[i].vName+'</td>';
+                fi_str += '<td>'+dashboard_fiberinquiry[i].vAddress+'</td>';
+                fi_str += '<td class="text-center font-weight-bold '+color_class+'">'+dashboard_fiberinquiry[i].vStatus+'</td>';
+            fi_str += '</tr>';
+        }
+    }else {
+        fi_str += '<tr>';
+            fi_str += '<td colspan="4" class="text-center font-weight-bold">No Records found!</td>';
+        fi_str += '</tr>';   
+    }
+    if(fi_str != ''){
+        $(".fiberinquiry_data").html(fi_str);
+    }
 }

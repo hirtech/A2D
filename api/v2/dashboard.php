@@ -401,7 +401,7 @@ if ($request_type == "dashboard_glance") {
     $code = 2000;
     $message = api_getMessage($req_ext, constant($code));
     $response_data = array("Code" => 200, "Message" => $message, "result" => $result);
-} else if ($request_type == "dashboard_amchart") {
+}else if ($request_type == "dashboard_amchart") {
     $rs = array();
     $where_arr = array();
     $join_fieds_arr = array();
@@ -424,7 +424,7 @@ if ($request_type == "dashboard_glance") {
         $message = api_getMessage($req_ext, constant($code));
         $response_data = array("Code" => 400, "Message" => $message, "result" => $rs);
     }
-} else if ($request_type == "dashboard_accesgroup_map") {
+}else if ($request_type == "dashboard_accesgroup_map") {
     $site_arr = array();
     
     $userid = $RES_PARA['userId'];
@@ -881,8 +881,278 @@ if ($request_type == "dashboard_glance") {
     $code = 2000;
     $message = api_getMessage($req_ext, constant($code));
     $response_data = array("Code" => 200, "Message" => $message, "result" => array('site' => $site_arr));
-}
-else {
+}else if ($request_type == "dashboard_serviceorder_barchart"){
+    $js_status_arr = array();
+
+    $sql_so = "SELECT count(\"iServiceOrderId\") as count, \"iSOStatus\", \"iCarrierID\" FROM service_order GROUP BY \"iCarrierID\", \"iSOStatus\" ORDER BY \"iSOStatus\"";
+    $rs_so = $sqlObj->GetAll($sql_so);
+    $SO_arr = array();
+    foreach ($rs_so as $key => $value) {
+        $SO_arr[$value['iCarrierID']][$value['iSOStatus']] = $value['count'];
+    }
+    //echo "<pre>";print_r($SO_arr);exit;
+    
+    $sql = "SELECT \"iCompanyId\", \"vCompanyName\" FROM company_mas WHERE \"iStatus\" = 1 ORDER BY \"vCompanyName\"";
+    $rs = $sqlObj->GetAll($sql);
+    $ci = count($rs);
+
+    $status_arr = ['1' => 'Created', '2'=> 'In-Review', '3' => 'Approved'];
+    if($ci > 0){
+        $row1 = '["Status", ';
+        $row2 = '';
+        for($c=0; $c<$ci; $c++){
+            $row1 .= '"'.$rs[$c]['vCompanyName'].'", ';
+        }
+        $arr[] = substr($row1, 0, -2).']';
+
+        foreach($status_arr as $key=>$val){
+            $row2 .= '["'.$val.'"';
+            foreach($rs as $k=>$v){
+                $so_cnt = 0;
+                if(isset($SO_arr[$v['iCompanyId']][$key]) && $SO_arr[$v['iCompanyId']][$key] > 0){
+                    $so_cnt = $SO_arr[$v['iCompanyId']][$key];
+                }
+                $row2 .= ', '.$so_cnt; 
+            }  
+            $row2 .= '], ';
+        }
+        $arr[] = substr($row2, 0, -2).'';
+        //echo "<pre>";print_r($arr);exit;
+        if(count($arr) > 0){
+            $js_status_arr =  implode(', ', $arr);
+        }
+        $rh = HTTPStatus(200);
+        $code = 2000;
+        $message = api_getMessage($req_ext, constant($code));
+        $response_data = array("Code" => 200, "Message" => $message, "result" => $js_status_arr);
+    } else {
+        $rh = HTTPStatus(400);
+        $code = 2104;
+        $message = api_getMessage($req_ext, constant($code));
+        $response_data = array("Code" => 400, "Message" => $message, "result" => $js_status_arr);
+    }
+}else if ($request_type == "dashboard_workorder_barchart"){
+    $js_status_arr = array();
+
+    $sql_wo = "SELECT count(\"iWOId\") as count, w.\"iWOSId\", s.\"iCarrierID\" FROM workorder w INNER JOIN service_order s ON w.\"iServiceOrderId\" = s.\"iServiceOrderId\" GROUP BY s.\"iCarrierID\", w.\"iWOSId\" ORDER BY w.\"iWOSId\"";
+    $rs_wo = $sqlObj->GetAll($sql_wo);
+    $WO_arr = array();
+    foreach ($rs_wo as $key => $value) {
+        $WO_arr[$value['iCarrierID']][$value['iWOSId']] = $value['count'];
+    }
+    //echo $sql_wo;
+    //echo "<pre>";print_r($WO_arr);exit;
+    
+    $sql = "SELECT \"iCompanyId\", \"vCompanyName\" FROM company_mas WHERE \"iStatus\" = 1 ORDER BY \"vCompanyName\"";
+    $rs = $sqlObj->GetAll($sql);
+    $ci = count($rs);
+    
+    $sql_status = "SELECT \"iWOSId\", \"vStatus\" FROM workorder_status_mas WHERE \"iStatus\" = 1 ORDER BY \"iWOSId\"";
+    $rs_status = $sqlObj->GetAll($sql_status);
+    $wi = count($rs_status);
+    $status_arr = [];
+    if($wi > 0){
+        foreach ($rs_status as $key => $status) {
+            $status_arr[$status['iWOSId']] = $status['vStatus'];
+        }
+    }
+    //echo "<pre>";print_r($status_arr);exit;
+
+    if($ci > 0){
+        $row1 = '["Status", ';
+        $row2 = '';
+        for($c=0; $c<$ci; $c++){
+            $row1 .= '"'.$rs[$c]['vCompanyName'].'", ';
+        }
+        $arr[] = substr($row1, 0, -2).']';
+
+        foreach($status_arr as $key=>$val){
+            $row2 .= '["'.$val.'"';
+            foreach($rs as $k=>$v){
+                $wo_cnt = 0;
+                if(isset($WO_arr[$v['iCompanyId']][$key]) && $WO_arr[$v['iCompanyId']][$key] > 0){
+                    $wo_cnt = $WO_arr[$v['iCompanyId']][$key];
+                }
+                $row2 .= ', '.$wo_cnt; 
+            }  
+            $row2 .= '], ';
+        }
+        $arr[] = substr($row2, 0, -2).'';
+        //echo "<pre>";print_r($arr);exit;
+        if(count($arr) > 0){
+            $js_status_arr =  implode(', ', $arr);
+        }
+        $rh = HTTPStatus(200);
+        $code = 2000;
+        $message = api_getMessage($req_ext, constant($code));
+        $response_data = array("Code" => 200, "Message" => $message, "result" => $js_status_arr);
+    } else {
+        $rh = HTTPStatus(400);
+        $code = 2104;
+        $message = api_getMessage($req_ext, constant($code));
+        $response_data = array("Code" => 400, "Message" => $message, "result" => $js_status_arr);
+    }
+}else if ($request_type == "dashboard_profile_data"){
+    $site_arr = [];
+    $userid = $RES_PARA['userId'];
+    
+    // ************ Service Order ************ //
+    $ServiceOrderObj->clear_variable();
+    $where_arr = array();
+    $join_fieds_arr = array();
+    $join_arr = array();
+    $join_fieds_arr[] = 's."vName" as "vPremiseName"';
+    $join_fieds_arr[] = 'st."vTypeName" as "vPremiseType"';
+    $join_fieds_arr[] = 'cm."vCompanyName"';
+    $join_arr[] = 'LEFT JOIN premise_mas s on service_order."iPremiseId" = s."iPremiseId"';
+    $join_arr[] = 'LEFT JOIN site_type_mas st on s."iSTypeId" = st."iSTypeId"';
+    $join_arr[] = 'LEFT JOIN company_mas cm on service_order."iCarrierID" = cm."iCompanyId"';
+    
+    $where_arr[] = "service_order.\"iUserCreatedBy\" = '".$userid."'"; 
+    $where_arr[] = 'date_part(\'year\', service_order."dAddedDate") = date_part(\'year\', CURRENT_DATE)';  
+    $ServiceOrderObj->join_field = $join_fieds_arr;
+    $ServiceOrderObj->join = $join_arr;
+    $ServiceOrderObj->where = $where_arr;
+    $ServiceOrderObj->param['order_by'] = "service_order.\"iServiceOrderId\" DESC";
+    $ServiceOrderObj->setClause();
+    $ServiceOrderObj->debug_query = false;
+    $rs_sorder = $ServiceOrderObj->recordset_list();
+    $si = count($rs_sorder);
+    if($si >0){
+        $soarr = [];
+        for($i=0; $i<$si; $i++){
+            $vSOStatus = '';
+            $color_class = 'text-dark';
+            if($rs_sorder[$i]['iSOStatus'] == 1){
+                $vSOStatus = 'Created';
+                $color_class = 'text-info';
+            }else if($rs_sorder[$i]['iSOStatus'] == 2){
+                $vSOStatus = 'In-Review';
+                $color_class = 'text-warning';
+            }else if($rs_sorder[$i]['iSOStatus'] == 3){
+                $vSOStatus = 'Approved';
+                $color_class = 'text-success';
+            }
+            $soarr[$i]['id'] = $rs_sorder[$i]['iServiceOrderId'];
+            $soarr[$i]['vPremise'] = $rs_sorder[$i]['iPremiseId'].' ('.$rs_sorder[$i]['vPremiseName'].'; '.$rs_sorder[$i]['vPremiseType'].')';
+            $soarr[$i]['vCarrier'] = $rs_sorder[$i]['vCompanyName'];
+            $soarr[$i]['vStatus'] = $vSOStatus;
+            $soarr[$i]['color_class'] = $color_class;
+        }
+        $site_arr['Serviceorder'] = $soarr;
+    }
+    // ************ Service Order ************ //
+
+    // ************ Work Order ************ //
+    $WorkOrderObj->clear_variable();
+    $where_arr = array();
+    $join_fieds_arr = array();
+    $join_arr = array();
+
+    $join_fieds_arr[] = 's."vName" as "vPremiseName"';
+    $join_fieds_arr[] = 'st."vTypeName" as "vPremiseType"';
+    $join_fieds_arr[] = 'so."vMasterMSA"';
+    $join_fieds_arr[] = 'so."vServiceOrder"';
+    $join_fieds_arr[] = 'ws."vStatus"';
+    $join_arr[] = 'LEFT JOIN premise_mas s on workorder."iPremiseId" = s."iPremiseId"';
+    $join_arr[] = 'LEFT JOIN site_type_mas st on s."iSTypeId" = st."iSTypeId"';
+    $join_arr[] = 'LEFT JOIN service_order so on workorder."iServiceOrderId" = so."iServiceOrderId"';
+    $join_arr[] = 'LEFT JOIN workorder_status_mas ws on workorder."iWOSId" = ws."iWOSId"';
+    $where_arr[] = "workorder.\"iAssignedToId\" = '".$userid."'"; 
+    $where_arr[] = 'date_part(\'year\', workorder."dAddedDate") = date_part(\'year\', CURRENT_DATE)'; 
+    $WorkOrderObj->join_field = $join_fieds_arr;
+    $WorkOrderObj->join = $join_arr;
+    $WorkOrderObj->where = $where_arr;
+    $WorkOrderObj->param['order_by'] = "workorder.\"iWOId\" DESC";
+    $WorkOrderObj->setClause();
+    $WorkOrderObj->debug_query = false;
+    $rs_worder = $WorkOrderObj->recordset_list();
+    //echo "<pre>";print_r($rs_worder);exit;
+    $wi = count($rs_worder);
+    if($wi >0){
+        $woarr = [];
+        for($i=0; $i<$wi; $i++){
+            $color_class = 'text-dark';
+            if($rs_worder[$i]['iWOSId'] == 1){ //Open
+                $color_class = 'text-warning';
+            }else if($rs_worder[$i]['iWOSId'] == 2){ //Closed
+                $color_class = 'text-primary';
+            }else if($rs_worder[$i]['iWOSId'] == 3){ //Suspended
+                $color_class = 'text-warning';
+            }else if($rs_worder[$i]['iWOSId'] == 4){ //Planning
+                $color_class = 'text-info';
+            }
+
+            $vServiceDetails = '';
+            if($rs_worder[$i]['iServiceOrderId'] != ""){
+                $vServiceDetails .= "SO #".$rs_worder[$i]['iServiceOrderId'].": ".$rs_worder[$i]['vMasterMSA']." | ".$rs_worder[$i]['vServiceOrder'];
+            }
+
+            $woarr[$i]['id'] = $rs_worder[$i]['iServiceOrderId'];
+            $woarr[$i]['vPremise'] = $rs_worder[$i]['iPremiseId'].' ('.$rs_worder[$i]['vPremiseName'].'; '.$rs_worder[$i]['vPremiseType'].')';
+            $woarr[$i]['vServiceOrder'] = $vServiceDetails;
+            $woarr[$i]['vStatus'] = $rs_worder[$i]['vStatus'];
+            $woarr[$i]['color_class'] = $color_class;
+        }
+        $site_arr['Workorder'] = $woarr;
+    }
+    // ************ Work Order ************ //
+
+    // ************ Fiber Inquiry ************ //
+    $FiberInquiryObj->clear_variable();
+    $where_arr = array();
+    $join_fieds_arr = array();
+    $join_arr = array();
+
+    $join_fieds_arr[] = "CONCAT(contact_mas.\"vFirstName\", ' ', contact_mas.\"vLastName\") AS \"vContactName\"";
+    $join_fieds_arr[] = 'sm."vState"';
+    $join_fieds_arr[] = 'cm."vCity"';
+    $join_arr[] = 'LEFT JOIN contact_mas on fiberinquiry_details."iCId" = contact_mas."iCId"';
+    $join_arr[] = 'LEFT JOIN state_mas sm on fiberinquiry_details."iStateId" = sm."iStateId"';
+    $join_arr[] = 'LEFT JOIN city_mas cm on fiberinquiry_details."iCityId" = cm."iCityId"';
+    $where_arr[] = "fiberinquiry_details.\"iLoginUserId\" = '".$userid."'"; 
+    $where_arr[] = 'date_part(\'year\', fiberinquiry_details."dAddedDate") = date_part(\'year\', CURRENT_DATE)'; 
+    $FiberInquiryObj->join_field = $join_fieds_arr;
+    $FiberInquiryObj->join = $join_arr;
+    $FiberInquiryObj->where = $where_arr;
+    $FiberInquiryObj->param['order_by'] = "fiberinquiry_details.\"iFiberInquiryId\" DESC";
+    $FiberInquiryObj->setClause();
+    $FiberInquiryObj->debug_query = false;
+    $rs_fInquiry = $FiberInquiryObj->recordset_list();
+    //echo "<pre>";print_r($rs_fInquiry);exit;
+    $fi = count($rs_fInquiry);
+    if($fi > 0){
+        $fi_arr = array();
+        for ($i=0; $i < $fi; $i++) {
+            $vStatus = '';
+            $color_class = 'text-dark';
+            if($rs_fInquiry[$i]['iStatus'] == 1) { // Draft
+                $vStatus = 'Draft';
+                $color_class = 'text-primary';
+            }else if($rs_fInquiry[$i]['iStatus'] == 2) { // Assigned
+                $vStatus = 'Assigned';
+                $color_class = 'text-secondary';
+            }else if($rs_fInquiry[$i]['iStatus'] == 3) { // Review
+                $vStatus = 'Review';
+                $color_class = 'text-info';
+            }else if($rs_fInquiry[$i]['iStatus'] == 4) { // Complete
+                $vStatus = 'Complete';
+                $color_class = 'text-success';
+            } 
+            $fi_arr[$i]['id'] = $rs_fInquiry[$i]['iFiberInquiryId'];
+            $fi_arr[$i]['vName'] = $rs_fInquiry[$i]['vContactName'];
+            $fi_arr[$i]['vAddress'] = $rs_fInquiry[$i]['vAddress1']." ".$rs_fInquiry[$i]['vCity']." ".$rs_fInquiry[$i]['vState'];
+            $fi_arr[$i]['vStatus'] = $vStatus;
+            $fi_arr[$i]['color_class'] = $color_class;
+        }
+        $site_arr['FiberInquiry'] = $fi_arr;
+    }
+    // ************ Fiber Inquiry ************ //
+    $rh = HTTPStatus(200);
+    $code = 2000;
+    $message = api_getMessage($req_ext, constant($code));
+    $response_data = array("Code" => 200, "Message" => $message, "result" => array('site' => $site_arr));
+}else {
    $r = HTTPStatus(400);
    $code = 1001;
    $message = api_getMessage($req_ext, constant($code));
