@@ -94,23 +94,8 @@ class Fieldmap {
     public function getData($param, $site_url = ''){
         global $sqlObj;
         $data = array();
-        $where = array();
-        $where1 = array();
-
-        $attrSql = 'SELECT "iSTypeId" FROM site_type_mas'; 
-        $premiseIds = $sqlObj->GetAll($attrSql);
-        $sIdsArr = array();
-        foreach ($premiseIds as $key => $value) {
-            $sIdsArr[$key] = $value['iSTypeId'];
-        }
-        $sIds = implode(",", $sIdsArr);
-        $where[] = 's."iSTypeId" IN('.$sIds.')';
-
-        $whereQuery = implode(" AND ", $where);
-        $where1[] = 's."iSTypeId" IN('.$sIds.')';
-        $whereQuery1 = implode(" AND ", $where1);
-
-        $sql_attr = 'SELECT sa."iPremiseId", sa."iSAttributeId" FROM "site_attribute" sa INNER JOIN premise_mas s ON sa."iPremiseId" = s."iPremiseId" WHERE '.$whereQuery1.' ORDER BY sa."iPremiseId"';
+        
+        $sql_attr = 'SELECT sa."iPremiseId", sa."iSAttributeId" FROM "site_attribute" sa INNER JOIN premise_mas s ON sa."iPremiseId" = s."iPremiseId"  ORDER BY sa."iPremiseId"';
         $rs_sql_attr = $sqlObj->GetAll($sql_attr);
         $ai = count($rs_sql_attr);
         $attr_arr = [];
@@ -119,7 +104,7 @@ class Fieldmap {
         }
         //echo "<pre>";print_r($attr_arr);exit;
 
-        $filterSql = 'SELECT s."iPremiseId" as premiseid, s."iSTypeId" as sTypeId, s."iSSTypeId" as sSTypeId, s."iCityId", s."iZoneId", z."iNetworkId", s."iZipcode", s."iStatus", st_astext(s."vPointLatLong") as point FROM premise_mas s LEFT JOIN zone z ON s."iZoneId" = z."iZoneId"  WHERE '.$whereQuery.' ORDER BY premiseid';
+        $filterSql = 'SELECT s."iPremiseId" as premiseid, s."iSTypeId" as sTypeId, s."iSSTypeId" as sSTypeId, s."iCityId", s."iZoneId", z."iNetworkId", s."iZipcode", s."iStatus", st_astext(s."vPointLatLong") as point FROM premise_mas s LEFT JOIN zone z ON s."iZoneId" = z."iZoneId"  ORDER BY premiseid';
         $data['sites'] = $sqlObj->GetAll($filterSql);
         //echo "<pre>";print_r($data['sites']);exit;
         if(!empty($data['sites'])) {
@@ -129,19 +114,16 @@ class Fieldmap {
                 //echo "<pre>";print_r($data['sites']);exit;
             }
         }
-        //echo "<pre>";print_r($data['sites']);exit;
+        //echo "<pre>";print_r($data);exit;
         return $data;
     }
 
     public function getJson($param, $site_url){
         //echo "<pre>";print_r($param);exit();
         global $sqlObj, $field_map_json_url;
-        include_once($function_path."image.inc.php");
 
-        $field_map_json_path = $field_map_json_url;
         $tmp_siteArr = array();
-
-        $siteJsonUrl = $field_map_json_path."/premise-data.json";
+        $siteJsonUrl = $field_map_json_url."/premise-data.json";
         $site = array();
         $finalArr = array();
         $_finalArr = array();
@@ -149,13 +131,10 @@ class Fieldmap {
         $siteData = json_decode(file_get_contents($siteJsonUrl), true);
         $siteArr = $siteData['sites'];
       
-        //print_r($siteArr); die('ok');
         if(isset($param['siteFilter']) && $param['siteFilter'] != ''){
             $siteFilterArr = explode(",", $param['siteFilter']);
             $siteFilter_data = $this->multi_array_search($siteArr,$siteFilterArr);
-            //$response['sites'] = $siteFilter_data;
             if(!empty($response['sites'])){
-                //$response['sites'] = array_replace($response['sites'],$siteFilter_data);
                 $response['sites'] = $response['sites'] + $siteFilter_data;
             }else{
                 $response['sites'] = $siteFilter_data;
@@ -164,13 +143,11 @@ class Fieldmap {
 
         if(isset($param['srFilter']) && $param['srFilter'] != ''){
             $srFilterArr = explode(",", $param['srFilter']);
-            $srJsonUrl = $field_map_json_path."fiberInquiry-data.json";
+            $srJsonUrl = $field_map_json_url."fiberInquiry-data.json";
             $srData = json_decode(file_get_contents($srJsonUrl), true);
             $srArr = $srData['sites'];
             $srFilter_data = $this->multi_array_search($srArr,$srFilterArr);
-            //$response['sites'] = $srFilter_data;
             if(!empty($response['sites'])){
-                //$response['sites'] = array_replace($response['sites'],$srFilter_data);
                 $response['sites'] = $response['sites'] + $srFilter_data;
             }else{
                 $response['sites'] = $srFilter_data;
@@ -187,11 +164,7 @@ class Fieldmap {
                     unset($finalArr[$_key]);
                 }
             }
-            /*if(!empty($response['sites'])){
-                $response['sites'] = $response['sites'] + $finalArr;
-            }else{*/
-                $response['sites'] = $finalArr;
-            //}
+            $response['sites'] = $finalArr;
         }
 
         if(isset($param['zone']) && $param['zone'] != ''){
@@ -206,11 +179,7 @@ class Fieldmap {
                     unset($finalArr[$_key]);
                 }
             }
-            /*if(!empty($response['sites'])){
-                $response['sites'] =array_intersect_key($response['sites'],$finalArr);
-            }else{*/
-                $response['sites'] = $finalArr;
-            //}
+            $response['sites'] = $finalArr;
             $response['polyZone'] = $zones;
         }
 
@@ -252,7 +221,7 @@ class Fieldmap {
 
         if(isset($param['zoneLayer']) && $param['zoneLayer'] != ''){
             $zolyrArr = explode(",", $param['zoneLayer']);
-            $zoneLayerJsonUrl = $field_map_json_path."zoneLayer.json";
+            $zoneLayerJsonUrl = $field_map_json_url."zoneLayer.json";
             $layerData = json_decode(file_get_contents($zoneLayerJsonUrl), true);
             $zlayerArr = $layerData['zonelayer'];
             $zlayerFilter_data = $this->multi_array_search($zlayerArr,$zolyrArr);
@@ -261,7 +230,7 @@ class Fieldmap {
 
         if(isset($param['networkLayer']) && $param['networkLayer'] != ''){
             $networkLayerArr = explode(",", $param['networkLayer']);
-            $networkLayerJsonUrl = $field_map_json_path."networkLayer.json";
+            $networkLayerJsonUrl = $field_map_json_url."networkLayer.json";
             $ntworklayerData = json_decode(file_get_contents($networkLayerJsonUrl), true);
             $nlayerArr = $ntworklayerData['networklayer'];
             $ntworklayerFilter_data = $this->multi_array_search($nlayerArr,$networkLayerArr);
@@ -279,7 +248,7 @@ class Fieldmap {
 
         if(isset($param['custlayer']) && $param['custlayer'] != ''){
             $culyrArr = explode(",", $param['custlayer']);
-            $custlayerJsonUrl = $field_map_json_path."/customlayer.json";
+            $custlayerJsonUrl = $field_map_json_url."/customlayer.json";
             $layerData = json_decode(file_get_contents($custlayerJsonUrl), true);
             $layerArr = $layerData['customlayer'];
             $clayerFilter_data = $this->multi_array_search($layerArr,$culyrArr);
@@ -287,7 +256,7 @@ class Fieldmap {
         }
 
         if(isset($param['fiberInquiryLayer']) && $param['fiberInquiryLayer'] != ''){
-            $fiberInquiryJsonUrl = $field_map_json_path."fiberInquiry-data.json";
+            $fiberInquiryJsonUrl = $field_map_json_url."fiberInquiry-data.json";
             $fiberInquiryData = json_decode(file_get_contents($fiberInquiryJsonUrl), true);
             $fiberInquiryArr = $fiberInquiryData['sites'];
 
@@ -339,7 +308,7 @@ class Fieldmap {
         }
         
         if(isset($param['serviceOrderLayer']) && $param['serviceOrderLayer'] != ''){
-            $serviceOrderJsonUrl = $field_map_json_path."serviceorder-data.json";
+            $serviceOrderJsonUrl = $field_map_json_url."serviceorder-data.json";
             $serviceOrderData = json_decode(file_get_contents($serviceOrderJsonUrl), true);
             $serviceOrderArr = $serviceOrderData['sites'];
 
@@ -391,7 +360,7 @@ class Fieldmap {
         }
 
         if(isset($param['workOrderLayer']) && $param['workOrderLayer'] != ''){
-            $workOrderJsonUrl = $field_map_json_path."workorder-data.json";
+            $workOrderJsonUrl = $field_map_json_url."workorder-data.json";
             $workOrderData = json_decode(file_get_contents($workOrderJsonUrl), true);
             $workOrderArr = $workOrderData['sites'];
 
@@ -445,7 +414,7 @@ class Fieldmap {
         $pCircuitStatusArr = [];
         if(isset($param['pCircuitStatusLayer']) && $param['pCircuitStatusLayer'] != ''){
             $pclyrArr = explode(",", $param['pCircuitStatusLayer']);
-            $pCircuitStatusJsonUrl = $field_map_json_path."premiseCircuit-data.json";
+            $pCircuitStatusJsonUrl = $field_map_json_url."premiseCircuit-data.json";
             $layerData = json_decode(file_get_contents($pCircuitStatusJsonUrl), true);
             $pCircuitStatusArr = $layerData['sites'];
             //echo "<pre>";print_r($pclayerArr);exit;
@@ -506,7 +475,7 @@ class Fieldmap {
         $pCircuitcTypeArr = [];
         if(isset($param['pCircuitcTypeLayer']) && $param['pCircuitcTypeLayer'] != ''){
             $pclyrArr = explode(",", $param['pCircuitcTypeLayer']);
-            $pCircuitcTypeJsonUrl = $field_map_json_path."premiseCircuit-data.json";
+            $pCircuitcTypeJsonUrl = $field_map_json_url."premiseCircuit-data.json";
             $layerData = json_decode(file_get_contents($pCircuitcTypeJsonUrl), true);
             $pCircuitcTypeArr = $layerData['sites'];
             //echo "<pre>";print_r($pCircuitcTypeArr);exit;
@@ -579,7 +548,7 @@ class Fieldmap {
         $premiseStatusLayer = [];
         if(isset($param['premiseStatusLayer']) && $param['premiseStatusLayer'] != ''){
             $pslyrArr = explode(",", $param['premiseStatusLayer']);
-            $premiseStatusJsonUrl = $field_map_json_path."premise-data.json";
+            $premiseStatusJsonUrl = $field_map_json_url."premise-data.json";
             $layerData = json_decode(file_get_contents($premiseStatusJsonUrl), true);
             $premiseStatusArr = $layerData['sites'];
             //echo "<pre>";print_r($premiseStatusArr);exit;
@@ -668,7 +637,7 @@ class Fieldmap {
         $premiseAttributeArr = [];
         if(isset($param['premiseAttribute']) && $param['premiseAttribute'] != ''){
             $palyrArr = explode(",", $param['premiseAttribute']);
-            $premiseAttrJsonUrl = $field_map_json_path."premise-data.json";
+            $premiseAttrJsonUrl = $field_map_json_url."premise-data.json";
             $layerData = json_decode(file_get_contents($premiseAttrJsonUrl), true);
             $AttributeArr = $layerData['sites'];
             //echo "<pre>";print_r($palyrArr);exit;
@@ -761,7 +730,7 @@ class Fieldmap {
         $premiseTypeLayerArr = [];
         if(isset($param['premiseTypeLayer']) && $param['premiseTypeLayer'] != ''){
             $ptlyrArr = explode(",", $param['premiseTypeLayer']);
-            $premiseTypeJsonUrl = $field_map_json_path."premise-data.json";
+            $premiseTypeJsonUrl = $field_map_json_url."premise-data.json";
             $layerData = json_decode(file_get_contents($premiseTypeJsonUrl), true);
             $premiseTypeLayerArr = $layerData['sites'];
             //echo "<pre>";print_r($layerData);exit;
@@ -850,7 +819,7 @@ class Fieldmap {
         $premisesubTypeLayerArr = [];
         if(isset($param['premisesubTypeLayer']) && $param['premisesubTypeLayer'] != ''){
             $pstlyrArr = explode(",", $param['premisesubTypeLayer']);
-            $premisesubTypeJsonUrl = $field_map_json_path."premise-data.json";
+            $premisesubTypeJsonUrl = $field_map_json_url."premise-data.json";
             $layerData = json_decode(file_get_contents($premisesubTypeJsonUrl), true);
             $premisesTypeLayerArr = $layerData['sites'];
 
