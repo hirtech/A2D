@@ -1,6 +1,3 @@
-var primarycolor = getComputedStyle(document.body).getPropertyValue('--primarycolor');
-var bordercolor = getComputedStyle(document.body).getPropertyValue('--bordercolor');
-var bodycolor = getComputedStyle(document.body).getPropertyValue('--bodycolor');
 
 $(document).ready(function(){
 
@@ -414,11 +411,12 @@ function drawChart() {
         titleTextStyle: {
             color: primarycolor,  
             fontSize: 18,              
-            bold: true,                
+            bold: true,
         },
         bars: 'vertical', // Required for Material Bar Charts.
-        //width: 600,
+        width: 600,
         height: 300,
+        legend: {textStyle: {fontSize: 12}},
     };
     var chart = new google.charts.Bar(document.getElementById('serviceorder_chart'));
     chart.draw(data, google.charts.Bar.convertOptions(options));
@@ -433,8 +431,10 @@ function drawChart() {
             bold: true,      
         },
         bars: 'vertical', // Required for Material Bar Charts.
-        //width: 600,
+        width: 600,
         height: 300,
+        legend: {textStyle: {fontSize: 12}},
+
     };
     var wochart = new google.charts.Bar(document.getElementById('workorder_chart'));
     wochart.draw(wodata, google.charts.Bar.convertOptions(WOoptions));

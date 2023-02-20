@@ -110,7 +110,7 @@ table.dataTable td {
 	color: var(--primarycolor);
 	position: absolute;
 	top: 26px;
-	right: 430px;
+	right: 630px;
 	font-weight: 600;
 }
 
@@ -218,6 +218,17 @@ meter[value="2"]::-moz-meter-bar { background: yellow; }
 meter[value="3"]::-moz-meter-bar { background: orange; }
 meter[value="4"]::-moz-meter-bar { background: green; }
 
+/* 23-12-2022 */
+.user_list_header  .search-links li select.search_filter_dd {
+    width: 100%;
+    min-width: 338px;
+}
+/* 23-12-2022 */
+
+.card-body .table-responsive {
+    overflow-x: auto;
+}
+
 @media(max-width:1199px) {
 	div.dataTables_wrapper div.dataTables_paginate ul.pagination {
 		-webkit-box-pack: end !important;
@@ -260,7 +271,22 @@ main > .container-fluid {
 @media(max-width:991px) {
 
 	footer.site-footer{    width: 100%;}
-
+    /* 23-12-2022 */
+    .card .card-header .user_list_header .card-title {
+        display: block;
+        float: none !important;
+    }
+    .card .card-header .user_list_header .nav.search-links {
+        width: 100%;
+        float: none !important;
+        margin-left: 110px;
+    }
+    .drop-search .drop-title .center a {
+        top: 64px;
+        right: auto;
+        left: 12px;
+    }
+    /* 23-12-2022 */
 }
 
 @media(max-width:767px) {

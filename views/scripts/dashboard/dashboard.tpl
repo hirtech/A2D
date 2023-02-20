@@ -22,7 +22,7 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-12 col-lg-8 col-xl-4 mt-3">
+    <div class="col-12 col-sm-6 col-xl-3 mt-3">
         <div class="card">
             <div class="card-body">
                 <div class="row ml-1">
@@ -63,7 +63,7 @@
             </div>
         </div>
     </div> 
-    <div class="col-12 col-lg-8 col-xl-8 mt-3">
+    <div class="col-12 col-sm-6 col-xl-3 mt-3">
         <div class="card">
             <div class="card-body">
                 <div class="row ml-1">
@@ -85,9 +85,7 @@
             </div>
         </div>
     </div>
-</div>
-<div class="row">
-    <div class="col-12 col-lg-8 col-xl-6 mt-3">
+    <div class="col-12 col-sm-6 col-xl-3 mt-3">
         <div class="card">
             <div class="card-body">
                 <div class="row ml-1">
@@ -109,7 +107,7 @@
             </div>
         </div>
     </div>
-    <div class="col-12 col-lg-8 col-xl-6 mt-3">
+    <div class="col-12 col-sm-6 col-xl-3 mt-3">
         <div class="card">
             <div class="card-body">
                 <div class="row ml-1">
@@ -155,6 +153,7 @@ var dashboard_workorder = {$dashboard_workorder|json_encode};
 var dashboard_fiberinquiry = {$dashboard_fiberinquiry|json_encode};
 var dashboard_SObarchart = new Array({$dashboard_SObarchart});
 var dashboard_WObarchart = new Array({$dashboard_WObarchart});
+var primarycolor = '{$user_panel_theme_arr["template_color"]}';
 let MAP_LONG = '{$MAP_LONGITUDE}';
 let MAP_LAT = '{$MAP_LATITUDE}';
 var markerSpiderfier;

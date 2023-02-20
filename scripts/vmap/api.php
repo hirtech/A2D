@@ -2,8 +2,6 @@
 include_once($function_path."image.inc.php");
 include_once($controller_path . "fieldmap.inc.php");
 
-$field_map_json_path = $field_map_json_url;
-
 $mapObj = new Fieldmap();
 if(isset($_POST) &&  !in_array($_POST['action'],array("getSerachSiteData", "getSerachFiberInquiryData", "getSerachServiceOrderData", "getSerachWorkOrderData", "getSerachTroubleTicketData", "getSerachMaintenanceTicketData", "getSerachAwarenessTaskData", "getSerachEquipmentData", "getSerachPremiseCircuitData", "getPremiseFiberInquiryFilterData")) ){
 

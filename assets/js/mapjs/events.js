@@ -422,10 +422,10 @@ $(document).ready(function() {
             });
         }
         resetButton();
-        custLayer = [];
+        //custLayer = [];
+        //zoneLayer = [];
         pCircuitStatusLayer = [];
         pCircuitcTypeLayer = [];
-        zoneLayer = [];
         fiberInquiryLayer = [];
         serviceOrderLayer = [];
         workOrderLayer = [];
@@ -433,10 +433,10 @@ $(document).ready(function() {
         premiseAttribute = [];
         premiseTypeLayer = [];
         premisesubTypeLayer = [];
-        $("#selectAllZoneLayer").prop("checked", false);
-        $(".selectAllZoneLayer").prop("checked", false);
-        $("#selectAllCustLayer").prop("checked", false);
-        $(".selectAllCustLayer").prop("checked", false);
+        // $("#selectAllZoneLayer").prop("checked", false);
+        // $(".selectAllZoneLayer").prop("checked", false);
+        // $("#selectAllCustLayer").prop("checked", false);
+        // $(".selectAllCustLayer").prop("checked", false);
         $("#selectAllFiberInquiries").prop("checked", false);
         $("#selectAllServiceOrders").prop("checked", false);
         $("#selectAllWorkOrders").prop("checked", false);
@@ -469,8 +469,8 @@ $(document).ready(function() {
               networkLayer.push($(this).val());
         });
         resetButton();
-        zoneLayer = [];
-        custLayer = [];
+        //zoneLayer = [];
+        //custLayer = [];
         pCircuitStatusLayer = [];
         pCircuitcTypeLayer = [];
         zoneLayer = [];
@@ -481,10 +481,10 @@ $(document).ready(function() {
         premiseAttribute = [];
         premiseTypeLayer = [];
         premisesubTypeLayer = [];
-        $("#selectAllZoneLayer").prop("checked", false);
-        $(".selectAllZoneLayer").prop("checked", false);
-        $("#selectAllCustLayer").prop("checked", false);
-        $(".selectAllCustLayer").prop("checked", false);
+        // $("#selectAllZoneLayer").prop("checked", false);
+        // $(".selectAllZoneLayer").prop("checked", false);
+        // $("#selectAllCustLayer").prop("checked", false);
+        // $(".selectAllCustLayer").prop("checked", false);
         $("#selectAllFiberInquiries").prop("checked", false);
         $("#selectAllServiceOrders").prop("checked", false);
         $("#selectAllWorkOrders").prop("checked", false);
@@ -527,8 +527,8 @@ $(document).ready(function() {
             });
         }
         resetButton();
-        networkLayer = [];
-        zoneLayer = [];
+        //networkLayer = [];
+        //zoneLayer = [];
         pCircuitStatusLayer = [];
         pCircuitcTypeLayer = [];
         zoneLayer = [];
@@ -539,10 +539,10 @@ $(document).ready(function() {
         premiseAttribute = [];
         premiseTypeLayer = [];
         premisesubTypeLayer = [];
-        $("#selectAllNetworkLayer").prop("checked", false);
-        $(".selectAllNetworkLayer").prop("checked", false);
-        $("#selectAllZoneLayer").prop("checked", false);
-        $(".selectAllZoneLayer").prop("checked", false);
+        // $("#selectAllNetworkLayer").prop("checked", false);
+        // $(".selectAllNetworkLayer").prop("checked", false);
+        // $("#selectAllZoneLayer").prop("checked", false);
+        // $(".selectAllZoneLayer").prop("checked", false);
         $("#selectAllFiberInquiries").prop("checked", false);
         $("#selectAllServiceOrders").prop("checked", false);
         $("#selectAllWorkOrders").prop("checked", false);
@@ -575,11 +575,10 @@ $(document).ready(function() {
             custLayer.push($(this).val());
         });
         resetButton();
-        networkLayer = [];
-        zoneLayer = [];
+        //networkLayer = [];
+        //zoneLayer = [];
         pCircuitStatusLayer = [];
         pCircuitcTypeLayer = [];
-        zoneLayer = [];
         fiberInquiryLayer = [];
         serviceOrderLayer = [];
         workOrderLayer = [];
@@ -587,10 +586,10 @@ $(document).ready(function() {
         premiseAttribute = [];
         premiseTypeLayer = [];
         premisesubTypeLayer = [];
-        $("#selectAllNetworkLayer").prop("checked", false);
-        $(".selectAllNetworkLayer").prop("checked", false);
-        $("#selectAllZoneLayer").prop("checked", false);
-        $(".selectAllZoneLayer").prop("checked", false);
+        // $("#selectAllNetworkLayer").prop("checked", false);
+        // $(".selectAllNetworkLayer").prop("checked", false);
+        // $("#selectAllZoneLayer").prop("checked", false);
+        // $(".selectAllZoneLayer").prop("checked", false);
         $("#selectAllFiberInquiries").prop("checked", false);
         $("#selectAllServiceOrders").prop("checked", false);
         $("#selectAllWorkOrders").prop("checked", false);
@@ -640,7 +639,7 @@ $(document).ready(function() {
         }
         resetButton();
         //networkLayer = [];
-        custLayer = [];
+        //custLayer = [];
         pCircuitStatusLayer = [];
         pCircuitcTypeLayer = [];
         fiberInquiryLayer = [];
@@ -652,8 +651,8 @@ $(document).ready(function() {
         premisesubTypeLayer = [];
         //$("#selectAllNetworkLayer").prop("checked", false);
         //$(".selectAllNetworkLayer").prop("checked", false);
-        $("#selectAllCustLayer").prop("checked", false);
-        $(".selectAllCustLayer").prop("checked", false);
+        //$("#selectAllCustLayer").prop("checked", false);
+        //$(".selectAllCustLayer").prop("checked", false);
         $("#selectAllFiberInquiries").prop("checked", false);
         $("#selectAllServiceOrders").prop("checked", false);
         $("#selectAllWorkOrders").prop("checked", false);
@@ -694,7 +693,7 @@ $(document).ready(function() {
         }
         resetButton();
         //networkLayer = [];
-        custLayer = [];
+        //custLayer = [];
         pCircuitStatusLayer = [];
         pCircuitcTypeLayer = [];
         fiberInquiryLayer = [];
@@ -707,8 +706,8 @@ $(document).ready(function() {
 
         //$("#selectAllNetworkLayer").prop("checked", false);
         //$(".selectAllNetworkLayer").prop("checked", false);
-        $("#selectAllCustLayer").prop("checked", false);
-        $(".selectAllCustLayer").prop("checked", false);
+        //$("#selectAllCustLayer").prop("checked", false);
+        //$(".selectAllCustLayer").prop("checked", false);
         $("#selectAllFiberInquiries").prop("checked", false);
         $("#selectAllServiceOrders").prop("checked", false);
         $("#selectAllWorkOrders").prop("checked", false);

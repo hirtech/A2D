@@ -658,7 +658,7 @@ function showPointMap(sitePath, map, icon, premiseid) {
     //Extend each marker's position in LatLngBounds object.
     latlngbounds.extend(siteMarker[pCount].position);
 
-    /*markerCluster = new MarkerClusterer(map, siteMarker, {
+    /*siteMarkerCluster = new MarkerClusterer(map, siteMarker[pCount], {
 		imagePath: imagePath
 	});*/
 
@@ -1528,15 +1528,29 @@ function newLocation(newLat,newLng) {
 	}
 	
     //console.log("defaultZoom New Location = "+defaultZoom)
-    google.maps.event.addListener(map, 'zoom_changed', function() {
+   /* google.maps.event.addListener(map, 'zoom_changed', function() {
 	    defaultZoom = map.getZoom();
 	});
 	if(defaultZoom < 14) {
 		defaultZoom = 14;	
 	}
-	map.setZoom(defaultZoom);
+	map.setZoom(defaultZoom);*/
+	smoothZoom(map, defaultZoom, map.getZoom());
 	//console.log("defaultZoom New Location1 = "+defaultZoom)
 }
+
+function smoothZoom (map, max, cnt) {
+    if (cnt >= max) {
+        return;
+    }
+    else {
+        z = google.maps.event.addListener(map, 'zoom_changed', function(event){
+            google.maps.event.removeListener(z);
+            smoothZoom(map, max, cnt + 1);
+        });
+        setTimeout(function(){map.setZoom(cnt)}, 30); // 
+    }
+}  
 
 function getPremiseFiberInquiryFilterData(siteFilter,srFilter){
 	//console.log('filter_map_site_sr');

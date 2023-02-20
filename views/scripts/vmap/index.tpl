@@ -561,6 +561,7 @@ var sitesearchMarker = [];
 var siteserachData = [];
 var sscount = 0;
 var markerClusterSiteSerach;
+var siteMarkerCluster;
 
 var infowindow;
 var contentString
