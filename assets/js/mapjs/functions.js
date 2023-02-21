@@ -1,8 +1,4 @@
 var markerCluster;
-/*var fiberInquiryMarkerCluster;
-var serviceOrderMarkerCluster;
-var workOrderMarkerCluster;
-var premiseCircuitMarkerCluster;*/
 function getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLayer, custlayer, fiberInquiryLayer, serviceOrderLayer, workOrderLayer, pCircuitStatusLayer, pCircuitcTypeLayer, premiseStatusLayer, premiseAttribute, premiseTypeLayer, premisesubTypeLayer) {
 	clearMap();
 	if(skNetwork != "" || skCity != "" || skZipcode != "" || skZones != "" || networkLayer != ""|| zoneLayer != "" || custlayer != "" || fiberInquiryLayer != "" || serviceOrderLayer != "" || workOrderLayer != "" || pCircuitStatusLayer != "" || pCircuitcTypeLayer != "" || premiseStatusLayer != "" || premiseAttribute != "" || premiseTypeLayer != "" || premisesubTypeLayer != ""){
@@ -549,9 +545,9 @@ function showPointMapForFiberInquiry(sitePath, map, icon, id, vName, vAddress, p
         markerSpiderfier.addMarker(fiberInquirylayerMarker[fiberInquiryCount]);
     }
 
-    /*fiberInquiryMarkerCluster = new MarkerClusterer(map, fiberInquirylayerMarker, {
+    fiberInquiryMarkerCluster = new MarkerClusterer(map, fiberInquirylayerMarker, {
 		imagePath: imagePath
-	});*/
+	});
 
 	//Extend each marker's position in LatLngBounds object.
     latlngbounds.extend(fiberInquirylayerMarker[fiberInquiryCount].position);
@@ -575,9 +571,9 @@ function showPointMapForserviceOrder(sitePath, map, icon, id, vMasterMSA, vServi
         markerSpiderfier.addMarker(serviceOrderlayerMarker[serviceOrderCount]);
     }
 
-    /*serviceOrderMarkerCluster = new MarkerClusterer(map, serviceOrderlayerMarker, {
+    serviceOrderMarkerCluster = new MarkerClusterer(map, serviceOrderlayerMarker, {
 		imagePath: imagePath
-	});*/
+	});
 
 	//Extend each marker's position in LatLngBounds object.
     latlngbounds.extend(serviceOrderlayerMarker[serviceOrderCount].position);
@@ -601,9 +597,9 @@ function showPointMapForworkOrder(sitePath, map, icon, id, premiseid, vPremiseNa
         markerSpiderfier.addMarker(workOrderlayerMarker[workOrderCount]);
     }
 
-    /*workOrderMarkerCluster = new MarkerClusterer(map, workOrderlayerMarker, {
+    workOrderMarkerCluster = new MarkerClusterer(map, workOrderlayerMarker, {
 		imagePath: imagePath
-	});*/
+	});
 
 	//Extend each marker's position in LatLngBounds object.
     latlngbounds.extend(workOrderlayerMarker[workOrderCount].position);
@@ -629,9 +625,9 @@ function showPointMapForpremiseCircuit(sitePath, map, icon, id, premiseid, vPrem
 	//Extend each marker's position in LatLngBounds object.
     latlngbounds.extend(premiseCircuitlayerMarker[premiseCircuitCount].position);
 
-    /*premiseCircuitMarkerCluster = new MarkerClusterer(map, siteMarker, {
+    premiseCircuitMarkerCluster = new MarkerClusterer(map, premiseCircuitlayerMarker, {
 		imagePath: imagePath
-	});*/
+	});
 
 	premiseCircuitCount++;
 }
@@ -658,9 +654,9 @@ function showPointMap(sitePath, map, icon, premiseid) {
     //Extend each marker's position in LatLngBounds object.
     latlngbounds.extend(siteMarker[pCount].position);
 
-    /*siteMarkerCluster = new MarkerClusterer(map, siteMarker[pCount], {
+    siteMarkerCluster = new MarkerClusterer(map, siteMarker, {
 		imagePath: imagePath
-	});*/
+	});
 
 	pCount++;
 }

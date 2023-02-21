@@ -562,6 +562,10 @@ var siteserachData = [];
 var sscount = 0;
 var markerClusterSiteSerach;
 var siteMarkerCluster;
+var fiberInquiryMarkerCluster;
+var serviceOrderMarkerCluster;
+var workOrderMarkerCluster;
+var premiseCircuitMarkerCluster;
 
 var infowindow;
 var contentString
