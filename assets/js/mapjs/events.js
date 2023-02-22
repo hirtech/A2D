@@ -234,13 +234,22 @@ $(document).ready(function() {
         clearMap();
         skZones = [];
         var checksone = checkNetworkSelected();
+
         if(checksone == true){
-            if ($("#selectAllZone").prop("checked") && $("#selectAllZone").val() != 'Yes') {
-                $("#selectAllZone").prop("checked", false);
+            if ($("#selectAllZone").prop("checked")) {
+                $(".selectAllZone").prop("checked", true);
+                $("#selectAllZone").val("Yes");
+                $.each($("input[name='skZones[]']:checked"), function() {
+                    skZones.push($(this).val());
+                });
+            } else {
+                $(".selectAllZone").prop("checked", false);
+                $("#selectAllZone").val("No");
+                skZones = [];
+                $.each($("input[name='skZones[]']:checked"), function() {
+                    skZones.push($(this).val());
+                });
             }
-            $.each($("input[name='skZones[]']:checked"), function() {
-                skZones.push($(this).val());
-            });
         }else{
             skCity = [];
             skZipcode = [];
@@ -250,6 +259,8 @@ $(document).ready(function() {
         }
         resetButton();
         clearLayerData();
+
+
         getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLayer, custLayer, fiberInquiryLayer, serviceOrderLayer, workOrderLayer, pCircuitStatusLayer, pCircuitcTypeLayer, premiseStatusLayer, premiseAttribute, premiseTypeLayer, premisesubTypeLayer);
     });
 
@@ -298,7 +309,7 @@ $(document).ready(function() {
                 $.each($("input[name='city[]']:checked"), function() {
                     skCity.push($(this).val());
                 });
-               } else {
+            } else {
                 $(".selectAllCity").prop("checked", false);
                 $("#selectAllCity").val("No");
                 skCity = [];

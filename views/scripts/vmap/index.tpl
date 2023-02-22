@@ -388,6 +388,7 @@
         </div>
     </div>
 </div>
+
 <link rel="stylesheet" href="{$site_url}assets/css/custom_map.css">
 <script src="{$site_url}assets/js/mapjs/jquery_3_5_1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
@@ -398,11 +399,13 @@
 <script src="{$site_url}assets/vendors/typeahead/handlebars-v4.5.3.js"></script>
 <script src="{$site_url}assets/vendors/typeahead/typeahead.bundle.js"></script>
 
+{include file="scripts/premise/multiple_premise_add.tpl"}
+{include file="scripts/tasks/task_awareness_add.tpl"}
+
 <script src="{$site_url}assets/js/app_js/multiple_premise_add.js"></script>
 <script src="{$site_url}assets/js/app_js/task_awareness_add.js"></script>
 
-{include file="scripts/premise/multiple_premise_add.tpl"}
-{include file="scripts/tasks/task_awareness_add.tpl"}
+
 <script type="text/javascript">
     var ajax_url = 'vmap/index?mode=List';
     var dDate = '{$dDate}';

@@ -2,7 +2,6 @@ var markerCluster;
 function getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLayer, custlayer, fiberInquiryLayer, serviceOrderLayer, workOrderLayer, pCircuitStatusLayer, pCircuitcTypeLayer, premiseStatusLayer, premiseAttribute, premiseTypeLayer, premisesubTypeLayer) {
 	clearMap();
 	if(skNetwork != "" || skCity != "" || skZipcode != "" || skZones != "" || networkLayer != ""|| zoneLayer != "" || custlayer != "" || fiberInquiryLayer != "" || serviceOrderLayer != "" || workOrderLayer != "" || pCircuitStatusLayer != "" || pCircuitcTypeLayer != "" || premiseStatusLayer != "" || premiseAttribute != "" || premiseTypeLayer != "" || premisesubTypeLayer != ""){
-
 		$.ajax({
 			type: "POST",
 			url: 'vmap/api/',
@@ -329,7 +328,10 @@ function getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLay
 						if (response.length > 0){
 							markerCluster = new MarkerClusterer(map, siteMarker, {
 								// var markerCluster = new google.maps.Map(map, siteMarker, {
-								imagePath: imagePath
+								imagePath: imagePath,
+								minZoom: 12,
+								maxZoom: 15,
+								minimumClusterSize : 5
 							});
 							//Center map and adjust Zoom based on the position of all markers.
 	                        map.setCenter(latlngbounds.getCenter());
@@ -546,7 +548,10 @@ function showPointMapForFiberInquiry(sitePath, map, icon, id, vName, vAddress, p
     }
 
     fiberInquiryMarkerCluster = new MarkerClusterer(map, fiberInquirylayerMarker, {
-		imagePath: imagePath
+		imagePath: imagePath,
+		minZoom: 12,
+        maxZoom: 15,
+		minimumClusterSize : 5
 	});
 
 	//Extend each marker's position in LatLngBounds object.
@@ -572,7 +577,10 @@ function showPointMapForserviceOrder(sitePath, map, icon, id, vMasterMSA, vServi
     }
 
     serviceOrderMarkerCluster = new MarkerClusterer(map, serviceOrderlayerMarker, {
-		imagePath: imagePath
+		imagePath: imagePath,
+		minZoom: 12,
+        maxZoom: 15,
+		minimumClusterSize : 5
 	});
 
 	//Extend each marker's position in LatLngBounds object.
@@ -598,7 +606,10 @@ function showPointMapForworkOrder(sitePath, map, icon, id, premiseid, vPremiseNa
     }
 
     workOrderMarkerCluster = new MarkerClusterer(map, workOrderlayerMarker, {
-		imagePath: imagePath
+		imagePath: imagePath,
+		minZoom: 12,
+        maxZoom: 15,
+		minimumClusterSize : 5
 	});
 
 	//Extend each marker's position in LatLngBounds object.
@@ -626,7 +637,10 @@ function showPointMapForpremiseCircuit(sitePath, map, icon, id, premiseid, vPrem
     latlngbounds.extend(premiseCircuitlayerMarker[premiseCircuitCount].position);
 
     premiseCircuitMarkerCluster = new MarkerClusterer(map, premiseCircuitlayerMarker, {
-		imagePath: imagePath
+		imagePath: imagePath,
+		minZoom: 12,
+        maxZoom: 15,
+		minimumClusterSize : 5
 	});
 
 	premiseCircuitCount++;
@@ -653,10 +667,13 @@ function showPointMap(sitePath, map, icon, premiseid) {
 
     //Extend each marker's position in LatLngBounds object.
     latlngbounds.extend(siteMarker[pCount].position);
-
     siteMarkerCluster = new MarkerClusterer(map, siteMarker, {
-		imagePath: imagePath
+		imagePath: imagePath,
+		minZoom: 12,
+        maxZoom: 15,
+		minimumClusterSize : 5
 	});
+	
 
 	pCount++;
 }
@@ -1544,7 +1561,7 @@ function smoothZoom (map, max, cnt) {
             google.maps.event.removeListener(z);
             smoothZoom(map, max, cnt + 1);
         });
-        setTimeout(function(){map.setZoom(cnt)}, 30); // 
+        setTimeout(function(){map.setZoom(cnt)}, 15); // 
     }
 }  
 
