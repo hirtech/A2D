@@ -1044,6 +1044,15 @@ switch($path) {
 			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
 		}
 		break;
+	case "fiber_inquiry_change_status." . $req_ext:
+		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
+			$request_type = "fiber_inquiry_change_status";
+			$api_file_name = "fiber_inquiry.php";
+			include_once($site_api_path."api_authentication.php");
+		}else {
+			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
+		}
+		break;
 	case "service_order_list." . $req_ext:
 		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
 			$request_type = "service_order_list";

@@ -37,6 +37,8 @@ if($request_type == "fiber_inquiry_edit"){
         "iPremiseSubTypeId"     => $RES_PARA['iPremiseSubTypeId'],
         "iEngagementId"         => $RES_PARA['iEngagementId'],
         "iLoginUserId"          => $RES_PARA['iLoginUserId'],
+        "iInquiryType"          => $RES_PARA['iInquiryType'],
+        "tNotes"                => $RES_PARA['tNotes'],
         "iMatchingPremiseId"    => $iMatchingPremiseId,
     );
 
@@ -94,6 +96,8 @@ if($request_type == "fiber_inquiry_edit"){
         "iPremiseSubTypeId"     => $RES_PARA['iPremiseSubTypeId'],
         "iEngagementId"         => $RES_PARA['iEngagementId'],
         "iLoginUserId"          => $RES_PARA['iLoginUserId'],
+        "iInquiryType"          => $RES_PARA['iInquiryType'],
+        "tNotes"                => $RES_PARA['tNotes'],
         "iMatchingPremiseId"    => $iMatchingPremiseId,
     );
 
@@ -118,6 +122,7 @@ if($request_type == "fiber_inquiry_edit"){
         $vNetwork               = $RES_PARA['vNetwork'];
         $vFiberZone             = $RES_PARA['vFiberZone'];
         $vStatus                = $RES_PARA['vStatus'];
+        $vInquiryType           = $RES_PARA['vInquiryType'];
 
         $page_length            = isset($RES_PARA['page_length']) ? trim($RES_PARA['page_length']) : "10";
         $start                  = isset($RES_PARA['start']) ? trim($RES_PARA['start']) : "0";
@@ -132,10 +137,10 @@ if($request_type == "fiber_inquiry_edit"){
         $AddressFilterOpDD      = $RES_PARA['AddressFilterOpDD'];
         $vCity                  = $RES_PARA['vCity'];
         $CityFilterOpDD         = $RES_PARA['CityFilterOpDD'];
-        $vState                 = $RES_PARA['vState'];
-        $StateFilterOpDD        = $RES_PARA['StateFilterOpDD'];
         $vCounty                = $RES_PARA['vCounty'];
         $CountyFilterOpDD       = $RES_PARA['CountyFilterOpDD'];
+        $vZipcode               = $RES_PARA['vZipcode'];
+        $ZipcodeFilterOpDD      = $RES_PARA['ZipcodeFilterOpDD'];
         $zoneName               = $RES_PARA['zoneName'];
         $ZoneNameFilterOpDD     = $RES_PARA['ZoneNameFilterOpDD'];
         $networkName            = $RES_PARA['networkName'];
@@ -160,6 +165,10 @@ if($request_type == "fiber_inquiry_edit"){
 
     if ($vStatus != "") {
         $where_arr[] = "fiberinquiry_details.\"iStatus\" = '".$vStatus."'";
+    }
+
+    if ($vInquiryType != "") {
+        $where_arr[] = "fiberinquiry_details.\"iInquiryType\" = '".$vInquiryType."'";
     }
 
     if ($contactName != "") {
@@ -210,22 +219,6 @@ if($request_type == "fiber_inquiry_edit"){
         }
     }
 
-    if ($vState != "") {
-        if ($StateFilterOpDD != "") {
-            if ($StateFilterOpDD == "Begins") {
-                $where_arr[] = 'sm."vState" ILIKE \'' . trim($vState) . '%\'';
-            } else if ($StateFilterOpDD == "Ends") {
-                $where_arr[] = 'sm."vState" ILIKE \'%' . trim($vState) . '\'';
-            } else if ($StateFilterOpDD == "Contains") {
-                $where_arr[] = 'sm."vState" ILIKE \'%' . trim($vState) . '%\'';
-            } else if ($StateFilterOpDD == "Exactly") {
-                $where_arr[] = 'sm."vState" = \'' . trim($vState) . '\'';
-            }
-        } else {
-            $where_arr[] = 'sm."vState" ILIKE \'' . trim($vState) . '%\'';
-        }
-    }
-
     if ($vCountry != "") {
         if ($CountryFilterOpDD != "") {
             if ($CountryFilterOpDD == "Begins") {
@@ -239,6 +232,22 @@ if($request_type == "fiber_inquiry_edit"){
             }
         } else {
             $where_arr[] = 'c."vCounty" ILIKE \'' . trim($vCountry) . '%\'';
+        }
+    }
+
+    if ($vZipcode != "") {
+        if ($ZipcodeFilterOpDD != "") {
+            if ($ZipcodeFilterOpDD == "Begins") {
+                $where_arr[] = 'zm."vZipcode" ILIKE \'' . trim($vZipcode) . '%\'';
+            } else if ($ZipcodeFilterOpDD == "Ends") {
+                $where_arr[] = 'zm."vZipcode" ILIKE \'%' . trim($vZipcode) . '\'';
+            } else if ($ZipcodeFilterOpDD == "Contains") {
+                $where_arr[] = 'zm."vZipcode" ILIKE \'%' . trim($vZipcode) . '%\'';
+            } else if ($ZipcodeFilterOpDD == "Exactly") {
+                $where_arr[] = 'zm."vZipcode" = \'' . trim($vZipcode) . '\'';
+            }
+        } else {
+            $where_arr[] = 'zm."vZipcode" ILIKE \'' . trim($vZipcode) . '%\'';
         }
     }
 
@@ -286,10 +295,10 @@ if($request_type == "fiber_inquiry_edit"){
             $sortname = "cm.\"vCity\"";
             break;
         case "5":
-            $sortname = "sm.\"vState\"";
+            $sortname = "c.\"vCounty\"";
             break;
         case "6":
-            $sortname = "c.\"vCounty\"";
+            $sortname = "zm.\"vZipcode\"";
             break;
         case "7":
             $sortname = "z.\"vZoneName\"";
@@ -299,6 +308,12 @@ if($request_type == "fiber_inquiry_edit"){
             break;
         case "9":
             $sortname = "fiberinquiry_details.\"iStatus\"";
+            break;
+        case "10":
+            $sortname = "fiberinquiry_details.\"iInquiryType\"";
+            break;
+        case "11":
+            $sortname = "fiberinquiry_details.\"dAddedDate\"";
             break;
         default:
             $sortname = "fiberinquiry_details.\"iFiberInquiryId\"";
@@ -310,16 +325,16 @@ if($request_type == "fiber_inquiry_edit"){
         $join_fieds_arr = array();
         $join_fieds_arr[] = "CONCAT(contact_mas.\"vFirstName\", ' ', contact_mas.\"vLastName\") AS \"vContactName\"";;
         $join_fieds_arr[] = 'c."vCounty"';
-        $join_fieds_arr[] = 'sm."vState"';
         $join_fieds_arr[] = 'cm."vCity"';
+        $join_fieds_arr[] = 'zm."vZipcode"';
         $join_fieds_arr[] = 'z."vZoneName"';
         $join_fieds_arr[] = 'n."vName" as "vNetwork"';
 
         $join_arr = array();
         $join_arr[] = 'LEFT JOIN contact_mas on fiberinquiry_details."iCId" = contact_mas."iCId"';
         $join_arr[] = 'LEFT JOIN county_mas c on fiberinquiry_details."iCountyId" = c."iCountyId"';
-        $join_arr[] = 'LEFT JOIN state_mas sm on fiberinquiry_details."iStateId" = sm."iStateId"';
         $join_arr[] = 'LEFT JOIN city_mas cm on fiberinquiry_details."iCityId" = cm."iCityId"';
+        $join_arr[] = 'LEFT JOIN zipcode_mas zm on fiberinquiry_details."iZipcode" = zm."iZipcode"';
         $join_arr[] = 'LEFT JOIN zone z on fiberinquiry_details."iZoneId" = z."iZoneId"';
         $join_arr[] = 'LEFT JOIN network n on z."iNetworkId" = n."iNetworkId"';
         $FiberInquiryObj->join_field = $join_fieds_arr;
@@ -352,17 +367,30 @@ if($request_type == "fiber_inquiry_edit"){
                 }else if($rs_sr[$i]['iStatus'] == 4){
                     $vStatus = 'Complete';
                 }
+
+                $vInquiryType = '---';
+                if($rs_sr[$i]['iInquiryType'] == 1){
+                    $vInquiryType = 'Address Check';
+                }else if($rs_sr[$i]['iInquiryType'] == 2){
+                    $vInquiryType = 'Order Request';
+                }else if($rs_sr[$i]['iInquiryType'] == 3){
+                    $vInquiryType = 'Reservation';
+                }
+
                 $data[] = array(
                     "iFiberInquiryId" => $rs_sr[$i]['iFiberInquiryId'],
                     "vContactName" => $rs_sr[$i]['vContactName'],
                     "vAddress" => $vAddress,
                     "vCity" => $rs_sr[$i]['vCity'],
-                    "vState" => $rs_sr[$i]['vState'],
                     "vCounty" => $rs_sr[$i]['vCounty'],
+                    "vZipcode" => $rs_sr[$i]['vZipcode'],
                     "vZoneName" => $rs_sr[$i]['vZoneName'],
                     "vNetwork" => $rs_sr[$i]['vNetwork'],
                     "iStatus" => $rs_sr[$i]['iStatus'],
-                    "vStatus" => $vStatus
+                    "vStatus" => $vStatus,
+                    "iInquiryType" => $rs_sr[$i]['iInquiryType'],
+                    "vInquiryType" => $vInquiryType,
+                    "dAddedDate" => $rs_sr[$i]['dAddedDate'],
                 );
             }
         }
@@ -373,6 +401,17 @@ if($request_type == "fiber_inquiry_edit"){
     $code = 2000;
     $message = api_getMessage($req_ext, constant($code));
     $response_data = array("Code" => 200, "Message" => $message, "result" => $result);
+}else if($request_type == "fiber_inquiry_change_status"){
+    $status = $RES_PARA['status'];
+    $iFiberInquiryIds = $RES_PARA['iFiberInquiryIds'];
+    $FiberInquiryObj = new FiberInquiry();
+    $rs_db = $FiberInquiryObj->change_status($iFiberInquiryIds, $status);
+    if($rs_db) {
+        $response_data = array("Code" => 200, "Message" => "Status Changed Successfully.", "error" => 0, "iFiberInquiryId" => $iFiberInquiryIds);
+    }
+    else {
+        $response_data = array("Code" => 500 , "Message" => "ERROR - in update status.", "error" => 1);
+    }
 }else if($request_type == "search_fiber_inquiry"){
     $rs_arr  = array();
     $where_arr = array();

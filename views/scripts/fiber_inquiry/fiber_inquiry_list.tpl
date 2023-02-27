@@ -11,6 +11,7 @@
 									<option value="vNetwork">Network</option>
                                     <option value="vFiberZone">Fiber Zone</option>
                                     <option value="vStatus">Status</option>
+                                    <option value="vInquiryType">Inquiry Type</option>
 								</select>
 							</li>
 							<li id="network_dd" class="searching_dd">
@@ -30,6 +31,14 @@
 									<option value="2">Assigned</option>
 									<option value="3">Review</option>
 									<option value="4">Complete</option>
+								</select>
+                            </li>
+                            <li id="inquiry_type_dd" style="display: none" class="searching_dd">
+                                <select name="iInquiryType" id="iInquiryType" class="form-control col-md-12 search_filter_dd">
+									<option value="">-- Select --</option>
+									<option value="1">Address Check</option>
+									<option value="2">Order Request</option>
+									<option value="3">Reservation</option>
 								</select>
                             </li>
 							<li>
@@ -62,11 +71,13 @@
 						<th>Name</th>
 						<th>Address</th>
 						<th>City</th>
-						<th>State</th>
 						<th>County</th>
+						<th>Zipcode</th>
 						<th>Zone</th>
 						<th>Network</th>
 						<th>Status</th>
+						<th>Inquiry Type</th>
+						<th>Date Created</th>
 						<th>Action</th> 
 						</tr>
 					</thead>
@@ -82,6 +93,7 @@
 <script type="text/javascript">
 	var ajax_url = 'fiber_inquiry/list&mode=List';
 	var access_group_var_add= '{$access_group_var_add}';
+	var access_group_var_CSV= '{$access_group_var_CSV}';
 </script>
 <script src="assets/js/app_js/fiber_inquiry.js"></script>
 

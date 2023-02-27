@@ -59,22 +59,6 @@
 				</div>
 			</div>
 			<div class="form-group col-md-4">
-				<label for="inputEmail4">State</label>
-				<div class="form-row">
-					<div class="form-group col-md-6">
-						<select name="StateFilterOpDD" id="StateFilterOpDD" class="form-control">
-							<option value="">-- Select --</option>
-							<option value="Begins">Begins With</option>
-							<option value="Ends">Ends With</option>
-							<option value="Contains" selected>Contains</option>
-							<option value="Exactly">Exactly</option>
-						</select>
-					</div>
-					<div class="form-group col-md-6">
-						<input type="text" name="vState" id="vState" value="" class="form-control"> </div>
-				</div>
-			</div>
-			<div class="form-group col-md-4">
 				<label for="CountyFilterOpDD">County</label>
 				<div class="form-row">
 					<div class="form-group col-md-6">
@@ -88,6 +72,22 @@
 					</div>
 					<div class="form-group col-md-6">
 						<input type="text" name="vCounty" id="vCounty" value="" class="form-control"> </div>
+				</div>
+			</div>
+			<div class="form-group col-md-4">
+				<label for="inputEmail4">Zipcode</label>
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<select name="ZipcodeFilterOpDD" id="ZipcodeFilterOpDD" class="form-control">
+							<option value="">-- Select --</option>
+							<option value="Begins">Begins With</option>
+							<option value="Ends">Ends With</option>
+							<option value="Contains" selected>Contains</option>
+							<option value="Exactly">Exactly</option>
+						</select>
+					</div>
+					<div class="form-group col-md-6">
+						<input type="text" name="vZipcode" id="vZipcode" value="" class="form-control"> </div>
 				</div>
 			</div>
 		</div>

@@ -86,9 +86,6 @@
 											</select>
 											</div>
 										</div>
-									</div>
-									<div class="col-md-1"></div>
-									<div class="col-md-6">
 										<div class="form-row mb-3">
 											<label for="autofilladdress">Address</label>
 											<div class="position-relative w-100">
@@ -113,6 +110,9 @@
 											<div class="col-3 address-details text-right" id="showNearbySr">
 											</div>
 										</div>
+									</div>
+									<div class="col-md-1"></div>
+									<div class="col-md-6">
 										<div class="form-row mb-2">
 											<div class="col-12">
 												<label for="iStatus">Status</label>
@@ -124,6 +124,23 @@
 												</select>
 											</div>
 										</div>
+										<div class="form-row mb-2">
+											<div class="col-12">
+												<label for="iInquiryType">Inquiry Type</label>
+												<select name="iInquiryType" id="iInquiryType" class="select">
+													<option value="">--- Select ---</option>
+													<option value="1"{if $rs_sr[0].iInquiryType eq 1} selected {/if}>Address Check</option>
+													<option value="2" {if $rs_sr[0].iInquiryType eq 2} selected {/if} >Order Request</option>
+													<option value="3" {if $rs_sr[0].iInquiryType eq 3} selected {/if}>Reservation</option>
+												</select>
+											</div>
+										</div>
+										<div class="form-row mb-2">
+											<div class="col-12">
+		                                        <label for="tNotes">Notes</label>
+		                                        <textarea class="form-control" name="tNotes" id="tNotes" rows="4">{$rs_sr[0].tNotes|gen_filter_text}</textarea>
+		                                    </div>
+		                                </div>
 									</div>
 								</div>
 							</div>

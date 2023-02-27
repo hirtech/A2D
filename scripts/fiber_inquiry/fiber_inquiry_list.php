@@ -31,6 +31,8 @@ if($mode == "List"){
         $searchId = $_REQUEST['iSZoneId'];
     }else if($vOptions == "vStatus"){
         $searchId = $_REQUEST['iStatus'];
+    }else if($vOptions == "vInquiryType"){
+        $searchId = $_REQUEST['iInquiryType'];
     }
     if ($searchId != "") {
         $arr_param[$vOptions] = $searchId;
@@ -52,13 +54,14 @@ if($mode == "List"){
         $arr_param['vCity'] = $_REQUEST['vCity'];
         $arr_param['CityFilterOpDD'] = $_REQUEST['CityFilterOpDD'];  
     }
-    if($_REQUEST['vState'] != ""){
-        $arr_param['vState'] = $_REQUEST['vState'];
-        $arr_param['StateFilterOpDD'] = $_REQUEST['StateFilterOpDD'];  
-    } 
     if($_REQUEST['vCounty'] != ""){
         $arr_param['vCounty'] = $_REQUEST['vCounty'];
         $arr_param['CountyFilterOpDD'] = $_REQUEST['CountyFilterOpDD'];  
+    }
+
+    if($_REQUEST['vZipcode'] != ""){
+        $arr_param['vZipcode'] = $_REQUEST['vZipcode'];
+        $arr_param['ZipcodeFilterOpDD'] = $_REQUEST['ZipcodeFilterOpDD'];  
     }
     if($_REQUEST['zoneName'] != ""){
         $arr_param['zoneName'] = $_REQUEST['zoneName'];
@@ -131,11 +134,13 @@ if($mode == "List"){
                 "vContactName"       => $rs_sr[$i]['vContactName'],
                 "vAddress"           => $rs_sr[$i]['vAddress'],
                 "vCity"              => $rs_sr[$i]['vCity'],
-                "vState"             => $rs_sr[$i]['vState'],
                 "vCounty"            => $rs_sr[$i]['vCounty'],
+                "vZipcode"           => $rs_sr[$i]['vZipcode'],
                 "vZoneName"          => $rs_sr[$i]['vZoneName'],
                 "vNetwork"           => $rs_sr[$i]['vNetwork'],
                 "vStatus"            => $vStatus,
+                "iInquiryType"       => $rs_sr[$i]['vInquiryType'],
+                "dAddedDate"         => date_display_report_date($rs_sr[$i]['dAddedDate']),
                 "actions"            => ($action!="")?$action:"---"
             );
         }
@@ -144,6 +149,7 @@ if($mode == "List"){
     # Return jSON data.
     # -----------------------------------
     $jsonData['aaData'] = $entry;
+    //echo "<pre>";print_r($jsonData);exit();
     echo json_encode($jsonData);
     hc_exit();
     # -----------------------------------
@@ -360,6 +366,8 @@ if($mode == "List"){
             "iOldStatus"            => $_POST['iOldStatus'],
             "iPremiseSubTypeId"     => $_POST['iPremiseSubTypeId'],
             "iEngagementId"         => $_POST['iEngagementId'],
+            "iInquiryType"          => $_POST['iInquiryType'],
+            "tNotes"                => $_POST['tNotes'],
             "iLoginUserId"          => $iLoginUserId,
         );
         $API_URL = $site_api_url."fiber_inquiry_add.json";
@@ -423,6 +431,8 @@ if($mode == "List"){
             "iOldStatus"            => $_POST['iOldStatus'],
             "iPremiseSubTypeId"     => $_POST['iPremiseSubTypeId'],
             "iEngagementId"         => $_POST['iEngagementId'],
+            "iInquiryType"          => $_POST['iInquiryType'],
+            "tNotes"                => $_POST['tNotes'],
             "iLoginUserId"          => $iLoginUserId,
         );
 
@@ -500,7 +510,201 @@ if($mode == "List"){
     echo json_encode($result);
     hc_exit();
     # -----------------------------------   
+}else if($mode== "Excel"){
+    $arr_param = array();
+
+    $vOptions = $_REQUEST['vOptions'];
+    if($vOptions == "vNetwork"){
+        $searchId = $_REQUEST['iSNetworkId'];
+    }else if($vOptions == "vFiberZone"){
+        $searchId = $_REQUEST['iSZoneId'];
+    }else if($vOptions == "vStatus"){
+        $searchId = $_REQUEST['iStatus'];
+    }else if($vOptions == "vInquiryType"){
+        $searchId = $_REQUEST['iInquiryType'];
+    }
+    if ($searchId != "") {
+        $arr_param[$vOptions] = $searchId;
+    }
+
+    //echo "<pre>";print_r($_REQUEST);
+    if($_REQUEST['fiberInquiryId'] != ""){
+        $arr_param['fiberInquiryId'] = $_REQUEST['fiberInquiryId'];
+    }
+    if($_REQUEST['contactName'] != ""){
+        $arr_param['contactName'] = $_REQUEST['contactName'];
+        $arr_param['contactNameFilterOpDD'] = $_REQUEST['contactNameFilterOpDD'];
+    }
+    if($_REQUEST['vAddress'] != ""){
+        $arr_param['vAddress'] = $_REQUEST['vAddress'];
+        $arr_param['AddressFilterOpDD'] = $_REQUEST['AddressFilterOpDD']; 
+    }
+    if($_REQUEST['vCity'] != ""){
+        $arr_param['vCity'] = $_REQUEST['vCity'];
+        $arr_param['CityFilterOpDD'] = $_REQUEST['CityFilterOpDD'];  
+    }
+    if($_REQUEST['vCounty'] != ""){
+        $arr_param['vCounty'] = $_REQUEST['vCounty'];
+        $arr_param['CountyFilterOpDD'] = $_REQUEST['CountyFilterOpDD'];  
+    }
+
+    if($_REQUEST['vZipcode'] != ""){
+        $arr_param['vZipcode'] = $_REQUEST['vZipcode'];
+        $arr_param['ZipcodeFilterOpDD'] = $_REQUEST['ZipcodeFilterOpDD'];  
+    }
+    if($_REQUEST['zoneName'] != ""){
+        $arr_param['zoneName'] = $_REQUEST['zoneName'];
+        $arr_param['ZoneNameFilterOpDD'] = $_REQUEST['ZoneNameFilterOpDD'];  
+    }
+    if($_REQUEST['networkName'] != ""){
+        $arr_param['networkName'] = $_REQUEST['networkName'];
+        $arr_param['NetworkFilterOpDD'] = $_REQUEST['NetworkFilterOpDD'];  
+    }
+    
+    $arr_param['page_length'] = $page_length;
+    $arr_param['start'] = $start;
+    $arr_param['sEcho'] = $sEcho;
+    $arr_param['display_order'] = $display_order;
+    $arr_param['dir'] = $dir;
+    $arr_param['access_group_var_edit'] = $access_group_var_edit;
+    $arr_param['access_group_var_delete'] = $access_group_var_delete;
+    $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
+    $API_URL = $site_api_url."fiber_inquiry_list.json";
+    // echo $API_URL." ".json_encode($arr_param);exit;
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $API_URL);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_HEADER, FALSE);
+    curl_setopt($ch, CURLOPT_POST, TRUE);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($arr_param));
+
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+       "Content-Type: application/json",
+    ));
+    $response = curl_exec($ch);
+    curl_close($ch);  
+    //echo "<pre>";print_r($response);exit();
+    $result_arr = json_decode($response, true);
+    $rs_export = $result_arr['result']['data'];
+    $cnt_export = count($rs_export);
+    //  echo "<pre>";print_r($rs_export);exit();
+    include_once($class_path.'PHPExcel/PHPExcel.php'); 
+    // // Create new PHPExcel object
+    $objPHPExcel = new PHPExcel();
+    $file_name = "fiberinquiry".time().".xlsx";
+
+    if($cnt_export >0) {
+        $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue('A1', 'Id')
+            ->setCellValue('B1', 'Name')
+            ->setCellValue('C1', 'Address')
+            ->setCellValue('D1', 'City')
+            ->setCellValue('E1', 'County')
+            ->setCellValue('F1', 'Zipcode')
+            ->setCellValue('G1', 'Zone')
+            ->setCellValue('H1', 'Network')
+            ->setCellValue('I1', 'Status')
+            ->setCellValue('J1', 'Inquiry Type')
+            ->setCellValue('K1', 'Created Date');
+
+        for($e=0; $e<$cnt_export; $e++) {
+
+            $objPHPExcel->getActiveSheet()
+            ->setCellValue('A'.($e+2), $rs_export[$e]['iFiberInquiryId'])
+            ->setCellValue('B'.($e+2), $rs_export[$e]['vContactName'])
+            ->setCellValue('C'.($e+2), $rs_export[$e]['vAddress'])
+            ->setCellValue('D'.($e+2), $rs_export[$e]['vCity'])
+            ->setCellValue('E'.($e+2), $rs_export[$e]['vCounty'])
+            ->setCellValue('F'.($e+2), $rs_export[$e]['vZipcode'])
+            ->setCellValue('G'.($e+2), $rs_export[$e]['vZoneName'])
+            ->setCellValue('H'.($e+2), $rs_export[$e]['vNetwork'])
+            ->setCellValue('I'.($e+2), $rs_export[$e]['vStatus'])
+            ->setCellValue('J'.($e+2), $rs_export[$e]['vInquiryType'])
+            ->setCellValue('K'.($e+2), date_display_report_date($rs_export[$e]['dAddedDate']));
+         }
+                        
+        /* Set Auto width of each comlumn */
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
+        
+        /* Set Font to Bold for each comlumn */
+        $objPHPExcel->getActiveSheet()->getStyle('A1:K1')->getFont()->setBold(true);
+        
+
+        /* Set Alignment of Selected Columns */
+        $objPHPExcel->getActiveSheet()->getStyle("A1:A".($e+3))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        // Rename worksheet
+        $objPHPExcel->getActiveSheet()->setTitle('FiberInquiry');
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+        
+    }
+
+    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+    $result_arr  = array();
+   
+     //save in file 
+    $objWriter->save($temp_gallery.$file_name);
+    $result_arr['isError'] = 0;
+    $result_arr['file_path'] = base64_encode($temp_gallery.$file_name);
+    $result_arr['file_url'] = base64_encode($temp_gallery_url.$file_name);
+    # -------------------------------------
+
+   echo json_encode($result_arr);
+   exit;
+}else if($mode == "change_status"){
+    $result = array();
+    $arr_param = array();
+    $status = $_POST['status'];
+    $iFiberInquiryIds = $_POST['iFiberInquiryIds'];
+    
+    $arr_param['status']            = $status; 
+    $arr_param['iFiberInquiryIds']  = $iFiberInquiryIds; 
+    $arr_param['sessionId']         = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
+    $API_URL = $site_api_url."fiber_inquiry_change_status.json";
+    //echo $API_URL." ".json_encode($arr_param);exit();
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $API_URL);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_HEADER, FALSE);
+    curl_setopt($ch, CURLOPT_POST, TRUE);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($arr_param));
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+       "Content-Type: application/json",
+    ));
+
+    $rs = curl_exec($ch);
+    $res = json_decode($rs, true);
+    curl_close($ch);   
+    if($res['error'] == 0){
+        $result['msg'] = $res['Message'];
+        $result['error']= $res['error'] ;
+    }else{
+        $result['msg'] = $res['Message'];
+        $result['error']= $res['error'];
+    }
+    # -----------------------------------
+    # Return jSON data.
+    # -----------------------------------
+    echo json_encode($result);
+    hc_exit();
+    # -----------------------------------   
 }
+
 # Network Dropdown
 $network_arr_param = array();
 $network_arr_param = array(
@@ -557,4 +761,5 @@ $module_title = "Fiber Inquiry";
 $smarty->assign("module_name", $module_name);
 $smarty->assign("module_title", $module_title);
 $smarty->assign("access_group_var_add", $access_group_var_add);
+$smarty->assign("access_group_var_CSV", $access_group_var_CSV);
 ?>
