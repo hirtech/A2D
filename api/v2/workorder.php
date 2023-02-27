@@ -335,7 +335,7 @@ if($request_type == "workorder_list"){
     $iWOIds = $RES_PARA['iWOIds'];
     $rs_db = $WorkOrderObj->change_status($iWOIds, $status);
     if($rs_db) {
-        $response_data = array("Code" => 200, "Message" => "Status Changed Successfully.", "error" => 0, "iTroubleTicketId" => $iWOIds);
+        $response_data = array("Code" => 200, "Message" => "Status Changed Successfully.", "error" => 0, "iWOId" => $iWOIds);
     }
     else {
         $response_data = array("Code" => 500 , "Message" => "ERROR - in update status.", "error" => 1);
