@@ -76,7 +76,7 @@ $("#save_data").click(function() {
         form_data.append("vConfPassword", $('[name="vConfPassword"]').val());
         form_data.append("vEmail", $('[name="vEmail"]').val());
         form_data.append("iStatus", $('[name="iStatus"]').val());
-        form_data.append("vCompanyName", $('[name="vCompanyName"]').val());
+        form_data.append("iCompanyId", $('[name="iCompanyId"]').val());
         form_data.append("autofilladdress", $('[name="autofilladdress"]').val());
         form_data.append("vPhone", $('[name="vPhone"]').val());
         form_data.append("vCell", $('[name="vCell"]').val());

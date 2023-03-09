@@ -8,7 +8,6 @@ if($request_type == "user_list"){
 	$where_arr = array();
     if(!empty($RES_PARA)){
         $vSName				= trim($RES_PARA['vSName']);
-        $vSCompanyName		= trim($RES_PARA['vSCompanyName']);
         $vSUsername			= trim($RES_PARA['vSUsername']);
         $vSEmail			= trim($RES_PARA['vSEmail']);
         $iStatus			= trim($RES_PARA['iStatus']);
@@ -27,6 +26,7 @@ if($request_type == "user_list"){
         $vUsernameDD		= $RES_PARA['vUsernameDD'];
         $iDepartmentId		= $RES_PARA['iDepartmentId'];
         $iAGroupId			= $RES_PARA['iAGroupId'];
+        $iCompanyId          = $RES_PARA['iCompanyId'];
     } 
     if ($vSName != "") {
        $where_arr[] = "((concat(user_mas.\"vFirstName\", ' ', user_mas.\"vLastName\") LIKE '".$vSName."%') OR (user_mas.\"vFirstName\" LIKE '".$vSName."%') OR (user_mas.\"vLastName\" LIKE '".$vSName."%'))";
@@ -106,6 +106,10 @@ if($request_type == "user_list"){
         $where_arr[] = "user_mas.\"iAGroupId\"='".$iAGroupId."'";
     }
 
+    if ($iCompanyId != "") {
+        $where_arr[] = "user_details.\"iCompanyId\"='".$iCompanyId."'";
+    }
+
     switch ($display_order) {
         case "0":
         	$sortname = "user_mas.\"iUserId\"";
@@ -137,10 +141,11 @@ if($request_type == "user_list"){
 
     $join_fieds_arr = array();
     $join_fieds_arr[] = "access_group_mas.\"vAccessGroup\"";
-    $join_fieds_arr[] = "user_details.\"vCompanyName\"";
+    $join_fieds_arr[] = "company_mas.\"vCompanyName\"";
     $join_arr = array();
     $join_arr[] = "LEFT JOIN access_group_mas ON user_mas.\"iAGroupId\" = access_group_mas.\"iAGroupId\"";
     $join_arr[] = "LEFT JOIN user_details ON user_mas.\"iUserId\" = user_details.\"iUserId\"";
+    $join_arr[] = "LEFT JOIN company_mas ON user_details.\"iCompanyId\" = company_mas.\"iCompanyId\"";
     $UserObj->join_field = $join_fieds_arr;
     $UserObj->join = $join_arr;
     $UserObj->where = $where_arr;
@@ -248,8 +253,7 @@ if($request_type == "user_list"){
 	$iZoneId 			= $RES_PARA['iZoneId'];
 	$iStatus 			= $RES_PARA['iStatus'];
 	$iType 				= $RES_PARA['iType'];
-	$vCompanyName 		= $RES_PARA['vCompanyName'];
-	$vCompanyNickName 	= $RES_PARA['vCompanyNickName'];
+	$iCompanyId 		= $RES_PARA['iCompanyId'];
 	$vAddress1 			= $RES_PARA['vAddress1'];
 	$vAddress2 			= $RES_PARA['vAddress2'];
 	$vStreet 			= $RES_PARA['vStreet'];
@@ -281,8 +285,7 @@ if($request_type == "user_list"){
         "iStatus" 			=> $iStatus,
         "iType" 			=> $iType,
         "dDate" 			=> date_getSystemDateTime(),
-        "vCompanyName" 		=> addslashes($vCompanyName),
-        "vCompanyNickName" 	=> addslashes($vCompanyNickName),
+        "iCompanyId" 		=> $iCompanyId,
         "vAddress1"  		=> addslashes($vAddress1),
         "vAddress2"  		=> addslashes($vAddress2),
         "vStreet"    		=> addslashes($vStreet),
@@ -331,8 +334,7 @@ if($request_type == "user_list"){
 	$iZoneId 			= $RES_PARA['iZoneId'];
 	$iStatus 			= $RES_PARA['iStatus'];
 	$iType 				= $RES_PARA['iType'];
-	$vCompanyName 		= $RES_PARA['vCompanyName'];
-	$vCompanyNickName 	= $RES_PARA['vCompanyNickName'];
+	$iCompanyId 		= $RES_PARA['iCompanyId'];
 	$vAddress1 			= $RES_PARA['vAddress1'];
 	$vAddress2 			= $RES_PARA['vAddress2'];
 	$vStreet 			= $RES_PARA['vStreet'];
@@ -362,8 +364,7 @@ if($request_type == "user_list"){
         "iStatus" 			=> $iStatus,
         "iType" 			=> $iType,
         "dDate" 			=> date_getSystemDateTime(),
-        "vCompanyName" 		=> addslashes($vCompanyName),
-        "vCompanyNickName" 	=> addslashes($vCompanyNickName),
+        "iCompanyId" 		=> ($iCompanyId),
         "vAddress1"  		=> addslashes($vAddress1),
         "vAddress2"  		=> addslashes($vAddress2),
         "vStreet"    		=> addslashes($vStreet),

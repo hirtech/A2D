@@ -55,8 +55,10 @@ if ($request_type == "user_login")
 
         $join_fieds_arr[] = "access_group_mas.\"vAccessGroup\"";
         $join_fieds_arr[] = "access_group_mas.\"iAccessType\"";
-        $join_fieds_arr[] = "user_details.\"vCompanyName\"";
+        $join_fieds_arr[] = "user_details.\"iCompanyId\"";
+        $join_fieds_arr[] = "company_mas.\"vCompanyName\"";
         $join_arr[] = "LEFT JOIN user_details ON user_mas.\"iUserId\" = user_details.\"iUserId\"";
+        $join_arr[] = "LEFT JOIN company_mas ON user_details.\"iCompanyId\" = company_mas.\"iCompanyId\"";
         $join_arr[] = "LEFT JOIN access_group_mas ON user_mas.\"iAGroupId\" = access_group_mas.\"iAGroupId\"";
         $UserObj->join_field = $join_fieds_arr;
         $UserObj->join = $join_arr;

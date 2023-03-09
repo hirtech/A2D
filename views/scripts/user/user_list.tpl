@@ -9,7 +9,6 @@
 								<li>
 									<select id="vOptions" name="vOptions" class="form-control">
 										<option value="vSName">Name</option>
-										<option value="vSCompanyName">Company Name</option>
 										<option value="vSUsername">Username</option>
 										<option value="vSEmail">Email</option>
 	                  					<option value="iStatus">Status</option>

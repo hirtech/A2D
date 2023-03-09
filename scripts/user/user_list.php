@@ -37,6 +37,7 @@ if($mode == "List") {
     $arr_param['vUsernameDD']   = trim($_REQUEST['vUsernameDD']);
     $arr_param['iDepartmentId'] = $_REQUEST['iDepartmentId'];
     $arr_param['iAGroupId']     = $_REQUEST['iAGroupId'];
+    $arr_param['iCompanyId']     = $_REQUEST['iCompanyId'];
 
     $arr_param['page_length']   = $page_length;
     $arr_param['start']         = $start;
@@ -134,7 +135,8 @@ if($mode == "List") {
     echo json_encode($jsonData);
     hc_exit();
     # -----------------------------------   
-}else if($mode == "Update"){   
+}else if($mode == "Update"){ 
+    //echo "<pre>";print_r($_POST);exit;  
     $file_name = $file_msg ="";
     if($_FILES['vImage']['name'] != ""){
         $file_arr = img_fileUpload("vImage", $user_path, '', $valid_ext = array('jpg','jpeg','gif','png'));
@@ -158,8 +160,7 @@ if($mode == "List") {
         "iStatus"           => $_POST['iStatus'],
         "iType"             => $_POST['iType'],
         "dDate"             => date_getSystemDateTime(),
-        "vCompanyName"      => addslashes($_POST['vCompanyName']),
-        "vCompanyNickName"  => addslashes($_POST['vCompanyNickName']),
+        "iCompanyId"        => $_POST['iCompanyId'],
         "vAddress1"         => addslashes($_POST['vAddress1']),
         "vAddress2"         => addslashes($_POST['vAddress2']),
         "vStreet"           => addslashes($_POST['vStreet']),
@@ -258,8 +259,7 @@ if($mode == "List") {
             "iStatus"           => $_POST['iStatus'],
             "iType"             => $_POST['iType'],
             "dDate"             => date_getSystemDateTime(),
-            "vCompanyName"      => addslashes($_POST['vCompanyName']),
-            "vCompanyNickName"  => addslashes($_POST['vCompanyNickName']),
+            "iCompanyId"        => $_POST['iCompanyId'],
             "vAddress1"         => addslashes($_POST['vAddress1']),
             "vAddress2"         => addslashes($_POST['vAddress2']),
             "vStreet"           => addslashes($_POST['vStreet']),
@@ -550,6 +550,31 @@ $rs_department1 = json_decode($response_department, true);
 $rs_department = $rs_department1['result'];
 $smarty->assign("rs_department", $rs_department);
 
+# Company Dropdown
+$company_arr_param = array();
+$company_arr_param = array(
+    "iStatus"        => 1,
+    "sessionId"     => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
+);
+$company_API_URL = $site_api_url."company_dropdown.json";
+//echo $company_API_URL." ".json_encode($company_arr_param);
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $company_API_URL);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_HEADER, FALSE);
+curl_setopt($ch, CURLOPT_POST, TRUE);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($company_arr_param));
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+   "Content-Type: application/json",
+));
+$response_company = curl_exec($ch);
+curl_close($ch); 
+$rs_company = json_decode($response_company, true); 
+$rs_company = $rs_company['result'];
+$smarty->assign("rs_company", $rs_company);
+//echo "<pre>";print_r($rs_company);exit;
 
 $module_name = "User List";
 $module_title = "User";

@@ -1,7 +1,7 @@
 <div class="card card-body">
     <form id="advfrm" name="advfrm" class="user_search_form">
       <div class="form-row">
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-4">
           <label for="inputEmail4">Name</label>
           <div class="form-row">
             <div class="form-group col-md-6">
@@ -18,7 +18,7 @@
             </div>
           </div>
         </div>
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-4">
           <label for="inputEmail4">Email</label>
           <div class="form-row">
             <div class="form-group col-md-6">
@@ -35,8 +35,6 @@
             </div>
           </div>
         </div>
-      </div>
-      <div class="form-row">
         <div class="form-group col-md-4">
           <label for="inputEmail4">Username</label>
           <div class="form-row">
@@ -54,6 +52,9 @@
             </div>
           </div>
         </div>
+      </div>
+      <div class="form-row">
+        
         <div class="form-group col-md-4">
           <label for="inputEmail4">Department</label>
           <div class="form-row">
@@ -75,6 +76,19 @@
                 <option value="">-- Select --</option>
                 {section name="a" loop=$rs_agroup}
                 <option value="{$rs_agroup[a].iAGroupId}">{$rs_agroup[a].vAccessGroup|gen_strip_slash}</option>
+                {/section}
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="form-group col-md-4">
+          <label for="inputEmail4">Company:</label>
+          <div class="form-row">
+            <div class="form-group col-md-12">
+              <select name="iCompanyId" id="iCompanyId" class="form-control">
+                <option value="">-- Select --</option>
+                {section name="c" loop=$rs_company}
+                <option value="{$rs_company[c].iCompanyId}">{$rs_company[c].vCompanyName|gen_strip_slash}</option>
                 {/section}
               </select>
             </div>

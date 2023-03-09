@@ -154,7 +154,8 @@ $('#AdvSearchReset').click(function () {
     $('#vUsername').val("");
     $('#iDepartmentId').val("");
     $('#iAGroupId').val("");
-   gridtable.ajax.reload();
+    $('#iCompanyId').val("");
+    gridtable.ajax.reload();
     //$("#grid").flexOptions({params: ''}).flexReload();
     return false;
 });
@@ -184,83 +185,4 @@ function exportExcelSheet(){
     });
     return false;
 }
-/*****************************************************************************/
-/*(function ($) {
-    "use strict";
 
-    $('#datatable-grid').DataTable({  
-       // "stateSave": true,     
-       // "processing": true,
-       // "serverSide": true,
-       // "info": true,
-       // "bLengthChange": false,   
-       //  "ajax":{
-       //      "url":  site_url+'user/user_list?mode=List',
-       //      "type": "GET",
-       //  },
-       //  //"aaSorting": [[ 0, "DESC" ]],
-       //  "columns": [
-       //      { "data": "checkbox", "name": "checkbox",  "orderable": false},
-       //      { "data": "name", "name": "name", "orderable": true },
-       //      { "data": "vEmail", "name": "vEmail", "orderable": true },
-       //      { "data": "vUsername", "name": "vUsername", "orderable": true },
-       //      { "data": "vDepartment", "orderable": false },
-       //      { "data": "vAccessGroup", "orderable": true },
-       //      { "data": "vLoginHistory", "orderable": true},
-       //      { "data": "dDate", "orderable": true },
-       //      { "data": "iStatus", "orderable": true },
-       //      { "data": "actions", "orderable": false },
-       //  ],
-       //  //"pagingType": "full_numbers",
-       //  //"lengthMenu": [ 10, 15, 20, 30, 50, 100, 200 ],
-       //  "sDom": 'Rfrtlip',
-
-        "bProcessing": true,
-        "bServerSide": true,
-        "sAjaxSource": site_url+'user/list?mode=List',
-        "aaSorting": [[7,'desc']],
-        "aoColumns": [
-            { "mData": "checkbox", "bSortable":false, "className": "text-center" , "width":"1%"},
-            { "mData": "name", "width":"12%"},
-            { "mData": "vEmail", "width":"12%"},
-            { "mData": "vUsername", "className": "text-center", "width":"10%"},
-            { "mData": "vDepartment", "width":"15%"},
-            { "mData": "vAccessGroup", "width":"10%"},
-            { "mData": "vLoginHistory", "bSortable":false, "className": "text-center", "width":"6%"},
-            { "mData": "dDate", "className": "text-center", "width":"10%"},
-            { "mData": "iStatus", "className": "text-center", "width":"6%"},
-            { "mData": "actions", "bSortable":false, "className": "text-center", "width":"10%"},
-        ],
-        //"sDom": 'Rfrtlip',
-        "sDom": 'Bfrtlip',
-        "bFilter": false,
-        "pagingType": "full_numbers",
-        "oLanguage": {
-            "oPaginate": {
-               "sNext": '<i class="fa fa-forward"></i>',
-               "sPrevious": '<i class="fa fa-backward"></i>',
-               "sFirst": '<i class="fa fa-step-backward"></i>',
-               "sLast": '<i class="fa fa-step-forward"></i>'
-            },
-            "sLengthMenu": "_MENU_",
-            "sLoadingRecords": "Please wait - loading...",
-
-        },
-        "buttons": [
-            'copy', 'excel', 'print'
-        ],
-        // "drawCallback": function (settings) {
-        //     $('#datatable-grid').editableTableWidget({ 
-        //         editor: $('<input>' , '<select>'), 
-        //         activeColumns: [2, 6] 
-        //     }).on('change', function(evt, newValue) {
-        //         //alert($(this).closest(".list").val())
-        //         $.post( site_url+'user/user_list?mode=edit_cell', { value: newValue })
-        //             .done(function( data ) {
-        //                 //alert( "Data Loaded: " + data );
-        //             }); 
-        //         ;
-        //     });
-        // }
-    });
-})(jQuery);*/

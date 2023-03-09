@@ -143,8 +143,13 @@
                                     </div>
                                     <div class="col-6">
                                         <div class="col-12 mb-3">
-                                            <label for="vCompanyName">Company</label>
-                                            <input type="text" id="vCompanyName" name="vCompanyName" value="{$rs_user[0].vCompanyName|gen_filter_text}"  class="form-control">
+                                            <label for="iCompanyId">Company</label>
+                                            <select name="iCompanyId" id="iCompanyId" class="form-control">
+                                                <option value="">--- Select Company ---</option>
+                                                {section name="c" loop=$rs_company}
+                                                <option value="{$rs_company[c].iCompanyId}" {if $rs_user[0].iCompanyId eq $rs_company[c].iCompanyId} Selected {/if}>{$rs_company[c].vCompanyName|gen_strip_slash}</option>
+                                                {/section}
+                                            </select>
                                         </div>
                                         <div class="col-12 mb-3">
                                             <label for="autofilladdress">Address</label>

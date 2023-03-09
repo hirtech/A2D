@@ -30,7 +30,7 @@ if ($mode == "Update") {
     $join_arr = array();
 
     if(isset($_REQUEST['iUserId'])) {
-    	$join_fieds_arr[] = "user_details.\"vCompanyName\", user_details.\"vCompanyNickName\", user_details.\"vPhone\", user_details.\"vCell\", user_details.\"vFax\", user_details.\"vAddress1\", user_details.\"vAddress2\", user_details.\"vStreet\", user_details.\"vCrossStreet\", user_details.\"iZipcode\", user_details.\"iStateId\", user_details.\"iCountyId\", user_details.\"iCityId\", user_details.\"iZoneId\", user_details.\"vLatitude\", user_details.\"vLongitude\"";
+    	$join_fieds_arr[] = "user_details.\"vCompanyName\", user_details.\"vCompanyNickName\", user_details.\"vPhone\", user_details.\"vCell\", user_details.\"vFax\", user_details.\"vAddress1\", user_details.\"vAddress2\", user_details.\"vStreet\", user_details.\"vCrossStreet\", user_details.\"iZipcode\", user_details.\"iStateId\", user_details.\"iCountyId\", user_details.\"iCityId\", user_details.\"iZoneId\", user_details.\"vLatitude\", user_details.\"vLongitude\", user_details.\"iCompanyId\"";
     	$join_fieds_arr[] = 'c."vCounty"';
     	$join_fieds_arr[] = 'sm."vState"';
    		$join_fieds_arr[] = 'cm."vCity"';
@@ -168,6 +168,35 @@ $rs_network = json_decode($response_network, true);
 $rs_ntwork = $rs_network['result'];
 $smarty->assign("rs_ntwork", $rs_ntwork);
 ## --------------------------------
+
+
+# Company Dropdown
+$company_arr_param = array();
+$company_arr_param = array(
+    "iStatus"        => 1,
+    "sessionId"     => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
+);
+$company_API_URL = $site_api_url."company_dropdown.json";
+//echo $company_API_URL." ".json_encode($company_arr_param);
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $company_API_URL);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_HEADER, FALSE);
+curl_setopt($ch, CURLOPT_POST, TRUE);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($company_arr_param));
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+   "Content-Type: application/json",
+));
+$response_company = curl_exec($ch);
+curl_close($ch); 
+$rs_company = json_decode($response_company, true); 
+$rs_company = $rs_company['result'];
+$smarty->assign("rs_company", $rs_company);
+//echo "<pre>";print_r($rs_company);exit;
+## --------------------------------
+
 // General Variables
 $module_name = "User";
 
