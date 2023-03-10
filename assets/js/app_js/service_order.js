@@ -161,7 +161,7 @@ var listPage = function(){
 
         //Excel button 
         if(access_group_var_CSV == '1'){
-            gridtable.button().add( 2, {
+            gridtable.button().add( 3, {
                 text: 'Excel',
                 className: 'btn btn-secondary',
                 action: function ( e, dt, node, config ) {
@@ -280,7 +280,7 @@ function delete_record(id)
 function exportExcelSheet(){
     $.ajax({
         type: "POST",
-        url: site_url+"service_order/list?mode=Excel",
+        url: site_url+"service_order/list&mode=Excel",
         data: $("#frmlist").serializeArray(),
         success: function(data){
             res = JSON.parse(data);

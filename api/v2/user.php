@@ -174,15 +174,17 @@ if($request_type == "user_list"){
             $UserObj->param['limit'] = 0;
             $UserObj->setClause();
             $rs_user_dept = $UserObj->user_department_list();
+            //echo "<pre>";print_r($rs_user_dept);exit;
             $pi = count($rs_user_dept);
             $user_department = '';
             if ($pi > 0) {
                 for ($p = 0; $p < $pi; $p++) {
-                    $user_department .= $rs_user_dept[$p]['vDepartment'] . ', ';					
+                    $user_department .= $rs_user_dept[$p]['vDepartment'] . ' | ';					
                 }
                 $user_department = substr($user_department, 0, -2);
             }
             $user_department = wordwrap($user_department,40,"<br>\n");
+            //echo $user_department;exit;
 			$data[] = array(
                 "iUserId" 			=> $rs_user[$i]['iUserId'],
                 "vFirstName" 		=> $rs_user[$i]['vFirstName'],
@@ -193,6 +195,7 @@ if($request_type == "user_list"){
                 "vCompanyName" 		=> $rs_user[$i]['vCompanyName'],
                 "iStatus" 			=> $rs_user[$i]['iStatus'],
                 "dDate" 			=> $rs_user[$i]['dDate'],
+                "vEmail"            => $rs_user[$i]['vEmail'],
                 'vDepartment' 		=> $user_department,
             );
 		}

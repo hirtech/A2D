@@ -347,7 +347,10 @@ if($mode == "List"){
                  ->setCellValue('C1', 'WorkOrder')
                  ->setCellValue('D1', 'Circuit Name')
                  ->setCellValue('E1', 'Connetion Type')
-                 ->setCellValue('F1', 'Status');
+                 ->setCellValue('F1', 'Carrier Services')
+                 ->setCellValue('G1', 'Equipment')
+                 ->setCellValue('H1', 'Status');
+
     
         for($e=0; $e<$cnt_export; $e++) {
             $vPremise = $rs_export[$e]['iPremiseId']." (".$rs_export[$e]['vPremiseName']."; ".$rs_export[$e]['vPremiseType'].")";
@@ -378,7 +381,9 @@ if($mode == "List"){
             ->setCellValue('C'.($e+2), $vWorkOrder)
             ->setCellValue('D'.($e+2), $rs_export[$e]['vCircuitName'])
             ->setCellValue('E'.($e+2), $rs_export[$e]['vConnectionTypeName'])
-            ->setCellValue('F'.($e+2), $vStatus);
+            ->setCellValue('F'.($e+2), $rs_export[$e]['vCarrierServices'])
+            ->setCellValue('G'.($e+2), $rs_export[$e]['vEquipmentExcel'])
+            ->setCellValue('H'.($e+2), $vStatus);
          }
                         
         /* Set Auto width of each comlumn */
@@ -388,9 +393,11 @@ if($mode == "List"){
         $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
         
         /* Set Font to Bold for each comlumn */
-        $objPHPExcel->getActiveSheet()->getStyle('A1:F1')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A1:H1')->getFont()->setBold(true);
         
 
         /* Set Alignment of Selected Columns */

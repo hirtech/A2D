@@ -333,138 +333,80 @@ else if($mode == "Delete"){
     # -----------------------------------   
 }
 else if($mode== "Excel"){
-   $ContactObj->contact_clear_variable();
-    $where_arr = array();
-    $where_arr[] = '"iDelete" <> 1';
-    if ($query) {
-        $where_arr[] = $qtype . " LIKE '" . addslashes($query) . "%'";
-    }
+    $arr_param = array();
 
     $vOptions = $_REQUEST['vOptions'];
     $Keyword = addslashes(trim($_REQUEST['Keyword']));
-     if ($Keyword != "") {
-        if ($vOptions == "Name") {
-            $where_arr[] = "concat(contact_mas.\"vSalutation\", ' ',contact_mas.\"vFirstName\", ' ', contact_mas.\"vLastName\") ILIKE '" . $Keyword . "%'";
-        } 
-        else if($vOptions == "vPhone" ) {
-           $where_arr[] = 'contact_mas. "vPhone" LIKE \''.$_REQUEST['vPrimaryPhone'].'%\' ';
-        } else if( $vOptions == "iCId") {
-            $where_arr[] = " contact_mas.\"iCId\"  = '". $Keyword . "'";
-        } else if($vOptions == "iStatus"){
-            if(strtolower($Keyword) == "active"){
-                $where_arr[] = "\"iStatus\" = '1'";
-            }
-            else if(strtolower($Keyword) == "inactive"){
-                $where_arr[] = "\"iStatus\" = '0'";
-            }
-        } else {
-            $where_arr[] = '"' . $vOptions . "\" ILIKE '" . $Keyword . "%'";
-        }
-    }
-
-    if($_REQUEST['vSalutation']!="") {
-        $where_arr[] = 'contact_mas."vSalutation" LIKE \''.trim($_REQUEST['vSalutation']).'\'';
-    }
-
-
-    if($_REQUEST['vFirstName']!="") {
-        if($_REQUEST['vFirstNameDD']!="") {
-            if($_REQUEST['vFirstNameDD']=="Begins") {
-                $where_arr[] = 'contact_mas."vFirstName" LIKE \''.trim($_REQUEST['vFirstName']).'%\'';
-            }
-            else if($_REQUEST['vFirstNameDD']=="Ends") {
-                $where_arr[] = 'contact_mas."vFirstName" LIKE \'%'.trim($_REQUEST['vFirstName']).'\'';
-            }
-            else if($_REQUEST['vFirstNameDD']=="Contains") {
-                $where_arr[] = 'contact_mas."vFirstName" LIKE \'%'.trim($_REQUEST['vFirstName']).'%\'';
-            }
-            else if($_REQUEST['vFirstNameDD']=="Exactly") {
-                $where_arr[] = 'contact_mas."vFirstName" = \''.trim($_REQUEST['vFirstName']).'\'';
-            }
-        }
-        else {
-            $where_arr[] = 'contact_mas."vFirstName" LIKE \''.trim($_REQUEST['vFirstName']).'%\'';
-        }
-    }
-
-    if($_REQUEST['vLastName']!="") {
-        if($_REQUEST['vLastNameDD']!="") {
-            if($_REQUEST['vLastNameDD']=="Begins") {
-                $where_arr[] = 'contact_mas."vLastName" LIKE \''.trim($_REQUEST['vLastName']).'%\'';
-            }
-            else if($_REQUEST['vLastNameDD']=="Ends") {
-                $where_arr[] = 'contact_mas."vLastName" LIKE \'%'.trim($_REQUEST['vLastName']).'\'';
-            }
-            else if($_REQUEST['vLastNameDD']=="Contains") {
-                $where_arr[] = 'contact_mas."vLastName" LIKE \'%'.trim($_REQUEST['vLastName']).'%\'';
-            }
-            else if($_REQUEST['vLastNameDD']=="Exactly") {
-                $where_arr[] = 'contact_mas."vLastName" = \''.trim($_REQUEST['vLastName']).'\'';
-            }
-        }
-        else {
-            $where_arr[] = 'contact_mas."vLastName" LIKE \''.trim($_REQUEST['vLastName']).'%\'';
-        }
-    }
-
-
-    if ($_REQUEST['vCompany'] != "") {
-        if ($_REQUEST['vCompanyDD'] != "") {
-            if ($_REQUEST['vCompanyDD'] == "Begins") {
-                $where_arr[] = 'contact_mas."vCompany" LIKE \'' . trim($_REQUEST['vCompany']) . '%\'';
-            } else if ($_REQUEST['vCompanyDD'] == "Ends") {
-                $where_arr[] = 'contact_mas."vCompany" LIKE \'%' . trim($_REQUEST['vCompany']) . '\'';
-            } else if ($_REQUEST['vCompanyDD'] == "Contains") {
-                $where_arr[] = 'contact_mas."vCompany" LIKE \'%' . trim($_REQUEST['vCompany']) . '%\'';
-            } else if ($_REQUEST['vCompanyDD'] == "Exactly") {
-                $where_arr[] = 'contact_mas."vCompany" = \'' . trim($_REQUEST['vCompany']) . '\'';
-            }
-        } else {
-            $where_arr[] = 'contact_mas."vCompany" LIKE \'' . trim($_REQUEST['vCompany']) . '%\'';
-        }
-    }
-
-    if ($_REQUEST['vEmail'] != "") {
-        if ($_REQUEST['vEmailDD'] != "") {
-            if ($_REQUEST['vEmailDD'] == "Begins") {
-                $where_arr[] = 'contact_mas."vEmail" LIKE \'' . trim($_REQUEST['vEmail']) . '%\'';
-            } else if ($_REQUEST['vEmailDD'] == "Ends") {
-                $where_arr[] = 'contact_mas."vEmail" LIKE \'%' . trim($_REQUEST['vEmail']) . '\'';
-            } else if ($_REQUEST['vEmailDD'] == "Contains") {
-                $where_arr[] = 'contact_mas."vEmail" LIKE \'%' . trim($_REQUEST['vEmail']) . '%\'';
-            } else if ($_REQUEST['vEmailDD'] == "Exactly") {
-                $where_arr[] = 'contact_mas."vEmail" = \'' . trim($_REQUEST['vEmail']) . '\'';
-            }
-        } else {
-            $where_arr[] = 'contact_mas."vEmail" LIKE \'' . trim($_REQUEST['vEmail']) . '%\'';
-        }
-    }
-    if ($_REQUEST['vPosition'] != "") {
-        if ($_REQUEST['vPositionDD'] != "") {
-            if ($_REQUEST['vPositionDD'] == "Begins") {
-                $where_arr[] = 'contact_mas."vPosition" LIKE \'' . trim($_REQUEST['vPosition']) . '%\'';
-            } else if ($_REQUEST['vPositionDD'] == "Ends") {
-                $where_arr[] = 'contact_mas."vPosition" LIKE \'%' . trim($_REQUEST['vPosition']) . '\'';
-            } else if ($_REQUEST['vPositionDD'] == "Contains") {
-                $where_arr[] = 'contact_mas."vPosition" LIKE \'%' . trim($_REQUEST['vPosition']) . '%\'';
-            } else if ($_REQUEST['vPositionDD'] == "Exactly") {
-                $where_arr[] = 'contact_mas."vPosition" = \'' . trim($_REQUEST['vPosition']) . '\'';
-            }
-        } else {
-            $where_arr[] = 'contact_mas."vPosition" LIKE \'' . trim($_REQUEST['vPosition']) . '%\'';
-        }
+    if ($Keyword != "") {
+        $arr_param[$vOptions] = $Keyword;
     }
     
-    $join_fieds_arr = array();
-    $join_arr = array();
-    $ContactObj->join_field = $join_fieds_arr;
-    $ContactObj->join = $join_arr;
-    $ContactObj->where = $where_arr;
-    $ContactObj->param['order_by'] = "contact_mas.\"iCId\"";
-    $ContactObj->param['limit'] = "";
-    $ContactObj->setClause();
-    $ContactObj->debug_query = false;
-    $rs_export = $ContactObj->recordset_list();
+    if($_REQUEST['vSalutation'] != ""){
+     $arr_param['vSalutation'] = $_REQUEST['vSalutation'];
+    }
+    if($_REQUEST['vFirstName'] != ""){
+     $arr_param['vFirstName'] = $_REQUEST['vFirstName'];
+    }
+    if($_REQUEST['vFirstNameDD'] != ""){
+        $arr_param['vFirstNameDD'] = $_REQUEST['vFirstNameDD'];
+    }
+    if($_REQUEST['vLastName'] != ""){
+     $arr_param['vLastName'] = $_REQUEST['vLastName'] ;
+    } 
+    if($_REQUEST['vLastNameDD'] != ""){
+     $arr_param['vLastNameDD'] = $_REQUEST['vLastNameDD'];
+    }
+    if($_REQUEST['vCompany'] != ""){
+        $arr_param['vCompany'] = $_REQUEST['vCompany'] ;
+    }
+    if($_REQUEST['vCompanyDD'] != ""){
+      $arr_param['vCompanyDD'] = $_REQUEST['vCompanyDD'] ;
+    }
+    if($_REQUEST['vEmail'] != ""){
+      $arr_param['vEmail'] = $_REQUEST['vEmail'];
+    }
+    if($_REQUEST['vEmailDD'] != ""){
+        $arr_param['vEmailDD'] = $_REQUEST['vEmailDD'];
+    }
+    if($_REQUEST['vPosition'] != ""){
+     $arr_param['vPosition'] = $_REQUEST['vPosition'];
+    }
+    if($_REQUEST['vPositionDD'] != ""){
+         $arr_param['vPositionDD'] = $_REQUEST['vPositionDD'];
+    }
+
+    $arr_param['page_length'] = $page_length;
+    $arr_param['start'] = $start;
+    $arr_param['sEcho'] = $sEcho;
+    $arr_param['display_order'] = $display_order;
+    $arr_param['dir'] = $dir;
+
+    $arr_param['access_group_var_edit'] = $access_group_var_edit;
+    $arr_param['access_group_var_delete'] = $access_group_var_delete;
+    $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
+    
+    //echo "<pre>";print_r(json_encode($arr_param));exit();
+    $API_URL = $site_api_url."contact_list.json";
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $API_URL);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_HEADER, FALSE);
+    curl_setopt($ch, CURLOPT_POST, TRUE);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($arr_param));
+
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+       "Content-Type: application/json",
+    ));
+    //
+    $response = curl_exec($ch);
+    curl_close($ch);  
+    //echo "<pre>";print_r($response);exit();
+    $result_arr = json_decode($response, true);
+    
+    $entry = $hidden_arr = array();
+    $rs_export = $result_arr['result']['data'];
     $cnt_export = count($rs_export);
       
     include_once($class_path.'PHPExcel/PHPExcel.php'); 
@@ -487,7 +429,7 @@ else if($mode== "Excel"){
 
                 $name = gen_strip_slash($rs_export[$e]['vSalutation']) . ' ' . gen_strip_slash($rs_export[$e]['vFirstName']) . ' ' . gen_strip_slash($rs_export[$e]['vLastName']);
                 $vPhone = $rs_export[$e]['vPhone'];
-                $status =gen_status($rs_export[$e]['iStatus']);
+                $status =gen_status($rs_export[$e]['status']);
                 $objPHPExcel->getActiveSheet()
                 ->setCellValue('A'.($e+2), $rs_export[$e]['iCId'])
                 ->setCellValue('B'.($e+2), $name)

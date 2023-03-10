@@ -7,6 +7,7 @@ $access_group_var_delete = per_hasModuleAccess("Event", 'Delete', 'N');
 $access_group_var_status = per_hasModuleAccess("Event", 'Status', 'N');
 $access_group_var_add = per_hasModuleAccess("Event", 'Add', 'N');
 $access_group_var_edit = per_hasModuleAccess("Event", 'Edit', 'N');
+$access_group_var_CSV = per_hasModuleAccess("Event", 'CSV', 'N');
 # ----------- Access Rule Condition -----------
 # ------------------------------------------------------------
 # General Variables
@@ -256,7 +257,132 @@ if($mode == "List"){
     echo json_encode($result);
     hc_exit();
     # -----------------------------------   
+} else if($mode== "Excel"){
+    $arr_param = array();
+
+    $vOptions = $_REQUEST['vOptions'];
+    $Keyword = addslashes(trim($_REQUEST['Keyword']));
+    if ($Keyword != "") {
+        $arr_param[$vOptions] = $Keyword;
+    }
+    
+    $arr_param['iSCampaignBy']      = $_POST['iSCampaignBy'];
+    $arr_param['iSPremiseId']       = $_POST['iSPremiseId'];
+    $arr_param['vSPremiseNameDD']   = $_POST['vSPremiseNameDD'];
+    $arr_param['vSPremiseName']     = trim($_POST['vSPremiseName']);
+    $arr_param['iSZoneId']          = $_POST['iSZoneId'];
+    $arr_param['vSZipcodeDD']       = $_POST['vSZipcodeDD'];
+    $arr_param['vSZipcode']         = trim($_POST['vSZipcode']);
+    $arr_param['vSCityDD']          = $_POST['vSCityDD'];
+    $arr_param['vSCity']            = trim($_POST['vSCity']);
+    $arr_param['iSNetworkId']       = $_POST['iSNetworkId'];
+    $arr_param['iSStatus']          = $_POST['iSStatus'];
+    $arr_param['dSCompletedDate']   = $_POST['dSCompletedDate'];
+
+    $arr_param['page_length']       = $page_length;
+    $arr_param['start']             = $start;
+    $arr_param['sEcho']             = $sEcho;
+    $arr_param['display_order']     = $display_order;
+    $arr_param['dir']               = $dir;
+
+    $arr_param['access_group_var_edit']     = $access_group_var_edit;
+    $arr_param['access_group_var_delete']   = $access_group_var_delete;
+
+    $arr_param['sessionId']     = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
+    
+    $API_URL = $site_api_url."event_list.json";
+    //echo $API_URL. " ".json_encode($arr_param);exit;
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $API_URL);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_HEADER, FALSE);
+    curl_setopt($ch, CURLOPT_POST, TRUE);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($arr_param));
+
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+       "Content-Type: application/json",
+    ));
+    //
+    $response = curl_exec($ch);
+    curl_close($ch);  
+    $result_arr = json_decode($response, true);
+    
+    $rs_export = $result_arr['result']['data'];
+    $cnt_export = count($rs_export);
+      
+    include_once($class_path.'PHPExcel/PHPExcel.php'); 
+    // // Create new PHPExcel object
+    $objPHPExcel = new PHPExcel();
+    $file_name = "event_".time().".xlsx";
+
+    if($cnt_export >0) {
+        $iStatus = '---';
+        if($rs_event[$i]['iStatus'] == 1){
+           $iStatus = "Not Started"; 
+        }else if($rs_event[$i]['iStatus'] == 2){
+           $iStatus = "In Progress"; 
+        }else if($rs_event[$i]['iStatus'] == 3){
+           $iStatus = "Completed"; 
+        }
+
+        $objPHPExcel->setActiveSheetIndex(0)
+                 ->setCellValue('A1', 'Id')
+                 ->setCellValue('B1', 'Event Type')
+                 ->setCellValue('C1', 'Campaign By')
+                 ->setCellValue('D1', 'Campaign Coverage')
+                 ->setCellValue('E1', 'Status')
+                 ->setCellValue('F1', 'Date Completed');
+
+        for($e=0; $e<$cnt_export; $e++) {
+
+            $vCampaignCoverage = str_replace("<br />", "\n", $rs_export[$e]['vCampaignCoverage']);
+
+            $objPHPExcel->getActiveSheet()
+            ->setCellValue('A'.($e+2), $rs_export[$e]['iEventId'])
+            ->setCellValue('B'.($e+2), $rs_export[$e]['vEventType'])
+            ->setCellValue('C'.($e+2), $EVENT_CAMPAIGN_BY_ARR[$rs_export[$e]['iCampaignBy']])
+            ->setCellValue('D'.($e+2), ($vCampaignCoverage))
+            ->setCellValue('E'.($e+2), $rs_export[$e]['iStatus'])
+            ->setCellValue('F'.($e+2), date_getDateTimeDDMMYYYY($rs_export[$e]['dCompletedDate']));   
+         }
+                        
+        /* Set Auto width of each comlumn */
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
+        
+        /* Set Font to Bold for each comlumn */
+        $objPHPExcel->getActiveSheet()->getStyle('A1:F1')->getFont()->setBold(true);
+
+        /* Set Alignment of Selected Columns */
+        $objPHPExcel->getActiveSheet()->getStyle("A1:A".($e+3))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        // Rename worksheet
+        $objPHPExcel->getActiveSheet()->setTitle('Event');
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+        
+    }
+
+    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+    $result_arr  = array();
+
+    //save in file 
+    $objWriter->save($temp_gallery.$file_name);
+    $result_arr['isError'] = 0;
+    $result_arr['file_path'] = base64_encode($temp_gallery.$file_name);
+    $result_arr['file_url'] = base64_encode($temp_gallery_url.$file_name);
+    # -------------------------------------
+
+   echo json_encode($result_arr);
+   exit;
 }
+
 
 /*-------------------------- Zone -------------------------- */
 $zone_arr_param = array();

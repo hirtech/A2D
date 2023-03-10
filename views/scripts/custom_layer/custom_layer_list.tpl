@@ -48,6 +48,7 @@
 <script type="text/javascript">
 	var ajax_url = 'custom_layer/custom_layer_list&mode=List';
 	var access_group_var_add= '{$access_group_var_add}';
+	var access_group_var_CSV= '{$access_group_var_CSV}';
 
 </script>
 <script src="assets/js/app_js/custom_layer.js"></script>

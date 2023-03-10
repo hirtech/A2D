@@ -166,11 +166,11 @@ class User {
                     
                     for($d=0;$d<$di;$d++){
                         
-                        $user_dept_arr[] = '('.gen_allow_null_int($this->insert_arr['iDepartmentId'][$d]).', '.gen_allow_null_int($userid).')';
+                        $user_dept_arr[] = '('.gen_allow_null_int($iDepartmentId_arr[$d]).', '.gen_allow_null_int($userid).', '.gen_allow_null_char($_SESSION["sess_vName" . $admin_panel_session_suffix]).')';
                     }
                     
                     if(count($user_dept_arr) > 0){
-                        $sql = 'INSERT INTO user_department("iDepartmentId", "iUserId") VALUES '.implode(", ", $user_dept_arr);
+                        $sql = 'INSERT INTO user_department("iDepartmentId", "iUserId", "vLoginUserName") VALUES '.implode(", ", $user_dept_arr);
                         $sqlObj->Execute($sql);
                     }
                 }
@@ -181,32 +181,6 @@ class User {
 
                 $sql_user_details = "INSERT INTO user_details (\"iUserId\", \"iCompanyId\", \"vAddress1\", \"vAddress2\", \"vStreet\",\"vCrossStreet\", \"iZipcode\", \"iStateId\", \"iCountyId\", \"iCityId\", \"iZoneId\", \"vLatitude\", \"vLongitude\", \"vPhone\", \"vCell\", \"vFax\", \"vLoginUserName\",  \"iRecLimit\") VALUES (" . gen_allow_null_int($userid) . ", " . gen_allow_null_char($this->insert_arr['iCompanyId'])  . ", " .gen_allow_null_char($this->insert_arr['vAddress1']).", ".gen_allow_null_char($this->insert_arr['vAddress2']).", ".gen_allow_null_char($this->insert_arr['vStreet']).", ".gen_allow_null_char($this->insert_arr['vCrossStreet']).", ".gen_allow_null_char($this->insert_arr['iZipcode']).", ".gen_allow_null_char($this->insert_arr['iStateId']).", ".gen_allow_null_char($this->insert_arr['iCountyId']).", ".gen_allow_null_char($this->insert_arr['iCityId']).", ".gen_allow_null_char($this->insert_arr['iZoneId']).", ".gen_allow_null_char($this->insert_arr['vLatitude']).", ".gen_allow_null_char($this->insert_arr['vLongitude']).", " . gen_allow_null_char($this->insert_arr['vPhone']) . ", " . gen_allow_null_char($this->insert_arr['vCell']) . ", " . gen_allow_null_char($this->insert_arr['vFax']) . ", " . gen_allow_null_char($_SESSION["sess_vName" . $admin_panel_session_suffix]). ", ". gen_allow_null_int($iRecLimit) .")";
                 $iUDetailId = $sqlObj->Execute($sql_user_details);
-
-              
-                include_once("zone.inc.php");
-                $ZoneObj = new Zone();
-
-                $where_arr_zone = array();
-                $where_arr_zone[] = 'zone."iStatus"=1';
-                $ZoneObj->where = $where_arr_zone;
-                $ZoneObj->param['order_by'] = "zone.\"iZoneId\"";
-                $ZoneObj->setClause();
-                $rs_zone = $ZoneObj->recordset_list();
-                $zi = count($rs_zone);
-
-                $temp_zone_arr = array();
-                $zone_arr = array();
-
-                if ($zi > 0) {
-                    for ($z = 0; $z < $zi; $z++) {
-                        $temp_zone_arr[$rs_zone [$z]['vZoneName']][] = $rs_zone [$z]['iZoneId'];
-                    }
-
-                    foreach ($temp_zone_arr as $key => $val) {
-                        if (count($val) > 0)
-                            $zone_arr[] = implode(",", $val);
-                    }
-                }
 
                 $iNetworkId_arr = explode(",",$this->insert_arr['networkId_arr']);
                 $pi = count($iNetworkId_arr);
@@ -278,15 +252,14 @@ class User {
 				$iDepartmentId_arr = explode(",",$this->update_arr['iDepartmentId']); 
 				$di = count($iDepartmentId_arr);
 				if($di > 0){
+                    $sql = 'INSERT INTO user_department("iDepartmentId", "iUserId", "vLoginUserName") VALUES ';
 					$user_dept_arr = array();
 					for($d=0;$d<$di;$d++){
-						$user_dept_arr[] = '('.gen_allow_null_int($this->update_arr['iDepartmentId'][$d]).', '.gen_allow_null_int($this->update_arr['iUserId']).')';
+						$sql .= '('.gen_allow_null_int($iDepartmentId_arr[$d]).', '.gen_allow_null_int($this->update_arr['iUserId']).', '.gen_allow_null_char($_SESSION["sess_vName" . $admin_panel_session_suffix]).'), ';
 					}
-					if(count($user_dept_arr) > 0){
-						$sql = 'INSERT INTO user_department("iDepartmentId", "iUserId") VALUES '.implode(", ", $user_dept_arr);
-						$sqlObj->Execute($sql);
-					}
+                    $sqlObj->Execute(substr($sql, 0, -2));
 				}
+
                 $sql_del = 'DELETE FROM user_network WHERE "iUserId" = '.gen_allow_null_int($this->update_arr['iUserId']);
                 $sqlObj->Execute($sql_del);
                 

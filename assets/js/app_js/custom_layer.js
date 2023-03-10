@@ -41,7 +41,9 @@ var listPage = function(){
                     "sLoadingRecords": "Please wait - loading...",
 
                 },
-                "buttons": [],
+                "buttons": [
+                    'copy', 'print',
+                ],
                 fnServerData: function(sSource, aoData, fnCallback,oSettings) {
                     oSettings.jqXHR = $.ajax({
                         "dataType": 'json',
@@ -62,13 +64,16 @@ var listPage = function(){
                 }
             });
         }
-        /*gridtable.button().add( 1, {
-                text: 'Geo Edit',
-                className: 'btn btn-primary',
+        //'excel'
+        if(access_group_var_CSV == '1'){
+            gridtable.button().add( 3, {
+                text: 'Excel',
+                className: 'btn btn-secondary',
                 action: function ( e, dt, node, config ) {
-                    geoEdit();
+                    exportExcelSheet();
                 }
-            });*/
+            });
+        }
     }
     return {
         init :function () {
@@ -127,20 +132,20 @@ function delete_record(id)
     );
 }
 
-/*function geoEdit(){
-    var IdArr = new Array()
-    $('.list').each(function(){ 
-        if($(this).is(':checked')){
-            IdArr.push($(this).val());
+function exportExcelSheet(){
+    $.ajax({
+        type: "POST",
+        url: site_url+"custom_layer/custom_layer_list&mode=Excel",
+        data: $("#frmlist").serializeArray(),
+        success: function(data){
+            res = JSON.parse(data);
+            isError = res['isError'];
+            if(isError == 0) {
+                file_path = res['file_path'];
+                file_url = res['file_url'];
+                window.location = site_url+"download.php?vFileName_path="+file_path+"&vFileName_url="+file_url;
+            }
         }
     });
-    if (IdArr.length == 0) {
-         toastr.error(" Please select only one record to Geo Edit.");
-    }else if (IdArr.length != 1) {
-        toastr.error(" Please select only one record to Geo Edit.");
-        $('#chkall').prop('checked', false);
-    }else {
-        var iCLId = IdArr;
-        window.location = site_url + 'custom_layer/custom_layer_geo_edit&mode=GeoEdit&iCLId=' + iCLId;
-    }
-}*/
+    return false;
+}

@@ -84,6 +84,7 @@
 	// var ajax_url = 'tasks/task_awareness_list&mode=List'+extra_url;
 	var ajax_url = 'tasks/task_awareness_list&mode=List';
 	var access_group_var_add= '{$access_group_var_add}';
+	var access_group_var_CSV= '{$access_group_var_CSV}';
 	var dDate= '{$dDate}';
     var dStartTime= '{$dStartTime}';
     var dEndTime= '{$dEndTime}';

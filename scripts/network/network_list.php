@@ -7,7 +7,7 @@ $access_group_var_delete = per_hasModuleAccess("Network", 'Delete', 'N');
 $access_group_var_status = per_hasModuleAccess("Network", 'Status', 'N');
 $access_group_var_add = per_hasModuleAccess("Network", 'Add', 'N');
 $access_group_var_edit = per_hasModuleAccess("Network", 'Edit', 'N');
-
+$access_group_var_CSV = per_hasModuleAccess("Network", 'CSV', 'N');
 # ------------------------------------------------------------
 # General Variables
 # ------------------------------------------------------------
@@ -26,7 +26,6 @@ include_once($controller_path . "network.inc.php");
 $NetworkObj = new Network();
 //echo "<pre>";print_r($mode);exit;
 if($mode == "List"){
-	
     $arr_param = array();
 
     $vOptions = $_REQUEST['vOptions'];
@@ -275,6 +274,108 @@ if($mode == "List"){
     echo json_encode($result_arr['result']);
     hc_exit();
     # -----------------------------------
+}else if($mode== "Excel"){
+    $arr_param = array();
+
+    $vOptions = $_REQUEST['vOptions'];
+    $Keyword = addslashes(trim($_REQUEST['Keyword']));
+
+    if ($Keyword != "") {
+        $arr_param[$vOptions] = $Keyword;
+    }
+
+    $arr_param['page_length'] = $page_length;
+    $arr_param['start'] = $start;
+    $arr_param['sEcho'] = $sEcho;
+    $arr_param['display_order'] = $display_order;
+    $arr_param['dir'] = $dir;
+
+    $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
+
+    $API_URL = $site_api_url."network_list.json";
+    //echo "<pre>";print_r($API_URL);exit;
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $API_URL);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_HEADER, FALSE);
+    curl_setopt($ch, CURLOPT_POST, TRUE);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($arr_param));
+
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+       "Content-Type: application/json",
+    ));
+
+    $response = curl_exec($ch);
+    curl_close($ch);  
+   
+    $result_arr = json_decode($response, true);
+
+    $rs_export = $result_arr['result']['data'];
+    $cnt_export = count($rs_export);
+      
+    include_once($class_path.'PHPExcel/PHPExcel.php'); 
+    // // Create new PHPExcel object
+    $objPHPExcel = new PHPExcel();
+    $file_name = "network_".time().".xlsx";
+
+    if($cnt_export >0) {
+        
+        $objPHPExcel->setActiveSheetIndex(0)
+                 ->setCellValue('A1', 'Id')
+                 ->setCellValue('B1', 'Name')
+                 ->setCellValue('C1', 'Status');
+
+        for($e=0; $e<$cnt_export; $e++) {
+
+            $status = "";
+            if($rs_export[$e]['iStatus'] == 0){
+                $status = 'Inactive';
+            }else if($rs_export[$e]['iStatus'] == 1){
+                $status = 'Active';
+            }else if($rs_export[$e]['iStatus'] == 2){
+                $status = 'Created';
+            }else if($rs_export[$e]['iStatus'] == 3){
+                $status = 'Planning';
+            }
+
+            $objPHPExcel->getActiveSheet()
+            ->setCellValue('A'.($e+2), $rs_export[$e]['iNetworkId'])
+            ->setCellValue('B'.($e+2), $rs_export[$e]['vName'])
+            ->setCellValue('C'.($e+2), $status);
+         }
+                        
+        /* Set Auto width of each comlumn */
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+        
+        /* Set Font to Bold for each comlumn */
+        $objPHPExcel->getActiveSheet()->getStyle('A1:C1')->getFont()->setBold(true);
+
+        /* Set Alignment of Selected Columns */
+        $objPHPExcel->getActiveSheet()->getStyle("A1:A".($e+3))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        // Rename worksheet
+        $objPHPExcel->getActiveSheet()->setTitle('Network');
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+        
+    }
+
+    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+    $result_arr  = array();
+
+    //save in file 
+    $objWriter->save($temp_gallery.$file_name);
+    $result_arr['isError'] = 0;
+    $result_arr['file_path'] = base64_encode($temp_gallery.$file_name);
+    $result_arr['file_url'] = base64_encode($temp_gallery_url.$file_name);
+    # -------------------------------------
+
+   echo json_encode($result_arr);
+   exit;
 }
 
 $module_name = "Network List";
@@ -282,5 +383,6 @@ $module_title = "Network";
 $smarty->assign("module_name", $module_name);
 $smarty->assign("module_title", $module_title);
 $smarty->assign("access_group_var_add", $access_group_var_add);
+$smarty->assign("access_group_var_CSV", $access_group_var_CSV);
 
 ?>

@@ -7,6 +7,7 @@ $access_group_var_delete = per_hasModuleAccess("Task Awareness", 'Delete', 'N');
 $access_group_var_status = per_hasModuleAccess("Task Awareness", 'Status', 'N');
 $access_group_var_add = per_hasModuleAccess("Task Awareness", 'Add', 'N');
 $access_group_var_edit = per_hasModuleAccess("Task Awareness", 'Edit', 'N');
+$access_group_var_CSV = per_hasModuleAccess("Task Awareness", 'CSV', 'N');
 # ----------- Access Rule Condition -----------
 # ------------------------------------------------------------
 # General Variables
@@ -286,7 +287,7 @@ if($mode == "List"){
     echo json_encode($result);
     hc_exit();
     # -----------------------------------   
-}else if($mode == "search_site"){
+} else if($mode == "search_site"){
     /*Search site api*/
     $arr_param = array();
     $vSiteName_awareness = trim($_REQUEST['vSiteName_awareness']);
@@ -317,7 +318,7 @@ if($mode == "List"){
     echo  json_encode($result_arr['result']['data']);
     hc_exit();
     # -----------------------------------
-}else if($mode == "search_fiber_inquiry"){
+} else if($mode == "search_fiber_inquiry"){
     /*Search site api*/
     $arr_param = array();
     $srId = trim($_REQUEST['vSR_awareness']);
@@ -350,6 +351,145 @@ if($mode == "List"){
     echo  json_encode($result_arr['result']['data']);
     hc_exit();
     # -----------------------------------
+} else if($mode== "Excel"){
+    $arr_param = array();
+
+    $vOptions = $_REQUEST['vOptions'];
+    if($vOptions == "iNetworkId"){
+        $searchId = $_REQUEST['networkId'];
+    }else if($vOptions == "iEngagementId"){
+        $searchId = $_REQUEST['engagementId'];
+    }else if($vOptions == "iTechnicianId"){
+        $searchId = $_REQUEST['technicianId'];
+    }
+    if ($searchId != "") {
+        $arr_param[$vOptions] = $searchId;
+    }
+
+    if ($_REQUEST['aId'] != "") {
+        $arr_param['aId'] = $_REQUEST['aId'];
+    }
+
+    if ($_REQUEST['premiseId'] != "") {
+        $arr_param['premiseId'] = $_REQUEST['premiseId'];
+    }
+
+    if($_REQUEST['siteName'] != ""){
+        $arr_param['siteName'] = $_REQUEST['siteName'];
+        $arr_param['SiteFilterOpDD'] = $_REQUEST['SiteFilterOpDD'];
+    }
+
+    if($_REQUEST['vAddress'] != ""){
+        $arr_param['vAddress'] = $_REQUEST['vAddress'];
+        $arr_param['AddressFilterOpDD'] = $_REQUEST['AddressFilterOpDD'];
+    }
+
+    if ($_REQUEST['fiberInquiryId'] != "") {
+        $arr_param['fiberInquiryId'] = $_REQUEST['fiberInquiryId'];
+    }
+    
+    $arr_param['page_length']   = $page_length;
+    $arr_param['start']         = $start;
+    $arr_param['sEcho']         = $sEcho;
+    $arr_param['display_order'] = $display_order;
+    $arr_param['dir']           = $dir;
+
+    $arr_param['access_group_var_edit']     = $access_group_var_edit;
+    $arr_param['access_group_var_delete']   = $access_group_var_delete;
+
+    $arr_param['sessionId']     = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
+    
+    $API_URL = $site_api_url."task_awareness_list.json";
+    //echo $API_URL. " ".json_encode($arr_param);exit;
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $API_URL);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_HEADER, FALSE);
+    curl_setopt($ch, CURLOPT_POST, TRUE);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($arr_param));
+
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+       "Content-Type: application/json",
+    ));
+    //
+    $response = curl_exec($ch);
+    curl_close($ch);  
+    $result_arr = json_decode($response, true);
+
+    $rs_export = $result_arr['result']['data'];
+    $cnt_export = count($rs_export);
+      
+    include_once($class_path.'PHPExcel/PHPExcel.php'); 
+        // // Create new PHPExcel object
+        $objPHPExcel = new PHPExcel();
+        $file_name = "task_awareness_".time().".xlsx";
+
+        if($cnt_export >0) {
+            
+            $objPHPExcel->setActiveSheetIndex(0)
+                     ->setCellValue('A1', 'Id')
+                     ->setCellValue('B1', 'Premise Name')
+                     ->setCellValue('C1', 'Address')
+                     ->setCellValue('D1', 'Fiber Inquiry')
+                     ->setCellValue('E1', 'Date')
+                     ->setCellValue('F1', 'Start Time')
+                     ->setCellValue('G1', 'End Time')
+                     ->setCellValue('H1', 'Engagement')
+                     ->setCellValue('I1', 'Notes');
+
+            for($e=0; $e<$cnt_export; $e++) {
+
+                $objPHPExcel->getActiveSheet()
+                ->setCellValue('A'.($e+2), $rs_export[$e]['iAId'])
+                ->setCellValue('B'.($e+2), $rs_export[$e]['vName'])
+                ->setCellValue('C'.($e+2), $rs_export[$e]['vAddress'])
+                ->setCellValue('D'.($e+2), $rs_export[$e]['vFiberInquiry'])
+                ->setCellValue('E'.($e+2), date_getDateTimeDDMMYYYY($rs_export[$e]['dDate']))
+                ->setCellValue('F'.($e+2), date_getTimeFromDate($rs_export[$e]['dStartDate']))
+                ->setCellValue('G'.($e+2), date_getTimeFromDate($rs_export[$e]['dEndDate']))
+                ->setCellValue('H'.($e+2), $rs_export[$e]['vEngagement'])
+                ->setCellValue('I'.($e+2), trim($rs_export[$e]['tNotes']));   
+             }
+                            
+            /* Set Auto width of each comlumn */
+            $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
+            
+            /* Set Font to Bold for each comlumn */
+            $objPHPExcel->getActiveSheet()->getStyle('A1:I1')->getFont()->setBold(true);
+            
+
+            /* Set Alignment of Selected Columns */
+            $objPHPExcel->getActiveSheet()->getStyle("A1:A".($e+3))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            // Rename worksheet
+            $objPHPExcel->getActiveSheet()->setTitle('TaskAwareness');
+
+            // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+            $objPHPExcel->setActiveSheetIndex(0);
+            
+        }
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $result_arr  = array();
+        
+         //save in file 
+        $objWriter->save($temp_gallery.$file_name);
+        $result_arr['isError'] = 0;
+        $result_arr['file_path'] = base64_encode($temp_gallery.$file_name);
+        $result_arr['file_url'] = base64_encode($temp_gallery_url.$file_name);
+    # -------------------------------------
+
+       echo json_encode($result_arr);
+       exit;
 }
 
 /*-------------------------- Engagement -------------------------- */
@@ -430,6 +570,7 @@ $smarty->assign("module_title", $module_title);
 $smarty->assign("iPremiseId", $iPremiseId);
 
 $smarty->assign("access_group_var_add", $access_group_var_add);
+$smarty->assign("access_group_var_CSV", $access_group_var_CSV);
 
 $smarty->assign("dDate", date('Y-m-d'));
 $smarty->assign("dStartTime", date("H:i", time()));

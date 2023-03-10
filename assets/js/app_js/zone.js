@@ -42,7 +42,9 @@ var listPage = function(){
                     "sLoadingRecords": "Please wait - loading...",
 
                 },
-                "buttons": [],
+                "buttons": [
+                    'copy', 'print',
+                ],
                 fnServerData: function(sSource, aoData, fnCallback,oSettings) {
                     oSettings.jqXHR = $.ajax({
                         "dataType": 'json',
@@ -63,13 +65,16 @@ var listPage = function(){
                 }
             });
         }
-        /*gridtable.button().add( 1, {
-                text: 'Geo Edit',
-                className: 'btn btn-primary',
+        //'excel'
+        if(access_group_var_CSV == '1'){
+            gridtable.button().add( 3, {
+                text: 'Excel',
+                className: 'btn btn-secondary',
                 action: function ( e, dt, node, config ) {
-                    geoEdit();
+                    exportExcelSheet();
                 }
-            });*/
+            });
+        }
     }
     return {
         init :function () {
@@ -128,3 +133,21 @@ function delete_record(id)
     );
 }
 
+
+function exportExcelSheet(){
+    $.ajax({
+        type: "POST",
+        url: site_url+"zone/zone_list&mode=Excel",
+        data: $("#frmlist").serializeArray(),
+        success: function(data){
+            res = JSON.parse(data);
+            isError = res['isError'];
+            if(isError == 0) {
+                file_path = res['file_path'];
+                file_url = res['file_url'];
+                window.location = site_url+"download.php?vFileName_path="+file_path+"&vFileName_url="+file_url;
+            }
+        }
+    });
+    return false;
+}

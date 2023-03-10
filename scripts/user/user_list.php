@@ -90,7 +90,7 @@ if($mode == "List") {
                 "name"           => gen_strip_slash($rs_user[$i]['vFirstName']) . " " . gen_strip_slash($rs_user[$i]['vLastName']),
                 "vEmail"         => $rs_user[$i]['vEmail'],
                 'vUsername'      => gen_strip_slash($rs_user[$i]['vUsername']),
-                'vDepartment'    => $user_department,
+                'vDepartment'    => $rs_user[$i]['vDepartment'],
                 'vAccessGroup'   => gen_strip_slash($rs_user[$i]['vAccessGroup']),
                 'vLoginHistory'  => '<a class="btn btn-outline-primary" title="View" href="' . $site_url . 'login_history/list&iUserId=' . $rs_user[$i]['iUserId'] . '"  target="_blank"><i class="fa fa-eye"></i></a>',
                 'dDate'          =>  date_getDateTime($rs_user[$i]['dDate']),
@@ -362,6 +362,14 @@ if($mode == "List") {
         $arr_param[$vOptions] = $Keyword;
     }
 
+    $arr_param = array();
+    $vOptions = $_REQUEST['vOptions'];
+    $Keyword = addslashes(trim($_REQUEST['Keyword']));
+
+    if ($Keyword != "") {
+        $arr_param[$vOptions] = $Keyword;
+    }
+
     $arr_param['vName']         = trim($_REQUEST['vName']);
     $arr_param['vNameDD']       = trim($_REQUEST['vNameDD']);
     $arr_param['vEmail']        = trim($_REQUEST['vEmail']);
@@ -370,12 +378,14 @@ if($mode == "List") {
     $arr_param['vUsernameDD']   = trim($_REQUEST['vUsernameDD']);
     $arr_param['iDepartmentId'] = $_REQUEST['iDepartmentId'];
     $arr_param['iAGroupId']     = $_REQUEST['iAGroupId'];
+    $arr_param['iCompanyId']     = $_REQUEST['iCompanyId'];
 
     $arr_param['page_length']   = $page_length;
     $arr_param['start']         = $start;
     $arr_param['sEcho']         = $sEcho;
     $arr_param['display_order'] = $display_order;
     $arr_param['dir']           = $dir;
+
     $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
 
     $API_URL = $site_api_url."user_list.json";
@@ -414,41 +424,20 @@ if($mode == "List") {
         ->setCellValue('D1', 'User Name')
         ->setCellValue('E1', 'Department')
         ->setCellValue('F1', 'AccessGroup')
-        ->setCellValue('G1', 'Company')
-        ->setCellValue('H1', 'Address')
-        ->setCellValue('I1', 'Area')
-        ->setCellValue('J1', 'State')
-        ->setCellValue('K1', 'County')
-        ->setCellValue('L1', 'City')
-        ->setCellValue('M1', 'Zip Code')
-        ->setCellValue('N1', 'Phone')
-        ->setCellValue('O1', 'Cell')
-        ->setCellValue('P1', 'Fax')
-        ->setCellValue('Q1', 'Last Login');
+        ->setCellValue('G1', 'Company');
 
     for($e=0; $e<$cnt_export; $e++) {
 
         $name = gen_strip_slash($rs_export[$e]['vFirstName']) . ' ' . gen_strip_slash($rs_export[$e]['vLastName']);
-        $dLastAccess = date_getDateTime($rs_export[$e]['dLastAccess']);
 
         $objPHPExcel->getActiveSheet()
         ->setCellValue('A'.($e+2), $rs_export[$e]['iUserId'])
         ->setCellValue('B'.($e+2), $name)
         ->setCellValue('C'.($e+2), $rs_export[$e]['vEmail'])
         ->setCellValue('D'.($e+2), $rs_export[$e]['vUsername'])
-        ->setCellValue('E'.($e+2), $rs_export[$e]['user_department'])
+        ->setCellValue('E'.($e+2), $rs_export[$e]['vDepartment'])
         ->setCellValue('F'.($e+2), $rs_export[$e]['vAccessGroup'])
-        ->setCellValue('G'.($e+2), $rs_export[$e]['vCompanyName'])
-        ->setCellValue('H'.($e+2), $rs_export[$e]['vAddress'])
-        ->setCellValue('I'.($e+2), $rs_export[$e]['vArea'])
-        ->setCellValue('J'.($e+2), $rs_export[$e]['vState'])
-        ->setCellValue('K'.($e+2), $rs_export[$e]['vCountry'])
-        ->setCellValue('L'.($e+2), $rs_export[$e]['vCity'])
-        ->setCellValue('M'.($e+2), $rs_export[$e]['vZipCode'])
-        ->setCellValue('N'.($e+2), $rs_export[$e]['vPhone'])
-        ->setCellValue('O'.($e+2), $rs_export[$e]['vCell'])
-        ->setCellValue('P'.($e+2), $rs_export[$e]['vFax'])
-        ->setCellValue('Q'.($e+2), $dLastAccess);
+        ->setCellValue('G'.($e+2), $rs_export[$e]['vCompanyName']);
     }
 
     /* Set Auto width of each comlumn */
@@ -459,19 +448,9 @@ if($mode == "List") {
     $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
     $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
     $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
-    $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
-    $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
-    $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
-    $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
-    $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setAutoSize(true);
-    $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setAutoSize(true);
-    $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setAutoSize(true);
-    $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setAutoSize(true);
-    $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setAutoSize(true);
-    $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setAutoSize(true);
 
     /* Set Font to Bold for each comlumn */
-    $objPHPExcel->getActiveSheet()->getStyle('A1:Q1')->getFont()->setBold(true);
+    $objPHPExcel->getActiveSheet()->getStyle('A1:G1')->getFont()->setBold(true);
 
 
     /* Set Alignment of Selected Columns */

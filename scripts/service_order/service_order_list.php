@@ -393,10 +393,8 @@ if($mode == "List") {
                  ->setCellValue('F1', 'SalesRep Email')
                  ->setCellValue('G1', 'Premise Name')
                  ->setCellValue('H1', 'Connection Type')
-                 ->setCellValue('I1', 'Service1')
-                 ->setCellValue('J1', 'Service2')
-                 ->setCellValue('K1', 'Service3')
-                 ->setCellValue('L1', 'Comments');
+                 ->setCellValue('I1', 'Service Type')
+                 ->setCellValue('J1', 'Comments');
     
         for($e=0; $e<$cnt_export; $e++) {
             $vPremise = $rs_export[$e]['iPremiseId']." (".$rs_export[$e]['vPremiseName']."; ".$rs_export[$e]['vPremiseType'].")";
@@ -411,9 +409,7 @@ if($mode == "List") {
             ->setCellValue('G'.($e+2), $vPremise)
             ->setCellValue('H'.($e+2), $rs_export[$e]['vConnectionTypeName'])
             ->setCellValue('I'.($e+2), $rs_export[$e]['vServiceType1'])
-            ->setCellValue('J'.($e+2), $rs_export[$e]['vServiceType2'])
-            ->setCellValue('K'.($e+2), $rs_export[$e]['vServiceType3'])
-            ->setCellValue('L'.($e+2), nl2br($rs_export[$e]['tComments']));
+            ->setCellValue('J'.($e+2), nl2br($rs_export[$e]['tComments']));
          }
                         
         /* Set Auto width of each comlumn */
@@ -427,11 +423,9 @@ if($mode == "List") {
         $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setAutoSize(true);
         
         /* Set Font to Bold for each comlumn */
-        $objPHPExcel->getActiveSheet()->getStyle('A1:L1')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A1:J1')->getFont()->setBold(true);
         
 
         /* Set Alignment of Selected Columns */

@@ -153,14 +153,17 @@ if($request_type == "premise_circuit_list"){
             $sql_equipment = 'SELECT e."iEquipmentId", e."vMACAddress",em."vModelName",em."iEquipmentModelId" FROM premise_circuit pc LEFT JOIN equipment e ON pc."iPremiseCircuitId"= e."iPremiseCircuitId" LEFT JOIN equipment_model em ON e."iEquipmentModelId"= em."iEquipmentModelId" WHERE pc."iPremiseCircuitId"='.$rs_list[$i]['iPremiseCircuitId'];
             $rs_equipment = $sqlObj->GetAll($sql_equipment);
             $vEquipment = "";
+            $vEquipmentExcel = "";
             if(count($rs_equipment) > 0){
                 for($k=0;$k<count($rs_equipment);$k++){
                     if($rs_equipment[$k]['iEquipmentModelId'] > 0 && $rs_equipment[$k]['vMACAddress'] != "" && $rs_equipment[$k]['vModelName'] != ""){
 
                         $vEqupment_url = $site_url."service_order/equipment_add&mode=Update&iEquipmentId=".$rs_equipment[$k]['iEquipmentId'];
-                        $vEquipment .= "<a class='text-primary' href='".$vEqupment_url."' target='_blank'>ID#".$rs_equipment[$k]['iEquipmentId']." | ".$rs_equipment[$k]['vModelName']." | ".$rs_equipment[$k]['vMACAddress']."<br>";
+                        $vEquipment .= "<a class='text-primary' href='".$vEqupment_url."' target='_blank'>ID#".$rs_equipment[$k]['iEquipmentId']." | ".$rs_equipment[$k]['vModelName']." | ".$rs_equipment[$k]['vMACAddress']."</a><br>";
+                        $vEquipmentExcel .= "ID#".$rs_equipment[$k]['iEquipmentId']." | ".$rs_equipment[$k]['vModelName']." | ".$rs_equipment[$k]['vMACAddress']."<br>";
                     }else{
                         $vEquipment .= "---";
+                        $vEquipmentExcel .= "---";
                     }
                 }
             }
@@ -178,6 +181,7 @@ if($request_type == "premise_circuit_list"){
                 "vConnectionTypeName"   => $rs_list[$i]['vConnectionTypeName'],
                 "vCarrierServices"      => $vCarrierServices,
                 "vEquipment"            => $vEquipment,
+                "vEquipmentExcel"            => $vEquipmentExcel,
                 "iStatus"               => $rs_list[$i]['iStatus'],
             );
         }

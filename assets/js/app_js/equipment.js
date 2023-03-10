@@ -71,7 +71,7 @@ var listPage = function(){
 
         //Excel button 
         if(access_group_var_CSV == '1'){
-            gridtable.button().add( 2, {
+            gridtable.button().add( 3, {
                 text: 'Excel',
                 className: 'btn btn-secondary',
                 action: function ( e, dt, node, config ) {
