@@ -6,6 +6,7 @@ $access_group_var_delete = per_hasModuleAccess("Access Group", 'Delete', 'N');
 $access_group_var_status = per_hasModuleAccess("Access Group", 'Status', 'N');
 $access_group_var_add = per_hasModuleAccess("Access Group", 'Add', 'N');
 $access_group_var_edit = per_hasModuleAccess("Access Group", 'Edit', 'N');
+$access_group_var_CSV = per_hasModuleAccess("Access Group", 'CSV', 'N');
 # ----------- Access Rule Condition -----------
 # ------------------------------------------------------------
 # General Variables
@@ -230,7 +231,7 @@ if($mode == "List"){
     echo json_encode($result);
     hc_exit();
     # -----------------------------------   
-} else if($mode == "Manage_Role"){
+}else if($mode == "Manage_Role"){
     //echo "<pre>";print_r($_POST['eList']);exit;
     $arr_param = array();
     $arr_param = array(
@@ -275,9 +276,117 @@ if($mode == "List"){
     # -----------------------------------
     echo json_encode($result);
     hc_exit();
+}else if($mode== "Excel"){
+    $where_arr = array();
+    $vOptions = $_REQUEST['vOptions'];
+    $Keyword = addslashes(trim($_REQUEST['Keyword']));
+    if ($Keyword != "") {
+        $arr_param[$vOptions] = $Keyword;
+    }
+    $arr_param['page_length'] = $page_length;
+    $arr_param['start'] = $start;
+    $arr_param['sEcho'] = $sEcho;
+    $arr_param['display_order'] = $display_order;
+    $arr_param['dir'] = $dir;
+    $arr_param['access_group_var_edit'] = $access_group_var_edit;
+    $arr_param['access_group_var_delete'] = $access_group_var_delete;
+    $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
+    $API_URL = $site_api_url."access_group_list.json";
+    //echo $API_URL." ".json_encode($arr_param);exit;
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $API_URL);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_HEADER, FALSE);
+    curl_setopt($ch, CURLOPT_POST, TRUE);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($arr_param));
+
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+       "Content-Type: application/json",
+    ));
+    //
+    $response = curl_exec($ch);
+    curl_close($ch);  
+    //echo "<pre>";print_r($response);exit();
+    $result_arr = json_decode($response, true);
+
+    $rs_export = $result_arr['result']['data'];
+    $cnt_export = count($rs_export);
+      
+    include_once($class_path.'PHPExcel/PHPExcel.php'); 
+        // // Create new PHPExcel object
+        $objPHPExcel = new PHPExcel();
+        $file_name = "access_group_".time().".xlsx";
+
+        if($cnt_export >0) {
+            
+            $objPHPExcel->setActiveSheetIndex(0)
+                     ->setCellValue('A1', 'Id')
+                     ->setCellValue('B1', 'Access Group')
+                     ->setCellValue('C1', 'Access Type')
+                     ->setCellValue('D1', 'Description')
+                     ->setCellValue('E1', 'Status');
+
+            for($e=0; $e<$cnt_export; $e++) {
+
+               $vAccessType = '';
+                if($rs_export[$e]['iAccessType'] == 1){
+                    $vAccessType = "Sales";
+                }else if($rs_export[$e]['iAccessType'] == 2){
+                    $vAccessType = "Technician";
+                }else if($rs_export[$e]['iAccessType'] == 3){
+                    $vAccessType = "Carrier";
+                }
+               
+                $objPHPExcel->getActiveSheet()
+                        ->setCellValue('A'.($e+2), $rs_export[$e]['iAGroupId'])
+                        ->setCellValue('B'.($e+2), $rs_export[$e]['vAccessGroup'])
+                        ->setCellValue('C'.($e+2), $vAccessType)
+                        ->setCellValue('D'.($e+2), $rs_export[$e]['tDescription'])
+                        ->setCellValue('E'.($e+2), gen_status($rs_export[$e]['iStatus']));
+
+            }
+                            
+            /* Set Auto width of each comlumn */
+            $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
+            
+            
+            /* Set Font to Bold for each comlumn */
+            $objPHPExcel->getActiveSheet()->getStyle('A1:E1')->getFont()->setBold(true);
+            
+
+            /* Set Alignment of Selected Columns */
+            $objPHPExcel->getActiveSheet()->getStyle("A1:A".($e+3))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            // Rename worksheet
+            $objPHPExcel->getActiveSheet()->setTitle('AccessGroup');
+
+            // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+            $objPHPExcel->setActiveSheetIndex(0);
+            
+        }
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $result_arr  = array();
+        
+         //save in file 
+        $objWriter->save($temp_gallery.$file_name);
+        $result_arr['isError'] = 0;
+        $result_arr['file_path'] = base64_encode($temp_gallery.$file_name);
+        $result_arr['file_url'] = base64_encode($temp_gallery_url.$file_name);
+    # -------------------------------------
+
+       echo json_encode($result_arr);
+       exit;
 }
+
 $module_name = "Access Group List";
 $module_title = "Access Group";
 $smarty->assign("module_name", $module_name);
 $smarty->assign("module_title", $module_title);
 $smarty->assign("access_group_var_add", $access_group_var_add);
+$smarty->assign("access_group_var_CSV", $access_group_var_CSV);

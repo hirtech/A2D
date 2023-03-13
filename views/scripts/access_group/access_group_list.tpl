@@ -110,6 +110,7 @@
 <script type="text/javascript">
 	var ajax_url = 'access_group/access_group_list?mode=List';
 	var access_group_var_add = '{$access_group_var_add}';
+	var access_group_var_CSV= '{$access_group_var_CSV}';
 </script>
 {include file="general/dataTables.tpl"}
 

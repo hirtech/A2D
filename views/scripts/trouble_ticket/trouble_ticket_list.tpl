@@ -63,6 +63,7 @@
 <script type="text/javascript">
 	var ajax_url = 'trouble_ticket/trouble_ticket_list&mode=List';
 	var access_group_var_add= '{$access_group_var_add}';
+	var access_group_var_CSV= '{$access_group_var_CSV}';
 </script>
 <script src="assets/js/app_js/trouble_ticket.js"></script>
 {include file="general/dataTables.tpl"}

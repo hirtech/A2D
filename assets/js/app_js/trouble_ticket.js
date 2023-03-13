@@ -94,6 +94,17 @@ var listPage = function(){
                 className: 'btn btn-primary'
             });
         }
+
+        //Excel button 
+        if(access_group_var_CSV == '1'){
+            gridtable.button().add( 3, {
+                text: 'Excel',
+                className: 'btn btn-secondary',
+                action: function ( e, dt, node, config ) {
+                    exportExcelSheet();
+                }
+            });
+        }
     }
     return {
         init :function () {
@@ -224,3 +235,21 @@ $('#AdvSearchReset').click(function () {
     gridtable.ajax.reload();
     return false;
 });
+
+function exportExcelSheet(){
+    $.ajax({
+        type: "POST",
+        url: site_url+"trouble_ticket/trouble_ticket_list&mode=Excel",
+        data: $(".trouble_ticket_search_form").serializeArray(),
+        success: function(data){
+            res = JSON.parse(data);
+            isError = res['isError'];
+            if(isError == 0) {
+                file_path = res['file_path'];
+                file_url = res['file_url'];
+                window.location = site_url+"download.php?vFileName_path="+file_path+"&vFileName_url="+file_url;
+            }
+        }
+    });
+    return false;
+}

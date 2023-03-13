@@ -65,7 +65,7 @@ var listPage = function(){
             });
         }
         //'excel'
-        gridtable.button().add( 2, {
+        gridtable.button().add( 3, {
             text: 'Excel',
             className: 'btn btn-secondary',
             action: function ( e, dt, node, config ) {

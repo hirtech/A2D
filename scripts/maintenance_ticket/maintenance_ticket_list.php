@@ -7,6 +7,7 @@ $access_group_var_delete = per_hasModuleAccess("Maintenance Ticket", 'Delete', '
 $access_group_var_status = per_hasModuleAccess("Maintenance Ticket", 'Status', 'N');
 $access_group_var_add = per_hasModuleAccess("Maintenance Ticket", 'Add', 'N');
 $access_group_var_edit = per_hasModuleAccess("Maintenance Ticket", 'Edit', 'N');
+$access_group_var_CSV = per_hasModuleAccess("Maintenance Ticket", 'CSV', 'N');
 # ----------- Access Rule Condition -----------
 # ------------------------------------------------------------
 # General Variables
@@ -317,6 +318,148 @@ if($mode == "List"){
     echo json_encode($result);
     hc_exit();
     # -----------------------------------   
+} else if($mode== "Excel"){
+    $arr_param = array();
+
+    $vOptions = $_REQUEST['vOptions'];
+    $Keyword = addslashes(trim($_REQUEST['Keyword']));
+    if ($Keyword != "") {
+        $arr_param[$vOptions] = $Keyword;
+    }
+    
+    $arr_param['iSAssignedToId']    = $_POST['iSAssignedToId'];
+    $arr_param['iSServiceOrderId']  = $_POST['iSServiceOrderId'];
+    $arr_param['iSSeverity']        = $_POST['iSSeverity'];
+    $arr_param['iSStatus']          = $_POST['iSStatus'];
+    $arr_param['dSCompletionDate']  = trim($_POST['dSCompletionDate']);
+    $arr_param['tSDescriptionDD']   = $_POST['tSDescriptionDD'];
+    $arr_param['tSDescription']     = trim($_POST['tSDescription']);
+    $arr_param['iSPremiseId']       = trim($_POST['iSPremiseId']);
+    $arr_param['vSPremiseNameDD']   = $_POST['vSPremiseNameDD'];
+    $arr_param['vSPremiseName']     = trim($_POST['vSPremiseName']);
+    $arr_param['vSAddressDD']       = $_POST['vSAddressDD'];
+    $arr_param['vSAddress']         = trim($_POST['vSAddress']);
+    $arr_param['iSNetworkId']       = $_POST['iSNetworkId'];
+    $arr_param['iSCarrierId']       = $_POST['iSCarrierId'];
+   
+
+    $arr_param['page_length']       = $page_length;
+    $arr_param['start']             = $start;
+    $arr_param['sEcho']             = $sEcho;
+    $arr_param['display_order']     = $display_order;
+    $arr_param['dir']               = $dir;
+
+    $arr_param['sessionId']     = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
+    
+    $API_URL = $site_api_url."maintenance_ticket_list.json";
+    //echo $API_URL. " ".json_encode($arr_param);exit;
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $API_URL);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_HEADER, FALSE);
+    curl_setopt($ch, CURLOPT_POST, TRUE);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($arr_param));
+
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+       "Content-Type: application/json",
+    ));
+    //
+    $response = curl_exec($ch);
+    curl_close($ch);  
+    $result_arr = json_decode($response, true);
+
+    $rs_export = $result_arr['result']['data'];
+    $cnt_export = count($rs_export);
+      
+    include_once($class_path.'PHPExcel/PHPExcel.php'); 
+        // // Create new PHPExcel object
+        $objPHPExcel = new PHPExcel();
+        $file_name = "maintenance_ticket_".time().".xlsx";
+
+        if($cnt_export >0) {
+            
+            $objPHPExcel->setActiveSheetIndex(0)
+                     ->setCellValue('A1', 'Id')
+                     ->setCellValue('B1', 'Assigned To')
+                     ->setCellValue('C1', 'Service Order')
+                     ->setCellValue('D1', 'Severity')
+                     ->setCellValue('E1', 'Status')
+                     ->setCellValue('F1', 'Completion Date')
+                     ->setCellValue('G1', 'Description');
+
+            for($e=0; $e<$cnt_export; $e++) {
+                $iSeverity = '---';
+                if($rs_export[$e]['iSeverity'] == 1){
+                   $iSeverity = "Low"; 
+                }else if($rs_export[$e]['iSeverity'] == 2){
+                   $iSeverity = "Medium"; 
+                }else if($rs_export[$e]['iSeverity'] == 3){
+                   $iSeverity = "High"; 
+                }else if($rs_export[$e]['iSeverity'] == 4){
+                   $iSeverity = "Critical"; 
+                }
+
+                $iStatus = '---';
+                if($rs_export[$e]['iStatus'] == 1){
+                   $iStatus = "Not Started"; 
+                }else if($rs_export[$e]['iStatus'] == 2){
+                   $iStatus = "In Progress"; 
+                }else if($rs_export[$e]['iStatus'] == 3){
+                   $iStatus = "Completed"; 
+                }
+
+                $vServiceDetails = '';
+                if($rs_export[$e]['iServiceOrderId'] != ""){
+                    $vServiceDetails .= "SO #".$rs_export[$e]['iServiceOrderId'].": ".$rs_export[$e]['vServiceOrder'];
+                }
+                $objPHPExcel->getActiveSheet()
+                        ->setCellValue('A'.($e+2), $rs_export[$e]['iMaintenanceTicketId'])
+                        ->setCellValue('B'.($e+2), $rs_export[$e]['vAssignedTo'])
+                        ->setCellValue('C'.($e+2), $vServiceDetails)
+                        ->setCellValue('D'.($e+2), $iSeverity)
+                        ->setCellValue('E'.($e+2), $iStatus)
+                        ->setCellValue('F'.($e+2), date_getDateTimeDDMMYYYY($rs_export[$e]['dCompletionDate']))
+                        ->setCellValue('G'.($e+2), nl2br($rs_export[$e]['tDescription']));
+
+            }
+                            
+            /* Set Auto width of each comlumn */
+            $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
+            
+            /* Set Font to Bold for each comlumn */
+            $objPHPExcel->getActiveSheet()->getStyle('A1:G1')->getFont()->setBold(true);
+            
+
+            /* Set Alignment of Selected Columns */
+            $objPHPExcel->getActiveSheet()->getStyle("A1:A".($e+3))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            // Rename worksheet
+            $objPHPExcel->getActiveSheet()->setTitle('MaintenanceTicket');
+
+            // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+            $objPHPExcel->setActiveSheetIndex(0);
+            
+        }
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $result_arr  = array();
+        
+         //save in file 
+        $objWriter->save($temp_gallery.$file_name);
+        $result_arr['isError'] = 0;
+        $result_arr['file_path'] = base64_encode($temp_gallery.$file_name);
+        $result_arr['file_url'] = base64_encode($temp_gallery_url.$file_name);
+    # -------------------------------------
+
+       echo json_encode($result_arr);
+       exit;
 }
 
 /*-------------------------- User -------------------------- */
@@ -423,4 +566,5 @@ $module_title = "Maintenance Ticket";
 $smarty->assign("module_name", $module_name);
 $smarty->assign("module_title", $module_title);
 $smarty->assign("access_group_var_add", $access_group_var_add);
+$smarty->assign("access_group_var_CSV", $access_group_var_CSV);
 ?>

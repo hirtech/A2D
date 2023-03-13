@@ -40,13 +40,6 @@ var listPage = function(){
 
                 },
                 "buttons": [
-                    /*{
-                        text: '<i class="fa fa-plus"></i>Add',
-                        className: 'btn btn-primary',
-                        action: function ( e, dt, node, config ) {
-                            addEditData('','add');
-                        }
-                    },*/
                     'copy', 'print',
                 ],
                 fnServerData: function(sSource, aoData, fnCallback,oSettings) {
@@ -70,7 +63,7 @@ var listPage = function(){
             });
         }
         //'excel'
-        gridtable.button().add( 2, {
+        gridtable.button().add( 3, {
                 text: 'Excel',
                 className: 'btn btn-secondary',
                 action: function ( e, dt, node, config ) {
