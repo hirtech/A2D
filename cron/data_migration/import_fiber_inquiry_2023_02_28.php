@@ -188,9 +188,8 @@ if($ni > 0){
 		if($iFiberInquiryId > 0){
 			$sql = "INSERT INTO fiberinquiry_status_history(\"iFiberInquiryId\", \"iStatus\", \"dAddedDate\", \"iLoginUserId\") VALUES (".gen_allow_null_int($iFiberInquiryId).", ".$iStatus.",  ".gen_allow_null_char(date_getSystemDateTime()).", ".gen_allow_null_int($iLoginUserId).")";
 			$sqlObj->Execute($sql);	
+			$cnt++;
 		}
-
-		$cnt++;
 	}
 
 }
