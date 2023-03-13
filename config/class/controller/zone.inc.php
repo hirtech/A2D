@@ -118,8 +118,32 @@ class Zone {
 			$sqlObj->Execute($sql);
 			$iZoneId = $sqlObj->Insert_ID();
 			if($iZoneId){
-		        $contents = file_get_contents($zone_path.$file_name);   
-		        $data= xmlstring2array($contents);
+				$ext = pathinfo($file_name, PATHINFO_EXTENSION);
+				if($ext == "kmz") {
+					$filename = $zone_path.$file_name;
+					$extract_folder = $zone_path."/temp";
+					$newfile = substr($filename, 0, -4).'.zip';
+					$rename_file = substr($file_name, 0, -4).'.kml';
+					if (copy($filename, $newfile)) {
+						$zip = new ZipArchive;
+						$res = $zip->open($newfile);
+						if ($res === TRUE) {
+							$zip->extractTo($extract_folder);
+							$zip->close();
+							$latest_filename = $zone_path."/temp/doc.kml";
+							
+							$contents = utf8_encode(file_get_contents($latest_filename));
+							$data12 = str_replace("°", "", $contents);
+							$contents1 = utf8_encode($data12);
+							$data1 = str_replace("°", "", $contents1);
+							$data = xmlstring2array($data1);
+							//echo "<pre>";print_r($data);exit;
+						}
+					}
+				}else {
+					$contents = file_get_contents($zone_path.$file_name);
+					$data= xmlstring2array($contents);
+				}
 		        //echo "<pre>";print_r($data);exit;
 		        $ni = count($data['Document']['Placemark']);
 		         if($ni > 0) {
@@ -189,8 +213,32 @@ class Zone {
 			$rs_db = $sqlObj->Affected_Rows();
 			if($rs_db){
 				if($file_name != ''){
-			        $contents = file_get_contents($zone_path.$file_name);
-			        $data= xmlstring2array($contents);
+					$ext = pathinfo($file_name, PATHINFO_EXTENSION);
+					if($ext == "kmz") {
+						$filename = $zone_path.$file_name;
+						$extract_folder = $zone_path."/temp";
+						$newfile = substr($filename, 0, -4).'.zip';
+						$rename_file = substr($file_name, 0, -4).'.kml';
+						if (copy($filename, $newfile)) {
+							$zip = new ZipArchive;
+							$res = $zip->open($newfile);
+							if ($res === TRUE) {
+								$zip->extractTo($extract_folder);
+								$zip->close();
+								$latest_filename = $zone_path."/temp/doc.kml";
+								
+								$contents = utf8_encode(file_get_contents($latest_filename));
+								$data12 = str_replace("°", "", $contents);
+								$contents1 = utf8_encode($data12);
+								$data1 = str_replace("°", "", $contents1);
+								$data = xmlstring2array($data1);
+								//echo "<pre>";print_r($data);exit;
+							}
+						}
+					}else {
+						$contents = file_get_contents($zone_path.$file_name);
+						$data= xmlstring2array($contents);
+					}
 			        //echo "<pre>";print_r($data);exit;
 			        $ni = count($data['Document']['Placemark']);
 			        if($ni > 0) {

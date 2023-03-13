@@ -1,5 +1,5 @@
 <?php
-include_once("config.php");
+include_once("../config.php");
 	
 $sql = "SELECT * FROM premise_mas order by \"iPremiseId\"";	
 $rs = $sqlObj->GetAll($sql);
