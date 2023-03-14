@@ -981,8 +981,9 @@ class Fieldmap {
     public function getServiceOrderData($param){
         global $sqlObj;
         $data = array();
-        $sOrderData = 'SELECT service_order.* , s."vName" as "vPremiseName", s."vAddress1", s."vStreet", s."iCityId", s."iCountyId", s."iStateId", s."iZoneId", s."iZipcode", s."vLatitude", s."vLongitude", st."vTypeName" as "vPremiseType", cm."vCompanyName", z."vZoneName", z."iNetworkId", n."vName" as "vNetwork", ct."vConnectionTypeName", st1."vServiceType" as "vServiceType1", c."vCity", sm."vState"  
+        $sOrderData = 'SELECT service_order.* , s."vName" as "vPremiseName", s."vAddress1", s."vStreet", s."iCityId", s."iCountyId", s."iStateId", s."iZoneId", s."iZipcode", s."vLatitude", s."vLongitude", st."vTypeName" as "vPremiseType", cm."vCompanyName", z."vZoneName", z."iNetworkId", n."vName" as "vNetwork", ct."vConnectionTypeName", st1."vServiceType" as "vServiceType1", c."vCity", sm."vState",  concat(user_mas."vFirstName", \' \', user_mas."vLastName" ) as "vSalesRepName"
             FROM service_order 
+            LEFT JOIN user_mas on service_order."iSalesRepId" = user_mas."iUserId" 
             LEFT JOIN premise_mas s on service_order."iPremiseId" = s."iPremiseId" 
             LEFT JOIN zone z on s."iZoneId" = z."iZoneId" 
             LEFT JOIN city_mas c on s."iCityId" = c."iCityId" 

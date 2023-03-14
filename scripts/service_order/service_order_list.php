@@ -147,9 +147,9 @@ if($mode == "List") {
     $arr_param = array(
         "iServiceOrderId"       => $_POST['iServiceOrderId'],
         "vMasterMSA"            => trim($_POST['vMasterMSA']),
-        "vServiceOrder"         => trim($_POST['vServiceOrder']),
+        "vNameId"         => trim($_POST['vNameId']),
         "iCarrierID"            => $_POST['iCarrierID'],
-        "vSalesRepName"         => trim($_POST['vSalesRepName']),
+        "iSalesRepId"           => trim($_POST['iSalesRepId']),
         "vSalesRepEmail"        => trim($_POST['vSalesRepEmail']),
         "iPremiseId"            => $_POST['search_iPremiseId'],
         "iConnectionTypeId"     => $_POST['iConnectionTypeId'],
@@ -193,9 +193,9 @@ if($mode == "List") {
 }else if($mode == "Add") {
     $arr_param = array(
         "vMasterMSA"            => trim($_POST['vMasterMSA']),
-        "vServiceOrder"         => trim($_POST['vServiceOrder']),
+        "vNameId"               => trim($_POST['vNameId']),
         "iCarrierID"            => $_POST['iCarrierID'],
-        "vSalesRepName"         => trim($_POST['vSalesRepName']),
+        "iSalesRepId"           => trim($_POST['iSalesRepId']),
         "vSalesRepEmail"        => trim($_POST['vSalesRepEmail']),
         "iPremiseId"            => $_POST['search_iPremiseId'],
         "iConnectionTypeId"     => $_POST['iConnectionTypeId'],
@@ -265,7 +265,7 @@ if($mode == "List") {
         $result['msg'] = MSG_DELETE;
         $result['error'] = 0 ;
     }else{
-         $result['msg'] = MSG_DELETE_ERROR;
+        $result['msg'] = MSG_DELETE_ERROR;
         $result['error'] = 1 ;
     }
     # -----------------------------------
@@ -315,7 +315,7 @@ if($mode == "List") {
     echo json_encode($result);
     hc_exit();
     # -----------------------------------   
-} else if($mode== "Excel"){
+}else if($mode == "Excel"){
     $arr_param = array();
     $vOptions = $_REQUEST['vOptions'];
     $Keyword = addslashes(trim($_REQUEST['Keyword']));
@@ -450,7 +450,125 @@ if($mode == "List") {
 
    echo json_encode($result_arr);
    exit;
-}
+}else if($mode == "get_master_msa_from_carrier"){
+    $arr_param = array(
+        "iCompanyId"    => $_POST['iCarrierId'],
+        "sessionId"     => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
+    );
+
+    $API_URL = $site_api_url."get_company_data_from_id.json";
+    //echo $API_URL." ".json_encode($arr_param);exit;
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $API_URL);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_HEADER, FALSE);
+    curl_setopt($ch, CURLOPT_POST, TRUE);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $arr_param);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+       "Content-Type: multipart/form-data",
+    ));
+    $response = curl_exec($ch);
+    curl_close($ch); 
+    $result_arr = json_decode($response, true); 
+    //echo "<pre>;";print_r($result_arr['result']);exit;
+    $vMSANum = '';
+    $vNameId = '';
+    if(isset($result_arr['result'])){
+        $vMSANum = $result_arr['result']['vMSANum'];
+        $vNameId = $result_arr['result']['vNameId'];
+        $result['vMSANum'] = $vMSANum ;
+        $result['vNameId'] = $vNameId ;
+        $result['error'] = 0 ;
+    }else{
+        $result['vNameId'] = $vNameId ;
+        $result['error'] = 1 ;
+    }
+
+    # -----------------------------------
+    # Return jSON data.
+    # -----------------------------------
+    echo json_encode($result);
+    hc_exit();
+    # -----------------------------------  
+}else if($mode == "get_user_details_from_carrier"){
+    $arr_param = array(
+        "iCompanyId"    => $_POST['iCarrierId'],
+        "sessionId"     => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
+    );
+
+    $API_URL = $site_api_url."get_user_details_from_company_id.json";
+    //echo $API_URL." ".json_encode($arr_param);exit;
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $API_URL);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_HEADER, FALSE);
+    curl_setopt($ch, CURLOPT_POST, TRUE);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $arr_param);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+       "Content-Type: multipart/form-data",
+    ));
+    $response = curl_exec($ch);
+    curl_close($ch); 
+    $result_arr = json_decode($response, true); 
+    //echo "<pre>;";print_r($result_arr['result']);exit;
+    if(isset($result_arr['result']) && count($result_arr['result']) > 0){
+        $result['user_data'] = $result_arr['result'];
+        $result['error'] = 0;
+    }else{
+        $result['user_data'] = [];
+        $result['error'] = 1;
+    }
+
+    # -----------------------------------
+    # Return jSON data.
+    # -----------------------------------
+    echo json_encode($result);
+    hc_exit();
+    # -----------------------------------  
+}else if($mode == "get_user_details_from_user"){
+    $arr_param = array(
+        "iUserId"    => $_POST['iUserId'],
+        "sessionId"     => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
+    );
+
+    $API_URL = $site_api_url."getUserDetailsFromUserId.json";
+    //echo $API_URL." ".json_encode($arr_param);exit;
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $API_URL);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_HEADER, FALSE);
+    curl_setopt($ch, CURLOPT_POST, TRUE);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $arr_param);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+       "Content-Type: multipart/form-data",
+    ));
+    $response = curl_exec($ch);
+    curl_close($ch); 
+    $result_arr = json_decode($response, true); 
+    //echo "<pre>";print_r($result_arr['result']);exit;
+    $vEmail = '';
+    if(isset($result_arr['result'][0]['vEmail'])){
+        $vEmail = $result_arr['result'][0]['vEmail'];
+        $result['vEmail'] = $vEmail ;
+        $result['error'] = 0 ;
+    }else{
+        $result['vEmail'] = $vEmail ;
+        $result['error'] = 1 ;
+    }
+
+    # -----------------------------------
+    # Return jSON data.
+    # -----------------------------------
+    echo json_encode($result);
+    hc_exit();
+    # -----------------------------------  
+} 
 
 ## --------------------------------
 # Network Dropdown

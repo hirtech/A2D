@@ -230,9 +230,11 @@ if($request_type == "user_list"){
         $join_arr = array();
         $where_arr[] = "user_mas.\"iUserId\" = '" . $iUserId . "'";
         $join_fieds_arr[] = "access_group_mas.\"vAccessGroup\"";
-        $join_fieds_arr[] = "user_details.\"vCompanyName\"";
+        $join_fieds_arr[] = "company_mas.\"vCompanyName\"";
+        $join_fieds_arr[] = "user_details.\"iCompanyId\"";
         $join_arr[] = "LEFT JOIN access_group_mas ON user_mas.\"iAGroupId\" = access_group_mas.\"iAGroupId\"";
         $join_arr[] = "LEFT JOIN user_details ON user_mas.\"iUserId\" = user_details.\"iUserId\"";
+        $join_arr[] = "LEFT JOIN company_mas ON company_mas.\"iCompanyId\" = user_details.\"iCompanyId\"";
         $UserObj->join_field = $join_fieds_arr;
         $UserObj->join = $join_arr;
         $UserObj->where = $where_arr;
@@ -566,6 +568,38 @@ if($request_type == "user_list"){
     $code = 2000;
     $message = api_getMessage($req_ext, constant($code));
     $response_data = array("Code" => 200, "Message" => $message, "result" => $result);
+}else if($request_type == "get_user_details_from_company_id"){
+    $iCompanyId = $RES_PARA['iCompanyId'];
+    $user_arr = array();
+    $where_arr = array();
+    $join_fieds_arr = array();
+    $join_arr = array();
+    $where_arr[] = " user_details.\"iCompanyId\" = '".$iCompanyId."' ";
+    $UserObj = new User();
+    //$join_fieds_arr[] = "user_details.\"vCompanyName\"";
+    $join_arr[] = "LEFT JOIN user_details ON user_mas.\"iUserId\" = user_details.\"iUserId\"";
+    $UserObj->join_field = $join_fieds_arr;
+    $UserObj->join = $join_arr;
+    $UserObj->where = $where_arr;
+    $UserObj->param['limit'] = "";
+    $UserObj->param['order_by'] = '"vFirstName"';
+    $UserObj->setClause();
+    $UserObj->debug_query = false;
+    $rs_user = $UserObj->recordset_list();
+    //echo "<pre>";print_r($rs_user);exit;
+    $ui = count($rs_user);
+    $user_arr = array();
+    if($ui > 0){
+        for ($i=0; $i < $ui; $i++) { 
+            $user_arr[$i]['iUserId'] = $rs_user[$i]['iUserId'];
+            $user_arr[$i]['vName'] = $rs_user[$i]['vFirstName']." ".$rs_user[$i]['vLastName'];
+            $user_arr[$i]['vEmail'] = $rs_user[$i]['vEmail'];
+        }
+    }
+    $rh = HTTPStatus(200);
+    $code = 2000;
+    $message = api_getMessage($req_ext, constant($code));
+    $response_data = array("Code" => 200, "Message" => $message, "result" => $user_arr);  
 }
 else {
    $r = HTTPStatus(400);

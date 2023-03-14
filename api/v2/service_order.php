@@ -158,18 +158,18 @@ if($request_type == "service_order_list"){
     }
 
     if ($vSSalesRepName != "") {
-        if ($vSSalesRepNameDD != "") {
+        if ($vNameDD != "") {
             if ($vSSalesRepNameDD == "Begins") {
-                $where_arr[] = 'service_order."vSalesRepName" ILIKE \''.trim($vSSalesRepName).'%\'';
+                $where_arr[] = "user_mas.\"vFirstName\" LIKE '".$vSSalesRepName."%'";
             } else if ($vSSalesRepNameDD == "Ends") {
-                $where_arr[] = 'service_order."vSalesRepName" ILIKE \'%'.trim($vSSalesRepName).'\'';
+                $where_arr[] = "user_mas.\"vLastName\" LIKE '%".$vSSalesRepName."'";
             } else if ($vSSalesRepNameDD == "Contains") {
-                $where_arr[] = 'service_order."vSalesRepName" ILIKE \'%'.trim($vSSalesRepName).'%\'';
+                $where_arr[] = "concat(user_mas.\"vFirstName\", ' ', user_mas.\"vLastName\") LIKE '%".$vSSalesRepName."%'";
             } else if ($vSSalesRepNameDD == "Exactly") {
-                $where_arr[] = 'service_order."vSalesRepName" ILIKE \''.trim($vSSalesRepName).'\'';
+                $where_arr[] = "concat(user_mas.\"vFirstName\", ' ', user_mas.\"vLastName\") = '".$vSSalesRepName."'";
             }
         } else {
-            $where_arr[] = 'service_order."vSalesRepName" ILIKE \''.trim($vSSalesRepName).'%\'';
+            $where_arr[] = "concat(user_mas.\"vFirstName\", ' ', user_mas.\"vLastName\") LIKE '".$vSSalesRepName."%'";
         }
     }
 
@@ -203,7 +203,7 @@ if($request_type == "service_order_list"){
             $sortname = "cm.\"vCompanyName\"";
             break;
         case "5":
-            $sortname = "service_order.\"vSalesRepName\"";
+            $sortname = "user_mas.\"vFirstName\"";
             break;
         case "6":
             $sortname = "s.\"vName\"";
@@ -227,8 +227,10 @@ if($request_type == "service_order_list"){
     $join_fieds_arr[] = 'n."vName" as "vNetwork"';
     $join_fieds_arr[] = 'ct."vConnectionTypeName"';
     $join_fieds_arr[] = 'st1."vServiceType" as "vServiceType1"';
+    $join_fieds_arr[] = "concat(user_mas.\"vFirstName\", ' ', user_mas.\"vLastName\" ) as \"vSalesRepName\"";
     
     $join_arr = array();
+    $join_arr[] = 'LEFT JOIN user_mas on service_order."iSalesRepId" = user_mas."iUserId"';
     $join_arr[] = 'LEFT JOIN premise_mas s on service_order."iPremiseId" = s."iPremiseId"';
     $join_arr[] = 'LEFT JOIN zipcode_mas on s."iZipcode" = zipcode_mas."iZipcode"';
     if($vSContactName != '') {
@@ -298,9 +300,10 @@ if($request_type == "service_order_list"){
    	$update_arr = array(
         "iServiceOrderId"       => $RES_PARA['iServiceOrderId'],
         "vMasterMSA"            => $RES_PARA['vMasterMSA'],
+        "vNameId"               => $RES_PARA['vNameId'],
         "vServiceOrder"         => $RES_PARA['vServiceOrder'],
         "iCarrierID"            => $RES_PARA['iCarrierID'],
-        "vSalesRepName"         => $RES_PARA['vSalesRepName'],
+        "iSalesRepId"           => $RES_PARA['iSalesRepId'],
         "vSalesRepEmail"        => $RES_PARA['vSalesRepEmail'],
         "iPremiseId"            => $RES_PARA['iPremiseId'],
         "iConnectionTypeId"     => $RES_PARA['iConnectionTypeId'],
@@ -337,9 +340,9 @@ if($request_type == "service_order_list"){
     $ServiceOrderObj->clear_variable();
     $insert_arr = array(
         "vMasterMSA"            => $RES_PARA['vMasterMSA'],
-        "vServiceOrder"         => $RES_PARA['vServiceOrder'],
+        "vNameId"               => $RES_PARA['vNameId'],
         "iCarrierID"            => $RES_PARA['iCarrierID'],
-        "vSalesRepName"         => $RES_PARA['vSalesRepName'],
+        "iSalesRepId"           => $RES_PARA['iSalesRepId'],
         "vSalesRepEmail"        => $RES_PARA['vSalesRepEmail'],
         "iPremiseId"            => $RES_PARA['iPremiseId'],
         "iConnectionTypeId"     => $RES_PARA['iConnectionTypeId'],

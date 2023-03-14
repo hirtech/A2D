@@ -90,10 +90,26 @@ class ServiceOrder {
 
 		global $sqlObj, $admin_panel_session_suffix, $function_path;
 
-		$sql = "INSERT INTO service_order(\"vMasterMSA\", \"vServiceOrder\", \"iCarrierID\",\"vSalesRepName\", \"vSalesRepEmail\", \"iPremiseId\", \"iConnectionTypeId\", \"iService1\", \"iSOStatus\", \"iCStatus\", \"iSStatus\", \"tComments\", \"iUserCreatedBy\", \"dAddedDate\") VALUES (".gen_allow_null_char($this->insert_arr['vMasterMSA']).", ".gen_allow_null_char($this->insert_arr['vServiceOrder']).", ".gen_allow_null_int($this->insert_arr['iCarrierID']).", ".gen_allow_null_char($this->insert_arr['vSalesRepName']).", ".gen_allow_null_char($this->insert_arr['vSalesRepEmail']).", ".gen_allow_null_int($this->insert_arr['iPremiseId']).", ".gen_allow_null_int($this->insert_arr['iConnectionTypeId']).", ".gen_allow_null_int($this->insert_arr['iService1']).", ".gen_allow_null_int($this->insert_arr['iSOStatus']).", ".gen_allow_null_int($this->insert_arr['iCStatus']).", ".gen_allow_null_int($this->insert_arr['iSStatus']).", ".gen_allow_null_char($this->insert_arr['tComments']).", ".gen_allow_null_int($this->insert_arr['iUserCreatedBy']).",  ".gen_allow_null_char(date_getSystemDateTime()).")";
+		$sql = "INSERT INTO service_order(\"vMasterMSA\", \"iCarrierID\",\"iSalesRepId\", \"vSalesRepEmail\", \"iPremiseId\", \"iConnectionTypeId\", \"iService1\", \"iSOStatus\", \"iCStatus\", \"iSStatus\", \"tComments\", \"iUserCreatedBy\", \"dAddedDate\") VALUES (".gen_allow_null_char($this->insert_arr['vMasterMSA']).", ".gen_allow_null_int($this->insert_arr['iCarrierID']).", ".gen_allow_null_int($this->insert_arr['iSalesRepId']).", ".gen_allow_null_char($this->insert_arr['vSalesRepEmail']).", ".gen_allow_null_int($this->insert_arr['iPremiseId']).", ".gen_allow_null_int($this->insert_arr['iConnectionTypeId']).", ".gen_allow_null_int($this->insert_arr['iService1']).", ".gen_allow_null_int($this->insert_arr['iSOStatus']).", ".gen_allow_null_int($this->insert_arr['iCStatus']).", ".gen_allow_null_int($this->insert_arr['iSStatus']).", ".gen_allow_null_char($this->insert_arr['tComments']).", ".gen_allow_null_int($this->insert_arr['iUserCreatedBy']).",  ".gen_allow_null_char(date_getSystemDateTime()).")";
 		//echo $sql;exit;
 		$sqlObj->Execute($sql);		
 		$iServiceOrderId = $sqlObj->Insert_ID();
+		if($iServiceOrderId > 0){
+			$vNameId  = $this->insert_arr['vNameId'];
+			$iService1  = $this->insert_arr['iService1'];
+			$iConnectionTypeId  = $this->insert_arr['iConnectionTypeId'];
+			$sql = "SELECT \"iServicePricingId\" FROM service_pricing_mas WHERE \"iServiceTypeId\" = '".$iService1."' and \"iConnectionTypeId\" = '".$iConnectionTypeId."' ORDER BY \"iServicePricingId\"  DESC LIMIT 1 ";
+			$rs = $sqlObj->GetAll($sql);
+
+			$iServicePricingId = 0;
+			if($rs){
+				$iServicePricingId	= $rs[0]['iServicePricingId'];
+			}
+
+			$vServiceOrder = $vNameId."-".$iServicePricingId."-".$iServiceOrderId;
+			$rs_db = "UPDATE service_order SET \"vServiceOrder\" = '".$vServiceOrder."' WHERE  \"iServiceOrderId\" = ".$iServiceOrderId;
+			$sqlObj->Execute($rs_db);
+		}
 		return $iServiceOrderId;
 	}
 	
@@ -103,9 +119,8 @@ class ServiceOrder {
 		if($this->update_arr){
 			$rs_db = "UPDATE service_order SET 
 			\"vMasterMSA\" = ".gen_allow_null_char($this->update_arr['vMasterMSA']).", 
-			\"vServiceOrder\" = ".gen_allow_null_char($this->update_arr['vServiceOrder']).", 
 			\"iCarrierID\" = ".gen_allow_null_int($this->update_arr['iCarrierID']).", 
-			\"vSalesRepName\" = ".gen_allow_null_char($this->update_arr['vSalesRepName']).", 
+			\"iSalesRepId\" = ".gen_allow_null_int($this->update_arr['iSalesRepId']).", 
 			\"vSalesRepEmail\" = ".gen_allow_null_char($this->update_arr['vSalesRepEmail']).", 
 			\"iPremiseId\" = ".gen_allow_null_int($this->update_arr['iPremiseId']).", 
 			\"iConnectionTypeId\" = ".gen_allow_null_int($this->update_arr['iConnectionTypeId']).", 
@@ -119,6 +134,24 @@ class ServiceOrder {
 			//echo $rs_db;exit;
 			$sqlObj->Execute($rs_db);
 			$rs_up = $sqlObj->Affected_Rows();
+			if($rs_up){
+				$vNameId  = $this->update_arr['vNameId'];
+				$iService1  = $this->update_arr['iService1'];
+				$iConnectionTypeId  = $this->update_arr['iConnectionTypeId'];
+				$sql = "SELECT \"iServicePricingId\" FROM service_pricing_mas WHERE \"iServiceTypeId\" = '".$iService1."' and \"iConnectionTypeId\" = '".$iConnectionTypeId."' ORDER BY \"iServicePricingId\"  DESC LIMIT 1 ";
+				//echo "<pre>";print_r($sql);exit;
+				$rs = $sqlObj->GetAll($sql);
+
+				$iServicePricingId = 0;
+				if($rs){
+					$iServicePricingId	= $rs[0]['iServicePricingId'];
+				}
+
+				$vServiceOrder = $vNameId."-".$iServicePricingId."-".$this->update_arr['iServiceOrderId'];
+				//echo $vServiceOrder;exit;
+				$rs_db = "UPDATE service_order SET \"vServiceOrder\" = '".$vServiceOrder."' WHERE  \"iServiceOrderId\" = ".$this->update_arr['iServiceOrderId'];
+				$sqlObj->Execute($rs_db);
+			}
 			return $rs_up;
 		}
 	}

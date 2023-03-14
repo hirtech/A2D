@@ -1076,6 +1076,28 @@ if($request_type == "city_list"){
     }else{
         $response_data = array("Code" => 500 , "Message" => MSG_DELETE_ERROR);
     }
+}else if($request_type == "get_company_data_from_id"){
+    $iCompanyId = $RES_PARA['iCompanyId'];
+
+    $where_arr = array();
+    $join_fieds_arr = array();
+    $join_arr  = array();
+    $CompanyObj = new Company();
+    $where_arr = array();
+    if($iCompanyId != ''){
+        $where_arr[] = "company_mas.\"iCompanyId\"='".$iCompanyId."'";
+    }
+    $CompanyObj->where = $where_arr;
+    $CompanyObj->param['order_by'] = "company_mas.\"vCompanyName\"";
+    $CompanyObj->param['limit'] = "1";
+    $CompanyObj->setClause();
+    $rs_company = $CompanyObj->recordset_list();
+    //print_r($rs_company);exit;
+    if($rs_company){
+        $response_data = array("Code" => 200, "result" => $rs_company[0]);
+    }else{
+        $response_data = array("Code" => 500);
+    }
 }else if($request_type == "service_type_list"){
     $ServiceTypeObj = new ServiceType();
     $where_arr = array();

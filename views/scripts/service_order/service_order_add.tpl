@@ -24,21 +24,12 @@
                             <input type="hidden" name="groupaction" value="groupaction">
                             <input type="hidden" name="mode" id="mode" value="{$mode}">
                             <input type="hidden" name="iServiceOrderId" id="iServiceOrderId" value="{$rs_sorder[0].iServiceOrderId}">
+                            <input type="hidden" name="vNameId" id="vNameId" value="">
                             <div class="form-row">
                                 <div class="col-6">
-                                	<div class="col-12 mb-3">
-                                        <label for="vMasterMSA">Master MSA # <span class="text-danger">*</span></label>
-                                        <input type="text" id="vMasterMSA" name="vMasterMSA" value="{$rs_sorder[0].vMasterMSA|gen_filter_text}" class="form-control" required>
-                                        <div class="invalid-feedback"> Please enter master msa</div>
-                                    </div>
-                                    <div class="col-12 mb-3">
-                                        <label for="vServiceOrder">Service Order <span class="text-danger">*</span></label>
-                                        <input type="text" id="vServiceOrder" name="vServiceOrder" value="{$rs_sorder[0].vServiceOrder|gen_filter_text}" class="form-control" required>
-                                        <div class="invalid-feedback"> Please enter service order</div>
-                                    </div>
                                     <div class="col-12 mb-3">
                                         <label for="iCarrierID">Carrier <span class="text-danger">*</span></label>
-                                        <select name="iCarrierID" id="iCarrierID" class="form-control" required>
+                                        <select name="iCarrierID" id="iCarrierID" class="form-control" required onchange="getMasterMSAFromCarrier(this.value)">
                                             <option value="">Select</option>
                                             {section name="c" loop=$rs_carrier}
                                                 <option value="{$rs_carrier[c].iCompanyId}" {if $rs_carrier[c].iCompanyId eq $rs_sorder[0].iCarrierID}selected{/if}>{$rs_carrier[c].vCompanyName|gen_strip_slash}</option>
@@ -46,15 +37,10 @@
                                         </select>
                                         <div class="invalid-feedback"> Please select carrier</div>
                                     </div>
-                                    <div class="col-12 mb-3">
-                                        <label for="vSalesRepName">SalesRep Name <span class="text-danger">*</span></label>
-                                        <input type="text" id="vSalesRepName" name="vSalesRepName" value="{$rs_sorder[0].vSalesRepName|gen_filter_text}" class="form-control" required>
-                                        <div class="invalid-feedback"> Please enter SalesRep name</div>
-                                    </div>
-                                    <div class="col-12 mb-3">
-                                        <label for="vSalesRepEmail">SalesRep Email <span class="text-danger">*</span></label>
-                                        <input type="text" id="vSalesRepEmail" name="vSalesRepEmail" value="{$rs_sorder[0].vSalesRepEmail|gen_filter_text}" class="form-control" required>
-                                        <div class="invalid-feedback"> Please enter SalesRep email</div>
+                                	<div class="col-12 mb-3">
+                                        <label for="vMasterMSA">Master MSA # <span class="text-danger">*</span></label>
+                                        <input type="text" id="vMasterMSA" name="vMasterMSA" value="{$rs_sorder[0].vMasterMSA|gen_filter_text}" class="form-control readonly-color" readonly required>
+                                        <div class="invalid-feedback"> Please enter master msa</div>
                                     </div>
                                     <div class="col-12 mb-3">
                                         <label for="iPremiseId">Premise <span class="text-danger">*</span></label>
@@ -63,6 +49,21 @@
                                         <img class="clear_address" src="assets/images/icon-delete.png" style="cursor:pointer;" onclick="return clear_serach_premise();">
                                         <div class="invalid-feedback" id="errmsg_search_premise">Please enter premise</div>
                                     </div>
+                                    <div class="col-12 mb-3">
+                                        <label for="iSalesRepId">SalesRep <span class="text-danger">*</span></label>
+                                        <!-- <input type="text" id="vSalesRepName" name="vSalesRepName" value="{$rs_sorder[0].vSalesRepName|gen_filter_text}" class="form-control" required>
+                                        <div class="invalid-feedback"> Please enter SalesRep name</div> -->
+
+                                        <select name="iSalesRepId" id="iSalesRepId" class="form-control" required onchange="getUserDetailsFromUser(this.value);">
+                                            <option value="">--- Select ---</option>
+                                        </select>
+                                        <div class="invalid-feedback"> Please select SalesRep</div>
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <label for="vSalesRepEmail">SalesRep Email <span class="text-danger">*</span></label>
+                                        <input type="text" id="vSalesRepEmail" name="vSalesRepEmail" value="{$rs_sorder[0].vSalesRepEmail|gen_filter_text}" class="form-control readonly-color" readonly="" required>
+                                        <div class="invalid-feedback"> Please enter SalesRep email</div>
+                                    </div>                                    
                                     <div class="col-12 mb-3">
                                         <label for="iConnectionTypeId">Connection Type <span class="text-danger">*</span></label>
                                         <select name="iConnectionTypeId" id="iConnectionTypeId" class="form-control" required>
@@ -73,18 +74,22 @@
                                         </select>
                                         <div class="invalid-feedback"> Please select connection type</div>
                                     </div>
-                                </div>
-                                <div class="col-6">
-                                    
                                     <div class="col-12 mb-3">
                                         <label for="iService1">Service<span class="text-danger">*</span></label>
-                                        <select name="iService1" id="iService1" class="form-control" required>
+                                        <select name="iService1" id="iService1" class="form-control"  >
                                             <option value="">Select</option>
                                             {section name="s" loop=$rs_stype}
                                                 <option value="{$rs_stype[s].iServiceTypeId}" {if $rs_stype[s].iServiceTypeId eq $rs_sorder[0].iService1}selected{/if}>{$rs_stype[s].vServiceType}</option>
                                             {/section}
                                         </select>
                                         <div class="invalid-feedback"> Please select service type</div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="col-12 mb-3">
+                                        <label for="vServiceOrder">Service Order <span class="text-danger">*</span></label>
+                                        <input type="text" id="vServiceOrder" name="vServiceOrder" value="{$rs_sorder[0].vServiceOrder|gen_filter_text}" class="form-control readonly-color" readonly="" required>
+                                        <div class="invalid-feedback"> Please enter service order</div>
                                     </div>
                                     <div class="col-12 mb-3">
                                         <label for="iSOStatus">Service Order Status <span class="text-danger">*</span></label>
@@ -155,6 +160,7 @@
 <!-- START: Page JS-->
 <script type="text/javascript">
 var mode = '{$mode}';
+var iSalesRepId = '{$rs_sorder[0].iSalesRepId}';
 </script>
 <style type="text/css">
     img.clear_address {

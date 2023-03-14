@@ -511,7 +511,9 @@ if ($request_type == "dashboard_glance") {
         $join_fieds_arr[] = 'st1."vServiceType" as "vServiceType1"';
         $join_fieds_arr[] = 'sm."vState"';
         $join_fieds_arr[] = 'cm1."vCity"';
-        
+		$join_fieds_arr[] = "concat(user_mas.\"vFirstName\", ' ', user_mas.\"vLastName\" ) as \"vSalesRepName\"";
+
+        $join_arr[] = 'LEFT JOIN user_mas on service_order."iSalesRepId" = user_mas."iUserId"';
         $join_arr[] = 'LEFT JOIN premise_mas s on service_order."iPremiseId" = s."iPremiseId"';
         $join_arr[] = 'LEFT JOIN state_mas sm on s."iStateId" = sm."iStateId"';
         $join_arr[] = 'LEFT JOIN city_mas cm1 on s."iCityId" = cm1."iCityId"';
@@ -843,6 +845,9 @@ if ($request_type == "dashboard_glance") {
         $join_fieds_arr[] = 'st1."vServiceType" as "vServiceType1"';
         $join_fieds_arr[] = 'sm."vState"';
         $join_fieds_arr[] = 'cm1."vCity"';
+		$join_fieds_arr[] = "concat(user_mas.\"vFirstName\", ' ', user_mas.\"vLastName\" ) as \"vSalesRepName\"";
+
+        $join_arr[] = 'LEFT JOIN user_mas on service_order."iSalesRepId" = user_mas."iUserId"';
         
         $join_arr[] = 'LEFT JOIN premise_mas s on service_order."iPremiseId" = s."iPremiseId"';
         $join_arr[] = 'LEFT JOIN state_mas sm on s."iStateId" = sm."iStateId"';
@@ -1004,9 +1009,13 @@ if ($request_type == "dashboard_glance") {
     $join_fieds_arr[] = 's."vName" as "vPremiseName"';
     $join_fieds_arr[] = 'st."vTypeName" as "vPremiseType"';
     $join_fieds_arr[] = 'cm."vCompanyName"';
+	$join_fieds_arr[] = "concat(user_mas.\"vFirstName\", ' ', user_mas.\"vLastName\" ) as \"vSalesRepName\"";
+
+    $join_arr[] = 'LEFT JOIN user_mas on service_order."iSalesRepId" = user_mas."iUserId"';
     $join_arr[] = 'LEFT JOIN premise_mas s on service_order."iPremiseId" = s."iPremiseId"';
     $join_arr[] = 'LEFT JOIN site_type_mas st on s."iSTypeId" = st."iSTypeId"';
     $join_arr[] = 'LEFT JOIN company_mas cm on service_order."iCarrierID" = cm."iCompanyId"';
+	
     
     $where_arr[] = "service_order.\"iUserCreatedBy\" = '".$userid."'"; 
     $where_arr[] = 'date_part(\'year\', service_order."dAddedDate") = date_part(\'year\', CURRENT_DATE)';  

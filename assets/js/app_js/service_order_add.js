@@ -37,6 +37,10 @@ $(document).ready(function() {
     .blur(function() {
         $(".tt-dropdown-menu").hide();
     });
+
+    if(mode == "Update"){
+        getMasterMSAFromCarrier($("#iCarrierID").val())
+    }
 });
 
 function onPremiseClusteSelected(e, datum){
@@ -89,4 +93,64 @@ $("#save_data").click(function(){
 function clear_serach_premise(){
     $("#vPremiseName").typeahead('val','');
     $("#search_iPremiseId").val('');
+}
+
+function getMasterMSAFromCarrier(iCarrierID){
+    $.ajax({
+        type: "POST",
+        url: site_url+"service_order/list",
+        data: {
+            "mode" : "get_master_msa_from_carrier",
+            "iCarrierId" : iCarrierID
+        },
+        success: function(data){
+            response =JSON.parse(data);
+            $("#vMasterMSA").val(response['vMSANum']);
+            $("#vNameId").val(response['vNameId']);
+        }
+    });
+    getSalesRepDropDownFromCarrier(iCarrierID);
+}
+
+function getSalesRepDropDownFromCarrier(iCarrierID){
+    $.ajax({
+        type: "POST",
+        url: site_url+"service_order/list",
+        data: {
+            "mode" : "get_user_details_from_carrier",
+            "iCarrierId" : iCarrierID
+        },
+        success: function(data){
+            response =JSON.parse(data);
+            var user_data = response.user_data;
+
+            var option ="<option value=''>--- Select ---</option>";
+            var selected = '';
+
+            if(user_data.length > 0 ){
+                if(iSalesRepId > 0) {
+                    selected = "selected";
+                }
+                $.each(user_data,function(i,val){
+                    option +="<option value='"+user_data[i].iUserId+"' "+selected+">"+user_data[i].vName+"</option>";
+                });
+            }
+            $("#iSalesRepId").html(option);
+        }
+    });
+}
+
+function getUserDetailsFromUser(iUserId){
+    $.ajax({
+        type: "POST",
+        url: site_url+"service_order/list",
+        data: {
+            "mode" : "get_user_details_from_user",
+            "iUserId" : iUserId
+        },
+        success: function(data){
+            response =JSON.parse(data);
+            $("#vSalesRepEmail").val(response['vEmail']);
+        }
+    });
 }
