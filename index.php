@@ -1,4 +1,4 @@
-<?
+<?php
 include_once("server.php");
 $module = $_REQUEST['module'];  // Module Name
 $page = $_REQUEST['page'];	  // Page Name
@@ -81,6 +81,7 @@ if($_SESSION["sess_iUserId".$admin_panel_session_suffix]!= '') {
 	$smarty->assign("sess_iUserId", $_SESSION["sess_iUserId".$admin_panel_session_suffix]);
 	$smarty->assign("sess_vName", $_SESSION["sess_vName".$admin_panel_session_suffix]);
 	$smarty->assign("sess_vAccessGroup", $_SESSION["sess_vAccessGroup".$admin_panel_session_suffix]);
+	$smarty->assign("sess_iCompanyId", $_SESSION["sess_iCompanyId".$admin_panel_session_suffix]);
 	$smarty->assign("sess_vCompanyName", $_SESSION["sess_vCompanyName".$admin_panel_session_suffix]);
 	$smarty->assign("sess_iAGroupId", $_SESSION["sess_iAGroupId".$admin_panel_session_suffix]);
 	$smarty->assign("sess_vImage", $_SESSION["sess_vImage".$admin_panel_session_suffix]);
@@ -116,7 +117,7 @@ $smarty->assign("js_date_picker_date",  date("y-m-d"));
 //echo "<pre>111111111";print_r($_SESSION);exit;
 //echo $COMPANY_COPYRIGHTS;exit();
 $smarty_array[] = '';
-$smarty_array = array_merge($smarty_array, array("SUPPORT_EMAIL", "SHOW_SAVING", "banner_url", "page_title","file", "msgs", "site_images", "site_style", "script", "file", "top_banner", "middle", "site_url", "module","module_prefix", "var_msg", "sslash", "aslash","hentites", "adminfolder", "page", "section", "stylesheet_name", "admin_url", "SITE_TITLE", "site_images_url","META_KEYWORD", "META_DESCRIPTION", "LOGO_ALT_TEXT", "META_OTHER","prefix", "REC_LIMIT","access_group_var_delete","access_group_var_status","access_group_var_add","access_group_var_edit", "access_group_var_PDF", "access_group_var_CSV","access_group_var_Respond", "page_module", "access_group_var_Calsurv", "device_detect", "user_url", "user_path", "site_api_url"));
+$smarty_array = array_merge($smarty_array, array("SUPPORT_EMAIL", "SHOW_SAVING", "banner_url", "page_title","file", "msgs", "site_images", "site_style", "script", "file", "top_banner", "middle", "site_url", "module","module_prefix", "var_msg", "sslash", "aslash","hentites", "adminfolder", "page", "section", "stylesheet_name", "admin_url", "SITE_TITLE", "site_images_url","META_KEYWORD", "META_DESCRIPTION", "LOGO_ALT_TEXT", "META_OTHER","prefix", "REC_LIMIT","access_group_var_delete","access_group_var_status","access_group_var_add","access_group_var_edit", "access_group_var_PDF", "access_group_var_CSV","access_group_var_Respond", "page_module", "access_group_var_Calsurv", "device_detect", "user_url", "user_path", "site_api_url", "A2D_COMPANY_ID"));
 
 for($k=0;$k<count($smarty_array);$k++)
 {

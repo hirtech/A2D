@@ -102,6 +102,8 @@
                                 <th>Premise</th>
                                 <th>Connection Type</th>
                                 <th>Service Type</th>
+                                <th>SO Status</th>
+                                <th>Service Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -119,5 +121,7 @@
     var ajax_url = 'service_order/list&mode=List'+extra_url;
     var access_group_var_add = '{$access_group_var_add}';
     var access_group_var_CSV = '{$access_group_var_CSV}';
+    var A2D_COMPANY_ID = '{$A2D_COMPANY_ID}';
+    var sess_iCompanyId = '{$sess_iCompanyId}';
 </script>
 <script src="assets/js/app_js/service_order.js"></script>

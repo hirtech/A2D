@@ -128,10 +128,13 @@ function getSalesRepDropDownFromCarrier(iCarrierID){
             var selected = '';
 
             if(user_data.length > 0 ){
-                if(iSalesRepId > 0) {
-                    selected = "selected";
-                }
                 $.each(user_data,function(i,val){
+					if(iSalesRepId == user_data[i].iUserId) {
+						selected = "selected";
+					}else{
+						selected = '';
+					}
+					//alert(selected)
                     option +="<option value='"+user_data[i].iUserId+"' "+selected+">"+user_data[i].vName+"</option>";
                 });
             }

@@ -162,4 +162,6 @@ $notification_class_arr = array(
 	"TroubleTicket" => array('icon' => 'fa fa-list-alt' , "color" => 'text-primary'),
 	"MaintenanceTicket" => array('icon' => 'fas fa-clipboard-list' , "color" => 'text-secondary'),
 );
+
+$A2D_COMPANY_ID = 1;
 ?>

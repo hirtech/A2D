@@ -2,6 +2,12 @@ var gridtable;
 $(document).ready(function(){
     $('[data-toggle="tooltip"]').tooltip();   
     listPage.init();  
+
+    if(A2D_COMPANY_ID != sess_iCompanyId){
+        $(".status_buttons").hide();
+    }else {
+        $(".status_buttons").show();
+    }
 });
 
 var listPage = function(){ 
@@ -15,20 +21,21 @@ var listPage = function(){
                 'bAutoWidth': true,
                 "aoColumns": [
                     { "data": "checkbox", "sortable":false, "className": "text-center"},
-                    { "mData": "iServiceOrderId", "sortable":true, "className": "text-center", "width" : "1%"},
-                    { "mData": "vMasterMSA", "width" : "8%", "sortable":true},
-                    { "mData": "vServiceOrder", "width" : "12%", "sortable":true},
-                    { "mData": "iCarrierID", "width" : "12%", "sortable":true},
-                    { "mData": "vSalesRepName", "width" : "15%", "sortable":true},
-                    { "mData": "iPremiseId", "width" : "12%", "sortable":true},
-                    { "mData": "iConnectionTypeId", "width" : "12%", "sortable":true},
-                    { "mData": "iServiceDetails", "width" : "18%", "sortable":false},
-                    { "mData": "actions", "sortable":false, "className": "text-center", "width" : "10%"},
+                    { "mData": "iServiceOrderId", "sortable":true, "className": "text-center"},
+                    { "mData": "vMasterMSA", "sortable":true},
+                    { "mData": "vServiceOrder", "sortable":true},
+                    { "mData": "iCarrierID", "sortable":true},
+                    { "mData": "vSalesRepName", "sortable":true},
+                    { "mData": "iPremiseId", "sortable":true},
+                    { "mData": "iConnectionTypeId", "sortable":true},
+                    { "mData": "iServiceDetails", "sortable":false},
+                    { "mData": "iSOStatus", "sortable":false, "className": "text-center"},
+                    { "mData": "iSStatus", "sortable":false, "className": "text-center"},
+                    { "mData": "actions", "sortable":false, "className": "text-center"},
                 ],                
                 "autoWidth" : true,
                 "lengthMenu": PageLengthMenuArr,
                 "iDisplayLength": REC_LIMIT,
-                //"sDom": 'Rfrtlip',
                 "dom": 'Bfrtlip',
                 "filter": false,
                 'serverMethod': 'post',
@@ -49,7 +56,7 @@ var listPage = function(){
                     'copy', 'print',
                     {
                         extend: 'collection',
-                        className: 'btn btn-dark',
+                        className: 'btn btn-dark status_buttons',
                         text: '<i class="far fa-edit"></i> Change SO Status',
                         buttons: [
                             { 
@@ -75,7 +82,7 @@ var listPage = function(){
                     },
                     {
                         extend: 'collection',
-                        className: 'btn btn-dark',
+                        className: 'btn btn-dark status_buttons',
                         text: '<i class="far fa-edit"></i> Change Connection Status',
                         buttons: [
                             { 
@@ -101,7 +108,7 @@ var listPage = function(){
                     },
                     {
                         extend: 'collection',
-                        className: 'btn btn-dark',
+                        className: 'btn btn-dark status_buttons',
                         text: '<i class="far fa-edit"></i> Change Service Status',
                         buttons: [
                             { 

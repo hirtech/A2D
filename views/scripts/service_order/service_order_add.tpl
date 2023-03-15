@@ -93,6 +93,7 @@
                                     </div>
                                     <div class="col-12 mb-3">
                                         <label for="iSOStatus">Service Order Status <span class="text-danger">*</span></label>
+                                        <input type="hidden" id="iOldSOStatus" name="iOldSOStatus" value="{$rs_sorder[0].iSOStatus}" class="form-control">
                                         <select name="iSOStatus" id="iSOStatus" class="select">
                                                 <option value="1"  {if $rs_sorder[0].iSOStatus eq 1} selected {/if}>Created</option>
                                                 <option value="2" {if $rs_sorder[0].iSOStatus eq 2} selected {/if} >In-Review</option>

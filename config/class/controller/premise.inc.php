@@ -351,14 +351,14 @@ class Site {
 	}
 	
 	## Function will retun zipcode id according its state, country and city id. If not exist will insert it and will send newly inserted id...
-	private function getZipcodeId($vZipcode, $iStateId, $iCountyId, $iCityId) {
+	private function getZipcodeId($vZipcode) {
 		global $sqlObj;
-		$sql = 'SELECT "iZipcode" FROM "zipcode_mas" WHERE "vZipcode"=\''.$vZipcode.'\' AND "iStateId"=\''.$iStateId.'\' AND "iCountyId"=\''.$iCountyId.'\' AND "iCityId"=\''.$iCityId.'\' LIMIT 1';
+		$sql = 'SELECT "iZipcode" FROM "zipcode_mas" WHERE "vZipcode"=\''.$vZipcode.'\' ORDER BY "iZipcode" DESC LIMIT 1';
 		$rs = $sqlObj->GetAll($sql);
 		$cnt_c = count($rs);
 		if($cnt_c > 0) return $rs[0]['iZipcode'];
 		else {
-			$sql_in = 'INSERT INTO "zipcode_mas" ("vZipcode", "iStateId", "iCountyId", "iCityId") VALUES ('.gen_allow_null_char($vZipcode).', '.gen_allow_null_int($iStateId).', '.gen_allow_null_int($iCountyId).', '.gen_allow_null_int($iCityId).')';
+			$sql_in = 'INSERT INTO "zipcode_mas" ("vZipcode", "dAddedDate", "dModifiedDate") VALUES ('.gen_allow_null_char($vZipcode).', '.gen_allow_null_char(date_getSystemDateTime()).', '.gen_allow_null_char(date_getSystemDateTime()).')';
 			$sqlObj->Execute($sql_in);
 			return $sqlObj->Insert_ID();
 		}
@@ -504,8 +504,8 @@ class Site {
 							if($rs_city)
 								$iCityId = $rs_city[0]['iCityId'];
 
-							if($vZipcode != "" && $iStateId != "" && $iCountyId != "" && $iCityId != "") {
-								$iZipcode = $this->getZipcodeId($vZipcode, $iStateId, $iCountyId, $iCityId);
+							if($vZipcode != "") {
+								$iZipcode = $this->getZipcodeId($vZipcode);
 							}	
 
 							$vName = $vAddress1." ".$vStreet;	

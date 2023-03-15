@@ -38,6 +38,7 @@ if ($_POST) {
             $_SESSION["sess_iAGroupId" . $admin_panel_session_suffix] = $result_data["iAGroupId"];
             $_SESSION["sess_iAccessType" . $admin_panel_session_suffix] = $result_data["iAccessType"];
             $_SESSION["sess_vAccessGroup" . $admin_panel_session_suffix] = $result_data["vAccessGroup"];
+            $_SESSION["sess_iCompanyId" . $admin_panel_session_suffix] = $result_data["iCompanyId"];
             $_SESSION["sess_vCompanyName" . $admin_panel_session_suffix] = $result_data["vCompanyName"];
             $_SESSION["sess_vName" . $admin_panel_session_suffix] = gen_strip_slash($result_data['vName']);
             $_SESSION["sess_vUsername" . $admin_panel_session_suffix] = gen_strip_slash($result_data["vUsername"]);

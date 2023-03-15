@@ -1,6 +1,8 @@
 <?php
 include_once($controller_path . "service_order.inc.php");
+include_once($controller_path . "user.inc.php");
 $ServiceOrderObj = new ServiceOrder();
+$UserObj = new User();
 if($request_type == "service_order_list"){
     $ServiceOrderObj->clear_variable();
     $where_arr = array();
@@ -39,6 +41,7 @@ if($request_type == "service_order_list"){
         $vSSalesRepEmailDD      = $RES_PARA['vSSalesRepEmailDD'];
         $vSSalesRepEmail        = $RES_PARA['vSSalesRepEmail'];
         $vServiceOrder          = $RES_PARA['vServiceOrder'];   
+        $sess_iCompanyId        = $RES_PARA['sess_iCompanyId'];   
     }
 
     if ($iFieldmapPremiseId != "") {
@@ -189,6 +192,19 @@ if($request_type == "service_order_list"){
         }
     }
 
+    if($sess_iCompanyId > 0){
+        $iUserIds = $UserObj->user_getUserIdsFromCompanyId($sess_iCompanyId);
+        //echo "<pre>";print_r($iUserIds);exit;
+        if(!empty($iUserIds)){
+            $where_arr[] = "service_order.\"iUserCreatedBy\"IN (".implode(", ", $iUserIds).")";
+        }else {
+            $where_arr[] = "service_order.\"iUserCreatedBy\" = 99999999999999999999";
+        }
+        //echo "<pre>";print_r($where_arr);exit;
+    }else {
+        $where_arr[] = "service_order.\"iUserCreatedBy\" = 99999999999999999999";
+    }
+
     switch ($display_order) {
         case "1":
             $sortname = "service_order.\"iServiceOrderId\"";
@@ -215,6 +231,8 @@ if($request_type == "service_order_list"){
             $sortname = "service_order.\"iServiceOrderId\"";
             break;
     }
+
+    
 
     $limit = "LIMIT ".$page_length." OFFSET ".$start."";
 
@@ -285,6 +303,8 @@ if($request_type == "service_order_list"){
                 "iService3"             => $rs_sorder[$i]['iService3'],
                 "vServiceType1"         => $rs_sorder[$i]['vServiceType1'],
                 "tComments"             => $rs_sorder[$i]['tComments'],
+                "iSOStatus"             => $rs_sorder[$i]['iSOStatus'],
+                "iSStatus"              => $rs_sorder[$i]['iSStatus'],
             );
         }
     }
@@ -308,6 +328,7 @@ if($request_type == "service_order_list"){
         "iPremiseId"            => $RES_PARA['iPremiseId'],
         "iConnectionTypeId"     => $RES_PARA['iConnectionTypeId'],
         "iService1"             => $RES_PARA['iService1'],
+        "iOldSOStatus"          => $RES_PARA['iOldSOStatus'],
         "iSOStatus"             => $RES_PARA['iSOStatus'],
         "iCStatus"              => $RES_PARA['iCStatus'],
         "iSStatus"              => $RES_PARA['iSStatus'],
@@ -416,7 +437,8 @@ if($request_type == "service_order_list"){
     $status_field = $RES_PARA['status_field'];
     $status = $RES_PARA['status'];
     $iServiceOrderIds = $RES_PARA['iServiceOrderIds'];
-    $rs_db = $ServiceOrderObj->change_status($iServiceOrderIds, $status, $status_field);
+    $iUserId = $RES_PARA['iUserId'];
+    $rs_db = $ServiceOrderObj->change_status($iServiceOrderIds, $status, $status_field, $iUserId);
     if($rs_db) {
         $response_data = array("Code" => 200, "Message" => "Status Changed Successfully.", "error" => 0, "iServiceOrderId" => $iServiceOrderIds);
     }

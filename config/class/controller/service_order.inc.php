@@ -151,6 +151,12 @@ class ServiceOrder {
 				//echo $vServiceOrder;exit;
 				$rs_db = "UPDATE service_order SET \"vServiceOrder\" = '".$vServiceOrder."' WHERE  \"iServiceOrderId\" = ".$this->update_arr['iServiceOrderId'];
 				$sqlObj->Execute($rs_db);
+
+				if($this->update_arr['iOldSOStatus'] != '' && $this->update_arr['iOldSOStatus'] != $this->update_arr['iSOStatus']){
+					$sql_log = "INSERT INTO service_order_status_log(\"iServiceOrderId\", \"iFromSOStatus\",\"iToSOStatus\", \"iUserId\", \"dAddedDate\") VALUES (".gen_allow_null_char($this->update_arr['iServiceOrderId']).", ".gen_allow_null_int($this->update_arr['iOldSOStatus']).", ".gen_allow_null_int($this->update_arr['iSOStatus']).", ".gen_allow_null_int($this->update_arr['iUserModifiedBy']).",  ".gen_allow_null_char(date_getSystemDateTime()).")";
+					//echo $sql;exit;
+					$sqlObj->Execute($sql_log);		
+				}
 			}
 			return $rs_up;
 		}
@@ -182,12 +188,33 @@ class ServiceOrder {
 		return $rs_db;
 	}
 
-	function change_status($ids, $status, $status_field){
+	function change_status($ids, $status, $status_field, $iUserId){
 		global $sqlObj;
-			
-		$sql = "UPDATE service_order set \"$status_field\" = '".$status."', \"dModifiedDate\" = '".date_getSystemDateTime()."' WHERE service_order.\"iServiceOrderId\" IN (".$ids.")";
-		//echo $sql ;exit;
-		$rs = $sqlObj->Execute($sql);
+		if($status_field == "iSOStatus") {
+			$sql = "SELECT \"iServiceOrderId\", \"iSOStatus\" FROM service_order where \"iServiceOrderId\" IN (".$ids.") ORDER BY \"iServiceOrderId\" ASC";
+			$rs_so = $sqlObj->GetAll($sql);
+			//echo "<pre>";print_r($sql);exit;
+			$ni = count($rs_so);
+			if($ni > 0){
+				for ($i=0; $i < $ni ; $i++) { 
+					$iServiceOrderId = $rs_so[$i]['iServiceOrderId'];
+					$iFromSOStatus = $rs_so[$i]['iSOStatus'];
+					$iToSOStatus = $status;
+					$sql_up = "UPDATE service_order set \"iSOStatus\" = '".$status."', \"dModifiedDate\" = '".date_getSystemDateTime()."' WHERE service_order.\"iServiceOrderId\" = '".$iServiceOrderId."' ";
+					//echo $sql_up;exit;
+					$rs = $sqlObj->Execute($sql_up);
+					if($rs){
+						$sql_log = "INSERT INTO service_order_status_log(\"iServiceOrderId\", \"iFromSOStatus\",\"iToSOStatus\", \"iUserId\", \"dAddedDate\") VALUES (".gen_allow_null_char($iServiceOrderId).", ".gen_allow_null_int($iFromSOStatus).", ".gen_allow_null_int($iToSOStatus).", ".gen_allow_null_int($iUserId).",  ".gen_allow_null_char(date_getSystemDateTime()).")";
+						//echo $sql_log;exit;
+						$sqlObj->Execute($sql_log);	
+					}
+				}
+			}
+		}else {
+			$sql = "UPDATE service_order set \"$status_field\" = '".$status."', \"dModifiedDate\" = '".date_getSystemDateTime()."' WHERE service_order.\"iServiceOrderId\" IN (".$ids.")";
+			//echo $sql ;exit;
+			$rs = $sqlObj->Execute($sql);
+		}
 		return $rs;
 	}
 

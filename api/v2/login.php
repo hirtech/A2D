@@ -75,6 +75,7 @@ if ($request_type == "user_login")
                 $user_id = $result[0]["iUserId"];
                 $first_name = $result[0]["vFirstName"];
                 $last_name = $result[0]["vLastName"];
+                $iCompanyId = $result[0]["iCompanyId"];
                 $vCompanyName = $result[0]["vCompanyName"];
                 $vImage = $result[0]["vImage"];
                 $iAGroupId = $result[0]["iAGroupId"];
@@ -164,6 +165,7 @@ if ($request_type == "user_login")
                     "iAGroupId" => $iAGroupId,
                     "vAccessGroup" => $vAccessGroup,
                     "iAccessType" => $iAccessType,
+                    "iCompanyId" => $iCompanyId,
                     "vCompanyName" => $vCompanyName,
                     "vName" => $vName,
                     "vUsername" => $vUsername,
