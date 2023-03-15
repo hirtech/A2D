@@ -70,6 +70,7 @@ if($mode == "List") {
     $arr_param['vServiceOrder']             = trim($_REQUEST['vServiceOrder']);
     $arr_param['sess_iCompanyId']            = $_SESSION["sess_iCompanyId" . $admin_panel_session_suffix];
 
+    $arr_param['A2D_COMPANY_ID']     = $A2D_COMPANY_ID;
     $arr_param['access_group_var_edit']     = $access_group_var_edit;
     $arr_param['access_group_var_delete']   = $access_group_var_delete;
 

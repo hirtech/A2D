@@ -42,6 +42,7 @@ if($request_type == "service_order_list"){
         $vSSalesRepEmail        = $RES_PARA['vSSalesRepEmail'];
         $vServiceOrder          = $RES_PARA['vServiceOrder'];   
         $sess_iCompanyId        = $RES_PARA['sess_iCompanyId'];   
+        $A2D_COMPANY_ID         = $RES_PARA['A2D_COMPANY_ID'];   
     }
 
     if ($iFieldmapPremiseId != "") {
@@ -192,7 +193,7 @@ if($request_type == "service_order_list"){
         }
     }
 
-    if($sess_iCompanyId > 0){
+    if($sess_iCompanyId > 0 && $A2D_COMPANY_ID != $sess_iCompanyId){
         $iUserIds = $UserObj->user_getUserIdsFromCompanyId($sess_iCompanyId);
         //echo "<pre>";print_r($iUserIds);exit;
         if(!empty($iUserIds)){
@@ -201,8 +202,6 @@ if($request_type == "service_order_list"){
             $where_arr[] = "service_order.\"iUserCreatedBy\" = 99999999999999999999";
         }
         //echo "<pre>";print_r($where_arr);exit;
-    }else {
-        $where_arr[] = "service_order.\"iUserCreatedBy\" = 99999999999999999999";
     }
 
     switch ($display_order) {
