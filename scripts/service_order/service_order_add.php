@@ -17,6 +17,7 @@ $access_group_var_edit = per_hasModuleAccess("Service Order", 'Edit', 'N');
 include_once($controller_path . "service_order.inc.php");
 $ServiceOrderObj = new ServiceOrder();
 $iPremiseId = $_REQUEST['iPremiseId'];
+$sess_iCompanyId = $_SESSION["sess_iCompanyId" . $admin_panel_session_suffix];
 if($mode == "Update") {
     $iServiceOrderId = $_REQUEST['iServiceOrderId'];
     $where_arr = array();
@@ -33,6 +34,24 @@ if($mode == "Update") {
     $ServiceOrderObj->setClause();
     $rs_sorder = $ServiceOrderObj->recordset_list();
     //echo "<pre>";print_r($rs_sorder);exit();
+    if(!empty($rs_sorder)){
+        if($rs_sorder[0]['iSOStatus'] == 3){
+            $msg = 'Unauthorised Access!!!!! Contact Administrator....';
+            echo "<script>window.location='".$site_url."user/unauthorised?msg=".$msg."';</script>";
+            exit;
+        }
+
+        if($sess_iCompanyId > 0 && $A2D_COMPANY_ID != $sess_iCompanyId){
+            $iUserIds = $UserObj->user_getUserIdsFromCompanyId($sess_iCompanyId);
+            //echo "<pre>";print_r($iUserIds);exit;
+            if(!in_array($rs_sorder[0]['iUserCreatedBy'] ,$iUserIds ) )
+            {
+                $msg = 'Unauthorised Access!!!!! Contact Administrator....';
+                echo "<script>window.location='".$site_url."user/unauthorised?msg=".$msg."';</script>";
+                exit;
+            }
+        }
+    }
 }else if($mode =="search_premise"){
     $arr_param = array();
     $vPremiseName = trim($_REQUEST['vPremiseName']);
@@ -112,54 +131,6 @@ $res = json_decode($response, true);
 $rs_carrier = $res['result'];
 $smarty->assign("rs_carrier", $rs_carrier);
 //echo "<pre>";print_r($rs_carrier);exit;
-
-//Connection Type Dropdown
-$cntype_param = array();
-$cntype_param['iStatus'] = '1';
-$cntype_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
-$cntypeAPI_URL = $site_api_url."connection_type_dropdown.json";
-//echo $cntypeAPI_URL." ".json_encode($cntype_param);exit;
-$ch = curl_init();
-curl_setopt($ch, CURLOPT_URL, $cntypeAPI_URL);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-curl_setopt($ch, CURLOPT_HEADER, FALSE);
-curl_setopt($ch, CURLOPT_POST, TRUE);
-curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($cntype_param));
-curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-   "Content-Type: application/json",
-)); 
-$response_cntype = curl_exec($ch);
-curl_close($ch);  
-$res_cntype = json_decode($response_cntype, true);
-$rs_cntype = $res_cntype['result'];
-$smarty->assign("rs_cntype", $rs_cntype);
-//echo "<pre>";print_r($rs_cntype);exit;
-
-//Service Type Dropdown
-$stype_param = array();
-$stype_param['iStatus'] = '1';
-$stype_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
-$stypeAPI_URL = $site_api_url."service_type_dropdown.json";
-//echo $stypeAPI_URL." ".json_encode($stype_param);exit;
-$ch = curl_init();
-curl_setopt($ch, CURLOPT_URL, $stypeAPI_URL);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-curl_setopt($ch, CURLOPT_HEADER, FALSE);
-curl_setopt($ch, CURLOPT_POST, TRUE);
-curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($stype_param));
-curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-   "Content-Type: application/json",
-)); 
-$response_stype = curl_exec($ch);
-curl_close($ch);  
-$res_stype = json_decode($response_stype, true);
-$rs_stype = $res_stype['result'];
-$smarty->assign("rs_stype", $rs_stype);
-//echo "<pre>";print_r($rs_stype);exit;
 
 $module_name = "Service Order ";
 $module_title = "Service Order";

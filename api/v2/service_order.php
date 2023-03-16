@@ -194,14 +194,7 @@ if($request_type == "service_order_list"){
     }
 
     if($sess_iCompanyId > 0 && $A2D_COMPANY_ID != $sess_iCompanyId){
-        $iUserIds = $UserObj->user_getUserIdsFromCompanyId($sess_iCompanyId);
-        //echo "<pre>";print_r($iUserIds);exit;
-        if(!empty($iUserIds)){
-            $where_arr[] = "service_order.\"iUserCreatedBy\"IN (".implode(", ", $iUserIds).")";
-        }else {
-            $where_arr[] = "service_order.\"iUserCreatedBy\" = 99999999999999999999";
-        }
-        //echo "<pre>";print_r($where_arr);exit;
+		$where_arr[] = "service_order.\"iCarrierID\" = '".$sess_iCompanyId."'";
     }
 
     switch ($display_order) {
@@ -331,6 +324,8 @@ if($request_type == "service_order_list"){
         "iSOStatus"             => $RES_PARA['iSOStatus'],
         "iCStatus"              => $RES_PARA['iCStatus'],
         "iSStatus"              => $RES_PARA['iSStatus'],
+        "iNRCVariable"          => $RES_PARA['iNRCVariable'],
+        "iMRCFixed"             => $RES_PARA['iMRCFixed'],
         "tComments"             => $RES_PARA['tComments'],
         "iUserModifiedBy"       => $RES_PARA['iUserModifiedBy'],
     );
@@ -370,6 +365,8 @@ if($request_type == "service_order_list"){
         "iSOStatus"             => $RES_PARA['iSOStatus'],
         "iCStatus"              => $RES_PARA['iCStatus'],
         "iSStatus"              => $RES_PARA['iSStatus'],
+        "iNRCVariable"          => $RES_PARA['iNRCVariable'],
+        "iMRCFixed"             => $RES_PARA['iMRCFixed'],
         "tComments"             => $RES_PARA['tComments'],
         "iUserCreatedBy"		=> $RES_PARA['iUserCreatedBy'],
     );

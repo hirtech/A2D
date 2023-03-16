@@ -67,22 +67,24 @@
                                     <div class="col-12 mb-3">
                                         <label for="iConnectionTypeId">Connection Type <span class="text-danger">*</span></label>
                                         <select name="iConnectionTypeId" id="iConnectionTypeId" class="form-control" required>
-                                            <option value="">Select</option>
-                                            {section name="c" loop=$rs_cntype}
-                                                <option value="{$rs_cntype[c].iConnectionTypeId}" {if $rs_cntype[c].iConnectionTypeId eq $rs_sorder[0].iConnectionTypeId}selected{/if}>{$rs_cntype[c].vConnectionTypeName|gen_strip_slash}</option>
-                                            {/section}
+                                            <option value="">-- Select --</option>
                                         </select>
                                         <div class="invalid-feedback"> Please select connection type</div>
                                     </div>
                                     <div class="col-12 mb-3">
                                         <label for="iService1">Service<span class="text-danger">*</span></label>
-                                        <select name="iService1" id="iService1" class="form-control"  >
+                                        <select name="iService1" id="iService1" class="form-control" onchange="getNRCMRCValue(this.value)">
                                             <option value="">Select</option>
-                                            {section name="s" loop=$rs_stype}
-                                                <option value="{$rs_stype[s].iServiceTypeId}" {if $rs_stype[s].iServiceTypeId eq $rs_sorder[0].iService1}selected{/if}>{$rs_stype[s].vServiceType}</option>
-                                            {/section}
                                         </select>
                                         <div class="invalid-feedback"> Please select service type</div>
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <label for="iNRCVariable">NRC Variable</label>
+                                        <input type="text" id="iNRCVariable" name="iNRCVariable" value="{$rs_sorder[0].iNRCVariable}" class="form-control readonly-color" readonly="" required>
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <label for="iMRCFixed">MRC Fixed</label>
+                                        <input type="text" id="iMRCFixed" name="iMRCFixed" value="{$rs_sorder[0].iMRCFixed}" class="form-control readonly-color" readonly="" required>
                                     </div>
                                 </div>
                                 <div class="col-6">
@@ -162,6 +164,8 @@
 <script type="text/javascript">
 var mode = '{$mode}';
 var iSalesRepId = '{$rs_sorder[0].iSalesRepId}';
+var iConnectionTypeId = '{$rs_sorder[0].iConnectionTypeId}';
+var iService1 = '{$rs_sorder[0].iService1}';
 </script>
 <style type="text/css">
     img.clear_address {

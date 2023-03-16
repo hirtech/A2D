@@ -990,8 +990,8 @@ if($request_type == "city_list"){
             $sortname = "company_mas.\"iCompanyId\"";
             break;
     }
-	
-	$limit = "LIMIT ".$page_length." OFFSET ".$start."";
+    
+    $limit = "LIMIT ".$page_length." OFFSET ".$start."";
 
     $join_fieds_arr = array();
     $join_arr = array();
@@ -1851,6 +1851,130 @@ if($request_type == "city_list"){
         $response_data = array("Code" => 200, "Message" => MSG_DELETE, "iServicePricingId" => $iServicePricingId);
     }else{
         $response_data = array("Code" => 500 , "Message" => MSG_DELETE_ERROR);
+    }
+}else if($request_type == "get_connection_type_of_service_pricing_from_company_id"){
+    $iCompanyId = $RES_PARA['iCompanyId'];
+
+    if($iCompanyId > 0){
+        $where_arr = array();
+        $join_fieds_arr = array();
+        $join_arr  = array();
+
+        $ServicePricingObj = new ServicePricing();
+
+        if($iCompanyId != ''){
+            $where_arr[] = "service_pricing_mas.\"iCarrierId\"='".$iCompanyId."'";
+        }
+
+        $where_arr[] = "service_pricing_mas.\"iConnectionTypeId\" IS NOT NULL";
+
+        $join_fieds_arr[] = 'cm."vConnectionTypeName"';
+        $join_arr[] = 'LEFT JOIN connection_type_mas cm on service_pricing_mas."iConnectionTypeId" = cm."iConnectionTypeId"';
+        $ServicePricingObj->join_field = $join_fieds_arr;
+        $ServicePricingObj->join = $join_arr;
+        $ServicePricingObj->where = $where_arr;
+        $ServicePricingObj->param['order_by'] = "cm.\"vConnectionTypeName\"";
+        $ServicePricingObj->setClause();
+        $rs = $ServicePricingObj->recordset_list();
+        //echo "<pre>";print_r($rs);exit;
+        $ni = count($rs);
+        if($rs){
+            $c_type_arr = array();
+            $connection_type_arr = array();
+            for ($i=0; $i < $ni ; $i++) { 
+                $c_type_arr[$i]['iConnectionTypeId'] = $rs[$i]['iConnectionTypeId'];
+                $c_type_arr[$i]['vConnectionTypeName'] = $rs[$i]['vConnectionTypeName'];
+            }
+            foreach($c_type_arr as $sub_array) {
+                if(!in_array($sub_array, $connection_type_arr)) {
+                    $connection_type_arr[] = $sub_array;
+                }
+            }
+
+            $response_data = array("Code" => 200, "result" => $connection_type_arr, "total_record" => count($connection_type_arr));
+        }else{
+            $response_data = array("Code" => 500);
+        }
+    }else{
+        $response_data = array("Code" => 500);
+    }
+}else if($request_type == "get_service_type_of_service_pricing_from_company_id"){
+    $iCompanyId = $RES_PARA['iCompanyId'];
+
+    if($iCompanyId > 0){
+        $where_arr = array();
+        $join_fieds_arr = array();
+        $join_arr  = array();
+
+        $ServicePricingObj = new ServicePricing();
+
+        if($iCompanyId != ''){
+            $where_arr[] = "service_pricing_mas.\"iCarrierId\"='".$iCompanyId."'";
+        }
+
+        $where_arr[] = "service_pricing_mas.\"iServiceTypeId\" IS NOT NULL";
+
+        $join_fieds_arr[] = 'st."vServiceType"';
+        $join_arr[] = 'LEFT JOIN service_type_mas st on service_pricing_mas."iServiceTypeId" = st."iServiceTypeId"';
+        $ServicePricingObj->join_field = $join_fieds_arr;
+        $ServicePricingObj->join = $join_arr;
+        $ServicePricingObj->where = $where_arr;
+        $ServicePricingObj->param['order_by'] = "st.\"vServiceType\"";
+        $ServicePricingObj->setClause();
+        $rs = $ServicePricingObj->recordset_list();
+        //echo "<pre>";print_r($rs);exit;
+        $ni = count($rs);
+        if($rs){
+            $service_type_arr = array();
+            $s_type_arr = array();
+            for ($i=0; $i < $ni ; $i++) { 
+                $s_type_arr[$i]['iServiceTypeId'] = $rs[$i]['iServiceTypeId'];
+                $s_type_arr[$i]['vServiceType'] = $rs[$i]['vServiceType'];
+            }
+            foreach($s_type_arr as $sub_array) {
+                if(!in_array($sub_array, $service_type_arr)) {
+                    $service_type_arr[] = $sub_array;
+                }
+            }
+
+            $response_data = array("Code" => 200, "result" => $service_type_arr, "total_record" => count($service_type_arr));
+        }else{
+            $response_data = array("Code" => 500);
+        }
+    }else{
+        $response_data = array("Code" => 500);
+    }
+}else if($request_type == "get_service_type_data_from_service_pricing_id"){
+    $iServiceTypeId = $RES_PARA['iServiceTypeId'];
+    $iCarrierId = $RES_PARA['iCarrierId'];
+    $iConnectionTypeId = $RES_PARA['iConnectionTypeId'];
+
+    if($iCarrierId > 0){
+        $where_arr = array();
+        $join_fieds_arr = array();
+        $join_arr  = array();
+
+        $ServicePricingObj = new ServicePricing();
+
+        $where_arr[] = "service_pricing_mas.\"iServiceTypeId\"='".$iServiceTypeId."'";
+        $where_arr[] = "service_pricing_mas.\"iCarrierId\"='".$iCarrierId."'";
+        $where_arr[] = "service_pricing_mas.\"iConnectionTypeId\"='".$iConnectionTypeId."'";
+        
+        $ServicePricingObj->join_field = $join_fieds_arr;
+        $ServicePricingObj->join = $join_arr;
+        $ServicePricingObj->where = $where_arr;
+        $ServicePricingObj->param['order_by'] = "service_pricing_mas.\"iServicePricingId\" DESC";
+        $ServicePricingObj->param['limit'] = "1";
+        $ServicePricingObj->setClause();
+        $rs = $ServicePricingObj->recordset_list();
+        //echo "<pre>";print_r($rs);exit;
+        if($rs){
+            $response_data = array("Code" => 200, "result" => $rs[0]);
+        }else{
+            $response_data = array("Code" => 500);
+        }
+    }else{
+        $response_data = array("Code" => 500);
     }
 }
 else {

@@ -68,9 +68,9 @@ if($mode == "List") {
     $arr_param['vSSalesRepEmailDD']         = trim($_REQUEST['vSSalesRepEmailDD']);
     $arr_param['vSSalesRepEmail']           = trim($_REQUEST['vSSalesRepEmail']);
     $arr_param['vServiceOrder']             = trim($_REQUEST['vServiceOrder']);
-    $arr_param['sess_iCompanyId']            = $_SESSION["sess_iCompanyId" . $admin_panel_session_suffix];
+    $arr_param['sess_iCompanyId']           = $_SESSION["sess_iCompanyId" . $admin_panel_session_suffix];
 
-    $arr_param['A2D_COMPANY_ID']     = $A2D_COMPANY_ID;
+    $arr_param['A2D_COMPANY_ID']            = $A2D_COMPANY_ID;
     $arr_param['access_group_var_edit']     = $access_group_var_edit;
     $arr_param['access_group_var_delete']   = $access_group_var_delete;
 
@@ -184,6 +184,8 @@ if($mode == "List") {
         "iSOStatus"             => $_POST['iSOStatus'],
         "iCStatus"              => $_POST['iCStatus'],
         "iSStatus"              => $_POST['iSStatus'],
+        "iNRCVariable"          => $_POST['iNRCVariable'],
+        "iMRCFixed"             => $_POST['iMRCFixed'],
         "tComments"             => trim($_POST['tComments']),
         "iUserModifiedBy"       => $_SESSION["sess_iUserId".$admin_panel_session_suffix],
         "sessionId"             => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
@@ -230,6 +232,8 @@ if($mode == "List") {
         "iSOStatus"             => $_POST['iSOStatus'],
         "iCStatus"              => $_POST['iCStatus'],
         "iSStatus"              => $_POST['iSStatus'],
+        "iNRCVariable"          => $_POST['iNRCVariable'],
+        "iMRCFixed"             => $_POST['iMRCFixed'],
         "tComments"             => trim($_POST['tComments']),
         "iUserCreatedBy"        => $_SESSION["sess_iUserId".$admin_panel_session_suffix],
         "sessionId"             => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
@@ -346,37 +350,53 @@ if($mode == "List") {
 }else if($mode == "Excel"){
     $arr_param = array();
     $vOptions = $_REQUEST['vOptions'];
-    $Keyword = addslashes(trim($_REQUEST['Keyword']));
-
-    if ($Keyword != "") {
-        $arr_param[$vOptions] = $Keyword;
+    if($vOptions == "vNetwork"){
+        $searchId = $_REQUEST['iSNetworkId'];
+    }else if($vOptions == "vCarrier"){
+        $searchId = $_REQUEST['iSCarrierId'];
+    }else if($vOptions == "vConnectionType"){
+        $searchId = $_REQUEST['iConnectionTypeId'];
+    }else if($vOptions == "vServiceType"){
+        $searchId = $_REQUEST['iSServiceType'];
+    }else if($vOptions == "iSOStatus"){
+        $searchId = $_REQUEST['iSOStatus'];
+    }else if($vOptions == "iCStatus"){
+        $searchId = $_REQUEST['iCStatus'];
+    }else if($vOptions == "iSStatus"){
+        $searchId = $_REQUEST['iSStatus'];
+    }
+    if ($searchId != "") {
+        $arr_param[$vOptions] = $searchId;
     }
 
-    $arr_param['page_length']   = $page_length;
-    $arr_param['start']         = $start;
-    $arr_param['sEcho']         = $sEcho;
-    $arr_param['display_order'] = $display_order;
-    $arr_param['dir']           = $dir;
+    $arr_param['page_length']               = $page_length;
+    $arr_param['start']                     = $start;
+    $arr_param['sEcho']                     = $sEcho;
+    $arr_param['display_order']             = $display_order;
+    $arr_param['dir']                       = $dir;
 
-    $arr_param['iFieldmapPremiseId']    = $iPremiseId;
+    $arr_param['iFieldmapPremiseId']        = $iPremiseId;
 
-    $arr_param['vSContactNameDD']       = trim($_REQUEST['vSContactNameDD']);
-    $arr_param['vSContactName']         = trim($_REQUEST['vSContactName']);
-    $arr_param['vSAddressFilterOpDD']   = trim($_REQUEST['vSAddressFilterOpDD']);
-    $arr_param['vSAddress']             = trim($_REQUEST['vSAddress']);
-    $arr_param['vSCityFilterOpDD']      = trim($_REQUEST['vSCityFilterOpDD']);
-    $arr_param['vSCity']                = trim($_REQUEST['vSCity']);
-    $arr_param['vSStateFilterOpDD']     = trim($_REQUEST['vSStateFilterOpDD']);
-    $arr_param['vSState']               = trim($_REQUEST['vSState']);
-    $arr_param['vSZipCode']             = trim($_REQUEST['vSZipCode']);
-    $arr_param['iSZoneId']              = trim($_REQUEST['iSZoneId']);
-    $arr_param['iSNetworkId']           = trim($_REQUEST['iSNetworkId']);
-    $arr_param['iSCarrierId']           = trim($_REQUEST['iSCarrierId']);
-    $arr_param['vSSalesRepNameDD']      = trim($_REQUEST['vSSalesRepNameDD']);
-    $arr_param['vSSalesRepName']        = trim($_REQUEST['vSSalesRepName']);
-    $arr_param['vSSalesRepEmailDD']     = trim($_REQUEST['vSSalesRepEmailDD']);
-    $arr_param['vSSalesRepEmail']       = trim($_REQUEST['vSSalesRepEmail']);
-    $arr_param['iSServiceType']         = trim($_REQUEST['iSServiceType']);
+    $arr_param['vSContactNameDD']           = trim($_REQUEST['vSContactNameDD']);
+    $arr_param['vSContactName']             = trim($_REQUEST['vSContactName']);
+    $arr_param['vSAddressFilterOpDD']       = trim($_REQUEST['vSAddressFilterOpDD']);
+    $arr_param['vSAddress']                 = trim($_REQUEST['vSAddress']);
+    $arr_param['vSCityFilterOpDD']          = trim($_REQUEST['vSCityFilterOpDD']);
+    $arr_param['vSCity']                    = trim($_REQUEST['vSCity']);
+    $arr_param['vSStateFilterOpDD']         = trim($_REQUEST['vSStateFilterOpDD']);
+    $arr_param['vSState']                   = trim($_REQUEST['vSState']);
+    $arr_param['vSZipCode']                 = trim($_REQUEST['vSZipCode']);
+    $arr_param['iSZoneId']                  = trim($_REQUEST['iSZoneId']);
+    $arr_param['iServiceOrderId']           = trim($_REQUEST['iServiceOrderId']);
+    $arr_param['vMasterMSA']                = trim($_REQUEST['vMasterMSA']);
+    $arr_param['vSSalesRepNameDD']          = trim($_REQUEST['vSSalesRepNameDD']);
+    $arr_param['vSSalesRepName']            = trim($_REQUEST['vSSalesRepName']);
+    $arr_param['vSSalesRepEmailDD']         = trim($_REQUEST['vSSalesRepEmailDD']);
+    $arr_param['vSSalesRepEmail']           = trim($_REQUEST['vSSalesRepEmail']);
+    $arr_param['vServiceOrder']             = trim($_REQUEST['vServiceOrder']);
+    $arr_param['sess_iCompanyId']           = $_SESSION["sess_iCompanyId" . $admin_panel_session_suffix];
+
+    $arr_param['A2D_COMPANY_ID']            = $A2D_COMPANY_ID;
 
     $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
 
@@ -510,6 +530,7 @@ if($mode == "List") {
         $result['vNameId'] = $vNameId ;
         $result['error'] = 0 ;
     }else{
+        $result['vMSANum'] = $vMSANum ;
         $result['vNameId'] = $vNameId ;
         $result['error'] = 1 ;
     }
@@ -587,6 +608,125 @@ if($mode == "List") {
         $result['error'] = 0 ;
     }else{
         $result['vEmail'] = $vEmail ;
+        $result['error'] = 1 ;
+    }
+
+    # -----------------------------------
+    # Return jSON data.
+    # -----------------------------------
+    echo json_encode($result);
+    hc_exit();
+    # -----------------------------------  
+}else if($mode == "get_connection_type_from_carrier"){
+    $arr_param = array(
+        "iCompanyId"    => $_POST['iCarrierId'],
+        "sessionId"     => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
+    );
+
+    $API_URL = $site_api_url."get_connection_type_of_service_pricing_from_company_id.json";
+    //echo $API_URL." ".json_encode($arr_param);exit;
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $API_URL);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_HEADER, FALSE);
+    curl_setopt($ch, CURLOPT_POST, TRUE);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $arr_param);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+       "Content-Type: multipart/form-data",
+    ));
+    $response = curl_exec($ch);
+    curl_close($ch); 
+    $result_arr = json_decode($response, true); 
+    //echo "<pre>;";print_r($result_arr['result']);exit;
+    if(isset($result_arr['result']) && count($result_arr['result']) > 0){
+        $result['ctype_data'] = $result_arr['result'];
+        $result['error'] = 0;
+    }else{
+        $result['ctype_data'] = [];
+        $result['error'] = 1;
+    }
+
+    # -----------------------------------
+    # Return jSON data.
+    # -----------------------------------
+    echo json_encode($result);
+    hc_exit();
+    # -----------------------------------  
+}else if($mode == "get_service_type_from_carrier"){
+    $arr_param = array(
+        "iCompanyId"    => $_POST['iCarrierId'],
+        "sessionId"     => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
+    );
+
+    $API_URL = $site_api_url."get_service_type_of_service_pricing_from_company_id.json";
+    //echo $API_URL." ".json_encode($arr_param);exit;
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $API_URL);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_HEADER, FALSE);
+    curl_setopt($ch, CURLOPT_POST, TRUE);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $arr_param);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+       "Content-Type: multipart/form-data",
+    ));
+    $response = curl_exec($ch);
+    curl_close($ch); 
+    $result_arr = json_decode($response, true); 
+    //echo "<pre>;";print_r($result_arr['result']);exit;
+    if(isset($result_arr['result']) && count($result_arr['result']) > 0){
+        $result['stype_data'] = $result_arr['result'];
+        $result['error'] = 0;
+    }else{
+        $result['stype_data'] = [];
+        $result['error'] = 1;
+    }
+
+    # -----------------------------------
+    # Return jSON data.
+    # -----------------------------------
+    echo json_encode($result);
+    hc_exit();
+    # -----------------------------------  
+}else if($mode == "get_nrc_mrc_from_service_type"){
+    $arr_param = array(
+        "iServiceTypeId"    => $_POST['iServiceTypeId'],
+        "iCarrierId"        => $_POST['iCarrierId'],
+        "iConnectionTypeId" => $_POST['iConnectionTypeId'],
+        "sessionId"         => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
+    );
+
+    $API_URL = $site_api_url."get_service_type_data_from_service_pricing_id.json";
+    //echo $API_URL." ".json_encode($arr_param);exit;
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $API_URL);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_HEADER, FALSE);
+    curl_setopt($ch, CURLOPT_POST, TRUE);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $arr_param);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+       "Content-Type: multipart/form-data",
+    ));
+    $response = curl_exec($ch);
+    curl_close($ch); 
+    $result_arr = json_decode($response, true); 
+    //echo "<pre>;";print_r($result_arr['result']);exit;
+    $iNRCVariable = '';
+    $iMRCFixed = '';
+    if(isset($result_arr['result'])){
+        $iNRCVariable = $result_arr['result']['iNRCVariable'];
+        $iMRCFixed = $result_arr['result']['iMRCFixed'];
+        $result['iNRCVariable'] = $iNRCVariable ;
+        $result['iMRCFixed'] = $iMRCFixed ;
+        $result['error'] = 0 ;
+    }else{
+        $result['iNRCVariable'] = $iNRCVariable ;
+        $result['iMRCFixed'] = $iMRCFixed ;
         $result['error'] = 1 ;
     }
 

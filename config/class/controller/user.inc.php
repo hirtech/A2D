@@ -430,21 +430,6 @@ class User {
         return $zone_arr;
     } 
 
-    function user_getUserIdsFromCompanyId($iCompanyId){
-        global $sqlObj;
-
-        $sql = "SELECT \"iUserId\" FROM user_details WHERE \"iCompanyId\"='" . $iCompanyId . "' ORDER BY \"iUserId\" ASC";
-        $rs_db = $sqlObj->GetAll($sql);
-        $user_arr = [];
-        $ni = count($rs_db);
-        if($ni > 0){
-            for($i=0; $i<$ni; $i++){
-                $user_arr[] =  $rs_db[$i]['iUserId'];
-            }
-        }
-        return $user_arr;
-    }
-
 }
 
 ?>

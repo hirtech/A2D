@@ -110,6 +110,8 @@ function getMasterMSAFromCarrier(iCarrierID){
         }
     });
     getSalesRepDropDownFromCarrier(iCarrierID);
+    getConnectionTypeDropDownFromCarrier(iCarrierID);
+    getServiceTypeDropDownFromCarrier(iCarrierID);
 }
 
 function getSalesRepDropDownFromCarrier(iCarrierID){
@@ -143,6 +145,70 @@ function getSalesRepDropDownFromCarrier(iCarrierID){
     });
 }
 
+function getConnectionTypeDropDownFromCarrier(iCarrierID){
+    $.ajax({
+        type: "POST",
+        url: site_url+"service_order/list",
+        data: {
+            "mode" : "get_connection_type_from_carrier",
+            "iCarrierId" : iCarrierID
+        },
+        success: function(data){
+            response =JSON.parse(data);
+            var ctype_data = response.ctype_data;
+
+            var option ="<option value=''>--- Select ---</option>";
+            var selected = '';
+
+            if(ctype_data.length > 0 ){
+                $.each(ctype_data,function(i,val){
+                    if(iConnectionTypeId == ctype_data[i].iConnectionTypeId) {
+                        selected = "selected";
+                    }else{
+                        selected = '';
+                    }
+                    //alert(selected)
+                    option +="<option value='"+ctype_data[i].iConnectionTypeId+"' "+selected+">"+ctype_data[i].vConnectionTypeName+"</option>";
+                });
+            }
+            $("#iConnectionTypeId").html(option);
+        }
+    });
+}
+
+function getServiceTypeDropDownFromCarrier(iCarrierID){
+    $.ajax({
+        type: "POST",
+        url: site_url+"service_order/list",
+        data: {
+            "mode" : "get_service_type_from_carrier",
+            "iCarrierId" : iCarrierID
+        },
+        success: function(data){
+            response =JSON.parse(data);
+            var stype_data = response.stype_data;
+
+            var option ="<option value=''>--- Select ---</option>";
+            var selected = '';
+
+            if(stype_data.length > 0 ){
+                $.each(stype_data,function(i,val){
+                    if(iService1 == stype_data[i].iServiceTypeId) {
+                        selected = "selected";
+                    }else{
+                        selected = '';
+                    }
+                    //alert(selected)
+                    option +="<option value='"+stype_data[i].iServiceTypeId+"' "+selected+">"+stype_data[i].vServiceType+"</option>";
+                });
+            }
+
+            $("#iService1").html(option);
+            getNRCMRCValue(iService1);
+        }
+    });
+}
+
 function getUserDetailsFromUser(iUserId){
     $.ajax({
         type: "POST",
@@ -154,6 +220,24 @@ function getUserDetailsFromUser(iUserId){
         success: function(data){
             response =JSON.parse(data);
             $("#vSalesRepEmail").val(response['vEmail']);
+        }
+    });
+}
+
+function getNRCMRCValue(iService1){
+    $.ajax({
+        type: "POST",
+        url: site_url+"service_order/list",
+        data: {
+            "mode" : "get_nrc_mrc_from_service_type",
+            "iServiceTypeId" : iService1,
+            "iCarrierId" : $("#iCarrierID").val(),
+            "iConnectionTypeId" : $("#iConnectionTypeId").val(),
+        },
+        success: function(data){
+            response =JSON.parse(data);
+            $("#iNRCVariable").val(response['iNRCVariable']);
+            $("#iMRCFixed").val(response['iMRCFixed']);
         }
     });
 }
