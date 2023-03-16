@@ -42,9 +42,7 @@ if($mode == "Update") {
         }
 
         if($sess_iCompanyId > 0 && $A2D_COMPANY_ID != $sess_iCompanyId){
-            $iUserIds = $UserObj->user_getUserIdsFromCompanyId($sess_iCompanyId);
-            //echo "<pre>";print_r($iUserIds);exit;
-            if(!in_array($rs_sorder[0]['iUserCreatedBy'] ,$iUserIds ) )
+            if($rs_sorder[0]['iCarrierID'] != $sess_iCompanyId )
             {
                 $msg = 'Unauthorised Access!!!!! Contact Administrator....';
                 echo "<script>window.location='".$site_url."user/unauthorised?msg=".$msg."';</script>";
