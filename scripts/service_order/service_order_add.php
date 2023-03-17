@@ -15,6 +15,7 @@ $access_group_var_add = per_hasModuleAccess("Service Order", 'Add', 'N');
 $access_group_var_edit = per_hasModuleAccess("Service Order", 'Edit', 'N');
 # ----------- Access Rule Condition -----------
 include_once($controller_path . "service_order.inc.php");
+
 $ServiceOrderObj = new ServiceOrder();
 $iPremiseId = $_REQUEST['iPremiseId'];
 $sess_iCompanyId = $_SESSION["sess_iCompanyId" . $admin_panel_session_suffix];
@@ -35,6 +36,17 @@ if($mode == "Update") {
     $rs_sorder = $ServiceOrderObj->recordset_list();
     //echo "<pre>";print_r($rs_sorder);exit();
     if(!empty($rs_sorder)){
+
+        if($rs_sorder[0]['vFile'] != ""){
+            if(file_exists($service_order_path.$rs_sorder[0]['vFile'])){
+            
+                $download_path = $service_order_path.$rs_sorder[0]['vFile'];
+                $download_url = $service_order_url.$rs_sorder[0]['vFile'];
+                
+                $file_url = $site_url.'download.php?vFileName_path='.base64_encode($download_path).'&vFileName_url='.base64_encode($download_url).'&file_name='.base64_encode($rs_sorder[0]['vFile']);
+                $rs_sorder[0]['file_url'] = $file_url;
+            }
+        }
         if($rs_sorder[0]['iSOStatus'] == 3){
             $msg = 'Unauthorised Access!!!!! Contact Administrator....';
             echo "<script>window.location='".$site_url."user/unauthorised?msg=".$msg."';</script>";
@@ -105,6 +117,16 @@ if($mode == "Update") {
         $rs_sorder[0]['iPremiseId'] = $iPremiseId;
         $rs_sorder[0]['vPremiseName'] = $vPremiseName;
     }
+    $iLastServiceOrderId = 0;
+    $sql = 'select setval(\'"public"."service_order_iServiceOrderId_seq"\'::regclass, (select MAX("iServiceOrderId") FROM "public"."service_order"))';
+    $rs = (array)$sqlObj->Execute($sql);
+    //echo "<pre>";print_r($rs['fields']['setval']);exit;
+    if(!empty($rs)) {
+        if(isset($rs['fields']['setval']) && $rs['fields']['setval'] > 0){
+            $iLastServiceOrderId = $rs['fields']['setval'];
+        }
+    }
+
 }
 //Carrier (Company) Dropdown
 $carrier_param = array();
@@ -136,5 +158,6 @@ $smarty->assign("module_name", $module_name);
 $smarty->assign("module_title", $module_title);
 $smarty->assign("mode", $mode);
 $smarty->assign("rs_sorder", $rs_sorder);
+$smarty->assign("iLastServiceOrderId", $iLastServiceOrderId);
 $smarty->assign("access_group_var_edit", $access_group_var_edit);
 ?>

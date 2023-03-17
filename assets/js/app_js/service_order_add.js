@@ -40,7 +40,13 @@ $(document).ready(function() {
 
     if(mode == "Update"){
         getMasterMSAFromCarrier($("#iCarrierID").val())
-    }
+        if($("#iNRCVariable").val() == "" && $("#iMRCFixed").val() == "") {
+            setTimeout(function () {
+                getNRCMRCValue($("#iService1").val());
+            }, 200);
+            
+        }
+    } 
 });
 
 function onPremiseClusteSelected(e, datum){
@@ -204,7 +210,7 @@ function getServiceTypeDropDownFromCarrier(iCarrierID){
             }
 
             $("#iService1").html(option);
-            getNRCMRCValue(iService1);
+
         }
     });
 }
@@ -238,6 +244,12 @@ function getNRCMRCValue(iService1){
             response =JSON.parse(data);
             $("#iNRCVariable").val(response['iNRCVariable']);
             $("#iMRCFixed").val(response['iMRCFixed']);
+            if(mode == 'Add'){
+                var iNewServiceOrderId = parseInt($("#iLastServicePricingId").val()) + 1;
+
+                var vServiceOrder = $("#vNameId").val() + "-" + response['iServicePricingId'] + "-" + iNewServiceOrderId;
+                $("#vServiceOrder").val(vServiceOrder)
+            }
         }
     });
 }

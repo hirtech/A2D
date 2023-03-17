@@ -296,6 +296,7 @@ if($request_type == "service_order_list"){
                 "vServiceType1"         => $rs_sorder[$i]['vServiceType1'],
                 "tComments"             => $rs_sorder[$i]['tComments'],
                 "iSOStatus"             => $rs_sorder[$i]['iSOStatus'],
+                "iCStatus"              => $rs_sorder[$i]['iCStatus'],
                 "iSStatus"              => $rs_sorder[$i]['iSStatus'],
             );
         }
@@ -326,7 +327,9 @@ if($request_type == "service_order_list"){
         "iSStatus"              => $RES_PARA['iSStatus'],
         "iNRCVariable"          => $RES_PARA['iNRCVariable'],
         "iMRCFixed"             => $RES_PARA['iMRCFixed'],
+        "vServiceOrder"         => $RES_PARA['vServiceOrder'],
         "tComments"             => $RES_PARA['tComments'],
+        "vFile"                 => $RES_PARA['vFile'],
         "iUserModifiedBy"       => $RES_PARA['iUserModifiedBy'],
     );
 
@@ -367,7 +370,9 @@ if($request_type == "service_order_list"){
         "iSStatus"              => $RES_PARA['iSStatus'],
         "iNRCVariable"          => $RES_PARA['iNRCVariable'],
         "iMRCFixed"             => $RES_PARA['iMRCFixed'],
+        "vServiceOrder"         => $RES_PARA['vServiceOrder'],
         "tComments"             => $RES_PARA['tComments'],
+        "vFile"                 => $RES_PARA['vFile'],
         "iUserCreatedBy"		=> $RES_PARA['iUserCreatedBy'],
     );
 

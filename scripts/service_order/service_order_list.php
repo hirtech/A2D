@@ -18,6 +18,7 @@ $sEcho = (isset($_REQUEST["sEcho"]) ? $_REQUEST["sEcho"] : '0');
 $display_order = (isset($_REQUEST["iSortCol_0"]) ? $_REQUEST["iSortCol_0"] : '0');
 $dir = (isset($_REQUEST["sSortDir_0"]) ? $_REQUEST["sSortDir_0"] : 'desc');
 # ------------------------------------------------------------
+include_once($function_path."image.inc.php");
 
 $iPremiseId = $_REQUEST['iPremiseId'];
 if($mode == "List") {
@@ -109,9 +110,13 @@ if($mode == "List") {
             if($access_group_var_edit == "1" && $rs_order[$i]['iSOStatus']  != 3){ 
                 $action .= '<a class="btn btn-outline-secondary" title="Edit" href="'.$site_url.'service_order/edit&mode=Update&iServiceOrderId=' . $rs_order[$i]['iServiceOrderId'] . '"><i class="fa fa-edit"></i></a>';
             }
+            if($rs_order[$i]['iSOStatus'] == 3){
+                $action .= '<a class="btn btn-outline-info" title="View" href="'.$site_url.'service_order/view&iServiceOrderId=' . $rs_order[$i]['iServiceOrderId'] . '"><i class="fa fa-eye"></i></a>';
+            }
             if($access_group_var_delete == "1"){
                 $action .= ' <a class="btn btn-outline-danger" title="Delete" href="javascript:void(0);" onclick="delete_record('.$rs_order[$i]['iServiceOrderId'].');"><i class="fa fa-trash"></i></a>';
             }
+
 
             $vSalesRepName = '';
             if($rs_order[$i]['vSalesRepName'] != ""){
@@ -170,6 +175,14 @@ if($mode == "List") {
     # -----------------------------------
 }else if($mode == "Update"){   
     //echo "<pre>";print_r($_POST);exit;
+    if(isset($_FILES["vFile"])){
+        $file_arr = img_fileUpload("vFile", $service_order_path, '', $valid_ext = array('docx', 'doc','xlsx', 'xls', 'pdf'));
+        $file_name = $file_arr[0];
+        $file_msg =  $file_arr[1];
+    } else {
+        $file_name = $_POST['vFile_old'];
+    }
+
     $arr_param = array(
         "iServiceOrderId"       => $_POST['iServiceOrderId'],
         "vMasterMSA"            => trim($_POST['vMasterMSA']),
@@ -186,7 +199,9 @@ if($mode == "List") {
         "iSStatus"              => $_POST['iSStatus'],
         "iNRCVariable"          => $_POST['iNRCVariable'],
         "iMRCFixed"             => $_POST['iMRCFixed'],
+        "vServiceOrder"         => $_POST['vServiceOrder'],
         "tComments"             => trim($_POST['tComments']),
+        "vFile"                 => $file_name,
         "iUserModifiedBy"       => $_SESSION["sess_iUserId".$admin_panel_session_suffix],
         "sessionId"             => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
     );
@@ -220,6 +235,13 @@ if($mode == "List") {
     hc_exit();
     # -----------------------------------
 }else if($mode == "Add") {
+
+    if(isset($_FILES["vFile"])){
+        $file_arr = img_fileUpload("vFile", $service_order_path, '', $valid_ext = array('docx', 'doc','xlsx', 'xls', 'pdf'));
+        $file_name = $file_arr[0];
+        $file_msg =  $file_arr[1];
+    }
+
     $arr_param = array(
         "vMasterMSA"            => trim($_POST['vMasterMSA']),
         "vNameId"               => trim($_POST['vNameId']),
@@ -234,7 +256,9 @@ if($mode == "List") {
         "iSStatus"              => $_POST['iSStatus'],
         "iNRCVariable"          => $_POST['iNRCVariable'],
         "iMRCFixed"             => $_POST['iMRCFixed'],
+        "vServiceOrder"         => $_POST['vServiceOrder'],
         "tComments"             => trim($_POST['tComments']),
+        "vFile"                 => $file_name,
         "iUserCreatedBy"        => $_SESSION["sess_iUserId".$admin_panel_session_suffix],
         "sessionId"             => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
     );
@@ -718,16 +742,20 @@ if($mode == "List") {
     //echo "<pre>;";print_r($result_arr['result']);exit;
     $iNRCVariable = '';
     $iMRCFixed = '';
+    $iServicePricingId = 0;
     if(isset($result_arr['result'])){
         $iNRCVariable = $result_arr['result']['iNRCVariable'];
         $iMRCFixed = $result_arr['result']['iMRCFixed'];
-        $result['iNRCVariable'] = $iNRCVariable ;
-        $result['iMRCFixed'] = $iMRCFixed ;
-        $result['error'] = 0 ;
+        $iServicePricingId = $result_arr['result']['iServicePricingId'];
+        $result['iNRCVariable'] = $iNRCVariable;
+        $result['iMRCFixed'] = $iMRCFixed;
+        $result['iServicePricingId'] = $iServicePricingId;
+        $result['error'] = 0;
     }else{
-        $result['iNRCVariable'] = $iNRCVariable ;
-        $result['iMRCFixed'] = $iMRCFixed ;
-        $result['error'] = 1 ;
+        $result['iNRCVariable'] = $iNRCVariable;
+        $result['iMRCFixed'] = $iMRCFixed;
+        $result['iServicePricingId'] = $iServicePricingId;
+        $result['error'] = 1;
     }
 
     # -----------------------------------
@@ -742,7 +770,7 @@ if($mode == "List") {
 # Network Dropdown
 $network_arr_param = array();
 $network_arr_param = array(
-    "iStatus"        => 1,
+    "iStatus"       => 1,
     "sessionId"     => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
 );
 $network_API_URL = $site_api_url."network_dropdown.json";
@@ -768,7 +796,7 @@ $smarty->assign("rs_ntwork", $rs_ntwork);
 # Zone Dropdown
 $zone_arr_param = array();
 $zone_arr_param = array(
-    "iStatus"        => 1,
+    "iStatus"       => 1,
     "sessionId"     => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
 );
 $zone_API_URL = $site_api_url."zone_dropdown.json";
@@ -792,7 +820,7 @@ $smarty->assign("rs_zone", $rs_zone);
 
 //Carrier (Company) Dropdown
 $carrier_param = array();
-$carrier_param['iStatus'] = '1';
+$carrier_param['iStatus']   = '1';
 $carrier_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
 $carrierAPI_URL = $site_api_url."company_dropdown.json";
 //echo $carrierAPI_URL." ".json_encode($carrier_param);exit;

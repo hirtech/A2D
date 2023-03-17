@@ -25,6 +25,7 @@
                             <input type="hidden" name="mode" id="mode" value="{$mode}">
                             <input type="hidden" name="iServiceOrderId" id="iServiceOrderId" value="{$rs_sorder[0].iServiceOrderId}">
                             <input type="hidden" name="vNameId" id="vNameId" value="">
+                            <input type="hidden" name="iLastServicePricingId" id="iLastServicePricingId" value="{$iLastServiceOrderId}">
                             <div class="form-row">
                                 <div class="col-6">
                                     <div class="col-12 mb-3">
@@ -51,9 +52,6 @@
                                     </div>
                                     <div class="col-12 mb-3">
                                         <label for="iSalesRepId">SalesRep <span class="text-danger">*</span></label>
-                                        <!-- <input type="text" id="vSalesRepName" name="vSalesRepName" value="{$rs_sorder[0].vSalesRepName|gen_filter_text}" class="form-control" required>
-                                        <div class="invalid-feedback"> Please enter SalesRep name</div> -->
-
                                         <select name="iSalesRepId" id="iSalesRepId" class="form-control" required onchange="getUserDetailsFromUser(this.value);">
                                             <option value="">--- Select ---</option>
                                         </select>
@@ -80,11 +78,11 @@
                                     </div>
                                     <div class="col-12 mb-3">
                                         <label for="iNRCVariable">NRC Variable</label>
-                                        <input type="text" id="iNRCVariable" name="iNRCVariable" value="{$rs_sorder[0].iNRCVariable}" class="form-control readonly-color" readonly="" required>
+                                        <input type="text" id="iNRCVariable" name="iNRCVariable" value="{$rs_sorder[0].iNRCVariable}" class="form-control" >
                                     </div>
                                     <div class="col-12 mb-3">
                                         <label for="iMRCFixed">MRC Fixed</label>
-                                        <input type="text" id="iMRCFixed" name="iMRCFixed" value="{$rs_sorder[0].iMRCFixed}" class="form-control readonly-color" readonly="" required>
+                                        <input type="text" id="iMRCFixed" name="iMRCFixed" value="{$rs_sorder[0].iMRCFixed}" class="form-control" >
                                     </div>
                                 </div>
                                 <div class="col-6">
@@ -126,6 +124,19 @@
                                     <div class="col-12 mb-3">
                                         <label for="tComments">Comments</label>
                                         <textarea class="form-control" name="tComments" id="tComments" rows="4">{$rs_sorder[0].tComments|gen_filter_text}</textarea>
+                                    </div>
+                                    <div class="col-12 mb-3 ">
+                                        <label for="vFile">File</label>
+                                        <div class="input-group">
+                                            <input type="file" class="d-inline-flex form-control-file form-control h-auto" id="vFile" name="vFile">
+                                        </div>
+                                        <input type="hidden" name="vFile_old" id="vFile_old" value="{$rs_sorder[0].vFile}">
+                                        <span class="text-danger"> [valid extension file : *.docx, *.doc; *.xlsx; *.xls; *.pdf;]</span>
+                                        {if $rs_sorder[0].file_url neq ''}
+                                        <span class="mt-3"><br/>
+                                            <a href="{$rs_sorder[0].file_url}" title="Download"><i class="fa fa-download"></i>&nbsp;&nbsp;Download</a>
+                                        </span>
+                                        {/if}
                                     </div>
                                 </div>
                             </div>

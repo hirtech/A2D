@@ -137,6 +137,10 @@ $network_url = $site_storage_images_url."netowrk_kml/";
 $service_pricing_path = $site_storage_images_path."service_pricing/";
 $service_pricing_url = $site_storage_images_url."service_pricing/";
 
+#Service Order file
+$service_order_path = $site_storage_images_path."service_order/";
+$service_order_url = $site_storage_images_url."service_order/";
+
 #Zone
 $zone_path = $site_storage_images_path."zone/";
 $zone_url = $site_storage_images_url."zone/";
