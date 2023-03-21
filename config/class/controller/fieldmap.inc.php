@@ -218,13 +218,15 @@ class Fieldmap {
                 $response['sites'] = $finalArr;
             //}
         }
-
+	
         if(isset($param['zoneLayer']) && $param['zoneLayer'] != ''){
             $zolyrArr = explode(",", $param['zoneLayer']);
             $zoneLayerJsonUrl = $field_map_json_url."zoneLayer.json";
             $layerData = json_decode(file_get_contents($zoneLayerJsonUrl), true);
-            $zlayerArr = $layerData['zonelayer'];
+            $zlayerArr = $layerData['polyZone'];
+			//echo "<pre>";print_r($zlayerArr);exit;
             $zlayerFilter_data = $this->multi_array_search($zlayerArr,$zolyrArr);
+			//echo "<pre>";print_r($zlayerFilter_data);exit;
             $response['zoneLayer'] = $zlayerFilter_data;
         }
 
@@ -1449,9 +1451,14 @@ class Fieldmap {
 
     public function getZoneLayerData($param){
         global $sqlObj;
-        $data = array();
+        /*$data = array();
          $sqlData = 'SELECT "iZoneId", "vZoneName", "vFile" FROM "zone" where "iStatus" = 1';
         $data['zonelayer'] = $sqlObj->GetAll($sqlData);
+        return $data;*/
+        $geoArr = array();
+        $zoneSql = 'SELECT st_astext("PShape") as geotxt, "iZoneId" FROM zone WHERE "iStatus" = 1'; 
+        $data['zonelayer'] = $sqlObj->GetAll($zoneSql);
+        //echo "<pre>";print_r($geoArr);exit;
         return $data;
     }
 

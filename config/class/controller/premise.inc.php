@@ -478,14 +478,18 @@ class Site {
 							$sql_state = 'SELECT "iStateId" FROM state_mas WHERE "vStateCode" = '.gen_allow_null_char($address_arr['administrative_area_level_1']['short_name']);
 							$rs_state = $sqlObj->GetAll($sql_state);
 							
-							$sql="SELECT fun_getZoneIdFromZoneBoundary(ST_GeometryFromText('POINT(".$vLongitude." ".$vLatitude.")', 4326)::geometry) as iZoneId;";
-							$rs_zone=$sqlObj->GetAll($sql);
+							$long = number_format($vLongitude,6);
+							$lat = number_format($vLatitude,6);
+
+							$sql_zone = "SELECT zone.\"iZoneId\", zone.\"vZoneName\" FROM zone WHERE  St_Within(ST_GeometryFromText('POINT(".$long." ".$lat.")', 4326)::geometry, (zone.\"PShape\")::geometry)='t'"; 
+							$rs_zone=$sqlObj->GetAll($sql_zone);
+							//echo "<pre>";print_r($rs_zone);exit;
 							
 							$vAddress1 = $address_arr['street_number']['short_name'];
 							$vStreet = $address_arr['route']['long_name'];
 							$vCrossStreet = $address_arr['neighborhood']['long_name'];
 							$iStateId = $rs_state[0]['iStateId'];
-							$izoneid = $rs_zone[0]['izoneid'];
+							$iZoneId = $rs_zone[0]['iZoneId'];
 							$vZipcode = $address_arr['postal_code']['short_name'];
 							$vCity = $address_arr['locality']['long_name'];
 							$vCounty = trim(str_replace("County", "", $address_arr['administrative_area_level_2']['long_name']));
@@ -513,7 +517,7 @@ class Site {
 							$iStatus = 1;
 							
 							$sql_ins = 'INSERT INTO premise_mas ("vName",  "iSTypeId", "iSSTypeId",  "vAddress1", "vAddress2", "vStreet", "vCrossStreet", "iZipcode", "iGeometryType", "iZoneId", "vLatitude", "vLongitude", "vPointLatLong", "dAddedDate",  "vLoginUserName", "iStatus","iStateId", "iCountyId", "iCityId") VALUES ('.gen_allow_null_char($vName).', '.gen_allow_null_int($iSTypeId).', '.gen_allow_null_int($iSSTypeId).', '.gen_allow_null_char($vAddress1).', '.gen_allow_null_char($vAddress2).', '.gen_allow_null_char($vStreet).', '.gen_allow_null_char($vCrossStreet).', '.gen_allow_null_int($iZipcode).', '.gen_allow_null_int($iGeometryType).', '.gen_allow_null_int($iZoneId).', '.gen_allow_null_char($vLatitude).', '.gen_allow_null_char($vLongitude).', ST_GEOMFROMTEXT(\'POINT('.$vLongitude.' '.$vLatitude .')\', 4326), '.gen_allow_null_char(date_getSystemDateTime()).', '.gen_allow_null_char($vLoginUserName).', '.gen_allow_null_int($iStatus).', '.gen_allow_null_int($iStateId).', '.gen_allow_null_int($iCountyId).', '.gen_allow_null_int($iCityId).')';
-						    //echo $sql_ins."\n";
+						    //echo $sql_ins."\n";exit;
 							$rs_site = $sqlObj->Execute($sql_ins);
 							if($rs_site){
 								$site_arr[] = $sqlObj->Insert_ID();

@@ -148,14 +148,37 @@ if(isset($_POST) &&  !in_array($_POST['action'],array("getSerachSiteData", "getS
             echo "done";die;
         break;
         case 'getZoneLayerData':
-            $zonelayerData = $data['zonelayer'];
+            /*$zonelayerData = $data['zonelayer'];
             $geoArr = array();
             foreach($zonelayerData as $data){
                 if($data['vFile'] != "" && file_exists($zone_path.$data['vFile'])){
                     $geoArr['zonelayer'][$data['iZoneId']]['file_url'] = $zone_url.$data['vFile'];;
                 }
                 $geoArr['zonelayer'][$data['iZoneId']]['vZoneName'] =  $data['vZoneName'];
+            }*/
+			//echo "<pre>";print_r($data);exit;
+            if(isset($data['zonelayer']) && $data['zonelayer'] != ''){
+                foreach($data['zonelayer'] as $key => $zone){
+					//echo "<pre>";print_r($zone);exit;
+                    $polygon = str_replace("POLYGON((", '', $zone['geotxt']);
+                    $polygon = str_replace("))", '', $polygon);
+                    //print_r($polygon);
+                    $polyArr = explode(",", $polygon);
+                    //print_r($polyArr);
+
+                    foreach($polyArr as $latlng){
+                        $latLngArr = explode(" ", $latlng);
+                        //print_r($latLngArr);
+                        $geoArr['polyZone'][$zone['iZoneId']][] = array(
+                            'lat' => (float) $latLngArr[1],
+                            'lng' => (float) $latLngArr[0]
+                            );
+                        $i++;
+                    }
+                }
+                //print_r($geoArr);
             }
+            //echo "<pre>";print_r($geoArr);exit;
             $fp = fopen($field_map_json_path.'zoneLayer.json', 'w');
             fwrite($fp, json_encode($geoArr));
             fclose($fp);

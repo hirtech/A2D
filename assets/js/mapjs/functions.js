@@ -110,7 +110,9 @@ function getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLay
 					// ******** Zone layer ******** //
 					if (response.zoneLayer !== undefined) {
 						$.each(response.zoneLayer, function(id, item) {
-							var src = item['file_url'];
+							//alert(id);
+							showZonePolygonLayerMap(item, map);
+							/*var src = item['file_url'];
 							//var src =  "http://54.167.253.109/eCommunityfiber/storage/zone/1664396393_Polygon_One.kml";
 	                        var kml = new google.maps.KmlLayer({
 	                            url: src,
@@ -120,9 +122,9 @@ function getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLay
 	                        }); 
 
 							kml.vZoneName = item['vZoneName'];
-                        	zoneLayerArr.push(kml);
+                        	zoneLayerArr.push(kml);*/
 						});
-		                var kmls = zoneLayerArr.length;
+		                /*var kmls = zoneLayerArr.length;
 		                if (kmls > 0) {
 		                	//info window
 		                    for (i = 0; i < kmls; i++) {
@@ -145,7 +147,7 @@ function getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLay
 									})
 								}
 		                    }
-		                }
+		                }*/
 					}
 
 					// ******** custom layer ******** //
@@ -527,6 +529,35 @@ function showZonePolygonMap(sitePath, map) {
 
 	zCount++;
 }
+
+function showZonePolygonLayerMap(sitePath, map) {
+	//console.log(sitePath);
+	zonePolygonLayerObj[zLayerCount] = new google.maps.Polygon({
+		path: sitePath,
+		strokeColor: '#FF9C6E',
+		strokeOpacity: 0.8,
+		strokeWeight: 2,
+		fillColor: '#FF9C6E',
+		fillOpacity: 0,
+	});
+
+
+	$site_map = zonePolygonLayerObj[zLayerCount];
+
+	zonePolygonLayerObj[zLayerCount].setMap(map);
+
+	//Extend each marker's position in LatLngBounds object.
+    var bounds = new google.maps.LatLngBounds();
+    zonePolygonLayerObj[zLayerCount].getPath().forEach(function (path, index) {
+        bounds.extend(path);
+        //latlngbounds.extend(path);
+    });
+    map.fitBounds(bounds);
+
+	zLayerCount++;
+}
+
+
 
 function showPointMapForFiberInquiry(sitePath, map, icon, id, vName, vAddress, premiseid, vPremiseName, vPremiseSubType, vEngagement, vZoneName, vNetwork, vStatus,iFiberInquiryId) {
 	/*map.setCenter({lat: 41.595526, lng: -72.687145}); */
