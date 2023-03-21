@@ -94,10 +94,15 @@
                                     <div class="col-12 mb-3">
                                         <label for="iSOStatus">Service Order Status <span class="text-danger">*</span></label>
                                         <input type="hidden" id="iOldSOStatus" name="iOldSOStatus" value="{$rs_sorder[0].iSOStatus}" class="form-control">
-                                        <select name="iSOStatus" id="iSOStatus" class="select">
-                                                <option value="1"  {if $rs_sorder[0].iSOStatus eq 1} selected {/if}>Created</option>
-                                                <option value="2" {if $rs_sorder[0].iSOStatus eq 2} selected {/if} >In-Review</option>
-                                                <option value="3" {if $rs_sorder[0].iSOStatus eq 3} selected {/if}>Approved</option>
+                                            <select name="iSOStatus" id="iSOStatus" class="select" onchange="addSOValidation(this.value);" required="">
+                                                <option value=""> --- Select ---</option>
+                                                <option value="1"  {if $rs_sorder[0].iSOStatus eq 1 || $mode eq 'Add'} selected {/if}>Created</option>
+                                                <option value="2" {if $rs_sorder[0].iSOStatus eq 2} selected {/if} >In Progress</option>
+                                                <option value="3" {if $rs_sorder[0].iSOStatus eq 3} selected {/if}>Delayed</option>
+                                                <option value="4" {if $rs_sorder[0].iSOStatus eq 4} selected {/if}>Cancelled</option>
+                                                <option value="5" {if $rs_sorder[0].iSOStatus eq 5} selected {/if}>Final Review</option>
+                                                <option value="6" {if $rs_sorder[0].iSOStatus eq 6} selected {/if}>Carrier Approved</option>
+                                                <option value="7" {if $rs_sorder[0].iSOStatus eq 7} selected {/if}>Final Approved</option>
                                             </select>
                                         <div class="invalid-feedback"> Please select service order status</div>
                                     </div>
@@ -106,6 +111,7 @@
                                         <select name="iCStatus" id="iCStatus" class="select">
                                                 <option value="1"  {if $rs_sorder[0].iCStatus eq 1} selected {/if}>Created</option>
                                                 <option value="2" {if $rs_sorder[0].iCStatus eq 2} selected {/if}>In-Progress</option>
+                                                <option value="3" {if $rs_sorder[0].iCStatus eq 3} selected {/if}>Delayed</option>
                                                 <option value="4" {if $rs_sorder[0].iCStatus eq 4} selected {/if}>On-Net</option>
                                             </select>
                                         <div class="invalid-feedback"> Please select connection status</div>
@@ -174,6 +180,9 @@
 <!-- START: Page JS-->
 <script type="text/javascript">
 var mode = '{$mode}';
+var A2D_COMPANY_ID = '{$A2D_COMPANY_ID}';
+var sess_iCompanyId = '{$sess_iCompanyId}';
+var sess_vCompanyAccessType = '{$sess_vCompanyAccessType}';
 var iSalesRepId = '{$rs_sorder[0].iSalesRepId}';
 var iConnectionTypeId = '{$rs_sorder[0].iConnectionTypeId}';
 var iService1 = '{$rs_sorder[0].iService1}';

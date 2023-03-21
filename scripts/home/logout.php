@@ -23,6 +23,7 @@ if ($_SESSION['sess_iUserId' . $admin_panel_session_suffix] != '') {
         $_SESSION["sess_vAccessGroup" . $admin_panel_session_suffix] = "";
         $_SESSION["sess_iCompanyId" . $admin_panel_session_suffix] = "";
         $_SESSION["sess_vCompanyName" . $admin_panel_session_suffix] = "";
+        $_SESSION["sess_vCompanyAccessType" . $admin_panel_session_suffix] = "";
         $_SESSION["sess_vName" . $admin_panel_session_suffix] = "";
         $_SESSION["sess_vUsername" . $admin_panel_session_suffix] = "";
         $_SESSION["sess_eFrontSesssion" . $admin_panel_session_suffix] = "";

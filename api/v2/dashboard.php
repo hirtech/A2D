@@ -889,7 +889,7 @@ if ($request_type == "dashboard_glance") {
 }else if ($request_type == "dashboard_serviceorder_barchart"){
     $js_status_arr = array();
 
-    $sql_so = "SELECT count(\"iServiceOrderId\") as count, \"iSOStatus\", \"iCarrierID\" FROM service_order GROUP BY \"iCarrierID\", \"iSOStatus\" ORDER BY \"iSOStatus\"";
+    $sql_so = "SELECT count(\"iServiceOrderId\") as count, so.\"iSOStatus\", so.\"iCarrierID\" FROM service_order so JOIN company_mas cm ON so.\"iCarrierID\" = cm.\"iCompanyId\" WHERE cm.\"vAccessType\" = 'Carrier' GROUP BY so.\"iCarrierID\", so.\"iSOStatus\" ORDER BY so.\"iSOStatus\"";
     $rs_so = $sqlObj->GetAll($sql_so);
     $SO_arr = array();
     foreach ($rs_so as $key => $value) {
@@ -897,7 +897,7 @@ if ($request_type == "dashboard_glance") {
     }
     //echo "<pre>";print_r($SO_arr);exit;
     
-    $sql = "SELECT \"iCompanyId\", \"vCompanyName\" FROM company_mas WHERE \"iStatus\" = 1 ORDER BY \"vCompanyName\"";
+    $sql = "SELECT \"iCompanyId\", \"vCompanyName\" FROM company_mas WHERE \"iStatus\" = 1 AND \"vAccessType\" = 'Carrier' ORDER BY \"vCompanyName\"";
     $rs = $sqlObj->GetAll($sql);
     $ci = count($rs);
 
@@ -939,7 +939,7 @@ if ($request_type == "dashboard_glance") {
 }else if ($request_type == "dashboard_workorder_barchart"){
     $js_status_arr = array();
 
-    $sql_wo = "SELECT count(\"iWOId\") as count, w.\"iWOSId\", s.\"iCarrierID\" FROM workorder w INNER JOIN service_order s ON w.\"iServiceOrderId\" = s.\"iServiceOrderId\" GROUP BY s.\"iCarrierID\", w.\"iWOSId\" ORDER BY w.\"iWOSId\"";
+    $sql_wo = "SELECT count(\"iWOId\") as count, w.\"iWOSId\", s.\"iCarrierID\" FROM workorder w INNER JOIN service_order s ON w.\"iServiceOrderId\" = s.\"iServiceOrderId\" JOIN company_mas cm ON s.\"iCarrierID\" = cm.\"iCompanyId\" WHERE cm.\"vAccessType\" = 'Carrier' GROUP BY s.\"iCarrierID\", w.\"iWOSId\" ORDER BY w.\"iWOSId\"";
     $rs_wo = $sqlObj->GetAll($sql_wo);
     $WO_arr = array();
     foreach ($rs_wo as $key => $value) {
@@ -948,7 +948,7 @@ if ($request_type == "dashboard_glance") {
     //echo $sql_wo;
     //echo "<pre>";print_r($WO_arr);exit;
     
-    $sql = "SELECT \"iCompanyId\", \"vCompanyName\" FROM company_mas WHERE \"iStatus\" = 1 ORDER BY \"vCompanyName\"";
+    $sql = "SELECT \"iCompanyId\", \"vCompanyName\" FROM company_mas WHERE \"iStatus\" = 1 AND \"vAccessType\" = 'Carrier' ORDER BY \"vCompanyName\"";
     $rs = $sqlObj->GetAll($sql);
     $ci = count($rs);
     

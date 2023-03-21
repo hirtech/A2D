@@ -107,10 +107,10 @@ if($mode == "List") {
     if ($ni > 0) {
         for ($i = 0; $i < $ni; $i++) {
             $action = '';
-            if($access_group_var_edit == "1" && $rs_order[$i]['iSOStatus']  != 3){ 
+            if($access_group_var_edit == "1" && $rs_order[$i]['iSOStatus']  != 7){ 
                 $action .= '<a class="btn btn-outline-secondary" title="Edit" href="'.$site_url.'service_order/edit&mode=Update&iServiceOrderId=' . $rs_order[$i]['iServiceOrderId'] . '"><i class="fa fa-edit"></i></a>';
             }
-            if($rs_order[$i]['iSOStatus'] == 3){
+            if($rs_order[$i]['iSOStatus'] == 7){
                 $action .= '<a class="btn btn-outline-info" title="View" href="'.$site_url.'service_order/view&iServiceOrderId=' . $rs_order[$i]['iServiceOrderId'] . '"><i class="fa fa-eye"></i></a>';
             }
             if($access_group_var_delete == "1"){
@@ -133,9 +133,17 @@ if($mode == "List") {
             if($rs_order[$i]['iSOStatus'] == 1){
                 $iSOStatus = '<span class="btn btn-warning">Created</span>';
             }else if($rs_order[$i]['iSOStatus'] == 2){
-                $iSOStatus = '<span class="btn btn-info">Review</span>';
+                $iSOStatus = '<span class="btn btn-primary">In Progress</span>';
             }else if($rs_order[$i]['iSOStatus'] == 3){
-                $iSOStatus = '<span class="btn btn-success">Approved</span>';
+                $iSOStatus = '<span class="btn btn-danger">Delayed</span>';
+            }else if($rs_order[$i]['iSOStatus'] == 4){
+                $iSOStatus = '<span class="btn btn-warning">Cancelled</span>';
+            }else if($rs_order[$i]['iSOStatus'] == 5){
+                $iSOStatus = '<span class="btn btn-info">Final Review</span>';
+            }else if($rs_order[$i]['iSOStatus'] == 6){
+                $iSOStatus = '<span class="btn btn-dark">Carrier Approved</span>';
+            }else if($rs_order[$i]['iSOStatus'] == 7){
+                $iSOStatus = '<span class="btn btn-success">Final Approved</span>';
             }
 
             $iSStatus = "";
@@ -897,4 +905,5 @@ $smarty->assign("access_group_var_add", $access_group_var_add);
 $smarty->assign("access_group_var_CSV", $access_group_var_CSV);
 $smarty->assign("iPremiseId", $iPremiseId);
 $smarty->assign("sess_iCompanyId", $_SESSION["sess_iCompanyId" . $admin_panel_session_suffix]);
+$smarty->assign("sess_vCompanyAccessType", $_SESSION["sess_vCompanyAccessType" . $admin_panel_session_suffix]);
 ?>

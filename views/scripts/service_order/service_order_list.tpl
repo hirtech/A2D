@@ -46,6 +46,10 @@
                                     <option value="1">Created</option>
                                     <option value="2">In-Review</option>
                                     <option value="3">Approved</option>
+                                    <option value="4">Cancelled</option>
+                                    <option value="5">Final Review</option>
+                                    <option value="6">Carrier Approved</option>
+                                    <option value="7">Final Approved</option>
                                 </select>
                             </li>
                             <li id="connection_status_dd" style="display: none" class="searching_dd">
@@ -53,7 +57,7 @@
                                     <option value="">-- Select --</option>
                                     <option value="1">Created</option>
                                     <option value="2">In-Progress</option>
-                                    <option value="3">Completed</option>
+                                    <option value="3">Delayed</option>
                                     <option value="4">On-Net</option>
                                 </select>
                             </li>
@@ -123,5 +127,6 @@
     var access_group_var_CSV = '{$access_group_var_CSV}';
     var A2D_COMPANY_ID = '{$A2D_COMPANY_ID}';
     var sess_iCompanyId = '{$sess_iCompanyId}';
+    var sess_vCompanyAccessType = '{$sess_vCompanyAccessType}';
 </script>
 <script src="assets/js/app_js/service_order.js"></script>

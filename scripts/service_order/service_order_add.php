@@ -19,6 +19,8 @@ include_once($controller_path . "service_order.inc.php");
 $ServiceOrderObj = new ServiceOrder();
 $iPremiseId = $_REQUEST['iPremiseId'];
 $sess_iCompanyId = $_SESSION["sess_iCompanyId" . $admin_panel_session_suffix];
+$sess_vCompanyAccessType = $_SESSION["sess_vCompanyAccessType" . $admin_panel_session_suffix];
+
 if($mode == "Update") {
     $iServiceOrderId = $_REQUEST['iServiceOrderId'];
     $where_arr = array();
@@ -47,7 +49,7 @@ if($mode == "Update") {
                 $rs_sorder[0]['file_url'] = $file_url;
             }
         }
-        if($rs_sorder[0]['iSOStatus'] == 3){
+        if($rs_sorder[0]['iSOStatus'] == 7){
             $msg = 'Unauthorised Access!!!!! Contact Administrator....';
             echo "<script>window.location='".$site_url."user/unauthorised?msg=".$msg."';</script>";
             exit;
@@ -159,5 +161,6 @@ $smarty->assign("module_title", $module_title);
 $smarty->assign("mode", $mode);
 $smarty->assign("rs_sorder", $rs_sorder);
 $smarty->assign("iLastServiceOrderId", $iLastServiceOrderId);
+$smarty->assign("sess_vCompanyAccessType", $sess_vCompanyAccessType);
 $smarty->assign("access_group_var_edit", $access_group_var_edit);
 ?>

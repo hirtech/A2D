@@ -7,7 +7,7 @@ $(document).ready(function(){
         $(".status_buttons").hide();
     }else {
         $(".status_buttons").show();
-    }
+    }    
 });
 
 var listPage = function(){ 
@@ -56,7 +56,7 @@ var listPage = function(){
                     'copy', 'print',
                     {
                         extend: 'collection',
-                        className: 'btn btn-dark status_buttons',
+                        className: 'btn btn-dark status_buttons so_status',
                         text: '<i class="far fa-edit"></i> Change SO Status',
                         buttons: [
                             { 
@@ -66,15 +66,39 @@ var listPage = function(){
                                 } 
                             },
                             { 
-                                text: 'In-Review',    
+                                text: 'In Progress',    
                                 action: function ( e, dt, node, config ) {
                                     changeStatus(2,"iSOStatus");
                                 } 
                             },
                             { 
-                                text: 'Approved',    
+                                text: 'Delayed',    
                                 action: function ( e, dt, node, config ) {
                                     changeStatus(3,"iSOStatus");
+                                } 
+                            },
+                            { 
+                                text: 'Cancelled',    
+                                action: function ( e, dt, node, config ) {
+                                    changeStatus(4,"iSOStatus");
+                                } 
+                            },
+                            { 
+                                text: 'Final Review',    
+                                action: function ( e, dt, node, config ) {
+                                    changeStatus(5,"iSOStatus");
+                                } 
+                            },
+                            { 
+                                text: 'Carrier Approved',    
+                                action: function ( e, dt, node, config ) {
+                                    changeStatus(6,"iSOStatus");
+                                } 
+                            },
+                            { 
+                                text: 'Final Approved',    
+                                action: function ( e, dt, node, config ) {
+                                    changeStatus(7,"iSOStatus");
                                 } 
                             },
                         ],
@@ -95,6 +119,12 @@ var listPage = function(){
                                 text: 'In-Progress',    
                                 action: function ( e, dt, node, config ) {
                                     changeStatus(2,"iCStatus");
+                                } 
+                            },
+                            { 
+                                text: 'Delayed',    
+                                action: function ( e, dt, node, config ) {
+                                    changeStatus(3,"iCStatus");
                                 } 
                             },
                             { 
@@ -196,49 +226,56 @@ function changeStatus(status, status_field){
         {
             ids.push($(this).val());            
         });
-        swal({
-            title: "Are you sure you want to change the status for selected record(s) ?",
-            text: "",
-            type: "warning",
-            showCancelButton: true,
-            //confirmButtonColor: "#DD6B55",
-            confirmButtonClass: 'confirm btn btn-lg btn-danger',
-            cancelButtonClass : 'cancel btn btn-lg btn-default',
-            confirmButtonText: 'Yes!',
-            cancelButtonText: "No, cancel plx!",
-            closeOnConfirm: false,
-            closeOnCancel: true,
-            },
-            function(isConfirm) {
-                if (isConfirm) {
-                    $.ajax({
-                        type: "POST",
-                        url: site_url+"service_order/list",
-                        data: {
-                            "mode" : "change_status",
-                            "status" : status,
-                            "status_field" : status_field,
-                            "iServiceOrderIds" : ids.join(",")
-                        },
-                        success: function(data){
-                            swal.close();
-                            response =JSON.parse(data);
-                            if(response['error'] == "0"){
-                                toastr.success(response['msg']);
-                            }else{
-                                toastr.error(response['msg']);
+        if(status_field == "iSOStatus" && status == 6 && sess_vCompanyAccessType != "Carrier"){
+            toastr.error("\"Carrier Approved\" status can be only selected by Carrier Users.");
+        }else if(status_field == "iSOStatus" && status == 7 && sess_iCompanyId != A2D_COMPANY_ID){
+            toastr.error("\"Final Approved\" status can be only selected by A2D Users.");
+        }else {
+            swal({
+                title: "Are you sure you want to change the status for selected record(s) ?",
+                text: "",
+                type: "warning",
+                showCancelButton: true,
+                //confirmButtonColor: "#DD6B55",
+                confirmButtonClass: 'confirm btn btn-lg btn-danger',
+                cancelButtonClass : 'cancel btn btn-lg btn-default',
+                confirmButtonText: 'Yes!',
+                cancelButtonText: "No, cancel plx!",
+                closeOnConfirm: false,
+                closeOnCancel: true,
+                },
+                function(isConfirm) {
+                    if (isConfirm) {
+                        $.ajax({
+                            type: "POST",
+                            url: site_url+"service_order/list",
+                            data: {
+                                "mode" : "change_status",
+                                "status" : status,
+                                "status_field" : status_field,
+                                "iServiceOrderIds" : ids.join(",")
+                            },
+                            success: function(data){
+                                swal.close();
+                                response =JSON.parse(data);
+                                if(response['error'] == "0"){
+                                    toastr.success(response['msg']);
+                                }else{
+                                    toastr.error(response['msg']);
+                                }
+                                gridtable.ajax.reload();
                             }
-                            gridtable.ajax.reload();
-                        }
-                    });
-                } else {
-                    swal.close();
+                        });
+                    } else {
+                        swal.close();
+                    }
                 }
-            }
-        );
+            );
+        }
     }
     else{
-        alert("Please select at list one record");
+        //alert("Please select at list one record");
+        toastr.error("Please select at list one record to change the status.");
     }
 }
 

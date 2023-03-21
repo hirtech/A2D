@@ -56,9 +56,9 @@ table.dataTable td {
 	border-color: #dc3545;
 }
 .btn-outline-primary{}
-#datatable-grid.editable-table .btn-outline-secondary {
+/*#datatable-grid.editable-table .btn-outline-secondary {
 	margin-right: 5px;
-}
+}*/
 .user_list_header .search-links .btn {
     padding: 8px 12px 9px;
     font-size: 14px;

@@ -36,18 +36,28 @@ if($iServiceOrderId  > 0) {
     if(!empty($rs_sorder)){
 		$vSOStatus = "";
 		if($rs_sorder[0]['iSOStatus'] == 1){
-			$vSOStatus = '<span class="btn btn-warning">Created</span>';
-		}else if($rs_sorder[0]['iSOStatus'] == 2){
-			$vSOStatus = '<span class="btn btn-info">Review</span>';
-		}else if($rs_sorder[0]['iSOStatus'] == 3){
-			$vSOStatus = '<span class="btn btn-success">Approved</span>';
-		}
+            $vSOStatus = '<span class="btn btn-warning">Created</span>';
+        }else if($rs_sorder[0]['iSOStatus'] == 2){
+            $vSOStatus = '<span class="btn btn-primary">In Progress</span>';
+        }else if($rs_sorder[0]['iSOStatus'] == 3){
+            $vSOStatus = '<span class="btn btn-danger">Delayed</span>';
+        }else if($rs_sorder[0]['iSOStatus'] == 4){
+            $vSOStatus = '<span class="btn btn-warning">Cancelled</span>';
+        }else if($rs_sorder[0]['iSOStatus'] == 5){
+            $vSOStatus = '<span class="btn btn-info">Final Review</span>';
+        }else if($rs_sorder[0]['iSOStatus'] == 6){
+            $vSOStatus = '<span class="btn btn-dark">Carrier Approved</span>';
+        }else if($rs_sorder[0]['iSOStatus'] == 7){
+            $vSOStatus = '<span class="btn btn-success">Final Approved</span>';
+        }
 
 		$vCStatus = "";
 		if($rs_sorder[0]['iCStatus'] == 1){
 			$vCStatus = '<span class="btn btn-warning">Created</span>';
 		}else if($rs_sorder[0]['iCStatus'] == 2){
 			$vCStatus = '<span class="btn btn-primary">In-Progress</span>';
+		}else if($rs_sorder[0]['iCStatus'] == 3){
+			$vCStatus = '<span class="btn btn-danger">Delayed</span>';
 		}else if($rs_sorder[0]['iCStatus'] == 4){
 			$vCStatus = '<span class="btn btn-success">On-Net</span>';
 		}

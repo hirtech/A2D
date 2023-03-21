@@ -253,3 +253,64 @@ function getNRCMRCValue(iService1){
         }
     });
 }
+
+
+function addSOValidation(iSOStatus){
+
+    if(iSOStatus == 6) {
+
+        if(sess_vCompanyAccessType != "Carrier"){
+            toastr.error("\"Carrier Approved\" status can be only selected by Carrier Users.");
+        }else {
+            swal({
+                title: "Are you sure you want to change the service order status as \"Carrier Approved\" ?",
+                text: "",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: 'confirm btn btn-lg btn-danger',
+                cancelButtonClass : 'cancel btn btn-lg btn-default',
+                confirmButtonText: 'Yes!',
+                cancelButtonText: "No, cancel plx!",
+                closeOnConfirm: false,
+                closeOnCancel: true,
+                },
+                function(isConfirm) {
+                    if (isConfirm) {
+                        $("#iSOStatus").val(iSOStatus) 
+                        swal.close(); 
+                    } else {
+                        $("#iSOStatus").val("").trigger('change');
+                        swal.close();
+                    }
+                }
+            ); 
+        }
+    }else if(iSOStatus == 7) {
+        if(sess_iCompanyId != A2D_COMPANY_ID){
+            toastr.error("\"Final Approved\" status can be only selected by A2D Users.");
+        }else {
+            swal({
+                title: "Are you sure you want to change the service order status as \"Final Approved\" ?",
+                text: "",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: 'confirm btn btn-lg btn-danger',
+                cancelButtonClass : 'cancel btn btn-lg btn-default',
+                confirmButtonText: 'Yes!',
+                cancelButtonText: "No, cancel plx!",
+                closeOnConfirm: false,
+                closeOnCancel: true,
+                },
+                function(isConfirm) {
+                    if (isConfirm) {
+                        $("#iSOStatus").val(iSOStatus);
+                        swal.close(); 
+                    } else {
+                        $("#iSOStatus").val("").trigger('change');
+                        swal.close();
+                    }
+                }
+            ); 
+        }
+    }
+}

@@ -57,6 +57,7 @@ if ($request_type == "user_login")
         $join_fieds_arr[] = "access_group_mas.\"iAccessType\"";
         $join_fieds_arr[] = "user_details.\"iCompanyId\"";
         $join_fieds_arr[] = "company_mas.\"vCompanyName\"";
+        $join_fieds_arr[] = "company_mas.\"vAccessType\" as \"vCompanyAccessType\"";
         $join_arr[] = "LEFT JOIN user_details ON user_mas.\"iUserId\" = user_details.\"iUserId\"";
         $join_arr[] = "LEFT JOIN company_mas ON user_details.\"iCompanyId\" = company_mas.\"iCompanyId\"";
         $join_arr[] = "LEFT JOIN access_group_mas ON user_mas.\"iAGroupId\" = access_group_mas.\"iAGroupId\"";
@@ -77,6 +78,7 @@ if ($request_type == "user_login")
                 $last_name = $result[0]["vLastName"];
                 $iCompanyId = $result[0]["iCompanyId"];
                 $vCompanyName = $result[0]["vCompanyName"];
+                $vCompanyAccessType = $result[0]["vCompanyAccessType"];
                 $vImage = $result[0]["vImage"];
                 $iAGroupId = $result[0]["iAGroupId"];
                 $iAccessType = $result[0]["iAccessType"];
@@ -167,6 +169,7 @@ if ($request_type == "user_login")
                     "iAccessType" => $iAccessType,
                     "iCompanyId" => $iCompanyId,
                     "vCompanyName" => $vCompanyName,
+                    "vCompanyAccessType" => $vCompanyAccessType,
                     "vName" => $vName,
                     "vUsername" => $vUsername,
                     "iStatus" => $iStatus,
