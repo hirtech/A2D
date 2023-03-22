@@ -1039,9 +1039,22 @@ if ($request_type == "dashboard_glance") {
                 $vSOStatus = 'In-Review';
                 $color_class = 'text-warning';
             }else if($rs_sorder[$i]['iSOStatus'] == 3){
-                $vSOStatus = 'Approved';
+                $vSOStatus = 'Delayed';
+                $color_class = 'text-danger';
+            }else if($rs_sorder[$i]['iSOStatus'] == 4){
+                $vSOStatus = 'Cancelled';
+                $color_class = 'text-warning';
+            }else if($rs_sorder[$i]['iSOStatus'] == 5){
+                $vSOStatus = 'Final Review';
+                $color_class = 'text-info';
+            }else if($rs_sorder[$i]['iSOStatus'] == 6){
+                $vSOStatus = 'Carrier Approved';
+                $color_class = 'text-dark';
+            }else if($rs_sorder[$i]['iSOStatus'] == 7){
+                $vSOStatus = 'Final Approved';
                 $color_class = 'text-success';
             }
+
             $soarr[$i]['id'] = $rs_sorder[$i]['iServiceOrderId'];
             $soarr[$i]['vPremise'] = $rs_sorder[$i]['iPremiseId'].' ('.$rs_sorder[$i]['vPremiseName'].'; '.$rs_sorder[$i]['vPremiseType'].')';
             $soarr[$i]['vCarrier'] = $rs_sorder[$i]['vCompanyName'];
