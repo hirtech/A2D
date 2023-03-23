@@ -135,41 +135,38 @@
 					                            </div>
 					                            <div class="card-body">
 					                                <dl class="row mb-0 redial-line-height-2_5">
-					                                    <dt class="col-sm-5">vAddress1:</dt>
+					                                    <dt class="col-sm-5">Number:</dt>
 					                                    <dd class="col-sm-7 vAddress1">{$rs_site[0].vAddress1}</dd>
 
-					                                    <dt class="col-sm-5">vStreet:</dt>
+					                                    <dt class="col-sm-5">Street:</dt>
 					                                    <dd class="col-sm-7 vStreet">{$rs_site[0].vStreet}</dd>
 
-					                                    <dt class="col-sm-5">iZipcode:</dt>
-					                                    <dd class="col-sm-7 iZipcode">{$rs_site[0].iZipcode}</dd>
+					                                    <dt class="col-sm-5">Zipcode:</dt>
+					                                    <dd class="col-sm-7 iZipcode">{$rs_site[0].vZipcode}</dd>
 
-					                                    <dt class="col-sm-5">iCountyId:</dt>
-					                                    <dd class="col-sm-7 iCountyId">{$rs_site[0].iCountyId}</dd>
+					                                    <dt class="col-sm-5">County:</dt>
+					                                    <dd class="col-sm-7 iCountyId">{$rs_site[0].vCounty}</dd>
 
-					                                    <dt class="col-sm-5">iStateId:</dt>
-					                                    <dd class="col-sm-7 iStateId">{$rs_site[0].iStateId}</dd>
+					                                    <dt class="col-sm-5">State:</dt>
+					                                    <dd class="col-sm-7 iStateId">{$rs_site[0].vState}</dd>
 
-					                                    <dt class="col-sm-5">iCityId:</dt>
-					                                    <dd class="col-sm-7 iCityId">{$rs_site[0].iCityId}</dd>
+					                                    <dt class="col-sm-5">City:</dt>
+					                                    <dd class="col-sm-7 iCityId">{$rs_site[0].vCity}</dd>
 
-					                                    <dt class="col-sm-5">iZoneId:</dt>
-					                                    <dd class="col-sm-7 iZoneId">{$rs_site[0].iZoneId}</dd>
+					                                    <dt class="col-sm-5">Fiber Zone:</dt>
+					                                    <dd class="col-sm-7 iZoneId">{$rs_site[0].vZoneName}</dd>
 
-					                                    <dt class="col-sm-5">vLatitude:</dt>
+					                                    <dt class="col-sm-5">Latitude:</dt>
 					                                    <dd class="col-sm-7 vLatitude">{$rs_site[0].vLatitude}</dd>
 
-					                                    <dt class="col-sm-5">vLongitude:</dt>
+					                                    <dt class="col-sm-5">Longitude:</dt>
 					                                    <dd class="col-sm-7 vLongitude">{$rs_site[0].vLongitude}</dd>
 
-					                                    <dt class="col-sm-5 {if $rs_site[0].vNewLatitude == ''} d-none {/if} edit_address">vNewLatitude:</dt>
-					                                    <dd class="col-sm-7 {if $rs_site[0].vNewLatitude == ''} d-none {/if}  edit_address vNewLatitude">{$rs_site[0].vNewLatitude}</dd>
+					                                    <dt class="col-sm-5 {if $rs_site[0].vNewLatitude == ''} d-none {/if} edit_address">New Latitude:</dt>
+					                                    <dd class="col-sm-7 {if $rs_site[0].vNewLatitude == ''} d-none {/if}  edit_address New Latitude">{$rs_site[0].vNewLatitude}</dd>
 
-					                                    <dt class="col-sm-5 {if $rs_site[0].vNewLongitude == ''} d-none {/if}  edit_address">vNewLongitude:</dt>
+					                                    <dt class="col-sm-5 {if $rs_site[0].vNewLongitude == ''} d-none {/if}  edit_address">New Longitude:</dt>
 					                                    <dd class="col-sm-7 {if $rs_site[0].vNewLongitude == ''} d-none {/if} edit_address vNewLongitude">{$rs_site[0].vNewLongitude}</dd>
-
-					                                    <dt class="col-sm-5 {if $rs_site[0].iGeometryType neq 2} d-none {/if}  edit_address polyarea">Area:</dt>
-					                                    <dd class="col-sm-7 {if $rs_site[0].iGeometryType neq 2} d-none {/if} edit_address polyarea" id="polyarea"></dd>
 					                                </dl>
 					                            </div>
 					                        </div>

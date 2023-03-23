@@ -61,7 +61,7 @@ function fillInAddress() {
 					$('#vLatitude').val(data.lat);
 					$('#vLongitude').val(data.long);
 
-					$('.iZoneId').html(data.iZoneId);
+					$('.iZoneId').html(data.vZoneName);
 					$('.vLatitude').html(data.lat);
 					$('.vLongitude').html(data.long);
 				}
@@ -164,7 +164,7 @@ function fillInAddress() {
 								success: function(data){
 									if(data.iStateId){
 										$('#iStateId').val(data.iStateId);
-										$('.iStateId').html(data.iStateId);
+										$('.iStateId').html(data.vState);
 										
 									}
 								}
@@ -184,8 +184,8 @@ function fillInAddress() {
 										$('#iCountyId').val(data.iCountyId);
 										$('#iCityId').val(data.iCityId);
 
-										$('.iCountyId').html(data.iCountyId);
-										$('.iCityId').html(data.iCityId);
+										$('.iCountyId').html(data.vCounty);
+										$('.iCityId').html(data.vCity);
 									}
 								}
 							});
@@ -200,7 +200,7 @@ function fillInAddress() {
 								async: false,
 								success: function(data){
 									$('#iZipcode').val(data.iZipcode);
-									$('.iZipcode').html(data.iZipcode);
+									$('.iZipcode').html(data.vZipcode);
 								}
 						    });
 						}

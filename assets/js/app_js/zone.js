@@ -50,7 +50,7 @@ var listPage = function(){
                         "dataType": 'json',
                         "type": "POST",
                         "url": sSource+'&'+$.param(aoData),
-                        "data": $("#frmlist").serializeArray(),
+                        "data": $(".zone_search_form").serializeArray(),
                         "success": fnCallback
                     });
                 },
@@ -85,7 +85,7 @@ var listPage = function(){
 
 
 $('#Search').click(function (){
-     gridtable.ajax.reload();
+    gridtable.ajax.reload();
     return false;
 });
 
@@ -138,7 +138,7 @@ function exportExcelSheet(){
     $.ajax({
         type: "POST",
         url: site_url+"zone/zone_list&mode=Excel",
-        data: $("#frmlist").serializeArray(),
+        data: $(".zone_search_form").serializeArray(),
         success: function(data){
             res = JSON.parse(data);
             isError = res['isError'];
@@ -151,3 +151,36 @@ function exportExcelSheet(){
     });
     return false;
 }
+
+
+function getDropdown(vOptions) {
+    if(vOptions == "iNetworkId"){
+        reset_all_fields();
+        $('#network_dd').show();
+        $('#status_dd').hide();
+    }else if(vOptions == "iStatus"){
+        reset_all_fields();
+        $('#status_dd').show();
+        $('#network_dd').hide();
+    }
+}
+
+function reset_all_fields(){
+  $('#networkId').val('');
+  $('#status').val('');
+}
+
+$('#AdvSearchSubmit').click(function () {
+    gridtable.ajax.reload();
+    return false;
+});
+
+$('#AdvSearchReset').click(function () {
+    $('#iZoneId').val("");
+    $('#vZoneNameFilterOpDD').val("Contains");
+    $('#vZoneName').val("");
+    $('#isFile').val("");
+   
+    gridtable.ajax.reload();
+    return false;
+});

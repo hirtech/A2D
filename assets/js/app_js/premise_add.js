@@ -171,486 +171,70 @@ function displayMap(iGeometryType, mode) {
             var vLongitude = parseFloat($("#vLongitude").val());
         }
         
-        if(iGeometryType == '1') {
-            //alert('1111');
-            $("#PointMap").show();
-            $("#PolygonMap").hide();
-            $("#PolylineMap").hide();
-            (function ($) {
-                "use strict";
-                /////////////////////////// Marker ///////////////////////////
-                function initMap() {
-                    var uluru = {lat: vLatitude, lng: vLongitude};
-                    // The map, centered at Uluru
-                    var map = new google.maps.Map(document.getElementById('PointMap'), {zoom: 17, center: uluru, mapTypeId: 'satellite'});
-                    // The marker, positioned at Uluru
-                    var marker = new google.maps.Marker({position: uluru, map: map, draggable: true});
+        //alert('1111');
+        $("#PointMap").show();
+        (function ($) {
+            "use strict";
+            /////////////////////////// Marker ///////////////////////////
+            function initMap() {
+                var uluru = {lat: vLatitude, lng: vLongitude};
+                // The map, centered at Uluru
+                var map = new google.maps.Map(document.getElementById('PointMap'), {zoom: 17, center: uluru, mapTypeId: 'satellite'});
+                // The marker, positioned at Uluru
+                var marker = new google.maps.Marker({position: uluru, map: map, draggable: true});
 
-                    google.maps.event.addListener(marker, 'dragend', function(marker) {
-                        var latLng = marker.latLng;
-                        //alert(latLng)
-                        var lat = latLng.lat();
-                        var lng = latLng.lng();
+                google.maps.event.addListener(marker, 'dragend', function(marker) {
+                    var latLng = marker.latLng;
+                    //alert(latLng)
+                    var lat = latLng.lat();
+                    var lng = latLng.lng();
 
-                        $(".edit_address").removeClass('d-none');
-                        $('#vNewLatitude').val(lat);
-                        $('#vNewLongitude').val(lng);
-                        $('.vNewLatitude').html(lat);
-                        $('.vNewLongitude').html(lng);
+                    $(".edit_address").removeClass('d-none');
+                    $('#vNewLatitude').val(lat);
+                    $('#vNewLongitude').val(lng);
+                    $('.vNewLatitude').html(lat);
+                    $('.vNewLongitude').html(lng);
 
-                        $(".polyarea").addClass('d-none');
-                    });
-                }
-                initMap();
-            })(jQuery);
-        }
-        /*else if(iGeometryType == '2') {
-            $("#PointMap").hide();
-            $("#PolygonMap").show();
-            $("#PolylineMap").hide();
-            //alert(mode)
-            var pathOldArr = [];
-            if(mode == 'Update' && $("#vPolygonLatLong").val() != ""){
-                var vPolygonLatLong =  $("#vPolygonLatLong").val();
-                var str1 = vPolygonLatLong.replace('POLYGON((','');
-                var str2 = str1.replace('))','');
-                var str3 = str2.split(",");
-                if(str3.length > 0){
-                    for(var i = 0; i<str3.length; i++){
-                        var str = str3[i].split(" ");
-                        pathOldArr.push({lat: parseFloat(str[1]), lng: parseFloat(str[0])});
-                    }
-                }
-                (function ($) {
-                    "use strict";
-                    function initMapEdit1() {
-                        var uluru = {lat: vLatitude, lng: vLongitude};
-                        var map = new google.maps.Map(document.getElementById('PolygonMap'), {
-                           zoom: 17,
-                           center: uluru,
-                           mapTypeId: 'satellite'
-                        });
-                        var PolytoAdd = new google.maps.Polygon({
-                          paths: pathOldArr,
-                          strokeColor: '#FF0000',
-                          strokeOpacity: 0.8,
-                          strokeWeight: 2,
-                          fillColor: '#FF0000',
-                          fillOpacity: 0.35,
-                          editable: true
-                        });
-                        PolytoAdd.setMap(map);
-
-                        var polyArea = google.maps.geometry.spherical.computeArea(PolytoAdd.getPath());
-                        var polyacres = (polyArea.toFixed(2)) * parseFloat(0.000247);
-                        $("#polyarea").html((polyacres.toFixed(2))+" acre");
-                        $(".polyarea").removeClass('d-none');
-   
-                        
-                        if (PolytoAdd) {  
-                            //setPolygonCordinates(); 
-                            google.maps.event.addListener(PolytoAdd.getPath(), 'set_at', function () {
-                                newPolygonArr = new Array();
-                                newPolygonArr.length = 0;
-                                var curLatLng = PolytoAdd.getPath().getArray();
-
-                                var polyArea = google.maps.geometry.spherical.computeArea(PolytoAdd.getPath());
-                                 var polyacres = (polyArea.toFixed(2)) * parseFloat(0.000247);
-                                $("#polyarea").html((polyacres.toFixed(2))+" acre");
-                                $(".polyarea").removeClass('d-none');
-                                //alert(JSON.stringify(curLatLng))
-                                newPolygonArr = curLatLng;
-                                setPolygonCordinates();
-                            });
-
-                            google.maps.event.addListener(PolytoAdd.getPath(), 'insert_at', function () {
-                                //alert("insert_at");
-                                newPolygonArr = new Array();
-                                newPolygonArr.length = 0;
-                                var curLatLng = PolytoAdd.getPath().getArray();
-
-                                var polyArea = google.maps.geometry.spherical.computeArea(PolytoAdd.getPath());
-                                 var polyacres = (polyArea.toFixed(2)) * parseFloat(0.000247);
-                                $("#polyarea").html((polyacres.toFixed(2))+" acre");
-                                $(".polyarea").removeClass('d-none');
-                                //alert(JSON.stringify(curLatLng))
-                                newPolygonArr = curLatLng;
-                                setPolygonCordinates();
-                            });
-
-                            google.maps.event.addListener(PolytoAdd.getPath(), 'remove_at', function () {
-                                //alert("remove_at");
-                                newPolygonArr = new Array();
-                                newPolygonArr.length = 0;
-                                var curLatLng = PolytoAdd.getPath().getArray();
-                                
-                                var polyArea = google.maps.geometry.spherical.computeArea(PolytoAdd.getPath());
-                                 var polyacres = (polyArea.toFixed(2)) * parseFloat(0.000247);
-                                $("#polyarea").html((polyacres.toFixed(2))+" acre");
-                                $(".polyarea").removeClass('d-none');
-                                //alert(JSON.stringify(curLatLng))
-                                newPolygonArr = curLatLng;
-                                setPolygonCordinates();
-                            });
-                        }
-                    }
-                    initMapEdit1();
-                })(jQuery);
-            }else {
-                (function ($) {
-                    "use strict";
-                    function initMap1() {
-                        var uluru = {lat: vLatitude, lng: vLongitude};
-                        var map = new google.maps.Map(document.getElementById('PolygonMap'), {
-                           zoom: 17,
-                           center: uluru,
-                           mapTypeId: 'satellite'
-                        });
-
-                        var pathArr = [];
-                        var sub = 0.0005;
-                                            
-                        var firstLat , firstLng;
-                        firstLat = (parseFloat(vLatitude));
-                        firstLng = (parseFloat(vLongitude));
-                        pathArr.push({lat: firstLat, lng: firstLng})
-                        for (var i = 0; i<1; i++){
-                            pathArr.push({lat: (parseFloat(vLatitude) - sub),lng: (parseFloat(vLongitude)-sub)});
-                            sub = sub + 0.001;
-                        }
-
-                        var add = 0.001;
-                        for (var i =0; i<1; i++){
-                            pathArr.push({lat: (parseFloat(vLatitude)),lng: (parseFloat(vLongitude)-add)});
-                            add = add + 0.001;
-                        }
-
-                        pathArr.push({lat: firstLat, lng: firstLng})
-                        //alert(JSON.stringify(pathArr))
-                        // Construct the polygon.
-
-                        var PolytoAdd = new google.maps.Polygon({
-                          paths: pathArr,
-                          strokeColor: '#FF0000',
-                          strokeOpacity: 0.8,
-                          strokeWeight: 2,
-                          fillColor: '#FF0000',
-                          fillOpacity: 0.35,
-                          editable: true
-                        });
-
-                        var polyArea = google.maps.geometry.spherical.computeArea(PolytoAdd.getPath());
-                        var polyacres = (polyArea.toFixed(2) )* parseFloat(0.000247);
-                        $("#polyarea").html((polyacres.toFixed(2))+" acre");
-                        $(".polyarea").removeClass('d-none');
-                        
-                        PolytoAdd.setMap(map);
-
-                        //newPolygonArr = pathArr;
-                        //alert(JSON.stringify(newPolygonArr))
-                        var polygon_str = '';
-                        if(pathArr.length > 0){
-                            polygon_str += 'POLYGON((';
-                            for(var p = 0; p<pathArr.length; p++){
-                                polygon_str += pathArr[p].lng+ " " + pathArr[p].lat;
-                                if(p<(pathArr.length-1)){
-                                    polygon_str += ',';
-                                }
-                            }
-                            polygon_str += '))';
-                        }
-                        $("#vPolygonLatLong").val(polygon_str);
-                        
-                        if (PolytoAdd) {  
-                            //setPolygonCordinates(); 
-                            google.maps.event.addListener(PolytoAdd.getPath(), 'set_at', function () {
-                                newPolygonArr = new Array();
-                                newPolygonArr.length = 0;
-                                var curLatLng = PolytoAdd.getPath().getArray();
-
-                                var polyArea = google.maps.geometry.spherical.computeArea(PolytoAdd.getPath());
-                                 var polyacres = (polyArea.toFixed(2)) * parseFloat(0.000247);
-                                $("#polyarea").html((polyacres.toFixed(2))+" acre");
-                                $(".polyarea").removeClass('d-none');
-
-                                //alert(JSON.stringify(curLatLng))
-                                newPolygonArr = curLatLng;
-                                setPolygonCordinates();
-                            });
-
-                            google.maps.event.addListener(PolytoAdd.getPath(), 'insert_at', function () {
-                                //alert("insert_at");
-                                newPolygonArr = new Array();
-                                newPolygonArr.length = 0;
-                                var curLatLng = PolytoAdd.getPath().getArray();
-
-                                var polyArea = google.maps.geometry.spherical.computeArea(PolytoAdd.getPath());
-                                 var polyacres = (polyArea.toFixed(2)) * parseFloat(0.000247);
-                                $("#polyarea").html((polyacres.toFixed(2))+" acre");
-                                $(".polyarea").removeClass('d-none');
-
-                                //alert(JSON.stringify(curLatLng))
-                                newPolygonArr = curLatLng;
-                                setPolygonCordinates();
-                            });
-
-                            google.maps.event.addListener(PolytoAdd.getPath(), 'remove_at', function () {
-                                //alert("remove_at");
-                                newPolygonArr = new Array();
-                                newPolygonArr.length = 0;
-                                var curLatLng = PolytoAdd.getPath().getArray();
-                                var polyArea = google.maps.geometry.spherical.computeArea(PolytoAdd.getPath());
-                                 var polyacres = (polyArea.toFixed(2)) * parseFloat(0.000247);
-                                $("#polyarea").html((polyacres.toFixed(2))+" acre");
-                                $(".polyarea").removeClass('d-none');
-                                //alert(JSON.stringify(curLatLng))
-                                newPolygonArr = curLatLng;
-                                setPolygonCordinates();
-                            });
-                        }
-
-                    }
-                    initMap1();
-                })(jQuery);
-            }            
-        }else if(iGeometryType == '3') {
-            $("#PointMap").hide();
-            $("#PolygonMap").hide();
-            $("#PolylineMap").show();
-            $(".polyarea").addClass('d-none');
-            var pathOldArr = [];
-            if(mode == 'Update'){
-                var vPolyLineLatLong =  $("#vPolyLineLatLong").val();
-                var str1 = vPolyLineLatLong.replace('LINESTRING(','');
-                var str2 = str1.replace(')','');
-                var str3 = str2.split(",");
-                
-                if(str3.length > 0){
-                    for(var i = 0; i<str3.length; i++){
-                        var str = str3[i].split(" ");
-                        pathOldArr.push({lat: parseFloat(str[1]), lng: parseFloat(str[0])});
-                    }
-                }
-
-                (function ($) {
-                    "use strict";
-                    function initMapEdit2() {
-                        var uluru = {lat: vLatitude, lng: vLongitude};
-                        var map = new google.maps.Map(document.getElementById('PolylineMap'), {
-                           zoom: 17,
-                           center: uluru,
-                           mapTypeId: 'satellite'
-                        });
-                        var polyline = new google.maps.Polyline({
-                            path: pathOldArr,
-                            geodesic: true,
-                            strokeColor: '#FF0000',
-                            strokeOpacity: 1.0,
-                            strokeWeight: 2,
-                            editable: true
-                        });
-                        polyline.setMap(map);
-                        if (polyline) {  
-                            //setPolygonCordinates(); 
-                            google.maps.event.addListener(polyline.getPath(), 'set_at', function () {
-                                newPolylineArr = new Array();
-                                newPolylineArr.length = 0;
-                                var curLatLng = polyline.getPath().getArray();
-                                //alert(JSON.stringify(curLatLng))
-                                newPolylineArr = curLatLng;
-                                setPolylineCordinates();
-                            });
-
-                            google.maps.event.addListener(polyline.getPath(), 'insert_at', function () {
-                                //alert("insert_at");
-                                newPolylineArr = new Array();
-                                newPolylineArr.length = 0;
-                                var curLatLng = polyline.getPath().getArray();
-                                //alert(JSON.stringify(curLatLng))
-                                newPolylineArr = curLatLng;
-                                setPolylineCordinates();
-                            });
-
-                            google.maps.event.addListener(polyline.getPath(), 'remove_at', function () {
-                                //alert("remove_at");
-                                newPolylineArr = new Array();
-                                newPolylineArr.length = 0;
-                                var curLatLng = polyline.getPath().getArray();
-                                //alert(JSON.stringify(curLatLng))
-                                newPolylineArr = curLatLng;
-                                setPolylineCordinates();
-                            });
-                        }
-
-                    }
-                    initMapEdit2();
-                })(jQuery);
-            }else {
-                (function ($) {
-                    "use strict";
-                    function initMap2() {
-                        var uluru = {lat: vLatitude, lng: vLongitude};
-                        var map = new google.maps.Map(document.getElementById('PolylineMap'), {
-                           zoom: 17,
-                           center: uluru,
-                           mapTypeId: 'satellite'
-                        });
-
-                        var pathArr = [];
-                        pathArr.push({lat: (parseFloat(vLatitude)),lng: (parseFloat(vLongitude))});
-                        var sub = 0.0005;
-                        for (var i = 0; i<1; i++){
-                            pathArr.push({lat: (parseFloat(vLatitude) - sub),lng: (parseFloat(vLongitude) - sub)});
-                            sub = sub + 0.001;
-                        }
-
-                        var polyline_str = '';
-                        if(pathArr.length > 0){
-                            polyline_str += 'LINESTRING(';
-                            for(var p = 0; p<pathArr.length; p++){
-                                polyline_str += pathArr[p].lng+ " " + pathArr[p].lat;
-                                if(p<(pathArr.length-1)){
-                                    polyline_str += ',';
-                                }
-                            }
-                            polyline_str += ')';
-                        }
-
-                        $("#vPolyLineLatLong").val(polyline_str);
-                        // Construct the Polyline.
-                        var polyline = new google.maps.Polyline({
-                            path: pathArr,
-                            geodesic: true,
-                            strokeColor: '#FF0000',
-                            strokeOpacity: 1.0,
-                            strokeWeight: 2,
-                            editable: true
-                        });
-                        polyline.setMap(map);
-                        if (polyline) {  
-                            //setPolygonCordinates(); 
-                            google.maps.event.addListener(polyline.getPath(), 'set_at', function () {
-                                newPolylineArr = new Array();
-                                newPolylineArr.length = 0;
-                                var curLatLng = polyline.getPath().getArray();
-                                //alert(JSON.stringify(curLatLng))
-                                newPolylineArr = curLatLng;
-                                setPolylineCordinates();
-                            });
-
-                            google.maps.event.addListener(polyline.getPath(), 'insert_at', function () {
-                                //alert("insert_at");
-                                newPolylineArr = new Array();
-                                newPolylineArr.length = 0;
-                                var curLatLng = polyline.getPath().getArray();
-                                //alert(JSON.stringify(curLatLng))
-                                newPolylineArr = curLatLng;
-                                setPolylineCordinates();
-                            });
-
-                            google.maps.event.addListener(polyline.getPath(), 'remove_at', function () {
-                                //alert("remove_at");
-                                newPolylineArr = new Array();
-                                newPolylineArr.length = 0;
-                                var curLatLng = polyline.getPath().getArray();
-                                //alert(JSON.stringify(curLatLng))
-                                newPolylineArr = curLatLng;
-                                setPolylineCordinates();
-                            });
-                        }
-                    }
-                    initMap2();
-                })(jQuery);
+                });
             }
-        }*/
+            initMap();
+        })(jQuery);
     }
 }
-
-function setPolygonCordinates(){
-    var polygon_str = '';
-    //alert(JSON.stringify(newPolygonArr))
-    //alert(newPolygonArr.length)
-    if(newPolygonArr.length > 0){
-        polygon_str += 'POLYGON((';
-        for(var p = 0; p<newPolygonArr.length; p++){
-            var str=newPolygonArr[p].toString();
-            var str1 = str.replace('(','');
-            var str2 = str1.replace(')','');
-            //alert(str2)
-            var arr = str2.split(", ");
-            polygon_str += arr[1]+ " " + arr[0];
-            if(p<(newPolygonArr.length-1)){
-                polygon_str += ',';
-            }
-        }
-        polygon_str += '))';
-    }
-    $("#vPolygonLatLong").val(polygon_str);
-}
-
-function setPolylineCordinates(){
-    var polyline_str = '';
-    //alert(JSON.stringify(newPolylineArr))
-    //alert(newPolygonArr.length)
-    if(newPolylineArr.length > 0){
-        polyline_str += 'LINESTRING(';
-        for(var p = 0; p<newPolylineArr.length; p++){
-            var str=newPolylineArr[p].toString();
-            var str1 = str.replace('(','');
-            var str2 = str1.replace(')','');
-            //alert(str2)
-            var arr = str2.split(", ");
-            polyline_str += arr[1]+ " " + arr[0];
-            if(p<(newPolylineArr.length-1)){
-                polyline_str += ',';
-            }
-        }
-        polyline_str += ')';
-    }
-    $("#vPolyLineLatLong").val(polyline_str);
-}
-/********************************************************/
 
 (function ($) {
+    var cluster = new Bloodhound({
+      datumTokenizer: function(d) { return d.tokens; },
+      queryTokenizer: Bloodhound.tokenizers.whitespace,
+      remote: {
+        url: site_url+'premise/edit&mode=searchContact',
+        replace: function(url, uriEncodedQuery) {
+            var newUrl = url + '&vContactName=' + uriEncodedQuery;
+            return newUrl;
+            },
+        filter: function(list) {
+            if(list==null)
+                return {};
+            else
+                return $.map(list, function(rawdata) { return { display: rawdata.display, id:rawdata.iCId , name:rawdata.name , phone : rawdata.phone }; });
+        } 
+      }      
+    });
     
-        var cluster = new Bloodhound({
-          datumTokenizer: function(d) { return d.tokens; },
-          queryTokenizer: Bloodhound.tokenizers.whitespace,
-          remote: {
-            url: site_url+'premise/edit&mode=searchContact',
-            replace: function(url, uriEncodedQuery) {
-                var newUrl = url + '&vContactName=' + uriEncodedQuery;
-                return newUrl;
-                },
-            filter: function(list) {
-                if(list==null)
-                    return {};
-                else
-                    return $.map(list, function(rawdata) { return { display: rawdata.display, id:rawdata.iCId , name:rawdata.name , phone : rawdata.phone }; });
-            } 
-          }      
-        });
-        
-        cluster.initialize();
-        
-        select = false;
-        $('#search_contact').typeahead({hint: false, highlight: true,minLength: 1 }, 
-        {
-            displayKey: 'display',
-            source: cluster.ttAdapter(),
-        })
-        .on('typeahead:selected', onClusteSelected)
-        .off('blur')
-        .blur(function() {
-            $(".tt-dropdown-menu").hide();
-        });
-       
- 
-
+    cluster.initialize();
+    
+    select = false;
+    $('#search_contact').typeahead({hint: false, highlight: true,minLength: 1 }, 
+    {
+        displayKey: 'display',
+        source: cluster.ttAdapter(),
+    })
+    .on('typeahead:selected', onClusteSelected)
+    .off('blur')
+    .blur(function() {
+        $(".tt-dropdown-menu").hide();
+    });
 })(jQuery);
-
-
-
 
 function onClusteSelected(e, datum){
      var tr_data = '<tr><td id="cont_name_'+datum['id']+'">' + datum['name']+'</td>';
@@ -664,7 +248,6 @@ function onClusteSelected(e, datum){
 }
 
 function editContact(contactId){
-
     if(contactId != ""){
         $.ajax({
             type: "POST",
@@ -702,9 +285,7 @@ function editContact(contactId){
                  $("#contact_modalbox").trigger('click');
             }
         });
-        
     }
-
 }
 
 function remove_contact_row(obj){

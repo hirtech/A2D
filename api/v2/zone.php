@@ -12,40 +12,54 @@ if($request_type == "zone_list"){
 
    if(!empty($RES_PARA)){
 
-        $iZoneId            = $RES_PARA['iZoneId'];
-        $vZoneName          = $RES_PARA['vZoneName'];
-        $vNetwork           = $RES_PARA['vNetwork'];
-        $iStatus            = $RES_PARA['iStatus'];
-        $page_length        = isset($RES_PARA['page_length']) ? trim($RES_PARA['page_length']) : "10";
-        $start              = isset($RES_PARA['start']) ? trim($RES_PARA['start']) : "0";
-        $sEcho              = $RES_PARA['sEcho'];
-        $display_order      = $RES_PARA['display_order'];
-        $dir                = $RES_PARA['dir'];
-        $order_by           = $RES_PARA['order_by'];
+        $iNetworkId             = $RES_PARA['iNetworkId'];
+        $iStatus                = $RES_PARA['iStatus'];
+
+        $iZoneId                = $RES_PARA['iZoneId'];
+        $vZoneNameFilterOpDD    = $RES_PARA['vZoneNameFilterOpDD'];
+        $vZoneName              = $RES_PARA['vZoneName'];
+        $isFile                 = $RES_PARA['isFile'];
+        $page_length            = isset($RES_PARA['page_length']) ? trim($RES_PARA['page_length']) : "10";
+        $start                  = isset($RES_PARA['start']) ? trim($RES_PARA['start']) : "0";
+        $sEcho                  = $RES_PARA['sEcho'];
+        $display_order          = $RES_PARA['display_order'];
+        $dir                    = $RES_PARA['dir'];
+        $order_by               = $RES_PARA['order_by'];
     }
     
+    if ($iNetworkId != "") {
+        $where_arr[] = 'zone."iNetworkId"='.$iNetworkId ;
+    }
+
+    if ($iStatus != "") {
+        $where_arr[] = 'zone."iStatus"='.$iStatus ;
+    }
+
     if ($iZoneId != "") {
-        $where_arr[] = '"iZoneId"='.$iZoneId ;
+        $where_arr[] = 'zone."iZoneId"='.$iZoneId ;
     }
 
     if ($vZoneName != "") {
-        $where_arr[] = "\"vZoneName\" ILIKE '" . $vZoneName . "%'";
-    }
-
-    if ($vNetwork != "") {
-        $where_arr[] = "network.\"vName\" ILIKE '" . $vNetwork . "%'";
-    }
-
-    if($iStatus != ""){
-
-        if(strtolower($iStatus) == "near" || strtolower($iStatus) == "near net"){
-            $where_arr[] = "zone.\"iStatus\" = '1'";
-        }else if(strtolower($iStatus) == "off" || strtolower($iStatus) == "off net"){
-            $where_arr[] = "zone.\"iStatus\" = '2'";
-        }else if(strtolower($iStatus) == "created"){
-            $where_arr[] = "zone.\"iStatus\" = '3'";
+        if ($vZoneNameFilterOpDD != "") {
+            if ($vZoneNameFilterOpDD == "Begins") {
+                $where_arr[] = 'zone."vZoneName" ILIKE \''.$vZoneName.'%\'';
+            } else if ($vZoneNameFilterOpDD == "Ends") {
+                $where_arr[] = 'zone."vZoneName" ILIKE \'%'.$vZoneName.'\'';
+            } else if ($vZoneNameFilterOpDD == "Contains") {
+                $where_arr[] = 'zone."vZoneName" ILIKE \'%'.$vZoneName.'%\'';
+            } else if ($vZoneNameFilterOpDD == "Exactly") {
+                $where_arr[] = 'zone."vZoneName" ILIKE \''.$vZoneName.'\'';
+            }
+        } else {
+            $where_arr[] = 'zone."vZoneName" ILIKE \''.$vZoneName.'%\'';
         }
-    } 
+    }
+
+    if ($isFile == "1") {
+        $where_arr[] = " zone.\"PShape\" IS NOT NULL AND zone.\"vFile\" IS NOT NULL";
+    }else if ($isFile == "0") {
+        $where_arr[] = " zone.\"PShape\" IS NULL AND zone.\"vFile\" IS NULL";
+    }
 
     switch ($display_order) {
         case "0":

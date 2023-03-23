@@ -131,15 +131,17 @@ if($request_type == "department_dropdown") {
     $vStateCode = $RES_PARA['vStateCode'];
     $jsonData = array();
 
-    $sql_state = "SELECT \"iStateId\" FROM state_mas WHERE \"vStateCode\" = '" . $vStateCode . "' Limit 1";
+    $sql_state = "SELECT * FROM state_mas WHERE \"vStateCode\" = '" . $vStateCode . "' Limit 1";
     $rs_state = $sqlObj->GetAll($sql_state);
 
     $iStateId = 0;
+    $vState = "---";
     if($rs_state){
         $iStateId = $rs_state[0]['iStateId'];
+        $vState = $rs_state[0]['vState'];
     }
 
-    $jsonData = array('iStateId' => $iStateId);
+    $jsonData = array('iStateId' => $iStateId, 'vState' => $vState);
 
     $rh = HTTPStatus(200);
     $code = 2000;
@@ -149,15 +151,17 @@ if($request_type == "department_dropdown") {
     $vZipcode = $RES_PARA['vZipcode'];
     $jsonData = array();
 
-    $sql = 'SELECT "iZipcode" FROM zipcode_mas WHERE zipcode_mas."vZipcode"=' . gen_allow_null_char($vZipcode) . ' LIMIT 1';
+    $sql = 'SELECT "iZipcode", "vZipcode" FROM zipcode_mas WHERE zipcode_mas."vZipcode"=' . gen_allow_null_char($vZipcode) . ' LIMIT 1';
     $rs = $sqlObj->GetAll($sql);
 
     $iZipcode = 0;
+    $vZipcode = "---";
     if($rs){
         $iZipcode = $rs[0]['iZipcode'];
+        $vZipcode = $rs[0]['vZipcode'];
     }
     
-    $jsonData = array('iZipcode' => $iZipcode);
+    $jsonData = array('iZipcode' => $iZipcode, 'vZipcode' => $vZipcode);
 
     $rh = HTTPStatus(200);
     $code = 2000;
@@ -168,31 +172,35 @@ if($request_type == "department_dropdown") {
     $vCounty = $RES_PARA['vCounty'];
     $jsonData = array();
 
-    $sql_city = "SELECT \"iCityId\" FROM city_mas WHERE \"vCity\" = '" . $vCity . "' Limit 1";
+    $sql_city = "SELECT * FROM city_mas WHERE \"vCity\" = '" . $vCity . "' Limit 1";
     $rs_city = $sqlObj->GetAll($sql_city);
 
     $iCityId = 0;
+    $vCity = "---";
     $iCountyId = 0;
+    $vCounty = "---";
     if($rs_city){
         $iCityId = $rs_city[0]['iCityId'];
+        $vCity = $rs_city[0]['vCity'];
     }/*else {
         $sql = 'INSERT INTO city_mas ("vCity") VALUES (' . gen_allow_null_char($vCity) . ')';
         $sqlObj->Execute($sql);
         $iCityId = $sqlObj->Insert_ID();
     }*/
 
-    $sql_county = "SELECT \"iCountyId\" FROM county_mas WHERE \"vCounty\" = '" . $vCounty . "' Limit 1";
+    $sql_county = "SELECT * FROM county_mas WHERE \"vCounty\" = '" . $vCounty . "' Limit 1";
     $rs_county = $sqlObj->GetAll($sql_county);
 
     if($rs_county){
         $iCountyId = $rs_county[0]['iCountyId'];
+        $vCounty = $rs_county[0]['vCounty'];
     }/*else {
         $sql = 'INSERT INTO county_mas ("vCounty") VALUES (' . gen_allow_null_char($vCounty) . ')';
         $sqlObj->Execute($sql);
         $iCountyId = $sqlObj->Insert_ID();
     }*/
 
-    $jsonData = array('iCityId' => $iCityId, 'iCountyId' => $iCountyId);
+    $jsonData = array('iCityId' => $iCityId, 'iCountyId' => $iCountyId, 'vCity' => $vCity, 'vCounty' => $vCounty);
 
     $rh = HTTPStatus(200);
     $code = 2000;

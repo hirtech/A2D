@@ -3,32 +3,14 @@
 include_once($site_path . "scripts/session_valid.php");
 
 # ----------- Access Rule Condition -----------
-per_hasModuleAccess("Premise", 'List');
-$access_group_var_delete = per_hasModuleAccess("Premise", 'Delete', 'N');
-$access_group_var_status = per_hasModuleAccess("Premise", 'Status', 'N');
 $access_group_var_add = per_hasModuleAccess("Premise", 'Add', 'N');
 $access_group_var_edit = per_hasModuleAccess("Premise", 'Edit', 'N');
 # ----------- Access Rule Condition -----------
 
-
 include_once($controller_path . "premise.inc.php");
-include_once($controller_path ."premise_type.inc.php");
-include_once($controller_path ."premise_sub_type.inc.php");
-include_once($controller_path . "premise_attribute.inc.php");
-include_once($controller_path."state.inc.php");
-include_once($controller_path."zone.inc.php");
-include_once($controller_path. "contact.inc.php");
-
 $SiteObj = new Site();
-$SiteTypeObj = new SiteType();
-$SiteSubTypeObj = new SiteSubType();
-$SiteAttribute = new SiteAttribute();
-$StateObj = new State();
-$ZoneObj = new Zone();
-$ContactObj = new Contact();
 
 $mode = (($_REQUEST['mode'] != "") ? $_REQUEST['mode'] : "Add");
-//include_once($site_path . "scripts/session_valid.php");
 $rs_site = array();
 $iSAttributeIdArr = array();
 if($mode == "Update") {
@@ -42,18 +24,53 @@ if($mode == "Update") {
     $join_fieds_arr[] = 'c."vCounty"';
     $join_fieds_arr[] = 'sm."vState"';
     $join_fieds_arr[] = 'cm."vCity"';
+    $join_fieds_arr[] = 'zm."vZipcode"';
+    $join_fieds_arr[] = 'z."vZoneName"';
     $join_arr[] = 'LEFT JOIN county_mas c on s."iCountyId" = c."iCountyId"';
     $join_arr[] = 'LEFT JOIN state_mas sm on s."iStateId" = sm."iStateId"';
     $join_arr[] = 'LEFT JOIN city_mas cm on s."iCityId" = cm."iCityId"';
+    $join_arr[] = 'LEFT JOIN zipcode_mas zm on s."iZipcode" = zm."iZipcode"';
+    $join_arr[] = 'LEFT JOIN zone z on s."iZoneId" = z."iZoneId"';
     $SiteObj->join_field = $join_fieds_arr;
     $SiteObj->join = $join_arr;
     $SiteObj->where = $where_arr;
     $SiteObj->param['limit'] = "LIMIT 1";
     $SiteObj->setClause();
     $rs_site = $SiteObj->recordset_list();
+	//echo "<pre>";print_r($rs_site);exit();
     if(!empty($rs_site)){
+
         // Premise Attribute dropdown
         $rs_site[0]['address'] = $rs_site[0]['vAddress1'].' '.$rs_site[0]['vStreet'].' '.$rs_site[0]['vCity'].', '.$rs_site[0]['vState'].' '.$rs_site[0]['vCounty'];
+
+        if($rs_site[0]['vAddress1'] == '')  {
+            $rs_site[0]['vAddress1'] = "---";
+        }
+
+        if($rs_site[0]['vStreet'] == '')  {
+            $rs_site[0]['vStreet'] = "---";
+        }
+
+        if($rs_site[0]['vCounty'] == '')  {
+            $rs_site[0]['vCounty'] = "---";
+        }
+
+        if($rs_site[0]['vState'] == '')  {
+            $rs_site[0]['vState'] = "---";
+        }
+
+        if($rs_site[0]['vCity'] == '')  {
+            $rs_site[0]['vCity'] = "---";
+        }
+
+        if($rs_site[0]['vZipcode'] == '')  {
+            $rs_site[0]['vZipcode'] = "---";
+        }
+
+        if($rs_site[0]['vZoneName'] == '')  {
+            $rs_site[0]['vZoneName'] = "---";
+        }
+
         $SiteObj->clear_variable();
         $where_arr = array();
         $join_fieds_arr = array();
@@ -150,7 +167,7 @@ if($mode == "Update") {
 
 	echo json_encode($rs_sstype);
 	hc_exit();
-} else if($mode == "searchContact"){
+}else if($mode == "searchContact"){
     $iCId = trim($_REQUEST['iCId']);
     $vContactName = trim($_REQUEST['vContactName']);
 
@@ -212,7 +229,6 @@ if($mode == "Update") {
     echo json_encode($jsonData);
     hc_exit();
 }
-
 
 //-----------------  Add Site using lat & lng ----------------------
 $GeoLocation = 0;
@@ -471,6 +487,5 @@ $smarty->assign("iSAttributeIdArr", $iSAttributeIdArr);
 $smarty->assign("rs_site_contact", $rs_site_contact);
 $smarty->assign("rs_site_doc", $rs_site_doc);
 $smarty->assign("access_group_var_edit", $access_group_var_edit);
-
 $smarty->assign("tabid",$_REQUEST['tabid']);
 ?>
