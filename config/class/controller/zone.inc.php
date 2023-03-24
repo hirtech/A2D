@@ -85,15 +85,13 @@ class Zone {
 		
 	}
 	
-	function delete_records(){
+	function delete_records($id){
 		global $sqlObj;
 		
-		$sql = "DELETE  FROM zone".$this->join_clause.$this->where_clause.$this->group_by_clause.$this->order_by_clause.$this->limit_clause;
-		//echo $sql;exit;
-		$sqlObj->Execute($sql);
-		$rs_db = Affected_Rows();
+		$sql_del = "DELETE FROM zone WHERE zone.\"iZoneId\" IN (".$id.")";
+		$rs_del = $sqlObj->Execute($sql_del);
 		
-		return $rs_db;
+		return $rs_del;
 	}
 	function action_records(){
 		
@@ -202,13 +200,14 @@ class Zone {
 
 		if($this->update_arr){
 			$iZoneId = $this->update_arr['iZoneId'];
-			$sql = 'SELECT "vFile" from zone where "iZoneId" = '.$iZoneId.' LIMIT 1';
+			$file_name = $this->update_arr['vFile'];
+			/*$sql = 'SELECT "vFile" from zone where "iZoneId" = '.$iZoneId.' LIMIT 1';
 			$rs = $sqlObj->GetAll($sql);
 			$file_name = '';
 			if(!empty($rs)){
 				$file_name = $rs[0]['vFile'];
-			}
-			$rs_db = "UPDATE zone SET \"vZoneName\"='".$this->update_arr['vZoneName']."', \"iNetworkId\"='".$this->update_arr['iNetworkId']."', \"iStatus\"='".$this->update_arr['iStatus']."',\"dModifiedDate\" = ".gen_allow_null_char(date_getSystemDateTime())."  WHERE \"iZoneId\"='".$this->update_arr['iZoneId']."'";
+			}*/
+			$rs_db = "UPDATE zone SET \"vZoneName\"='".$this->update_arr['vZoneName']."',\"vFile\"='".$this->update_arr['vFile']."', \"iNetworkId\"='".$this->update_arr['iNetworkId']."', \"iStatus\"='".$this->update_arr['iStatus']."',\"dModifiedDate\" = ".gen_allow_null_char(date_getSystemDateTime())."  WHERE \"iZoneId\"='".$this->update_arr['iZoneId']."'";
 			$sqlObj->Execute($rs_db);
 			$rs_db = $sqlObj->Affected_Rows();
 			if($rs_db){

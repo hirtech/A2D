@@ -190,10 +190,12 @@ if($request_type == "zone_list"){
     }
 }else if($request_type == "zone_edit"){
     if($RES_PARA['iZoneId'] > 0 || $RES_PARA != ""){
+
         $update_arr = array(
             "iZoneId"       => $RES_PARA['iZoneId'],
             "vZoneName"     => $RES_PARA['vZoneName'],
             "iNetworkId"    => $RES_PARA['iNetworkId'],
+            "vFile"         => $RES_PARA['vFile'],
             "iStatus"       => $RES_PARA['iStatus'],
         );
 

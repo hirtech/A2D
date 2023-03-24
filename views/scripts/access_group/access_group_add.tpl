@@ -31,7 +31,7 @@
                                 {/if}
                             </div>
                             <div class="form-row table-responsive" >
-                            	<table  class="display table dataTable table-striped table-bordered editable-table  table-hover sticky-header-table" width="100%" >
+                            	<table  class="display table dataTable table-striped table-bordered editable-table  table-hover layout-primary" width="100%" >
 									<thead>
 										<tr>
 											<th width="1%" class="text-center">#</th>

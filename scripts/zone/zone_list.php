@@ -205,13 +205,23 @@ if($mode == "List"){
     # -----------------------------------  
 }else if($mode == "Update"){
     $result =array();
+    $file_msg = "";
 
+    if(isset($_FILES["vFile"]['name']) && $_FILES["vFile"]['name'] != ''){
+        $file_arr = img_fileUpload("vFile", $zone_path, '', $valid_ext = array('kml', 'kmz'));
+        $file_name = $file_arr[0];
+        $file_msg =  $file_arr[1];
+    } else {
+        $file_name = $_POST['vFile_old'];
+    }
+    
     $arr_param = array(
-        'iZoneId'   => $_POST['iZoneId'],
+        'iZoneId'       => $_POST['iZoneId'],
         "vZoneName"     => $_POST['vZoneName'],
         "iNetworkId"    => $_POST['iNetworkId'],
-        "iStatus"   => $_POST['iStatus'],
-        "sessionId" => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
+        "vFile"         => $file_name,
+        "iStatus"       => $_POST['iStatus'],
+        "sessionId"     => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
     );
     //echo "<pre>";print_r(json_encode($arr_param));exit;
 
@@ -232,7 +242,7 @@ if($mode == "List"){
     curl_close($ch); 
     $result = json_decode($response, true); 
     if($result){
-        $result['msg'] = MSG_UPDATE;
+        $result['msg'] = MSG_UPDATE. " " .$file_msg;
         $result['error']= 0 ;
     }else{
         $result['msg'] = MSG_UPDATE_ERROR;
@@ -278,7 +288,7 @@ if($mode == "List"){
     echo json_encode($result_arr['result']);
     hc_exit();
     # -----------------------------------
-}else if($mode== "Excel"){
+}else if($mode == "Excel"){
     $arr_param = array();
 
     $vOptions = $_REQUEST['vOptions'];
@@ -390,6 +400,36 @@ if($mode == "List"){
 
    echo json_encode($result_arr);
    exit;
+}else if($mode == "update_zone_id_in_premise"){
+    $sql = "SELECT * FROM premise_mas order by \"iPremiseId\""; 
+    $rs = $sqlObj->GetAll($sql);
+    $ni = count($rs);
+    //echo"<pre>";print_r($rs);exit;
+    if($ni > 0){
+        for($i=0; $i<$ni; $i++) {
+            if($rs[$i]['vLongitude'] != '' && $rs[$i]['vLatitude'] != ''){
+                $long = number_format($rs[$i]['vLongitude'],6);
+                $lat = number_format($rs[$i]['vLatitude'],6);
+
+                $sql_zone = "SELECT zone.\"iZoneId\", zone.\"vZoneName\" FROM zone WHERE  St_Within(ST_GeometryFromText('POINT(".$long." ".$lat.")', 4326)::geometry, (zone.\"PShape\")::geometry)='t' ORDER BY zone.\"iZoneId\" DESC LIMIT 1"; 
+                $rs_zone = $sqlObj->GetAll($sql_zone);
+                $iZoneId = 0;
+                if($rs){
+                    $iZoneId = $rs_zone[0]['iZoneId'];
+                }
+
+                //echo "Premise Id === ".$rs[$i]['iPremiseId']."<br/>";
+                //echo "Zone Id === ".$iZoneId."<br/>";
+                
+                if($iZoneId > 0){
+                    $sql_update = 'UPDATE premise_mas set "iZoneId" =  '.gen_allow_null_int($iZoneId).' WHERE "iPremiseId" = '.$rs[$i]['iPremiseId'];
+                    //echo $sql_update."<hr/>";
+                    $sqlObj->Execute($sql_update);
+                }
+            }
+        }
+    }
+
 }
 
 ## --------------------------------

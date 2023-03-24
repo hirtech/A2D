@@ -15,7 +15,7 @@
     <div class="col-12 mt-3">
         <div class="card">
             <div class="card-header">                               
-               <h4 class="card-title">{$module_name} {$mode}</h4>
+               <h4 class="card-title">{$module_name} {$mode} </h4>
             </div>
             <div class="card-content">
                 <div class="card-body">
@@ -27,7 +27,7 @@
                             <div class="form-row">
                                 <div class="col-6">
                                     <div class="col-12 mb-3">
-                                        <label for="vZoneName">Fiber Zone Name  <span class="text-danger">*</span></label>
+                                        <label for="vZoneName">Fiber Zone Name <span class="text-danger">*</span></label>
                                         <input type="text" id="vZoneName" name="vZoneName" value="{$rs_data[0]['vZoneName']}" class="form-control" required>
                                         <div class="invalid-feedback"> Please enter name</div>
                                     </div>
@@ -39,7 +39,17 @@
                                         <div class="invalid-feedback"> Please upload fiber zone boundary map</div>
                                         &nbsp;&nbsp;<span class="text-danger"> [valid extension file : kml,kmz]</span>
                                     </div>
-                                    {elseif $mode eq 'Update' &&  $rs_data[0].file_url neq ''}
+                                    {/if}
+                                    {if $mode eq 'Update' && $sess_vCompanyAccessType eq 'Admin'}
+                                    <div class="col-12 mb-3">
+                                        <label for="vFile">Upload Fiber Zone Boundary Map <span class="text-danger"> *</span></label>
+                                             <input type="file" class="d-inline-flex form-control-file" id="vFile" name="vFile" {if $mode neq 'Update'} required {/if}>
+                                             <input type="hidden" name="vFile_old" id="vFile_old" value="{$rs_data[0]['vFile']}">
+                                        <div class="invalid-feedback"> Please upload fiber zone boundary map</div>
+                                        &nbsp;&nbsp;<span class="text-danger"> [valid extension file : kml,kmz]</span>
+                                    </div>
+                                    {/if}
+                                    {if $mode eq 'Update' &&  $rs_data[0].file_url neq ''}
                                     <div class="col-12 mb-3">
                                         <label >Fiber Zone Boundary Map</label>
                                         &nbsp;&nbsp;<a href="{$rs_data[0].file_url}" title="Download"><i class="fa fa-download"></i>&nbsp;&nbsp;Download</a>

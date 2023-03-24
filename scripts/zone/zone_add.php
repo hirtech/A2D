@@ -21,8 +21,12 @@ $access_group_var_edit = per_hasModuleAccess("Fiber Zone", 'Edit', 'N');
 include_once($controller_path . "zone.inc.php");
 include_once($controller_path . "network.inc.php");
 
+
 $ZoneObj = new Zone();
 $NetworkObj = new Network();
+
+$sess_vCompanyAccessType = $_SESSION["sess_vCompanyAccessType" . $admin_panel_session_suffix];
+
 
 if($mode == "Update") {
     $iZoneId = $_REQUEST['iZoneId'];
@@ -87,10 +91,9 @@ $module_title = "Fiber Zone";
 $smarty->assign("module_name", $module_name);
 $smarty->assign("module_title", $module_title);
 $smarty->assign("mode", $mode);
-$smarty->assign("GOOGLE_GEOCODE_API_KEY", $GOOGLE_GEOCODE_API_KEY);
 
 $smarty->assign("rs_data", $rs_data);
+$smarty->assign("sess_vCompanyAccessType", $sess_vCompanyAccessType);
 $smarty->assign("network_arr", $network_arr);
-
 
 ?>

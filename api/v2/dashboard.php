@@ -18,6 +18,10 @@ $EventObj = new Event();
 $ServiceTypeObj = new ServiceType();
 
 if ($request_type == "dashboard_glance") {
+
+    $iCompanyId = $RES_PARA['iCompanyId'];
+    $vCompanyAccessType = $RES_PARA['vCompanyAccessType'];
+
     $currentdate = date("Y-m-d");
     $yesterdate = date("Y-m-d", strtotime("-1 days"));
 
@@ -121,282 +125,14 @@ if ($request_type == "dashboard_glance") {
     $day_glanc_arr['events']['yesterday'] = (isset($rs_db_day[0]['ecount2'])) ? $rs_db_day[0]['ecount2'] : '0';
     $day_glanc_arr['events']['diff_ratio'] = $e_diff_rat;
 
+    //echo "<pre>";print_r($day_glanc_arr);exit;
     /*==================== Day Glance ====================*/
 
-    /*==================== Month Glance ====================*/
-    $month_where1 = 'date_trunc(\'month\', "dAddedDate") = date_trunc(\'month\',  (\'' . $currentdate . '\')::date)'; //current month
-    $month_where2 = 'date_trunc(\'month\', "dAddedDate") = date_trunc(\'month\', (\'' . $currentdate . '\')::date - interval \'1 month\') '; //previous month (last month)
-
-    //Trouble Tickets Count Differnce of current month and last month
-    $rs_db_month = $TroubleTicketObj->recordset_glance_data($month_where1, $month_where2);
-    $diff_ratio = ($rs_db_month[0]['ttcount1'] - $rs_db_month[0]['ttcount2']) / ($rs_db_month[0]['ttcount2'] * 100);
-    $diff_ratio = (is_nan($diff_ratio) == 1 || is_infinite($diff_ratio) == 1)?"0" : $diff_ratio;
-    //check curr_month >= last_month
-    if ($rs_db_month[0]['ttcount1'] >= $rs_db_month[0]['ttcount2']){
-        $tt_diff_rat = '<span class="text-success"><i class="fa fa-caret-up"></i> ' . round(abs($diff_ratio),2) . '%</span>';
-    }else{
-        $tt_diff_rat = '<span class="text-danger"><i class="fa fa-caret-down"></i> ' . round(abs($diff_ratio),2) . '%</span>';
-    }
-    $month_glanc_arr['trouble_ticket']['curr_month'] = (isset($rs_db_month[0]['ttcount1'])) ? $rs_db_month[0]['ttcount1'] : '0';
-    $month_glanc_arr['trouble_ticket']['last_month'] = (isset($rs_db_month[0]['ttcount2'])) ? $rs_db_month[0]['ttcount2'] : '0';
-    $month_glanc_arr['trouble_ticket']['diff_ratio'] = $tt_diff_rat;
-
-    //Maintenance Ticket Count Differnce of current month and last month
-    $rs_db_month = $MaintenanceTicketObj->recordset_glance_data($month_where1, $month_where2);
-    $diff_ratio = ($rs_db_month[0]['mtcount1'] - $rs_db_month[0]['mtcount2']) / ($rs_db_month[0]['mtcount2'] * 100);
-    $diff_ratio = (is_nan($diff_ratio) == 1 || is_infinite($diff_ratio) == 1)?"0" : $diff_ratio;
-    //check curr_month >= last_month
-    if ($rs_db_month[0]['mtcount1'] >= $rs_db_month[0]['mtcount2']){
-        $mt_diff_rat = '<span class="text-success"><i class="fa fa-caret-up"></i> ' . round(abs($diff_ratio),2) . '%</span>';
-    }else{
-        $mt_diff_rat = '<span class="text-danger"><i class="fa fa-caret-down"></i> ' . round(abs($diff_ratio),2) . '%</span>';
-    }
-    $month_glanc_arr['maintenance_ticket']['curr_month'] = (isset($rs_db_month[0]['mtcount1'])) ? $rs_db_month[0]['mtcount1'] : '0';
-    $month_glanc_arr['maintenance_ticket']['last_month'] = (isset($rs_db_month[0]['mtcount2'])) ? $rs_db_month[0]['mtcount2'] : '0';
-    $month_glanc_arr['maintenance_ticket']['diff_ratio'] = $mt_diff_rat;
-
-    //ServiceOrder Count Differnce of current month and last month
-    $rs_db_month = $ServiceOrderObj->recordset_glance_data($month_where1, $month_where2);
-    $diff_ratio = ($rs_db_month[0]['socount1'] - $rs_db_month[0]['socount2']) / ($rs_db_month[0]['socount2'] * 100);
-    $diff_ratio = (is_nan($diff_ratio) == 1 || is_infinite($diff_ratio) == 1)?"0" : $diff_ratio;
-    //check curr_month >= last_month
-    if ($rs_db_month[0]['socount1'] >= $rs_db_month[0]['socount2']){
-        $so_diff_rat = '<span class="text-success"><i class="fa fa-caret-up"></i> ' . round(abs($diff_ratio),2) . '%</span>';
-    }
-    else{
-        $so_diff_rat = '<span class="text-danger"><i class="fa fa-caret-down"></i> ' . round(abs($diff_ratio),2) . '%</span>';
-    }
-    $month_glanc_arr['service_order']['curr_month'] = (isset($rs_db_month[0]['socount1'])) ? $rs_db_month[0]['socount1'] : '0';
-    $month_glanc_arr['service_order']['last_month'] = (isset($rs_db_month[0]['socount2'])) ? $rs_db_month[0]['socount2'] : '0';
-    $month_glanc_arr['service_order']['diff_ratio'] = $so_diff_rat;
-
-    //Workorder Count Differnce of current month and last month
-    $rs_db_month = $WorkOrderObj->recordset_glance_data($month_where1, $month_where2);
-    $diff_ratio = ($rs_db_month[0]['wocount1'] - $rs_db_month[0]['wocount2']) / ($rs_db_month[0]['wocount2'] * 100);
-    $diff_ratio = (is_nan($diff_ratio) == 1 || is_infinite($diff_ratio) == 1)?"0" : $diff_ratio;
-    //check curr_month >= last_month
-    if ($rs_db_month[0]['wocount1'] >= $rs_db_month[0]['wocount2']){
-        $wo_diff_rat = '<span class="text-success"><i class="fa fa-caret-up"></i> ' . round(abs($diff_ratio),2) . '%</span>';
-    }else {
-        $wo_diff_rat = '<span class="text-danger"><i class="fa fa-caret-down"></i> ' . round(abs($diff_ratio),2) . '%</span>';
-    }
-    $month_glanc_arr['workorder']['curr_month'] = (isset($rs_db_month[0]['wocount1'])) ? $rs_db_month[0]['wocount1'] : '0';
-    $month_glanc_arr['workorder']['last_month'] = (isset($rs_db_month[0]['wocount2'])) ? $rs_db_month[0]['wocount2'] : '0';
-    $month_glanc_arr['workorder']['diff_ratio'] = $wo_diff_rat;
-
-    //FiberInquiry Count Differnce of current month and last month
-    $rs_db_month = $FiberInquiryObj->recordset_glance_data($month_where1, $month_where2);
-    $diff_ratio = ($rs_db_month[0]['ficount1'] - $rs_db_month[0]['ficount2']) / ($rs_db_month[0]['ficount2'] * 100);
-    $diff_ratio = (is_nan($diff_ratio) == 1 || is_infinite($diff_ratio) == 1)?"0" : $diff_ratio;
-    //check curr_month >= last_month
-    if ($rs_db_month[0]['ficount1'] >= $rs_db_month[0]['ficount2']){
-        $fi_diff_rat = '<span class="text-success"><i class="fa fa-caret-up"></i> ' . round(abs($diff_ratio),2) . '%</span>';
-    }else {
-        $fi_diff_rat = '<span class="text-danger"><i class="fa fa-caret-down"></i> ' . round(abs($diff_ratio),2) . '%</span>';
-    }
-    $month_glanc_arr['fiber_inquiry']['curr_month'] = (isset($rs_db_month[0]['ficount1'])) ? $rs_db_month[0]['ficount1'] : '0';
-    $month_glanc_arr['fiber_inquiry']['last_month'] = (isset($rs_db_month[0]['ficount2'])) ? $rs_db_month[0]['ficount2'] : '0';
-    $month_glanc_arr['fiber_inquiry']['diff_ratio'] = $fi_diff_rat;
-
-    //Event Count Differnce of current month and last month
-    $rs_db_month = $EventObj->recordset_glance_data($month_where1, $month_where2);
-    $diff_ratio = ($rs_db_month[0]['ecount1'] - $rs_db_month[0]['ecount2']) / ($rs_db_month[0]['ecount2'] * 100);
-    $diff_ratio = (is_nan($diff_ratio) == 1 || is_infinite($diff_ratio) == 1)?"0" : $diff_ratio;
-    //check curr_month >= last_month
-    if ($rs_db_month[0]['ecount1'] >= $rs_db_month[0]['ecount2']){
-        $e_diff_rat = '<span class="text-success"><i class="fa fa-caret-up"></i> ' . round(abs($diff_ratio),2) . '%</span>';
-    } else {
-        $e_diff_rat = '<span class="text-danger"><i class="fa fa-caret-down"></i> ' . round(abs($diff_ratio),2) . '%</span>';
-    }
-    $month_glanc_arr['events']['curr_month'] = (isset($rs_db_month[0]['ecount1'])) ? $rs_db_month[0]['ecount1'] : '0';
-    $month_glanc_arr['events']['last_month'] = (isset($rs_db_month[0]['ecount2'])) ? $rs_db_month[0]['ecount2'] : '0';
-    $month_glanc_arr['events']['diff_ratio'] = $e_diff_rat;
-    /*==================== Month Glance ====================*/
-
-    /*==================== Week Glance ====================*/
-    $week_where1 = ' ("dAddedDate"::date >= \'' . $currentweek_startdate . '\' and "dAddedDate"::date <= \'' . $currentdate . '\' )'; //current week
-    $week_where2 = '( "dAddedDate"::date <= \'' . $lastweek_startdate . '\' and "dAddedDate"::date >= \'' . $lastweek_enddate . '\' )'; //last week
-
-    //TroubleTicket Count Differnce of current week and last week
-    $rs_db_week = $TroubleTicketObj->recordset_glance_data($week_where1, $week_where2);
-    $diff_ratio = ($rs_db_week[0]['ttcount1'] - $rs_db_week[0]['ttcount2']) / ($rs_db_week[0]['ttcount2'] * 100);
-    $diff_ratio = (is_nan($diff_ratio) == 1 || is_infinite($diff_ratio) == 1)?"0" : $diff_ratio;
-    //check curr_week >= last_week
-    if ($rs_db_week[0]['ttcount1'] >= $rs_db_week[0]['ttcount2']){
-        $tt_diff_rat = '<span class="text-success"><i class="fa fa-caret-up"></i> ' . round(abs($diff_ratio),2) . '%</span>';
-    } else {
-        $tt_diff_rat = '<span class="text-danger"><i class="fa fa-caret-down"></i> ' . round(abs($diff_ratio),2) . '%</span>';
-    }
-    $week_glanc_arr['trouble_ticket']['curr_week'] = (isset($rs_db_week[0]['ttcount1'])) ? $rs_db_week[0]['ttcount1'] : '0';
-    $week_glanc_arr['trouble_ticket']['last_week'] = (isset($rs_db_week[0]['ttcount2'])) ? $rs_db_week[0]['ttcount2'] : '0';
-    $week_glanc_arr['trouble_ticket']['diff_ratio'] = $tt_diff_rat;
-
-    //MaintenanceTicket Count Differnce of current week and last week
-    $rs_db_week = $MaintenanceTicketObj->recordset_glance_data($week_where1, $week_where2);
-    $diff_ratio = ($rs_db_week[0]['mtcount1'] - $rs_db_week[0]['mtcount2']) / ($rs_db_week[0]['mtcount2'] * 100);
-    $diff_ratio = (is_nan($diff_ratio) == 1 || is_infinite($diff_ratio) == 1)?"0" : $diff_ratio;
-    //check curr_week >= last_week
-    if ($rs_db_week[0]['mtcount1'] >= $rs_db_week[0]['mtcount2']){
-        $mt_diff_rat = '<span class="text-success"><i class="fa fa-caret-up"></i> ' . round(abs($diff_ratio),2) . '%</span>';
-    } else {
-        $mt_diff_rat = '<span class="text-danger"><i class="fa fa-caret-down"></i> ' . round(abs($diff_ratio),2) . '%</span>';
-    }
-    $week_glanc_arr['maintenance_ticket']['curr_week'] = (isset($rs_db_week[0]['mtcount1'])) ? $rs_db_week[0]['mtcount1'] : '0';
-    $week_glanc_arr['maintenance_ticket']['last_week'] = (isset($rs_db_week[0]['mtcount2'])) ? $rs_db_week[0]['mtcount2'] : '0';
-    $week_glanc_arr['maintenance_ticket']['diff_ratio'] = $mt_diff_rat;
-
-    //ServiceOrder Count Differnce of current week and last week
-    $rs_db_week = $ServiceOrderObj->recordset_glance_data($week_where1, $week_where2);
-    $diff_ratio = ($rs_db_week[0]['socount1'] - $rs_db_week[0]['socount2']) / ($rs_db_week[0]['socount2'] * 100);
-    $diff_ratio = (is_nan($diff_ratio) == 1 || is_infinite($diff_ratio) == 1)?"0" : $diff_ratio;
-    //check curr_week >= last_week
-    if ($rs_db_week[0]['socount1'] >= $rs_db_week[0]['socount2']){
-        $so_diff_rat = '<span class="text-success"><i class="fa fa-caret-up"></i> ' . round(abs($diff_ratio),2) . '%</span>';
-    } else {
-        $so_diff_rat = '<span class="text-danger"><i class="fa fa-caret-down"></i> ' . round(abs($diff_ratio),2) . '%</span>';
-    }
-    $week_glanc_arr['service_order']['curr_week'] = (isset($rs_db_week[0]['socount1'])) ? $rs_db_week[0]['socount1'] : '0';
-    $week_glanc_arr['service_order']['last_week'] = (isset($rs_db_week[0]['socount2'])) ? $rs_db_week[0]['socount2'] : '0';
-    $week_glanc_arr['service_order']['diff_ratio'] = $so_diff_rat;
-
-    //Workorder Count Differnce of current week and last week
-    $rs_db_week = $WorkOrderObj->recordset_glance_data($week_where1, $week_where2);
-    $diff_ratio = ($rs_db_week[0]['wocount1'] - $rs_db_week[0]['wocount2']) / ($rs_db_week[0]['wocount2'] * 100);
-    $diff_ratio = (is_nan($diff_ratio) == 1 || is_infinite($diff_ratio) == 1)?"0" : $diff_ratio;
-    //check curr_week >= last_week
-    if ($rs_db_week[0]['wocount1'] >= $rs_db_week[0]['wocount2']){
-        $wo_diff_rat = '<span class="text-success"><i class="fa fa-caret-up"></i> ' . round(abs($diff_ratio),2) . '%</span>';
-    } else {
-        $wo_diff_rat = '<span class="text-danger"><i class="fa fa-caret-down"></i> ' . round(abs($diff_ratio),2) . '%</span>';
-    }
-    $week_glanc_arr['workorder']['curr_week'] = (isset($rs_db_week[0]['wocount1'])) ? $rs_db_week[0]['wocount1'] : '0';
-    $week_glanc_arr['workorder']['last_week'] = (isset($rs_db_week[0]['wocount2'])) ? $rs_db_week[0]['wocount2'] : '0';
-    $week_glanc_arr['workorder']['diff_ratio'] = $wo_diff_rat;
-
-    //FiberInquiry Count Differnce of current week and last week
-    $rs_db_week = $FiberInquiryObj->recordset_glance_data($week_where1, $week_where2);
-    $diff_ratio = ($rs_db_week[0]['ficount1'] - $rs_db_week[0]['ficount2']) / ($rs_db_week[0]['ficount2'] * 100);
-    $diff_ratio = (is_nan($diff_ratio) == 1 || is_infinite($diff_ratio) == 1)?"0" : $diff_ratio;
-    //check curr_week >= last_week
-    if ($rs_db_week[0]['ficount1'] >= $rs_db_week[0]['ficount2']){
-        $fi_diff_rat = '<span class="text-success"><i class="fa fa-caret-up"></i> ' . round(abs($diff_ratio),2) . '%</span>';
-    } else {
-        $fi_diff_rat = '<span class="text-danger"><i class="fa fa-caret-down"></i> ' . round(abs($diff_ratio),2) . '%</span>';
-    }
-    $week_glanc_arr['fiber_inquiry']['curr_week'] = (isset($rs_db_week[0]['ficount1'])) ? $rs_db_week[0]['ficount1'] : '0';
-    $week_glanc_arr['fiber_inquiry']['last_week'] = (isset($rs_db_week[0]['ficount2'])) ? $rs_db_week[0]['ficount2'] : '0';
-    $week_glanc_arr['fiber_inquiry']['diff_ratio'] = $fi_diff_rat;
-
-    //Event Count Differnce of current week and last week
-    $rs_db_week = $EventObj->recordset_glance_data($week_where1, $week_where2);
-    $diff_ratio = ($rs_db_week[0]['ecount1'] - $rs_db_week[0]['ecount2']) / ($rs_db_week[0]['ecount2'] * 100);
-    $diff_ratio = (is_nan($diff_ratio) == 1 || is_infinite($diff_ratio) == 1)?"0" : $diff_ratio;
-    //check curr_week >= last_week
-    if ($rs_db_week[0]['ecount1'] >= $rs_db_week[0]['ecount2']){
-        $e_diff_rat = '<span class="text-success"><i class="fa fa-caret-up"></i> ' . round(abs($diff_ratio),2) . '%</span>';
-    } else {
-        $e_diff_rat = '<span class="text-danger"><i class="fa fa-caret-down"></i> ' . round(abs($diff_ratio),2) . '%</span>';
-    }
-    $week_glanc_arr['events']['curr_week'] = (isset($rs_db_week[0]['ecount1'])) ? $rs_db_week[0]['ecount1'] : '0';
-    $week_glanc_arr['events']['last_week'] = (isset($rs_db_week[0]['ecount2'])) ? $rs_db_week[0]['ecount2'] : '0';
-    $week_glanc_arr['events']['diff_ratio'] = $e_diff_rat;
-
-    /*==================== Week Glance ====================*/
-
-    /*==================== Year Glance ====================*/
-    $year_where1 = 'date_trunc(\'year\', "dAddedDate")  = date_trunc(\'year\',  (\'' . $currentdate . '\')::date)'; //current year
-    $year_where2 = 'date_trunc(\'year\', "dAddedDate") = date_trunc(\'year\', (\'' . $currentdate . '\')::date - interval \'1 year\') '; //previous year (last_year)
-
-    //TroubleTicket Differnce of current year and previous year
-    $rs_db_year = $TroubleTicketObj->recordset_glance_data($year_where1, $year_where2);
-    $diff_ratio = ($rs_db_year[0]['ttcount1'] - $rs_db_year[0]['ttcount2']) / ($rs_db_year[0]['ttcount2'] * 100);
-    $diff_ratio = (is_nan($diff_ratio) == 1 || is_infinite($diff_ratio) == 1)?"0" : $diff_ratio;
-    //check curr_year >= last_year
-    if ($rs_db_year[0]['ttcount1'] >= $rs_db_year[0]['ttcount2']){
-        $tt_diff_rat = '<span class="text-success"><i class="fa fa-caret-up"></i> ' . round(abs($diff_ratio),2) . '%</span>';
-    } else {
-        $tt_diff_rat = '<span class="text-danger"><i class="fa fa-caret-down"></i> ' . round(abs($diff_ratio),2) . '%</span>';
-    }
-    $year_glanc_arr['trouble_ticket']['curr_year'] = (isset($rs_db_year[0]['ttcount1'])) ? $rs_db_year[0]['ttcount1'] : '0';
-    $year_glanc_arr['trouble_ticket']['last_year'] = (isset($rs_db_year[0]['ttcount2'])) ? $rs_db_year[0]['ttcount2'] : '0';
-    $year_glanc_arr['trouble_ticket']['diff_ratio'] = $tt_diff_rat;
-
-    //MaintenanceTicket Differnce of current year and previous year
-    $rs_db_year = $MaintenanceTicketObj->recordset_glance_data($year_where1, $year_where2);
-    $diff_ratio = ($rs_db_year[0]['mtcount1'] - $rs_db_year[0]['mtcount2']) / ($rs_db_year[0]['mtcount2'] * 100);
-    $diff_ratio = (is_nan($diff_ratio) == 1 || is_infinite($diff_ratio) == 1)?"0" : $diff_ratio;
-    //check curr_year >= last_year
-    if ($rs_db_year[0]['mtcount1'] >= $rs_db_year[0]['mtcount2']){
-        $mt_diff_rat = '<span class="text-success"><i class="fa fa-caret-up"></i> ' . round(abs($diff_ratio),2) . '%</span>';
-    } else {
-        $mt_diff_rat = '<span class="text-danger"><i class="fa fa-caret-down"></i> ' . round(abs($diff_ratio),2) . '%</span>';
-    }
-    $year_glanc_arr['maintenance_ticket']['curr_year'] = (isset($rs_db_year[0]['mtcount1'])) ? $rs_db_year[0]['mtcount1'] : '0';
-    $year_glanc_arr['maintenance_ticket']['last_year'] = (isset($rs_db_year[0]['mtcount2'])) ? $rs_db_year[0]['mtcount2'] : '0';
-    $year_glanc_arr['maintenance_ticket']['diff_ratio'] = $mt_diff_rat;
-
-    //ServiceOrder Differnce of current year and previous year
-    $rs_db_year = $ServiceOrderObj->recordset_glance_data($year_where1, $year_where2);
-    $diff_ratio = ($rs_db_year[0]['socount1'] - $rs_db_year[0]['socount2']) / ($rs_db_year[0]['socount2'] * 100);
-    $diff_ratio = (is_nan($diff_ratio) == 1 || is_infinite($diff_ratio) == 1)?"0" : $diff_ratio;
-    //check curr_year >= last_year
-    if ($rs_db_year[0]['socount1'] >= $rs_db_year[0]['socount2']){
-        $so_diff_rat = '<span class="text-success"><i class="fa fa-caret-up"></i> ' . round(abs($diff_ratio),2) . '%</span>';
-    } else {
-        $so_diff_rat = '<span class="text-danger"><i class="fa fa-caret-down"></i> ' . round(abs($diff_ratio),2) . '%</span>';
-    }
-    $year_glanc_arr['service_order']['curr_year'] = (isset($rs_db_year[0]['socount1'])) ? $rs_db_year[0]['socount1'] : '0';
-    $year_glanc_arr['service_order']['last_year'] = (isset($rs_db_year[0]['socount2'])) ? $rs_db_year[0]['socount2'] : '0';
-    $year_glanc_arr['service_order']['diff_ratio'] = $so_diff_rat;
-
-    //Workorder Differnce of current year and previous year
-    $rs_db_year = $WorkOrderObj->recordset_glance_data($year_where1, $year_where2);
-    $diff_ratio = ($rs_db_year[0]['wocount1'] - $rs_db_year[0]['wocount2']) / ($rs_db_year[0]['wocount2'] * 100);
-    $diff_ratio = (is_nan($diff_ratio) == 1 || is_infinite($diff_ratio) == 1)?"0" : $diff_ratio;
-    //check curr_year >= last_year
-    if ($rs_db_year[0]['wocount1'] >= $rs_db_year[0]['wocount2']){
-        $wo_diff_rat = '<span class="text-success"><i class="fa fa-caret-up"></i> ' . round(abs($diff_ratio),2) . '%</span>';
-    } else {
-        $wo_diff_rat = '<span class="text-danger"><i class="fa fa-caret-down"></i> ' . round(abs($diff_ratio),2) . '%</span>';
-    }
-    $year_glanc_arr['workorder']['curr_year'] = (isset($rs_db_year[0]['wocount1'])) ? $rs_db_year[0]['wocount1'] : '0';
-    $year_glanc_arr['workorder']['last_year'] = (isset($rs_db_year[0]['wocount2'])) ? $rs_db_year[0]['wocount2'] : '0';
-    $year_glanc_arr['workorder']['diff_ratio'] = $wo_diff_rat;
-
-    //FiberInquiry Differnce of current year and previous year
-    $rs_db_year = $FiberInquiryObj->recordset_glance_data($year_where1, $year_where2);
-    $diff_ratio = ($rs_db_year[0]['ficount1'] - $rs_db_year[0]['ficount2']) / ($rs_db_year[0]['ficount2'] * 100);
-    $diff_ratio = (is_nan($diff_ratio) == 1 || is_infinite($diff_ratio) == 1)?"0" : $diff_ratio;
-    //check curr_year >= last_year
-    if ($rs_db_year[0]['ficount1'] >= $rs_db_year[0]['ficount2']){
-        $fi_diff_rat = '<span class="text-success"><i class="fa fa-caret-up"></i> ' . round(abs($diff_ratio),2) . '%</span>';
-    } else {
-        $fi_diff_rat = '<span class="text-danger"><i class="fa fa-caret-down"></i> ' . round(abs($diff_ratio),2) . '%</span>';
-    }
-    $year_glanc_arr['fiber_inquiry']['curr_year'] = (isset($rs_db_year[0]['ficount1'])) ? $rs_db_year[0]['ficount1'] : '0';
-    $year_glanc_arr['fiber_inquiry']['last_year'] = (isset($rs_db_year[0]['ficount2'])) ? $rs_db_year[0]['ficount2'] : '0';
-    $year_glanc_arr['fiber_inquiry']['diff_ratio'] = $fi_diff_rat;
-
-    //Event Differnce of current year and previous year
-    $rs_db_year = $EventObj->recordset_glance_data($year_where1, $year_where2);
-    $diff_ratio = ($rs_db_year[0]['ecount1'] - $rs_db_year[0]['ecount2']) / ($rs_db_year[0]['ecount2'] * 100);
-    $diff_ratio = (is_nan($diff_ratio) == 1 || is_infinite($diff_ratio) == 1)?"0" : $diff_ratio;
-    //check curr_year >= last_year
-    if ($rs_db_year[0]['ecount1'] >= $rs_db_year[0]['ecount2']){
-        $e_diff_rat = '<span class="text-success"><i class="fa fa-caret-up"></i> ' . round(abs($diff_ratio),2) . '%</span>';
-    } else {
-        $e_diff_rat = '<span class="text-danger"><i class="fa fa-caret-down"></i> ' . round(abs($diff_ratio),2) . '%</span>';
-    }
-    $year_glanc_arr['events']['curr_year'] = (isset($rs_db_year[0]['ecount1'])) ? $rs_db_year[0]['ecount1'] : '0';
-    $year_glanc_arr['events']['last_year'] = (isset($rs_db_year[0]['ecount2'])) ? $rs_db_year[0]['ecount2'] : '0';
-    $year_glanc_arr['events']['diff_ratio'] = $e_diff_rat;
-    /*==================== Year Glance ====================*/
-    
     $result['day_galance'] = $day_glanc_arr;
     $result['month_glance'] = $month_glanc_arr;
     $result['week_glance'] = $week_glanc_arr;
     $result['year_glance'] = $year_glanc_arr;
-
+    
     $rh = HTTPStatus(200);
     $code = 2000;
     $message = api_getMessage($req_ext, constant($code));
@@ -889,16 +625,29 @@ if ($request_type == "dashboard_glance") {
 }else if ($request_type == "dashboard_serviceorder_barchart"){
     $js_status_arr = array();
 
-    $sql_so = "SELECT count(\"iServiceOrderId\") as count, so.\"iSOStatus\", so.\"iCarrierID\" FROM service_order so JOIN company_mas cm ON so.\"iCarrierID\" = cm.\"iCompanyId\" WHERE cm.\"vAccessType\" = 'Carrier' GROUP BY so.\"iCarrierID\", so.\"iSOStatus\" ORDER BY so.\"iSOStatus\"";
+    $iCompanyId = $RES_PARA['iCompanyId'];
+    $vCompanyAccessType = $RES_PARA['vCompanyAccessType'];
+
+    $where_so_str = "";
+    $where_company_str = "";
+    if($vCompanyAccessType == "Carrier") {
+        $where_so_str = "AND so.\"iCarrierID\" = '".$iCompanyId."'";
+        $where_company_str = "AND \"iCompanyId\" = '".$iCompanyId."'";
+    }
+
+    $sql_so = "SELECT count(\"iServiceOrderId\") as count, so.\"iSOStatus\", so.\"iCarrierID\" FROM service_order so JOIN company_mas cm ON so.\"iCarrierID\" = cm.\"iCompanyId\" WHERE cm.\"vAccessType\" = 'Carrier' ".$where_so_str." GROUP BY so.\"iCarrierID\", so.\"iSOStatus\" ORDER BY so.\"iSOStatus\"";
     $rs_so = $sqlObj->GetAll($sql_so);
+    //echo $sql_so;exit;
     $SO_arr = array();
     foreach ($rs_so as $key => $value) {
         $SO_arr[$value['iCarrierID']][$value['iSOStatus']] = $value['count'];
     }
     //echo "<pre>";print_r($SO_arr);exit;
     
-    $sql = "SELECT \"iCompanyId\", \"vCompanyName\" FROM company_mas WHERE \"iStatus\" = 1 AND \"vAccessType\" = 'Carrier' ORDER BY \"vCompanyName\"";
+    $sql = "SELECT \"iCompanyId\", \"vCompanyName\" FROM company_mas WHERE \"iStatus\" = 1 AND \"vAccessType\" = 'Carrier' ".$where_company_str." ORDER BY \"vCompanyName\"";
     $rs = $sqlObj->GetAll($sql);
+
+    
     $ci = count($rs);
 
     $status_arr = ['1' => 'Created', '2'=> 'In-Review', '3' => 'Approved'];
@@ -939,7 +688,17 @@ if ($request_type == "dashboard_glance") {
 }else if ($request_type == "dashboard_workorder_barchart"){
     $js_status_arr = array();
 
-    $sql_wo = "SELECT count(\"iWOId\") as count, w.\"iWOSId\", s.\"iCarrierID\" FROM workorder w INNER JOIN service_order s ON w.\"iServiceOrderId\" = s.\"iServiceOrderId\" JOIN company_mas cm ON s.\"iCarrierID\" = cm.\"iCompanyId\" WHERE cm.\"vAccessType\" = 'Carrier' GROUP BY s.\"iCarrierID\", w.\"iWOSId\" ORDER BY w.\"iWOSId\"";
+    $iCompanyId = $RES_PARA['iCompanyId'];
+    $vCompanyAccessType = $RES_PARA['vCompanyAccessType'];
+
+    $where_wo_str = "";
+    $where_company_str = "";
+    if($vCompanyAccessType == "Carrier") {
+        $where_wo_str = "AND so.\"iCarrierID\" = '".$iCompanyId."'";
+        $where_company_str = "AND \"iCompanyId\" = '".$iCompanyId."'";
+    }
+
+    $sql_wo = "SELECT count(\"iWOId\") as count, w.\"iWOSId\", s.\"iCarrierID\" FROM workorder w INNER JOIN service_order s ON w.\"iServiceOrderId\" = s.\"iServiceOrderId\" JOIN company_mas cm ON s.\"iCarrierID\" = cm.\"iCompanyId\" WHERE cm.\"vAccessType\" = 'Carrier' ".$where_wo_str." GROUP BY s.\"iCarrierID\", w.\"iWOSId\" ORDER BY w.\"iWOSId\"";
     $rs_wo = $sqlObj->GetAll($sql_wo);
     $WO_arr = array();
     foreach ($rs_wo as $key => $value) {
@@ -948,7 +707,7 @@ if ($request_type == "dashboard_glance") {
     //echo $sql_wo;
     //echo "<pre>";print_r($WO_arr);exit;
     
-    $sql = "SELECT \"iCompanyId\", \"vCompanyName\" FROM company_mas WHERE \"iStatus\" = 1 AND \"vAccessType\" = 'Carrier' ORDER BY \"vCompanyName\"";
+    $sql = "SELECT \"iCompanyId\", \"vCompanyName\" FROM company_mas WHERE \"iStatus\" = 1 AND \"vAccessType\" = 'Carrier' ".$where_company_str." ORDER BY \"vCompanyName\"";
     $rs = $sqlObj->GetAll($sql);
     $ci = count($rs);
     
@@ -1000,6 +759,8 @@ if ($request_type == "dashboard_glance") {
 }else if ($request_type == "dashboard_profile_data"){
     $site_arr = [];
     $userid = $RES_PARA['userId'];
+    $iCompanyId = $RES_PARA['iCompanyId'];
+    $vCompanyAccessType = $RES_PARA['vCompanyAccessType'];
     
     // ************ Service Order ************ //
     $ServiceOrderObj->clear_variable();
@@ -1016,8 +777,12 @@ if ($request_type == "dashboard_glance") {
     $join_arr[] = 'LEFT JOIN site_type_mas st on s."iSTypeId" = st."iSTypeId"';
     $join_arr[] = 'LEFT JOIN company_mas cm on service_order."iCarrierID" = cm."iCompanyId"';
 	
+    if($vCompanyAccessType == "Carrier") {
+        $where_arr[] = "service_order.\"iCarrierID\" = '".$iCompanyId."'"; 
+    }
+    $where_arr[] = "cm.\"vAccessType\" = 'Carrier'"; 
     
-    $where_arr[] = "service_order.\"iUserCreatedBy\" = '".$userid."'"; 
+    //$where_arr[] = "service_order.\"iUserCreatedBy\" = '".$userid."'"; 
     $where_arr[] = 'date_part(\'year\', service_order."dAddedDate") = date_part(\'year\', CURRENT_DATE)';  
     $ServiceOrderObj->join_field = $join_fieds_arr;
     $ServiceOrderObj->join = $join_arr;
@@ -1079,8 +844,14 @@ if ($request_type == "dashboard_glance") {
     $join_arr[] = 'LEFT JOIN premise_mas s on workorder."iPremiseId" = s."iPremiseId"';
     $join_arr[] = 'LEFT JOIN site_type_mas st on s."iSTypeId" = st."iSTypeId"';
     $join_arr[] = 'LEFT JOIN service_order so on workorder."iServiceOrderId" = so."iServiceOrderId"';
+    $join_arr[] = 'LEFT JOIN company_mas cm on so."iCarrierID" = cm."iCompanyId"';
     $join_arr[] = 'LEFT JOIN workorder_status_mas ws on workorder."iWOSId" = ws."iWOSId"';
-    $where_arr[] = "workorder.\"iAssignedToId\" = '".$userid."'"; 
+
+    if($vCompanyAccessType == "Carrier") {
+        $where_arr[] = "so.\"iCarrierID\" = '".$iCompanyId."'"; 
+    }
+    $where_arr[] = "cm.\"vAccessType\" = 'Carrier'"; 
+    // $where_arr[] = "workorder.\"iAssignedToId\" = '".$userid."'"; 
     $where_arr[] = 'date_part(\'year\', workorder."dAddedDate") = date_part(\'year\', CURRENT_DATE)'; 
     $WorkOrderObj->join_field = $join_fieds_arr;
     $WorkOrderObj->join = $join_arr;

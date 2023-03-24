@@ -37,6 +37,8 @@ $("#save_data").click(function(){
                     toastr.error(response['msg']);
                 }
                 setTimeout(function () { location.href = site_url+'zone/zone_list';}, 3500);
+
+                updateZoneIdInPremise();
             }
         });
         return false; 
@@ -77,9 +79,7 @@ function initMap() {
         onMapLoad();
     }); 
     map.setCenter(new google.maps.LatLng(maplat, maplng));
-   
 }
-
 
 function onMapLoad(){
     //KML Layer
@@ -122,3 +122,14 @@ function onMapLoad(){
     }
 }
 
+function updateZoneIdInPremise(){
+    $.ajax({
+        type: "POST",
+            url: site_url+"zone/zone_list",
+            data: {
+                "mode" : "update_zone_id_in_premise",
+            },
+        success: function(data){
+        }
+    });   
+}
