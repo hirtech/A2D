@@ -71,9 +71,16 @@
                             			<div class="col-sm-8">
 	                            			<select name="iAccessType" id="iAccessType" class="form-control" required>
 	                                            <option value="">Select</option>
-	                                            <option value="1">Sales</option>
-	                                            <option value="2">Technician</option>
-	                                            <option value="3">Carrier</option>
+	                                            <option value="1">Technician</option>
+	                                            <option value="2">Exec</option>
+	                                            <option value="3">Admin</option>
+	                                            <option value="4">Management</option>
+	                                            <option value="5">Gov't</option>
+	                                            <option value="6">Sales</option>
+	                                            <option value="7">Investor</option>
+	                                            <option value="8">Partner</option>
+	                                            <option value="9">Customer</option>
+	                                            <option value="10">Other</option>
 	                                        </select>
 	                            			<div class="invalid-feedback">Please enter acess type.</div>
 	                            		</div>

@@ -144,21 +144,28 @@ function getParentChildAModuleList($iParent=0, $prefix="", $loop=0, $maxloop=5)
 {
 	global $accmod_assoc_arr, $param_array,$arid;
 	if($loop<=$maxloop && is_array($accmod_assoc_arr[$iParent]))
-	{
+	{	
+		
 		foreach($accmod_assoc_arr[$iParent] as $Pid=>$rsamodule)
 		{		
-				if($loop>0){
+
+			if($loop>0){
+				if($rsamodule['iSubParentId'] > 0 ){
+					$path = $prefix."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - ".$rsamodule['vAccessModule'];
+				}else {
 					$path = $prefix." - ".$rsamodule['vAccessModule'];
-					$disnum = "";
 				}
-				else{
-					$path = $rsamodule['vAccessModule'];
-					$disnum=$arid+=1;
-					//$arid++;
-				}
-				$param_array[]=array_merge($rsamodule, array('disnum' => $disnum,'vPath' => $path , 'loop'=>$loop));
-				getParentChildAModuleList($rsamodule['iAModuleId'],"&nbsp;&nbsp;&nbsp;",$loop+1,$maxloop);
+				$disnum = "";
 			}
+			else{
+				$path = $rsamodule['vAccessModule'];
+				$disnum=$arid+=1;
+				//$arid++;
+			}
+			$param_array[]=array_merge($rsamodule, array('disnum' => $disnum,'vPath' => $path , 'loop'=>$loop));
+			getParentChildAModuleList($rsamodule['iAModuleId'],"&nbsp;&nbsp;&nbsp;",$loop+1,$maxloop);
+			
+		}
 		
 	}
 	$prefix = "";

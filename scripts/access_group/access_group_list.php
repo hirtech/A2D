@@ -77,13 +77,29 @@ if($mode == "List"){
             }
 
             $vAccessType = '';
+
             if($rs_data[$i]['iAccessType'] == 1){
-                $vAccessType = "Sales";
-            }else if($rs_data[$i]['iAccessType'] == 2){
                 $vAccessType = "Technician";
+            }else if($rs_data[$i]['iAccessType'] == 2){
+                $vAccessType = "Exec";
             }else if($rs_data[$i]['iAccessType'] == 3){
-                $vAccessType = "Carrier";
+                $vAccessType = "Admin";
+            }else if($rs_data[$i]['iAccessType'] == 4){
+                $vAccessType = "Management";
+            }else if($rs_data[$i]['iAccessType'] == 5){
+                $vAccessType = "Gov't";
+            }else if($rs_data[$i]['iAccessType'] == 6){
+                $vAccessType = "Sales";
+            }else if($rs_data[$i]['iAccessType'] == 7){
+                $vAccessType = "Investor";
+            }else if($rs_data[$i]['iAccessType'] == 8){
+                $vAccessType = "Partner";
+            }else if($rs_data[$i]['iAccessType'] == 9){
+                $vAccessType = "Customer";
+            }else if($rs_data[$i]['iAccessType'] == 10){
+                $vAccessType = "Other";
             }
+
 
             $entry[] = array(
                // "checkbox" => $checkbox,
