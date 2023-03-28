@@ -124,12 +124,15 @@ if($request_type == "user_list"){
         	$sortname = "user_mas.\"vUsername\"";
         break;
         case "5":
+            $sortname = "company_mas.\"vCompanyName\"";
+        break;
+        case "6":
         	$sortname = "access_group_mas.\"vAccessGroup\"";
         break;
-        case "7":
-        	$sortname = "user_mas.\"dDate\"";
-        break;
         case "8":
+        	$sortname = "user_mas.\"dAddedDate\"";
+        break;
+        case "9":
         	$sortname = "user_mas.\"iStatus\"";
         break;
         default:
@@ -194,7 +197,7 @@ if($request_type == "user_list"){
                 "vAccessGroup" 		=> $rs_user[$i]['vAccessGroup'],
                 "vCompanyName" 		=> $rs_user[$i]['vCompanyName'],
                 "iStatus" 			=> $rs_user[$i]['iStatus'],
-                "dDate" 			=> $rs_user[$i]['dDate'],
+                "dAddedDate" 		=> $rs_user[$i]['dAddedDate'],
                 "vEmail"            => $rs_user[$i]['vEmail'],
                 'vDepartment' 		=> $user_department,
             );

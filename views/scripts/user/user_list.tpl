@@ -39,7 +39,7 @@
 		      	</div>
 			<div class="card-body ">
 				<div class="table-responsive">
-				<table id="datatable-grid" class="display table dataTable table-striped table-bordered editable-table  dt-responsive nowrap" width="100%">
+				<table id="datatable-grid" class="display table dataTable table-striped table-bordered editable-table  dt-responsive">
 					<thead>
 						<tr>
 							<!-- <th><input type="checkbox" id="chkall" onclick="checkall(this)"/></th> -->
@@ -48,9 +48,10 @@
 							<th>Email</th>
 							<th>UserName</th>
 							<th>Department</th>
+							<th>Company</th>
 							<th>Access Group</th>
-							<th>Last Login</th>
-							<th>Date</th>
+							<th>Login History</th>
+							<th>Added Date</th>
 							<th>Status</th>
 							<th>Action</th> 
 						</tr>

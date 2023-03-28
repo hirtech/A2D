@@ -99,7 +99,7 @@
 			</div> 
             <div class="card-body ">
                 <div>
-                    <table id="datatable-grid" class="display table dataTable table-striped table-bordered editable-table  dt-responsive" width="100%">
+                    <table id="datatable-grid" class="display table dataTable table-striped table-bordered editable-table  dt-responsive">
                         <thead>
                             <tr>
                                 <th>ID</th>

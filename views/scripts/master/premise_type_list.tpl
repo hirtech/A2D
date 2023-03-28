@@ -27,7 +27,7 @@
 				</div>
 			</div>
 			<div class="card-body">
-				<table id="datatable-grid" class="display table dataTable table-striped table-bordered editable-table table-responsive" width="100%">
+				<table id="datatable-grid" class="display table dataTable table-striped table-bordered editable-table table-responsive">
 					<thead>
 						<tr>
 							<!--<th  width="10%"><input type="checkbox" id="chkall" onclick="checkall(this)"/></th> -->

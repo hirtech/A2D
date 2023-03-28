@@ -91,9 +91,10 @@ if($mode == "List") {
                 "vEmail"         => $rs_user[$i]['vEmail'],
                 'vUsername'      => gen_strip_slash($rs_user[$i]['vUsername']),
                 'vDepartment'    => $rs_user[$i]['vDepartment'],
+                'vCompanyName'   => gen_strip_slash($rs_user[$i]['vCompanyName']),
                 'vAccessGroup'   => gen_strip_slash($rs_user[$i]['vAccessGroup']),
                 'vLoginHistory'  => '<a class="btn btn-outline-primary" title="View" href="' . $site_url . 'login_history/list&iUserId=' . $rs_user[$i]['iUserId'] . '"  target="_blank"><i class="fa fa-eye"></i></a>',
-                'dDate'          =>  date_getDateTime($rs_user[$i]['dDate']),
+                'dAddedDate'          =>  date_getDateTime($rs_user[$i]['dAddedDate']),
                 'iStatus'        =>'<span data-toggle="tooltip" data-placement="top" title="'.gen_status($rs_user[$i]['iStatus']).'" class="badge badge-pill badge-'.$status_color[ gen_status($rs_user[$i]['iStatus'])].'">&nbsp;</span>',
                 "actions"        => ($actions == "")?"---":$actions
             );
