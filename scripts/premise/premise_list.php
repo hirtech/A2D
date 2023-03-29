@@ -9,16 +9,6 @@ $access_group_var_add = per_hasModuleAccess("Premise", 'Add', 'N');
 $access_group_var_edit = per_hasModuleAccess("Premise", 'Edit', 'N');
 $access_group_var_CSV = per_hasModuleAccess("Premise", 'CSV', 'N');
 # ----------- Access Rule Condition -----------
-
-
-include_once($controller_path . "premise.inc.php");
-
-include_once($controller_path . "premise_sub_type.inc.php");
-include_once($controller_path . "premise_type.inc.php");
-include_once($controller_path . "user.inc.php");
-
-include_once($function_path."image.inc.php");
-
 $page = $_REQUEST['page'];
 # ------------------------------------------------------------
 # General Variables
@@ -30,7 +20,6 @@ $sEcho = (isset($_REQUEST["sEcho"]) ? $_REQUEST["sEcho"] : '0');
 $display_order = (isset($_REQUEST["iSortCol_0"]) ? $_REQUEST["iSortCol_0"] : '1');
 $dir = (isset($_REQUEST["sSortDir_0"]) ? $_REQUEST["sSortDir_0"] : 'desc');
 # ------------------------------------------------------------
-$SiteObj = new Site();
 //echo "<pre>";print_r($access_group_var_delete);exit();
 //echo $mode;exit();
 if($mode == "List"){
@@ -154,40 +143,50 @@ if($mode == "List"){
             }else if($rs_site[$i]['iStatus'] == 2){
                 $status = '<span title="Near-Net" class="btn btn-warning">Near-Net</span>';
             }
+
+			
+			$awareness_var_list = per_hasModuleAccess("Task Awareness", 'List', 'N');
+			$premise_var_list = per_hasModuleAccess("Premise", 'List', 'N');
+			$so_var_list = per_hasModuleAccess("Service Order", 'List', 'N');
+			$so_var_add = per_hasModuleAccess("Service Order", 'Add', 'N');
+			$wo_var_list = per_hasModuleAccess("Work Order", 'List', 'N');
+			$wo_var_add = per_hasModuleAccess("Work Order", 'Add', 'N');
+			$equipemnt_var_list = per_hasModuleAccess("Equipment", 'List', 'N');
+			$pcircuit_var_list = per_hasModuleAccess("Premise Circuit", 'Add', 'N');
             
-            if(per_hasModuleAccess("Task Awareness", 'List') || per_hasModuleAccess("Premise", 'List') || per_hasModuleAccess("Service Order", 'List') || per_hasModuleAccess("Work Order", 'List') || per_hasModuleAccess("Equipment", 'List') || per_hasModuleAccess("Service Order", 'Add') || per_hasModuleAccess("Work Order", 'Add') || per_hasModuleAccess("Premise Circuit", 'Add')){
+            if($awareness_var_list == 1 || $premise_var_list == 1 || $so_var_list == 1 || $wo_var_list == 1 || $equipemnt_var_list == 1 || $so_var_add == 1 || $wo_var_add == 1 || $pcircuit_var_list == 1){
                 $action .= ' <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tasks</button>
                     <div class="dropdown-menu p-0">';
                     
-                    if(per_hasModuleAccess("Service Order", 'List')){
+                    if($so_var_list == 1){
                         $vSOURL = $site_url."service_order/list&iPremiseId=".$rs_site[$i]['iPremiseId'];
                         $action .= '<a class="dropdown-item" title="View Service Orders" target="_blank" href="'.$vSOURL.'">View Service Orders</a>';
                     }
-                    if(per_hasModuleAccess("Work Order", 'List')){
+                    if($wo_var_list == 1){
                         $vWOURL = $site_url."service_order/workorder_list&iPremiseId=".$rs_site[$i]['iPremiseId'];
                         $action .= '<a class="dropdown-item" title="View Work Orders" target="_blank" href="'.$vWOURL.'">View Work Orders</a>';
                     }
-                    if(per_hasModuleAccess("Equipment", 'List')){
+                    if($equipemnt_var_list == 1){
                         $vEqupment_url = $site_url."service_order/equipment_list&iPremiseId=".$rs_site[$i]['iPremiseId'];
                         $action .= '<a class="dropdown-item" title="View Equipment" target="_blank" href="'.$vEqupment_url.'">View Equipment</a>';
                     }
                     $action .= '<div class="dropdown-divider"></div>';
-                    if(per_hasModuleAccess("Service Order", 'Add')){
+                    if($so_var_add == 1){
                         $vSOAURL = $site_url."service_order/add&iPremiseId=".$rs_site[$i]['iPremiseId'];
                         $action .= '<a class="dropdown-item" title="Setup Service Order" target="_blank" href="'.$vSOAURL.'">Setup Service Order</a>';
                     }
-                    if(per_hasModuleAccess("Work Order", 'Add')){
+                    if($wo_var_add == 1){
                         $vWOAURL = $site_url."service_order/workorder_add&iPremiseId=".$rs_site[$i]['iPremiseId'];
                         $action .= '<a class="dropdown-item" title="Setup Work Order" target="_blank" href="'.$vWOAURL.'">Setup Work Order</a>';
                     }
-                    if(per_hasModuleAccess("Premise Circuit", 'Add')){
+                    if($pcircuit_var_list == 1){
                         $vPCAURL = $site_url."premise_circuit/premise_circuit_add&iPremiseId=".$rs_site[$i]['iPremiseId'];
                         $action .= '<a class="dropdown-item" title="Setup Premise Circuit" target="_blank" href="'.$vPCAURL.'">Setup Premise Circuit</a>';
                     }
 
                     $action .= '<a class="dropdown-item" title="Setup Premise Services"   onclick="setupPremiseService('.$rs_site[$i]['iPremiseId'].', '.$rs_site[$i]['premice_circuit_count'].')">Setup Premise Services</a>';
                     $action .= '<div class="dropdown-divider"></div>';
-                    if(per_hasModuleAccess("Task Awareness", 'List')){
+                    if($awareness_var_list == 1){
                         $action .= '<a class="dropdown-item" title="Awareness"  onclick="addEditDataAwareness(0,\'add\','.$rs_site[$i]['iPremiseId'].')">Awareness</a>';
                     }
                     $action .= '</div>';
@@ -395,7 +394,7 @@ if($mode == "List"){
     echo json_encode($result);
     hc_exit();
     # ----------------------------------- 
-} else if ($mode == "get_zone_from_latlong") {
+}else if ($mode == "get_zone_from_latlong") {
     //echo"<pre>";print_r($_REQUEST);exit;
 
     $lat = number_format($_REQUEST['lat'],6);
@@ -430,7 +429,6 @@ if($mode == "List"){
     echo json_encode($jsonData);
     hc_exit();
 }else if ($mode == "check_city_state") {
-
     $state_code = $_REQUEST['state_code'];
     $city = $_REQUEST['city'];
 
@@ -463,9 +461,7 @@ if($mode == "List"){
     
     echo json_encode($jsonData);
     hc_exit();
-
 }else if ($mode == "get_state") {
-
     $jsonData = array();
     $vStateCode = trim($_REQUEST['vStateCode']);
 
@@ -496,7 +492,6 @@ if($mode == "List"){
     echo json_encode($jsonData);
     hc_exit();
 }else if ($mode == "get_zipcode") {
-
     $jsonData = array();
     $vZipcode = trim($_REQUEST['vZipcode']);
 
@@ -527,7 +522,6 @@ if($mode == "List"){
     echo json_encode($jsonData);
     hc_exit();
 }else if ($mode == "get_city") {
-
     $vCity = trim($_REQUEST['city']);
     $vCounty = trim($_REQUEST['county']);
 
@@ -993,26 +987,57 @@ $kml .= '</kml>';
     # -----------------------------------
 }
 
-# Premise Type Dropdown
-$SiteTypeObj = new SiteType();
-$where_arr = array();
-$SiteTypeObj->where = $where_arr;
-$SiteTypeObj->param['order_by'] = "site_type_mas.\"vTypeName\"";
-$SiteTypeObj->setClause();
-$rs_site_type = $SiteTypeObj->recordset_list();
-//echo "<pre>";print_r($rs_site_type);exit;
-$smarty->assign("rs_site_type", $rs_site_type);
+/*-------------------------- Premise Type -------------------------- */
+$premise_type_arr_param = array();
+$premise_type_arr_param = array(
+    "iStatus"    => 1,
+    "sessionId" => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
+);
+$premise_type_API_URL = $site_api_url."premise_type_dropdown.json";
+//echo json_encode($premise_type_arr_param);exit();
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $premise_type_API_URL);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_HEADER, FALSE);
+curl_setopt($ch, CURLOPT_POST, TRUE);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($premise_type_arr_param));
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+   "Content-Type: application/json",
+));
+$response_sitetype = curl_exec($ch);
+curl_close($ch); 
+$rs_sitetype1 = json_decode($response_sitetype, true); 
+$rs_sitetype = $rs_sitetype1['result'];
+$smarty->assign("rs_site_type", $rs_sitetype);
+//echo "<pre>";print_r($rs_sitetype);exit;
+/*-------------------------- Premise Type -------------------------- */
 
-## --------------------------------
-# Premise Sub type Dropdown
-$SiteSubTypeObj = new SiteSubType();
-$where_arr = array();
-$SiteSubTypeObj->where = $where_arr;
-$SiteSubTypeObj->param['order_by'] = "site_sub_type_mas.\"vSubTypeName\"";
-$SiteSubTypeObj->setClause();
-$rs_site_sub_type = $SiteSubTypeObj->recordset_list();
-$smarty->assign("rs_site_sub_type", $rs_site_sub_type);
-## --------------------------------
+/*-------------------------- Premise Sub Type -------------------------- */
+$psubtype_param = array();
+$psubtype_param['iStatus'] = '1';
+$psubtype_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
+$psubtypeAPI_URL = $site_api_url."premise_sub_type_dropdown.json";
+//echo $psubtypeAPI_URL." ".json_encode($psubtype_param);exit;
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $psubtypeAPI_URL);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_HEADER, FALSE);
+curl_setopt($ch, CURLOPT_POST, TRUE);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($psubtype_param));
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+   "Content-Type: application/json",
+)); 
+$response_psubtype = curl_exec($ch);
+curl_close($ch);  
+$res_psubtype= json_decode($response_psubtype, true);
+$rs_premise_sub_type = $res_psubtype['result'];
+$smarty->assign("rs_site_sub_type", $rs_premise_sub_type);
+/*-------------------------- Premise Sub Type -------------------------- */
+
 ## --------------------------------
 # Network Dropdown
 $network_arr_param = array();

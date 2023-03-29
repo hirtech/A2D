@@ -11,6 +11,7 @@
 	<!-- START: Menu-->
 	<ul id="side-menu" class="sidebar-menu">
 		{foreach from=$menu_arr key=k item=menu}
+		{if $menu.vName neq ''}
 		<li class="dropdown {$menu.vActiveClass}  {$showimport}"> <a href="{$menu.vURL}"><i class="{$menu.vIcon}"></i>{$menu.vName}</a>
 			{if $menu.submenu|@count gt 0}
 			<div>
@@ -36,6 +37,7 @@
 			</div>
 			{/if}
 		</li>
+		{/if}
 		{/foreach}
 	</ul>
 	<!-- END: Menu-->

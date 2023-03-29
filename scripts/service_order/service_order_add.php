@@ -133,6 +133,8 @@ if($mode == "Update") {
 //Carrier (Company) Dropdown
 $carrier_param = array();
 $carrier_param['iStatus'] = '1';
+$carrier_param['sess_iCompanyId'] = $sess_iCompanyId;
+$carrier_param['sess_vCompanyAccessType'] = $sess_vCompanyAccessType;
 $carrier_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
 $carrierAPI_URL = $site_api_url."company_dropdown.json";
 //echo $carrierAPI_URL." ".json_encode($carrier_param);exit;

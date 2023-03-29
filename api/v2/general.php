@@ -293,11 +293,20 @@ if($request_type == "department_dropdown") {
     $join_fieds_arr = array();
     $join_arr  = array();
     $CompanyObj = new Company();
+
     $iStatus = $RES_PARA['iStatus'];
+    $sess_iCompanyId = $RES_PARA['sess_iCompanyId'];
+    $sess_vCompanyAccessType = $RES_PARA['sess_vCompanyAccessType'];
+
     $where_arr = array();
     if($iStatus != ''){
         $where_arr[] = "company_mas.\"iStatus\"='".$iStatus."'";
     }
+    if($sess_iCompanyId != '' && $sess_vCompanyAccessType == "Carrier"){
+        $where_arr[] = "company_mas.\"iCompanyId\"='".$sess_iCompanyId."'";
+        $where_arr[] = "company_mas.\"vAccessType\"='".$sess_vCompanyAccessType."'";
+    }
+    
     $CompanyObj->where = $where_arr;
     $CompanyObj->param['order_by'] = "company_mas.\"vCompanyName\"";
     $CompanyObj->setClause();

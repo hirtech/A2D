@@ -33,7 +33,7 @@
                                         <select name="iCarrierID" id="iCarrierID" class="form-control" required onchange="getMasterMSAFromCarrier(this.value)">
                                             <option value="">Select</option>
                                             {section name="c" loop=$rs_carrier}
-                                                <option value="{$rs_carrier[c].iCompanyId}" {if $rs_carrier[c].iCompanyId eq $rs_sorder[0].iCarrierID}selected{/if}>{$rs_carrier[c].vCompanyName|gen_strip_slash}</option>
+                                                <option value="{$rs_carrier[c].iCompanyId}" {if $mode eq 'Add' && $rs_carrier[c].iCompanyId eq $sess_iCompanyId} selected {else if $rs_carrier[c].iCompanyId eq $rs_sorder[0].iCarrierID}selected{/if}>{$rs_carrier[c].vCompanyName|gen_strip_slash}</option>
                                             {/section}
                                         </select>
                                         <div class="invalid-feedback"> Please select carrier</div>
