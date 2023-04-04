@@ -168,3 +168,45 @@ $("#save_data").click(function(){
         $("#save_data").prop('disabled', false);
     }
 });
+
+function delete_file(id){
+   // alert('delete')
+    swal({
+        title: "Are you sure you want to delete document ?",
+        text: "",
+        type: "warning",
+        showCancelButton: true,
+        //confirmButtonColor: "#DD6B55",
+        confirmButtonClass: 'confirm btn btn-lg btn-danger',
+        cancelButtonClass : 'cancel btn btn-lg btn-default',
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: "No, cancel plx!",
+        closeOnConfirm: false,
+        closeOnCancel: true,
+        },
+        function(isConfirm) {
+            if (isConfirm) {
+                $.ajax({
+                    type: "POST",
+                    url: site_url+"premise_circuit/premise_circuit_list",
+                    data: {
+                        "mode" : "delete_document",
+                        "iPremiseCircuitId" : id,
+                    },
+                    success: function(data){
+                        swal.close();
+                        response =JSON.parse(data);
+                        if(response['error'] == "0"){
+                            toastr.success(response['msg']);
+                        }else{
+                            toastr.error(response['msg']);
+                        }
+                        setTimeout(function () { location.href = site_url+'premise_circuit/premise_circuit_edit&mode=Update&iPremiseCircuitId='+response['iPremiseCircuitId'];}, 3500);
+                    }
+                });
+            } else {
+                swal.close();
+            }
+        }
+    );
+}

@@ -145,6 +145,19 @@ $service_order_url = $site_storage_images_url."service_order/";
 $zone_path = $site_storage_images_path."zone/";
 $zone_url = $site_storage_images_url."zone/";
 
+#Circuit
+$circuit_path = $site_storage_images_path."circuit/";
+$circuit_url = $site_storage_images_url."circuit/";
+
+#Premise Circuit
+$premise_circuit_path = $site_storage_images_path."premise_circuit/";
+$premise_circuit_url = $site_storage_images_url."premise_circuit/";
+
+#Equipment
+$equipment_path = $site_storage_images_path."equipment/";
+$equipment_url = $site_storage_images_url."equipment/";
+
+
 $site_api_url = $site_url."api/v2/";
 
 /*Access Group ID of super/administrator*/

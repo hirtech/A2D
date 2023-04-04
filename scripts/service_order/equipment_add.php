@@ -32,6 +32,17 @@ if($mode == "Update") {
     $EquipmentObj->setClause();
     $rs_equipment = $EquipmentObj->recordset_list();
     //echo "<pre>";print_r($rs_equipment);exit();
+    if(!empty($rs_equipment)){
+        if($rs_equipment[0]['vFile'] != ""){
+            if(file_exists($equipment_path.$rs_equipment[0]['vFile'])){
+                $download_path = $equipment_path.$rs_equipment[0]['vFile'];
+                $download_url = $equipment_url.$rs_equipment[0]['vFile'];
+                
+                $file_url = $site_url.'download.php?vFileName_path='.base64_encode($download_path).'&vFileName_url='.base64_encode($download_url).'&file_name='.base64_encode($rs_equipment[0]['vFile']);
+                $rs_equipment[0]['file_url'] = $file_url;
+            }
+        }
+    }
 }else if($mode =="search_premise"){
     $arr_param = array();
     $vPremiseName = trim($_REQUEST['vPremiseName']);

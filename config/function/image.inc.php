@@ -508,7 +508,7 @@ function img_doUnlinkImages($img_name, $primaryId, $table_name, $id_arr, $img_pa
 	global $sqlObj;
 	$img_delete_id = array();
 	$cnt_deleted = $cnt_not_deleted = 0;
-	//echo "<pre>";print_r($id_arr);exit;
+	//echo "<pre>";print_r($sizes);exit;
 	if(empty($id_arr) || (is_array($id_arr) && count($id_arr)==0))
 	{		 
 		return 0;
@@ -520,8 +520,10 @@ function img_doUnlinkImages($img_name, $primaryId, $table_name, $id_arr, $img_pa
 	}
 	else
 		$img_delete_id = $id_arr;
-	$sql_sel = "SELECT ".$img_name." FROM ".$table_name." WHERE ".$primaryId." IN ( ".implode(", ", $img_delete_id)." )";
-	$rs_sel = $sqlObj->select($sql_sel);
+
+	$sql_sel = 'SELECT "'.$img_name.'" FROM "'.$table_name.'" WHERE "'.$primaryId.'" IN ( '.implode(", ", $img_delete_id).' )';
+	//echo $sql_sel;exit;
+	$rs_sel = $sqlObj->GetAll($sql_sel);
 	//echo "<pre>";print_r($rs_sel);exit;
 	for($i = 0, $ni = count($rs_sel) ; $i < $ni ; $i++)
 	{
@@ -531,8 +533,11 @@ function img_doUnlinkImages($img_name, $primaryId, $table_name, $id_arr, $img_pa
 			//echo $del_file;exit;
 			if($del_file != '' && file_exists($del_file))
 			{
+				
 				@unlink($del_file);
 				$cnt_deleted++;
+				//echo $cnt_deleted;
+				
 			}
 			else
 			{
@@ -562,8 +567,8 @@ function img_doUnlinkImages($img_name, $primaryId, $table_name, $id_arr, $img_pa
 			}
 		}
 	}
-	/*$sql_up = "UPDATE ".$table_name." SET ".$img_name."='' WHERE ".$primaryId." IN ( ".implode(", ", $img_delete_id)." )";
-	$rs_up = $sqlObj->execute($sql_up);*/
+	$sql_up = 'UPDATE "'.$table_name.'" SET "'.$img_name.'"=\'\' WHERE "'.$primaryId.'" IN ( '.implode(", ", $img_delete_id).' )';
+	$rs_up = $sqlObj->Execute($sql_up);
 	$res = array();
 	$res[0] = $cnt_deleted;
 	$res[1] = $cnt_not_deleted;

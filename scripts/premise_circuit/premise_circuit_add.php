@@ -52,6 +52,17 @@ if($mode == "Update") {
         $rs_data[0]['vWODisplay'] = $vWODisplay;
         $vPremiseDisplay = $rs_data[0]['iPremiseId']." (".$rs_data[0]['vPremiseName'].";".$rs_data[0]['vPremiseType'].")";
         $rs_data[0]['vPremiseDisplay'] = $vPremiseDisplay;
+
+        if($rs_data[0]['vFile'] != ""){
+            if(file_exists($premise_circuit_path.$rs_data[0]['vFile'])){
+            
+                $download_path = $premise_circuit_path.$rs_data[0]['vFile'];
+                $download_url = $premise_circuit_url.$rs_data[0]['vFile'];
+                
+                $file_url = $site_url.'download.php?vFileName_path='.base64_encode($download_path).'&vFileName_url='.base64_encode($download_url).'&file_name='.base64_encode($rs_data[0]['vFile']);
+                $rs_data[0]['file_url'] = $file_url;
+            }
+        }
     }
     //echo "<pre>";print_r($rs_data);exit;
 }else if($mode == "search_workorder"){

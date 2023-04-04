@@ -18,6 +18,7 @@ $sEcho = (isset($_REQUEST["sEcho"]) ? $_REQUEST["sEcho"] : '0');
 $display_order = (isset($_REQUEST["iSortCol_0"]) ? $_REQUEST["iSortCol_0"] : '0');
 $dir = (isset($_REQUEST["sSortDir_0"]) ? $_REQUEST["sSortDir_0"] : 'desc');
 # ------------------------------------------------------------
+include_once($function_path."image.inc.php");
 
 if($mode == "List"){
     $arr_param = array();
@@ -199,12 +200,22 @@ if($mode == "List"){
 }else if($mode == "Add"){
     $arr_param = array();
     //echo "<pre>";print_r($_POST);exit;
+    $file_msg = "";
+    if(isset($_FILES["vFile"])){
+        $file_arr = img_fileUpload("vFile", $premise_circuit_path, '', $valid_ext = array('docx', 'doc','xlsx', 'xls', 'pdf'));
+        $file_name = $file_arr[0];
+        $file_msg =  $file_arr[1];
+    }
+
     $arr_param = array(
         "iPremiseId"        => $_POST['search_iPremiseId'],
         "iWOId"             => $_POST['search_iWOId'],
         "iCircuitId"        => $_POST['iCircuitId'],
         "iConnectionTypeId" => $_POST['iConnectionTypeId'],
         "iStatus"           => $_POST['iStatus'],
+        "vName"             => trim($_POST['vName']),
+        "tComments"         => trim($_POST['tComments']),
+        "vFile"             => $file_name,
         "iLoginUserId"      => $_SESSION['sess_iUserId' . $admin_panel_session_suffix],
         "sessionId"         => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
     );
@@ -228,7 +239,7 @@ if($mode == "List"){
     //echo "<pre>";print_r($result_arr);exit();
     if(isset($result_arr['iPremiseCircuitId'])){    
 		$result['iPremiseId'] = $result_arr['iPremiseId'];
-        $result['msg'] = MSG_ADD;
+        $result['msg'] = MSG_ADD." ".$file_msg;
         $result['error'] = 0 ;
         $result['matching_network'] = $result_arr['matching_network'];
     }else{
@@ -246,6 +257,15 @@ if($mode == "List"){
 }else if($mode == "Update"){
     $result =array();
 
+    $file_msg = "";
+    if(isset($_FILES["vFile"])){
+        $file_arr = img_fileUpload("vFile", $premise_circuit_path, '', $valid_ext = array('docx', 'doc','xlsx', 'xls', 'pdf'));
+        $file_name = $file_arr[0];
+        $file_msg =  $file_arr[1];
+    } else {
+        $file_name = $_POST['vFile_old'];
+    }
+
     $arr_param = array(
         'iPremiseCircuitId' => $_POST['iPremiseCircuitId'],
         "iPremiseId"        => $_POST['search_iPremiseId'],
@@ -253,6 +273,9 @@ if($mode == "List"){
         "iCircuitId"        => $_POST['iCircuitId'],
         "iConnectionTypeId" => $_POST['iConnectionTypeId'],
         "iStatus"           => $_POST['iStatus'],
+        "vName"             => trim($_POST['vName']),
+        "tComments"         => trim($_POST['tComments']),
+        "vFile"             => $file_name,
         "iLoginUserId"      => $_SESSION['sess_iUserId' . $admin_panel_session_suffix],
         "sessionId"         => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
     );
@@ -276,7 +299,7 @@ if($mode == "List"){
     $result_arr = json_decode($response, true);
     if($result_arr && $result_arr['matching_network'] == 1){
         $result['iPremiseId'] = $result_arr['iPremiseId'];
-        $result['msg'] = MSG_UPDATE;
+        $result['msg'] = MSG_UPDATE." ".$file_msg;
         $result['error']= 0 ;
         $result['matching_network'] = $result_arr['matching_network'];
     }else{
@@ -422,6 +445,44 @@ if($mode == "List"){
 
     echo json_encode($result_arr);
     exit;
+}else if($mode == "delete_document"){
+    $result = array();
+    $arr_param = array();
+    $iPremiseCircuitId = $_POST['iPremiseCircuitId'];
+
+    $arr_param['iPremiseCircuitId'] = $iPremiseCircuitId; 
+    $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
+    $API_URL = $site_api_url."premise_circuit_delete_document.json";
+    //echo $API_URL." ".json_encode($arr_param);exit;
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $API_URL);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_HEADER, FALSE);
+    curl_setopt($ch, CURLOPT_POST, TRUE);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($arr_param));
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+       "Content-Type: application/json",
+    ));
+    $response = curl_exec($ch);
+    curl_close($ch);  
+    $result_arr = json_decode($response, true);
+    if(!empty($result_arr)){
+        $result['msg'] = $result_arr['Message'];
+        $result['error'] = $result_arr['error']; ;
+        $result['iPremiseCircuitId'] = $iPremiseCircuitId;
+    }else{
+        $result['msg'] = "ERROR - in file delete.";
+        $result['error'] = 1 ;
+        $result['iPremiseCircuitId'] = $iPremiseCircuitId;
+    }
+    # -----------------------------------
+    # Return jSON data.
+    # -----------------------------------
+    echo json_encode($result);
+    hc_exit();
+    # ----------------------------------- 
 }
 
 ## --------------------------------

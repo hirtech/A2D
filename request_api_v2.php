@@ -648,6 +648,24 @@ switch($path) {
 			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
 		}
 		break;
+	case "get_service_type_of_service_pricing_from_company_id." . $req_ext:
+		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
+			$request_type = "get_service_type_of_service_pricing_from_company_id";
+			$api_file_name = "masters.php";
+			include_once($site_api_path . "api_authentication.php");
+		}else {
+			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
+		}
+		break;
+	case "get_service_type_data_from_service_pricing_id." . $req_ext:
+		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
+			$request_type = "get_service_type_data_from_service_pricing_id";
+			$api_file_name = "masters.php";
+			include_once($site_api_path . "api_authentication.php");
+		}else {
+			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
+		}
+		break;
 	case "service_type_dropdown." . $req_ext:
 		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
 			$request_type = "service_type_dropdown";
@@ -876,6 +894,15 @@ switch($path) {
 	case "service_pricing_edit." . $req_ext:
 		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
 			$request_type = "service_pricing_edit";
+			$api_file_name = "masters.php";
+			include_once($site_api_path . "api_authentication.php");
+		}else {
+			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
+		}
+		break;
+	case "get_connection_type_of_service_pricing_from_company_id." . $req_ext:
+		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
+			$request_type = "get_connection_type_of_service_pricing_from_company_id";
 			$api_file_name = "masters.php";
 			include_once($site_api_path . "api_authentication.php");
 		}else {
@@ -1308,6 +1335,15 @@ switch($path) {
 	case "equipment_delete." . $req_ext:
 		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
 			$request_type = "equipment_delete";
+			$api_file_name = "equipment.php";
+			include_once($site_api_path . "api_authentication.php");
+		}else {
+			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
+		}
+		break;
+	case "equipment_delete_document." . $req_ext:
+		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
+			$request_type = "equipment_delete_document";
 			$api_file_name = "equipment.php";
 			include_once($site_api_path . "api_authentication.php");
 		}else {
@@ -1981,6 +2017,15 @@ switch($path) {
 			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
 		}
 		break;
+	case "circuit_delete_document." . $req_ext:
+		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
+			$request_type = "circuit_delete_document";
+			$api_file_name = "circuit.php";
+			include_once($site_api_path . "api_authentication.php");
+		}else {
+			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
+		}
+		break;
 	case "circuit_dropdown." . $req_ext:
 		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
 			$request_type = "circuit_dropdown";
@@ -2029,6 +2074,15 @@ switch($path) {
 	case "get_premise_circuit_from_circuit_id." . $req_ext:
 		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
 			$request_type = "get_premise_circuit_from_circuit_id";
+			$api_file_name = "premise_circuit.php";
+			include_once($site_api_path . "api_authentication.php");
+		}else {
+			$response_data = api_invalidRequestMode(API_REQUEST_MODE_GET);
+		}
+		break;
+	case "premise_circuit_delete_document." . $req_ext:
+		if(strtoupper($_SERVER['REQUEST_METHOD'])==API_REQUEST_MODE_CREATE) {
+			$request_type = "premise_circuit_delete_document";
 			$api_file_name = "premise_circuit.php";
 			include_once($site_api_path . "api_authentication.php");
 		}else {

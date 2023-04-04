@@ -1,6 +1,9 @@
 <?php
 include_once($controller_path . "equipment.inc.php");
 $EquipmentObj = new Equipment();
+
+include_once($function_path."image.inc.php");
+
 if($request_type == "equipment_list"){
     $EquipmentObj->clear_variable();
     $where_arr = array();
@@ -239,7 +242,10 @@ if($request_type == "equipment_list"){
         "iPremiseCircuitId"			=> $RES_PARA['iPremiseCircuitId'],
         "iLinkTypeId"				=> $RES_PARA['iLinkTypeId'],
         "dProvisionDate"			=> $RES_PARA['dProvisionDate'],
-        "iOperationalStatusId"		=> $RES_PARA['iOperationalStatusId']
+        "iOperationalStatusId"		=> $RES_PARA['iOperationalStatusId'],
+        "vName"                     => $RES_PARA['vName'],
+        "tComments"                 => $RES_PARA['tComments'],
+        "vFile"                     => $RES_PARA['vFile'],
     );
 
    $EquipmentObj->update_arr = $update_arr;
@@ -286,7 +292,10 @@ if($request_type == "equipment_list"){
         "iPremiseCircuitId"			=> $RES_PARA['iPremiseCircuitId'],
         "iLinkTypeId"				=> $RES_PARA['iLinkTypeId'],
         "dProvisionDate"			=> $RES_PARA['dProvisionDate'],
-        "iOperationalStatusId"		=> $RES_PARA['iOperationalStatusId']
+        "iOperationalStatusId"		=> $RES_PARA['iOperationalStatusId'],
+        "vName"                     => $RES_PARA['vName'],
+        "tComments"                 => $RES_PARA['tComments'],
+        "vFile"                     => $RES_PARA['vFile'],
     );
 
     $EquipmentObj->insert_arr = $insert_arr;
@@ -298,6 +307,19 @@ if($request_type == "equipment_list"){
     else{
         $response_data = array("Code" => 500 , "Message" => MSG_ADD_ERROR);
     }
+}else if($request_type == "equipment_delete_document"){
+    $iEquipmentId = $RES_PARA['iEquipmentId'];
+    $table_name = "equipment";
+    
+    $res = array();
+    $res = img_doUnlinkImages("vFile", "iEquipmentId", $table_name, $iEquipmentId, $equipment_path, '', $ext="", $sizes="single");
+    
+    //echo "<pre>";print_r($res);exit;
+    if(!empty($res) && $res[0] > 0){
+        $response_data = array("Code" => 200, "Message" => "File Deleted Successfully.", "error" => 0);
+    }else{
+        $response_data = array("Code" => 500 , "Message" => "ERROR - in file delete.", "error" => 1);
+    }    
 }
 else {
 	$r = HTTPStatus(400);

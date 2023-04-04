@@ -1,5 +1,6 @@
 <?php
 include_once($controller_path . "circuit.inc.php");
+include_once($function_path . "image.inc.php");
 
 $CircuitObj = new Circuit();
 
@@ -10,6 +11,9 @@ if($request_type == "circuit_list"){
 
         $vCircuitType       = $RES_PARA['vCircuitType'];
         $vNetwork           = $RES_PARA['vNetwork'];
+        /*$vCircuitName       = $RES_PARA['vCircuitName'];
+        $vName				= $RES_PARA['vName'];
+        $tComments          = $RES_PARA['tComments'];*/
 
         $page_length        = isset($RES_PARA['page_length']) ? trim($RES_PARA['page_length']) : "10";
         $start              = isset($RES_PARA['start']) ? trim($RES_PARA['start']) : "0";
@@ -26,6 +30,18 @@ if($request_type == "circuit_list"){
     if ($vNetwork != "") {
         $where_arr[] = "network.\"iNetworkId\"=" . $vNetwork;
     }
+	
+    /*if ($vCircuitName != "") {
+        $where_arr[] = "circuit.\"vCircuitName\" ILIKE '%".$vCircuitName."%' ";
+    }
+	
+    if ($vName != "") {
+        $where_arr[] = "circuit.\"vCircuitName\" ILIKE '%".$vName."%' ";
+    }
+	
+    if ($tComments != "") {
+        $where_arr[] = "circuit.\"vCircuitName\" ILIKE '%".$tComments."%' ";
+    }*/
     
     switch ($display_order) {
         case "0":
@@ -39,6 +55,12 @@ if($request_type == "circuit_list"){
             break;
         case "3":
             $sortname = "circuit.\"vCircuitName\"";
+            break;
+		case "4":
+            $sortname = "circuit.\"vName\"";
+            break;
+		case "5":
+            $sortname = "circuit.\"tComments\"";
             break;
         default:
             $sortname = "circuit.\"iCircuitId\"";
@@ -83,6 +105,8 @@ if($request_type == "circuit_list"){
                 "iNetworkId"        => $rs_list[$i]['iNetworkId'],
                 "vNetwork"          => $rs_list[$i]['vNetwork'],
                 "vCircuitName"      => $rs_list[$i]['vCircuitName'],
+                "vName"				=> $rs_list[$i]['vName'],
+                "tComments"			=> $rs_list[$i]['tComments'],
             );
         }
     }
@@ -107,6 +131,9 @@ if($request_type == "circuit_list"){
         "iCircuitTypeId"    => $RES_PARA['iCircuitTypeId'],
         "iNetworkId"        => $RES_PARA['iNetworkId'],
         "vCircuitName"      => $RES_PARA['vCircuitName'],
+        "vName"             => $RES_PARA['vName'],
+        "tComments"         => $RES_PARA['tComments'],
+        "vFile"             => $RES_PARA['vFile'],
     );
     $CircuitObj->insert_arr = $insert_arr;
     $CircuitObj->setClause();
@@ -123,6 +150,9 @@ if($request_type == "circuit_list"){
         "iCircuitTypeId"    => $RES_PARA['iCircuitTypeId'],
         "iNetworkId"        => $RES_PARA['iNetworkId'],
         "vCircuitName"      => $RES_PARA['vCircuitName'],
+        "vName"             => $RES_PARA['vName'],
+        "tComments"         => $RES_PARA['tComments'],
+        "vFile"             => $RES_PARA['vFile'],
     );
 
     $CircuitObj->update_arr = $update_arr;
@@ -135,6 +165,19 @@ if($request_type == "circuit_list"){
     else{
         $response_data = array("Code" => 500 , "Message" => MSG_UPDATE_ERROR);
     }
+}else if($request_type == "circuit_delete_document"){
+    $iCircuitId = $RES_PARA['iCircuitId'];
+	$table_name = "circuit";
+	
+	$res = array();
+	$res = img_doUnlinkImages("vFile", "iCircuitId", $table_name, $iCircuitId, $circuit_path, '', $ext="", $sizes="single");
+	
+	//echo "<pre>";print_r($res);exit;
+    if(!empty($res) && $res[0] > 0){
+        $response_data = array("Code" => 200, "Message" => "File Deleted Successfully.", "error" => 0);
+    }else{
+        $response_data = array("Code" => 500 , "Message" => "ERROR - in file delete.", "error" => 1);
+    }    
 }
 else {
    $r = HTTPStatus(400);

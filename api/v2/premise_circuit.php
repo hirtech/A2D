@@ -1,5 +1,6 @@
 <?php
 include_once($controller_path . "premise_circuit.inc.php");
+include_once($function_path."image.inc.php");
 
 $PremiseCircuitObj = new PremiseCircuit();
 
@@ -233,6 +234,9 @@ if($request_type == "premise_circuit_list"){
 			"iCircuitId"        => $RES_PARA['iCircuitId'],
             "iConnectionTypeId" => $RES_PARA['iConnectionTypeId'],
             "iStatus"           => $RES_PARA['iStatus'],
+            "vName"             => $RES_PARA['vName'],
+            "tComments"         => $RES_PARA['tComments'],
+            "vFile"             => $RES_PARA['vFile'],
             "iLoginUserId"      => $RES_PARA['iLoginUserId'],
 		);
 		$PremiseCircuitObj->insert_arr = $insert_arr;
@@ -279,6 +283,9 @@ if($request_type == "premise_circuit_list"){
             "iCircuitId"        => $RES_PARA['iCircuitId'],
             "iConnectionTypeId" => $RES_PARA['iConnectionTypeId'],
             "iStatus"           => $RES_PARA['iStatus'],
+            "vName"             => $RES_PARA['vName'],
+            "tComments"         => $RES_PARA['tComments'],
+            "vFile"             => $RES_PARA['vFile'],
             "iLoginUserId"      => $RES_PARA['iLoginUserId'],
 		);
         
@@ -345,6 +352,19 @@ if($request_type == "premise_circuit_list"){
     }else{
         $response_data = array("Code" => 500, "result" => $rs_list, "total_record" => count($rs_list));
     }
+}else if($request_type == "premise_circuit_delete_document"){
+    $iPremiseCircuitId = $RES_PARA['iPremiseCircuitId'];
+    $table_name = "premise_circuit";
+    
+    $res = array();
+    $res = img_doUnlinkImages("vFile", "iPremiseCircuitId", $table_name, $iPremiseCircuitId, $premise_circuit_path, '', $ext="", $sizes="single");
+    
+    //echo "<pre>";print_r($res);exit;
+    if(!empty($res) && $res[0] > 0){
+        $response_data = array("Code" => 200, "Message" => "File Deleted Successfully.", "error" => 0);
+    }else{
+        $response_data = array("Code" => 500 , "Message" => "ERROR - in file delete.", "error" => 1);
+    }    
 }
 else {
    $r = HTTPStatus(400);

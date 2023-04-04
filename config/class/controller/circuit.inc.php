@@ -97,7 +97,7 @@ class Circuit {
 	function add_records(){
 		global $sqlObj, $circuit_path, $circuit_url;
 		if($this->insert_arr){
-			$sql = "INSERT INTO circuit(\"iCircuitTypeId\",\"iNetworkId\", \"vCircuitName\", \"dAddedDate\")VALUES ('".$this->insert_arr['iCircuitTypeId']."', '".$this->insert_arr['iNetworkId']."', '".$this->insert_arr['vCircuitName']."', ".gen_allow_null_char(date_getSystemDateTime()).")";
+			$sql = "INSERT INTO circuit(\"iCircuitTypeId\",\"iNetworkId\", \"vCircuitName\", \"dAddedDate\", \"vName\", \"tComments\", \"vFile\")VALUES ('".$this->insert_arr['iCircuitTypeId']."', '".$this->insert_arr['iNetworkId']."', '".$this->insert_arr['vCircuitName']."', ".gen_allow_null_char(date_getSystemDateTime()).", '".$this->insert_arr['vName']."', '".$this->insert_arr['tComments']."', '".$this->insert_arr['vFile']."')";
 			$sqlObj->Execute($sql);
 			$iCircuitId = $sqlObj->Insert_ID();
 			return $iCircuitId;
@@ -108,7 +108,7 @@ class Circuit {
 		global $sqlObj, $circuit_path, $circuit_url;
 
 		if($this->update_arr){
-			$rs_db = "UPDATE circuit SET \"iCircuitTypeId\"='".$this->update_arr['iCircuitTypeId']."', \"iNetworkId\"='".$this->update_arr['iNetworkId']."', \"vCircuitName\"='".$this->update_arr['vCircuitName']."',\"dModifiedDate\" = ".gen_allow_null_char(date_getSystemDateTime())."  WHERE \"iCircuitId\"='".$this->update_arr['iCircuitId']."'";
+			$rs_db = "UPDATE circuit SET \"iCircuitTypeId\"='".$this->update_arr['iCircuitTypeId']."', \"iNetworkId\"='".$this->update_arr['iNetworkId']."', \"vCircuitName\"='".$this->update_arr['vCircuitName']."',\"dModifiedDate\" = ".gen_allow_null_char(date_getSystemDateTime()).", \"vName\"='".$this->update_arr['vName']."', \"tComments\"='".$this->update_arr['tComments']."', \"vFile\"='".$this->update_arr['vFile']."'  WHERE \"iCircuitId\"='".$this->update_arr['iCircuitId']."'";
 			$sqlObj->Execute($rs_db);
 			$rs_db = $sqlObj->Affected_Rows();
 			return $rs_db;

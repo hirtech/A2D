@@ -35,6 +35,18 @@ if($mode == "Update") {
     $CircuitObj->setClause();
     $rs_data = $CircuitObj->recordset_list();
     if(!empty($rs_data)) {
+
+        if($rs_data[0]['vFile'] != ""){
+            if(file_exists($circuit_path.$rs_data[0]['vFile'])){
+            
+                $download_path = $circuit_path.$rs_data[0]['vFile'];
+                $download_url = $circuit_url.$rs_data[0]['vFile'];
+                
+                $file_url = $site_url.'download.php?vFileName_path='.base64_encode($download_path).'&vFileName_url='.base64_encode($download_url).'&file_name='.base64_encode($rs_data[0]['vFile']);
+                $rs_data[0]['file_url'] = $file_url;
+            }
+        }
+
         ## --------------------------------
         # Get Premise Circuit Data from Circuit
         $arr_param = array();

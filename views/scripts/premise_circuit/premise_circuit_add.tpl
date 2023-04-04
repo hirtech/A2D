@@ -73,6 +73,35 @@
                                         </select>
                                     </div>
                                 </div>
+                                <div class="col-6">
+                                    <div class="col-12 mb-3">
+                                        <label for="vName">Name <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="vName" name="vName" placeholder="Name" value="{$rs_data[0].vName}" required>
+                                        <div class="invalid-feedback">
+                                            Please enter name
+                                        </div>
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <label for="tComments">Comments</label>
+                                        <textarea class="form-control" name="tComments" id="tComments" rows="4">{$rs_data[0].tComments|gen_filter_text}</textarea>
+                                    </div>
+                                    <div class="col-12 mb-3 ">
+                                        <label for="vFile">File</label>
+                                        <div class="input-group">
+                                            <input type="file" class="d-inline-flex form-control-file form-control h-auto" id="vFile" name="vFile">
+                                            {if $rs_data[0].file_url neq ''}
+                                            <span class="mt-2 ml-3">
+                                                <a class="btn btn-outline-info" href="{$rs_data[0].file_url}" title="Download"><i class="fa fa-download"></i></a>
+                                            </span>
+                                            <span class="mt-2 ml-3">
+                                                <a class="btn btn-outline-danger" href="javascript::void(0)" title="Delete" onclick="delete_file('{$rs_data[0]["iPremiseCircuitId"]}');"><i class="fa fa-window-close"></i></a>
+                                            </span>
+                                            {/if}
+                                        </div>
+                                        <input type="hidden" name="vFile_old" id="vFile_old" value="{$rs_data[0].vFile}">
+                                        <span class="text-danger"> [valid extension file : *.docx, *.doc; *.xlsx; *.xls; *.pdf;]</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

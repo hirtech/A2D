@@ -9,10 +9,11 @@ $access_group_var_add = per_hasModuleAccess("Premise", 'Add', 'N');
 $access_group_var_edit = per_hasModuleAccess("Premise", 'Edit', 'N');
 $access_group_var_CSV = per_hasModuleAccess("Premise", 'CSV', 'N');
 # ----------- Access Rule Condition -----------
-$page = $_REQUEST['page'];
+
 # ------------------------------------------------------------
 # General Variables
 # ------------------------------------------------------------
+$page = $_REQUEST['page'];
 $mode = isset($_REQUEST['mode']) ? $_REQUEST['mode'] : 'list';
 $page_length = isset($_REQUEST['iDisplayLength']) ? $_REQUEST['iDisplayLength'] : '10';
 $start = isset($_REQUEST['iDisplayStart']) ? $_REQUEST['iDisplayStart'] : '0';
@@ -20,8 +21,9 @@ $sEcho = (isset($_REQUEST["sEcho"]) ? $_REQUEST["sEcho"] : '0');
 $display_order = (isset($_REQUEST["iSortCol_0"]) ? $_REQUEST["iSortCol_0"] : '1');
 $dir = (isset($_REQUEST["sSortDir_0"]) ? $_REQUEST["sSortDir_0"] : 'desc');
 # ------------------------------------------------------------
-//echo "<pre>";print_r($access_group_var_delete);exit();
-//echo $mode;exit();
+
+$sess_iCompanyId = $_SESSION["sess_iCompanyId" . $admin_panel_session_suffix];
+
 if($mode == "List"){
     // echo "<pre>"; print_r($_REQUEST);exit();
     $arr_param = array();
@@ -184,7 +186,10 @@ if($mode == "List"){
                         $action .= '<a class="dropdown-item" title="Setup Premise Circuit" target="_blank" href="'.$vPCAURL.'">Setup Premise Circuit</a>';
                     }
 
-                    $action .= '<a class="dropdown-item" title="Setup Premise Services"   onclick="setupPremiseService('.$rs_site[$i]['iPremiseId'].', '.$rs_site[$i]['premice_circuit_count'].')">Setup Premise Services</a>';
+                    if($sess_iCompanyId == $A2D_COMPANY_ID){
+                        $action .= '<a class="dropdown-item" title="Setup Premise Services"   onclick="setupPremiseService('.$rs_site[$i]['iPremiseId'].', '.$rs_site[$i]['premice_circuit_count'].')">Setup Premise Services</a>';
+                    }
+
                     $action .= '<div class="dropdown-divider"></div>';
                     if($awareness_var_list == 1){
                         $action .= '<a class="dropdown-item" title="Awareness"  onclick="addEditDataAwareness(0,\'add\','.$rs_site[$i]['iPremiseId'].')">Awareness</a>';

@@ -42,6 +42,8 @@
 							<th>Circuit Type</th>
 							<th>Network</th>
 							<th>Circuit Name</th>
+							<th>Name</th>
+							<th>Comments</th>
 							<th>Action</th> 
 						</tr>
 					</thead>

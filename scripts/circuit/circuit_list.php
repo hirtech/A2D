@@ -18,6 +18,7 @@ $sEcho = (isset($_REQUEST["sEcho"]) ? $_REQUEST["sEcho"] : '0');
 $display_order = (isset($_REQUEST["iSortCol_0"]) ? $_REQUEST["iSortCol_0"] : '0');
 $dir = (isset($_REQUEST["sSortDir_0"]) ? $_REQUEST["sSortDir_0"] : 'desc');
 # ------------------------------------------------------------
+include_once($function_path."image.inc.php");
 
 if($mode == "List"){
     $arr_param = array();
@@ -83,6 +84,8 @@ if($mode == "List"){
                 "vCircuitType"  => $rs_list[$i]['vCircuitType'],
                 "vNetwork"      => $rs_list[$i]['vNetwork'],
                 "vCircuitName"  => $rs_list[$i]['vCircuitName'],
+                "vName"         => $rs_list[$i]['vName'],
+                "tComments"     => nl2br($rs_list[$i]['tComments']),
                 "actions"       => ($action!="")?$action:"---"       
             );
         }
@@ -134,10 +137,20 @@ if($mode == "List"){
 }else if($mode == "Add"){
     $arr_param = array();
 
+    $file_msg = "";
+    if(isset($_FILES["vFile"])){
+        $file_arr = img_fileUpload("vFile", $circuit_path, '', $valid_ext = array('docx', 'doc','xlsx', 'xls', 'pdf'));
+        $file_name = $file_arr[0];
+        $file_msg =  $file_arr[1];
+    } 
+
     $arr_param = array(
         "iCircuitTypeId"    => $_POST['iCircuitTypeId'],
         "iNetworkId"        => $_POST['iNetworkId'],
-        "vCircuitName"      => $_POST['vCircuitName'],
+        "vCircuitName"      => trim($_POST['vCircuitName']),
+        "vName"             => trim($_POST['vName']),
+        "tComments"         => trim($_POST['tComments']),
+        "vFile"             => $file_name,
         "sessionId"         => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
     );
 
@@ -159,7 +172,7 @@ if($mode == "List"){
     $result_arr = json_decode($response, true); 
     //echo "<pre>";print_r($result_arr);exit();
     if(isset($result_arr['iCircuitId'])){       
-        $result['msg'] = MSG_ADD;
+        $result['msg'] = MSG_ADD." ".$file_msg;
         $result['error']= 0 ;
     }else{
         //$result['msg'] = MSG_ADD_ERROR;
@@ -173,12 +186,23 @@ if($mode == "List"){
     # -----------------------------------  
 }else if($mode == "Update"){
     $result =array();
+    $file_msg = "";
+    if(isset($_FILES["vFile"])){
+        $file_arr = img_fileUpload("vFile", $circuit_path, '', $valid_ext = array('docx', 'doc','xlsx', 'xls', 'pdf'));
+        $file_name = $file_arr[0];
+        $file_msg =  $file_arr[1];
+    } else {
+        $file_name = $_POST['vFile_old'];
+    }
 
     $arr_param = array(
         'iCircuitId'        => $_POST['iCircuitId'],
         "iCircuitTypeId"    => $_POST['iCircuitTypeId'],
         "iNetworkId"        => $_POST['iNetworkId'],
-        "vCircuitName"      => $_POST['vCircuitName'],
+        "vCircuitName"      => trim($_POST['vCircuitName']),
+        "vName"             => trim($_POST['vName']),
+        "tComments"         => trim($_POST['tComments']),
+        "vFile"             => $file_name,
         "sessionId"         => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
     );
     
@@ -200,7 +224,7 @@ if($mode == "List"){
     curl_close($ch); 
     $result = json_decode($response, true); 
     if($result){
-        $result['msg'] = MSG_UPDATE;
+        $result['msg'] = MSG_UPDATE." ".$file_msg;
         $result['error']= 0 ;
     }else{
         $result['msg'] = MSG_UPDATE_ERROR;
@@ -213,7 +237,7 @@ if($mode == "List"){
     echo json_encode($result);
     hc_exit();
     # -----------------------------------   
-}else if($mode== "Excel"){
+}else if($mode == "Excel"){
     $arr_param = array();
     $vOptions = $_REQUEST['vOptions'];
     $Keyword = addslashes(trim($_REQUEST['Keyword']));
@@ -253,9 +277,6 @@ if($mode == "List"){
    
     $result_arr = json_decode($response, true);
 
-    $total = $result_arr['result']['total_record'];
-    $jsonData = array('sEcho' => $sEcho, 'iTotalDisplayRecords' => $total, 'iTotalRecords' => $total, 'aaData' => array());
-    $entry = $hidden_arr = array();
     $rs_export = $result_arr['result']['data'];
     $cnt_export = count($rs_export);
     //  echo "<pre>";print_r($rs_export);exit();
@@ -269,7 +290,9 @@ if($mode == "List"){
                  ->setCellValue('A1', 'Id')
                  ->setCellValue('B1', 'Circuit Type')
                  ->setCellValue('C1', 'Network')
-                 ->setCellValue('D1', 'Circuit Name');
+                 ->setCellValue('D1', 'Circuit Name')
+                 ->setCellValue('E1', 'Name')
+                 ->setCellValue('F1', 'Comments');
     
         for($e=0; $e<$cnt_export; $e++) {
 
@@ -277,7 +300,9 @@ if($mode == "List"){
             ->setCellValue('A'.($e+2), $rs_export[$e]['iCircuitId'])
             ->setCellValue('B'.($e+2), $rs_export[$e]['vCircuitType'])
             ->setCellValue('C'.($e+2), $rs_export[$e]['vNetwork'])
-            ->setCellValue('D'.($e+2), $rs_export[$e]['vCircuitName']);
+            ->setCellValue('D'.($e+2), $rs_export[$e]['vCircuitName'])
+            ->setCellValue('E'.($e+2), $rs_export[$e]['vName'])
+            ->setCellValue('F'.($e+2), $rs_export[$e]['tComments']);
          }
                         
         /* Set Auto width of each comlumn */
@@ -285,9 +310,11 @@ if($mode == "List"){
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
         
         /* Set Font to Bold for each comlumn */
-        $objPHPExcel->getActiveSheet()->getStyle('A1:D1')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A1:F1')->getFont()->setBold(true);
         
 
         /* Set Alignment of Selected Columns */
@@ -312,6 +339,44 @@ if($mode == "List"){
 
     echo json_encode($result_arr);
     exit;
+}else if($mode == "delete_document"){
+    $result = array();
+    $arr_param = array();
+    $iCircuitId = $_POST['iCircuitId'];
+
+    $arr_param['iCircuitId'] = $iCircuitId; 
+    $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
+    $API_URL = $site_api_url."circuit_delete_document.json";
+    //echo $API_URL." ".json_encode($arr_param);exit;
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $API_URL);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_HEADER, FALSE);
+    curl_setopt($ch, CURLOPT_POST, TRUE);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($arr_param));
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+       "Content-Type: application/json",
+    ));
+    $response = curl_exec($ch);
+    curl_close($ch);  
+    $result_arr = json_decode($response, true);
+    if(!empty($result_arr)){
+        $result['msg'] = $result_arr['Message'];
+        $result['error'] = $result_arr['error']; ;
+        $result['iCircuitId'] = $iCircuitId;
+    }else{
+        $result['msg'] = "ERROR - in file delete.";
+        $result['error'] = 1 ;
+        $result['iCircuitId'] = $iCircuitId;
+    }
+    # -----------------------------------
+    # Return jSON data.
+    # -----------------------------------
+    echo json_encode($result);
+    hc_exit();
+    # ----------------------------------- 
 }
 # Network Dropdown
 $network_arr_param = array();

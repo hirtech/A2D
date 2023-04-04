@@ -20,6 +20,8 @@ var listPage = function(){
                     { "data": "vCircuitType", "sortable":true},
                     { "data": "vNetwork", "sortable":true},
                     { "data": "vCircuitName", "sortable":true},
+                    { "data": "vName", "sortable":true},
+                    { "data": "tComments", "sortable":true},
                     { "data": "actions", "sortable":false, "className": "text-center"},
                 ],            
                 "autoWidth" : true,

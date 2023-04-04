@@ -71,8 +71,6 @@
                                         </select>
                                         <div class="invalid-feedback"> Please enter equipment model</div>
                                     </div>
-                                </div>
-                                <div class="col-4">
                                     <div class="col-12 mb-3">
                                         <label for="iPowerId">Power Type <span class="text-danger">*</span></label>
                                         <select name="iPowerId" id="iPowerId" class="form-control" required>
@@ -93,6 +91,8 @@
                                         </select>
                                         <div class="invalid-feedback"> Please enter equipment model</div>
                                     </div>
+                                </div>
+                                <div class="col-4">
                                     <div class="col-12 mb-3">
                                         <label for="dInstallByDate">Install By  <span class="text-danger">*</span></label>
                                         <input type="date" class="form-control" id="dInstallByDate" name="dInstallByDate" value="{$rs_equipment[0].dInstallByDate}" required=""> 
@@ -117,21 +117,19 @@
                                         <label for="dWarrantyExpiration">Warranty Expiration <span class="text-danger">*</span></label>
                                         <input type="date" class="form-control" id="dWarrantyExpiration" name="dWarrantyExpiration" value="{$rs_equipment[0].dWarrantyExpiration}" required=""> 
                                         <div class="invalid-feedback">Please select warranty expiration</div>
-                                    </div>                                    
-                                </div>
-                                <div class="col-4">
+                                    </div> 
                                     <div class="col-12 mb-3">
                                         <label for="vWarrantyCost">Warranty Cost <span class="text-danger">*</span></label>
                                         <input type="text" id="vWarrantyCost" name="vWarrantyCost" value="{$rs_equipment[0].vWarrantyCost|gen_filter_text}" class="form-control" required>
                                         <div class="invalid-feedback"> Please enter warranty cost</div>
-                                    </div>
+                                    </div>  
                                     <div class="col-12 mb-3">
                                         <label for="iPremiseId">Premise <span class="text-danger">*</span></label>
                                         <input type="text" name="vPremiseName"  class="form-control " id="vPremiseName" placeholder="Search Premise Id or Premise Name" value="{if $rs_equipment[0].iPremiseId}{if $rs_equipment[0].vPremiseName neq ''}{$rs_equipment[0].vPremiseName|gen_strip_slash} - {/if}PremiseID# {$rs_equipment[0].iPremiseId}{/if}"  required>
                                         <input type="hidden" id="search_iPremiseId" name="search_iPremiseId" value="{$rs_equipment[0].iPremiseId}"/>
                                         <img class="clear_address" src="assets/images/icon-delete.png" style="cursor:pointer;" onclick="return clear_serach_premise();">
                                         <div class="invalid-feedback" id="errmsg_search_premise">Please enter premise</div>
-                                    </div>
+                                    </div> 
                                     <div class="col-12 mb-3">
                                         <label for="iInstallTypeId">Install Type<span class="text-danger">*</span></label>
                                         <select name="iInstallTypeId" id="iInstallTypeId" class="form-control" required>
@@ -146,7 +144,9 @@
                                         <label for="iPremiseCircuitId">Premise Circuit </label>
                                         <select name="iPremiseCircuitId" id="iPremiseCircuitId" class="form-control">
                                         </select>
-                                    </div>
+                                    </div>                                
+                                </div>
+                                <div class="col-4">
                                     <div class="col-12 mb-3">
                                         <label for="iLinkTypeId">Link Type<span class="text-danger">*</span></label>
                                         <select name="iLinkTypeId" id="iLinkTypeId" class="form-control" required>
@@ -172,7 +172,33 @@
                                         </select>
                                         <div class="invalid-feedback"> Please enter install type</div>
                                     </div>
-
+                                    <div class="col-12 mb-3">
+                                        <label for="vName">Name <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="vName" name="vName" placeholder="Name" value="{$rs_equipment[0].vName}" required>
+                                        <div class="invalid-feedback">
+                                            Please enter name
+                                        </div>
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <label for="tComments">Comments</label>
+                                        <textarea class="form-control" name="tComments" id="tComments" rows="4">{$rs_equipment[0].tComments|gen_filter_text}</textarea>
+                                    </div>
+                                    <div class="col-12 mb-3 ">
+                                        <label for="vFile">File</label>
+                                        <div class="input-group">
+                                            <input type="file" class="d-inline-flex form-control-file form-control h-auto" id="vFile" name="vFile">
+                                            {if $rs_equipment[0].file_url neq ''}
+                                            <span class="mt-2 ml-3">
+                                                <a class="btn btn-outline-info" href="{$rs_equipment[0].file_url}" title="Download"><i class="fa fa-download"></i></a>
+                                            </span>
+                                            <span class="mt-2 ml-3">
+                                                <a class="btn btn-outline-danger" href="javascript::void(0)" title="Delete" onclick="delete_file('{$rs_equipment[0]['iEquipmentId']}');"><i class="fa fa-window-close"></i></a>
+                                            </span>
+                                            {/if}
+                                        </div>
+                                        <input type="hidden" name="vFile_old" id="vFile_old" value="{$rs_equipment[0].vFile}">
+                                        <span class="text-danger"> [valid extension file : *.docx, *.doc; *.xlsx; *.xls; *.pdf;]</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
