@@ -1,7 +1,7 @@
 <div class="card card-body">
     <form id="advfrm" name="advfrm" class="pc_search_form">
         <div class="form-row">
-			<div class="form-group col-md-4">
+			<div class="form-group col-md-2">
                 <label for="premiseId">Premise Circuit Id</label>
                 <div class="form-row">
                     <div class="form-group col-md-12">
@@ -9,7 +9,7 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-2">
                 <label for="premiseId">Premise Id</label>
                 <div class="form-row">
                     <div class="form-group col-md-12">
@@ -34,9 +34,7 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="form-row">
-			<div class="form-group col-md-4">
+            <div class="form-group col-md-2">
                 <label for="premiseId">Workorder Id</label>
                 <div class="form-row">
                     <div class="form-group col-md-12">
@@ -44,20 +42,22 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-2">
                 <label for="inputEmail4">Workorder Type</label>
                 <div class="form-row">
                     <div class="form-group col-md-12">
                         <select name="workorderTypeId" id="workorderTypeId" class="form-control col-md-12">
                             <option value="">Select</option>
-							{section name="t" loop=$rs_wotype}
-								<option value="{$rs_wotype[t].iWOTId}">{$rs_wotype[t].vType|gen_strip_slash}</option>
-							{/section}
-							</option>
+                            {section name="t" loop=$rs_wotype}
+                                <option value="{$rs_wotype[t].iWOTId}">{$rs_wotype[t].vType|gen_strip_slash}</option>
+                            {/section}
+                            </option>
                         </select>
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="form-row">
 			<div class="form-group col-md-4">
                 <label for="inputEmail4">Circuit</label>
                 <div class="form-row">
@@ -72,7 +72,40 @@
                     </div>
                 </div>
             </div>
-           
+            <div class="form-group col-md-4">
+                <label for="">Name</label>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <select name="NameFilterOpDD" id="NameFilterOpDD" class="form-control">
+                            <option value="">-- Select --</option>
+                            <option value="Begins">Begins With</option>
+                            <option value="Ends">Ends With</option>
+                            <option value="Contains" selected>Contains</option>
+                            <option value="Exactly">Exactly</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <input type="text" name="vName" id="vName" value="" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="">Comments</label>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <select name="CommentFilterOpDD" id="CommentFilterOpDD" class="form-control">
+                            <option value="">-- Select --</option>
+                            <option value="Begins">Begins With</option>
+                            <option value="Ends">Ends With</option>
+                            <option value="Contains" selected>Contains</option>
+                            <option value="Exactly">Exactly</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <input type="text" name="tComments" id="tComments" value="" class="form-control">
+                    </div>
+                </div>
+            </div>
         </div>
         <button type="button" id="AdvSearchSubmit" name="AdvSearchSubmit" class="btn btn-outline-warning fas fa-search"></button>
         <button type="button" class="btn btn-outline-danger fas fa-times" aria-label="Close" id="AdvSearchReset" name="AdvSearchReset"></button>

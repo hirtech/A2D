@@ -557,11 +557,19 @@ if($mode == "List"){
     echo json_encode($jsonData);
     hc_exit();
 }else if($mode== "Excel"){
-   $arr_param = array();
+    $arr_param = array();
     $vOptions = $_REQUEST['vOptions'];
-    $Keyword = addslashes(trim($_REQUEST['Keyword']));
-    if ($Keyword != "") {
-        $arr_param[$vOptions] = $Keyword;
+    if($vOptions == "vTypeName"){
+        $searchId = $_REQUEST['typeId'];
+    }else if($vOptions == "vSubTypeName"){
+        $searchId = $_REQUEST['sTypeId'];
+    }else if($vOptions == "vNetwork"){
+        $searchId = $_REQUEST['networkId'];
+    }else if($vOptions == "vFiberZone"){
+        $searchId = $_REQUEST['zoneId'];
+    }
+    if ($searchId != "") {
+        $arr_param[$vOptions] = $searchId;
     }
     if ($_REQUEST['premiseId'] != "") {
         $arr_param['premiseId'] = $_REQUEST['premiseId'];
@@ -601,18 +609,19 @@ if($mode == "List"){
         $arr_param['StateFilterOpDD'] = $_REQUEST['StateFilterOpDD'];
     }
 
-    if($_REQUEST['vCountry'] != ""){
-        $arr_param['vCountry'] = $_REQUEST['vCountry'];
-        $arr_param['CountryFilterOpDD'] = $_REQUEST['CountryFilterOpDD'];
+    if($_REQUEST['iZoneId'] != ""){
+        $arr_param['iZoneId'] = $_REQUEST['iZoneId'];
     }
 
+    if($_REQUEST['iNetworkId'] != ""){
+        $arr_param['iNetworkId'] = $_REQUEST['iNetworkId'];
+    }
+    
     $arr_param['page_length'] = $page_length;
     $arr_param['start'] = $start;
     $arr_param['sEcho'] = $sEcho;
     $arr_param['display_order'] = $display_order;
     $arr_param['dir'] = $dir;
-    $arr_param['access_group_var_edit'] = $access_group_var_edit;
-    $arr_param['access_group_var_delete'] = $access_group_var_delete;
     $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
     
     //print_r(json_encode($arr_param));exit();

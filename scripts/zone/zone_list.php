@@ -26,9 +26,7 @@ include_once($controller_path . "zone.inc.php");
 $ZoneObj = new Zone();
 //echo "<pre>";print_r($mode);exit;
 if($mode == "List"){
-    
     $arr_param = array();
-
     $vOptions = $_REQUEST['vOptions'];
     if($vOptions == "iNetworkId"){
         $searchId = $_REQUEST['networkId'];
@@ -290,7 +288,6 @@ if($mode == "List"){
     # -----------------------------------
 }else if($mode == "Excel"){
     $arr_param = array();
-
     $vOptions = $_REQUEST['vOptions'];
     if($vOptions == "iNetworkId"){
         $searchId = $_REQUEST['networkId'];

@@ -27,6 +27,10 @@ if($request_type == "equipment_list"){
 		$iSPremiseId        = $RES_PARA['iSPremiseId'];
 		$PremiseFilterOpDD  = $RES_PARA['PremiseFilterOpDD'];
 		$vPremiseName       = $RES_PARA['vPremiseName'];
+        $NameFilterOpDD     = $RES_PARA['NameFilterOpDD'];
+        $vName              = $RES_PARA['vName'];
+        $CommentFilterOpDD  = $RES_PARA['CommentFilterOpDD'];
+        $tComments          = $RES_PARA['tComments'];
 
         $page_length        = isset($RES_PARA['page_length']) ? trim($RES_PARA['page_length']) : "10";
         $start              = isset($RES_PARA['start']) ? trim($RES_PARA['start']) : "0";
@@ -85,6 +89,7 @@ if($request_type == "equipment_list"){
 	if ($iSPremiseId != "") {
         $where_arr[] = 'equipment."iPremiseId"='.$iSPremiseId ;
     }
+
 	if ($vPremiseName != "") {
         if ($PremiseFilterOpDD != "") {
             if ($PremiseFilterOpDD == "Begins") {
@@ -98,6 +103,38 @@ if($request_type == "equipment_list"){
             }
         } else {
             $where_arr[] = 's."vName" ILIKE \''.$vPremiseName.'%\'';
+        }
+    }
+
+    if ($vName != "") {
+        if ($NameFilterOpDD != "") {
+            if ($NameFilterOpDD == "Begins") {
+                $where_arr[] = 'equipment."vName" ILIKE \''.$vName.'%\'';
+            } else if ($NameFilterOpDD == "Ends") {
+                $where_arr[] = 'equipment."vName"  ILIKE \'%'.$vName.'\'';
+            } else if ($NameFilterOpDD == "Contains") {
+                $where_arr[] = 'equipment."vName"  ILIKE \'%'.$vName.'%\'';
+            } else if ($NameFilterOpDD == "Exactly") {
+                $where_arr[] = 'equipment."vName" = \''.$vName.'\'';
+            }
+        } else {
+            $where_arr[] = 'equipment."vName" ILIKE \''.$vName.'%\'';
+        }
+    }
+
+    if ($tComments != "") {
+        if ($CommentFilterOpDD != "") {
+            if ($CommentFilterOpDD == "Begins") {
+                $where_arr[] = 'equipment."tComments" ILIKE \''.$tComments.'%\'';
+            } else if ($CommentFilterOpDD == "Ends") {
+                $where_arr[] = 'equipment."tComments"  ILIKE \'%'.$tComments.'\'';
+            } else if ($CommentFilterOpDD == "Contains") {
+                $where_arr[] = 'equipment."tComments"  ILIKE \'%'.$tComments.'%\'';
+            } else if ($CommentFilterOpDD == "Exactly") {
+                $where_arr[] = 'equipment."tComments" = \''.$tComments.'\'';
+            }
+        } else {
+            $where_arr[] = 'equipment."tComments" ILIKE \''.$tComments.'%\'';
         }
     }
 
@@ -208,6 +245,8 @@ if($request_type == "equipment_list"){
                 "vOperationalStatus"	=> $rs_equipment[$i]['vOperationalStatus'],
                 "iNetworkId"            => $rs_equipment[$i]['iNetworkId'],
                 "vCircuitName"          => $rs_equipment[$i]['vCircuitName'],
+                "vName"                 => $rs_equipment[$i]['vName'],
+                "tComments"             => $rs_equipment[$i]['tComments'],
             );
         }
     }

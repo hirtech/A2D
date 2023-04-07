@@ -11,7 +11,6 @@ $access_group_var_CSV = per_hasModuleAccess("Contact", 'CSV', 'N');
 
 include_once($controller_path . "contact.inc.php");
 
-
 # ------------------------------------------------------------
 # General Variables
 # ------------------------------------------------------------
@@ -25,7 +24,6 @@ $dir = (isset($_REQUEST["sSortDir_0"]) ? $_REQUEST["sSortDir_0"] : 'desc');
 
 $ContactObj = new Contact();
 
-
 if($mode == "List"){
     $arr_param = array();
 
@@ -36,19 +34,19 @@ if($mode == "List"){
     }
     
     if($_REQUEST['vSalutation'] != ""){
-     $arr_param['vSalutation'] = $_REQUEST['vSalutation'];
+        $arr_param['vSalutation'] = $_REQUEST['vSalutation'];
     }
     if($_REQUEST['vFirstName'] != ""){
-     $arr_param['vFirstName'] = $_REQUEST['vFirstName'];
+        $arr_param['vFirstName'] = $_REQUEST['vFirstName'];
     }
     if($_REQUEST['vFirstNameDD'] != ""){
         $arr_param['vFirstNameDD'] = $_REQUEST['vFirstNameDD'];
     }
     if($_REQUEST['vLastName'] != ""){
-     $arr_param['vLastName'] = $_REQUEST['vLastName'] ;
+        $arr_param['vLastName'] = $_REQUEST['vLastName'] ;
     } 
     if($_REQUEST['vLastNameDD'] != ""){
-     $arr_param['vLastNameDD'] = $_REQUEST['vLastNameDD'];
+        $arr_param['vLastNameDD'] = $_REQUEST['vLastNameDD'];
     }
     if($_REQUEST['vCompany'] != ""){
         $arr_param['vCompany'] = $_REQUEST['vCompany'] ;
@@ -57,16 +55,16 @@ if($mode == "List"){
       $arr_param['vCompanyDD'] = $_REQUEST['vCompanyDD'] ;
     }
     if($_REQUEST['vEmail'] != ""){
-      $arr_param['vEmail'] = $_REQUEST['vEmail'];
+        $arr_param['vEmail'] = $_REQUEST['vEmail'];
     }
     if($_REQUEST['vEmailDD'] != ""){
         $arr_param['vEmailDD'] = $_REQUEST['vEmailDD'];
     }
     if($_REQUEST['vPosition'] != ""){
-     $arr_param['vPosition'] = $_REQUEST['vPosition'];
+        $arr_param['vPosition'] = $_REQUEST['vPosition'];
     }
     if($_REQUEST['vPositionDD'] != ""){
-         $arr_param['vPositionDD'] = $_REQUEST['vPositionDD'];
+        $arr_param['vPositionDD'] = $_REQUEST['vPositionDD'];
     }
 
     $arr_param['page_length'] = $page_length;
@@ -115,9 +113,8 @@ if($mode == "List"){
             if ($access_group_var_delete == 1) {
                 $actions .= ' <a class="btn btn-outline-danger" title="Delete" href="javascript:;" onclick="delete_record('.$rs_contact[$i]['iCId'].');"><i class="fa fa-trash"></i></a>';
             }
-	
 			
-			$vContactName = $rs_contact[$i]['vFirstName']." ".$rs_contact[$i]['vLastName'];
+            $vContactName = $rs_contact[$i]['vFirstName']." ".$rs_contact[$i]['vLastName'];
             $actions .= ' <a class="btn btn-outline-warning" title="History" href="javascript:void(0);" onclick="showContactHistory('.$rs_contact[$i]['iCId'].",'".$vContactName.'\')"><i class="fas fa-history "></i></a>';
 
             $hidden_fields = '<input type="hidden" id="cnt_id_'.$rs_contact[$i]['iCId'].'" value="'.$rs_contact[$i]['iCId'].'"><input type="hidden" id="cnt_salution_'.$rs_contact[$i]['iCId'].'" value="'.$rs_contact[$i]['vSalutation'].'"><input type="hidden" id="cnt_fname_'.$rs_contact[$i]['iCId'].'" value="'.$rs_contact[$i]['vFirstName'].'"><input type="hidden" id="cnt_lname_'.$rs_contact[$i]['iCId'].'" value="'.$rs_contact[$i]['vLastName'].'"><input type="hidden" id="cnt_company_'.$rs_contact[$i]['iCId'].'" value="'.$rs_contact[$i]['vCompany'].'"><input type="hidden" id="cnt_position_'.$rs_contact[$i]['iCId'].'" value="'.$rs_contact[$i]['vPosition'].'"><input type="hidden" id="cnt_phone_'.$rs_contact[$i]['iCId'].'" value="'.$rs_contact[$i]['vPhone'].'"><input type="hidden" id="cnt_email_'.$rs_contact[$i]['iCId'].'" value="'.$rs_contact[$i]['vEmail'].'"><input type="hidden" id="cnt_notes_'.$rs_contact[$i]['iCId'].'"  value="'.$rs_contact[$i]['tNotes'].'"><input type="hidden" id="cnt_status_'.$rs_contact[$i]['iCId'].'" value="'.$rs_contact[$i]['status'].'">';
@@ -140,9 +137,7 @@ if($mode == "List"){
     echo json_encode($jsonData);
     hc_exit();
     # -----------------------------------
- 
-}
-else if ($_REQUEST['mode'] == "contact_history") {
+} else if($mode == "contact_history") {
     $id=$_REQUEST['contact_history_id'];
     $arr_param = array();
     $arr_param['id']= $id; 
@@ -167,9 +162,7 @@ else if ($_REQUEST['mode'] == "contact_history") {
     $response = json_decode($res, true);
     echo json_encode($response['result']);
     hc_exit();
-
-}else if($_REQUEST['mode'] == "Update")
-{  
+} else if($mode == "Update") {  
     $vPhone = array();
 
     if(trim($_POST['vPrimaryPhone']) != ""){
@@ -192,7 +185,7 @@ else if ($_REQUEST['mode'] == "contact_history") {
         "iStatus" => isset($_POST['iStatus'])?$_POST['iStatus']:"0"
     );
    
-     $API_URL = $site_api_url."contact_edit.json";
+    $API_URL = $site_api_url."contact_edit.json";
        //echo "<pre>";print_r($API_URL);exit();
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $API_URL);
@@ -210,8 +203,8 @@ else if ($_REQUEST['mode'] == "contact_history") {
     curl_close($ch);
     //echo "<pre>";print_r($res);exit();   
     $response = json_decode($res, true);
-   //$iContactId= json_decode($response['iContactId']);
-   $rs_db = $response['result'];
+    //$iContactId= json_decode($response['iContactId']);
+    $rs_db = $response['result'];
  
     $result = array();
     if($rs_db){
@@ -220,7 +213,6 @@ else if ($_REQUEST['mode'] == "contact_history") {
     }else{
         $result['error'] = 1 ;
         $result['msg'] = MSG_UPDATE_ERROR;
-
     }
     # -----------------------------------
     # Return jSON data.
@@ -228,8 +220,7 @@ else if ($_REQUEST['mode'] == "contact_history") {
     echo json_encode($result);
     hc_exit();
     # -----------------------------------
-}
-else if ($mode == "Add") {
+} else if($mode == "Add") {
     $vPhone = array();
     if (isset($_POST) && count($_POST) > 0) {
         //echo "<pre>";print_r($_POST);exit;
@@ -293,8 +284,7 @@ else if ($mode == "Add") {
     echo json_encode($result);
     hc_exit();
     # -----------------------------------   
-}
-else if($mode == "Delete"){
+} else if($mode == "Delete"){
     $result = array();
     $arr_param = array();
     $iCId = $_POST['iCId'];
@@ -331,8 +321,7 @@ else if($mode == "Delete"){
    echo json_encode($result);
     hc_exit();
     # -----------------------------------   
-}
-else if($mode== "Excel"){
+} else if($mode== "Excel"){
     $arr_param = array();
 
     $vOptions = $_REQUEST['vOptions'];
@@ -342,19 +331,19 @@ else if($mode== "Excel"){
     }
     
     if($_REQUEST['vSalutation'] != ""){
-     $arr_param['vSalutation'] = $_REQUEST['vSalutation'];
+        $arr_param['vSalutation'] = $_REQUEST['vSalutation'];
     }
     if($_REQUEST['vFirstName'] != ""){
-     $arr_param['vFirstName'] = $_REQUEST['vFirstName'];
+        $arr_param['vFirstName'] = $_REQUEST['vFirstName'];
     }
     if($_REQUEST['vFirstNameDD'] != ""){
         $arr_param['vFirstNameDD'] = $_REQUEST['vFirstNameDD'];
     }
     if($_REQUEST['vLastName'] != ""){
-     $arr_param['vLastName'] = $_REQUEST['vLastName'] ;
+        $arr_param['vLastName'] = $_REQUEST['vLastName'] ;
     } 
     if($_REQUEST['vLastNameDD'] != ""){
-     $arr_param['vLastNameDD'] = $_REQUEST['vLastNameDD'];
+        $arr_param['vLastNameDD'] = $_REQUEST['vLastNameDD'];
     }
     if($_REQUEST['vCompany'] != ""){
         $arr_param['vCompany'] = $_REQUEST['vCompany'] ;
@@ -363,16 +352,16 @@ else if($mode== "Excel"){
       $arr_param['vCompanyDD'] = $_REQUEST['vCompanyDD'] ;
     }
     if($_REQUEST['vEmail'] != ""){
-      $arr_param['vEmail'] = $_REQUEST['vEmail'];
+        $arr_param['vEmail'] = $_REQUEST['vEmail'];
     }
     if($_REQUEST['vEmailDD'] != ""){
         $arr_param['vEmailDD'] = $_REQUEST['vEmailDD'];
     }
     if($_REQUEST['vPosition'] != ""){
-     $arr_param['vPosition'] = $_REQUEST['vPosition'];
+        $arr_param['vPosition'] = $_REQUEST['vPosition'];
     }
     if($_REQUEST['vPositionDD'] != ""){
-         $arr_param['vPositionDD'] = $_REQUEST['vPositionDD'];
+        $arr_param['vPositionDD'] = $_REQUEST['vPositionDD'];
     }
 
     $arr_param['page_length'] = $page_length;
@@ -381,8 +370,6 @@ else if($mode== "Excel"){
     $arr_param['display_order'] = $display_order;
     $arr_param['dir'] = $dir;
 
-    $arr_param['access_group_var_edit'] = $access_group_var_edit;
-    $arr_param['access_group_var_delete'] = $access_group_var_delete;
     $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
     
     //echo "<pre>";print_r(json_encode($arr_param));exit();
@@ -410,75 +397,68 @@ else if($mode== "Excel"){
     $cnt_export = count($rs_export);
       
     include_once($class_path.'PHPExcel/PHPExcel.php'); 
-       // // Create new PHPExcel object
-       $objPHPExcel = new PHPExcel();
-        $file_name = "contact_".time().".xlsx";
+    // // Create new PHPExcel object
+    $objPHPExcel = new PHPExcel();
+    $file_name = "contact_".time().".xlsx";
 
-        if($cnt_export >0) {
-            
-            $objPHPExcel->setActiveSheetIndex(0)
-                     ->setCellValue('A1', 'Id')
-                     ->setCellValue('B1', 'Name')
-                     ->setCellValue('C1', 'Company')
-                     ->setCellValue('D1', 'Position')
-                     ->setCellValue('E1', 'Primary Phone')
-                     ->setCellValue('F1', 'Email')
-                     ->setCellValue('G1', 'Status');
+    if($cnt_export >0) {
+        $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue('A1', 'Id')
+            ->setCellValue('B1', 'Name')
+            ->setCellValue('C1', 'Company')
+            ->setCellValue('D1', 'Position')
+            ->setCellValue('E1', 'Primary Phone')
+            ->setCellValue('F1', 'Email')
+            ->setCellValue('G1', 'Status');
 
-            for($e=0; $e<$cnt_export; $e++) {
+        for($e=0; $e<$cnt_export; $e++) {
 
-                $name = gen_strip_slash($rs_export[$e]['vSalutation']) . ' ' . gen_strip_slash($rs_export[$e]['vFirstName']) . ' ' . gen_strip_slash($rs_export[$e]['vLastName']);
-                $vPhone = $rs_export[$e]['vPhone'];
-                $status =gen_status($rs_export[$e]['status']);
-                $objPHPExcel->getActiveSheet()
-                ->setCellValue('A'.($e+2), $rs_export[$e]['iCId'])
-                ->setCellValue('B'.($e+2), $name)
-                ->setCellValue('C'.($e+2), $rs_export[$e]['vCompany'])
-                ->setCellValue('D'.($e+2), $rs_export[$e]['vPosition'])
-                ->setCellValue('E'.($e+2), $vPhone)
-                ->setCellValue('F'.($e+2), $rs_export[$e]['vEmail'])
-                ->setCellValue('G'.($e+2), $status);
-             }
-                            
-            /* Set Auto width of each comlumn */
-            $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
-            $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
-            
-            /* Set Font to Bold for each comlumn */
-            $objPHPExcel->getActiveSheet()->getStyle('A1:G1')->getFont()->setBold(true);
-            
-
-            /* Set Alignment of Selected Columns */
-            $objPHPExcel->getActiveSheet()->getStyle("A1:A".($e+3))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-            // Rename worksheet
-            $objPHPExcel->getActiveSheet()->setTitle('Contact');
-
-            // Set active sheet index to the first sheet, so Excel opens this as the first sheet
-            $objPHPExcel->setActiveSheetIndex(0);
-            
+            $name = gen_strip_slash($rs_export[$e]['vSalutation']) . ' ' . gen_strip_slash($rs_export[$e]['vFirstName']) . ' ' . gen_strip_slash($rs_export[$e]['vLastName']);
+            $vPhone = $rs_export[$e]['vPhone'];
+            $status =gen_status($rs_export[$e]['status']);
+            $objPHPExcel->getActiveSheet()
+            ->setCellValue('A'.($e+2), $rs_export[$e]['iCId'])
+            ->setCellValue('B'.($e+2), $name)
+            ->setCellValue('C'.($e+2), $rs_export[$e]['vCompany'])
+            ->setCellValue('D'.($e+2), $rs_export[$e]['vPosition'])
+            ->setCellValue('E'.($e+2), $vPhone)
+            ->setCellValue('F'.($e+2), $rs_export[$e]['vEmail'])
+            ->setCellValue('G'.($e+2), $status);
         }
-
-        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-         $result_arr  = array();
-       //  $objWriter  =   new PHPExcel_Writer_Excel2007($objPHPExcel);
-       //  //$objWriter->save('php://output');
+                        
+        /* Set Auto width of each comlumn */
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
         
-         //save in file 
-        $objWriter->save($temp_gallery.$file_name);
-        $result_arr['isError'] = 0;
-        $result_arr['file_path'] = base64_encode($temp_gallery.$file_name);
-        $result_arr['file_url'] = base64_encode($temp_gallery_url.$file_name);
+        /* Set Font to Bold for each comlumn */
+        $objPHPExcel->getActiveSheet()->getStyle('A1:G1')->getFont()->setBold(true);
+        
+        /* Set Alignment of Selected Columns */
+        $objPHPExcel->getActiveSheet()->getStyle("A1:A".($e+3))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        // Rename worksheet
+        $objPHPExcel->getActiveSheet()->setTitle('Contact');
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+    }
+
+    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+    $result_arr  = array();
+    
+    $objWriter->save($temp_gallery.$file_name);
+    $result_arr['isError'] = 0;
+    $result_arr['file_path'] = base64_encode($temp_gallery.$file_name);
+    $result_arr['file_url'] = base64_encode($temp_gallery_url.$file_name);
     # -------------------------------------
 
-       echo json_encode($result_arr);
-       exit;
+    echo json_encode($result_arr);
+    exit;
 }
-
 
 $module_name = "Contact List";
 $module_title = "Contact";

@@ -166,6 +166,10 @@ $('#AdvSearchReset').click(function () {
     $('#vIPAddress').val("");
     $('#vSize').val("");
     $('#vWeight').val("");
+    $('#NameFilterOpDD').val("Contains");
+    $('#vName').val("");
+    $('#CommentFilterOpDD').val("Contains");
+    $('#tComments').val("");
     
     gridtable.ajax.reload();
     return false;

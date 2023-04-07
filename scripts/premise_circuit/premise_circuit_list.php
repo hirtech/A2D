@@ -60,6 +60,16 @@ if($mode == "List"){
         $arr_param['circuitId'] = $_REQUEST['circuitId'];
     }
 
+    if($_REQUEST['vName'] != ""){
+        $arr_param['vName'] = $_REQUEST['vName'];
+        $arr_param['NameFilterOpDD'] = $_REQUEST['NameFilterOpDD'];
+    }
+
+    if($_REQUEST['tComments'] != ""){
+        $arr_param['tComments'] = $_REQUEST['tComments'];
+        $arr_param['CommentFilterOpDD'] = $_REQUEST['CommentFilterOpDD'];
+    }
+
     $arr_param['page_length'] = $page_length;
     $arr_param['start'] = $start;
     $arr_param['sEcho'] = $sEcho;
@@ -318,10 +328,51 @@ if($mode == "List"){
 }else if($mode== "Excel"){
     $arr_param = array();
     $vOptions = $_REQUEST['vOptions'];
-    $Keyword = addslashes(trim($_REQUEST['Keyword']));
+    
+    if($vOptions == "iNetworkId"){
+        $searchId = $_REQUEST['networkId'];
+    }else if($vOptions == "iConnectionTypeId"){
+        $searchId = $_REQUEST['ConnectionTypeId'];
+    }else if($vOptions == "vStatus"){
+        $searchId = $_REQUEST['iStatus'];
+    }
+    if ($searchId != "") {
+        $arr_param[$vOptions] = $searchId;
+    }
 
-    if ($Keyword != "") {
-        $arr_param[$vOptions] = $Keyword;
+    if ($_REQUEST['premiseCircuitId'] != "") {
+        $arr_param['premiseCircuitId'] = $_REQUEST['premiseCircuitId'];
+    }
+
+    if ($_REQUEST['premiseId'] != "") {
+        $arr_param['premiseId'] = $_REQUEST['premiseId'];
+    }
+
+    if($_REQUEST['siteName'] != ""){
+        $arr_param['siteName'] = $_REQUEST['siteName'];
+        $arr_param['SiteFilterOpDD'] = $_REQUEST['SiteFilterOpDD'];
+    }
+
+    if ($_REQUEST['workorderId'] != "") {
+        $arr_param['workorderId'] = $_REQUEST['workorderId'];
+    }
+
+    if ($_REQUEST['workorderTypeId'] != "") {
+        $arr_param['workorderTypeId'] = $_REQUEST['workorderTypeId'];
+    }
+
+    if ($_REQUEST['circuitId'] != "") {
+        $arr_param['circuitId'] = $_REQUEST['circuitId'];
+    }
+
+    if($_REQUEST['vName'] != ""){
+        $arr_param['vName'] = $_REQUEST['vName'];
+        $arr_param['NameFilterOpDD'] = $_REQUEST['NameFilterOpDD'];
+    }
+
+    if($_REQUEST['tComments'] != ""){
+        $arr_param['tComments'] = $_REQUEST['tComments'];
+        $arr_param['CommentFilterOpDD'] = $_REQUEST['CommentFilterOpDD'];
     }
 
     $arr_param['page_length'] = $page_length;
@@ -329,9 +380,6 @@ if($mode == "List"){
     $arr_param['sEcho'] = $sEcho;
     $arr_param['display_order'] = $display_order;
     $arr_param['dir'] = $dir;
-
-    $arr_param['access_group_var_edit'] = $access_group_var_edit;
-    $arr_param['access_group_var_delete'] = $access_group_var_delete;
 
     $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
 
@@ -372,7 +420,9 @@ if($mode == "List"){
                  ->setCellValue('E1', 'Connetion Type')
                  ->setCellValue('F1', 'Carrier Services')
                  ->setCellValue('G1', 'Equipment')
-                 ->setCellValue('H1', 'Status');
+                 ->setCellValue('H1', 'Status')
+                 ->setCellValue('I1', 'Name')
+                 ->setCellValue('J1', 'Comments');
 
     
         for($e=0; $e<$cnt_export; $e++) {
@@ -406,7 +456,9 @@ if($mode == "List"){
             ->setCellValue('E'.($e+2), $rs_export[$e]['vConnectionTypeName'])
             ->setCellValue('F'.($e+2), $rs_export[$e]['vCarrierServices'])
             ->setCellValue('G'.($e+2), $rs_export[$e]['vEquipmentExcel'])
-            ->setCellValue('H'.($e+2), $vStatus);
+            ->setCellValue('H'.($e+2), $vStatus)
+            ->setCellValue('I'.($e+2), $rs_export[$e]['vName'])
+            ->setCellValue('J'.($e+2), nl2br($rs_export[$e]['tComments']));
          }
                         
         /* Set Auto width of each comlumn */
@@ -418,9 +470,12 @@ if($mode == "List"){
         $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
+        
         
         /* Set Font to Bold for each comlumn */
-        $objPHPExcel->getActiveSheet()->getStyle('A1:H1')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A1:J1')->getFont()->setBold(true);
         
 
         /* Set Alignment of Selected Columns */

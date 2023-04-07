@@ -306,10 +306,22 @@ if($mode == "List") {
 else if($mode== "Excel"){
     $arr_param = array();
     $vOptions = $_REQUEST['vOptions'];
-    $Keyword = addslashes(trim($_REQUEST['Keyword']));
-
-    if ($Keyword != "") {
-        $arr_param[$vOptions] = $Keyword;
+    $vOptions = $_REQUEST['vOptions'];
+    if($vOptions == "vNetwork"){
+        $searchId = $_REQUEST['iSNetworkId'];
+    }else if($vOptions == "vFiberZone"){
+        $searchId = $_REQUEST['iSZoneId'];
+    }else if($vOptions == "vWOType"){
+        $searchId = $_REQUEST['iSWOTId'];
+    }else if($vOptions == "vRequestor"){
+        $searchId = $_REQUEST['iSRequestorId'];
+    }else if($vOptions == "vAssignedTo"){
+        $searchId = $_REQUEST['iSAssignedToId'];
+    }else if($vOptions == "vStatus"){
+        $searchId = $_REQUEST['iSWOSId'];
+    }
+    if ($searchId != "") {
+        $arr_param[$vOptions] = $searchId;
     }
 
     $arr_param['page_length']   = $page_length;
@@ -329,13 +341,12 @@ else if($mode== "Excel"){
     $arr_param['vSStateFilterOpDD']     = trim($_REQUEST['vSStateFilterOpDD']);
     $arr_param['vSState']               = trim($_REQUEST['vSState']);
     $arr_param['vSZipCode']             = trim($_REQUEST['vSZipCode']);
-    $arr_param['iSZoneId']              = trim($_REQUEST['iSZoneId']);
     $arr_param['iSServiceOrderId']      = trim($_REQUEST['iSServiceOrderId']);
     $arr_param['vSWOProjectDD']         = trim($_REQUEST['vSWOProjectDD']);
     $arr_param['vSWOProject']           = trim($_REQUEST['vSWOProject']);
-    $arr_param['iSRequestorId']         = trim($_REQUEST['iSRequestorId']);
-    $arr_param['iSAssignedToId']        = trim($_REQUEST['iSAssignedToId']);
-    $arr_param['iSWOSId']               = trim($_REQUEST['iSWOSId']);
+    $arr_param['iWOTId']                = trim($_REQUEST['iWOTId']);
+    $arr_param['iPremiseId']            = trim($_REQUEST['iPremiseId']);
+    $arr_param['iServiceOrderId']       = trim($_REQUEST['iServiceOrderId']);
 
     $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
 

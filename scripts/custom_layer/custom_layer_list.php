@@ -102,7 +102,6 @@ if($mode == "List"){
     echo json_encode($jsonData);
     hc_exit();
     # -----------------------------------
- 
 }else if($mode == "Delete"){
     $result = array();
     $arr_param = array();
@@ -274,7 +273,7 @@ if($mode == "List"){
     $vOptions = $_REQUEST['vOptions'];
     $Keyword = addslashes(trim($_REQUEST['Keyword']));
 
-    if ($Keyword != "") {
+    if($Keyword != "") {
         $arr_param[$vOptions] = $Keyword;
     }
 

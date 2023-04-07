@@ -2,14 +2,6 @@
     <form id="advfrm" name="advfrm" class="sorder_search_form">
         <div class="form-row">
             <div class="form-group col-md-4">
-                <label for="iSPremiseId">Premise Id</label>
-                <div class="form-row">
-                    <div class="form-group col-md-12">
-                        <input type="text" name="iSPremiseId" id="iSPremiseId" value="" class="form-control">
-                    </div>
-                </div>
-            </div>
-            <div class="form-group col-md-4">
                 <label for="">Premise Name</label>
                 <div class="form-row">
                     <div class="form-group col-md-6">
@@ -26,7 +18,15 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-2">
+                <label for="iSPremiseId">Premise Id</label>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <input type="text" name="iSPremiseId" id="iSPremiseId" value="" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-md-2">
                 <label for="inputEmail4">Serial Number</label>
                 <div class="form-row">
                     <div class="form-group col-md-12">
@@ -34,9 +34,7 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="form-row">
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-2">
                 <label for="inputEmail4">MAC Address</label>
                 <div class="form-row">
                     <div class="form-group col-md-12">
@@ -44,7 +42,7 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-2">
                 <label for="inputEmail4">IP Address</label>
                 <div class="form-row">
                     <div class="form-group col-md-12">
@@ -52,15 +50,51 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-2">
+                <div class="form-group">
+                    <label for="">Size</label>
+                    <input type="text" name="vSize" id="vSize" value="" class="form-control">
+                </div>
+            </div>
+            <div class="form-group col-md-2">
+                <div class="form-group">
+                    <label for="">Weight</label>
+                    <input type="text" name="vWeight" id="vWeight" value="" class="form-control">
+                </div>
+            </div>
             <div class="form-group col-md-4">
+                <label for="">Name</label>
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <label for="">Size</label>
-                        <input type="text" name="vSize" id="vSize" value="" class="form-control">
+                        <select name="NameFilterOpDD" id="NameFilterOpDD" class="form-control">
+                            <option value="">-- Select --</option>
+                            <option value="Begins">Begins With</option>
+                            <option value="Ends">Ends With</option>
+                            <option value="Contains" selected>Contains</option>
+                            <option value="Exactly">Exactly</option>
+                        </select>
                     </div>
                     <div class="form-group col-md-6">
-                        <label for="">Weight</label>
-                        <input type="text" name="vWeight" id="vWeight" value="" class="form-control">
+                        <input type="text" name="vName" id="vName" value="" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="">Comments</label>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <select name="CommentFilterOpDD" id="CommentFilterOpDD" class="form-control">
+                            <option value="">-- Select --</option>
+                            <option value="Begins">Begins With</option>
+                            <option value="Ends">Ends With</option>
+                            <option value="Contains" selected>Contains</option>
+                            <option value="Exactly">Exactly</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <input type="text" name="tComments" id="tComments" value="" class="form-control">
                     </div>
                 </div>
             </div>

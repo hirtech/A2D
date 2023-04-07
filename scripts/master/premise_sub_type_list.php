@@ -253,9 +253,6 @@ else if($mode== "Excel"){
     $arr_param['display_order'] = $display_order;
     $arr_param['dir'] = $dir;
 
-    $arr_param['access_group_var_edit'] = $access_group_var_edit;
-    $arr_param['access_group_var_delete'] = $access_group_var_delete;
-
     $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
 
     $API_URL = $site_api_url."premise_sub_type_list.json";

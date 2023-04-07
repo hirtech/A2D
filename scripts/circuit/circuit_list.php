@@ -238,12 +238,16 @@ if($mode == "List"){
     hc_exit();
     # -----------------------------------   
 }else if($mode == "Excel"){
-    $arr_param = array();
+   $arr_param = array();
     $vOptions = $_REQUEST['vOptions'];
-    $Keyword = addslashes(trim($_REQUEST['Keyword']));
+    if($vOptions == "vCircuitType"){
+        $searchId = $_REQUEST['circuitTypeId'];
+    }else if($vOptions == "vNetwork"){
+        $searchId = $_REQUEST['networkId'];
+    }
 
-    if ($Keyword != "") {
-        $arr_param[$vOptions] = $Keyword;
+    if ($searchId != "") {
+        $arr_param[$vOptions] = $searchId;
     }
 
     $arr_param['page_length'] = $page_length;
@@ -251,9 +255,6 @@ if($mode == "List"){
     $arr_param['sEcho'] = $sEcho;
     $arr_param['display_order'] = $display_order;
     $arr_param['dir'] = $dir;
-
-    $arr_param['access_group_var_edit'] = $access_group_var_edit;
-    $arr_param['access_group_var_delete'] = $access_group_var_delete;
 
     $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
 

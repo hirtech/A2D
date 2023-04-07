@@ -363,14 +363,6 @@ if($mode == "List") {
         $arr_param[$vOptions] = $Keyword;
     }
 
-    $arr_param = array();
-    $vOptions = $_REQUEST['vOptions'];
-    $Keyword = addslashes(trim($_REQUEST['Keyword']));
-
-    if ($Keyword != "") {
-        $arr_param[$vOptions] = $Keyword;
-    }
-
     $arr_param['vName']         = trim($_REQUEST['vName']);
     $arr_param['vNameDD']       = trim($_REQUEST['vNameDD']);
     $arr_param['vEmail']        = trim($_REQUEST['vEmail']);

@@ -117,7 +117,7 @@ if($mode == "List"){
     echo json_encode($jsonData);
     hc_exit();
     # -----------------------------------
-} else if($mode == "Delete"){
+}else if($mode == "Delete"){
     $result = array();
     $arr_param = array();
     $iEventId = $_POST['iEventId'];
@@ -154,7 +154,7 @@ if($mode == "List"){
     echo json_encode($result);
     hc_exit();
     # -----------------------------------   
-} else if($mode == "Update"){
+}else if($mode == "Update"){
     $arr_param = array();
     if (isset($_POST) && count($_POST) > 0) {
         $arr_param = array(
@@ -206,7 +206,7 @@ if($mode == "List"){
     echo json_encode($result);
     hc_exit();
     # -----------------------------------  
-} else if($mode == "Add"){
+}else if($mode == "Add"){
     $arr_param = array();
     //echo "<pre>";print_r($_POST);exit;
     if (isset($_POST) && count($_POST) > 0) {
@@ -257,7 +257,7 @@ if($mode == "List"){
     echo json_encode($result);
     hc_exit();
     # -----------------------------------   
-} else if($mode== "Excel"){
+}else if($mode== "Excel"){
     $arr_param = array();
 
     $vOptions = $_REQUEST['vOptions'];
@@ -284,9 +284,6 @@ if($mode == "List"){
     $arr_param['sEcho']             = $sEcho;
     $arr_param['display_order']     = $display_order;
     $arr_param['dir']               = $dir;
-
-    $arr_param['access_group_var_edit']     = $access_group_var_edit;
-    $arr_param['access_group_var_delete']   = $access_group_var_delete;
 
     $arr_param['sessionId']     = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
     
@@ -382,7 +379,6 @@ if($mode == "List"){
    echo json_encode($result_arr);
    exit;
 }
-
 
 /*-------------------------- Zone -------------------------- */
 $zone_arr_param = array();

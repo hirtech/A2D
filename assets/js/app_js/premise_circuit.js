@@ -195,6 +195,11 @@ $('#AdvSearchReset').click(function () {
     $('#workorderId').val("");
     $('#workorderTypeId').val("");
     $('#circuitId').val("");
+    $('#NameFilterOpDD').val("Contains");
+    $('#vName').val("");
+    $('#CommentFilterOpDD').val("Contains");
+    $('#tComments').val("");
+    
     gridtable.ajax.reload();
     return false;
 });

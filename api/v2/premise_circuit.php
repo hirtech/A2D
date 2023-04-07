@@ -25,6 +25,10 @@ if($request_type == "premise_circuit_list"){
         $workorderId            = $RES_PARA['workorderId'];
         $workorderTypeId        = $RES_PARA['workorderTypeId'];
         $circuitId              = $RES_PARA['circuitId'];
+        $NameFilterOpDD         = $RES_PARA['NameFilterOpDD'];
+        $vName                  = $RES_PARA['vName'];
+        $CommentFilterOpDD      = $RES_PARA['CommentFilterOpDD'];
+        $tComments              = $RES_PARA['tComments'];
     }
 
     if ($iNetworkId != "") {
@@ -73,6 +77,38 @@ if($request_type == "premise_circuit_list"){
 
     if ($circuitId != "") {
         $where_arr[] = 'premise_circuit."iCircuitId"='.$circuitId ;
+    }
+
+    if ($vName != "") {
+        if ($NameFilterOpDD != "") {
+            if ($NameFilterOpDD == "Begins") {
+                $where_arr[] = 'premise_circuit."vName" ILIKE \''.$vName.'%\'';
+            } else if ($NameFilterOpDD == "Ends") {
+                $where_arr[] = 'premise_circuit."vName"  ILIKE \'%'.$vName.'\'';
+            } else if ($NameFilterOpDD == "Contains") {
+                $where_arr[] = 'premise_circuit."vName"  ILIKE \'%'.$vName.'%\'';
+            } else if ($NameFilterOpDD == "Exactly") {
+                $where_arr[] = 'premise_circuit."vName" = \''.$vName.'\'';
+            }
+        } else {
+            $where_arr[] = 'premise_circuit."vName" ILIKE \''.$vName.'%\'';
+        }
+    }
+
+    if ($tComments != "") {
+        if ($CommentFilterOpDD != "") {
+            if ($CommentFilterOpDD == "Begins") {
+                $where_arr[] = 'premise_circuit."tComments" ILIKE \''.$tComments.'%\'';
+            } else if ($CommentFilterOpDD == "Ends") {
+                $where_arr[] = 'premise_circuit."tComments"  ILIKE \'%'.$tComments.'\'';
+            } else if ($CommentFilterOpDD == "Contains") {
+                $where_arr[] = 'premise_circuit."tComments"  ILIKE \'%'.$tComments.'%\'';
+            } else if ($CommentFilterOpDD == "Exactly") {
+                $where_arr[] = 'premise_circuit."tComments" = \''.$tComments.'\'';
+            }
+        } else {
+            $where_arr[] = 'premise_circuit."tComments" ILIKE \''.$tComments.'%\'';
+        }
     }
     
     switch ($display_order) {
@@ -182,8 +218,10 @@ if($request_type == "premise_circuit_list"){
                 "vConnectionTypeName"   => $rs_list[$i]['vConnectionTypeName'],
                 "vCarrierServices"      => $vCarrierServices,
                 "vEquipment"            => $vEquipment,
-                "vEquipmentExcel"            => $vEquipmentExcel,
+                "vEquipmentExcel"       => $vEquipmentExcel,
                 "iStatus"               => $rs_list[$i]['iStatus'],
+                "vName"                 => $rs_list[$i]['vName'],
+                "tComments"             => $rs_list[$i]['tComments'],
             );
         }
     }

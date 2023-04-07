@@ -60,6 +60,10 @@ if($mode == "List") {
     $arr_param['vIPAddress']                = $_REQUEST['vIPAddress'];
     $arr_param['vSize']                     = $_REQUEST['vSize'];
     $arr_param['vWeight']                   = $_REQUEST['vWeight'];
+    $arr_param['NameFilterOpDD']            = $_REQUEST['NameFilterOpDD'];
+    $arr_param['vName']                     = $_REQUEST['vName'];
+    $arr_param['CommentFilterOpDD']         = $_REQUEST['CommentFilterOpDD'];
+    $arr_param['tComments']                 = $_REQUEST['tComments'];
 
     $arr_param['access_group_var_edit'] = $access_group_var_edit;
     $arr_param['access_group_var_delete'] = $access_group_var_delete;
@@ -307,10 +311,25 @@ if($mode == "List") {
 }else if($mode== "Excel"){
     $arr_param = array();
     $vOptions = $_REQUEST['vOptions'];
-    $Keyword = addslashes(trim($_REQUEST['Keyword']));
-
-    if ($Keyword != "") {
-        $arr_param[$vOptions] = $Keyword;
+    if($vOptions == "vNetwork"){
+        $searchId = $_REQUEST['networkId'];
+    }else if($vOptions == "vOStatus"){
+        $searchId = $_REQUEST['iOStatus'];
+    }else if($vOptions == "vSModelName"){
+        $searchId = $_REQUEST['iEModel'];
+    }else if($vOptions == "vMaterial"){
+        $searchId = $_REQUEST['iMaterialId'];
+    }else if($vOptions == "vPType"){
+        $searchId = $_REQUEST['iPowerId'];
+    }else if($vOptions == "vGrounded"){
+        $searchId = $_REQUEST['iGrounded'];
+    }else if($vOptions == "vIType"){
+        $searchId = $_REQUEST['iInstallTypeId'];
+    }else if($vOptions == "vLType"){
+        $searchId = $_REQUEST['iLinkTypeId'];
+    }
+    if ($searchId != "") {
+        $arr_param[$vOptions] = $searchId;
     }
 
     $arr_param['page_length']   = $page_length;
@@ -318,22 +337,20 @@ if($mode == "List") {
     $arr_param['sEcho']         = $sEcho;
     $arr_param['display_order'] = $display_order;
     $arr_param['dir']           = $dir;
+    $arr_param['iFieldmapPremiseId']    = $iPremiseId;
 
-    $arr_param['iSEquipmentModelId']        = $_REQUEST['iSEquipmentModelId'];
-    $arr_param['iSMaterialId']              = $_REQUEST['iSMaterialId'];
-    $arr_param['iSPowerId']                 = $_REQUEST['iSPowerId'];
-    $arr_param['iSGrounded']                = $_REQUEST['iSGrounded'];
     $arr_param['iSPremiseId']               = $_REQUEST['iSPremiseId'];
     $arr_param['PremiseFilterOpDD']         = $_REQUEST['PremiseFilterOpDD'];
     $arr_param['vPremiseName']              = $_REQUEST['vPremiseName'];
-    $arr_param['iSInstallTypeId']           = $_REQUEST['iSInstallTypeId'];
-    $arr_param['iSLinkTypeId']              = $_REQUEST['iSLinkTypeId'];
-    $arr_param['iSOperationalStatusId']     = $_REQUEST['iSOperationalStatusId'];
-    
-
-    $arr_param['access_group_var_edit'] = $access_group_var_edit;
-    $arr_param['access_group_var_delete'] = $access_group_var_delete;
-
+    $arr_param['vSerialNumber']             = $_REQUEST['vSerialNumber'];
+    $arr_param['vMACAddress']               = $_REQUEST['vMACAddress'];
+    $arr_param['vIPAddress']                = $_REQUEST['vIPAddress'];
+    $arr_param['vSize']                     = $_REQUEST['vSize'];
+    $arr_param['vWeight']                   = $_REQUEST['vWeight'];
+    $arr_param['NameFilterOpDD']            = $_REQUEST['NameFilterOpDD'];
+    $arr_param['vName']                     = $_REQUEST['vName'];
+    $arr_param['CommentFilterOpDD']         = $_REQUEST['CommentFilterOpDD'];
+    $arr_param['tComments']                 = $_REQUEST['tComments'];
     $arr_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
 
     $API_URL = $site_api_url."equipment_list.json";
@@ -385,7 +402,9 @@ if($mode == "List") {
                  ->setCellValue('R1', 'Install Type')
                  ->setCellValue('S1', 'Link Type')
                  ->setCellValue('T1', 'Provision Date')
-                 ->setCellValue('U1', 'Operational Status');
+                 ->setCellValue('U1', 'Operational Status')
+                 ->setCellValue('V1', 'Name')
+                 ->setCellValue('W1', 'Comments') ;
     
         for($e=0; $e<$cnt_export; $e++) {
             $vPremise = $rs_export[$e]['iPremiseId']." (".$rs_export[$e]['vPremiseName']."; ".$rs_export[$e]['vPremiseType'].")";
@@ -414,7 +433,9 @@ if($mode == "List") {
             ->setCellValue('R'.($e+2), $rs_export[$e]['vInstallType'])
             ->setCellValue('S'.($e+2), $rs_export[$e]['vLinkType'])
             ->setCellValue('T'.($e+2), $rs_export[$e]['dProvisionDate'])
-            ->setCellValue('U'.($e+2), $rs_export[$e]['vOperationalStatus']);
+            ->setCellValue('U'.($e+2), $rs_export[$e]['vOperationalStatus'])
+            ->setCellValue('V'.($e+2), $rs_export[$e]['vName'])
+            ->setCellValue('W'.($e+2), nl2br($rs_export[$e]['tComments']));
          }
                         
         /* Set Auto width of each comlumn */
@@ -437,9 +458,11 @@ if($mode == "List") {
         $objPHPExcel->getActiveSheet()->getColumnDimension('R')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('T')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('U')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('V')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('W')->setAutoSize(true);
         
         /* Set Font to Bold for each comlumn */
-        $objPHPExcel->getActiveSheet()->getStyle('A1:U1')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A1:W1')->getFont()->setBold(true);
         
 
         /* Set Alignment of Selected Columns */
