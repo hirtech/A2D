@@ -108,6 +108,7 @@ if($mode == "List"){
     $entry = $hidden_arr = array();
     $rs_sr = $result_arr['result']['data'];
     $ni = count($rs_sr);
+
     if($ni > 0){
         for($i=0;$i<$ni;$i++){
 
@@ -121,6 +122,7 @@ if($mode == "List"){
 
             $premise_var_add = per_hasModuleAccess("Premise", 'Add', 'N');
             $so_var_add = per_hasModuleAccess("Service Order", 'Add', 'N');
+			
             if($rs_sr[$i]['iMatchingPremiseId'] > 0){
                 if($so_var_add == 1){
                     $action .= ' <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tasks</button>
@@ -132,12 +134,12 @@ if($mode == "List"){
                 }
             }else {
                 if($sess_iCompanyId == $A2D_COMPANY_ID){
-                    if($premise_var_add == 1){
+                    if($premise_var_add == 1 && $rs_sr[$i]['iMatchingPremiseId'] == 0){
                         $action .= ' <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tasks</button>
                         <div class="dropdown-menu p-0">';
                     
                         $vPremiseAURL = $site_url."premise/add&iFiberInquiryId=".$rs_sr[$i]['iFiberInquiryId'];
-                        $action .= '<a class="dropdown-item" title="Setup Service Order" target="_blank" href="'.$vPremiseAURL.'">Create Premise</a>';
+                        $action .= '<a class="dropdown-item" title="Create Premise" target="_blank" href="'.$vPremiseAURL.'">Create Premise</a>';
                         $action .= '</div>';
                     }
                 }
