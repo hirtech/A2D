@@ -24,6 +24,7 @@
                             <input type="hidden" name="groupaction" value="groupaction">
                             <input type="hidden" name="mode" id="mode" value="{$mode}">
                             <input type="hidden" name="iServiceOrderId" id="iServiceOrderId" value="{$rs_sorder[0].iServiceOrderId}">
+                            <input type="hidden" name="iFiberInquiryId" id="iFiberInquiryId" value="{$iFiberInquiryId}">
                             <input type="hidden" name="vNameId" id="vNameId" value="">
                             <input type="hidden" name="iLastServicePricingId" id="iLastServicePricingId" value="{$iLastServiceOrderId}">
                             <div class="form-row">

@@ -94,6 +94,14 @@ class ServiceOrder {
 		//echo $sql;exit;
 		$sqlObj->Execute($sql);		
 		$iServiceOrderId = $sqlObj->Insert_ID();
+		if($iServiceOrderId > 0){
+			$iFiberInquiryId = $this->insert_arr['iFiberInquiryId'];
+ 			if($iFiberInquiryId > 0){
+ 				$sql_fI = "UPDATE fiberinquiry_details set \"iServiceOrderId\" = '".$iServiceOrderId."' WHERE \"iFiberInquiryId\" = '".$iFiberInquiryId."'";
+ 				$rs_fI = $sqlObj->Execute($sql_fI);
+
+ 			}
+		}
 		return $iServiceOrderId;
 	}
 	

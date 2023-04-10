@@ -20,6 +20,8 @@ $display_order = (isset($_REQUEST["iSortCol_0"]) ? $_REQUEST["iSortCol_0"] : '0'
 $dir = (isset($_REQUEST["sSortDir_0"]) ? $_REQUEST["sSortDir_0"] : 'desc');
 # ------------------------------------------------------------
 //echo "<pre>";print_r($access_group_var_delete);exit();
+$sess_iCompanyId = $_SESSION["sess_iCompanyId" . $admin_panel_session_suffix];
+$sess_vCompanyAccessType = $_SESSION["sess_vCompanyAccessType" . $admin_panel_session_suffix];
 
 if($mode == "List"){
     $arr_param = array();
@@ -116,6 +118,31 @@ if($mode == "List"){
             if($access_group_var_delete == "1"){
                 $action .= ' <a class="btn btn-outline-danger" title="Delete" href="javascript:void(0);" onclick="delete_record('.$rs_sr[$i]['iFiberInquiryId'].');"><i class="fa fa-trash"></i></a>';
             }
+
+            $premise_var_add = per_hasModuleAccess("Premise", 'Add', 'N');
+            $so_var_add = per_hasModuleAccess("Service Order", 'Add', 'N');
+            if($rs_sr[$i]['iMatchingPremiseId'] > 0){
+                if($so_var_add == 1){
+                    $action .= ' <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tasks</button>
+                    <div class="dropdown-menu p-0">';
+                
+                    $vSOAURL = $site_url."service_order/add&iFiberInquiryId=".$rs_sr[$i]['iFiberInquiryId'];
+                    $action .= '<a class="dropdown-item" title="Create Service Order" target="_blank" href="'.$vSOAURL.'">Create Service Order</a>';
+                    $action .= '</div>';
+                }
+            }else {
+                if($sess_iCompanyId == $A2D_COMPANY_ID){
+                    if($premise_var_add == 1){
+                        $action .= ' <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tasks</button>
+                        <div class="dropdown-menu p-0">';
+                    
+                        $vPremiseAURL = $site_url."premise/add&iFiberInquiryId=".$rs_sr[$i]['iFiberInquiryId'];
+                        $action .= '<a class="dropdown-item" title="Setup Service Order" target="_blank" href="'.$vPremiseAURL.'">Create Premise</a>';
+                        $action .= '</div>';
+                    }
+                }
+            }
+            
 
             $vStatus = '';
             if($rs_sr[$i]['iStatus'] == 1) { // Draft
@@ -368,6 +395,7 @@ if($mode == "List"){
             "iEngagementId"         => $_POST['iEngagementId'],
             "iInquiryType"          => $_POST['iInquiryType'],
             "tNotes"                => $_POST['tNotes'],
+            "vSuitAptUnit"          => $_POST['vSuitAptUnit'],
             "iLoginUserId"          => $iLoginUserId,
         );
         $API_URL = $site_api_url."fiber_inquiry_add.json";
@@ -390,6 +418,7 @@ if($mode == "List"){
         if($res){
             $result['iMatchingPremiseId'] = $res['iMatchingPremiseId'];
             $result['iFiberInquiryId'] = $res['iFiberInquiryId'];
+            $result['iPremiseStatus'] = $res['iPremiseStatus'];
             $result['msg'] = MSG_ADD;
             $result['error']= 0 ;
         }else{
@@ -433,6 +462,7 @@ if($mode == "List"){
             "iEngagementId"         => $_POST['iEngagementId'],
             "iInquiryType"          => $_POST['iInquiryType'],
             "tNotes"                => $_POST['tNotes'],
+            "vSuitAptUnit"          => $_POST['vSuitAptUnit'],
             "iLoginUserId"          => $iLoginUserId,
         );
 
@@ -457,6 +487,7 @@ if($mode == "List"){
         if($res){
             $result['iMatchingPremiseId'] = $res['iMatchingPremiseId'];
             $result['iFiberInquiryId'] = $res['iFiberInquiryId'];
+            $result['iPremiseStatus'] = $res['iPremiseStatus'];
             $result['msg'] = MSG_UPDATE;
             $result['error']= 0 ;
         }else{
@@ -527,7 +558,7 @@ if($mode == "List"){
         $arr_param[$vOptions] = $searchId;
     }
 
-    //echo "<pre>";print_r($_REQUEST);
+    //echo "<pre>";print_r($page_length);exit;
     if($_REQUEST['fiberInquiryId'] != ""){
         $arr_param['fiberInquiryId'] = $_REQUEST['fiberInquiryId'];
     }
@@ -607,7 +638,10 @@ if($mode == "List"){
             ->setCellValue('H1', 'Network')
             ->setCellValue('I1', 'Status')
             ->setCellValue('J1', 'Inquiry Type')
-            ->setCellValue('K1', 'Created Date');
+            ->setCellValue('K1', 'Premise Id')
+            ->setCellValue('L1', 'Service Order Id')
+            ->setCellValue('M1', 'Suite/Apt/Unit#')
+            ->setCellValue('N1', 'Created Date');
 
         for($e=0; $e<$cnt_export; $e++) {
 
@@ -622,7 +656,10 @@ if($mode == "List"){
             ->setCellValue('H'.($e+2), $rs_export[$e]['vNetwork'])
             ->setCellValue('I'.($e+2), $rs_export[$e]['vStatus'])
             ->setCellValue('J'.($e+2), $rs_export[$e]['vInquiryType'])
-            ->setCellValue('K'.($e+2), date_display_report_date($rs_export[$e]['dAddedDate']));
+            ->setCellValue('K'.($e+2), $rs_export[$e]['iMatchingPremiseId'])
+            ->setCellValue('L'.($e+2), $rs_export[$e]['iServiceOrderId'])
+            ->setCellValue('M'.($e+2), $rs_export[$e]['vSuitAptUnit'])
+            ->setCellValue('N'.($e+2), date_display_report_date($rs_export[$e]['dAddedDate']));
          }
                         
         /* Set Auto width of each comlumn */
@@ -637,9 +674,12 @@ if($mode == "List"){
         $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setAutoSize(true);
         
         /* Set Font to Bold for each comlumn */
-        $objPHPExcel->getActiveSheet()->getStyle('A1:K1')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('A1:N1')->getFont()->setBold(true);
         
 
         /* Set Alignment of Selected Columns */

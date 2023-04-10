@@ -251,6 +251,8 @@ if($mode == "List"){
             "vPolygonLatLong"=>$_POST['vPolygonLatLong'],
             "vPolyLineLatLong"=>$_POST['vPolyLineLatLong'],
             "iSAttributeId"=>$_POST['iSAttributeId'],
+            "iFiberInquiryId"=>$_POST['iFiberInquiryId'],
+            "vSuitAptUnit"=>$_POST['vSuitAptUnit'],
             "vLoginUserName"=>$_SESSION["sess_vName".$admin_panel_session_suffix],
             "sessionId"             => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
         );
@@ -319,6 +321,7 @@ if($mode == "List"){
             "vPolygonLatLong"=>$_POST['vPolygonLatLong'],
             "vPolyLineLatLong"=>$_POST['vPolyLineLatLong'],
             "iSAttributeId"=>$_POST['iSAttributeId'],
+            "vSuitAptUnit"=>$_POST['vSuitAptUnit'],
             "vLoginUserName"=>$_SESSION["sess_vName".$admin_panel_session_suffix],
             "sessionId"             => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
         );

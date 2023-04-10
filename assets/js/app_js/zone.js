@@ -135,9 +135,10 @@ function delete_record(id)
 
 
 function exportExcelSheet(){
+	var iDisplayLength = gridtable.rows().count();
     $.ajax({
         type: "POST",
-        url: site_url+"zone/zone_list&mode=Excel",
+        url: site_url+"zone/zone_list&mode=Excel&iDisplayLength="+iDisplayLength,
         data: $(".zone_search_form").serializeArray(),
         success: function(data){
             res = JSON.parse(data);

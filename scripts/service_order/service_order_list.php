@@ -252,6 +252,7 @@ if($mode == "List") {
 
     $arr_param = array(
         "vMasterMSA"            => trim($_POST['vMasterMSA']),
+        "iFiberInquiryId"       => trim($_POST['iFiberInquiryId']),
         "vNameId"               => trim($_POST['vNameId']),
         "iCarrierID"            => $_POST['iCarrierID'],
         "iSalesRepId"           => trim($_POST['iSalesRepId']),

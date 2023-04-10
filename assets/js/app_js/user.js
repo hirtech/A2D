@@ -166,10 +166,10 @@ $('#AdvSearchSubmit').click(function () {
     return false;
 });
 function exportExcelSheet(){
-  //  console.log('11111');
+    var iDisplayLength = gridtable.rows().count();
     $.ajax({
         type: "POST",
-        url: site_url+"user/list?mode=Excel",
+        url: site_url+"user/list?mode=Excel&iDisplayLength="+iDisplayLength,
         //data: $("#frmlist").serializeArray(),
         data: $(".user_search_form").serializeArray(),
         success: function(data){

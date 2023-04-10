@@ -156,9 +156,10 @@ $('#AdvSearchSubmit').click(function () {
 });
 
 function exportExcelSheet(){
+	var iDisplayLength = gridtable.rows().count();
     $.ajax({
         type: "POST",
-        url: site_url+"contact/list?mode=Excel",
+        url: site_url+"contact/list?mode=Excel&iDisplayLength="+iDisplayLength,
         data: $(".contact_search_form").serializeArray(),
         success: function(data){
             res = JSON.parse(data);

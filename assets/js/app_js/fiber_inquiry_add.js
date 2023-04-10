@@ -81,12 +81,20 @@ $("#save_data").click(function(e){
                     var fiber_msg = "";
                     var confirm_Button_Class = "";
                     var iFiberInquiryId = response['iFiberInquiryId'];
-                    if(response['iMatchingPremiseId'] > 0){
-                        fiber_msg = "Good News! Fiber is coming your way!\nWe have your contact information and will let you know when we start deploying our Fiber Network in your area";
-                        confirm_Button_Class = "confirm btn btn-lg btn-success";
-
+                    if(response['iMatchingPremiseId'] > 0) {
+                        if(response['iPremiseStatus'] == 1) { // On-Net
+                            fiber_msg = "This premise is On-Net. To request new services, please create a service order!";
+                            confirm_Button_Class = "confirm btn btn-lg btn-success";
+                        }
+                        else if(response['iPremiseStatus'] == 2) { // Near-Net
+                            fiber_msg = "This premise is Near-Net. To request new services, please create a service order!";
+                            confirm_Button_Class = "confirm btn btn-lg btn-success";
+                        }else {
+                            toastr.success(response['msg']);
+                            location.href = site_url+'fiber_inquiry/list';
+                        }
                     }else {
-                        fiber_msg = "WE APPRECIATE YOUR INTEREST!\nUnfortunately, eCommunity™ Fiber is not yet available in your area.\nWe have your contact information and will let you know when we start deploying in your community!";
+                        fiber_msg = "Unfortunately, the requested premise is not in our system. We will review this request and check to see if it can get fiber.";
                         confirm_Button_Class = "confirm btn btn-lg btn-danger";
                     }
                     swal({

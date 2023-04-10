@@ -7,11 +7,13 @@ if($request_type == "fiber_inquiry_edit"){
     //$vLongitude = number_format($RES_PARA['vLongitude'], 6, '.', '');
     //$sql_premise = "SELECT s.\"iPremiseId\", s.\"vName\" FROM premise_mas s WHERE  St_Within(ST_GeometryFromText('POINT(".$vLongitude." ".$vLatitude.")', 4326)::geometry, (s.\"vPointLatLong\")::geometry)='t'ORDER BY s.\"iPremiseId\" DESC LIMIT 1";
 
-    $sql_premise = "SELECT s.\"iPremiseId\", s.\"vName\" FROM premise_mas s WHERE s.\"vLongitude\" = '".$RES_PARA['vLongitude']."' AND  s.\"vLatitude\" = '".$RES_PARA['vLatitude']."' ORDER BY s.\"iPremiseId\" DESC LIMIT 1";    
+    $sql_premise = "SELECT s.\"iPremiseId\", s.\"iStatus\" FROM premise_mas s WHERE s.\"vLongitude\" = '".$RES_PARA['vLongitude']."' AND  s.\"vLatitude\" = '".$RES_PARA['vLatitude']."' ORDER BY s.\"iPremiseId\" DESC LIMIT 1";    
     $rs_premise = $sqlObj->GetAll($sql_premise);
     $iMatchingPremiseId = 0;
+    $iPremiseStatus = 0;
     if(!empty($rs_premise)){
         $iMatchingPremiseId = $rs_premise[0]['iPremiseId'];
+        $iPremiseStatus = $rs_premise[0]['iStatus'];
     }
     //echo "<pre>";print_r($rs_premise);exit;
    	$FiberInquiryObj = new FiberInquiry();
@@ -39,22 +41,23 @@ if($request_type == "fiber_inquiry_edit"){
         "iLoginUserId"          => $RES_PARA['iLoginUserId'],
         "iInquiryType"          => $RES_PARA['iInquiryType'],
         "tNotes"                => $RES_PARA['tNotes'],
+        "vSuitAptUnit"          => $RES_PARA['vSuitAptUnit'],
         "iMatchingPremiseId"    => $iMatchingPremiseId,
     );
 
-   $FiberInquiryObj->update_arr = $update_arr;
-   $FiberInquiryObj->setClause();
-   $rs_db = $FiberInquiryObj->update_records();
+    $FiberInquiryObj->update_arr = $update_arr;
+    $FiberInquiryObj->setClause();
+    $rs_db = $FiberInquiryObj->update_records();
 
-   if($rs_db){
-      $rh = HTTPStatus(200);
-      $code = 2000;
-      $message = api_getMessage($req_ext, constant($code));
-      $response_data = array("Code" => 200, "Message" => MSG_UPDATE, "iFiberInquiryId" => $RES_PARA['iFiberInquiryId'], "iMatchingPremiseId" => $iMatchingPremiseId);
-   }else{
-      $r = HTTPStatus(500);
-      $response_data = array("Code" => 500 , "Message" => MSG_UPDATE_ERROR);
-   }
+    if($rs_db){
+        $rh = HTTPStatus(200);
+        $code = 2000;
+        $message = api_getMessage($req_ext, constant($code));
+        $response_data = array("Code" => 200, "Message" => MSG_UPDATE, "iFiberInquiryId" => $RES_PARA['iFiberInquiryId'], "iMatchingPremiseId" => $iMatchingPremiseId, "iPremiseStatus" => $iPremiseStatus);
+    }else{
+        $r = HTTPStatus(500);
+        $response_data = array("Code" => 500 , "Message" => MSG_UPDATE_ERROR);
+    }
 }else if($request_type == "fiber_inquiry_delete"){
    	//echo "<pre>";print_r($RES_PARA);exit;
    	$iFiberInquiryId = $RES_PARA['iFiberInquiryId'];
@@ -70,11 +73,13 @@ if($request_type == "fiber_inquiry_edit"){
     //$vLatitude = number_format($RES_PARA['vLatitude'], 6, '.', '');
     //$vLongitude = number_format($RES_PARA['vLongitude'], 6, '.', '');
     //$sql_premise = "SELECT s.\"iPremiseId\", s.\"vName\" FROM premise_mas s WHERE  St_Within(ST_GeometryFromText('POINT(".$vLongitude." ".$vLatitude.")', 4326)::geometry, (s.\"vPointLatLong\")::geometry)='t'ORDER BY s.\"iPremiseId\" DESC LIMIT 1"; 
-    $sql_premise = "SELECT s.\"iPremiseId\", s.\"vName\" FROM premise_mas s WHERE s.\"vLongitude\" = '".$RES_PARA['vLongitude']."' AND  s.\"vLatitude\" = '".$RES_PARA['vLatitude']."' ORDER BY s.\"iPremiseId\" DESC LIMIT 1";
+    $sql_premise = "SELECT s.\"iPremiseId\", s.\"iPremiseStatus\" FROM premise_mas s WHERE s.\"vLongitude\" = '".$RES_PARA['vLongitude']."' AND  s.\"vLatitude\" = '".$RES_PARA['vLatitude']."' ORDER BY s.\"iPremiseId\" DESC LIMIT 1";
     $rs_premise = $sqlObj->GetAll($sql_premise);
     $iMatchingPremiseId = 0;
+    $iPremiseStatus = 0;
     if(!empty($rs_premise)){
         $iMatchingPremiseId = $rs_premise[0]['iPremiseId'];
+        $iPremiseStatus = $rs_premise[0]['iPremiseStatus'];
     }       
     $FiberInquiryObj = new FiberInquiry();
     $FiberInquiryObj->clear_variable();
@@ -98,6 +103,7 @@ if($request_type == "fiber_inquiry_edit"){
         "iLoginUserId"          => $RES_PARA['iLoginUserId'],
         "iInquiryType"          => $RES_PARA['iInquiryType'],
         "tNotes"                => $RES_PARA['tNotes'],
+        "vSuitAptUnit"          => $RES_PARA['vSuitAptUnit'],
         "iMatchingPremiseId"    => $iMatchingPremiseId,
     );
 
@@ -105,7 +111,7 @@ if($request_type == "fiber_inquiry_edit"){
     $FiberInquiryObj->setClause();
     $rs_db = $FiberInquiryObj->add_records();
     if($rs_db){
-        $response_data = array("Code" => 200, "Message" => MSG_ADD, "iFiberInquiryId" => $rs_db, "iMatchingPremiseId" => $iMatchingPremiseId);
+        $response_data = array("Code" => 200, "Message" => MSG_ADD, "iFiberInquiryId" => $rs_db, "iMatchingPremiseId" => $iMatchingPremiseId, "iPremiseStatus" => $iPremiseStatus);
     }
     else{
         $response_data = array("Code" => 500 , "Message" => MSG_ADD_ERROR);
@@ -329,6 +335,7 @@ if($request_type == "fiber_inquiry_edit"){
         $join_fieds_arr[] = 'zm."vZipcode"';
         $join_fieds_arr[] = 'z."vZoneName"';
         $join_fieds_arr[] = 'n."vName" as "vNetwork"';
+        $join_fieds_arr[] = 'pm."vName" as "vPremiseName"';
 
         $join_arr = array();
         $join_arr[] = 'LEFT JOIN contact_mas on fiberinquiry_details."iCId" = contact_mas."iCId"';
@@ -337,6 +344,7 @@ if($request_type == "fiber_inquiry_edit"){
         $join_arr[] = 'LEFT JOIN zipcode_mas zm on fiberinquiry_details."iZipcode" = zm."iZipcode"';
         $join_arr[] = 'LEFT JOIN zone z on fiberinquiry_details."iZoneId" = z."iZoneId"';
         $join_arr[] = 'LEFT JOIN network n on z."iNetworkId" = n."iNetworkId"';
+        $join_arr[] = 'LEFT JOIN premise_mas pm on fiberinquiry_details."iMatchingPremiseId" = pm."iPremiseId"';
         $FiberInquiryObj->join_field = $join_fieds_arr;
         $FiberInquiryObj->join = $join_arr;
         $FiberInquiryObj->where = $where_arr;
@@ -391,6 +399,21 @@ if($request_type == "fiber_inquiry_edit"){
                     "iInquiryType" => $rs_sr[$i]['iInquiryType'],
                     "vInquiryType" => $vInquiryType,
                     "dAddedDate" => $rs_sr[$i]['dAddedDate'],
+                    "iMatchingPremiseId" => $rs_sr[$i]['iMatchingPremiseId'],
+                    "vPremiseName" => $rs_sr[$i]['vPremiseName'],
+                    "vLatitude" => $rs_sr[$i]['vLatitude'],
+                    "vLongitude" => $rs_sr[$i]['vLongitude'],
+                    "vAddress1" => $rs_sr[$i]['vAddress1'],
+                    "vAddress2" => $rs_sr[$i]['vAddress2'],
+                    "vStreet" => $rs_sr[$i]['vStreet'],
+                    "vCrossStreet" => $rs_sr[$i]['vCrossStreet'],
+                    "iZipcode" => $rs_sr[$i]['iZipcode'],
+                    "iStateId" => $rs_sr[$i]['iStateId'],
+                    "iCountyId" => $rs_sr[$i]['iCountyId'],
+                    "iCityId" => $rs_sr[$i]['iCityId'],
+                    "iZoneId" => $rs_sr[$i]['iZoneId'],
+                    "iServiceOrderId" => $rs_sr[$i]['iServiceOrderId'],
+                    "vSuitAptUnit" => $rs_sr[$i]['vSuitAptUnit'],
                 );
             }
         }

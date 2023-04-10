@@ -261,10 +261,11 @@ function reset_all_fields(){
 }
 
 function exportExcelSheet(){
+    var iDisplayLength = gridtable.rows().count();
     $.ajax({
         type: "POST",
-        url: site_url+"fiber_inquiry/list&mode=Excel",
-        data: $("#frmlist").serializeArray(),
+        url: site_url+"fiber_inquiry/list&mode=Excel&iDisplayLength="+iDisplayLength,
+        data: $("#site_search_form").serializeArray(),
         success: function(data){
             res = JSON.parse(data);
             isError = res['isError'];

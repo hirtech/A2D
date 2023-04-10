@@ -237,9 +237,10 @@ $('#AdvSearchReset').click(function () {
 });
 
 function exportExcelSheet(){
+	var iDisplayLength = gridtable.rows().count();
     $.ajax({
         type: "POST",
-        url: site_url+"trouble_ticket/trouble_ticket_list&mode=Excel",
+        url: site_url+"trouble_ticket/trouble_ticket_list&mode=Excel&iDisplayLength="+iDisplayLength,
         data: $(".trouble_ticket_search_form").serializeArray(),
         success: function(data){
             res = JSON.parse(data);

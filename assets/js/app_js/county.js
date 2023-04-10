@@ -187,10 +187,10 @@ function delete_record(id)
 
 }
 function exportExcelSheet(){
-  //  console.log('11111');
+    var iDisplayLength = gridtable.rows().count();
     $.ajax({
         type: "POST",
-        url: site_url+"master/county_list?mode=Excel",
+        url: site_url+"master/county_list?mode=Excel&iDisplayLength="+iDisplayLength,
         data: $("#frmlist").serializeArray(),
         success: function(data){
             res = JSON.parse(data);

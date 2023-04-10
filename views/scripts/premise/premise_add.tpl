@@ -32,6 +32,7 @@
                         <div class="col-12">
                     		<input type="hidden" name="groupAction" value="groupAction">
                             <input type="hidden" name="mode" id="mode" value="{$mode}">
+                            <input type="hidden" name="iFiberInquiryId" id="iFiberInquiryId" value="{$iFiberInquiryId}">
 							<input type="hidden" name="iPremiseId" id="iPremiseId" value="{$rs_site[0].iPremiseId}" />
 							<input type="hidden" name="iGeometryType" id="iGeometryType" value="1" />
 							<input type="hidden" name="vAddress1" id="vAddress1" value="{$rs_site[0].vAddress1}" />
@@ -107,6 +108,12 @@
 							       				 	
 													 </div> 
 												</div>
+							       			</div>
+							       			<div class="form-row mb-2">
+							       				<div class="col-12">
+								       				<label for="vSuitAptUnit">Suite/Apt/Unit#</label>
+					                            	<input type="text" class="form-control" id="vSuitAptUnit" name="vSuitAptUnit" placeholder="Suite/Apt/Unit#" value="{$rs_site[0].vSuitAptUnit}" >
+					                        	</div>
 							       			</div>
 							       			<div class="form-row mb-2">
 							       				<div class="col-12">
@@ -326,6 +333,7 @@
 <script type="text/javascript">
 var mode = '{$mode}';
 var iSSTypeId = '{$rs_site[0].iSSTypeId}';
+var iFiberInquiryId = '{$iFiberInquiryId}';
 var tmplat = '' ;
 var tmplng = '' ;
 {if $rs_site[0].vLatitude neq '' && $rs_site[0].vLongitude neq ''}
@@ -333,25 +341,6 @@ var tmplng = '' ;
 	tmplng = '{$rs_site[0].vLongitude}';
 {/if}
 
-{literal}
-$(document).ready(function() {
-    $('select').each(function () {
-        $(this).select2({
-          theme: 'bootstrap4',
-          width: 'style',
-          placeholder: $(this).attr('placeholder'),
-          allowClear: Boolean($(this).data('allow-clear')),
-        });
-    });
-
-    if(mode == 'Add'){
-    	$(".address-details").hide();
-    }else if (mode == 'Update'){
-    	//google.maps.event.trigger(autocomplete, 'place_changed');
-    	google.maps.event.addDomListener(window, 'load', initialize);
-    }
-});
-{/literal}
 </script>
 
 <script type="text/javascript" src="assets/js/app_js/premise_add.js"></script>

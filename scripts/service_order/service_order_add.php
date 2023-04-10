@@ -18,8 +18,38 @@ include_once($controller_path . "service_order.inc.php");
 
 $ServiceOrderObj = new ServiceOrder();
 $iPremiseId = $_REQUEST['iPremiseId'];
+$iFiberInquiryId = $_REQUEST['iFiberInquiryId'];
 $sess_iCompanyId = $_SESSION["sess_iCompanyId" . $admin_panel_session_suffix];
 $sess_vCompanyAccessType = $_SESSION["sess_vCompanyAccessType" . $admin_panel_session_suffix];
+
+if($iFiberInquiryId > 0 && $mode = 'Add') {
+    $arr_param = array();
+    $arr_param = array(
+        "iFiberInquiryId"   => $_REQUEST['iFiberInquiryId'],
+        "sessionId"         => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
+    );
+    $API_URL = $site_api_url."fiber_inquiry_list.json";
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $API_URL);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_HEADER, FALSE);
+    curl_setopt($ch, CURLOPT_POST, TRUE);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($arr_param));
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+       "Content-Type: application/json",
+    ));
+    $response = curl_exec($ch);
+    curl_close($ch); 
+    $res1 = json_decode($response, true); 
+    $res = $res1['result']['data'];
+    //echo "<pre>";print_r($res);exit;
+    if($res[0]['vAddress'] != ''){
+        $rs_sorder[0]['iPremiseId'] = $res[0]['iMatchingPremiseId'];
+        $rs_sorder[0]['vPremiseName'] = $res[0]['vPremiseName'];
+    }
+}
 
 if($mode == "Update") {
     $iServiceOrderId = $_REQUEST['iServiceOrderId'];
@@ -161,6 +191,7 @@ $module_title = "Service Order";
 $smarty->assign("module_name", $module_name);
 $smarty->assign("module_title", $module_title);
 $smarty->assign("mode", $mode);
+$smarty->assign("iFiberInquiryId", $iFiberInquiryId);
 $smarty->assign("rs_sorder", $rs_sorder);
 $smarty->assign("iLastServiceOrderId", $iLastServiceOrderId);
 $smarty->assign("sess_vCompanyAccessType", $sess_vCompanyAccessType);

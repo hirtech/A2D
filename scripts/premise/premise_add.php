@@ -9,10 +9,51 @@ $access_group_var_edit = per_hasModuleAccess("Premise", 'Edit', 'N');
 
 include_once($controller_path . "premise.inc.php");
 $SiteObj = new Site();
-
+//echo "<pre>";print_r($_REQUEST);exit;
 $mode = (($_REQUEST['mode'] != "") ? $_REQUEST['mode'] : "Add");
+$iFiberInquiryId = (($_REQUEST['iFiberInquiryId'] != "") ? $_REQUEST['iFiberInquiryId'] : "0");
 $rs_site = array();
 $iSAttributeIdArr = array();
+
+if($iFiberInquiryId > 0 && $mode = 'Add') {
+    $arr_param = array();
+    $arr_param = array(
+        "iFiberInquiryId"   => $_REQUEST['iFiberInquiryId'],
+        "sessionId"         => $_SESSION["we_api_session_id" . $admin_panel_session_suffix],
+    );
+    $API_URL = $site_api_url."fiber_inquiry_list.json";
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $API_URL);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_HEADER, FALSE);
+    curl_setopt($ch, CURLOPT_POST, TRUE);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($arr_param));
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+       "Content-Type: application/json",
+    ));
+    $response = curl_exec($ch);
+    curl_close($ch); 
+    $res1 = json_decode($response, true); 
+    $res = $res1['result']['data'];
+    //echo "<pre>";print_r($res);exit;
+    if($res[0]['vAddress'] != ''){
+        $rs_site[0]['address'] = $res[0]['vAddress'];
+        $rs_site[0]['vLatitude'] = $res[0]['vLatitude'];
+        $rs_site[0]['vLongitude'] = $res[0]['vLongitude'];
+        $rs_site[0]['vAddress1'] = $res[0]['vAddress1'];
+        $rs_site[0]['vAddress2'] = $res[0]['vAddress2'];
+        $rs_site[0]['vStreet'] = $res[0]['vStreet'];
+        $rs_site[0]['vCrossStreet'] = $res[0]['vCrossStreet'];
+        $rs_site[0]['iZipcode'] = $res[0]['iZipcode'];
+        $rs_site[0]['iStateId'] = $res[0]['iStateId'];
+        $rs_site[0]['iCountyId'] = $res[0]['iCountyId'];
+        $rs_site[0]['iCityId'] = $res[0]['iCityId'];
+        $rs_site[0]['iZoneId'] = $res[0]['iZoneId'];
+    }
+}
+//echo "<pre>";print_r($rs_site);exit;
 if($mode == "Update") {
     $iPremiseId = $_REQUEST['iPremiseId'];
     $where_arr = array();
@@ -488,4 +529,5 @@ $smarty->assign("rs_site_contact", $rs_site_contact);
 $smarty->assign("rs_site_doc", $rs_site_doc);
 $smarty->assign("access_group_var_edit", $access_group_var_edit);
 $smarty->assign("tabid",$_REQUEST['tabid']);
+$smarty->assign("iFiberInquiryId", $iFiberInquiryId);
 ?>

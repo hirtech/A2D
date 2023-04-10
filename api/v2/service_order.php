@@ -374,6 +374,7 @@ if($request_type == "service_order_list"){
         "tComments"             => $RES_PARA['tComments'],
         "vFile"                 => $RES_PARA['vFile'],
         "iUserCreatedBy"		=> $RES_PARA['iUserCreatedBy'],
+        "iFiberInquiryId"       => $RES_PARA['iFiberInquiryId'],
     );
 
     $ServiceOrderObj->insert_arr = $insert_arr;

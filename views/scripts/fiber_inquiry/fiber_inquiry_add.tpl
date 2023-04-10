@@ -110,6 +110,12 @@
 											<div class="col-3 address-details text-right" id="showNearbySr">
 											</div>
 										</div>
+										<div class="form-row mb-2">
+						       				<div class="col-12">
+							       				<label for="vSuitAptUnit">Suite/Apt/Unit#</label>
+				                            	<input type="text" class="form-control" id="vSuitAptUnit" name="vSuitAptUnit" placeholder="Suite/Apt/Unit#" value="{$rs_sr[0].vSuitAptUnit}" >
+				                        	</div>
+						       			</div>
 									</div>
 									<div class="col-md-1"></div>
 									<div class="col-md-6">
