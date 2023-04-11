@@ -595,6 +595,9 @@ const imagePath = "https://developers.google.com/maps/documentation/javascript/e
 //Create LatLngBounds object.
 var latlngbounds = new google.maps.LatLngBounds();
 
+var networkFilterArr = [];
+var infowindow_networkFilter;
+
 var networkLayerArr = [];
 var infowindow_networkLayer;
 

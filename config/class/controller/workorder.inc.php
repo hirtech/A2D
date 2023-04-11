@@ -156,6 +156,15 @@ class WorkOrder {
 		$this->limit_clause = "";
 	}
 
+	function delete_records($iWOId){
+		global $sqlObj;
+
+        $sql_del = "DELETE FROM workorder WHERE workorder.\"iWOId\" IN (".$iWOId.")";
+		$rs_del = $sqlObj->Execute($sql_del);
+
+		return $rs_del;
+	}
+
 	function recordset_glance_data($where_clause1 = "",$where_clause2 ="") {	
 		global $sqlObj;
 		if($where_clause1 != ""){

@@ -65,6 +65,47 @@ function getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLay
 							}
 						});
           			}
+
+          			// ******** Network Filter ******** //
+					if (response.networkFilter !== undefined) {
+						$.each(response.networkFilter, function(id, item) {
+							var src = item['file_url'];
+							//var src =  "http://52.21.64.154/storage/netowrk_kml//1665577528_eCommunity_Military_Fort_Gordon.kml";
+	                        var kml = new google.maps.KmlLayer({
+	                            url: src,
+	                            suppressInfoWindows: true,  
+	                            map:map,
+	                            zindex: 0
+	                        }); 
+
+							kml.vName = item['vName'];
+                        	networkFilterArr.push(kml);
+						});
+		                var kmls = networkFilterArr.length;
+		                if (kmls > 0) {
+		                	//info window
+		                    for (i = 0; i < kmls; i++) {
+								var obj = {
+									'vname':networkFilterArr[i].vName,		
+								};
+								networkFilterArr[i].objInfo = obj;
+								if(networkFilterArr[i]) {
+									google.maps.event.addListener(networkFilterArr[i], 'click', function(evt) {
+										if(infowindow_networkFilter) {
+											infowindow_networkFilter.close();
+										}
+										infowindow_networkFilter = new google.maps.InfoWindow({
+											content: this.objInfo.vname,
+											zIndex: 100,
+											pixelOffset:evt.pixelOffset, 
+											position:evt.latLng
+										});
+										infowindow_networkFilter.open(map,networkFilterArr[i]);
+									})
+								}
+		                    }
+		                }
+					}
          	
          			// ******** Network layer ******** //
 					if (response.networkLayer !== undefined) {

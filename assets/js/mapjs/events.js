@@ -229,7 +229,39 @@ $(document).ready(function() {
         getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLayer, custLayer, fiberInquiryLayer, serviceOrderLayer, workOrderLayer, pCircuitStatusLayer, pCircuitcTypeLayer, premiseStatusLayer, premiseAttribute, premiseTypeLayer, premisesubTypeLayer);       
     });
 
-    // ************* Select all Zone - Filter Submenu ************* //
+    // ************* Select Zone - Filter Submenu ************* //
+    $(document).on("click", "#selectAllZone", function() {
+        clearMap();
+        skZones  = [];
+        var checksone = checkNetworkSelected();
+        if(checksone == true){
+            if ($("#selectAllZone").prop("checked")) {
+                $(".selectAllZone").prop("checked", true);
+                $("#selectAllZone").val("Yes");
+                //$(".selectAllZone").trigger('click');
+                $.each($("input[name='skZones[]']:checked"), function() {
+                    skZones.push($(this).val());
+                });
+                //alert(JSON.stringify(skZones))
+            } else {
+                $(".selectAllZone").prop("checked", false);
+                $("#selectAllZone").val("No");
+                skZones = [];
+                
+            }
+        }else{
+            skCity = [];
+            skZipcode = [];
+            skZones = [];
+            //alert('Please select atleast one network from "Filter" Submenu.');
+            toastr.error('Please select atleast one network from "Filter" Submenu.');
+        }
+        resetButton();
+        clearLayerData();
+        getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLayer, custLayer, fiberInquiryLayer, serviceOrderLayer, workOrderLayer, pCircuitStatusLayer, pCircuitcTypeLayer, premiseStatusLayer, premiseAttribute, premiseTypeLayer, premisesubTypeLayer);  
+    });
+
+    // ************* Select Zone - Filter Submenu ************* //
     $(document).on("click", ".selectAllZone", function() {
         clearMap();
         skZones = [];
@@ -256,39 +288,6 @@ $(document).ready(function() {
 
 
         getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLayer, custLayer, fiberInquiryLayer, serviceOrderLayer, workOrderLayer, pCircuitStatusLayer, pCircuitcTypeLayer, premiseStatusLayer, premiseAttribute, premiseTypeLayer, premisesubTypeLayer);
-    });
-
-    // ************* Select Zone - Filter Submenu ************* //
-    $(document).on("click", "#selectAllZone", function() {
-        clearMap();
-        skZones  = [];
-        var checksone = checkNetworkSelected();
-        if(checksone == true){
-            if ($("#selectAllZone").prop("checked")) {
-                $(".selectAllZone").prop("checked", true);
-                $("#selectAllZone").val("Yes");
-                //$(".selectAllZone").trigger('click');
-                $.each($("input[name='skZones[]']:checked"), function() {
-                    skZones.push($(this).val());
-                });
-            } else {
-                $(".selectAllZone").prop("checked", false);
-                $("#selectAllZone").val("No");
-                skZones = [];
-                $.each($("input[name='skZones[]']:checked"), function() {
-                    skZones.push($(this).val());
-                });
-            }
-        }else{
-            skCity = [];
-            skZipcode = [];
-            skZones = [];
-            //alert('Please select atleast one network from "Filter" Submenu.');
-            toastr.error('Please select atleast one network from "Filter" Submenu.');
-        }
-        resetButton();
-        clearLayerData();
-        getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLayer, custLayer, fiberInquiryLayer, serviceOrderLayer, workOrderLayer, pCircuitStatusLayer, pCircuitcTypeLayer, premiseStatusLayer, premiseAttribute, premiseTypeLayer, premisesubTypeLayer);  
     });
 
     // ************* Select All City - Filter Submenu ************* //

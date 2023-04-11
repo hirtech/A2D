@@ -155,7 +155,9 @@ class Fieldmap {
         }
 
         if(isset($param['network']) && $param['network'] != ''){
-            $selectedNetwork = explode(",", $param['network']);
+            $networks = $this->getNetworkKMLData($param['network']);
+            /*$selectedNetwork = explode(",", $param['network']);
+            
             if(empty($finalArr)){
                 $finalArr = $siteArr;
             }
@@ -164,12 +166,13 @@ class Fieldmap {
                     unset($finalArr[$_key]);
                 }
             }
-            $response['sites'] = $finalArr;
+            $response['sites'] = $finalArr;*/
+            $response['networkFilter'] = $networks;
         }
 
         if(isset($param['zone']) && $param['zone'] != ''){
             $zones = $this->getZonesData($param['zone']);
-            $selectedZones = explode(",", $param['zone']);
+            /*$selectedZones = explode(",", $param['zone']);
             if(empty($finalArr)){
                 $finalArr = $siteArr;
             }
@@ -179,7 +182,7 @@ class Fieldmap {
                     unset($finalArr[$_key]);
                 }
             }
-            $response['sites'] = $finalArr;
+            $response['sites'] = $finalArr;*/
             $response['polyZone'] = $zones;
         }
 
@@ -1444,7 +1447,7 @@ class Fieldmap {
     public function getNetworkLayerData($param){
         global $sqlObj;
         $data = array();
-         $sqlData = 'SELECT "iNetworkId", "vName","vFile" FROM "network" where "iStatus" = 1';
+        $sqlData = 'SELECT "iNetworkId", "vName","vFile" FROM "network" where "iStatus" = 1';
         $data['networklayer'] = $sqlObj->GetAll($sqlData);
         return $data;
     }
@@ -1468,6 +1471,26 @@ class Fieldmap {
          $sqlData = 'SELECT "iConnectionTypeId", "vConnectionTypeName", "iStatus" FROM "connection_type_mas" where "iStatus" = 1';
         $data = $sqlObj->GetAll($sqlData);
         return $data;
+    }
+
+    public function getNetworkKMLData($iNetworkId = ''){
+        global $sqlObj, $network_path, $network_url;
+        $data = array();
+        $extra_str = '';
+        if($iNetworkId != ''){
+            $extra_str .= ' AND "iNetworkId" IN ('.$iNetworkId.')';
+        }
+        $sqlData = 'SELECT "iNetworkId", "vName","vFile" FROM "network" where "iStatus" = 1'.$extra_str;
+        $rs = $sqlObj->GetAll($sqlData);
+        if($rs) {
+            $ni = count($rs);
+            for($i=0; $i<$ni; $i++){
+                if($rs[$i]['vFile'] != "" && file_exists($network_path.$rs[$i]['vFile'])){
+                    $rs[$i]['file_url'] = $network_url.$rs[$i]['vFile'];;
+                }
+            }
+        }
+        return $rs;
     }
     
 }
