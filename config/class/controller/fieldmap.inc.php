@@ -655,6 +655,7 @@ class Fieldmap {
                     //print_r($site); die;
                     $premiseAttributeArr = $premiseAttributeArr + $site;
                 }
+				$premiseAttributeArr = [];
             }
 
             if(isset($param['premiseStatusLayer']) && $param['premiseStatusLayer'] != ''){
@@ -664,6 +665,7 @@ class Fieldmap {
                         unset($premiseAttributeArr[$key]);
                     }
                 }
+				$premiseAttributeArr = [];
             }
 
             if(isset($param['premiseTypeLayer']) && $param['premiseTypeLayer'] != ''){
@@ -673,6 +675,7 @@ class Fieldmap {
                         unset($premiseAttributeArr[$key]);
                     }
                 }
+				$premiseTypeLayerArr = [];
             }
 
             if(isset($param['premisesubTypeLayer']) && $param['premisesubTypeLayer'] != ''){
@@ -684,6 +687,7 @@ class Fieldmap {
                     $site = $this->searchFor($sT1, $premiseAttributeArr, 'sstypeid');
                     $premiseAttributeArr = $premiseAttributeArr + $site;
                 }
+				$premisesubTypeLayerArr = [];
             }
 
             if(isset($param['networkLayer']) && $param['networkLayer'] != ''){
@@ -754,6 +758,7 @@ class Fieldmap {
                         unset($premiseTypeLayerArr[$key]);
                     }
                 }
+				$premiseStatusArr = [];
             }
 
             if(isset($param['premiseAttribute']) && $param['premiseAttribute'] != ''){
@@ -762,6 +767,7 @@ class Fieldmap {
                     $site = $this->searchFor($attr, $premiseTypeLayerArr, 'sattributeid');
                     $premiseTypeLayerArr = $premiseTypeLayerArr + $site;
                 }
+				$premiseAttributeArr = [];
             }
 
             if(isset($param['premisesubTypeLayer']) && $param['premisesubTypeLayer'] != ''){
@@ -773,6 +779,7 @@ class Fieldmap {
                     $site = $this->searchFor($sT1, $premiseTypeLayerArr, 'sstypeid');
                     $premiseTypeLayerArr = $premiseTypeLayerArr + $site;
                 }
+				$premisesubTypeLayerArr = [];
             }
 
             if(isset($param['networkLayer']) && $param['networkLayer'] != ''){
@@ -848,6 +855,7 @@ class Fieldmap {
                         unset($premisesTypeLayerArr[$key]);
                     }
                 }
+				$premiseStatusArr = [];
             }
 
             if(isset($param['premiseAttribute']) && $param['premiseAttribute'] != ''){
@@ -856,6 +864,7 @@ class Fieldmap {
                     $site = $this->searchFor($attr, $premisesTypeLayerArr, 'sattributeid');
                     $premisesTypeLayerArr = $premisesTypeLayerArr + $site;
                 }
+				$premiseAttributeArr = [];
             }
 
             if(isset($param['premiseTypeLayer']) && $param['premiseTypeLayer'] != ''){
@@ -865,6 +874,8 @@ class Fieldmap {
                         unset($premisesTypeLayerArr[$key]);
                     }
                 }
+
+				$premiseTypeLayerArr = [];
             }
 
             if(isset($param['networkLayer']) && $param['networkLayer'] != ''){
@@ -912,6 +923,11 @@ class Fieldmap {
                 }
             } 
         }
+
+		/*echo " premiseAttributeArr count " . count($premiseAttributeArr)."<hr/>";
+		echo " premisesubTypeLayerArr count " . count($premisesubTypeLayerArr)."<hr/>";
+		echo " premiseStatusArr count " . count($premiseStatusArr)."<hr/>";
+		echo " premiseTypeLayerArr count " . count($premiseTypeLayerArr)."<hr/>";exit;*/
         //echo "<pre>";print_r($premiseAttributeArr);exit();
         //echo "<pre>";print_r($premisesubTypeLayerArr);exit;
         //echo "<pre>";print_r($premiseStatusArr);
