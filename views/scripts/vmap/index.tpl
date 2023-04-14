@@ -393,7 +393,7 @@
 <script src="{$site_url}assets/js/mapjs/jquery_3_5_1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key={$GOOGLE_GEOCODE_API_KEY}&libraries=geometry,drawing,places,visualization"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key={$GOOGLE_GEOCODE_API_KEY}&libraries=geometry,drawing,places,visualization&callback=Function.prototype"></script>
 <script src="{$site_url}assets/js/mapjs/markerclustererplus/src/markerclusterer.js"></script>
 <script src="{$site_url}assets/js/mapjs/oms.min.js"></script>
 <script src="{$site_url}assets/vendors/typeahead/handlebars-v4.5.3.js"></script>

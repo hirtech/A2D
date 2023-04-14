@@ -64,13 +64,17 @@ function getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLay
 								}
 							}
 						});
+
+						siteMarkerCluster = new MarkerClusterer(map, siteMarker, {
+							imagePath: imagePath
+						});
           			}
 
           			// ******** Network Filter ******** //
 					if (response.networkFilter !== undefined) {
 						$.each(response.networkFilter, function(id, item) {
 							var src = item['file_url'];
-							//var src =  "http://52.21.64.154/storage/netowrk_kml//1665577528_eCommunity_Military_Fort_Gordon.kml";
+							//var src =  "http://52.21.64.154/storage/netowrk_kml/1678651009_eCommunityClayCo-3.11.23.kmz";
 	                        var kml = new google.maps.KmlLayer({
 	                            url: src,
 	                            suppressInfoWindows: true,  
@@ -256,6 +260,9 @@ function getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLay
 								}
 			            	}
 			            });
+						fiberInquiryMarkerCluster = new MarkerClusterer(map, fiberInquirylayerMarker, {
+							imagePath: imagePath,
+						});
           			}
 
           			// ******** Service Order layer ******** //
@@ -294,6 +301,10 @@ function getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLay
 								}
 					    	}
 					    });
+
+						serviceOrderMarkerCluster = new MarkerClusterer(map, serviceOrderlayerMarker, {
+							imagePath: imagePath,
+						});
 					}
 
 					// ******** Work Order layer ******** //
@@ -330,6 +341,9 @@ function getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLay
 								}
 					    	}
 					    });
+						workOrderMarkerCluster = new MarkerClusterer(map, workOrderlayerMarker, {
+							imagePath: imagePath,
+						});
 					}
 
 					// ******** Premise Circuit layer ******** //
@@ -366,6 +380,10 @@ function getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLay
 								}
 					    	}
 					    });
+
+						premiseCircuitMarkerCluster = new MarkerClusterer(map, premiseCircuitlayerMarker, {
+							imagePath: imagePath,
+						});
 					}
 					if(jQuery.isEmptyObject(response) == false){
 						if (response.length > 0){
@@ -619,13 +637,6 @@ function showPointMapForFiberInquiry(sitePath, map, icon, id, vName, vAddress, p
         markerSpiderfier.addMarker(fiberInquirylayerMarker[fiberInquiryCount]);
     }
 
-    fiberInquiryMarkerCluster = new MarkerClusterer(map, fiberInquirylayerMarker, {
-		imagePath: imagePath,
-		minZoom: 12,
-        maxZoom: 15,
-		minimumClusterSize : 5
-	});
-
 	//Extend each marker's position in LatLngBounds object.
     latlngbounds.extend(fiberInquirylayerMarker[fiberInquiryCount].position);
 	fiberInquiryCount++;
@@ -648,13 +659,6 @@ function showPointMapForserviceOrder(sitePath, map, icon, id, vMasterMSA, vServi
         markerSpiderfier.addMarker(serviceOrderlayerMarker[serviceOrderCount]);
     }
 
-    serviceOrderMarkerCluster = new MarkerClusterer(map, serviceOrderlayerMarker, {
-		imagePath: imagePath,
-		minZoom: 12,
-        maxZoom: 15,
-		minimumClusterSize : 5
-	});
-
 	//Extend each marker's position in LatLngBounds object.
     latlngbounds.extend(serviceOrderlayerMarker[serviceOrderCount].position);
 	serviceOrderCount++;
@@ -676,13 +680,6 @@ function showPointMapForworkOrder(sitePath, map, icon, id, premiseid, vPremiseNa
 	if (markerSpiderfier) {
         markerSpiderfier.addMarker(workOrderlayerMarker[workOrderCount]);
     }
-
-    workOrderMarkerCluster = new MarkerClusterer(map, workOrderlayerMarker, {
-		imagePath: imagePath,
-		minZoom: 12,
-        maxZoom: 15,
-		minimumClusterSize : 5
-	});
 
 	//Extend each marker's position in LatLngBounds object.
     latlngbounds.extend(workOrderlayerMarker[workOrderCount].position);
@@ -708,13 +705,6 @@ function showPointMapForpremiseCircuit(sitePath, map, icon, id, premiseid, vPrem
 	//Extend each marker's position in LatLngBounds object.
     latlngbounds.extend(premiseCircuitlayerMarker[premiseCircuitCount].position);
 
-    premiseCircuitMarkerCluster = new MarkerClusterer(map, premiseCircuitlayerMarker, {
-		imagePath: imagePath,
-		minZoom: 12,
-        maxZoom: 15,
-		minimumClusterSize : 5
-	});
-
 	premiseCircuitCount++;
 }
 
@@ -739,13 +729,7 @@ function showPointMap(sitePath, map, icon, premiseid) {
 
     //Extend each marker's position in LatLngBounds object.
     latlngbounds.extend(siteMarker[pCount].position);
-    siteMarkerCluster = new MarkerClusterer(map, siteMarker, {
-		imagePath: imagePath,
-		minZoom: 12,
-        maxZoom: 15,
-		minimumClusterSize : 5
-	});
-	
+    
 
 	pCount++;
 }

@@ -130,12 +130,14 @@ ClusterIcon.prototype.onAdd = function () {
     cDraggingMapByCluster = cMouseDownInCluster;
   });
 
-  google.maps.event.addDomListener(this.div_, "mousedown", function () {
+  //google.maps.event.addDomListener(this.div_, "mousedown", function () {
+  this.div_.addEventListener("mousedown", function () {
     cMouseDownInCluster = true;
     cDraggingMapByCluster = false;
   });
 
-  google.maps.event.addDomListener(this.div_, "click", function (e) {
+  //google.maps.event.addDomListener(this.div_, "click", function (e) {
+   this.div_.addEventListener( "click", function (e) {
     cMouseDownInCluster = false;
     if (!cDraggingMapByCluster) {
       var theBounds;
@@ -175,7 +177,9 @@ ClusterIcon.prototype.onAdd = function () {
     }
   });
 
-  google.maps.event.addDomListener(this.div_, "mouseover", function () {
+  //google.maps.event.addDomListener(this.div_, "mouseover", function () {
+  this.div_.addEventListener("mouseover", function () {
+ 
     var mc = cClusterIcon.cluster_.getMarkerClusterer();
     /**
      * This event is fired when the mouse moves over a cluster marker.
@@ -186,7 +190,8 @@ ClusterIcon.prototype.onAdd = function () {
     google.maps.event.trigger(mc, "mouseover", cClusterIcon.cluster_);
   });
 
-  google.maps.event.addDomListener(this.div_, "mouseout", function () {
+  //google.maps.event.addDomListener(this.div_, "mouseout", function () {
+   this.div_.addEventListener("mouseout", function () {
     var mc = cClusterIcon.cluster_.getMarkerClusterer();
     /**
      * This event is fired when the mouse moves out of a cluster marker.

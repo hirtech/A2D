@@ -291,7 +291,7 @@ if($request_type == "premise_list"){
 		"vPolyLineLatLong"	 => $RES_PARA['vPolyLineLatLong'],
 		"iSAttributeId"		 => $RES_PARA['iSAttributeId'],
         "iFiberInquiryId"    => $RES_PARA['iFiberInquiryId'],
-		"vSuitAptUnit"	     => $RES_PARA['vSuitAptUnit']
+		"vSuitAptUnit"	     => $RES_PARA['vSuitAptUnit'],
         "vLoginUserName"     => $RES_PARA['vLoginUserName']
     );
 	//echo "<pre>";print_r($insert_arr);exit;
@@ -331,7 +331,7 @@ if($request_type == "premise_list"){
 		"vPolygonLatLong"	 => $RES_PARA['vPolygonLatLong'],
 		"vPolyLineLatLong"	 => $RES_PARA['vPolyLineLatLong'],
 		"iSAttributeId"		 => $RES_PARA['iSAttributeId'],
-		"vLoginUserName"	 => $RES_PARA['vLoginUserName']
+		"vLoginUserName"	 => $RES_PARA['vLoginUserName'],
         "vSuitAptUnit"       => $RES_PARA['vSuitAptUnit']
     );
 	//echo "<pre>";print_r($update_arr);exit;

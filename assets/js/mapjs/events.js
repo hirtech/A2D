@@ -1872,6 +1872,10 @@ $("#btn_map_addsite").click(function(){
         $("#showCircle").prop("checked", false);
     }
     clearMapTool();
+    clearMap();
+    resetButton();
+    clearLayerData();
+    clearFilterData();
     cancleAddBatchSite();
     $('.collapse').collapse('hide')
     //add site point
@@ -1973,6 +1977,10 @@ $("#btn_map_addbatchsite").click(function() {
         $("#showCircle").prop("checked", false);
     }
     clearMapTool();
+    clearMap();
+    resetButton();
+    clearLayerData();
+    clearFilterData();
     cancleAddSite();
     $('.collapse').collapse('hide')
     //add site point
