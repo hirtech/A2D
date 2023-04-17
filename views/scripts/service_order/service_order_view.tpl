@@ -38,19 +38,19 @@
 										</div>
 									</div>
 									<div class="form-group row">
-										<label class="col-sm-4 col-form-label"><strong>Premise :</strong></label>
+										<label class="col-sm-4 col-form-label"><strong>Location B :</strong></label>
 										<div class="col-sm-8 mt-2">
 											{$rs_sorder[0].iPremiseId} ({$rs_sorder[0].vPremiseName}; {$rs_sorder[0].vPremiseType})
 										</div>
 									</div>
 									<div class="form-group row">
-										<label class="col-sm-4 col-form-label"><strong>SalesRep :</strong></label>
+										<label class="col-sm-4 col-form-label"><strong>Sales Rep :</strong></label>
 										<div class="col-sm-8 mt-2">
 											{$rs_sorder[0].vSalesRepName}
 										</div>
 									</div>
 									<div class="form-group row">
-										<label class="col-sm-4 col-form-label"><strong>SalesRep Email :</strong></label>
+										<label class="col-sm-4 col-form-label"><strong>Sales Rep Email :</strong></label>
 										<div class="col-sm-8 mt-2">
 											{$rs_sorder[0].vSalesRepEmail}
 										</div>
@@ -82,7 +82,7 @@
                                 </div>
                                 <div class="col-6">
 									<div class="form-group row">
-										<label class="col-sm-4 col-form-label"><strong>Service Order :</strong></label>
+										<label class="col-sm-4 col-form-label"><strong>Service Order # :</strong></label>
 										<div class="col-sm-8 mt-2">
 											{$rs_sorder[0].vServiceOrder}
 										</div>

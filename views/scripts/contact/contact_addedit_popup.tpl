@@ -15,13 +15,16 @@
                     <input type="hidden" name="iPremiseId" id="premiseid" value="" />
                     <input type="hidden" name="referer" id="referer" value="" />
             		<div class="form-group row">
-            			<label class="col-sm-3" for="salutation">Salutation  <span class="text-danger"> *</span></label>
+            			<label class="col-sm-3" for="salutation">Title </label>
             			<div class="col-sm-6">
-                		        <select class="form-control" id="salutation" name="vSalutation" required>
-                                    <option value="Mr.">Mr.</option>
-                                    <option value="Mrs.">Mrs.</option>
-                                </select>
-                			<div class="invalid-feedback">Please select salutation</div>
+            		        <select class="form-control" id="salutation" name="vSalutation">
+                                <option value="">--- Select ---</option>
+                                <option value="Mr.">Mr.</option>
+                                <option value="Mrs.">Mrs.</option>
+                                <option value="Ms.">Ms.</option>
+                                <option value="Honorable">Honorable</option>
+                                <option value="Doctor">Doctor</option>
+                            </select>
                 		</div>
                     </div>
                     <div class="form-group row"> 

@@ -117,7 +117,7 @@
                 </div>
             </div>
             <div class="form-group col-md-4">
-                <label for="dSCompletedDate">Completed Date</label>
+                <label for="dSCompletedDate">Completion Date</label>
                 <div class="form-row">
                     <div class="form-group col-md-10">
                         <input type="date" class="form-control" id="dSCompletedDate" name="dSCompletedDate" > 

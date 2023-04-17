@@ -124,6 +124,22 @@
 						<input type="text" name="networkName" id="networkName" value="" class="form-control"> </div>
 				</div>
 			</div>
+			<div class="form-group col-md-4">
+				<label for="NetworkFilterOpDD">Suite/Apt/Unit#</label>
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<select name="suitAptUnitFilterOpDD" id="suitAptUnitFilterOpDD" class="form-control">
+							<option value="">-- Select --</option>
+							<option value="Begins">Begins With</option>
+							<option value="Ends">Ends With</option>
+							<option value="Contains" selected>Contains</option>
+							<option value="Exactly">Exactly</option>
+						</select>
+					</div>
+					<div class="form-group col-md-6">
+						<input type="text" name="suitAptUnit" id="suitAptUnit" value="" class="form-control"> </div>
+				</div>
+			</div>
 		</div>
 		<button type="button" id="AdvSearchSubmit" name="AdvSearchSubmit" class="btn btn-outline-warning fas fa-search"></button>
 		<button type="button" class="btn btn-outline-danger fas fa-times" aria-label="Close" id="AdvSearchReset" name="AdvSearchReset"></button>

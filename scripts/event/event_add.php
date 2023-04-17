@@ -16,7 +16,8 @@ $access_group_var_edit = per_hasModuleAccess("Event", 'Edit', 'N');
 # ----------- Access Rule Condition -----------
 include_once($controller_path . "event.inc.php");
 $EventObj = new Event();
-$dCompletedDate = date('d-m-Y');
+$dStartedDate = date('Y-m-d');
+$dCompletedDate = date('Y-m-d');
 if($mode == "Update") {
     $iEventId = $_REQUEST['iEventId'];
     $where_arr = array();
@@ -34,6 +35,7 @@ if($mode == "Update") {
     if($rs_event){
         $iCampaignBy = $rs_event[0]['iCampaignBy'];
         $dCompletedDate = $rs_event[0]['dCompletedDate'];
+        $dStartedDate = $rs_event[0]['dStartedDate'];
         $iEventId = $rs_event[0]['iEventId'];
         $sql = "SELECT  * FROM event_campaign_coverage where \"iEventId\" = '".$iEventId."'";
         $rs = $sqlObj->GetAll($sql);
@@ -190,6 +192,57 @@ $smarty->assign("rs_premise", $res_premise['result']);
 //echo "<pre>";print_r($rs_premise);exit;
 /*-------------------------- Premise -------------------------- */
 
+/*-------------------------- Company -------------------------- */
+$carrier_param = array();
+$carrier_param['iStatus'] = '1';
+$carrier_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
+$carrierAPI_URL = $site_api_url."company_dropdown.json";
+//echo $carrierAPI_URL." ".json_encode($carrier_param);exit;
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $carrierAPI_URL);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_HEADER, FALSE);
+curl_setopt($ch, CURLOPT_POST, TRUE);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($carrier_param));
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+   "Content-Type: application/json",
+)); 
+$response = curl_exec($ch);
+curl_close($ch);  
+$res = json_decode($response, true);
+$rs_carrier = $res['result'];
+$smarty->assign("rs_carrier", $rs_carrier);
+//echo "<pre>";print_r($rs_carrier);exit;
+/*-------------------------- Company -------------------------- */
+
+/*-------------------------- Audience Type -------------------------- */
+$atype_param = array();
+$atype_param['iStatus'] = '1';
+$atype_param['sessionId'] = $_SESSION["we_api_session_id" . $admin_panel_session_suffix];
+$atypeAPI_URL = $site_api_url."audience_type_dropdown.json";
+//echo $atypeAPI_URL." ".json_encode($atype_param);exit;
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $atypeAPI_URL);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_HEADER, FALSE);
+curl_setopt($ch, CURLOPT_POST, TRUE);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($atype_param));
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+   "Content-Type: application/json",
+)); 
+$response_atype = curl_exec($ch);
+curl_close($ch);  
+$res_atype = json_decode($response_atype, true);
+$rs_atype = $res_atype['result'];
+$smarty->assign("rs_atype", $rs_atype);
+//echo "<pre>";print_r($rs_atype);exit;
+/*-------------------------- Audience Type -------------------------- */
+
+
 $module_name = "Event ";
 $module_title = "Event";
 $smarty->assign("module_name", $module_name);
@@ -199,6 +252,7 @@ $smarty->assign("rs_event", $rs_event);
 $smarty->assign("access_group_var_edit", $access_group_var_edit);
 $smarty->assign("EVENT_CAMPAIGN_BY_ARR", $EVENT_CAMPAIGN_BY_ARR);
 $smarty->assign("dCompletedDate", $dCompletedDate);
+$smarty->assign("dStartedDate", $dStartedDate);
 $smarty->assign("iPremiseIdArr", $iPremiseIdArr);
 $smarty->assign("iZoneIdArr", $iZoneIdArr);
 $smarty->assign("iZipcodeArr", $iZipcodeArr);

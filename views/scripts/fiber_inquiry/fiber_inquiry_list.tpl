@@ -66,19 +66,19 @@
 				<table id="datatable-grid" class="display table dataTable table-striped table-bordered editable-table">
 					<thead>
 						<tr>
-                        <th><input type="checkbox" id="chkall" onclick="checkall(this)"/></th>
-						<th>ID</th>
-						<th>Name</th>
-						<th>Address</th>
-						<th>City</th>
-						<th>County</th>
-						<th>Zipcode</th>
-						<th>Zone</th>
-						<th>Network</th>
-						<th>Status</th>
-						<th>Inquiry Type</th>
-						<th>Date Created</th>
-						<th>Action</th> 
+	                        <th><input type="checkbox" id="chkall" onclick="checkall(this)"/></th>
+							<th>ID</th>
+							<th>Name</th>
+							<th>Address</th>
+							<th>City</th>
+							<th>Zipcode</th>
+							<th>Zone</th>
+							<th>Network</th>
+							<th>Suite/Apt/Unit#</th>
+							<th>Status</th>
+							<th>Inquiry Type</th>
+							<th>Date Created</th>
+							<th>Action</th> 
 						</tr>
 					</thead>
 					<tbody>                            

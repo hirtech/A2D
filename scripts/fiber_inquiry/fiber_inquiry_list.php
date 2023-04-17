@@ -44,34 +44,38 @@ if($mode == "List"){
     if($_REQUEST['fiberInquiryId'] != ""){
         $arr_param['fiberInquiryId'] = $_REQUEST['fiberInquiryId'];
     }
-    if($_REQUEST['contactName'] != ""){
-        $arr_param['contactName'] = $_REQUEST['contactName'];
+    if(trim($_REQUEST['contactName']) != ""){
+        $arr_param['contactName'] = trim($_REQUEST['contactName']);
         $arr_param['contactNameFilterOpDD'] = $_REQUEST['contactNameFilterOpDD'];
     }
-    if($_REQUEST['vAddress'] != ""){
-        $arr_param['vAddress'] = $_REQUEST['vAddress'];
+    if(trim($_REQUEST['vAddress']) != ""){
+        $arr_param['vAddress'] = trim($_REQUEST['vAddress']);
         $arr_param['AddressFilterOpDD'] = $_REQUEST['AddressFilterOpDD']; 
     }
-    if($_REQUEST['vCity'] != ""){
-        $arr_param['vCity'] = $_REQUEST['vCity'];
+    if(trim($_REQUEST['vCity']) != ""){
+        $arr_param['vCity'] = trim($_REQUEST['vCity']);
         $arr_param['CityFilterOpDD'] = $_REQUEST['CityFilterOpDD'];  
     }
-    if($_REQUEST['vCounty'] != ""){
-        $arr_param['vCounty'] = $_REQUEST['vCounty'];
+    if(trim($_REQUEST['vCounty']) != ""){
+        $arr_param['vCounty'] = trim($_REQUEST['vCounty']);
         $arr_param['CountyFilterOpDD'] = $_REQUEST['CountyFilterOpDD'];  
     }
 
-    if($_REQUEST['vZipcode'] != ""){
-        $arr_param['vZipcode'] = $_REQUEST['vZipcode'];
+    if(trim($_REQUEST['vZipcode']) != ""){
+        $arr_param['vZipcode'] = trim($_REQUEST['vZipcode']);
         $arr_param['ZipcodeFilterOpDD'] = $_REQUEST['ZipcodeFilterOpDD'];  
     }
-    if($_REQUEST['zoneName'] != ""){
-        $arr_param['zoneName'] = $_REQUEST['zoneName'];
+    if(trim($_REQUEST['zoneName']) != ""){
+        $arr_param['zoneName'] = trim($_REQUEST['zoneName']);
         $arr_param['ZoneNameFilterOpDD'] = $_REQUEST['ZoneNameFilterOpDD'];  
     }
-    if($_REQUEST['networkName'] != ""){
-        $arr_param['networkName'] = $_REQUEST['networkName'];
+    if(trim($_REQUEST['networkName']) != ""){
+        $arr_param['networkName'] = trim($_REQUEST['networkName']);
         $arr_param['NetworkFilterOpDD'] = $_REQUEST['NetworkFilterOpDD'];  
+    }
+    if(trim($_REQUEST['suitAptUnit']) != ""){
+        $arr_param['suitAptUnit'] = trim($_REQUEST['suitAptUnit']);
+        $arr_param['suitAptUnitFilterOpDD'] = $_REQUEST['suitAptUnitFilterOpDD'];  
     }
     
     $arr_param['page_length'] = $page_length;
@@ -163,10 +167,10 @@ if($mode == "List"){
                 "vContactName"       => $rs_sr[$i]['vContactName'],
                 "vAddress"           => $rs_sr[$i]['vAddress'],
                 "vCity"              => $rs_sr[$i]['vCity'],
-                "vCounty"            => $rs_sr[$i]['vCounty'],
                 "vZipcode"           => $rs_sr[$i]['vZipcode'],
                 "vZoneName"          => $rs_sr[$i]['vZoneName'],
                 "vNetwork"           => $rs_sr[$i]['vNetwork'],
+                "vSuitAptUnit"       => $rs_sr[$i]['vSuitAptUnit'],
                 "vStatus"            => $vStatus,
                 "iInquiryType"       => $rs_sr[$i]['vInquiryType'],
                 "dAddedDate"         => date_display_report_date($rs_sr[$i]['dAddedDate']),
@@ -398,6 +402,7 @@ if($mode == "List"){
             "iInquiryType"          => $_POST['iInquiryType'],
             "tNotes"                => $_POST['tNotes'],
             "vSuitAptUnit"          => $_POST['vSuitAptUnit'],
+            "rAmount"               => $_POST['rAmount'],
             "iLoginUserId"          => $iLoginUserId,
         );
         $API_URL = $site_api_url."fiber_inquiry_add.json";
@@ -465,6 +470,7 @@ if($mode == "List"){
             "iInquiryType"          => $_POST['iInquiryType'],
             "tNotes"                => $_POST['tNotes'],
             "vSuitAptUnit"          => $_POST['vSuitAptUnit'],
+            "rAmount"               => $_POST['rAmount'],
             "iLoginUserId"          => $iLoginUserId,
         );
 

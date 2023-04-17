@@ -42,6 +42,7 @@ if($request_type == "fiber_inquiry_edit"){
         "iInquiryType"          => $RES_PARA['iInquiryType'],
         "tNotes"                => $RES_PARA['tNotes'],
         "vSuitAptUnit"          => $RES_PARA['vSuitAptUnit'],
+        "rAmount"               => $RES_PARA['rAmount'],
         "iMatchingPremiseId"    => $iMatchingPremiseId,
     );
 
@@ -104,6 +105,7 @@ if($request_type == "fiber_inquiry_edit"){
         "iInquiryType"          => $RES_PARA['iInquiryType'],
         "tNotes"                => $RES_PARA['tNotes'],
         "vSuitAptUnit"          => $RES_PARA['vSuitAptUnit'],
+        "rAmount"               => $RES_PARA['rAmount'],
         "iMatchingPremiseId"    => $iMatchingPremiseId,
     );
 
@@ -151,6 +153,8 @@ if($request_type == "fiber_inquiry_edit"){
         $ZoneNameFilterOpDD     = $RES_PARA['ZoneNameFilterOpDD'];
         $networkName            = $RES_PARA['networkName'];
         $NetworkFilterOpDD      = $RES_PARA['NetworkFilterOpDD'];
+        $suitAptUnit            = $RES_PARA['suitAptUnit'];
+        $suitAptUnitFilterOpDD  = $RES_PARA['suitAptUnitFilterOpDD'];
     }
 
     if ($iFiberInquiryId != "") {
@@ -289,6 +293,22 @@ if($request_type == "fiber_inquiry_edit"){
         }
     }
 
+    if ($suitAptUnit != "") {
+        if ($suitAptUnitFilterOpDD != "") {
+            if ($suitAptUnitFilterOpDD == "Begins") {
+                $where_arr[] = 'fiberinquiry_details."vSuitAptUnit" ILIKE \''.$suitAptUnit.'%\'';
+            } else if ($suitAptUnitFilterOpDD == "Ends") {
+                $where_arr[] = 'fiberinquiry_details."vSuitAptUnit"   ILIKE \'%'.$suitAptUnit.'\'';
+            } else if ($suitAptUnitFilterOpDD == "Contains") {
+                $where_arr[] = 'fiberinquiry_details."vSuitAptUnit"   ILIKE \'%'.$suitAptUnit.'%\'';
+            } else if ($suitAptUnitFilterOpDD == "Exactly") {
+                $where_arr[] = 'fiberinquiry_details."vSuitAptUnit"  = \''.$suitAptUnit.'\'';
+            }
+        } else {
+            $where_arr[] = 'fiberinquiry_details."vSuitAptUnit"  ILIKE \''.$suitAptUnit.'%\'';
+        }
+    }
+
 
     switch ($display_order) {
         case "1":
@@ -301,16 +321,16 @@ if($request_type == "fiber_inquiry_edit"){
             $sortname = "cm.\"vCity\"";
             break;
         case "5":
-            $sortname = "c.\"vCounty\"";
-            break;
-        case "6":
             $sortname = "zm.\"vZipcode\"";
             break;
-        case "7":
+        case "6":
             $sortname = "z.\"vZoneName\"";
             break;
-        case "8":
+        case "7":
             $sortname = "n.\"vName\"";
+            break;
+        case "8":
+            $sortname = "fiberinquiry_details.\"vSuitAptUnit\"";
             break;
         case "9":
             $sortname = "fiberinquiry_details.\"iStatus\"";
@@ -391,6 +411,7 @@ if($request_type == "fiber_inquiry_edit"){
                     "vAddress" => $vAddress,
                     "vCity" => $rs_sr[$i]['vCity'],
                     "vCounty" => $rs_sr[$i]['vCounty'],
+                    "vSuitAptUnit" => $rs_sr[$i]['vSuitAptUnit'],
                     "vZipcode" => $rs_sr[$i]['vZipcode'],
                     "vZoneName" => $rs_sr[$i]['vZoneName'],
                     "vNetwork" => $rs_sr[$i]['vNetwork'],

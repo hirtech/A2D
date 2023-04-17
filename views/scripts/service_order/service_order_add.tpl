@@ -45,23 +45,23 @@
                                         <div class="invalid-feedback"> Please enter master msa</div>
                                     </div>
                                     <div class="col-12 mb-3">
-                                        <label for="iPremiseId">Premise <span class="text-danger">*</span></label>
+                                        <label for="iPremiseId">Location B <span class="text-danger">*</span></label>
                                         <input type="text" name="vPremiseName"  class="form-control " id="vPremiseName" placeholder="Search Premise Id or Premise Name" value="{if $rs_sorder[0].iPremiseId neq ''}{$rs_sorder[0].iPremiseId} ({$rs_sorder[0].vPremiseName|gen_strip_slash}){/if}"  required>
                                         <input type="hidden" id="search_iPremiseId" name="search_iPremiseId" value="{$rs_sorder[0].iPremiseId}"/>
                                         <img class="clear_address" src="assets/images/icon-delete.png" style="cursor:pointer;" onclick="return clear_serach_premise();">
-                                        <div class="invalid-feedback" id="errmsg_search_premise">Please enter premise</div>
+                                        <div class="invalid-feedback" id="errmsg_search_premise">Please enter location b</div>
                                     </div>
                                     <div class="col-12 mb-3">
-                                        <label for="iSalesRepId">SalesRep <span class="text-danger">*</span></label>
+                                        <label for="iSalesRepId">Sales Rep <span class="text-danger">*</span></label>
                                         <select name="iSalesRepId" id="iSalesRepId" class="form-control" required onchange="getUserDetailsFromUser(this.value);">
                                             <option value="">--- Select ---</option>
                                         </select>
-                                        <div class="invalid-feedback"> Please select SalesRep</div>
+                                        <div class="invalid-feedback"> Please select Sales Rep</div>
                                     </div>
                                     <div class="col-12 mb-3">
-                                        <label for="vSalesRepEmail">SalesRep Email <span class="text-danger">*</span></label>
+                                        <label for="vSalesRepEmail">Sales Rep Email <span class="text-danger">*</span></label>
                                         <input type="text" id="vSalesRepEmail" name="vSalesRepEmail" value="{$rs_sorder[0].vSalesRepEmail|gen_filter_text}" class="form-control readonly-color" readonly="" required>
-                                        <div class="invalid-feedback"> Please enter SalesRep email</div>
+                                        <div class="invalid-feedback"> Please enter Sales Rep email</div>
                                     </div>                                    
                                     <div class="col-12 mb-3">
                                         <label for="iConnectionTypeId">Connection Type <span class="text-danger">*</span></label>
@@ -88,9 +88,9 @@
                                 </div>
                                 <div class="col-6">
                                     <div class="col-12 mb-3">
-                                        <label for="vServiceOrder">Service Order <span class="text-danger">*</span></label>
+                                        <label for="vServiceOrder">Service Order # <span class="text-danger">*</span></label>
                                         <input type="text" id="vServiceOrder" name="vServiceOrder" value="{$rs_sorder[0].vServiceOrder|gen_filter_text}" class="form-control readonly-color" readonly="" required>
-                                        <div class="invalid-feedback"> Please enter service order</div>
+                                        <div class="invalid-feedback"> Please enter service order #</div>
                                     </div>
                                     <div class="col-12 mb-3">
                                         <label for="iSOStatus">Service Order Status <span class="text-danger">*</span></label>

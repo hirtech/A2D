@@ -44,8 +44,8 @@
 							<th>Event Type</th>
 							<th>Campaign By</th>
 							<th>Campaign Coverage</th>
+							<th>Event Sponsor</th>
 							<th>Status</th>
-							<th>Date Completed</th>
 							<th>Action</th> 
 						</tr>
 					</thead>

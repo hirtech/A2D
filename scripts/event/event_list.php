@@ -105,6 +105,7 @@ if($mode == "List"){
                 "vEventType"        => $rs_event[$i]['vEventType'],
                 "vCampaignBy"       => $EVENT_CAMPAIGN_BY_ARR[$rs_event[$i]['iCampaignBy']],
                 "vCampaignCoverage" => $rs_event[$i]['vCampaignCoverage'],
+                "vEventSponsor"     => $rs_event[$i]['vEventSponsor'],
                 "iStatus"           => '<span class="btn btn-'.$status_color[$iStatus].'">'.$iStatus.'<span>',
                 "dCompletedDate"    => date_getDateTimeDDMMYYYY($rs_event[$i]['dCompletedDate']),
                 "actions"           => ($action != "") ? $action : "---"
@@ -168,6 +169,11 @@ if($mode == "List"){
             "iZipcode"          => $_POST['iZipcode'],
             "iCityId"           => $_POST['iCityId'],
             "iNetworkId"        => $_POST['iNetworkId'],
+            "tNotes"            => $_POST['tNotes'],
+            "dStartedDate"      => $_POST['dStartedDate'],
+            "iEventSponsorId"   => $_POST['iEventSponsorId'],
+            "iAudienceTypeId"   => $_POST['iAudienceTypeId'],
+            "vEventBudget"      => $_POST['vEventBudget'],
             "sessionId"         => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
         );
         $API_URL = $site_api_url."event_edit.json";
@@ -220,6 +226,11 @@ if($mode == "List"){
             "iZipcode"          => $_POST['iZipcode'],
             "iCityId"           => $_POST['iCityId'],
             "iNetworkId"        => $_POST['iNetworkId'],
+            "tNotes"            => $_POST['tNotes'],
+            "dStartedDate"      => $_POST['dStartedDate'],
+            "iEventSponsorId"   => $_POST['iEventSponsorId'],
+            "iAudienceTypeId"   => $_POST['iAudienceTypeId'],
+            "vEventBudget"      => $_POST['vEventBudget'],
             "sessionId"         => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
         );
 
@@ -329,8 +340,8 @@ if($mode == "List"){
                  ->setCellValue('B1', 'Event Type')
                  ->setCellValue('C1', 'Campaign By')
                  ->setCellValue('D1', 'Campaign Coverage')
-                 ->setCellValue('E1', 'Status')
-                 ->setCellValue('F1', 'Date Completed');
+                 ->setCellValue('E1', 'Event Sponsor')
+                 ->setCellValue('F1', 'Status');
 
         for($e=0; $e<$cnt_export; $e++) {
 
@@ -341,8 +352,8 @@ if($mode == "List"){
             ->setCellValue('B'.($e+2), $rs_export[$e]['vEventType'])
             ->setCellValue('C'.($e+2), $EVENT_CAMPAIGN_BY_ARR[$rs_export[$e]['iCampaignBy']])
             ->setCellValue('D'.($e+2), ($vCampaignCoverage))
-            ->setCellValue('E'.($e+2), $rs_export[$e]['iStatus'])
-            ->setCellValue('F'.($e+2), date_getDateTimeDDMMYYYY($rs_export[$e]['dCompletedDate']));   
+            ->setCellValue('E'.($e+2), $rs_export[$e]['vEventSponsor'])
+            ->setCellValue('F'.($e+2), $rs_export[$e]['iStatus']);
          }
                         
         /* Set Auto width of each comlumn */

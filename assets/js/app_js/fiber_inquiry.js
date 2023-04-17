@@ -31,10 +31,10 @@ var listPage = function(){
                     { "data": "vContactName"},
                     { "data": "vAddress", "sortable":false},
                     { "data": "vCity"},
-                    { "data": "vCounty"},
                     { "data": "vZipcode"},
                     { "data": "vZoneName"},
                     { "data": "vNetwork"},
+                    { "data": "vSuitAptUnit"},
                     { "data": "vStatus", "className": "text-center"},
                     { "data": "iInquiryType", "className": "text-center"},
                     { "data": "dAddedDate", "className": "text-center"},
@@ -182,9 +182,12 @@ $('#AdvSearchReset').click(function () {
     $('#vCountry').val("");
     $('#ZipcodeFilterOpDD').val("Contains");
     $('#vZipcode').val("");
-    $('#AssignToFilterOpDD').val("Contains");
-    $('#assignTo').val("");
-    $('#reqType').val("");
+    $('#ZoneNameFilterOpDD').val("Contains");
+    $('#zoneName').val("");
+    $('#NetworkFilterOpDD').val("Contains");
+    $('#networkName').val("");
+    $('#suitAptUnitFilterOpDD').val("Contains");
+    $('#suitAptUnit').val("");
     gridtable.ajax.reload();
     return false;
 });

@@ -236,10 +236,10 @@ if($request_type == "event_list"){
             $sortname = "e.\"vEventType\"";
             break;
         case "4":
-            $sortname = "event.\"iStatus\"";
+            $sortname = "cm.\"vCompanyName\"";
             break;
         case "5":
-            $sortname = "event.\"dCompletedDate\"";
+            $sortname = "event.\"iStatus\"";
             break;
         default:
             $sortname = "event.\"iEventId\"";
@@ -250,8 +250,10 @@ if($request_type == "event_list"){
 
     $join_fieds_arr = array();
     $join_fieds_arr[] = 'e."vEventType"';
+    $join_fieds_arr[] = 'cm."vCompanyName" as "vEventSponsor"';
     $join_arr = array();
     $join_arr[] = 'LEFT JOIN event_type_mas e on e."iEventTypeId" = event."iEventTypeId"';
+    $join_arr[] = 'LEFT JOIN company_mas cm on cm."iCompanyId" = event."iEventSponsorId"';
     $EventObj->join_field = $join_fieds_arr;
     $EventObj->join = $join_arr;
     $EventObj->where = $where_arr;
@@ -334,6 +336,7 @@ if($request_type == "event_list"){
                 "vEventType"        => $rs_event[$i]['vEventType'],
                 "iCampaignBy"       => $rs_event[$i]['iCampaignBy'],
                 "iStatus"           => $rs_event[$i]['iStatus'], 
+                "vEventSponsor"     => $rs_event[$i]['vEventSponsor'], 
                 "dCompletedDate"    => $rs_event[$i]['dCompletedDate'], 
                 "vCampaignCoverage" => $vCampaignCoverage, 
                 "dAddedDate"        => $rs_event[$i]['dAddedDate'], 
@@ -360,6 +363,11 @@ if($request_type == "event_list"){
         "iZipcode"          => $RES_PARA['iZipcode'],
         "iCityId"           => $RES_PARA['iCityId'],
         "iNetworkId"        => $RES_PARA['iNetworkId'],
+        "tNotes"            => $RES_PARA['tNotes'],
+        "dStartedDate"      => $RES_PARA['dStartedDate'],
+        "iEventSponsorId"   => $RES_PARA['iEventSponsorId'],
+        "iAudienceTypeId"   => $RES_PARA['iAudienceTypeId'],
+        "vEventBudget"      => trim($RES_PARA['vEventBudget']),
     );
 
     $EventObj->insert_arr = $insert_arr;
@@ -383,6 +391,11 @@ if($request_type == "event_list"){
         "iZipcode"          => $RES_PARA['iZipcode'],
         "iCityId"           => $RES_PARA['iCityId'],
         "iNetworkId"        => $RES_PARA['iNetworkId'],
+        "tNotes"            => $RES_PARA['tNotes'],
+        "dStartedDate"      => $RES_PARA['dStartedDate'],
+        "iEventSponsorId"   => $RES_PARA['iEventSponsorId'],
+        "iAudienceTypeId"   => $RES_PARA['iAudienceTypeId'],
+        "vEventBudget"      => trim($RES_PARA['vEventBudget']),
     );
 
     $EventObj->update_arr = $update_arr;

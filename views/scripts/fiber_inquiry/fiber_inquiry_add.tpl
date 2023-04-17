@@ -121,6 +121,17 @@
 									<div class="col-md-6">
 										<div class="form-row mb-2">
 											<div class="col-12">
+												<label for="rAmount">Amount</label>
+												<div class="input-group mb-3">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text bg-transparent border-right-0" id="rAmount"><i class="fas fa-dollar-sign"></i></span>
+                                                    </div>
+                                                    <input type="text" class="form-control" placeholder="Amount" name="rAmount" id="rAmount" value="{$rs_sr[0].rAmount}">
+                                                </div>
+											</div>
+										</div>
+										<div class="form-row mb-2">
+											<div class="col-12">
 												<label for="iStatus">Status</label>
 												<select name="iStatus" id="iStatus" class="select">
 													<option value="1"{if $rs_sr[0].iStatus eq 1} selected {/if}>Draft</option>

@@ -43,7 +43,7 @@ function addEditData(id,mode,premiseid,referer){
         $("#premiseid").val(premiseid);
         $("#referer").val(referer);
         $("#cid").val('');
-        $("#salutation").val('Mr.');
+        $("#salutation").val('');
         $("#firstName").val('');
         $("#lastName").val('');
         $("#primaryPhone").val('');

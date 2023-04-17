@@ -100,10 +100,10 @@
                                 <th><input type="checkbox" id="chkall" onclick="checkall(this)"/></th>
                                 <th>ID</th>
                                 <th>Master MSA #</th>
-                                <th>Service Order</th>
+                                <th>Service Order #</th>
                                 <th>Carrier</th>
-                                <th>SalesRep</th>
-                                <th>Premise</th>
+                                <th>Sales Rep</th>
+                                <th>Location B</th>
                                 <th>Connection Type</th>
                                 <th>Service Type</th>
                                 <th>SO Status</th>

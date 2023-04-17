@@ -107,7 +107,7 @@ class Event {
 		global $sqlObj;
 		if($this->insert_arr){
 			//echo"<pre>";print_r($this->insert_arr);exit;
-			$sql = "INSERT INTO event(\"iEventTypeId\", \"iCampaignBy\", \"iStatus\", \"dCompletedDate\", \"dAddedDate\") VALUES (".gen_allow_null_char($this->insert_arr['iEventTypeId']).", ".gen_allow_null_char($this->insert_arr['iCampaignBy']).", ".gen_allow_null_char($this->insert_arr['iStatus']).", ".gen_allow_null_char($this->insert_arr['dCompletedDate']).",".gen_allow_null_char(date_getSystemDateTime()).")";
+			$sql = "INSERT INTO event(\"iEventTypeId\", \"iCampaignBy\", \"iStatus\", \"dCompletedDate\", \"dAddedDate\", \"tNotes\", \"dStartedDate\", \"iEventSponsorId\", \"iAudienceTypeId\", \"vEventBudget\") VALUES (".gen_allow_null_char($this->insert_arr['iEventTypeId']).", ".gen_allow_null_char($this->insert_arr['iCampaignBy']).", ".gen_allow_null_char($this->insert_arr['iStatus']).", ".gen_allow_null_char($this->insert_arr['dCompletedDate']).",".gen_allow_null_char(date_getSystemDateTime()).", ".gen_allow_null_char($this->insert_arr['tNotes']).", ".gen_allow_null_char($this->insert_arr['dStartedDate']).", ".gen_allow_null_char($this->insert_arr['iEventSponsorId']).", ".gen_allow_null_char($this->insert_arr['iAudienceTypeId']).", ".gen_allow_null_char($this->insert_arr['vEventBudget']).")";
 			//echo $sql;exit;
 			$sqlObj->Execute($sql);		
 			$iEventId = $sqlObj->Insert_ID();
@@ -146,6 +146,11 @@ class Event {
 			\"iCampaignBy\"=".gen_allow_null_char($this->update_arr['iCampaignBy']).", 
 			\"iStatus\"=".gen_allow_null_char($this->update_arr['iStatus']).", 
 			\"dCompletedDate\"=".gen_allow_null_char($this->update_arr['dCompletedDate']).", 
+			\"tNotes\"=".gen_allow_null_char($this->update_arr['tNotes']).", 
+			\"dStartedDate\"=".gen_allow_null_char($this->update_arr['dStartedDate']).", 
+			\"iEventSponsorId\"=".gen_allow_null_char($this->update_arr['iEventSponsorId']).", 
+			\"iAudienceTypeId\"=".gen_allow_null_char($this->update_arr['iAudienceTypeId']).", 
+			\"vEventBudget\"=".gen_allow_null_char($this->update_arr['vEventBudget']).", 
 			\"dModifiedDate\"=".gen_allow_null_char(date_getSystemDateTime())."
 			WHERE \"iEventId\" = ".$this->update_arr['iEventId'];
 			//echo $rs_db;exit;

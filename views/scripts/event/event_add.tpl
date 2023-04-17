@@ -34,7 +34,7 @@
                                             <option value="{$rs_etype[e].iEventTypeId}"{if $rs_event[0].iEventTypeId eq $rs_etype[e].iEventTypeId} selected {/if}>{$rs_etype[e].vEventType|gen_strip_slash}</option>
                                             {/section}
                                         </select>
-                                        <div class="invalid-feedback"> Please select equipment type</div>
+                                        <div class="invalid-feedback"> Please select event type</div>
                                     </div>
                                     <div class="col-12 mb-3">
                                         <label for="iCampaignBy">Campaign By <span class="text-danger">*</span></label>
@@ -46,23 +46,6 @@
                                         </select>
                                         <div class="invalid-feedback"> Please select campaign by </div>
                                     </div>
-                                    <div class="col-12 mb-3">
-                                        <label for="iStatus">Status <span class="text-danger">*</span></label>
-                                        <select name="iStatus" id="iStatus" class="form-control" required>
-                                            <option value="">Select</option>
-                                            <option value="1" {if $rs_event[0].iStatus eq 1} selected {/if}>Not Started</option>
-                                            <option value="2" {if $rs_event[0].iStatus eq 2} selected {/if}>In Progress</option>
-                                            <option value="3" {if $rs_event[0].iStatus eq 3} selected {/if}>Completed</option>
-                                        </select>
-                                        <div class="invalid-feedback"> Please select campaign by </div>
-                                    </div>
-                                    <div class="col-12 mb-3">
-                                        <label for="dCompletedDate">Completed Date <span class="text-danger">*</span></label>
-                                        <input type="date" class="form-control" id="dCompletedDate" name="dCompletedDate" value="{$dCompletedDate}" required> 
-                                        <div class="invalid-feedback">Please select completed date</div>
-                                    </div>
-                                </div>
-                                <div class="col-6">
                                     <div class="col-12 mb-3 premise_data">
                                         <label for="iPremiseId">Premise<span class="text-danger">*</span></label>
                                         <select name="iPremiseId[]" id="iPremiseId" class="form-control select" multiple>
@@ -112,6 +95,53 @@
                                             {/section}
                                         </select>
                                         <div class="invalid-feedback" id="errmsg_iNetworkId"> Please select network</div>
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <label for="iEventSponsorId">Event Sponsor <span class="text-danger">*</span></label>
+                                        <select name="iEventSponsorId" id="iEventSponsorId" class="form-control" required>
+                                            <option value="">-- Select --</option> {section name="c" loop=$rs_carrier}
+                                            <option value="{$rs_carrier[c].iCompanyId}" {if $rs_event[0].iEventSponsorId eq $rs_carrier[c].iCompanyId} selected {/if}>{$rs_carrier[c].vCompanyName|gen_strip_slash}</option>
+                                        {/section}
+                                        </select>
+                                        <div class="invalid-feedback"> Please select event sponsor</div>
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <label for="iAudienceTypeId">Audience Type </label>
+                                        <select name="iAudienceTypeId" id="iAudienceTypeId" class="form-control">
+                                            <option value="">-- Select --</option> {section name="c" loop=$rs_atype}
+                                            <option value="{$rs_atype[c].iAudienceTypeId}" {if $rs_event[0].iAudienceTypeId eq $rs_atype[c].iAudienceTypeId} selected {/if}>{$rs_atype[c].vAudienceType|gen_strip_slash}</option>
+                                        {/section}
+                                        </select>
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <label for="vEventBudget">Event Budget </label>
+                                        <input type="text" id="vEventBudget" name="vEventBudget" value="{$rs_event[0].vEventBudget|gen_filter_text}" class="form-control" >
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="col-12 mb-3">
+                                        <label for="dStartedDate">Started Date <span class="text-danger">*</span></label>
+                                        <input type="date" class="form-control" id="dStartedDate" name="dStartedDate" value="{$dStartedDate}" required> 
+                                        <div class="invalid-feedback">Please select started date</div>
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <label for="dCompletedDate">Completion Date <span class="text-danger">*</span></label>
+                                        <input type="date" class="form-control" id="dCompletedDate" name="dCompletedDate" value="{$dCompletedDate}" required> 
+                                        <div class="invalid-feedback">Please select completion date</div>
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <label for="iStatus">Status <span class="text-danger">*</span></label>
+                                        <select name="iStatus" id="iStatus" class="form-control" required>
+                                            <option value="">Select</option>
+                                            <option value="1" {if $rs_event[0].iStatus eq 1} selected {/if}>Not Started</option>
+                                            <option value="2" {if $rs_event[0].iStatus eq 2} selected {/if}>In Progress</option>
+                                            <option value="3" {if $rs_event[0].iStatus eq 3} selected {/if}>Completed</option>
+                                        </select>
+                                        <div class="invalid-feedback"> Please select campaign by </div>
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <label for="tNotes">Notes</label>
+                                        <textarea class="form-control" name="tNotes" id="tNotes" rows="4">{$rs_event[0].tNotes|gen_filter_text}</textarea>
                                     </div>
                                 </div>
                             </div>

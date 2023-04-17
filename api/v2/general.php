@@ -574,6 +574,14 @@ if($request_type == "department_dropdown") {
     }else{
         $response_data = array("Code" => 500);
     }
+}else if($request_type == "audience_type_dropdown"){
+    $sql = 'SELECT * FROM audience_type_mas WHERE "iStatus" = 1 ORDER BY "iAudienceTypeId"';
+    $rs = $sqlObj->GetAll($sql);
+    if($rs){
+        $response_data = array("Code" => 200, "result" => $rs, "total_record" => count($rs));
+    }else{
+        $response_data = array("Code" => 500);
+    }
 }else if($request_type == "zipcode_dropdown"){
     $sql = 'SELECT * FROM zipcode_mas ORDER BY "vZipcode"';
     $rs = $sqlObj->GetAll($sql);
