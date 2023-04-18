@@ -175,6 +175,7 @@ else if($request_type == "network_edit"){
         $update_arr = array(
             "iNetworkId"     => $RES_PARA['iNetworkId'],
             "vName"     => $RES_PARA['vName'],
+            "vFile"         => $RES_PARA['vFile'],
             "iStatus"   => $RES_PARA['iStatus'],
         );
 

@@ -200,10 +200,12 @@ if($mode == "List"){
     # -----------------------------------  
 }else if($mode == "Update"){
     $result =array();
-
+    //echo "<pre>";print_r($_POST);exit();
+    $file_name = $_POST['vFile_old'];
 	$arr_param = array(
 		'iNetworkId'  	=> $_POST['iNetworkId'],
         "vName"     => $_POST['vName'],
+        "vFile"         => $file_name,
         "iStatus"   => $_POST['iStatus'],
         "sessionId" => $_SESSION["we_api_session_id" . $admin_panel_session_suffix]
     );

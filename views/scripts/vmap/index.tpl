@@ -237,7 +237,7 @@
                                             <span class="caret"><label class="form-check-label" for="site{$site['iSTypeId']}">{$site['vTypeName']}</label></span>
                                             <ul class="nested">
                                                 {foreach from=$site['premise_sub_types'] item=sSType}
-                                                <li><input class="form-check-input selectAllpremisesubTypeLayer" type="checkbox" id="premisesubTypeLayer_{$sSType['iSTypeId']}" name="premisesubTypeLayer[]" value="{$site['iSTypeId']}|||{$sSType['iSSTypeId']}" />
+                                                <li><input class="form-check-input selectAllpremisesubTypeLayer premisesubTypeLayer_{$site['iSTypeId']}" type="checkbox" id="premisesubTypeLayer_{$sSType['iSSTypeId']}" name="premisesubTypeLayer[]" value="{$site['iSTypeId']}|||{$sSType['iSSTypeId']}" />
                                                     <label class="form-check-label" for="site{$sSType['iSSTypeId']}">{$sSType['vSubTypeName']}</label>
                                                 </li>
                                                 {/foreach}

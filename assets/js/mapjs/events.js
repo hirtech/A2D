@@ -842,7 +842,7 @@ $(document).ready(function() {
         getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLayer, custLayer, fiberInquiryLayer, serviceOrderLayer, workOrderLayer, pCircuitStatusLayer, pCircuitcTypeLayer, premiseStatusLayer, premiseAttribute, premiseTypeLayer, premisesubTypeLayer);
     });
 
-    // ********** Select PremiseC Type All - Layer Submenu ********** //
+    // ********** Select PremiseC Type  - Layer Submenu ********** //
     $(document).on("click", "#selectAllpremiseTypeLayer", function() {
         clearMap();
         premiseTypeLayer = [];
@@ -877,12 +877,13 @@ $(document).ready(function() {
         premiseTypeLayer = [];
         var checksone = checkNetworkSelected();
         if(checksone == true){
+			$(".selectAllpremisesubTypeLayer").prop("checked", false);
             if ($("#selectAllpremiseTypeLayer").prop("checked") && $("#selectAllpremiseTypeLayer").val() != 'Yes') {
                 $("#selectAllpremiseTypeLayer").prop("checked", false);
             }
             $.each($("input[name='premiseTypeLayer[]']:checked"), function() {
                 premiseTypeLayer.push($(this).val());
-                $("#premisesubTypeLayer_"+$(this).val()).prop("checked", false);
+                $(".premisesubTypeLayer_"+$(this).val()).prop("checked", true);
             });
         }else {
             //alert('Please select atleast one network from "Filter" Submenu.');
@@ -1871,11 +1872,33 @@ $("#btn_map_addsite").click(function(){
     if ($("#showCircle").prop("checked")) {
         $("#showCircle").prop("checked", false);
     }
+	skNetwork = [];
+	networkLayer = [];
+	$(".selectAllNetwork").prop("checked", false);
+	$("#selectAllNetworkLayer").prop("checked", false);
+    $(".selectAllNetworkLayer").prop("checked", false);
+
+	var nFilters = networkFilterArr.length;
+    if (nFilters > 0) {
+        for (i = 0; i < nFilters; i++) {
+            networkFilterArr[i].setMap(null);
+        }
+    }
+    networkFilterArr.length = 0;
+
+	var nlayers = networkLayerArr.length;
+    if (nlayers > 0) {
+        for (i = 0; i < nlayers; i++) {
+            networkLayerArr[i].setMap(null);
+        }
+    }
+    networkLayerArr.length = 0;
+
     clearMapTool();
-    clearMap();
-    resetButton();
-    clearLayerData();
-    clearFilterData();
+    //clearMap();
+    //resetButton();
+    //clearLayerData();
+    //clearFilterData();
     cancleAddBatchSite();
     $('.collapse').collapse('hide')
     //add site point
@@ -1976,11 +1999,33 @@ $("#btn_map_addbatchsite").click(function() {
     if ($("#showCircle").prop("checked")) {
         $("#showCircle").prop("checked", false);
     }
+    skNetwork = [];
+	networkLayer = [];
+	$(".selectAllNetwork").prop("checked", false);
+	$("#selectAllNetworkLayer").prop("checked", false);
+    $(".selectAllNetworkLayer").prop("checked", false);
+
+	var nFilters = networkFilterArr.length;
+    if (nFilters > 0) {
+        for (i = 0; i < nFilters; i++) {
+            networkFilterArr[i].setMap(null);
+        }
+    }
+    networkFilterArr.length = 0;
+
+	var nlayers = networkLayerArr.length;
+    if (nlayers > 0) {
+        for (i = 0; i < nlayers; i++) {
+            networkLayerArr[i].setMap(null);
+        }
+    }
+    networkLayerArr.length = 0;
+
     clearMapTool();
-    clearMap();
-    resetButton();
-    clearLayerData();
-    clearFilterData();
+    //clearMap();
+    //resetButton();
+    //clearLayerData();
+    //clearFilterData();
     cancleAddSite();
     $('.collapse').collapse('hide')
     //add site point

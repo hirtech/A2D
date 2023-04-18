@@ -1017,6 +1017,13 @@ function clearMap() {
 		pCenterMarker = [];
 	}
 
+	var nFilters = networkFilterArr.length;
+    if (nFilters > 0) {
+        for (i = 0; i < nFilters; i++) {
+            networkFilterArr[i].setMap(null);
+        }
+    }
+
 	var clayers = customeLayerArr.length;
     if (clayers > 0) {
         for (i = 0; i < clayers; i++) {

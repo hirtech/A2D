@@ -35,7 +35,7 @@
                                     <div class="col-12 mb-3">
                                         <label for="vFile">File <span class="text-danger"> *</span></label>
                             				 <input type="file" class="d-inline-flex form-control-file" id="vFile" name="vFile" {if $mode neq 'Update'} required {/if}>
-                            				 <input type="hidden" name="vFile_old" id="vFile_old" value="{$rs_data[0]['vFile']}">
+                            				 
                                         <div class="invalid-feedback"> Please select file</div>
                                         &nbsp;&nbsp;<span class="text-danger"> [valid extension file : kml,kmz]</span>
                                     </div>
@@ -45,6 +45,8 @@
                                         &nbsp;&nbsp;<a href="{$rs_data[0].file_url}" title="Download"><i class="fa fa-download"></i>&nbsp;&nbsp;Download</a>
                                     </div>
                                     {/if}
+
+                                    <input type="hidden" name="vFile_old" id="vFile_old" value="{$rs_data[0]['vFile']}">
                             			
                                     <div class="col-12 mb-3">
                                         <label for="iStatus">Status</label>
