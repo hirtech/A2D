@@ -68,47 +68,23 @@ function getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLay
 						siteMarkerCluster = new MarkerClusterer(map, siteMarker, {
 							imagePath: imagePath
 						});
+
+						//siteMarkerCluster.setZIndex(99999999999)
+						/*google.maps.event.addListener(siteMarkerCluster, 'click', function(clust) {
+						    for (var i = 0; i < clust.getMarkers().length; i++) {
+						      clust.getMarkers()[i].setMap(map);
+						    }
+						    clust.remove();
+						});*/
+
+
           			}
 
           			// ******** Network Filter ******** //
 					if (response.networkFilter !== undefined) {
 						$.each(response.networkFilter, function(id, item) {
-							var src = item['file_url'];
-							//var src =  "http://52.21.64.154/storage/netowrk_kml/1678651009_eCommunityClayCo-3.11.23.kmz";
-	                        var kml = new google.maps.KmlLayer({
-	                            url: src,
-	                            suppressInfoWindows: true,  
-	                            map:map,
-	                            zindex: 0
-	                        }); 
-
-							kml.vName = item['vName'];
-                        	networkFilterArr.push(kml);
+							showNetworkPolygonMap(item, map);
 						});
-		                var kmls = networkFilterArr.length;
-		                if (kmls > 0) {
-		                	//info window
-		                    for (i = 0; i < kmls; i++) {
-								var obj = {
-									'vname':networkFilterArr[i].vName,		
-								};
-								networkFilterArr[i].objInfo = obj;
-								if(networkFilterArr[i]) {
-									google.maps.event.addListener(networkFilterArr[i], 'click', function(evt) {
-										if(infowindow_networkFilter) {
-											infowindow_networkFilter.close();
-										}
-										infowindow_networkFilter = new google.maps.InfoWindow({
-											content: this.objInfo.vname,
-											zIndex: 100,
-											pixelOffset:evt.pixelOffset, 
-											position:evt.latLng
-										});
-										infowindow_networkFilter.open(map,networkFilterArr[i]);
-									})
-								}
-		                    }
-		                }
 					}
          	
          			// ******** Network layer ******** //
@@ -387,12 +363,9 @@ function getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLay
 					}
 					if(jQuery.isEmptyObject(response) == false){
 						if (response.length > 0){
-							markerCluster = new MarkerClusterer(map, siteMarker, {
+							var markerCluster1 = new MarkerClusterer(map, siteMarker, {
 								// var markerCluster = new google.maps.Map(map, siteMarker, {
 								imagePath: imagePath,
-								minZoom: 12,
-								maxZoom: 15,
-								minimumClusterSize : 5
 							});
 							//Center map and adjust Zoom based on the position of all markers.
 	                        map.setCenter(latlngbounds.getCenter());
@@ -562,6 +535,34 @@ function getCurrentlatlong($setposition = false){
     }
 }
 
+
+function showNetworkPolygonMap(sitePath, map) {
+	//console.log(sitePath);
+	networkPolygonObj[nCount] = new google.maps.Polygon({
+		path: sitePath,
+		strokeColor: '#0000ff',
+	  	strokeOpacity: 0.8,
+	  	strokeWeight: 5,
+	  	fillOpacity: 0,
+	  	//clickable: false,
+      	//zIndex: 99999999999999999
+	});
+
+
+	$site_map = networkPolygonObj[nCount];
+
+	networkPolygonObj[nCount].setMap(map);
+
+	//Extend each marker's position in LatLngBounds object.
+    var bounds = new google.maps.LatLngBounds();
+    networkPolygonObj[nCount].getPath().forEach(function (path, index) {
+        bounds.extend(path);
+        //latlngbounds.extend(path);
+    });
+    map.fitBounds(bounds);
+    nCount++;
+}
+
 function showZonePolygonMap(sitePath, map) {
 	//console.log(sitePath);
 	zonePolygonObj[zCount] = new google.maps.Polygon({
@@ -714,7 +715,9 @@ function showPointMap(sitePath, map, icon, premiseid) {
 	siteMarker[pCount] = new google.maps.Marker({
 		map: map,
 		position: sitePath,
-		icon: icon
+		icon: icon,
+		//optimized: false,
+		//zIndex:99999999
 	});
 	newLocation(sitePath.lat,sitePath.lng);
 	$site_map = siteMarker[pCount];
@@ -989,12 +992,6 @@ function clearMap() {
         }
 	}
 
-	if (zonePolygonObj.length > 0) {
-        for (i = 0; i < zonePolygonObj.length; i++) {
-            zonePolygonObj[i].setMap(null);
-        }
-    }
-
     if (fiberInquirylayerMarker.length > 0) {
         for (i = 0; i < fiberInquirylayerMarker.length; i++) {
             fiberInquirylayerMarker[i].setMap(null);
@@ -1004,6 +1001,11 @@ function clearMap() {
 	if (zonePolygonObj !== undefined) {
 		zonePolygonObj = [];
 	}
+
+	if (zonePolygonLayerObj !== undefined) {
+		zonePolygonLayerObj = [];
+	}
+
 	if (polygonObj !== undefined) {
 		polygonObj = [];
 	}
@@ -1017,12 +1019,6 @@ function clearMap() {
 		pCenterMarker = [];
 	}
 
-	var nFilters = networkFilterArr.length;
-    if (nFilters > 0) {
-        for (i = 0; i < nFilters; i++) {
-            networkFilterArr[i].setMap(null);
-        }
-    }
 
 	var clayers = customeLayerArr.length;
     if (clayers > 0) {
@@ -1067,6 +1063,8 @@ function clearMap() {
 	pl = 0;
 	pline = 0;
 	zCount = 0;
+	zLayerCount = 0;
+
 	pCenter = 0;
 	pov = 0;
 	fiberInquiryCount = 0;

@@ -1864,7 +1864,7 @@ function clearMapTool(){
 $("#btn_map_addsite").click(function(){
     //remove object of drwa shapes 
     if ($("#showDistance").prop("checked")) {
-            $("#showDistance").prop("checked", false);
+        $("#showDistance").prop("checked", false);
     }
     if ($("#showArea").prop("checked")) {
         $("#showArea").prop("checked", false);
@@ -1878,13 +1878,13 @@ $("#btn_map_addsite").click(function(){
 	$("#selectAllNetworkLayer").prop("checked", false);
     $(".selectAllNetworkLayer").prop("checked", false);
 
-	var nFilters = networkFilterArr.length;
-    if (nFilters > 0) {
-        for (i = 0; i < nFilters; i++) {
-            networkFilterArr[i].setMap(null);
+	if (nCount  > 0) {
+        for (i = 0; i < nCount; i++) {
+            networkPolygonObj[i].setMap(null);
         }
+        networkPolygonObj.length = 0;
+        nCount = 0;
     }
-    networkFilterArr.length = 0;
 
 	var nlayers = networkLayerArr.length;
     if (nlayers > 0) {

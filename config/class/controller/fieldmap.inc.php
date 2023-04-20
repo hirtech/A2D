@@ -1491,22 +1491,31 @@ class Fieldmap {
 
     public function getNetworkKMLData($iNetworkId = ''){
         global $sqlObj, $network_path, $network_url;
-        $data = array();
         $extra_str = '';
         if($iNetworkId != ''){
             $extra_str .= ' AND "iNetworkId" IN ('.$iNetworkId.')';
         }
-        $sqlData = 'SELECT "iNetworkId", "vName","vFile" FROM "network" where "iStatus" = 1'.$extra_str;
-        $rs = $sqlObj->GetAll($sqlData);
-        if($rs) {
-            $ni = count($rs);
-            for($i=0; $i<$ni; $i++){
-                if($rs[$i]['vFile'] != "" && file_exists($network_path.$rs[$i]['vFile'])){
-                    $rs[$i]['file_url'] = $network_url.$rs[$i]['vFile'];;
+        $geoArr = array();
+        $zoneSql = 'SELECT st_astext("PShape") as geotxt, "iNetworkId", "vName" FROM network  where "iStatus" = 1'.$extra_str; 
+        $data['networks'] = $sqlObj->GetAll($zoneSql);
+        if(isset($data['networks']) && $data['networks'] != ''){
+            foreach($data['networks'] as $key => $network){
+                $polygon = str_replace("POLYGON((", '', $network['geotxt']);
+                $polygon = str_replace("))", '', $polygon);
+                //print_r($polygon);
+                $polyArr = explode(",", $polygon);
+                //print_r($polyArr);
+                foreach($polyArr as $latlng){
+                    $latLngArr = explode(" ", $latlng);
+                    //print_r($latLngArr);
+                    $geoArr[$network['iNetworkId']][] = array(
+                        'lat' => (float) $latLngArr[1],
+                        'lng' => (float) $latLngArr[0]
+                    );
                 }
             }
         }
-        return $rs;
+        return $geoArr;
     }
     
 }
