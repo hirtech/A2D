@@ -52,6 +52,43 @@ function getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLay
 						$.each(response.networkFilter, function(id, item) {
 							showNetworkPolygonMap(item, map);
 						});
+						/*$.each(response.networkFilter, function(id, item) {
+							var src = item['file_url'];
+							//var src =  "http://52.21.64.154/storage/netowrk_kml/1678651009_eCommunityClayCo-3.11.23.kmz";
+	                        var kml = new google.maps.KmlLayer({
+	                            url: src,
+	                            suppressInfoWindows: true,  
+	                            map:map,
+	                            zindex: 0
+	                        }); 
+
+							kml.vName = item['vName'];
+                        	networkFilterArr.push(kml);
+						});
+		                var kmls = networkFilterArr.length;
+		                if (kmls > 0) {
+		                	//info window
+		                    for (i = 0; i < kmls; i++) {
+								var obj = {
+									'vname':networkFilterArr[i].vName,		
+								};
+								networkFilterArr[i].objInfo = obj;
+								if(networkFilterArr[i]) {
+									google.maps.event.addListener(networkFilterArr[i], 'click', function(evt) {
+										if(infowindow_networkFilter) {
+											infowindow_networkFilter.close();
+										}
+										infowindow_networkFilter = new google.maps.InfoWindow({
+											content: this.objInfo.vname,
+											zIndex: 100,
+											pixelOffset:evt.pixelOffset, 
+											position:evt.latLng
+										});
+										infowindow_networkFilter.open(map,networkFilterArr[i]);
+									})
+								}
+		                    }
+		                }*/
 					}
          	
          			// ******** Network layer ******** //
@@ -195,6 +232,7 @@ function getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLay
 
 						siteMarkerCluster = new MarkerClusterer(map, siteMarker, {
 							imagePath: imagePath, 
+							maxZoom: 15,
 							//minZoom: 12,
 							//maxZoom: 15,
 							//minimumClusterSize : 5
@@ -230,6 +268,7 @@ function getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLay
 			            });
 						fiberInquiryMarkerCluster = new MarkerClusterer(map, fiberInquirylayerMarker, {
 							imagePath: imagePath,
+							maxZoom: 15,
 						});
           			}
 
@@ -272,6 +311,7 @@ function getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLay
 
 						serviceOrderMarkerCluster = new MarkerClusterer(map, serviceOrderlayerMarker, {
 							imagePath: imagePath,
+							maxZoom: 15,
 						});
 					}
 
@@ -311,6 +351,7 @@ function getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLay
 					    });
 						workOrderMarkerCluster = new MarkerClusterer(map, workOrderlayerMarker, {
 							imagePath: imagePath,
+							maxZoom: 15,
 						});
 					}
 
@@ -351,6 +392,7 @@ function getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLay
 
 						premiseCircuitMarkerCluster = new MarkerClusterer(map, premiseCircuitlayerMarker, {
 							imagePath: imagePath,
+							maxZoom: 15,
 						});
 					}
 
@@ -537,6 +579,7 @@ function showNetworkPolygonMap(sitePath, map) {
 	  	strokeOpacity: 0.8,
 	  	strokeWeight: 5,
 	  	fillOpacity: 0,
+	  	zindex: 0
 	  	//clickable: false,
       	//zIndex: 99999999999999999
 	});
@@ -552,7 +595,12 @@ function showNetworkPolygonMap(sitePath, map) {
         bounds.extend(path);
         //latlngbounds.extend(path);
     });
+   // map.fitBounds(bounds);
+    //map.setZoom(11);
+    map.setCenter(bounds.getCenter());
     map.fitBounds(bounds);
+    map.setZoom(defaultZoom);
+
     nCount++;
 }
 
@@ -1611,7 +1659,7 @@ function smoothZoom (map, max, cnt) {
             google.maps.event.removeListener(z);
             smoothZoom(map, max, cnt + 1);
         });
-        setTimeout(function(){map.setZoom(cnt)}, 15); // 
+        setTimeout(function(){map.setZoom(cnt)}, 10); // 
     }
 }  
 

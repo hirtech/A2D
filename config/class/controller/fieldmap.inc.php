@@ -1516,6 +1516,23 @@ class Fieldmap {
             }
         }
         return $geoArr;
+        /*global $sqlObj, $network_path, $network_url;
+        $data = array();
+        $extra_str = '';
+        if($iNetworkId != ''){
+            $extra_str .= ' AND "iNetworkId" IN ('.$iNetworkId.')';
+        }
+        $sqlData = 'SELECT "iNetworkId", "vName","vFile" FROM "network" where "iStatus" = 1'.$extra_str;
+        $rs = $sqlObj->GetAll($sqlData);
+        if($rs) {
+            $ni = count($rs);
+            for($i=0; $i<$ni; $i++){
+                if($rs[$i]['vFile'] != "" && file_exists($network_path.$rs[$i]['vFile'])){
+                    $rs[$i]['file_url'] = $network_url.$rs[$i]['vFile'];;
+                }
+            }
+        }
+        return $rs;*/
     }
     
 }
