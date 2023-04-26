@@ -599,7 +599,7 @@ function showNetworkPolygonMap(sitePath, map) {
     //map.setZoom(11);
     map.setCenter(bounds.getCenter());
     map.fitBounds(bounds);
-    map.setZoom(defaultZoom);
+    map.setZoom(10);
 
     nCount++;
 }
