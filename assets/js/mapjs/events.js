@@ -875,16 +875,36 @@ $(document).ready(function() {
     $(document).on("click",".selectAllpremiseTypeLayer",function(){
         clearMap();
         premiseTypeLayer = [];
+        premisesubTypeLayer = [];
         var checksone = checkNetworkSelected();
         if(checksone == true){
 			$(".selectAllpremisesubTypeLayer").prop("checked", false);
-            if ($("#selectAllpremiseTypeLayer").prop("checked") && $("#selectAllpremiseTypeLayer").val() != 'Yes') {
+            /*if ($("#selectAllpremiseTypeLayer").prop("checked") && $("#selectAllpremiseTypeLayer").val() != 'Yes') {
                 $("#selectAllpremiseTypeLayer").prop("checked", false);
             }
             $.each($("input[name='premiseTypeLayer[]']:checked"), function() {
                 premiseTypeLayer.push($(this).val());
                 $(".premisesubTypeLayer_"+$(this).val()).prop("checked", true);
-            });
+            });*/
+			if ($(".selectAllpremiseTypeLayer").prop("checked")) {
+                //$(".selectAllpremiseTypeLayer").val("Yes");
+                $.each($("input[name='premiseTypeLayer[]']:checked"), function() {
+					premiseTypeLayer.push($(this).val());
+					$(".premisesubTypeLayer_"+$(this).val()).prop("checked", true);
+				});
+				$.each($("input[name='premisesubTypeLayer[]']:checked"), function() {
+					premisesubTypeLayer.push($(this).val());
+				});
+            } else {
+                //$(".selectAllpremiseTypeLayer").val("Yes");
+                $.each($("input[name='premiseTypeLayer[]']:checked"), function() {
+					premiseTypeLayer.push($(this).val());
+					$(".premisesubTypeLayer_"+$(this).val()).prop("checked", true);
+				});
+				$.each($("input[name='premisesubTypeLayer[]']:checked"), function() {
+					premisesubTypeLayer.push($(this).val());
+				});
+            }
         }else {
             //alert('Please select atleast one network from "Filter" Submenu.');
             toastr.error('Please select atleast one network from "Filter" Submenu.');
