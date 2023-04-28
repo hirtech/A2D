@@ -125,8 +125,6 @@ class Fieldmap {
         $tmp_siteArr = array();
         $siteJsonUrl = $field_map_json_url."/premise-data.json";
         $site = array();
-        $finalArr = array();
-        $_finalArr = array();
         $response = array();
         $siteData = json_decode(file_get_contents($siteJsonUrl), true);
         $siteArr = $siteData['sites'];
@@ -156,70 +154,47 @@ class Fieldmap {
 
         if(isset($param['network']) && $param['network'] != ''){
             $networks = $this->getNetworkKMLData($param['network']);
-            /*$selectedNetwork = explode(",", $param['network']);
-            
-            if(empty($finalArr)){
-                $finalArr = $siteArr;
-            }
-            foreach($finalArr as $_key => $site){
+            $response['networkFilter'] = $networks;
+			$selectedNetwork = explode(",", $param['network']);
+			foreach($siteArr as $_key => $site){
                 if(!in_array($site['networkid'], $selectedNetwork) ){
-                    unset($finalArr[$_key]);
+                    unset($siteArr[$_key]);
                 }
             }
-            $response['sites'] = $finalArr;*/
-            $response['networkFilter'] = $networks;
         }
-
+		//echo "<pre>";print_r($siteArr);exit;
         if(isset($param['zone']) && $param['zone'] != ''){
             $zones = $this->getZonesData($param['zone']);
-            /*$selectedZones = explode(",", $param['zone']);
-            if(empty($finalArr)){
-                $finalArr = $siteArr;
-            }
-            foreach($finalArr as $_key => $site){
-                //print_r($finalArr[$_key]); die;
+            $response['polyZone'] = $zones;
+			$selectedZones = explode(",", $param['zone']);
+			foreach($siteArr as $_key => $site){
                 if(!in_array($site['zoneid'], $selectedZones) ){
-                    unset($finalArr[$_key]);
+                    unset($siteArr[$_key]);
                 }
             }
-            $response['sites'] = $finalArr;*/
-            $response['polyZone'] = $zones;
         }
 
         if(isset($param['city']) && $param['city'] != ''){
             $selectedCity = explode(",", $param['city']);
-            //echo "<pre>";print_r($finalArr);exit;
-            if(empty($finalArr)){
-                $finalArr = $siteArr;
-            }
-            foreach($finalArr as $_key => $site){
+            
+            foreach($siteArr as $_key => $site){
                 if(!in_array($site['cityid'], $selectedCity) ){
-                    unset($finalArr[$_key]);
+                    unset($siteArr[$_key]);
                 }
             }
-            //echo "<pre>";print_r($response['sites']);exit;
-            /*if(!empty($response['sites'])){
-                $response['sites'] = $response['sites'] + $finalArr;
-            }else{*/
-                $response['sites'] = $finalArr;
-            //}
+           
+            $response['sites'] = $siteArr;
         }
 
         if(isset($param['zipcode']) && $param['zipcode'] != ''){
             $selectedZipcode = explode(",", $param['zipcode']);
-            if(empty($finalArr)){
-                $finalArr = $siteArr;
-            }
-            foreach($finalArr as $_key => $site){
+			
+            foreach($siteArr as $_key => $site){
                 if(!in_array($site['zipcode'], $selectedZipcode) ){
-                    unset($finalArr[$_key]);
+                    unset($siteArr[$_key]);
                 }
             }
-            /*if(!empty($response['sites'])){
-                $response['sites'] = $response['sites'] + $finalArr;
-            }else{*/
-                $response['sites'] = $finalArr;
-            //}
+            $response['sites'] = $siteArr;
         }
 	
         if(isset($param['zoneLayer']) && $param['zoneLayer'] != ''){
@@ -240,15 +215,6 @@ class Fieldmap {
             $nlayerArr = $ntworklayerData['networklayer'];
             $ntworklayerFilter_data = $this->multi_array_search($nlayerArr,$networkLayerArr);
             $response['networkLayer'] = $ntworklayerFilter_data;
-
-            if(empty($finalArr)){
-                $finalArr = $siteArr;
-            }
-            foreach($finalArr as $_key => $site){
-                if(!in_array($site['networkid'], $selectedZones) ){
-                    unset($finalArr[$_key]);
-                }
-            }
         }
 
         if(isset($param['custlayer']) && $param['custlayer'] != ''){
@@ -933,19 +899,25 @@ class Fieldmap {
         //echo "<pre>";print_r($premiseStatusArr);
         //echo "<pre>";print_r($premiseTypeLayerArr);
         if(!empty($premiseStatusArr) && empty($premiseAttributeArr) && empty($premiseTypeLayerArr) && empty($premisesubTypeLayerArr)){
+			//echo "1111";
             $response['sites'] = $premiseStatusArr;
         }else if(empty($premiseStatusArr) && !empty($premiseAttributeArr) && empty($premiseTypeLayerArr) && empty($premisesubTypeLayerArr)){
+			//echo "2222";
             $response['sites'] = $premiseAttributeArr;
         }else if(empty($premiseStatusArr) && empty($premiseAttributeArr) && !empty($premiseTypeLayerArr) && empty($premisesubTypeLayerArr)){
+			//echo "3333";
             $response['sites'] = $premiseTypeLayerArr;
         }else if(empty($premiseStatusArr) && empty($premiseAttributeArr) && empty($premiseTypeLayerArr) && !empty($premisesubTypeLayerArr)){
+			//echo "4444";
             $response['sites'] = $premisesubTypeLayerArr;
         }else if(!empty($premiseStatusArr) || !empty($premiseAttributeArr) || !empty($premiseTypeLayerArr) || !empty($premisesubTypeLayerArr)){
+			//echo "5555";
             $newPremiseArr = array_merge($premiseStatusArr, $premiseAttributeArr, $premiseTypeLayerArr, $premisesubTypeLayerArr);
             $premiseArr = array_map("unserialize", array_unique(array_map("serialize", $newPremiseArr)));
             $response['sites'] = $premiseArr;
         }
         //echo "<pre>";print_r($response['sites']);exit();
+		//$response['sites_cnt'] = count($response['sites']);
         //echo "<pre>";print_r($response);exit();
         return $response;
     }

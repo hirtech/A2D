@@ -10,7 +10,6 @@ include_once($controller_path . "workorder.inc.php");
 
 $SiteObj = new Site();
 $SiteAttribute = new SiteAttribute();
-$CustomLayerObj = new CustomLayer();
 $ServiceOrderObj = new ServiceOrder();
 $WorkOrderObj = new WorkOrder();
 
@@ -353,7 +352,7 @@ function setSiteHistory($data) {
                     $hidden_arr = array(
                             "iAId"          => $operation_type_data['iAId'],
                             "vSiteName"     => $operation_type_data['vSiteName'],
-                            "iPremiseId"       => $operation_type_data['iPremiseId'],
+                            "iPremiseId"    => $operation_type_data['iPremiseId'],
                             "dDate"         => $operation_type_data['dDate'],
                             "dStartDate"    => $operation_type_data['dStartDate'],
                             "dStartTime"    => $operation_type_data['dStartTime'],

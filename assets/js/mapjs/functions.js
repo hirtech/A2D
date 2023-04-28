@@ -38,6 +38,8 @@ function getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLay
 				if (data) {
 					//console.log('data found');
 					var response = JSON.parse(data);
+					allZipcodeSelected = 0;
+					allCitySelected = 0;
 					
 					var ressrdata = "";
 					//var fiberInquiryCount = 0;
@@ -216,6 +218,7 @@ function getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLay
 
 					if (response.sites !== undefined) {
 						var siteData = response.sites;
+						
 						$.each(siteData, function(skey, item) {
 							var premiseid = siteData[skey].premiseid;
 							//console.log(premiseid)
@@ -595,7 +598,7 @@ function showNetworkPolygonMap(sitePath, map) {
         bounds.extend(path);
         //latlngbounds.extend(path);
     });
-   // map.fitBounds(bounds);
+    //map.fitBounds(bounds);
     //map.setZoom(11);
     map.setCenter(bounds.getCenter());
     map.fitBounds(bounds);

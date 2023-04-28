@@ -527,7 +527,6 @@ var user_networks = {$user_networks|@json_encode};
 // This example creates a 2-pixel-wide red polyline showing the path of
 // the first trans-Pacific flight between Oakland, CA, and Brisbane,
 // Australia which was made by Charles Kingsford Smith.
-var newPoly;
 var map;
 var m1;
 var cm;
@@ -561,12 +560,7 @@ var skZipcode = [];
 var clusterArr = [];
 var siteInfoWindowTaskAwarenessArr = [];
 
-/*var landinglayerMarker = [];
-var larvallayerMarker = [];
-var positivelayerMarker = [];*/
 var sitesearchMarker = [];
-var siteserachData = [];
-var sscount = 0;
 var markerClusterSiteSerach;
 var siteMarkerCluster;
 var fiberInquiryMarkerCluster;
@@ -577,7 +571,6 @@ var premiseCircuitMarkerCluster;
 var infowindow;
 var contentString
 var gmarkers = [];
-var positivesiteMarker = [];
 var pov = 0;
 var fiberInquirylayerMarker = [];
 var fiberInquiryCount = 0;
@@ -587,10 +580,6 @@ var workOrderlayerMarker = [];
 var workOrderCount = 0;
 var premiseCircuitlayerMarker = [];
 var premiseCircuitCount = 0;
-var landingMarker = [];
-var landCount = 0;
-var larvMarker = [];
-var larvCount = 0;
 
 const imagePath = "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m";
 
@@ -610,11 +599,12 @@ var customeLayerArr = [];
 var infowindow_customlayer;
 
 var sitesrFilterMarker = [];
-
-var siteNearDataMarker = [];
-var sncount =0;
 var defaultZoom = 9;
 var markerSpiderfier = null;
+
+var allZipcodeSelected = 0;
+var allCitySelected = 0;
+
 {/literal}
 </script>
 <script src="{$site_url}assets/js/mapjs/events.js?ver=1.2"></script>

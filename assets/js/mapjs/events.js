@@ -38,9 +38,12 @@ $(document).ready(function() {
     getPremiseCircuitJson();
     if (mode == 'filter_sites') {
         var iPremiseId = $.urlParam('iPremiseId');
+		$(".selectAllNetwork").prop("checked",false);
         siteFilter.push(iPremiseId);
         getPremiseFiberInquiryFilterData(siteFilter, srFilter);
+
     } else if (mode == 'filter_fiberInquiry') {
+		$(".selectAllNetwork").prop("checked",false);
         var iFiberInquiryId = $.urlParam('iFiberInquiryId');
         srFilter.push(iFiberInquiryId);
         getPremiseFiberInquiryFilterData(siteFilter, srFilter);
@@ -61,7 +64,7 @@ $(document).ready(function() {
                 clearLayerData();
                 getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLayer, custLayer, fiberInquiryLayer, serviceOrderLayer, workOrderLayer, pCircuitStatusLayer, pCircuitcTypeLayer, premiseStatusLayer, premiseAttribute, premiseTypeLayer, premisesubTypeLayer);
             }
-        },2000);
+        },700);
     }  
 
     $(document).on("click", "#showDistance", function() {
@@ -295,6 +298,7 @@ $(document).ready(function() {
         clearMap();
         var checksone = checkNetworkSelected();
         skCity = [];
+		allCitySelected = 1;
         if(checksone == true){
             if ($("#selectAllCity").prop("checked")) {
                 $(".selectAllCity").prop("checked", true);
@@ -325,26 +329,29 @@ $(document).ready(function() {
 
     // ************* Select City - Filter Submenu ************* //
     $(document).on("click",".selectAllCity",function(){
-        clearMap();
-        var checksone = checkNetworkSelected();
-        skCity = [];
-        if(checksone == true){
-            if ($(".selectAllCity").prop("checked") && $(".selectAllCity").val() != 'Yes') {
-                $("#selectAllCity").prop("checked", false);
-            }
-            $.each($("input[name='city[]']:checked"), function() {
-                  skCity.push($(this).val());
-            });
-        }else{
-            skCity = [];
-            skZipcode = [];
-            skZones = [];
-            //alert('Please select atleast one network from "Filter" Submenu.');
-            toastr.error('Please select atleast one network from "Filter" Submenu.');
-        }
-        resetButton();
-        clearLayerData();
-        getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLayer, custLayer, fiberInquiryLayer, serviceOrderLayer, workOrderLayer, pCircuitStatusLayer, pCircuitcTypeLayer, premiseStatusLayer, premiseAttribute, premiseTypeLayer, premisesubTypeLayer);       
+		//console.log(allCitySelected)
+		if(allCitySelected == 0) {
+			clearMap();
+			var checksone = checkNetworkSelected();
+			skCity = [];
+			if(checksone == true){
+				if ($(".selectAllCity").prop("checked") && $(".selectAllCity").val() != 'Yes') {
+					$("#selectAllCity").prop("checked", false);
+				}
+				$.each($("input[name='city[]']:checked"), function() {
+					  skCity.push($(this).val());
+				});
+			}else{
+				skCity = [];
+				skZipcode = [];
+				skZones = [];
+				//alert('Please select atleast one network from "Filter" Submenu.');
+				toastr.error('Please select atleast one network from "Filter" Submenu.');
+			}
+			resetButton();
+			clearLayerData();
+			getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLayer, custLayer, fiberInquiryLayer, serviceOrderLayer, workOrderLayer, pCircuitStatusLayer, pCircuitcTypeLayer, premiseStatusLayer, premiseAttribute, premiseTypeLayer, premisesubTypeLayer);
+		}
     });
 
     // ************* Select All Zipcode - Filter Submenu ************* //
@@ -352,6 +359,7 @@ $(document).ready(function() {
         clearMap();
         var checksone = checkNetworkSelected();
         skZipcode = [];
+		allZipcodeSelected = 1;
         if(checksone == true){
             if ($("#selectAllZipcode").prop("checked")) {
                 $(".selectAllZipcode").prop("checked", true);
@@ -381,26 +389,28 @@ $(document).ready(function() {
 
     // ************* Select Zipcode - Filter Submenu ************* //
     $(document).on("click",".selectAllZipcode",function(){
-        clearMap();
-        var checksone = checkNetworkSelected();
-        skZipcode = [];
-        if(checksone == true){
-            if ($(".selectAllZipcode").prop("checked") && $(".selectAllZipcode").val() != 'Yes') {
-                $("#selectAllZipcode").prop("checked", false);
-            }
-            $.each($("input[name='zipcode[]']:checked"), function() {
-                  skZipcode.push($(this).val());
-            });
-        }else{
-            skCity = [];
-            skZipcode = [];
-            skZones = [];
-            //alert('Please select atleast one network from "Filter" Submenu.');
-            toastr.error('Please select atleast one network from "Filter" Submenu.');
-        }
-        resetButton();
-        clearLayerData();
-        getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLayer, custLayer, fiberInquiryLayer, serviceOrderLayer, workOrderLayer, pCircuitStatusLayer, pCircuitcTypeLayer, premiseStatusLayer, premiseAttribute, premiseTypeLayer, premisesubTypeLayer);       
+		if(allZipcodeSelected == 0) {
+			clearMap();
+			var checksone = checkNetworkSelected();
+			skZipcode = [];
+			if(checksone == true){
+				if ($(".selectAllZipcode").prop("checked") && $(".selectAllZipcode").val() != 'Yes') {
+					$("#selectAllZipcode").prop("checked", false);
+				}
+				$.each($("input[name='zipcode[]']:checked"), function() {
+					  skZipcode.push($(this).val());
+				});
+			}else{
+				skCity = [];
+				skZipcode = [];
+				skZones = [];
+				//alert('Please select atleast one network from "Filter" Submenu.');
+				toastr.error('Please select atleast one network from "Filter" Submenu.');
+			}
+			resetButton();
+			clearLayerData();
+			getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLayer, custLayer, fiberInquiryLayer, serviceOrderLayer, workOrderLayer, pCircuitStatusLayer, pCircuitcTypeLayer, premiseStatusLayer, premiseAttribute, premiseTypeLayer, premisesubTypeLayer);
+		}
     });
 
     // ************* END - Filter Submenu ************* //
