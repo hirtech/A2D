@@ -602,6 +602,8 @@ var sitesrFilterMarker = [];
 var defaultZoom = 9;
 var markerSpiderfier = null;
 
+var allNetworkSelected = 0;
+var allZoneSelected = 0;
 var allZipcodeSelected = 0;
 var allCitySelected = 0;
 

@@ -38,59 +38,25 @@ function getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLay
 				if (data) {
 					//console.log('data found');
 					var response = JSON.parse(data);
+					allNetworkSelected = 0;
+					allZoneSelected = 0;
 					allZipcodeSelected = 0;
 					allCitySelected = 0;
 					
 					var ressrdata = "";
 					//var fiberInquiryCount = 0;
-					if (response.polyZone !== undefined) {
-						$.each(response.polyZone, function(zoneid, item) {
-							showZonePolygonMap(item, map);
-						});
-					}
-					
-          			// ******** Network Filter ******** //
+
+					// ******** Network Filter ******** //
 					if (response.networkFilter !== undefined) {
 						$.each(response.networkFilter, function(id, item) {
 							showNetworkPolygonMap(item, map);
 						});
-						/*$.each(response.networkFilter, function(id, item) {
-							var src = item['file_url'];
-							//var src =  "http://52.21.64.154/storage/netowrk_kml/1678651009_eCommunityClayCo-3.11.23.kmz";
-	                        var kml = new google.maps.KmlLayer({
-	                            url: src,
-	                            suppressInfoWindows: true,  
-	                            map:map,
-	                            zindex: 0
-	                        }); 
+					}
 
-							kml.vName = item['vName'];
-                        	networkFilterArr.push(kml);
+					if (response.polyZone !== undefined) {
+						$.each(response.polyZone, function(zoneid, item) {
+							showZonePolygonMap(item, map);
 						});
-		                var kmls = networkFilterArr.length;
-		                if (kmls > 0) {
-		                	//info window
-		                    for (i = 0; i < kmls; i++) {
-								var obj = {
-									'vname':networkFilterArr[i].vName,		
-								};
-								networkFilterArr[i].objInfo = obj;
-								if(networkFilterArr[i]) {
-									google.maps.event.addListener(networkFilterArr[i], 'click', function(evt) {
-										if(infowindow_networkFilter) {
-											infowindow_networkFilter.close();
-										}
-										infowindow_networkFilter = new google.maps.InfoWindow({
-											content: this.objInfo.vname,
-											zIndex: 100,
-											pixelOffset:evt.pixelOffset, 
-											position:evt.latLng
-										});
-										infowindow_networkFilter.open(map,networkFilterArr[i]);
-									})
-								}
-		                    }
-		                }*/
 					}
          	
          			// ******** Network layer ******** //
@@ -137,44 +103,8 @@ function getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLay
 					// ******** Zone layer ******** //
 					if (response.zoneLayer !== undefined) {
 						$.each(response.zoneLayer, function(id, item) {
-							//alert(id);
 							showZonePolygonLayerMap(item, map);
-							/*var src = item['file_url'];
-							//var src =  "http://54.167.253.109/eCommunityfiber/storage/zone/1664396393_Polygon_One.kml";
-	                        var kml = new google.maps.KmlLayer({
-	                            url: src,
-	                            suppressInfoWindows: true,  
-	                            map:map,
-	                            zindex: 0
-	                        }); 
-
-							kml.vZoneName = item['vZoneName'];
-                        	zoneLayerArr.push(kml);*/
 						});
-		                /*var kmls = zoneLayerArr.length;
-		                if (kmls > 0) {
-		                	//info window
-		                    for (i = 0; i < kmls; i++) {
-								var obj = {
-									'vzonename':zoneLayerArr[i].vZoneName,		
-								};
-								zoneLayerArr[i].objInfo = obj;
-								if(zoneLayerArr[i]) {
-									google.maps.event.addListener(zoneLayerArr[i], 'click', function(evt) {
-										if(infowindow_zoneLayer) {
-											infowindow_zoneLayer.close();
-										}
-										infowindow_zoneLayer = new google.maps.InfoWindow({
-												content: this.objInfo.vzonename,
-												zIndex: 100,
-												pixelOffset:evt.pixelOffset, 
-  												position:evt.latLng
-										});
-										infowindow_zoneLayer.open(map,zoneLayerArr[i]);
-									})
-								}
-		                    }
-		                }*/
 					}
 
 					// ******** custom layer ******** //
@@ -398,20 +328,6 @@ function getMapData(skNetwork, skCity, skZipcode, skZones, networkLayer, zoneLay
 							maxZoom: 15,
 						});
 					}
-
-					/*if(jQuery.isEmptyObject(response) == false){
-						if (response.length > 0){
-							var markerCluster1 = new MarkerClusterer(map, siteMarker, {
-								// var markerCluster = new google.maps.Map(map, siteMarker, {
-								imagePath: imagePath,
-							});
-							//Center map and adjust Zoom based on the position of all markers.
-	                        map.setCenter(latlngbounds.getCenter());
-	                        map.fitBounds(latlngbounds);
-	                        map.setZoom(defaultZoom);
-                            //console.log("defaultZoom bounds = "+defaultZoom)
-						}
-					}*/
 				} else {
 					//console.log('no data found');
 					clearMap();
@@ -664,7 +580,6 @@ function showZonePolygonLayerMap(sitePath, map) {
 
 
 function showPointMapForFiberInquiry(sitePath, map, icon, id, vName, vAddress, premiseid, vPremiseName, vPremiseSubType, vEngagement, vZoneName, vNetwork, vStatus,iFiberInquiryId) {
-	/*map.setCenter({lat: 41.595526, lng: -72.687145}); */
 	//console.log('pCount=>'+pCount);
 	fiberInquirylayerMarker[fiberInquiryCount] = new google.maps.Marker({
 		map: map,
@@ -755,7 +670,6 @@ function showPointMapForpremiseCircuit(sitePath, map, icon, id, premiseid, vPrem
 
 function showPointMap(sitePath, map, icon, premiseid) {
 	//alert(sitePath);
-	/*map.setCenter({lat: 41.595526, lng: -72.687145}); */
 	siteMarker[pCount] = new google.maps.Marker({
 		map: map,
 		position: sitePath,
@@ -881,7 +795,6 @@ function addLatLngCircle(event) {
 
 		cm = false;
 		cntrOfCircle = false;
-		//circleMarker = [];
 
 	} else {
 		cm = circleMarker[cmCount];
@@ -1640,15 +1553,7 @@ function newLocation(newLat,newLng) {
 			lng : newLng
 		});
 	}
-	
-    //console.log("defaultZoom New Location = "+defaultZoom)
-   /* google.maps.event.addListener(map, 'zoom_changed', function() {
-	    defaultZoom = map.getZoom();
-	});
-	if(defaultZoom < 14) {
-		defaultZoom = 14;	
-	}
-	map.setZoom(defaultZoom);*/
+
 	smoothZoom(map, defaultZoom, map.getZoom());
 	//console.log("defaultZoom New Location1 = "+defaultZoom)
 }
@@ -1681,7 +1586,6 @@ function getPremiseFiberInquiryFilterData(siteFilter,srFilter){
     sitesrFilterMarker.length = 0;
 
 	if(siteFilter != "" || srFilter != ""){
-
 		$.ajax({
 			type: "POST",
 			url: 'vmap/api/',
@@ -1704,83 +1608,81 @@ function getPremiseFiberInquiryFilterData(siteFilter,srFilter){
 					//console.log(response);
 					var ccount = 0;
 					if(siteData !== undefined && jQuery.isEmptyObject(siteData) == false){
-						
 						$.each(siteData, function(premiseid, item) {
-								if (siteData[premiseid].point !== undefined) {
-									for (i = 0; i < siteData[premiseid].point.length; i++) {
-                                        
-                                        var pointMatrix = {
-                                            lat: siteData[premiseid].point[i]['lat'] + mathRandLat,
-                                            lng: siteData[premiseid].point[i]['lng'] + mathRandLng
-                                        };
-                                        //showPointMap(pointMatrix, map, siteData[premiseid].icon, premiseid);
+							if (siteData[premiseid].point !== undefined) {
+								for (i = 0; i < siteData[premiseid].point.length; i++) {
+                                    
+                                    var pointMatrix = {
+                                        lat: siteData[premiseid].point[i]['lat'] + mathRandLat,
+                                        lng: siteData[premiseid].point[i]['lng'] + mathRandLng
+                                    };
+                                    //showPointMap(pointMatrix, map, siteData[premiseid].icon, premiseid);
 
-                                        sitesrFilterMarker[ccount] = new google.maps.Marker({
-                                            map: map,
-                                            position: pointMatrix,
-                                            icon: siteData[premiseid].icon
-                                        });
-                                        //if (siteData[premiseid].length != 0) {
-                                            newLocation(pointMatrix.lat, pointMatrix.lng);
-                                       // }
-                                        $site_map = sitesrFilterMarker[ccount];
-                                        gmarkers.push($site_map);
-                                        info_popup($site_map, premiseid);
-                                        sitesrFilterMarker[ccount].setMap(map);
-                                        if (markerSpiderfier) {
-							                markerSpiderfier.addMarker(sitesrFilterMarker[ccount]);
-							            }
+                                    sitesrFilterMarker[ccount] = new google.maps.Marker({
+                                        map: map,
+                                        position: pointMatrix,
+                                        icon: siteData[premiseid].icon
+                                    });
+                                    //if (siteData[premiseid].length != 0) {
+                                        newLocation(pointMatrix.lat, pointMatrix.lng);
+                                   // }
+                                    $site_map = sitesrFilterMarker[ccount];
+                                    gmarkers.push($site_map);
+                                    info_popup($site_map, premiseid);
+                                    sitesrFilterMarker[ccount].setMap(map);
+                                    if (markerSpiderfier) {
+						                markerSpiderfier.addMarker(sitesrFilterMarker[ccount]);
+						            }
 
-                                        //Extend each marker's position in LatLngBounds object.
-                                        latlngbounds.extend(sitesrFilterMarker[ccount].position);
+                                    //Extend each marker's position in LatLngBounds object.
+                                    latlngbounds.extend(sitesrFilterMarker[ccount].position);
 
-                                        ccount++;                      
-                                    }
-								}
-							
+                                    ccount++;                      
+                                }
+							}
 						});
 					}
 					if(fInquiryData !== undefined && jQuery.isEmptyObject(fInquiryData) == false){
 						$.each(fInquiryData, function(id, item) {
 							if (fInquiryData[id].point !== undefined) {
-                                    for (i = 0; i < fInquiryData[id].point.length; i++) {
+                                for (i = 0; i < fInquiryData[id].point.length; i++) {
 
-                                        var pointMatrix = {
-                                            lat: fInquiryData[id].point[i]['lat']+ mathRandLat,
-                                            lng: fInquiryData[id].point[i]['lng']+ mathRandLng
-                                        };
-                                        var vName = fInquiryData[id].vName;
-                                        var vAddress = fInquiryData[id].vAddress;
-                                        var premiseid = fInquiryData[id].premiseid;
-                                        var vPremiseName = fInquiryData[id].vPremiseName;
-                                        var vPremiseSubType	= fInquiryData[id].vPremiseSubType;
-                                        var vEngagement = fInquiryData[id].vEngagement;
-                                        var vZoneName = fInquiryData[id].vZoneName;
-                                        var vNetwork = fInquiryData[id].vNetwork;
-                                        var vStatus = fInquiryData[id].vStatus;
-                                        var fiberInquiryId = fInquiryData[id].fiberInquiryId;
+                                    var pointMatrix = {
+                                        lat: fInquiryData[id].point[i]['lat']+ mathRandLat,
+                                        lng: fInquiryData[id].point[i]['lng']+ mathRandLng
+                                    };
+                                    var vName = fInquiryData[id].vName;
+                                    var vAddress = fInquiryData[id].vAddress;
+                                    var premiseid = fInquiryData[id].premiseid;
+                                    var vPremiseName = fInquiryData[id].vPremiseName;
+                                    var vPremiseSubType	= fInquiryData[id].vPremiseSubType;
+                                    var vEngagement = fInquiryData[id].vEngagement;
+                                    var vZoneName = fInquiryData[id].vZoneName;
+                                    var vNetwork = fInquiryData[id].vNetwork;
+                                    var vStatus = fInquiryData[id].vStatus;
+                                    var fiberInquiryId = fInquiryData[id].fiberInquiryId;
 
-                                        sitesrFilterMarker[ccount] = new google.maps.Marker({
-                                            map: map,
-                                            position: pointMatrix,
-                                            icon: fInquiryData[id].icon
-                                        });
-                                        newLocation(pointMatrix.lat,pointMatrix.lng);
-                                        $sr_map = sitesrFilterMarker[ccount];
+                                    sitesrFilterMarker[ccount] = new google.maps.Marker({
+                                        map: map,
+                                        position: pointMatrix,
+                                        icon: fInquiryData[id].icon
+                                    });
+                                    newLocation(pointMatrix.lat,pointMatrix.lng);
+                                    $sr_map = sitesrFilterMarker[ccount];
 
-                                        fiberInquiryinfo_popup($sr_map, id, vName, vAddress, premiseid, vPremiseName, vPremiseSubType, vEngagement, vZoneName, vNetwork, vStatus, fiberInquiryId);
-                                        sitesrFilterMarker[ccount].setMap(map);
+                                    fiberInquiryinfo_popup($sr_map, id, vName, vAddress, premiseid, vPremiseName, vPremiseSubType, vEngagement, vZoneName, vNetwork, vStatus, fiberInquiryId);
+                                    sitesrFilterMarker[ccount].setMap(map);
 
-                                        if (markerSpiderfier) {
-							                markerSpiderfier.addMarker(sitesrFilterMarker[ccount]);
-							            }
+                                    if (markerSpiderfier) {
+						                markerSpiderfier.addMarker(sitesrFilterMarker[ccount]);
+						            }
 
-                                        //Extend each marker's position in LatLngBounds object.
-                                        latlngbounds.extend(sitesrFilterMarker[ccount].position);
+                                    //Extend each marker's position in LatLngBounds object.
+                                    latlngbounds.extend(sitesrFilterMarker[ccount].position);
 
-                                        ccount++;
-                                    }
+                                    ccount++;
                                 }
+                            }
 						});
 					}
 					
@@ -1794,7 +1696,6 @@ function getPremiseFiberInquiryFilterData(siteFilter,srFilter){
 					//console.log('no data found');
 					//alert("No sites found");
 					//clearMap();
-				
 				}
 				 
 				$(".loading").hide();
