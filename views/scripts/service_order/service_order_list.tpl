@@ -103,7 +103,7 @@
                                 <th>Service Order #</th>
                                 <th>Carrier</th>
                                 <th>Sales Rep</th>
-                                <th>Location B</th>
+                                <th>Premise</th>
                                 <th>Connection Type</th>
                                 <th>Service Type</th>
                                 <th>SO Status</th>

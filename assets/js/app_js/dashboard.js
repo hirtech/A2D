@@ -51,7 +51,7 @@ $(document).ready(function(){
     }
 
     initMap();
-    loadProfileData();
+    //loadProfileData();
 
     google.charts.load('current', {'packages':['bar']});
     google.charts.setOnLoadCallback(drawChart);
@@ -414,9 +414,24 @@ function drawChart() {
             bold: true,
         },
         bars: 'vertical', // Required for Material Bar Charts.
-        width: 600,
+        width: 800,
         height: 300,
-        legend: {textStyle: {fontSize: 12}},
+        legend: {
+            textStyle : {
+                fontSize: 12,
+            }
+        },
+        hAxis : { 
+            textStyle : {
+                fontSize: 12,
+
+            }
+        },
+        vAxis : { 
+            textStyle : {
+                fontSize: 12,               
+            }
+        },
     };
     var chart = new google.charts.Bar(document.getElementById('serviceorder_chart'));
     chart.draw(data, google.charts.Bar.convertOptions(options));
@@ -431,16 +446,30 @@ function drawChart() {
             bold: true,      
         },
         bars: 'vertical', // Required for Material Bar Charts.
-        width: 600,
+        width: 800,
         height: 300,
-        legend: {textStyle: {fontSize: 12}},
+        legend: {
+            textStyle : {
+                fontSize: 12,
+            }
+        },
+        hAxis : { 
+            textStyle : {
+                fontSize: 12,
 
+            }
+        },
+        vAxis : { 
+            textStyle : {
+                fontSize: 12,               
+            }
+        },
     };
     var wochart = new google.charts.Bar(document.getElementById('workorder_chart'));
     wochart.draw(wodata, google.charts.Bar.convertOptions(WOoptions));
 }
 
-function loadProfileData() {
+/*function loadProfileData() {
     var so_str = '';
     if(dashboard_serviceorder && dashboard_serviceorder.length > 0){
         for (var i = 0; i < dashboard_serviceorder.length; i++) {
@@ -499,5 +528,49 @@ function loadProfileData() {
     }
     if(fi_str != ''){
         $(".fiberinquiry_data").html(fi_str);
+    }
+}*/
+
+function showMoreRecords(mode, count){
+    if(mode == "SO") {
+        for(var i=6; i <= count; i++){
+            $(".so_"+i).show();  
+        }
+        $(".so_more").hide();
+        $(".so_less").show();
+    }else if(mode == "WO") {
+        for(var i=6; i <= count; i++){
+            $(".wo_"+i).show();  
+        }
+        $(".wo_more").hide();
+        $(".wo_less").show();
+    }else if(mode == "FiberInquiry") {
+        for(var i=6; i <= count; i++){
+            $(".fi_"+i).show();  
+        }
+        $(".fi_more").hide();
+        $(".fi_less").show();
+    }
+}
+
+function hideMoreRecords(mode, count){
+    if(mode == "SO") {
+        for(var i=6; i <= count; i++){
+            $(".so_"+i).hide();  
+        }
+        $(".so_more").show();
+        $(".so_less").hide();
+    }else if(mode == "WO") {
+        for(var i=6; i <= count; i++){
+            $(".wo_"+i).hide();  
+        }
+        $(".wo_more").show();
+        $(".wo_less").hide();
+    }else if(mode == "FiberInquiry") {
+        for(var i=6; i <= count; i++){
+            $(".fi_"+i).hide();  
+        }
+        $(".fi_more").show();
+        $(".fi_less").hide();
     }
 }

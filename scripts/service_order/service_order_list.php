@@ -472,7 +472,7 @@ if($mode == "List") {
                  ->setCellValue('D1', 'Carrier')
                  ->setCellValue('E1', 'Sales Rep Name')
                  ->setCellValue('F1', 'Sales Rep Email')
-                 ->setCellValue('G1', 'Location B')
+                 ->setCellValue('G1', 'Premise')
                  ->setCellValue('H1', 'Connection Type')
                  ->setCellValue('I1', 'Service Type')
                  ->setCellValue('J1', 'Comments');

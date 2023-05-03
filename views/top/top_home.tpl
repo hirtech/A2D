@@ -93,9 +93,9 @@
 
                             </div>
                             {if $sess_vImage neq '' }
-                            <img src="{$sess_vImage_url}" alt="user" class="d-flex img-fluid rounded-circle" width="45" height="45">
+                            <img src="{$sess_vImage_url}" alt="user" class="d-flex rounded-circle" width="45" height="45">
                             {else}
-                            <img src="images/user.png" alt="user" class="d-flex img-fluid rounded-circle" width="45" height="45">
+                            <img src="images/user.png" alt="user" class="d-flex rounded-circle" width="45" height="45">
                             {/if}
 
                         </div>

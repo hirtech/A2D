@@ -46,49 +46,53 @@ if ($mode == "Update") {
 	    $UserObj->param['limit'] = "LIMIT 1";
 	    $UserObj->setClause();
 	    $rs_user = $UserObj->recordset_list();
-	    $rs_user[0]['vPassword'] = decrypt_password($rs_user);
 
-        $rs_user[0]['address'] = ($rs_user[0]['vAddress1']!= "")?$rs_user[0]['vAddress1'].' '.$rs_user[0]['vStreet'].' '.$rs_user[0]['vCity'].', '.$rs_user[0]['vState'].' '.$rs_user[0]['vCounty']:"";
-	    // echo "<pre>";print_R($rs_user);exit;
-		#####  User Department
-		$UserObj->user_clear_variable();
-		$where_arr = array();
-		$join_fields_arr = array();
-		$join_arr = array();
-		
-		$where_arr[] = "user_department.\"iUserId\" = '".gen_add_slash($_REQUEST['iUserId'])."'";
-		$UserObj->join_field = $join_fields_arr;
-		$UserObj->join = $join_arr;
-		$UserObj->where = $where_arr;
-		$UserObj->param['limit'] = 0;
-		$UserObj->setClause();
-		$rs_user_dept = $UserObj->user_department_list();
-		$di = count($rs_user_dept);
-		
-		if($di > 0){
-			for($d=0;$d<$di;$d++){
-				$iDepartmentId_arr[] = $rs_user_dept[$d]['iDepartmentId'];
+	    if(!empty($rs_user)) {
+		    $rs_user[0]['vPassword'] = decrypt_password($rs_user);
+		    $rs_user[0]['vImageUrl'] = $user_url.$rs_user[0]['vImage'];
+
+	        $rs_user[0]['address'] = ($rs_user[0]['vAddress1']!= "")?$rs_user[0]['vAddress1'].' '.$rs_user[0]['vStreet'].' '.$rs_user[0]['vCity'].', '.$rs_user[0]['vState'].' '.$rs_user[0]['vCounty']:"";
+		    // echo "<pre>";print_R($rs_user);exit;
+			#####  User Department
+			$UserObj->user_clear_variable();
+			$where_arr = array();
+			$join_fields_arr = array();
+			$join_arr = array();
+			
+			$where_arr[] = "user_department.\"iUserId\" = '".gen_add_slash($_REQUEST['iUserId'])."'";
+			$UserObj->join_field = $join_fields_arr;
+			$UserObj->join = $join_arr;
+			$UserObj->where = $where_arr;
+			$UserObj->param['limit'] = 0;
+			$UserObj->setClause();
+			$rs_user_dept = $UserObj->user_department_list();
+			$di = count($rs_user_dept);
+			
+			if($di > 0){
+				for($d=0;$d<$di;$d++){
+					$iDepartmentId_arr[] = $rs_user_dept[$d]['iDepartmentId'];
+				}
 			}
+
+
+		    $UserObj->user_clear_variable();
+		    $where_arr = array();
+		    $join_arr = array();
+		    $join_fieds_arr = array();
+		    $where_arr[] = "user_network.\"iUserId\"='".gen_add_slash($_REQUEST['iUserId'])."'";
+		    $UserObj->join_field = $join_fieds_arr;
+		    $UserObj->join = $join_arr;
+		    $UserObj->where = $where_arr;
+		    $UserObj->param['limit'] = 0;
+		    $UserObj->setClause();
+		    $rs_user_ntwork = $UserObj->user_network_list();
+		    $pi = count($rs_user_ntwork);
+		    if($pi > 0){
+		        for($p=0;$p<$pi;$p++){
+		            $iNetworkId_arr[] = $rs_user_ntwork[$p]['iNetworkId'];
+		        }
+		    }
 		}
-
-
-	    $UserObj->user_clear_variable();
-	    $where_arr = array();
-	    $join_arr = array();
-	    $join_fieds_arr = array();
-	    $where_arr[] = "user_network.\"iUserId\"='".gen_add_slash($_REQUEST['iUserId'])."'";
-	    $UserObj->join_field = $join_fieds_arr;
-	    $UserObj->join = $join_arr;
-	    $UserObj->where = $where_arr;
-	    $UserObj->param['limit'] = 0;
-	    $UserObj->setClause();
-	    $rs_user_ntwork = $UserObj->user_network_list();
-	    $pi = count($rs_user_ntwork);
-	    if($pi > 0){
-	        for($p=0;$p<$pi;$p++){
-	            $iNetworkId_arr[] = $rs_user_ntwork[$p]['iNetworkId'];
-	        }
-	    }
     }
 	//echo "<pre>";print_r($iNetworkId_arr);exit;
 }

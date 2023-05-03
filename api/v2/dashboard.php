@@ -650,7 +650,7 @@ if ($request_type == "dashboard_glance") {
     
     $ci = count($rs);
 
-    $status_arr = ['1' => 'Created', '2'=> 'In-Review', '3' => 'Approved'];
+    $status_arr = ['1' => 'Created', '2'=> 'In-Review', '3' => 'Delayed', '4' => 'Cancelled', '5' => 'Final\nReview', '6' => 'Carrier\nApproved', '7' => 'Final\nApproved'];
     if($ci > 0){
         $row1 = '["Status", ';
         $row2 = '';
@@ -787,7 +787,7 @@ if ($request_type == "dashboard_glance") {
     $ServiceOrderObj->join_field = $join_fieds_arr;
     $ServiceOrderObj->join = $join_arr;
     $ServiceOrderObj->where = $where_arr;
-    $ServiceOrderObj->param['order_by'] = "service_order.\"iServiceOrderId\" DESC";
+    $ServiceOrderObj->param['order_by'] = "service_order.\"dAddedDate\" DESC";
     $ServiceOrderObj->setClause();
     $ServiceOrderObj->debug_query = false;
     $rs_sorder = $ServiceOrderObj->recordset_list();
@@ -856,7 +856,7 @@ if ($request_type == "dashboard_glance") {
     $WorkOrderObj->join_field = $join_fieds_arr;
     $WorkOrderObj->join = $join_arr;
     $WorkOrderObj->where = $where_arr;
-    $WorkOrderObj->param['order_by'] = "workorder.\"iWOId\" DESC";
+    $WorkOrderObj->param['order_by'] = "workorder.\"dAddedDate\" DESC";
     $WorkOrderObj->setClause();
     $WorkOrderObj->debug_query = false;
     $rs_worder = $WorkOrderObj->recordset_list();
@@ -908,7 +908,7 @@ if ($request_type == "dashboard_glance") {
     $FiberInquiryObj->join_field = $join_fieds_arr;
     $FiberInquiryObj->join = $join_arr;
     $FiberInquiryObj->where = $where_arr;
-    $FiberInquiryObj->param['order_by'] = "fiberinquiry_details.\"iFiberInquiryId\" DESC";
+    $FiberInquiryObj->param['order_by'] = "fiberinquiry_details.\"dAddedDate\" DESC";
     $FiberInquiryObj->setClause();
     $FiberInquiryObj->debug_query = false;
     $rs_fInquiry = $FiberInquiryObj->recordset_list();

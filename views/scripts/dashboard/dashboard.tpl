@@ -1,5 +1,5 @@
 <div class="row "> <!-- no-gutters w-100 -->
-    <div class="col-12 col-lg-8 col-xl-6 mt-3">
+    <div class="col-12 col-lg-8 col-xl-8 mt-3">
         <div class="card">
             <div class="card-content">
                 <div class="card-body text-center">
@@ -9,7 +9,7 @@
             </div>
         </div>
     </div>
-    <div class="col-12 col-lg-8 col-xl-6 mt-3">
+    <div class="col-12 col-lg-8 col-xl-4 mt-3">
         <div class="card h-100">
             <div class="card-content h-100">
                 <div class="card-body h-100 p-0">
@@ -79,7 +79,33 @@
                                 <th scope="col" class="text-center">Status</th>
                             </tr>
                         </thead>
-                        <tbody class="service_order_data"></tbody>
+                        <tbody>
+                            {if $dashboard_serviceorder|count > 0}
+                                {section name="a" loop=$dashboard_serviceorder}
+                                {assign var="so_class" value=""}
+                                {if $smarty.section.a.iteration > 5}
+                                    {assign var="so_class" value="style='display:none;'"}
+                                {/if}
+                                <tr class="so_row so_{$smarty.section.a.iteration}" {$so_class}>
+                                    <td class="text-center">{$dashboard_serviceorder[a].id}</td>
+                                    <td>{$dashboard_serviceorder[a].vPremise}</td>
+                                    <td>{$dashboard_serviceorder[a].vCarrier}</td>
+                                    <td class="text-center font-weight-bold {$dashboard_serviceorder[a].color_class}">{$dashboard_serviceorder[a].vStatus}</td>
+                                </tr>
+                                {/section}
+                                
+                            {/if}
+                        </tbody>
+                        <tfoot>
+                            {if $dashboard_serviceorder|count > 5}
+                            <tr>
+                                <td colspan="4">
+                                    <a href="javascript:void(0)" class="text-primary so_more" onclick="showMoreRecords('SO', '{$dashboard_serviceorder|count}')"> More >> </a>
+                                    <a href="javascript:void(0)" class="text-primary so_less " style="display: none;" onclick="hideMoreRecords('SO', '{$dashboard_serviceorder|count}')"> Less << </a>
+                                </td>
+                            </tr> 
+                            {/if}  
+                        </tfoot>
                     </table>
                 </div>
             </div>
@@ -101,7 +127,33 @@
                                 <th scope="col" class="text-center">Status</th>
                             </tr>
                         </thead>
-                        <tbody class="work_order_data"></tbody>
+                        <tbody>
+                            {if $dashboard_workorder|count > 0}
+                                {section name="a" loop=$dashboard_workorder}
+                                {assign var="wo_class" value=""}
+                                {if $smarty.section.a.iteration > 5}
+                                    {assign var="wo_class" value="style='display:none;'"}
+                                {/if}
+                                <tr class="wo_row wo_{$smarty.section.a.iteration}" {$wo_class}>
+                                    <td class="text-center">{$dashboard_workorder[a].id}</td>
+                                    <td>{$dashboard_workorder[a].vPremise}</td>
+                                    <td>{$dashboard_workorder[a].vServiceOrder}</td>
+                                    <td class="text-center font-weight-bold {$dashboard_workorder[a].color_class}">{$dashboard_workorder[a].vStatus}</td>
+                                </tr>
+                                {/section}
+                                
+                            {/if}
+                        </tbody>
+                        <tfoot>
+                            {if $dashboard_workorder|count > 5}
+                            <tr>
+                                <td colspan="4">
+                                    <a href="javascript:void(0)" class="text-primary wo_more" onclick="showMoreRecords('WO', '{$dashboard_workorder|count}')"> More >> </a>
+                                    <a href="javascript:void(0)" class="text-primary wo_less " style="display: none;" onclick="hideMoreRecords('WO', '{$dashboard_workorder|count}')"> Less << </a>
+                                </td>
+                            </tr> 
+                            {/if}  
+                        </tfoot>
                     </table>
                 </div>
             </div>
@@ -123,7 +175,32 @@
                                 <th scope="col" class="text-center">Status</th>
                             </tr>
                         </thead>
-                        <tbody class="fiberinquiry_data"></tbody>
+                        <tbody>
+                            {if $dashboard_fiberinquiry|count > 0}
+                                {section name="a" loop=$dashboard_fiberinquiry}
+                                {assign var="fi_class" value=""}
+                                {if $smarty.section.a.iteration > 5}
+                                    {assign var="fi_class" value="style='display:none;'"}
+                                {/if}
+                                <tr class="fi_row fi_{$smarty.section.a.iteration}" {$fi_class}>
+                                    <td class="text-center">{$dashboard_fiberinquiry[a].id}</td>
+                                    <td>{$dashboard_fiberinquiry[a].vName}</td>
+                                    <td>{$dashboard_fiberinquiry[a].vAddress}</td>
+                                    <td class="text-center font-weight-bold {$dashboard_fiberinquiry[a].color_class}">{$dashboard_fiberinquiry[a].vStatus}</td>
+                                </tr>
+                                {/section}
+                            {/if}
+                        </tbody>
+                        <tfoot>
+                            {if $dashboard_fiberinquiry|count > 5}
+                            <tr>
+                                <td colspan="4">
+                                    <a href="javascript:void(0)" class="text-primary fi_more" onclick="showMoreRecords('FiberInquiry', '{$dashboard_fiberinquiry|count}')"> More >> </a>
+                                    <a href="javascript:void(0)" class="text-primary fi_less " style="display: none;" onclick="hideMoreRecords('FiberInquiry', '{$dashboard_fiberinquiry|count}')"> Less << </a>
+                                </td>
+                            </tr> 
+                            {/if}  
+                        </tfoot>
                     </table>
                 </div>
             </div>

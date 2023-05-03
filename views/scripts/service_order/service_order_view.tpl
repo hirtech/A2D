@@ -38,7 +38,7 @@
 										</div>
 									</div>
 									<div class="form-group row">
-										<label class="col-sm-4 col-form-label"><strong>Location B :</strong></label>
+										<label class="col-sm-4 col-form-label"><strong>Premise :</strong></label>
 										<div class="col-sm-8 mt-2">
 											{$rs_sorder[0].iPremiseId} ({$rs_sorder[0].vPremiseName}; {$rs_sorder[0].vPremiseType})
 										</div>

@@ -227,7 +227,7 @@
                                             <label for="vImage">Image</label>
                                             <div class="input-group">
                                                 <input type="file" class="d-inline-flex form-control-file form-control h-auto" id="vImage" name="vImage">
-                                                <img src="{$user_url}{$rs_user[0].vImage}" alt="" class="d-inline-flex img-fluid rounded-circle ml-2" width="45">
+                                                <img src="{$rs_user[0].vImageUrl}" alt="" class="d-inline-flex img-fluid rounded-circle ml-2" width="45">
                                             </div>
                                             <input type="hidden" name="vImage_old" id="vImage_old" value="{$rs_user[0].vImage}">
                                         </div>
