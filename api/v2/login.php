@@ -144,8 +144,8 @@ if ($request_type == "user_login")
                 $db_logs = $sqlObj->Execute($sql_logs);
                 $id_log = $sqlObj->Insert_ID();
                                        
-                if(file_exists($user_url.$iCountySaasId."/".$vImage)){
-                    $vImage_url = $user_url.$iCountySaasId."/".$vImage;
+                if(file_exists($user_path.$vImage)){
+                    $vImage_url = $user_url.$vImage;
                 }else{
                     $vImage_url = $site_url."images/user.png";
                 }
