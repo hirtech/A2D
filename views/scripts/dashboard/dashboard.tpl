@@ -87,7 +87,7 @@
                                     {assign var="so_class" value="style='display:none;'"}
                                 {/if}
                                 <tr class="so_row so_{$smarty.section.a.iteration}" {$so_class}>
-                                    <td class="text-center">{$dashboard_serviceorder[a].id}</td>
+                                    <td class="text-center"><a href="{$site_url}service_order/edit&mode=Update&iServiceOrderId={$dashboard_serviceorder[a].id}" title="Edit Service Order" target="_blank" class="text-primary">{$dashboard_serviceorder[a].id}</a></td>
                                     <td>{$dashboard_serviceorder[a].vPremise}</td>
                                     <td>{$dashboard_serviceorder[a].vCarrier}</td>
                                     <td class="text-center font-weight-bold {$dashboard_serviceorder[a].color_class}">{$dashboard_serviceorder[a].vStatus}</td>
@@ -135,7 +135,7 @@
                                     {assign var="wo_class" value="style='display:none;'"}
                                 {/if}
                                 <tr class="wo_row wo_{$smarty.section.a.iteration}" {$wo_class}>
-                                    <td class="text-center">{$dashboard_workorder[a].id}</td>
+                                    <td class="text-center"><a href="{$site_url}service_order/workorder_add&mode=Update&iWOId={$dashboard_workorder[a].id}" title="Edit Work Order" target="_blank" class="text-primary">{$dashboard_workorder[a].id}</a></td>
                                     <td>{$dashboard_workorder[a].vPremise}</td>
                                     <td>{$dashboard_workorder[a].vServiceOrder}</td>
                                     <td class="text-center font-weight-bold {$dashboard_workorder[a].color_class}">{$dashboard_workorder[a].vStatus}</td>
@@ -183,7 +183,7 @@
                                     {assign var="fi_class" value="style='display:none;'"}
                                 {/if}
                                 <tr class="fi_row fi_{$smarty.section.a.iteration}" {$fi_class}>
-                                    <td class="text-center">{$dashboard_fiberinquiry[a].id}</td>
+                                    <td class="text-center"><a href="{$site_url}fiber_inquiry/edit&mode=Update&iFiberInquiryId={$dashboard_fiberinquiry[a].id}" title="Edit Fiber Inquiry" target="_blank" class="text-primary">{$dashboard_fiberinquiry[a].id}</a></td>
                                     <td>{$dashboard_fiberinquiry[a].vName}</td>
                                     <td>{$dashboard_fiberinquiry[a].vAddress}</td>
                                     <td class="text-center font-weight-bold {$dashboard_fiberinquiry[a].color_class}">{$dashboard_fiberinquiry[a].vStatus}</td>
