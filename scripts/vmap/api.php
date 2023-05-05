@@ -1136,16 +1136,16 @@ if(isset($_POST) &&  !in_array($_POST['action'],array("getSerachSiteData", "getS
             $vStatus = '';
             if($site['iStatus'] == 1){
                 $vStatus = 'Draft';
-                $fInquiryData[$site['iFiberInquiryId']]['icon'] = $site_url."images/sr_red.png";
+                $fInquiryData[$site['iFiberInquiryId']]['icon'] = $site_url."images/question_red.png";
             }else if($site['iStatus'] == 2){
                 $vStatus = 'Assigned';
-                $fInquiryData[$site['iFiberInquiryId']]['icon'] = $site_url."images/sr_black.png";
+                $fInquiryData[$site['iFiberInquiryId']]['icon'] = $site_url."images/question_black.png";
             }else if($site['iStatus'] == 3){
                 $vStatus = 'Review';
-                $fInquiryData[$site['iFiberInquiryId']]['icon'] = $site_url."images/sr_yellow.png";
+                $fInquiryData[$site['iFiberInquiryId']]['icon'] = $site_url."images/question_yellow.png";
             }else if($site['iStatus'] == 4){
                 $vStatus = 'Complete';
-                $fInquiryData[$site['iFiberInquiryId']]['icon'] = $site_url."images/sr_green.png";
+                $fInquiryData[$site['iFiberInquiryId']]['icon'] = $site_url."images/question_green.png";
             }
             
             $fInquiryData[$site['iFiberInquiryId']]['vName'] = $vFirstName. ' '.$vLastName;
