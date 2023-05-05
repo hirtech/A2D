@@ -227,7 +227,13 @@
                                             <label for="vImage">Image</label>
                                             <div class="input-group">
                                                 <input type="file" class="d-inline-flex form-control-file form-control h-auto" id="vImage" name="vImage">
-                                                <img src="{$rs_user[0].vImageUrl}" alt="" class="d-inline-flex img-fluid rounded-circle ml-2" width="45">
+                                                {if $mode eq 'Update'}
+                                                    <a data-fancybox-group="gallery" href="{$rs_user[0].vImageUrl}" class="fancybox">
+                                                        <img src="{$rs_user[0].vImageUrl}" alt="" class="d-flex rounded-circle ml-2" width="45" height="45">
+                                                    </a>
+                                                {else}
+                                                    <img src="{$rs_user[0].vImageUrl}" alt="" class="d-flex rounded-circle ml-2" width="45" height="45">
+                                                {/if}
                                             </div>
                                             <input type="hidden" name="vImage_old" id="vImage_old" value="{$rs_user[0].vImage}">
                                         </div>
@@ -262,13 +268,15 @@
 <link rel="stylesheet" href="assets/vendors/select2/css/select2-bootstrap.min.css"/>
 <script src="assets/vendors/select2/js/select2.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.2.0/zxcvbn.js"></script>
+<link rel="stylesheet" href="assets/vendors/fancybox/jquery.fancybox.min.css"/>
+<script src="assets/vendors/fancybox/jquery.fancybox.min.js"></script>
 <!-- <script src="http://s.codepen.io/assets/libs/modernizr.js" type="text/javascript"></script>  -->
 <script src="https://maps.googleapis.com/maps/api/js?key={$GOOGLE_GEOCODE_API_KEY}&libraries=geometry,drawing,places,visualization"></script>
 
 <script src="assets/js/app_js/google_autocomplete.js"></script>
 
-<script type="text/javascript" src="assets/js/app_js/user_add.js"></script>
 
+<script type="text/javascript" src="assets/js/app_js/user_add.js"></script>
 <!-- START: Page JS-->
 <script type="text/javascript">
 var iCountyId = '{$rs_user[0].iCountyId}';
@@ -276,6 +284,8 @@ var iCityId = '{$rs_user[0].iCityId}';
 var mode = '{$mode}';
 {literal}
 $(document).ready(function() {
+    $('.fancybox').fancybox();
+
     $('select').each(function () {
         $(this).select2({
           theme: 'bootstrap4',
